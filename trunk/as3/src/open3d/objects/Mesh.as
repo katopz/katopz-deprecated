@@ -21,7 +21,7 @@ package open3d.objects
 	 */	
 	public class Mesh extends Sprite
 	{
-		protected var vertices3D:Vector.<Number> = new Vector.<Number>();
+		protected var vin:Vector.<Number> = new Vector.<Number>();
 		protected var triangles:GraphicsTrianglePath = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), TriangleCulling.POSITIVE);
 
 		public var _material:Material;
@@ -66,25 +66,27 @@ package open3d.objects
 				i2 = _indices[ix3 + 2];
 				
 				// Vector3D faster than Vector
-				var index:Vector3D = new Vector3D(i0, i1, i2)
+				var index:Vector3D = new Vector3D(i0, i1, i2);
 				var _face:Face = faces[i] = new Face(index, new Vector3D(3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2));
+				
+				// register face
 				facesList[i] = index;
 			}
 			
 			this.material = material;
 			this.material.update();
 			
-			vertices3D.fixed = true;
+			vin.fixed = true;
 			triangles.uvtData.fixed = true;
 			triangles.indices.fixed = true;
 		}
 		
 		public function updateTransform(projection:Matrix3D, matrix3D:Matrix3D):void
 		{
-			vout = new Vector.<Number>(vertices3D.length, true);
+			vout = new Vector.<Number>(vin.length, true);
 			
 			// local
-			transform.matrix3D.transformVectors(vertices3D, vout);
+			transform.matrix3D.transformVectors(vin, vout);
 				
 			// global
 			matrix3D.transformVectors(vout, vout);
