@@ -88,7 +88,7 @@ package open3d.objects
 		private function parse(data:ByteArray):void
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
-			//var vertices:Vector.<Number> = this.vertices3D;
+			//var vertices:Vector.<Number> = this.vin;
 			//var faces:Array = []//TODO//this.faceList;
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
@@ -107,7 +107,7 @@ package open3d.objects
 			// 		Be sure to allocate memory for the vertices to the object
 			//		These vertices will be updated each frame with the proper coordinates
 			//for (i = 0; i < num_vertices; i++)
-				//vertices3D.push(new Vector3D(0,0,0));
+				//vin.push(new Vector3D(0,0,0));
 
 			// UV coordinates
 			//		Load them!
@@ -140,7 +140,7 @@ package open3d.objects
 				));
 				*/
 				
-				//vertices3D.push(vertices[c], vertices[b], vertices[a]);
+				//vin.push(vertices[c], vertices[b], vertices[a]);
 				
 				//triangles.uvtData.push(uvs[ta], uvs[tb], uvs[tc]);
 				//triangles.indices.push(j++, j++, j++);
@@ -177,9 +177,9 @@ package open3d.objects
 			j=0;
 			for (i = 0; i < Frame(frames[0]).vertices.length; i++)
 			{
-				vertices3D.push(Frame(frames[0]).vertices[i].x,
-								Frame(frames[0]).vertices[i].y,
-								Frame(frames[0]).vertices[i].z);
+				vin.push(Frame(frames[0]).vertices[i].x,
+						 Frame(frames[0]).vertices[i].y,
+						 Frame(frames[0]).vertices[i].z);
 				
 				trace( Frame(frames[0]).vertices[i]);
 				
@@ -196,10 +196,10 @@ package open3d.objects
 			
 			
 			/*
-			vertices3D.push(0,100,0);
-			vertices3D.push(100,100,0);
-			vertices3D.push(100,0,0);
-			vertices3D.push(0,0,0);
+			vin.push(0,100,0);
+			vin.push(100,100,0);
+			vin.push(100,0,0);
+			vin.push(0,0,0);
 			*/
 			/*
 			triangles.indices.push(0,1,2);
@@ -217,7 +217,7 @@ package open3d.objects
 			/*
 			for (i = 0; i < num_tris/3; i+=3)
 			{
-				trace("Vector3D("+vertices3D[i]+", "+vertices3D[i+1]+", "+vertices3D[i+2]+")");
+				trace("Vector3D("+vin[i]+", "+vin[i+1]+", "+vin[i+2]+")");
 			}
 			*/
 			//loader.close();
@@ -225,7 +225,7 @@ package open3d.objects
 			trace("__________________________________" + 
 				  "\n_______Parsed MD2_________________" +
 				  "\n|" + 
-				  "\n|\tvertices:" + vertices3D.length/3 +
+				  "\n|\tvertices:" + vin.length/3 +
 				  "\n|\ttexture vertices:" + uvs.length +
 				  "\n|\tfaces:" + num_tris +
 				  "\n|_________________________________"
