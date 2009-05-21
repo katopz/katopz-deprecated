@@ -22,10 +22,8 @@ package
 		
 		override protected function draw():void
 		{
-			//cat.rotationX=30;
 			cat.rotationY = 180*Math.abs(Math.sin(step));
 			step+=.01;
-			//cat.rotationZ=30;
 		}
 	}
 }

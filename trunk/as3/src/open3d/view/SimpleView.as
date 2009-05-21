@@ -36,7 +36,8 @@ package open3d.view
 			stage.quality = StageQuality.MEDIUM;
 
 			renderer = new Renderer(this);
-			renderer.camera.z = -500;
+			
+			renderer.world.z = -500;
 			
 			addChild(new Stats());
 			

@@ -4,6 +4,11 @@ package open3d.debug
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	/**
+	 * SimpleTextField
+	 * @author katopz
+	 * 
+	 */	
 	public class SimpleTextField extends TextField
 	{
 		public var defaultText:String="";

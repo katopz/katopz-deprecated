@@ -8,9 +8,9 @@ package open3d.objects
 	 * @author katopz
 	 * 
 	 */	
-	public class Camera3D extends Shape
+	public class Object3D extends Shape
 	{
-		public function Camera3D():void 
+		public function Object3D():void 
 		{
 			transform.matrix3D = new Matrix3D();
 		}

@@ -5,26 +5,27 @@ package open3d.render
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.events.EventDispatcher;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
 	
-	import open3d.objects.Camera3D;
 	import open3d.objects.Mesh;
+	import open3d.objects.Object3D;
 
-	public class Renderer extends EventDispatcher
+	public class Renderer
 	{
 		private var canvas:Sprite;
 		public var view:Shape;
 
-		private var projection:Matrix3D = (new PerspectiveProjection()).toMatrix3D();
+		public var pProjection:PerspectiveProjection = new PerspectiveProjection();
+		public var projectionMatrix3D:Matrix3D = pProjection.toMatrix3D();
 
 		public var totalFace:int = 0;
 		public var totalMesh:int = 0;
+		
+		public var world:Object3D = new Object3D();
+		private var worldMatrix3D:Matrix3D = world.transform.matrix3D;
 
-		private var _camera:Camera3D;
 		private var _faces:Array;
-
 		public function get faces():Array
 		{
 			return _faces;
@@ -35,12 +36,7 @@ package open3d.render
 		{
 			return _meshes;
 		}
-		
-		public function get camera():Camera3D
-		{
-			return _camera;
-		}
-		
+				
 		private var _isFaceZSort:Boolean;
 		public function set isFaceZSort(value:Boolean):void
 		{
@@ -74,8 +70,6 @@ package open3d.render
 			view.y = canvas.stage.stageHeight / 2;
 			canvas.addChild(view);
 
-			_camera = new Camera3D();
-
 			_meshes = new Vector.<Mesh>();
 			
 			isMeshZSort = true;
@@ -95,11 +89,9 @@ package open3d.render
 			var _view_graphics:Graphics = view.graphics;
 			_view_graphics.clear();
 			
-			// transfrom
-			var cameraMatrix3D:Matrix3D = _camera.transform.matrix3D;
 			var mesh:Mesh;
 			for each (mesh in _meshes)
-				mesh.updateTransform(projection, cameraMatrix3D);
+				mesh.updateTransform(projectionMatrix3D, worldMatrix3D);
 				
 			// z-sort mesh
 			if(_isMeshZSort)
@@ -113,7 +105,7 @@ package open3d.render
 			}
 		}
 		
-		private function zSort(a:Mesh, b:Mesh):Number
+		private function zSort(a:Mesh, b:Mesh):int
 		{
 			if (a.z > b.z)
 				return 1;
