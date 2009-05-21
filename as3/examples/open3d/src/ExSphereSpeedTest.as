@@ -5,8 +5,8 @@ package
 	import flash.events.MouseEvent;
 	
 	import open3d.materials.BitmapFileMaterial;
-	import open3d.objects.Camera3D;
 	import open3d.objects.Mesh;
+	import open3d.objects.Object3D;
 	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
 	
@@ -46,12 +46,12 @@ package
 		
 		override protected function draw():void
 		{
-			var _camera:Camera3D = renderer.camera;
-			_camera.x = (mouseX-stage.stageWidth/2)/10;
-			_camera.y = (mouseY-stage.stageHeight/2)/10;
+			var world:Object3D = renderer.world;
+			world.x = (mouseX-stage.stageWidth/2)/10;
+			world.y = (mouseY-stage.stageHeight/2)/10;
 			
 			if(renderer.view.height)
-				_camera.z += (-(renderer.view.height+renderer.totalMesh*100)-_camera.z)/25;
+				world.z += (-(renderer.view.height+renderer.totalMesh*100)-world.z)/25;
 			
 			var meshes:Vector.<Mesh> = renderer.meshes;
 			for each (var mesh:Mesh in meshes)

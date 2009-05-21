@@ -1,6 +1,5 @@
 package open3d.objects
 {
-	import flash.display.BitmapData;
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
 	import flash.utils.unescapeMultiByte;

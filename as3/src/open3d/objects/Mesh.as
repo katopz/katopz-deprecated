@@ -12,7 +12,6 @@ package open3d.objects
 	import flash.geom.Vector3D;
 	
 	import open3d.geom.Face;
-	import open3d.geom.Vertex;
 	import open3d.materials.Material;
 	
 	/**
@@ -66,8 +65,9 @@ package open3d.objects
 				i1 = _indices[ix3 + 1];
 				i2 = _indices[ix3 + 2];
 				
-				var index:Vertex = new Vertex(i0, i1, i2)
-				var _face:Face = faces[i] = new Face(index, new Vertex(3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2));
+				// Vector3D faster than Vector
+				var index:Vector3D = new Vector3D(i0, i1, i2)
+				var _face:Face = faces[i] = new Face(index, new Vector3D(3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2));
 				facesList[i] = index;
 			}
 			
@@ -95,8 +95,6 @@ package open3d.objects
 			// z-sort
 			if (isFaceZSort)
 			{
-				var _face_a:Vertex;
-				var _face_b:Vertex;
 				var _vout:Vector.<Number> = vout;
 				var _facesList:Array = facesList;
 				
@@ -104,13 +102,13 @@ package open3d.objects
 				for each (var _face:Face in faces)
 					_face.update(vout);
 				
-				// sort
+				// sortOn (faster than Vector.sort)
 				_facesList.sortOn("w", 16);
 				
-				// push back
+				// push back (faster than Vector concat)
 				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(_facesList.length * 3, true);
 				var j:int = 0;
-				for each(var face:Vertex in _facesList)
+				for each(var face:Vector3D in _facesList)
 				{
 					_triangles_indices[j++] = face.x;
 					_triangles_indices[j++] = face.y;

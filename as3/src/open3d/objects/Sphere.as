@@ -1,9 +1,5 @@
 package open3d.objects 
 {
-	import __AS3__.vec.Vector;
-	
-	import flash.geom.Vector3D;
-	
 	import open3d.materials.Material;
 	
 	/**
@@ -46,7 +42,7 @@ package open3d.objects
 					z = r*Math.sin(ma);
 					
 					// vertices
-					vertices3D.push(x,y,z);
+					vin.push(x,y,z);
 					
 					// triangles
 					triangles.uvtData.push(u, v, 1);

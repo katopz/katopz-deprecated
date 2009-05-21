@@ -2,6 +2,8 @@ package open3d.geom
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.geom.Vector3D;
+	
 	/**
 	 * Face
 	 * @author katopz
@@ -9,11 +11,11 @@ package open3d.geom
 	 */	
 	public class Face
 	{
-		private var a:Vertex;
-		private var b:Vertex;
-		private var vout:Vector.<Number>;
+		// actually it's not Vector3D but we can use it, cause it's faster than Vector
+		private var a:Vector3D;
+		private var b:Vector3D;
 		
-		public function Face(a:Vertex, b:Vertex)
+		public function Face(a:Vector3D, b:Vector3D)
 		{
 			this.a = a;
 			this.b = b;
