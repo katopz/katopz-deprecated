@@ -32,8 +32,6 @@ package
 			isDebug = true;
 			
 			renderer.world.rotationX = 30;
-			
-			start();
 		}
 		
 		override protected function draw():void
