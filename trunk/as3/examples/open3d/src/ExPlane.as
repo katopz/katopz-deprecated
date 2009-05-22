@@ -18,7 +18,6 @@ package
 			plane.culling = "none";
 			
 			isDebug = true;
-			start();
 		}
 		
 		override protected function draw():void
