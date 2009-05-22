@@ -52,7 +52,7 @@ package
 			world.rotationZ = (mouseY-stage.stageHeight/2)/5;
 			world.rotationY++;
 			
-			debugText.appendText(", Click to add more, move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
+			debugText.appendText(" Move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
 		}
 	}
 }
