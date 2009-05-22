@@ -21,32 +21,46 @@ package open3d.objects
 	 */	
 	public class Mesh extends Sprite
 	{
-		protected var vin:Vector.<Number> = new Vector.<Number>();
-		protected var triangles:GraphicsTrianglePath = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), TriangleCulling.POSITIVE);
-
-		public var _material:Material;
-
-		protected var faces:Vector.<Face>;
-		protected var vout:Vector.<Number>;
-		
 		public var totalFace:int = 0;
+		public var screenZ:Number = 0;
 		
-		private var _isFaceZSort:Boolean;
+		protected var triangles:GraphicsTrianglePath;
+		protected var vin:Vector.<Number>;
+		protected var vout:Vector.<Number>;
+		protected var _material:Material;
+		
+		private var _culling:String = TriangleCulling.POSITIVE;
+		private var _isFaceZSort:Boolean = true;
+		
+		protected var faces:Vector.<Face>;
 		private  var facesList:Array;
 		
 		public function set isFaceZSort(value:Boolean):void
 		{
 			_isFaceZSort = value;
 		}
+		
 		public function get isFaceZSort():Boolean
 		{
 			return _isFaceZSort;
 		}
+		
+		public function set culling(value:String):void
+		{
+			_culling = value;
+			triangles.culling = _culling;
+		}
+		
+		public function get culling():String
+		{
+			return _culling;
+		}
 
 		public function Mesh()
 		{
+			triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), culling);
+			vin = new Vector.<Number>();
 			transform.matrix3D = new Matrix3D();
-			isFaceZSort = true;
 		}
 		
 		protected function buildFaces(material:Material):void
@@ -93,7 +107,7 @@ package open3d.objects
 
 			// project
 			Utils3D.projectVectors(projection, vout, triangles.vertices, triangles.uvtData);
-
+			
 			// z-sort
 			if (isFaceZSort)
 			{
@@ -107,8 +121,11 @@ package open3d.objects
 				// sortOn (faster than Vector.sort)
 				_facesList.sortOn("w", 16);
 				
+				// debug
+				totalFace = _facesList.length;
+				
 				// push back (faster than Vector concat)
-				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(_facesList.length * 3, true);
+				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(totalFace * 3, true);
 				var j:int = 0;
 				for each(var face:Vector3D in _facesList)
 				{
@@ -116,10 +133,10 @@ package open3d.objects
 					_triangles_indices[j++] = face.y;
 					_triangles_indices[j++] = face.z;
 				}
-				
-				// debug
-				totalFace = _facesList.length;
 			}
+			
+			// faster than getRelativeMatrix3D, also support current render method
+			screenZ = facesList[totalFace*.5].w;
 		}
 		
 		public function set material(value:Material):void

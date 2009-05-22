@@ -4,7 +4,8 @@ package open3d.objects
 	
 	/**
 	* @author senocular (Flash CS4 spinning globe example)
-	* @link http://www.senocular.com/flash/source.php?id=1.201 
+	* @link http://www.senocular.com/flash/source.php?id=1.201
+	* @mod katopz
 	*/
 	public class Sphere extends Mesh
 	{

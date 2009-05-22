@@ -1,12 +1,11 @@
 package open3d.render
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
+	import flash.geom.Point;
 	
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
@@ -14,16 +13,20 @@ package open3d.render
 	public class Renderer
 	{
 		private var canvas:Sprite;
-		public var view:Shape;
+		private var _view:Shape;
+		public function get view():Shape
+		{
+			return _view;
+		}
 
-		public var pProjection:PerspectiveProjection = new PerspectiveProjection();
-		public var projectionMatrix3D:Matrix3D = pProjection.toMatrix3D();
+		private var projection:PerspectiveProjection;
+		private var projectionMatrix3D:Matrix3D;
 
 		public var totalFace:int = 0;
 		public var totalMesh:int = 0;
 		
-		public var world:Object3D = new Object3D();
-		private var worldMatrix3D:Matrix3D = world.transform.matrix3D;
+		public var world:Object3D;
+		private var worldMatrix3D:Matrix3D;
 
 		private var _faces:Array;
 		public function get faces():Array
@@ -31,8 +34,8 @@ package open3d.render
 			return _faces;
 		}
 
-		private var _meshes:Vector.<Mesh>;
-		public function get meshes():Vector.<Mesh>
+		private var _meshes:Array;
+		public function get meshes():Array
 		{
 			return _meshes;
 		}
@@ -65,12 +68,19 @@ package open3d.render
 		{
 			this.canvas = canvas;
 
-			view = new Shape();
-			view.x = canvas.stage.stageWidth / 2;
-			view.y = canvas.stage.stageHeight / 2;
-			canvas.addChild(view);
-
-			_meshes = new Vector.<Mesh>();
+			_view = new Shape();
+			_view.x = canvas.stage.stageWidth / 2;
+			_view.y = canvas.stage.stageHeight / 2;
+			canvas.addChild(_view);
+			
+			projection = new PerspectiveProjection();
+			projectionMatrix3D = projection.toMatrix3D();
+			projection.projectionCenter = new Point(canvas.stage.stageWidth / 2,  canvas.stage.stageHeight / 2);
+			
+			world = new Object3D();
+			worldMatrix3D = world.transform.matrix3D;
+			
+			_meshes = [];
 			
 			isMeshZSort = true;
 			isFaceZSort = true;
@@ -86,16 +96,16 @@ package open3d.render
 		{
 			// dispose
 			totalFace = 0;
-			var _view_graphics:Graphics = view.graphics;
+			var _view_graphics:Graphics = _view.graphics;
 			_view_graphics.clear();
 			
 			var mesh:Mesh;
 			for each (mesh in _meshes)
 				mesh.updateTransform(projectionMatrix3D, worldMatrix3D);
-				
+			
 			// z-sort mesh
 			if(_isMeshZSort)
-				_meshes.sort(zSort);
+				_meshes.sortOn("screenZ", 16);
 			
 			// draw
 			for each (mesh in _meshes)
@@ -103,15 +113,6 @@ package open3d.render
 				_view_graphics.drawGraphicsData(mesh.graphicsData);
 				totalFace+=mesh.totalFace;
 			}
-		}
-		
-		private function zSort(a:Mesh, b:Mesh):int
-		{
-			if (a.z > b.z)
-				return 1;
-			else if (a.z < b.z)
-				return -1;
-			return 0;
 		}
 	}
 }

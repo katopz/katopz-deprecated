@@ -12,16 +12,10 @@ package
 		override protected function create():void
 		{
 			plane = new Plane(500, 500, new BitmapFileMaterial("assets/earth.jpg"));
-			//plane.x = 500/2;
-			//plane.y = -500/2;
-			
 			renderer.addChild(plane);
 			
-			//plane.rotationY = -plane.rotationY;
-			
 			plane.rotationX = 30;
-			//plane.rotationY = 30;
-			//plane.rotationY = 180;
+			plane.culling = "none";
 			
 			isDebug = true;
 			start();
@@ -29,8 +23,7 @@ package
 		
 		override protected function draw():void
 		{
-			//plane.rotationY++;
-			//trace(plane.rotationY)
+			plane.rotationY++;
 		}
 	}
 }
