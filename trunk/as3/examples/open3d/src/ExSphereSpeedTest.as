@@ -53,7 +53,7 @@ package
 			if(renderer.view.height)
 				world.z += (-(renderer.view.height+renderer.totalMesh*100)-world.z)/25;
 			
-			var meshes:Vector.<Mesh> = renderer.meshes;
+			var meshes:Array = renderer.meshes;
 			for each (var mesh:Mesh in meshes)
 			{
 				mesh.rotationX++;

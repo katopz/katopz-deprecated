@@ -21,7 +21,7 @@ package
 		
 		override protected function create():void
 		{
-			var segment:uint = 46;
+			var segment:uint = 48;
 			
 			sphere = new Sphere(100, segment, segment, new BitmapMaterial(texture));
 			renderer.addChild(sphere);
@@ -31,18 +31,20 @@ package
 			
 			isDebug = true;
 			
+			renderer.world.rotationX = 30;
+			
 			start();
 		}
 		
 		override protected function draw():void
 		{
-			sphere.rotationY++;
-			sphere2.rotationY--;
+			sphere.rotationY+=10;
+			sphere2.rotationY-=10;
 			
 			sphere2.x = 200*Math.sin(step);
 			sphere2.z = 200*Math.cos(step);
 			
-			step+=0.01;
+			step+=0.1;
 		}
 	}
 }

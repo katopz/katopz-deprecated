@@ -53,13 +53,13 @@ package open3d.objects
 			parse(data);
 			buildFaces(material);
 		}
-		
+		/*
 		override protected function buildFaces(material:Material):void
 		{
 			this.material = material;
 			this.material.update();
 		}
-		
+		*/
 		/**
 		 * Actually load the file using a URLLoader instance
 		 * 

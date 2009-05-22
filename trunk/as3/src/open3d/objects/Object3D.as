@@ -1,14 +1,14 @@
 package open3d.objects
 {
-	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.geom.Matrix3D;
 	
 	/**
-	 * Camera3D
+	 * Object3D
 	 * @author katopz
 	 * 
 	 */	
-	public class Object3D extends Shape
+	public class Object3D extends Sprite
 	{
 		public function Object3D():void 
 		{
