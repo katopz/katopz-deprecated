@@ -9,9 +9,8 @@ package open3d.materials
 	import flash.system.LoaderContext;
 	
 	/**
-	 * BitmapFileMaterial
+	 * BitmapFileMaterial : load external image as texture
 	 * @author katopz
-	 * 
 	 */	
 	public class BitmapFileMaterial extends BitmapMaterial
 	{
@@ -33,6 +32,7 @@ package open3d.materials
 		private function onTextureLoaded(event:Event):void 
 		{
 			event.target.removeEventListener(Event.COMPLETE, onTextureLoaded);
+			stroke = null;
 			texture = Bitmap(event.target.content).bitmapData;
 		}
 	}

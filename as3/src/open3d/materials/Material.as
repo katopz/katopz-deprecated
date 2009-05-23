@@ -9,25 +9,32 @@ package open3d.materials
 	import flash.display.IGraphicsData;
 	
 	/**
-	 * Material
+	 * Material : texture
 	 * @author katopz
-	 * 
 	 */	
 	public class Material
 	{
+		public static const DEFAULT_MATERIAL:GraphicsStroke = new GraphicsStroke
+		(
+			1, false, "normal", "none", "round", 0, new GraphicsSolidFill(0xFF00FF)
+		);
+		
 		protected var _color:uint = 0xffffff;
 		protected var _alpha:Number = 1;
 		protected var _texture:BitmapData;
 		
-		public var graphicsData:Vector.<IGraphicsData>;
 		public var stroke:GraphicsStroke;
+		public var graphicsData:Vector.<IGraphicsData>;
+		
+		// referer to triangles
 		public var triangles:GraphicsTrianglePath;
 		
 		public function Material(color:uint=0x000000, alpha:Number = 1, doubleSided:Boolean = false) 
 		{
 			this.color = color;
 			this.alpha = alpha;
-			stroke = new GraphicsStroke(NaN, false, "normal", "none", "round", 3, new GraphicsSolidFill(0xFF0000));
+			stroke = stroke?stroke:DEFAULT_MATERIAL;
+			graphicsData = Vector.<IGraphicsData>([stroke, triangles]);
 		}
 		
 		public function get color():uint
@@ -52,7 +59,7 @@ package open3d.materials
 		
 		public function update():void
 		{
-			
+			// do it when dirty
 		}
 	}
 }

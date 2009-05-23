@@ -1,5 +1,7 @@
 package  
 {
+	import flash.display.Bitmap;
+	
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Plane;
 	import open3d.view.SimpleView;
@@ -7,22 +9,26 @@ package
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
 	public class ExPlane extends SimpleView
 	{
+		
+		[Embed(source = "assets/earth.jpg")]
+        private var Texture		:Class;
+		
 		private var plane:Plane;
 		
 		override protected function create():void
 		{
-			plane = new Plane(500, 500, new BitmapFileMaterial("assets/earth.jpg"));
+			var earthBitmap	:Bitmap = Bitmap(new Texture());
+			earthBitmap.x = stage.stageWidth/2 - earthBitmap.width/2;
+			addChild(earthBitmap);
+			
+			plane = new Plane(256, 128, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(plane);
-			
-			plane.rotationX = 30;
 			plane.culling = "none";
-			
-			isDebug = true;
 		}
 		
 		override protected function draw():void
 		{
-			plane.rotationY++;
+			plane.rotationX++;
 		}
 	}
 }

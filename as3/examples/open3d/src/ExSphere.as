@@ -29,8 +29,6 @@ package
 			sphere2 = new Sphere(50, segment, segment, new BitmapMaterial(texture));
 			renderer.addChild(sphere2);
 			
-			isDebug = true;
-			
 			renderer.world.rotationX = 30;
 		}
 		

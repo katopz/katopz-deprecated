@@ -3,7 +3,6 @@ package open3d.geom
 	/**
 	 * UV
 	 * @author katopz
-	 * 
 	 */	
 	public class UV
 	{

@@ -5,9 +5,8 @@ package open3d.debug
 	import flash.text.TextFormat;
 	
 	/**
-	 * SimpleTextField
+	 * SimpleTextField : for debug
 	 * @author katopz
-	 * 
 	 */	
 	public class SimpleTextField extends TextField
 	{

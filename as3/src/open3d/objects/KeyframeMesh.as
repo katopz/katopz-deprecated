@@ -20,7 +20,9 @@ package open3d.objects
 	 * 
 	 * @version 05.01.07
 	 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
- 	 * @modifier katopz@sleepydesign.com 
+	 * 
+	 * Modify/Optimize
+	 * @author katopz
 	 */
 	public class KeyframeMesh extends Mesh
 	{
@@ -45,7 +47,7 @@ package open3d.objects
 		 */
 		private var _currentFrame:int = 0;
 		private var interp:Number = 0;
-		private var start:int, end:int, type:int;
+		private var start:int, end:int, _type:int;
 		private var ctime:Number = 0, otime:Number = 0;
 		
 		/**
@@ -74,7 +76,7 @@ package open3d.objects
 		public function gotoAndPlay(frame:int):void
 		{
 			keyframe = frame;
-			type = ANIM_NORMAL;
+			_type = ANIM_NORMAL;
 		}
 		
 		public function loop(start:int, end:int):void
@@ -82,18 +84,18 @@ package open3d.objects
 			this.start = (start % framesLength);
 			keyframe = start;
 			this.end = (end % framesLength);
-			type = ANIM_LOOP;
+			_type = ANIM_LOOP;
 		}
 		
 		public function stop():void
 		{
-			type = ANIM_STOP;
+			_type = ANIM_STOP;
 		}
 		
 		public function gotoAndStop(frame:int):void
 		{
 			keyframe = frame;
-			type = ANIM_STOP;
+			_type = ANIM_STOP;
 		}
 		
 		public function updateFrame():void
@@ -124,12 +126,12 @@ package open3d.objects
 
 			// Update the timer part, to get time based animation
 			
-			if (type != ANIM_STOP)
+			if (_type != ANIM_STOP)
 			{
 				interp += fps * (ctime - otime) / 1000;
 				if (interp >= 1)
 				{
-					if (type == ANIM_LOOP && _currentFrame + 1 == end)
+					if (_type == ANIM_LOOP && _currentFrame + 1 == end)
 						keyframe = start;
 					else
 						keyframe++;

@@ -5,13 +5,12 @@ package open3d.geom
 	import flash.geom.Vector3D;
 	
 	/**
-	 * Face
+	 * Face : not a real face yet ;p
 	 * @author katopz
-	 * 
 	 */	
 	public class Face
 	{
-		// actually it's not Vector3D but we can use it, cause it's faster than Vector
+		// actually it's not Vector3D but it's faster than Vector
 		private var a:Vector3D;
 		private var b:Vector3D;
 		
@@ -21,7 +20,7 @@ package open3d.geom
 			this.b = b;
 		}
 		
-		public function update(vout:Vector.<Number>):void
+		public function calculateScreenZ(vout:Vector.<Number>):void
 		{
 			a.w = vout[b.x] + vout[b.y] + vout[b.z];
 		}

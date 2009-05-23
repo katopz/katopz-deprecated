@@ -13,6 +13,10 @@ package open3d.view
 	import open3d.objects.Mesh;
 	import open3d.render.Renderer;
 	
+	/**
+	 * SimpleView
+	 * @author katopz
+	 */	
 	public class SimpleView extends Sprite
 	{
 		protected var renderer:Renderer;
@@ -36,18 +40,18 @@ package open3d.view
 			stage.quality = StageQuality.MEDIUM;
 
 			renderer = new Renderer(this);
-			
-			renderer.world.z = -500;
-			
-			addChild(new Stats());
+			renderer.world.z = 500;
 			
 			debugText = new SimpleTextField();
-			debugText.x=80;
-			addChild( debugText );
+			debugText.x = 80;
 			
 			isDebug = true;
 			
 			create();
+			
+			addChild(new Stats());
+			addChild( debugText );
+			
 			start();
 		}
 		
@@ -83,7 +87,7 @@ package open3d.view
 		{
             if(_isDebug)
             {
-            	debugText.text = String("Mesh(es) : "+renderer.totalMesh+ ", Face(s) : "+renderer.totalFace);
+            	debugText.text = String("Object3D(es) : "+renderer.numChildren+ ", Face(s) : "+renderer.totalFaces);
             }
 		}
 		
@@ -110,7 +114,7 @@ package open3d.view
 		{
 			for each (var mesh:Mesh in renderer.meshes)
 			{
-				mesh.stroke.thickness = (event.type == MouseEvent.MOUSE_DOWN) ? 1 : NaN;
+				//mesh.stroke.thickness = (event.type == MouseEvent.MOUSE_DOWN) ? 1 : NaN;
 			}
 		}
 	}
