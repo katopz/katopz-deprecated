@@ -3,10 +3,12 @@ package open3d.objects
 	import open3d.materials.Material;
 	
 	/**
-	* @author senocular (Flash CS4 spinning globe example)
-	* @link http://www.senocular.com/flash/source.php?id=1.201
-	* @mod katopz
-	*/
+	 * @author senocular (Flash CS4 spinning globe example)
+	 * @link http://www.senocular.com/flash/source.php?id=1.201
+	 * 
+	 * Modify/Optimize
+	 * @author katopz
+	 */
 	public class Sphere extends Mesh
 	{
 		public function Sphere(radius:Number, parallels:int, meridians:int, material:Material):void 

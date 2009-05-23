@@ -33,13 +33,13 @@ package
 			var sphere:Sphere = new Sphere(100, 20, 20, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(sphere);
 			
-			var totalMesh:int = renderer.totalMesh;
+			var _numChildren:int = renderer.numChildren;
 			
 			var i:int=0;
 			for each (var mesh:Mesh in renderer.meshes)
 			{
-				mesh.x = totalMesh*50*Math.sin(2*Math.PI*i/totalMesh);
-				mesh.y = totalMesh*50*Math.cos(2*Math.PI*i/totalMesh);
+				mesh.x = _numChildren*50*Math.sin(2*Math.PI*i/_numChildren);
+				mesh.y = _numChildren*50*Math.cos(2*Math.PI*i/_numChildren);
 				i++;
 			}
 		}
@@ -51,7 +51,7 @@ package
 			world.y = (mouseY-stage.stageHeight/2)/10;
 			
 			if(renderer.view.height)
-				world.z += (-(renderer.view.height+renderer.totalMesh*100)-world.z)/25;
+				world.z += ((renderer.view.height+renderer.numChildren*100)-world.z)/25;
 			
 			var meshes:Array = renderer.meshes;
 			for each (var mesh:Mesh in meshes)

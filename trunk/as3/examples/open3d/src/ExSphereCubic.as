@@ -27,13 +27,14 @@ package
 			for(var j:int=-amount/2;j<amount/2;++j)
 			for(var k:int=-amount/2;k<amount/2;++k)
 			{
-				sphere = new Sphere(radius, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
+				// TODO : share material
+				var bitmapFileMaterial:BitmapFileMaterial = new BitmapFileMaterial("assets/earth.jpg");
+				sphere = new Sphere(radius, segment, segment, bitmapFileMaterial);
 				renderer.addChild(sphere);
 				sphere.x = gap*radius*i+gap*radius/2;
 				sphere.y = gap*radius*j+gap*radius/2;
 				sphere.z = gap*radius*k+gap*radius/2;
 			}
-			isDebug = true;
 			
 			renderer.world.rotationX=30;
 			
@@ -52,7 +53,7 @@ package
 			world.rotationZ = (mouseY-stage.stageHeight/2)/5;
 			world.rotationY++;
 			
-			debugText.appendText(" Move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
+			debugText.appendText(", Move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
 		}
 	}
 }

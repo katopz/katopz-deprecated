@@ -14,6 +14,13 @@ package open3d.objects
 	import open3d.geom.UV;
 	import open3d.materials.Material;
 	
+	/**
+	 * File loader for the Md2 file format.
+	 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
+	 * 
+	 * Modify/Optimize
+	 * @author katopz
+	 */	
 	public class MD2 extends KeyframeMesh
 	{
 		// [internal] Used for loading the MD2 file
@@ -184,30 +191,6 @@ package open3d.objects
 				trace( Frame(frames[0]).vertices[i]);
 				
 			}
-			
-			totalFace = 2;
-			
-			/*
-			triangles.vertices.push(0,0,0);
-			triangles.vertices.push(100,0,0);
-			triangles.vertices.push(100,100,0);
-			triangles.vertices.push(0,100,0);
-			*/
-			
-			
-			/*
-			vin.push(0,100,0);
-			vin.push(100,100,0);
-			vin.push(100,0,0);
-			vin.push(0,0,0);
-			*/
-			/*
-			triangles.indices.push(0,1,2);
-			triangles.indices.push(3,2,1);		
-			*/				
-			
-			
-			
 			
 			triangles.uvtData.push(1,1,1);
 			triangles.uvtData.push(0,1,1);

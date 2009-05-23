@@ -7,9 +7,8 @@ package open3d.materials
 	import flash.display.IGraphicsData;
 	
 	/**
-	 * BitmapMaterial
+	 * BitmapMaterial : embed image as texture
 	 * @author katopz
-	 * 
 	 */	
 	public class BitmapMaterial extends Material
 	{
@@ -32,7 +31,7 @@ package open3d.materials
 		
 		override public function update():void
 		{
-			graphicsData = Vector.<IGraphicsData>([stroke, new GraphicsBitmapFill(_texture, null, false, true), triangles]);
+			graphicsData = Vector.<IGraphicsData>([ new GraphicsBitmapFill(_texture, null, false, true), triangles]);
 		}  
 	}
 }

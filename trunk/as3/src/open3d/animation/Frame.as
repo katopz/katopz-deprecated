@@ -11,8 +11,9 @@ package open3d.animation
 	 * A Frame object has a list of vertices and a name which define the animation.
 	 * 
 	 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
-	 * @modifier katopz@sleepydesign.com
 	 * 
+	 * Modify/Optimize
+	 * @author katopz
 	 */
 	public class Frame
 	{
