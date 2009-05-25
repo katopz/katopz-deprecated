@@ -21,7 +21,7 @@ package
 		
 		override protected function create():void
 		{
-			var segment:uint = 48;
+			var segment:uint = 46;
 			
 			sphere = new Sphere(100, segment, segment, new BitmapMaterial(texture));
 			renderer.addChild(sphere);

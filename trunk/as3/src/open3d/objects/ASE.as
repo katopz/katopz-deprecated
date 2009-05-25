@@ -45,11 +45,11 @@ package open3d.objects
 			faceUVs[id] = uvs;
 		}
 
-		private var _faces:Array = [];
+		private var _faceLists:Array = [];
 
 		private function registerFace(id:int):void
 		{
-			_faces.push(id);
+			_faceLists.push(id);
 		}
 
 		override protected function buildFaces(material:Material):void
@@ -58,7 +58,7 @@ package open3d.objects
 			var i:int;
 			
 			vin = new Vector.<Number>();
-			for each (var id:int in _faces)
+			for each (var id:int in _faceLists)
 			{
 				var length:int = Math.min(faceVertices[id].length, faceUVs[id].length);
 				for (i = 0; i < length; i++)

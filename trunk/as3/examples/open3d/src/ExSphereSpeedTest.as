@@ -36,7 +36,7 @@ package
 			var _numChildren:int = renderer.numChildren;
 			
 			var i:int=0;
-			for each (var mesh:Mesh in renderer.meshes)
+			for each (var mesh:Mesh in renderer.childs)
 			{
 				mesh.x = _numChildren*50*Math.sin(2*Math.PI*i/_numChildren);
 				mesh.y = _numChildren*50*Math.cos(2*Math.PI*i/_numChildren);
@@ -47,21 +47,21 @@ package
 		override protected function draw():void
 		{
 			var world:Object3D = renderer.world;
-			world.x = (mouseX-stage.stageWidth/2)/10;
-			world.y = (mouseY-stage.stageHeight/2)/10;
+			world.x = -(mouseX-stage.stageWidth/2)/10;
+			world.y = -(mouseY-stage.stageHeight/2)/10;
 			
 			if(renderer.view.height)
 				world.z += ((renderer.view.height+renderer.numChildren*100)-world.z)/25;
 			
-			var meshes:Array = renderer.meshes;
-			for each (var mesh:Mesh in meshes)
+			var childs:Array = renderer.childs;
+			for each (var mesh:Mesh in childs)
 			{
 				mesh.rotationX++;
 				mesh.rotationY++;
 				mesh.rotationZ++;
 			}
 			
-			debugText.appendText(", Click to add more, move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
+			debugText.appendText(", Click to add more, Move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
 		}
 	}
 }

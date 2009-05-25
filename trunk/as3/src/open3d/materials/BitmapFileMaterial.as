@@ -1,6 +1,11 @@
 package open3d.materials
 {
-	import flash.display.Bitmap;
+	import flash.display.Bitmap;	
+	import flash.display.BitmapData;
+	import flash.display.GraphicsSolidFill;
+	import flash.display.GraphicsStroke;
+	import flash.display.GraphicsTrianglePath;
+	import flash.display.IGraphicsData;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -14,10 +19,15 @@ package open3d.materials
 	 */	
 	public class BitmapFileMaterial extends BitmapMaterial
 	{
-		public function BitmapFileMaterial(uri:String, smoothed:Boolean = false, color:uint=0xFFFFFF, alpha:Number = 1, doubleSided:Boolean = false) 
+		private const DEBUG_STROKE:GraphicsStroke = new GraphicsStroke
+		(
+			1, false, "normal", "none", "round", 0, new GraphicsSolidFill(0xFF00FF)
+		);
+		
+		public function BitmapFileMaterial(uri:String, color:uint=0xFFFFFF, alpha:Number = 1) 
 		{
-			var bitmapData:BitmapData = new BitmapData(100, 100, (alpha<1), 0x000000);
-			super(bitmapData, smoothed, color, alpha, doubleSided);
+			var bitmapData:BitmapData = new BitmapData(100, 100, (alpha<1), color);
+			super(bitmapData);
 			loadTexture(uri);
 		}
 		
@@ -32,7 +42,6 @@ package open3d.materials
 		private function onTextureLoaded(event:Event):void 
 		{
 			event.target.removeEventListener(Event.COMPLETE, onTextureLoaded);
-			stroke = null;
 			texture = Bitmap(event.target.content).bitmapData;
 		}
 	}
