@@ -16,12 +16,16 @@ package open3d.objects
 	{
 		public var screenZ:Number = 0;
 		
-		protected var faces:Vector.<Face>;
-		private  var facesList:Array;
-				
+		// public var faster than get/set
+		public var faces:Vector.<Face>;
+		protected var _faces:Vector.<Face>;
+		
+		// still need Array for sortOn(faster than Vector sort)
+		private var _faceIndexes:Array;
+		
 		public function get numFaces():int
 		{
-			return facesList?facesList.length:0;
+			return _faceIndexes?_faceIndexes.length:0;
 		}
 		
 		protected var _culling:String = TriangleCulling.NEGATIVE;
@@ -66,14 +70,17 @@ package open3d.objects
 		protected function buildFaces(material:Material):void
 		{
 			var _indices:Vector.<int> = triangles.indices;
+			
+			// numfaces
 			var _indices_length:int = _indices.length / 3;
 			
-			faces = new Vector.<Face>(_indices_length, true);
-			facesList = [];
+			_faces = new Vector.<Face>(_indices_length, true);
+			_faceIndexes = [];
 			
 			var i0:Number, i1:Number, i2:Number;
 			for (var i:int = 0; i < _indices_length; ++i)
 			{
+				// 3 point of face 
 				var ix3:int = int(i*3);
 				i0 = _indices[int(ix3 + 0)];
 				i1 = _indices[int(ix3 + 1)];
@@ -81,45 +88,42 @@ package open3d.objects
 				
 				// Vector3D faster than Vector
 				var index:Vector3D = new Vector3D(i0, i1, i2);
-				var _face:Face = faces[i] = new Face(index, new Vector3D(3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2));
+				var _face:Face = _faces[i] = new Face(index, new Vector3D(3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2));
 				
 				// register face index for z-sort
-				facesList[i] = index;
+				_faceIndexes[i] = index;
 			}
 			
 			this.material = material;
-			this.material.update();
 			
 			isDirty = true;
 			
-			vin.fixed = true;
-			triangles.uvtData.fixed = true;
-			triangles.indices.fixed = true;
+			// for public call fadter than get/set
+			faces = _faces;
+			
+			update();
 		}
 		
 		override public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
 		{
 			super.project(projectionMatrix3D, matrix3D);
 			
-			// z-sort, TODO : sort when isDirty
+			// z-sort, TODO : only sort when isDirty
 			if (_isFaceZSort && _isDirty)
 			{
-				var _vout:Vector.<Number> = vout;
-				var _facesList:Array = facesList;
-				
 				// get last depth after projected
-				for each (var _face:Face in faces)
+				for each (var _face:Face in _faces)
 					_face.calculateScreenZ(vout);
 				
 				// sortOn (faster than Vector.sort)
-				_facesList.sortOn("w", 18);
+				_faceIndexes.sortOn("w", 18);
 				
-				var _facesList_length:int = _facesList.length;
+				var _faceIndexes_length:int = _faceIndexes.length;
 				
 				// push back (faster than Vector concat)
-				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(_facesList_length * 3, true);
+				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(_faceIndexes_length * 3, true);
 				var j:int = 0;
-				for each(var face:Vector3D in _facesList)
+				for each(var face:Vector3D in _faceIndexes)
 				{
 					_triangles_indices[j++] = face.x;
 					_triangles_indices[j++] = face.y;
@@ -128,8 +132,8 @@ package open3d.objects
 			}
 			
 			// faster than getRelativeMatrix3D, also support current render method
-			if(_facesList_length>0)
-				screenZ = facesList[int(_facesList_length*.5)].w;
+			if(_faceIndexes_length>0)
+				screenZ = _faceIndexes[int(_faceIndexes_length*.5)].w;
 		}
 	}
 }

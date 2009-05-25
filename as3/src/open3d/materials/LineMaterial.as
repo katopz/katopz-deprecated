@@ -12,15 +12,16 @@ package open3d.materials
 	 */	
 	public class LineMaterial extends Material
 	{
+		public var stroke:GraphicsStroke;
 		public function LineMaterial(color:uint=0xFFFFFF, alpha:Number = 1) 
 		{
 			stroke = new GraphicsStroke(1, false, "normal", "none", "round", 0, new GraphicsSolidFill(color));
-			super(color, alpha);
 		}
 				
 		override public function update():void
 		{
 			graphicsData = Vector.<IGraphicsData>([stroke, triangles]);
+			graphicsData.fixed = true;
 		}
 	}
 }

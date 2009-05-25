@@ -1,5 +1,7 @@
 package open3d.objects
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.display.*;
 	import flash.geom.*;
 	
@@ -12,21 +14,40 @@ package open3d.objects
 	public class Object3D extends Sprite
 	{
 		protected var triangles:GraphicsTrianglePath;
-		protected var vin:Vector.<Number>;
+		
+		// public var faster than get/set view
+		public var vin:Vector.<Number>;
+		protected var _vin:Vector.<Number>;
+		
 		protected var vout:Vector.<Number>;
+		protected var _material:Material;
+		
+		public var vertices:Vector.<Number>;
 		
 		public function Object3D():void 
 		{
-			vin = new Vector.<Number>();
+			vin = _vin = new Vector.<Number>();
 			transform.matrix3D = new Matrix3D();
+		}
+		
+		/**
+		 * must do this when vin is dirty before project or using vertices
+		 */
+		public function update():void
+		{
+			_vin.fixed = true;
+			triangles.uvtData.fixed = true;
+			triangles.indices.fixed = true;
+			
+			vertices = _vin;
 		}
 		
 		public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
 		{
-			vout = new Vector.<Number>(vin.length, true);
+			vout = new Vector.<Number>(_vin.length, true);
 			
 			// local
-			transform.matrix3D.transformVectors(vin, vout);
+			transform.matrix3D.transformVectors(_vin, vout);
 				
 			// global
 			matrix3D.transformVectors(vout, vout);
@@ -35,11 +56,11 @@ package open3d.objects
 			Utils3D.projectVectors(projectionMatrix3D, vout, triangles.vertices, triangles.uvtData);
 		}
 		
-		protected var _material:Material;
 		public function set material(value:Material):void
 		{
 			_material = value?value: new Material();
 			_material.triangles = triangles;
+			_material.update();
 		}
 		
 		public function get material():Material
@@ -52,14 +73,27 @@ package open3d.objects
 			return _material.graphicsData;
 		}
 		
-		public function set stroke(value:GraphicsStroke):void
+		// TODO : more friendly use
+		public function getVertices(index:int):Vector3D
 		{
-			_material.stroke = value;
+			return new Vector3D
+			(
+				_vin[3*index+0],
+				_vin[3*index+1],
+				_vin[3*index+2]
+			);
 		}
 		
-		public function get stroke():GraphicsStroke
+		// TODO : more friendly use
+		public function setVertices(index:int, axis:String, value:Number):void
 		{
-			return _material.stroke;
+			if(axis=="x"){
+				_vin[3*index+0] = value;
+			}else if(axis=="y"){
+				_vin[3*index+1] = value;
+			}else if(axis=="z"){
+				_vin[3*index+2] = value;
+			}
 		}
 	}
 }

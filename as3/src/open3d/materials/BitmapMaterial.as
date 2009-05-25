@@ -2,6 +2,7 @@ package open3d.materials
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.display.*;
 	import flash.display.BitmapData;
 	import flash.display.GraphicsBitmapFill;
 	import flash.display.IGraphicsData;
@@ -12,10 +13,13 @@ package open3d.materials
 	 */	
 	public class BitmapMaterial extends Material
 	{
-		public function BitmapMaterial(bitmapData:BitmapData = null, smoothed:Boolean = false, color:uint=0xFFFFFF, alpha:Number = 1, doubleSided:Boolean = false) 
+		protected var _texture:BitmapData;
+		protected var _graphicsBitmapFill:GraphicsBitmapFill;
+		
+		public function BitmapMaterial(bitmapData:BitmapData = null) 
 		{
-			super(color, alpha);
-			texture = bitmapData;
+			_texture = bitmapData?bitmapData:new BitmapData(100, 100, false, 0x000000);
+			_graphicsBitmapFill = new GraphicsBitmapFill(_texture, null, false, true);
 		}
 		
 		public function get texture():BitmapData 
@@ -26,12 +30,13 @@ package open3d.materials
 		public function set texture(value:BitmapData):void
 		{ 
 			_texture = value;
-			update();
+			_graphicsBitmapFill.bitmapData = value;
 		}
 		
 		override public function update():void
 		{
-			graphicsData = Vector.<IGraphicsData>([ new GraphicsBitmapFill(_texture, null, false, true), triangles]);
-		}  
+			graphicsData = Vector.<IGraphicsData>([_graphicsBitmapFill , triangles]);
+			graphicsData.fixed = true;
+		}
 	}
 }

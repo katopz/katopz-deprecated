@@ -23,6 +23,7 @@ package open3d.view
 		
 		protected var _isDebug:Boolean = false;
 		protected var debugText:SimpleTextField;
+		protected var stat:Stats;
 		
 		public function SimpleView()
 		{
@@ -46,11 +47,15 @@ package open3d.view
 			debugText.x = 80;
 			
 			isDebug = true;
+			stat = new Stats();
 			
 			create();
 			
-			addChild(new Stats());
-			addChild( debugText );
+			addChild(stat);
+			addChild(debugText);
+			
+			stat.visible = isDebug;
+			debugText.visible = isDebug;
 			
 			start();
 		}
@@ -112,7 +117,7 @@ package open3d.view
 
 		protected function toggleStroke(event:MouseEvent):void
 		{
-			for each (var mesh:Mesh in renderer.meshes)
+			for each (var mesh:Mesh in renderer.childs)
 			{
 				//mesh.stroke.thickness = (event.type == MouseEvent.MOUSE_DOWN) ? 1 : NaN;
 			}
