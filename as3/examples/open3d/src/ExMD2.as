@@ -18,12 +18,13 @@ package
 			cat = new MD2(new CatModel, new BitmapFileMaterial("assets/pg.png"));
 			renderer.addChild(cat);
 			renderer.isFaceZSort = renderer.isMeshZSort = false;
+			cat.culling = "none";
 		}
 		
 		override protected function draw():void
 		{
-			cat.rotationY = 180*Math.abs(Math.sin(step));
-			step+=.01;
+			cat.rotationY+=10;// = 180*Math.abs(Math.sin(step));
+			//step+=.01;
 		}
 	}
 }

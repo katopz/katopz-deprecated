@@ -57,14 +57,14 @@ package open3d.objects
 			var n:int = -1;
 			var i:int;
 			
-			vin = new Vector.<Number>();
+			_vin = new Vector.<Number>();
 			for each (var id:int in _faceLists)
 			{
 				var length:int = Math.min(faceVertices[id].length, faceUVs[id].length);
 				for (i = 0; i < length; i++)
 				{
 					var vertex:Vector3D = vertexCoords[faceVertices[id][i]];
-					vin.push(vertex.x, vertex.y, vertex.z);
+					_vin.push(vertex.x, vertex.y, vertex.z);
 					n++;
 
 					var uv:UV = uvs[faceUVs[id][i]];

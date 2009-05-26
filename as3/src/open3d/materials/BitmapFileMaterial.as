@@ -19,11 +19,6 @@ package open3d.materials
 	 */	
 	public class BitmapFileMaterial extends BitmapMaterial
 	{
-		private const DEBUG_STROKE:GraphicsStroke = new GraphicsStroke
-		(
-			1, false, "normal", "none", "round", 0, new GraphicsSolidFill(0xFF00FF)
-		);
-		
 		public function BitmapFileMaterial(uri:String, color:uint=0xFFFFFF, alpha:Number = 1) 
 		{
 			var bitmapData:BitmapData = new BitmapData(100, 100, (alpha<1), color);

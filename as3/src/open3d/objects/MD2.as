@@ -95,10 +95,11 @@ package open3d.objects
 		private function parse(data:ByteArray):void
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
-			//var vertices:Vector.<Number> = this.vin;
+			var vertices:Array = [];
 			//var faces:Array = []//TODO//this.faceList;
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
+			var uvDatas:Array = []
 			//var data:ByteArray = loader.data;
 			
 			// Make sure to have this in Little Endian or you will hate you life.
@@ -113,8 +114,8 @@ package open3d.objects
 			// Vertice setup
 			// 		Be sure to allocate memory for the vertices to the object
 			//		These vertices will be updated each frame with the proper coordinates
-			//for (i = 0; i < num_vertices; i++)
-				//vin.push(new Vector3D(0,0,0));
+			for (i = 0; i < num_vertices; i++)
+				vertices.push(new Vector3D(0,0,0));
 
 			// UV coordinates
 			//		Load them!
@@ -137,50 +138,27 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 				
-				//faceList.push(new Face(this, v1, v2, v3, material, uvList));
-				// Create and add the face
+				trace(uvs[tc], uvs[tb], uvs[ta]);
+				
 				/*
-				faces.push(new Face
+				triangles.uvtData.push
 				(
-					this,vertices[c], vertices[b], vertices[a] , material,
-					[uvs[tc], uvs[tb], uvs[ta]]
-				));
+					uvs[tc].u, uvs[tc].v, 
+					uvs[tb].u, uvs[tb].v, 
+					uvs[ta].u, uvs[ta].v
+				);
 				*/
+				trace(triangles.uvtData);
 				
-				//vin.push(vertices[c], vertices[b], vertices[a]);
-				
-				//triangles.uvtData.push(uvs[ta], uvs[tb], uvs[tc]);
-				//triangles.indices.push(j++, j++, j++);
-				
-				trace(uvs[ta], uvs[tb], uvs[tc]);
 			}
 			
-			
-			for (i = 0; i < num_tris/2; i++)
-			{
-				var _3i:int = 3*i;
-				triangles.indices.push(_3i,_3i+1,_3i+2);
-				trace(_3i,_3i+1,_3i+2);
-				triangles.indices.push(_3i+3,_3i+2,_3i+1);
-				trace(_3i+3,_3i+2,_3i+1);
-			}
-			
+			triangles.uvtData.push(0,0,1, 1,0,1, 0,1,1, 1,1,1);
 			
 			// Frame animation data
 			//		This part is a little funky.
 			data.position = offset_frames;
 			readFrames(data);
-			
-			/*
-			for (i = 0; i < vertices.length; i++)
-			{
-				vertices[i].x = frames[0].vertices[i].x;
-				vertices[i].y = frames[0].vertices[i].y;
-				vertices[i].z = frames[0].vertices[i].z;
-				trace(vertices[i])
-			}
-			*/
-			
+						
 			j=0;
 			for (i = 0; i < Frame(frames[0]).vertices.length; i++)
 			{
@@ -189,13 +167,26 @@ package open3d.objects
 						 Frame(frames[0]).vertices[i].z);
 				
 				trace( Frame(frames[0]).vertices[i]);
+			}
+			/*vin.push(
+				0,-150,-160,
+				0,150,-160,
+				0,150,160,
+				0,-150,160
+				)*/
 				
+			//   ___   ___   ___         ___  
+			// 0|  /|1|  /|4|  /|(3*i)+0|  /|(3*i)+1
+			//  | / | | / | | / |		| / |
+			// 3|/__|2|/__|5|/__|(3*i)+3|/__|(3*i)+2
+			
+			for (i = 0; i < num_tris; i++)
+			{
+				//
 			}
 			
-			triangles.uvtData.push(1,1,1);
-			triangles.uvtData.push(0,1,1);
-			triangles.uvtData.push(1,0,1);
-			triangles.uvtData.push(0,0,1);
+			triangles.indices.push(0, 1, 2);
+			triangles.indices.push(1, 2, 3);
 			
 			/*
 			for (i = 0; i < num_tris/3; i+=3)
