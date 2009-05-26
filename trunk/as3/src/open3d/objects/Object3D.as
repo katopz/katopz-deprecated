@@ -22,8 +22,6 @@ package open3d.objects
 		protected var vout:Vector.<Number>;
 		protected var _material:Material;
 		
-		public var vertices:Vector.<Number>;
-		
 		public function Object3D():void 
 		{
 			vin = _vin = new Vector.<Number>();
@@ -38,8 +36,6 @@ package open3d.objects
 			_vin.fixed = true;
 			triangles.uvtData.fixed = true;
 			triangles.indices.fixed = true;
-			
-			vertices = _vin;
 		}
 		
 		public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
