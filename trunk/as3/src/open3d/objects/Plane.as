@@ -61,7 +61,6 @@ package open3d.objects
 					++k;
 				}
 			}
-
 			buildFaces(material);
 		}
 	}
