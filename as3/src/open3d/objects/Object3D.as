@@ -44,7 +44,7 @@ package open3d.objects
 			
 			// local
 			transform.matrix3D.transformVectors(_vin, vout);
-				
+			
 			// global
 			matrix3D.transformVectors(vout, vout);
 

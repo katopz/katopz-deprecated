@@ -88,9 +88,9 @@ package open3d.objects
 				
 				// Vector3D faster than Vector
 				var index:Vector3D = new Vector3D(i0, i1, i2);
-				var _face:Face = _faces[i] = new Face(index, new Vector3D(3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2));
+				var _face:Face = _faces[i] = new Face(index, 3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2);
 				
-				// register face index for z-sort
+				// register face index for z-sort, make it seal in this class, faster than "dot access" like face.index
 				_faceIndexes[i] = index;
 			}
 			
@@ -122,12 +122,12 @@ package open3d.objects
 				
 				// push back (faster than Vector concat)
 				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(_faceIndexes_length * 3, true);
-				var j:int = 0;
+				var i:int = -1;
 				for each(var face:Vector3D in _faceIndexes)
 				{
-					_triangles_indices[j++] = face.x;
-					_triangles_indices[j++] = face.y;
-					_triangles_indices[j++] = face.z;
+					_triangles_indices[++i] = face.x;
+					_triangles_indices[++i] = face.y;
+					_triangles_indices[++i] = face.z;
 				}
 			}
 			
