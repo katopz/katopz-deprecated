@@ -3,7 +3,7 @@ package open3d.objects
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
 	import flash.utils.unescapeMultiByte;
-	
+
 	import open3d.geom.UV;
 	import open3d.materials.Material;
 
@@ -11,7 +11,7 @@ package open3d.objects
 	 * Parses single ASE mesh from ByteArray.
 	 * @author makc
 	 * @link http://makc.googlecode.com/svn/trunk/flash/fp10_ase
-	 * 
+	 *
 	 * Modify/Optimize
 	 * @author katopz
 	 */
@@ -56,7 +56,7 @@ package open3d.objects
 		{
 			var n:int = -1;
 			var i:int;
-			
+
 			_vin = new Vector.<Number>();
 			for each (var id:int in _faceLists)
 			{
@@ -68,11 +68,11 @@ package open3d.objects
 					n++;
 
 					var uv:UV = uvs[faceUVs[id][i]];
-					triangles.uvtData.push(uv.u, uv.v, 1);
+					_triangles.uvtData.push(uv.u, uv.v, 1);
 				}
-				triangles.indices.push(n - 2, n - 1, n);
+				_triangles.indices.push(n - 2, n - 1, n);
 			}
-			
+
 			super.buildFaces(material);
 		}
 
@@ -106,7 +106,7 @@ package open3d.objects
 					}
 				}
 			}
-			
+
 			buildFaces(material);
 		}
 	}

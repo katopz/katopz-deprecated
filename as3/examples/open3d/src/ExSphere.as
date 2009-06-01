@@ -34,8 +34,8 @@ package
 		
 		override protected function draw():void
 		{
-			sphere.rotationY+=10;
-			sphere2.rotationY-=10;
+			sphere.rotationY+=2;
+			sphere2.rotationY-=2;
 			
 			sphere2.x = 200*Math.sin(step);
 			sphere2.z = 200*Math.cos(step);

@@ -1,17 +1,17 @@
 package open3d.animation
 {
 	import __AS3__.vec.Vector;
-	
+
 	import flash.geom.Vector3D;
-	
+
 	/**
 	 * Used in combination with KeyframeMesh DisplayObject3D and all sub-classes
 	 * to provided keyframe-based animation to objects.
 	 * <p>
 	 * A Frame object has a list of vertices and a name which define the animation.
-	 * 
+	 *
 	 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
-	 * 
+	 *
 	 * Modify/Optimize
 	 * @author katopz
 	 */
@@ -19,10 +19,10 @@ package open3d.animation
 	{
 		public var name:String;
 		public var vertices:Vector.<Vector3D>;
-		
+
 		/**
 		 * Create a new Frame with a name and a set of vertices
-		 * 
+		 *
 		 * @param name	The name of the frame
 		 * @param vertices	An array of Vertex objects
 		 */
@@ -31,10 +31,10 @@ package open3d.animation
 			this.name = name;
 			this.vertices = vertices;
 		}
-		
+
 		public function toString():String
 		{
 			return "[Frame][name:" + name + "][vertices:" + vertices.length + "]";
-		}	
+		}
 	}
 }
