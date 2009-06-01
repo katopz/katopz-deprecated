@@ -31,7 +31,16 @@ package open3d.materials
 		
 		public function update():void
 		{
-			
+			graphicsData.fixed = false;
+			if(_isDebug)
+			{
+				graphicsData.unshift(DEBUG_STROKE);
+			}else{
+				var _index:int = graphicsData.indexOf(DEBUG_STROKE);
+				if(_index>-1)
+					graphicsData.splice(_index, 1);
+			}
+			graphicsData.fixed = true;
 		}
 		
 		public function get isDebug():Boolean
@@ -41,15 +50,8 @@ package open3d.materials
 		
 		public function set isDebug(value:Boolean):void
 		{
-			graphicsData.fixed = false;
-			if(_isDebug)
-			{
-				graphicsData.unshift(DEBUG_STROKE);
-			}else{
-				graphicsData.fixed = false;
-				graphicsData.splice(graphicsData.indexOf(DEBUG_STROKE), 1);
-			}
-			graphicsData.fixed = true;
+			_isDebug = value;
+			update();
 		}
 	}
 }

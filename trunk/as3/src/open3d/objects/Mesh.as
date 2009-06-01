@@ -32,7 +32,7 @@ package open3d.objects
 		public function set culling(value:String):void
 		{
 			_culling = value;
-			triangles.culling = _culling;
+			_triangles.culling = _culling;
 		}
 		
 		public function get culling():String
@@ -51,25 +51,25 @@ package open3d.objects
 			return _isFaceZSort;
 		}
 		
-		private var _isDirty:Boolean = false;
-		public function set isDirty(value:Boolean):void
+		private var _isTransfromDirty:Boolean = false;
+		public function set isTransfromDirty(value:Boolean):void
 		{
-			_isDirty = value;
+			_isTransfromDirty = value;
 		}
 		
-		public function get isDirty():Boolean
+		public function get isTransfromDirty():Boolean
 		{
-			return _isDirty;
+			return _isTransfromDirty;
 		}
 		
 		public function Mesh()
 		{
-			triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), culling);
+			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), culling);
 		}
-		
+
 		protected function buildFaces(material:Material):void
 		{
-			var _indices:Vector.<int> = triangles.indices;
+			var _indices:Vector.<int> = _triangles.indices;
 			
 			// numfaces
 			var _indices_length:int = _indices.length / 3;
@@ -90,13 +90,13 @@ package open3d.objects
 				var index:Vector3D = new Vector3D(i0, i1, i2);
 				var _face:Face = _faces[i] = new Face(index, 3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2);
 				
-				// register face index for z-sort, make it seal in this class, faster than "dot access" like face.index
+				// register face index for z-sort
 				_faceIndexes[i] = index;
 			}
 			
 			this.material = material;
 			
-			isDirty = true;
+			isTransfromDirty = true;
 			
 			// for public call fadter than get/set
 			faces = _faces;
@@ -108,12 +108,12 @@ package open3d.objects
 		{
 			super.project(projectionMatrix3D, matrix3D);
 			
-			// z-sort, TODO : only sort when isDirty
-			if (_isFaceZSort && _isDirty)
+			// z-sort, TODO : only sort when transfrom is dirty
+			if (_isFaceZSort && _isTransfromDirty)
 			{
 				// get last depth after projected
 				for each (var _face:Face in _faces)
-					_face.calculateScreenZ(vout);
+					_face.calculateScreenZ(_vout);
 				
 				// sortOn (faster than Vector.sort)
 				_faceIndexes.sortOn("w", 18);
@@ -121,7 +121,7 @@ package open3d.objects
 				var _faceIndexes_length:int = _faceIndexes.length;
 				
 				// push back (faster than Vector concat)
-				var _triangles_indices:Vector.<int> = triangles.indices = new Vector.<int>(_faceIndexes_length * 3, true);
+				var _triangles_indices:Vector.<int> = _triangles.indices = new Vector.<int>(_faceIndexes_length * 3, true);
 				var i:int = -1;
 				for each(var face:Vector3D in _faceIndexes)
 				{
