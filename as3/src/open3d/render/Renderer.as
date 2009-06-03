@@ -4,7 +4,7 @@ package open3d.render
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
 	import flash.geom.Point;
-
+	
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
 
@@ -25,8 +25,8 @@ package open3d.render
 		private var canvas:Sprite;
 
 		// public var faster than get/set view
-		public var view:Shape;
-		private var _view:Shape;
+		public var view:Sprite;
+		private var _view:Sprite;
 
 		public var projection:PerspectiveProjection;
 		private var _projection:PerspectiveProjection;
@@ -78,7 +78,7 @@ package open3d.render
 		{
 			this.canvas = canvas;
 
-			view = _view = new Shape();
+			view = _view = new Sprite();
 			_view.x = canvas.stage.stageWidth / 2;
 			_view.y = canvas.stage.stageHeight / 2;
 			canvas.addChild(_view);
@@ -101,15 +101,15 @@ package open3d.render
 		{
 			if (!object3D)
 				return;
+				
 			_childs.push(object3D);
-
-			canvas.addChild(object3D);
 		}
 
 		public function removeChild(object3D:Object3D):void
 		{
 			if (!object3D)
 				return;
+				
 			_childs.splice(_childs.indexOf(object3D), 1);
 		}
 
@@ -137,30 +137,29 @@ package open3d.render
 
 				// count total faces in Mesh
 				if (child is Mesh)
+					totalFaces += int(Mesh(child).numFaces);
+			}
+			
+			/*
+			
+			// shoulde be faster draw which this way? sadly push Vector is slower, also call plenty of dot access
+			
+			var _drawGraphicsData:Vector.<IGraphicsData> = new Vector.<IGraphicsData>();
+			for each (child in _childs)
+			{
+				for each (var graphicsData:IGraphicsData in child.graphicsData)
 				{
-					totalFaces += Mesh(child).numFaces;
+					_drawGraphicsData.push(graphicsData);
 				}
+
+				// count total faces in Mesh
+				if (child is Mesh)
+					totalFaces += Mesh(child).numFaces;
 			}
 
-		/*
-
-		   // shoulde be faster draw which this way?
-		   var _drawGraphicsData:Vector.<IGraphicsData> = new Vector.<IGraphicsData>();
-		   for each (child in _childs)
-		   {
-		   for each (var graphicsData:IGraphicsData in child.graphicsData)
-		   {
-		   _drawGraphicsData.push(graphicsData);
-		   }
-
-		   // count total faces in Mesh
-		   if(child is Mesh)
-		   totalFaces+=Mesh(child).numFaces;
-		   }
-
-		   _view_graphics.drawGraphicsData(_drawGraphicsData);
-
-		 */
+			_view_graphics.drawGraphicsData(_drawGraphicsData);
+			
+			*/
 		}
 	}
 }

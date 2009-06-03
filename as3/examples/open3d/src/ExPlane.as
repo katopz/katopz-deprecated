@@ -17,18 +17,18 @@ package
 		
 		override protected function create():void
 		{
-			var earthBitmap	:Bitmap = Bitmap(new Texture());
-			earthBitmap.x = stage.stageWidth/2 - earthBitmap.width/2;
-			addChild(earthBitmap);
+			//var earthBitmap	:Bitmap = Bitmap(new Texture());
+			//earthBitmap.x = stage.stageWidth/2 - earthBitmap.width/2;
+			//addChild(earthBitmap);
 			
-			plane = new Plane(256, 128, new BitmapFileMaterial("assets/earth.jpg"));
+			plane = new Plane(256, 128, new BitmapFileMaterial("assets/earth.jpg"), 80,80);
 			renderer.addChild(plane);
 			plane.culling = "none";
 		}
 		
 		override protected function draw():void
 		{
-			plane.rotationX++;
+			//plane.rotationX++;
 		}
 	}
 }

@@ -41,7 +41,7 @@ package
 
 		override protected function draw():void
 		{
-			sphere.rotationY += 2;
+			//sphere.rotationY += 2;
 			
 			var light:Vector3D = new Vector3D();
 			light.x = (mouseX-400) / 400 / Math.SQRT2;
