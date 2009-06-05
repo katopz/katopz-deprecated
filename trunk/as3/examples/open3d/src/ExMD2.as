@@ -5,6 +5,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExMD2
+	 * @author katopz
+	 * 
+	 */	
 	public class ExMD2 extends SimpleView
 	{
 		[Embed(source='assets/plane.md2', mimeType='application/octet-stream')]

@@ -13,14 +13,18 @@ package
 	import open3d.objects.Plane;
 	import open3d.view.SimpleView;
 	
+	[SWF(width="600", height="600", frameRate="30", backgroundColor="0x000000")]
+	
 	/**
 	 * Native FP10 3D Environment Mapping demo
 	 * 
 	 * @author David Lenaerts
 	 * http://www.derschmale.com
+	 * 
+	 * Fluid Plane test
+	 * @author katopz
+	 * 
 	 */
-	
-	[SWF(width="600", height="600", frameRate="30", backgroundColor="0x000000")]
 	public class ExEnvironmentMapFilters extends SimpleView
 	{
 		[Embed(source="assets/bagger.jpg")]

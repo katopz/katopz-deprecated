@@ -24,7 +24,7 @@ package open3d.debug
 			filters = [new GlowFilter(0x000000, 1, 4, 4, 2, 1)];
 
 			if (text)
-				this.htmlText = text;
+				this.text = text;
 		}
 	}
 }

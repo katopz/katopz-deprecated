@@ -11,6 +11,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExSphereSpeedTest
+	 * @author katopz
+	 * 
+	 */	
 	public class ExSphereSpeedTest extends SimpleView
 	{
 		override protected function create():void
