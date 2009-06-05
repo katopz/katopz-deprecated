@@ -9,6 +9,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExLine3D
+	 * @author katopz
+	 * 
+	 */	
 	public class ExLine3D extends SimpleView
 	{
 		private var line:Line3D;

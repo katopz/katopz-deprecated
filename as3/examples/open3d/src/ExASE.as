@@ -9,6 +9,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExASE
+	 * @author katopz
+	 * 
+	 */	
 	public class ExASE extends SimpleView
 	{
 		[Embed(source='assets/shuttle.ase', mimeType='application/octet-stream')]

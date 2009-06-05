@@ -40,6 +40,17 @@ package open3d.objects
 			return _culling;
 		}
 		
+		private var _isFaceDebug:Boolean = true;
+		public function set isFaceDebug(value:Boolean):void
+		{
+			_isFaceDebug = value;
+		}
+		
+		public function get isFaceDebug():Boolean
+		{
+			return _isFaceDebug;
+		}
+		
 		private var _isFaceZSort:Boolean = true;
 		public function set isFaceZSort(value:Boolean):void
 		{
@@ -62,6 +73,9 @@ package open3d.objects
 			return _isTransfromDirty;
 		}
 		
+		private var _commands:Vector.<int>=Vector.<int>([1, 2, 2]); // commands to draw triangle
+		private var _data:Vector.<Number> = new Vector.<Number>(6, true); // data to draw shape
+
 		public function Mesh()
 		{
 			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), culling);
@@ -108,6 +122,9 @@ package open3d.objects
 		{
 			super.project(projectionMatrix3D, matrix3D);
 			
+			var _faceIndexes_length:int = _faceIndexes.length;
+			if(_faceIndexes_length<=0)return;
+			
 			// z-sort, TODO : only sort when transfrom is dirty
 			if (_isFaceZSort && _isTransfromDirty)
 			{
@@ -117,8 +134,6 @@ package open3d.objects
 				
 				// sortOn (faster than Vector.sort)
 				_faceIndexes.sortOn("w", 18);
-				
-				var _faceIndexes_length:int = _faceIndexes.length;
 				
 				// push back (faster than Vector concat)
 				var _triangles_indices:Vector.<int> = _triangles.indices = new Vector.<int>(_faceIndexes_length * 3, true);
@@ -132,8 +147,82 @@ package open3d.objects
 			}
 			
 			// faster than getRelativeMatrix3D, also support current render method
-			if(_faceIndexes_length>0)
-				screenZ = _faceIndexes[int(_faceIndexes_length*.5)].w;
+			screenZ = _faceIndexes[int(_faceIndexes_length*.5)].w;
 		}
+		
+		public function debugFace(x:Number, y:Number, _view_graphics:Graphics):void
+		{
+			var i:int;
+        	var _vertices:Vector.<Number> = _triangles.vertices;
+        	        	
+        	// TODO : toggle face hit test
+        	var isHit:Boolean
+			_view_graphics.beginBitmapFill(new BitmapData(100, 100, true, 0xCCFF0000));
+        	
+        	for each (var face:Face in _faces)
+        	{
+				// P0
+				i = face.j0 << 1;
+				_data[0] = _vertices[i];
+				_data[1] = _vertices[i + 1];
+				
+				// P1
+				i = face.j1 << 1;
+				_data[2] = _vertices[i];
+				_data[3] = _vertices[i + 1];
+
+				// P2
+				i = face.j2 << 1;
+				_data[4] = _vertices[i];
+				_data[5] = _vertices[i + 1];
+				
+				// chk point in triangle
+				if(insideTriangle(x, y, _data[0], _data[1], _data[2], _data[3], _data[4], _data[5]))
+				{
+					// DRAW TYPE #3 drawPath for ColorMaterial = faster than BitmapDataColor
+					_view_graphics.drawPath(_commands, _data);
+				}
+        	}
+        	
+        	_view_graphics.endFill();
+		}
+		
+        /**
+         * see if p is inside triangle abc
+         * http://actionsnippet.com/?p=1462
+         * 
+         *      a 
+         *     /\
+         *    /p \
+         *  b/____\c
+         * 
+         */        
+        private function insideTriangle(px:Number, py:Number, ax:Number, ay:Number, bx:Number, by:Number, cx:Number, cy:Number):Boolean
+        {
+			var aX:Number, aY:Number, bX:Number, bY:Number
+			var cX:Number, cY:Number, apx:Number, apy:Number;
+			var bpx:Number, bpy:Number, cpx:Number, cpy:Number;
+			var cCROSSap:Number, bCROSScp:Number, aCROSSbp:Number;
+
+			aX = cx - bx;
+			aY = cy - by;
+			bX = ax - cx;
+			bY = ay - cy;
+			cX = bx - ax;
+			cY = by - ay;
+			
+			apx = px - ax;
+			apy = py - ay;
+			bpx = px - bx;
+			bpy = py - by;
+			cpx = px - cx;
+			cpy = py - cy;
+
+			aCROSSbp = aX * bpy - aY * bpx;
+			cCROSSap = cX * apy - cY * apx;
+			bCROSScp = bX * cpy - bY * cpx;
+
+			return (aCROSSbp >= 0.0) && (bCROSScp >= 0.0) && (cCROSSap >= 0.0);
+        }
 	}
 }

@@ -8,6 +8,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExSphere
+	 * @author katopz
+	 * 
+	 */	
 	public class ExSphere extends SimpleView
 	{
         [Embed(source = "assets/earth.jpg")]
@@ -21,22 +27,19 @@ package
 		
 		override protected function create():void
 		{
-			var segment:uint = 78;
+			var segment:uint = 56;
 			
 			sphere = new Sphere(100, segment, segment, new BitmapMaterial(texture));
 			renderer.addChild(sphere);
 			
-			/*
 			sphere2 = new Sphere(50, segment, segment, new BitmapMaterial(texture));
 			renderer.addChild(sphere2);
 			
 			renderer.world.rotationX = 30;
-			*/
 		}
 		
 		override protected function draw():void
 		{
-			/*
 			sphere.rotationY+=2;
 			sphere2.rotationY-=2;
 			
@@ -44,7 +47,6 @@ package
 			sphere2.z = 200*Math.cos(step);
 			
 			step+=0.1;
-			*/
 		}
 	}
 }

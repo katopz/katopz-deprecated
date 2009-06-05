@@ -5,6 +5,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExFluidPlane
+	 * @author katopz
+	 * 
+	 */	
 	public class ExFluidPlane extends SimpleView
 	{
 		private var plane:Plane;

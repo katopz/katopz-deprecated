@@ -1,10 +1,13 @@
 package open3d.render
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.display.*;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
 	import flash.geom.Point;
 	
+	import open3d.geom.Face;
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
 
@@ -27,7 +30,7 @@ package open3d.render
 		// public var faster than get/set view
 		public var view:Sprite;
 		private var _view:Sprite;
-
+		
 		public var projection:PerspectiveProjection;
 		private var _projection:PerspectiveProjection;
 		private var _projectionMatrix3D:Matrix3D;
@@ -36,18 +39,28 @@ package open3d.render
 		private var _worldMatrix3D:Matrix3D;
 
 		// still need Array for sortOn(faster than Vector sort)
+		public var childs:Array;
 		private var _childs:Array;
-
-		public function get childs():Array
-		{
-			return _childs;
-		}
 
 		public function get numChildren():int
 		{
 			return _childs.length;
 		}
 
+		private var _isFaceDebug:Boolean;
+
+		public function set isFaceDebug(value:Boolean):void
+		{
+			_isFaceDebug = value;
+			//for each (var mesh:Mesh in _childs)
+				//mesh.isFaceDebug = value;
+		}
+
+		public function get isFaceDebug():Boolean
+		{
+			return _isFaceDebug;
+		}
+		
 		private var _isFaceZSort:Boolean;
 
 		public function set isFaceZSort(value:Boolean):void
@@ -82,7 +95,7 @@ package open3d.render
 			_view.x = canvas.stage.stageWidth / 2;
 			_view.y = canvas.stage.stageHeight / 2;
 			canvas.addChild(_view);
-
+			
 			projection = _projection = new PerspectiveProjection();
 			_projection.fieldOfView = 53;
 			_projection.projectionCenter = new Point(canvas.stage.stageWidth / 2, canvas.stage.stageHeight / 2);
@@ -91,7 +104,7 @@ package open3d.render
 			world = new Object3D();
 			_worldMatrix3D = world.transform.matrix3D;
 
-			_childs = [];
+			childs = _childs = [];
 
 			isMeshZSort = true;
 			isFaceZSort = true;
@@ -112,15 +125,16 @@ package open3d.render
 				
 			_childs.splice(_childs.indexOf(object3D), 1);
 		}
-
+		
 		public function render():void
 		{
 			// dispose
 			totalFaces = 0;
-
+			
+			// view
 			var _view_graphics:Graphics = _view.graphics;
 			_view_graphics.clear();
-
+			
 			// project children
 			var child:Object3D;
 			for each (child in _childs)
@@ -129,20 +143,42 @@ package open3d.render
 			// z-sort Object3D
 			if (_isMeshZSort)
 				_childs.sortOn("screenZ", 18);
-
+				
 			// draw
+			var childNum:int = 0;
 			for each (child in _childs)
 			{
+				// DRAW TYPE #1 drawGraphicsData 
 				_view_graphics.drawGraphicsData(child.graphicsData);
-
-				// count total faces in Mesh
+				
+				/*
+				
+				// DRAW TYPE #2 drawTriangles (with plenty of dot access = slow)
+				if(child.material is BitmapMaterial)
+				{
+					_view_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);
+            		_view_graphics.drawTriangles(child.triangles.vertices, child.triangles.indices, child.triangles.uvtData,  child.triangles.culling);
+            		_view_graphics.endFill();
+    			}
+    			
+            	*/
+            	
+				// Mesh only
 				if (child is Mesh)
+				{
+					// debug current total face number
 					totalFaces += int(Mesh(child).numFaces);
+					
+					// check for face hit test?
+					if(_isFaceDebug)
+						Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
+				}
 			}
 			
 			/*
 			
-			// shoulde be faster draw which this way? sadly push Vector is slower, also call plenty of dot access
+			// shoulde be faster draw which this way? 
+			// sadly "push" Vector is slower, also call plenty of dot access
 			
 			var _drawGraphicsData:Vector.<IGraphicsData> = new Vector.<IGraphicsData>();
 			for each (child in _childs)
@@ -161,5 +197,5 @@ package open3d.render
 			
 			*/
 		}
-	}
+   	}
 }

@@ -78,24 +78,21 @@ package open3d.view
 
 		protected function run(event:Event):void
 		{
-			debug();
+			if (_isDebug)debug();
 			draw();
 			renderer.render();
 		}
 
+		protected function debug():void
+		{
+			debugText.text = String("Object3D(s) : " + renderer.numChildren + ", Face(s) : " + renderer.totalFaces);
+		}
+		
 		protected function draw():void
 		{
 			// override me
 		}
-
-		protected function debug():void
-		{
-			if (_isDebug)
-			{
-				debugText.text = String("Object3D(s) : " + renderer.numChildren + ", Face(s) : " + renderer.totalFaces);
-			}
-		}
-
+		
 		protected function get isDebug():Boolean
 		{
 			return _isDebug;
@@ -110,16 +107,28 @@ package open3d.view
 			{
 				stage.addEventListener(MouseEvent.MOUSE_DOWN, toggleStroke, false, 0, true);
 				stage.addEventListener(MouseEvent.MOUSE_UP, toggleStroke, false, 0, true);
+				stage.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 			}
 			else
 			{
 				stage.removeEventListener(MouseEvent.MOUSE_DOWN, toggleStroke);
 				stage.removeEventListener(MouseEvent.MOUSE_UP, toggleStroke);
+				stage.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			}
-
+			
 			debugMesh(_isDebug);
 		}
 
+		protected function onWheel(event:MouseEvent):void
+		{
+			if(event.delta>0)
+			{
+				renderer.world.z+=event.delta;
+			}else{
+				if(renderer.world.z>0)renderer.world.z+=event.delta;
+			}
+		}
+		
 		protected function toggleStroke(event:MouseEvent):void
 		{
 			debugMesh((event.type == MouseEvent.MOUSE_DOWN));

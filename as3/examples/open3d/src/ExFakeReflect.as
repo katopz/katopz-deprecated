@@ -14,6 +14,13 @@ package
 	import open3d.view.SimpleView;
 
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExFakeReflect
+	 * @author katopz
+	 * 
+	 */	
+	 
 	public class ExFakeReflect extends SimpleView
 	{
 		[Embed(source='assets/shuttle.ase', mimeType='application/octet-stream')]

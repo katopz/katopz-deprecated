@@ -29,6 +29,7 @@ package open3d.objects
 		{
 			vin = _vin = new Vector.<Number>();
 			transform.matrix3D = new Matrix3D();
+			_material = new Material();
 		}
 
 		/**
@@ -46,13 +47,13 @@ package open3d.objects
 		public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
 		{
 			vout = _vout = new Vector.<Number>(_vin.length, true);
-
+			
 			// local
 			transform.matrix3D.transformVectors(_vin, _vout);
-
+			
 			// global
 			matrix3D.transformVectors(_vout, _vout);
-
+			
 			// project
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _triangles.vertices, _triangles.uvtData);
 		}

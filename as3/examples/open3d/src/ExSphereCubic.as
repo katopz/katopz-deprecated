@@ -10,6 +10,12 @@ package
 	import open3d.view.SimpleView;
 	
 	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
+	
+	/**
+	 * ExSphereCubic
+	 * @author katopz
+	 * 
+	 */	
 	public class ExSphereCubic extends SimpleView
 	{
 		private var spheres		:Vector.<Sphere>;
