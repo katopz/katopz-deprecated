@@ -35,7 +35,7 @@ package
 			renderer.addChild(sphere);
 			
 			renderer.isMeshZSort = false;
-			//renderer.isFaceDebug = true;
+			renderer.isFaceDebug = true;
 		}
 		
 		override protected function draw():void
