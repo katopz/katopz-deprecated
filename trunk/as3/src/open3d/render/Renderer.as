@@ -1,13 +1,11 @@
 package open3d.render
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.display.*;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
 	import flash.geom.Point;
 	
-	import open3d.geom.Face;
+	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
 
@@ -52,8 +50,6 @@ package open3d.render
 		public function set isFaceDebug(value:Boolean):void
 		{
 			_isFaceDebug = value;
-			//for each (var mesh:Mesh in _childs)
-				//mesh.isFaceDebug = value;
 		}
 
 		public function get isFaceDebug():Boolean
@@ -86,7 +82,19 @@ package open3d.render
 		{
 			return _isMeshZSort;
 		}
+		
+		private var _isDrawGraphicsData:Boolean;
 
+		public function set isDrawGraphicsData(value:Boolean):void
+		{
+			_isDrawGraphicsData = value;
+		}
+
+		public function get isDrawGraphicsData():Boolean
+		{
+			return _isDrawGraphicsData;
+		}
+		
 		public function Renderer(canvas:Sprite)
 		{
 			this.canvas = canvas;
@@ -108,6 +116,7 @@ package open3d.render
 
 			isMeshZSort = true;
 			isFaceZSort = true;
+			isDrawGraphicsData = true;
 		}
 
 		public function addChild(object3D:Object3D):void
@@ -148,20 +157,19 @@ package open3d.render
 			var childNum:int = 0;
 			for each (child in _childs)
 			{
-				// DRAW TYPE #1 drawGraphicsData 
-				_view_graphics.drawGraphicsData(child.graphicsData);
-				
-				/*
-				
-				// DRAW TYPE #2 drawTriangles (with plenty of dot access = slow)
-				if(child.material is BitmapMaterial)
+				if(isDrawGraphicsData)
 				{
-					_view_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);
-            		_view_graphics.drawTriangles(child.triangles.vertices, child.triangles.indices, child.triangles.uvtData,  child.triangles.culling);
-            		_view_graphics.endFill();
-    			}
-    			
-            	*/
+					// DRAW TYPE #1 drawGraphicsData 
+					_view_graphics.drawGraphicsData(child.graphicsData);
+				}else{
+					// DRAW TYPE #2 drawTriangles (with plenty of dot access = slower)
+					if(child.material is BitmapMaterial)
+					{
+						_view_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);
+	            		_view_graphics.drawTriangles(child.triangles.vertices, child.triangles.indices, child.triangles.uvtData,  child.triangles.culling);
+	            		_view_graphics.endFill();
+	    			}
+	  			}
             	
 				// Mesh only
 				if (child is Mesh)

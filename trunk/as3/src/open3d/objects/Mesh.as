@@ -152,38 +152,36 @@ package open3d.objects
 		
 		public function debugFace(x:Number, y:Number, _view_graphics:Graphics):void
 		{
-			var i:int;
         	var _vertices:Vector.<Number> = _triangles.vertices;
-        	        	
-        	// TODO : toggle face hit test
-        	var isHit:Boolean
-			_view_graphics.beginBitmapFill(new BitmapData(100, 100, true, 0xCCFF0000));
+
+			// TODO : promote this to face class somehow
+        	var isHit:Boolean;
+			_view_graphics.beginFill(0xCCFF0000);
         	
         	for each (var face:Face in _faces)
         	{
-				// P0
-				i = face.j0 << 1;
-				_data[0] = _vertices[i];
-				_data[1] = _vertices[i + 1];
-				
-				// P1
-				i = face.j1 << 1;
-				_data[2] = _vertices[i];
-				_data[3] = _vertices[i + 1];
-
-				// P2
-				i = face.j2 << 1;
-				_data[4] = _vertices[i];
-				_data[5] = _vertices[i + 1];
+				// get path data grom face
+				var _data:Vector.<Number> = face.getPathData(_vertices);
 				
 				// chk point in triangle
 				if(insideTriangle(x, y, _data[0], _data[1], _data[2], _data[3], _data[4], _data[5]))
 				{
-					// DRAW TYPE #3 drawPath for ColorMaterial = faster than BitmapDataColor
+					// DRAW TYPE #3 drawPath for ColorMaterial = faster than BitmapData-Color
 					_view_graphics.drawPath(_commands, _data);
+					
+					/* TODO : remove this face normal debug
+					
+					_view_graphics.lineStyle(1,0xFF0000);
+					var normal:Vector3D = face.getNormal(_vout);
+					
+					_view_graphics.moveTo(x,y);
+					_view_graphics.lineTo(normal.x, normal.y);
+					
+					_view_graphics.lineStyle();
+					
+					*/
 				}
         	}
-        	
         	_view_graphics.endFill();
 		}
 		
