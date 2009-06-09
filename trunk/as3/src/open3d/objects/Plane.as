@@ -8,7 +8,7 @@ package open3d.objects
 	 */
 	public class Plane extends Mesh
 	{
-		public function Plane(width:Number, height:Number, material:Material = null, segmentW:uint = 1, segmentH:uint = 1)
+		public function Plane(width:Number=100, height:Number=100, material:Material = null, segmentW:uint = 1, segmentH:uint = 1)
 		{
 			segmentW++;
 			segmentH++;

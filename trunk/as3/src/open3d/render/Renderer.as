@@ -6,6 +6,7 @@ package open3d.render
 	import flash.geom.Point;
 	
 	import open3d.materials.BitmapMaterial;
+	import open3d.objects.Line3D;
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
 
@@ -162,7 +163,7 @@ package open3d.render
 					// DRAW TYPE #1 drawGraphicsData 
 					_view_graphics.drawGraphicsData(child.graphicsData);
 				}else{
-					// DRAW TYPE #2 drawTriangles (with plenty of dot access = slower)
+					// DRAW TYPE #2 drawTriangles
 					if(child.material is BitmapMaterial)
 					{
 						_view_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);

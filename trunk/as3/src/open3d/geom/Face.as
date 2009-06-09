@@ -21,6 +21,24 @@ package open3d.geom
 		private var j1:uint;
 		private var j2:uint;
 		
+		private var k0:uint;
+		private var k1:uint;
+		private var k2:uint;
+		
+		private var index:uint;
+		
+		public var normal:Vector3D;
+		
+		public function getN0(vin:Vector.<Number>):Vector3D
+		{
+			return new Vector3D(vin[k0], vin[k1], vin[k2]);
+		}
+		
+		public function getN1(vin:Vector.<Number>):Vector3D
+		{
+			return new Vector3D(vin[k2+1], vin[k2+2], vin[k2+3]);
+		}
+		
 		public function Face(indice:Vector3D, j0:uint, j1:uint, j2:uint)
 		{
 			this.indice = indice;
@@ -39,9 +57,44 @@ package open3d.geom
 			indice.w = vout[j0] + vout[j1] + vout[j2];
 		}
 		
+		// TODO : separate this from vin to test speed gain or not
+		public function calculateNormal(vin:Vector.<Number>, uvtData:Vector.<Number>):void
+		{
+			var i0:int=(i0 << 1) + i0, i1:int=(i1 << 1) + i1, i2:int=(i2 << 1) + i2;
+			
+			// index for 2D projected
+			index = 2*vin.length/3;
+			
+			// x 
+			var x01:Number=vin[i1] - vin[i0], x02:Number=vin[i2] - vin[i0];
+			k0 = vin.length;
+			vin.push((vin[i0++] + vin[i1++] + vin[i2++]) / 3);
+			
+			// y
+			var y01:Number=vin[i1] - vin[i0], y02:Number=vin[i2] - vin[i0];
+			k1 = vin.length;
+			vin.push((vin[i0++] + vin[i1++] + vin[i2++]) / 3);
+			
+			// z
+			var z01:Number=vin[i1] - vin[i0], z02:Number=vin[i2] - vin[i0];
+			k2 = vin.length;
+			vin.push((vin[i0++] + vin[i1++] + vin[i2++]) / 3);
+			
+			// cross product
+			normal = new Vector3D(y02 * z01 - y01 * z02, z02 * x01 - z01 * x02, x02 * y01 - x01 * y02, 0);
+			normal.normalize();
+			
+			uvtData.push(vin[k0], vin[k1], vin[k2]);
+			
+			// n1 : x, y, z
+			vin.push(vin[k0]+normal.x*100, vin[k1]+normal.y*100, vin[k2]+normal.z*100);
+			uvtData.push(vin[k2+1], vin[k2+2], vin[k2+3]);
+		}
+		
+		// get path data from vertices
 		public function getPathData(_vertices:Vector.<Number>):Vector.<Number>
 		{
-			var _pathData:Vector.<Number> = new Vector.<Number>(6, true);
+			var _pathData:Vector.<Number> = new Vector.<Number>(10, true);
 			var i:int;
 			
 			// P0
@@ -59,30 +112,15 @@ package open3d.geom
 			_pathData[4] = _vertices[i];
 			_pathData[5] = _vertices[i + 1];
 			
+			// normal0
+			_pathData[6] = _vertices[index];
+			_pathData[7] = _vertices[index + 1];
+			
+			// normal1
+			_pathData[8] = _vertices[index + 2];
+			_pathData[9] = _vertices[index + 3];
+			
 			return _pathData; 
 		}
-		
-		/* TODO : make it work
-		public function getNormal(_vertices:Vector.<Number>):Vector3D
-		{
-			var vs:Vector.<Number>=_vertices;
-			var j:int = 0 ;
-			
-			var f:Face = this;
-			
-			var i0:int=(f.i0 << 1) + f.i0, i1:int=(f.i1 << 1) + f.i1, i2:int=(f.i2 << 1) + f.i2;
-			var x01:Number=vs[i1] - vs[i0], x02:Number=vs[i2] - vs[i0];
-			i0++;i1++;i2++;
-			var y01:Number=vs[i1] - vs[i0], y02:Number=vs[i2] - vs[i0];
-			i0++;i1++;i2++;
-			var z01:Number=vs[i1] - vs[i0], z02:Number=vs[i2] - vs[i0];
-			i0++;i1++;i2++;
-			
-			var normal:Vector3D = new Vector3D(y02 * z01 - y01 * z02, z02 * x01 - z01 * x02, x02 * y01 - x01 * y02, 0);
-			//normal.normalize();
-			//trace(normal)
-			return normal;
-		}
-		*/
 	}
 }
