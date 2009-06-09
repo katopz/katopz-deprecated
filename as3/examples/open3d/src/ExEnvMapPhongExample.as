@@ -170,9 +170,9 @@ package
 		{
 			var _material:BitmapMaterial = new BitmapMaterial(bitmapData);
 			
-			var segment:uint = 8;
-			var amount:uint = 4;
-			var radius:uint = 35;
+			var segment:uint = 6;
+			var amount:uint = 3;
+			var radius:uint = 45;
 			var gap:uint = amount;
 			
 			var sphere:Sphere;

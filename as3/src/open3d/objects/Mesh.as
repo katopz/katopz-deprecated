@@ -61,24 +61,16 @@ package open3d.objects
 		{
 			return _isFaceZSort;
 		}
-		
-		private var _isTransfromDirty:Boolean = false;
-		public function set isTransfromDirty(value:Boolean):void
-		{
-			_isTransfromDirty = value;
-		}
-		
-		public function get isTransfromDirty():Boolean
-		{
-			return _isTransfromDirty;
-		}
-		
-		private var _commands:Vector.<int>=Vector.<int>([1, 2, 2]); // commands to draw triangle
-		private var _data:Vector.<Number> = new Vector.<Number>(6, true); // data to draw shape
+			
+		private var _commands:Vector.<int> = new Vector.<int>(3, true); // commands to draw triangle
+		private var _data:Vector.<Number>  = new Vector.<Number>(6, true); // data to draw shape
 
 		public function Mesh()
 		{
 			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), culling);
+			_commands[0] = 1;
+			_commands[1] = 2;
+			_commands[2] = 2;
 		}
 
 		protected function buildFaces(material:Material):void
@@ -100,17 +92,19 @@ package open3d.objects
 				i1 = _indices[int(ix3 + 1)];
 				i2 = _indices[int(ix3 + 2)];
 				
-				// Vector3D faster than Vector
+				// referer
 				var index:Vector3D = new Vector3D(i0, i1, i2);
 				var _face:Face = _faces[i] = new Face(index, 3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2);
 				
 				// register face index for z-sort
 				_faceIndexes[i] = index;
+				
+				// add normal as vin, TODO : toggle this on/off for speed gain (+ 2 vertices * face num here = lost 6 fps eventually)
+				// or try separate light(like mesh?) as composite and project them separately? should be faster?
+				_face.calculateNormal(_vin, _triangles.uvtData);
 			}
 			
 			this.material = material;
-			
-			isTransfromDirty = true;
 			
 			// for public call fadter than get/set
 			faces = _faces;
@@ -122,11 +116,13 @@ package open3d.objects
 		{
 			super.project(projectionMatrix3D, matrix3D);
 			
+			if(!_faceIndexes)return;
+			
 			var _faceIndexes_length:int = _faceIndexes.length;
 			if(_faceIndexes_length<=0)return;
 			
 			// z-sort, TODO : only sort when transfrom is dirty
-			if (_isFaceZSort && _isTransfromDirty)
+			if (_isFaceZSort)
 			{
 				// get last depth after projected
 				for each (var _face:Face in _faces)
@@ -169,17 +165,11 @@ package open3d.objects
 					// DRAW TYPE #3 drawPath for ColorMaterial = faster than BitmapData-Color
 					_view_graphics.drawPath(_commands, _data);
 					
-					/* TODO : remove this face normal debug
-					
-					_view_graphics.lineStyle(1,0xFF0000);
-					var normal:Vector3D = face.getNormal(_vout);
-					
-					_view_graphics.moveTo(x,y);
-					_view_graphics.lineTo(normal.x, normal.y);
-					
+					// face normal debug
+					_view_graphics.lineStyle(1,0xFFFF00);
+					_view_graphics.moveTo(_data[6], _data[7]);
+					_view_graphics.lineTo(_data[8], _data[9]);
 					_view_graphics.lineStyle();
-					
-					*/
 				}
         	}
         	_view_graphics.endFill();
