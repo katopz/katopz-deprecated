@@ -108,7 +108,6 @@ package
 			//addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 			
 			renderer.isFaceDebug = true;
-			renderer.isDrawGraphicsData = false;
 		}
 		
 		private function initView() : void
@@ -168,8 +167,6 @@ package
 		
 		private function createCubic():void
 		{
-			var _material:BitmapMaterial = new BitmapMaterial(bitmapData);
-			
 			var segment:uint = 6;
 			var amount:uint = 3;
 			var radius:uint = 45;
@@ -181,7 +178,7 @@ package
 			for(var k:int=-amount/2;k<amount/2;++k)
 			{
 				// TODO : share material
-				sphere = new Sphere(radius, segment, segment, _material);
+				sphere = new Sphere(radius, segment, segment, new BitmapMaterial(bitmapData));
 				renderer.addChild(sphere);
 				sphere.x = gap*radius*i+gap*radius/2;
 				sphere.y = gap*radius*j+gap*radius/2;

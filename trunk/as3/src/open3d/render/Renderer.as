@@ -6,7 +6,6 @@ package open3d.render
 	import flash.geom.Point;
 	
 	import open3d.materials.BitmapMaterial;
-	import open3d.objects.Line3D;
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
 
@@ -84,16 +83,16 @@ package open3d.render
 			return _isMeshZSort;
 		}
 		
-		private var _isDrawGraphicsData:Boolean;
+		private var _type:uint = 1;
 
-		public function set isDrawGraphicsData(value:Boolean):void
+		public function set type(value:uint):void
 		{
-			_isDrawGraphicsData = value;
+			_type = value;
 		}
 
-		public function get isDrawGraphicsData():Boolean
+		public function get type():uint
 		{
-			return _isDrawGraphicsData;
+			return _type;
 		}
 		
 		public function Renderer(canvas:Sprite)
@@ -117,7 +116,6 @@ package open3d.render
 
 			isMeshZSort = true;
 			isFaceZSort = true;
-			isDrawGraphicsData = true;
 		}
 
 		public function addChild(object3D:Object3D):void
@@ -149,25 +147,26 @@ package open3d.render
 			var child:Object3D;
 			for each (child in _childs)
 				child.project(_projectionMatrix3D, _worldMatrix3D);
-
+			
 			// z-sort Object3D
 			if (_isMeshZSort)
 				_childs.sortOn("screenZ", 18);
-				
-			// draw
+			
+			// draw TODO : auto select render type
 			var childNum:int = 0;
 			for each (child in _childs)
 			{
-				if(isDrawGraphicsData)
+				if(_type==1)
 				{
-					// DRAW TYPE #1 drawGraphicsData 
+					// DRAW TYPE #1 drawGraphicsData
 					_view_graphics.drawGraphicsData(child.graphicsData);
 				}else{
 					// DRAW TYPE #2 drawTriangles
 					if(child.material is BitmapMaterial)
 					{
+						var _child_triangles:GraphicsTrianglePath = child.triangles;
 						_view_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);
-	            		_view_graphics.drawTriangles(child.triangles.vertices, child.triangles.indices, child.triangles.uvtData,  child.triangles.culling);
+	            		_view_graphics.drawTriangles(_child_triangles.vertices, _child_triangles.indices, _child_triangles.uvtData,  _child_triangles.culling);
 	            		_view_graphics.endFill();
 	    			}
 	  			}
@@ -178,7 +177,7 @@ package open3d.render
 					// debug current total face number
 					totalFaces += int(Mesh(child).numFaces);
 					
-					// check for face hit test?
+					// DRAW TYPE #3 drawPath 
 					if(_isFaceDebug)
 						Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
 				}
@@ -187,7 +186,7 @@ package open3d.render
 			/*
 			
 			// shoulde be faster draw which this way? 
-			// sadly "push" Vector is slower, also call plenty of dot access
+			// sadly "push" Vector is slower, also plenty of dot access
 			
 			var _drawGraphicsData:Vector.<IGraphicsData> = new Vector.<IGraphicsData>();
 			for each (child in _childs)
@@ -205,6 +204,12 @@ package open3d.render
 			_view_graphics.drawGraphicsData(_drawGraphicsData);
 			
 			*/
+		}
+		
+		// do this when dirty
+		public function update():void
+		{
+			_projectionMatrix3D = _projection.toMatrix3D();
 		}
    	}
 }
