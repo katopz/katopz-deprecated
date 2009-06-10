@@ -22,7 +22,7 @@ package
 		
 		override protected function create():void
 		{
-			plane = new Plane(256, 128, new BitmapFileMaterial("assets/sea01.jpg"), 10, 10);
+			plane = new Plane(256, 128, new BitmapFileMaterial("assets/sea01.jpg"), 1, 1);
 			renderer.addChild(plane);
 			plane.scaleX = plane.scaleY = plane.scaleZ = 2;
 			plane.y = 100;
@@ -31,18 +31,20 @@ package
 			plane.culling = "none";
 			
 			sphere = new Sphere(100, 10, 10, new BitmapFileMaterial("assets/earth.jpg"));
-			renderer.addChild(sphere);
+			//renderer.addChild(sphere);
 			
 			renderer.isMeshZSort = false;
 			renderer.isFaceDebug = true;
+			
+			alpha=.1
 		}
 		
 		override protected function draw():void
 		{
-			var _length:int = plane.vin.length/3;
+			var _length:int = plane.vin.length/3-2;
 			for (var i:int = 0; i<_length; ++i)
 			{
-				plane.setVertices(i, "z", (i+1)*0.1*Math.sin(step+i/10));
+				plane.setVertices(i, "z", (i+1)*10*Math.sin(step+i/10));
 				step+=0.001;
 			}
 		}

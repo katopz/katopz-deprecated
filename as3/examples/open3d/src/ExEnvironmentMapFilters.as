@@ -211,7 +211,7 @@ package
 			for (var i:int = 0; i<plane.vin.length/3; ++i)
 			{
 				plane.setVertices(i, "z", (i+1)*0.1*Math.sin(step+i/10));
-				step+=0.001;
+				step+=0.0005;
 			}
 		}
 	}

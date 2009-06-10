@@ -5,7 +5,7 @@ package open3d.geom
 	import flash.geom.Vector3D;
 
 	/**
-	 * Face : not a real face yet ;p
+	 * Face
 	 * @author katopz
 	 */
 	public class Face

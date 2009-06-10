@@ -99,7 +99,8 @@ package open3d.objects
 				// register face index for z-sort
 				_faceIndexes[i] = index;
 				
-				// add normal as vin, TODO : toggle this on/off for speed gain (+ 2 vertices * face num here = lost 6 fps eventually)
+				// add normal as vin
+				// TODO : toggle this on/off for speed gain (+ 2 vertices * face num here = lost 6 fps eventually)
 				// or try separate light(like mesh?) as composite and project them separately? should be faster?
 				_face.calculateNormal(_vin, _triangles.uvtData);
 			}

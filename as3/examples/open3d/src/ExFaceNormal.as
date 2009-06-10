@@ -26,47 +26,20 @@ package
 			plane = new Plane(256, 128, new BitmapFileMaterial("assets/sea01.jpg"), 10, 10);
 			renderer.addChild(plane);
 			plane.scaleX = plane.scaleY = plane.scaleZ = 2;
-			plane.y = 100;
-			plane.rotationX = -45;
 			
 			sphere = new Sphere(100, 10, 10, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(sphere);
+			sphere.y = -100;
+			
+			renderer.world.rotationX = -90;
 			
 			renderer.isMeshZSort = false;
 			renderer.isFaceDebug = true;
-			
-			/*
-			lines = new Vector.<Line3D>();
-			for each(var face:Face in plane.faces)
-			{
-				var line:Line3D = new Line3D(Vector.<Vector3D>
-				([
-					face.getN0(plane.vin), face.getN1(plane.vin)
-				]), 0xFF0000);
-				
-				renderer.addChild(line);
-				lines.push(line);
-			}
-			lines.fixed = true;
-			/*
 		}
 		
 		override protected function draw():void
 		{
 			sphere.rotationY++;
-			/*
-			var i:uint = 0;
-			for each(var face:Face in plane.faces)
-			{
-				var line:Line3D = lines[i++];
-				renderer.removeChild(line);
-				
-				line = new Line3D(Vector.<Vector3D>
-				([
-					face.getN0(plane.vin), face.getN1(plane.vin)
-				]), 0xFF0000);
-			}
-			*/
 		}
 	}
 }

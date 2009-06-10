@@ -121,11 +121,25 @@ package open3d.view
 
 		protected function onWheel(event:MouseEvent):void
 		{
-			if(event.delta>0)
+			if(event.ctrlKey)
 			{
-				renderer.world.z+=event.delta;
+				// The value must be greater than 0 and less than 180
+				if(event.delta>0)
+				{
+					if(renderer.projection.fieldOfView+event.delta*2<180)renderer.projection.fieldOfView+=event.delta*2;
+				}else{
+					if(renderer.projection.fieldOfView+event.delta*2>0)renderer.projection.fieldOfView+=event.delta*2;
+				}
+				
+				// projection dirty
+				renderer.update();
 			}else{
-				if(renderer.world.z>0)renderer.world.z+=event.delta;
+				if(event.delta>0)
+				{
+					renderer.world.z+=event.delta*2;
+				}else{
+					if(renderer.world.z+event.delta*2>0)renderer.world.z+=event.delta*2;
+				}
 			}
 		}
 		
