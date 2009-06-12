@@ -94,7 +94,7 @@ package open3d.objects
 				
 				// referer
 				var index:Vector3D = new Vector3D(i0, i1, i2);
-				var _face:Face = _faces[i] = new Face(index, 3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2);
+				var _face:Face = _faces[i] = new Face(this, index, 3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2);
 				
 				// register face index for z-sort
 				_faceIndexes[i] = index;
