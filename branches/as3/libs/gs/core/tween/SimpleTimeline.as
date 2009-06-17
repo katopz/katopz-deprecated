@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.61
- * DATE: 5/7/2009
+ * VERSION: 0.7
+ * DATE: 6/1/2009
  * ACTIONSCRIPT VERSION: 3.0 (AS2 version is also available)
  * UPDATES & MORE DETAILED DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -60,23 +60,41 @@ package gs.core.tween {
 			} else if (_firstChild == $node) {
 				_firstChild = $node.nextNode;
 			}
+			$node.nextNode = $node.prevNode = null;
 		}
 		
 		/** @private **/
-		override public function renderTime($time:Number, $force:Boolean=false):void {
-			this.cachedTotalTime = this.cachedTime = $time;
-			var tween:Tweenable = _firstChild, dur:Number;
-			while (tween != null) {
+		override public function renderTime($time:Number, $suppressEvents:Boolean=false, $force:Boolean=false):void {
+			var tween:Tweenable = _firstChild, dur:Number, next:Tweenable;
+			this.cachedTotalTime = $time;
+			this.cachedTime = $time;
+			while (tween) {
+				next = tween.nextNode; //record it here because the value could change after rendering...
 				if (tween.active || ($time >= tween.startTime && !tween.cachedPaused)) {
 					if (!tween.cachedReversed) {
-						tween.renderTime(($time - tween.startTime) * tween.cachedTimeScale);
+						tween.renderTime(($time - tween.startTime) * tween.cachedTimeScale, $suppressEvents, false);
 					} else {
 						dur = (tween.cacheIsDirty) ? tween.totalDuration : tween.cachedTotalDuration;
-						tween.renderTime(dur - (($time - tween.startTime) * tween.cachedTimeScale));
+						tween.renderTime(dur - (($time - tween.startTime) * tween.cachedTimeScale), $suppressEvents, false);
 					}
 				}
-				tween = tween.nextNode;
+				tween = next;
 			}
+		}
+		
+//---- GETTERS / SETTERS ------------------------------------------------------------------------------
+		
+		/**
+		 * @private
+		 * Reports the totalTime of the timeline without capping the number at the totalDuration (max) and zero (minimum) which can be useful when
+		 * unpausing tweens/timelines. Imagine a case where a paused tween is in a timeline that has already reached the end, but then
+		 * the tween gets unpaused - it needs a way to place itself accurately in time AFTER what was previously the timeline's end time.
+		 * In a SimpleTimeline, rawTime is always the same as cachedTotalTime, but in TimelineLite and TimelineMax, it can be different.
+		 * 
+		 * @return The totalTime of the timeline without capping the number at the totalDuration (max) and zero (minimum)
+		 */
+		public function get rawTime():Number {
+			return this.cachedTotalTime;			
 		}
 		
 	}

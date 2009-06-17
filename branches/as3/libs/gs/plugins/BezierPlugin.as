@@ -1,6 +1,6 @@
 /**
- * VERSION: 2.01
- * DATE: 3/25/2009
+ * VERSION: 2.1
+ * DATE: 5/26/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES & MORE DETAILED DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -17,20 +17,21 @@ package gs.plugins {
  * Keep in mind that you can bezier tween ANY properties, not just x/y. <br /><br />
  * 
  * Also, if you'd like to rotate the target in the direction of the bezier path, 
- * use the <code>orientToBeizer</code> special property. In order to alter a rotation property accurately, 
- * TweenLite/Max needs 4 pieces of information: <br />
+ * use the <code>orientToBezier</code> special property. In order to alter a rotation property accurately, 
+ * TweenLite/Max needs 5 pieces of information: <br />
  * <ol>
  * 		<li> Position property 1 (typically <code>"x"</code>)
  * 		<li> Position property 2 (typically <code>"y"</code>)
  * 		<li> Rotational property (typically <code>"rotation"</code>)
  * 		<li> Number of degrees to add (optional - makes it easy to orient your MovieClip properly)
+ * 		<li> Tolerance (default is 0.01, but increase this if the rotation seems to jitter during the tween)
  * </ol><br />
  * 
  * The <code>orientToBezier</code> property should be an Array containing one Array for each set of these values. 
  * For maximum flexibility, you can pass in any number of arrays inside the container array, one 
  * for each rotational property. This can be convenient when working in 3D because you can rotate
  * on multiple axis. If you're doing a standard 2D x/y tween on a bezier, you can simply pass 
- * in a boolean value of true and TweenLite/Max will use a typical setup, <code>[["x", "y", "rotation", 0]]</code>. 
+ * in a Boolean value of true and TweenLite/Max will use a typical setup, <code>[["x", "y", "rotation", 0, 0.01]]</code>. 
  * Hint: Don't forget the container Array (notice the double outer brackets)<br /><br />
  * 
  * <b>USAGE:</b><br /><br />
@@ -50,7 +51,7 @@ package gs.plugins {
  */
 	public class BezierPlugin extends TweenPlugin {
 		/** @private **/
-		public static const VERSION:Number = 2.01;
+		public static const VERSION:Number = 2.1;
 		/** @private **/
 		public static const API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		
@@ -89,7 +90,7 @@ package gs.plugins {
 			_target = $tween.target;
 			var enumerables:Object = ($tween.vars.isTV == true) ? $tween.vars.exposedVars : $tween.vars; //for TweenLiteVars and TweenMaxVars (we need an object with enumerable properties);
 			if (enumerables.orientToBezier == true) {
-				_orientData = [["x", "y", "rotation", 0]];
+				_orientData = [["x", "y", "rotation", 0, 0.01]];
 				_orient = true;
 			} else if (enumerables.orientToBezier is Array) {
 				_orientData = enumerables.orientToBezier;
@@ -99,7 +100,6 @@ package gs.plugins {
 			for (i = 0; i < $beziers.length; i++) {
 				for (p in $beziers[i]) {
 					if (props[p] == undefined) {
-						if(!$tween.target[p])continue;
 						props[p] = [$tween.target[p]];
 					}
 					if (typeof($beziers[i][p]) == "number") {
@@ -210,22 +210,30 @@ package gs.plugins {
 			}
 			
 			if (_orient) {
+				i = _orientData.length;
+				var curVals:Object = {}, dx:Number, dy:Number, cotb:Array, toAdd:Number;
+				while (i-- > 0) {
+					cotb = _orientData[i]; //current orientToBezier Array
+					curVals[cotb[0]] = _target[cotb[0]];
+					curVals[cotb[1]] = _target[cotb[1]];
+				}
+				
 				var oldTarget:Object = _target, oldRound:Boolean = this.round;
 				_target = _future;
 				this.round = false;
 				_orient = false;
-				this.changeFactor = $n + 0.01;
+				i = _orientData.length;
+				while (i-- > 0) {
+					cotb = _orientData[i]; //current orientToBezier Array
+					this.changeFactor = $n + (cotb[4] || 0.01);
+					toAdd = cotb[3] || 0;
+					dx = _future[cotb[0]] - curVals[cotb[0]];
+					dy = _future[cotb[1]] - curVals[cotb[1]];
+					oldTarget[cotb[2]] = Math.atan2(dy, dx) * _RAD2DEG + toAdd;
+				}
 				_target = oldTarget;
 				this.round = oldRound;
 				_orient = true;
-				var dx:Number, dy:Number, cotb:Array, toAdd:Number;
-				for (i = 0; i < _orientData.length; i++) {
-					cotb = _orientData[i]; //current orientToBezier Array
-					toAdd = cotb[3] || 0;
-					dx = _future[cotb[0]] - _target[cotb[0]];
-					dy = _future[cotb[1]] - _target[cotb[1]];
-					_target[cotb[2]] = Math.atan2(dy, dx) * _RAD2DEG + toAdd;
-				}
 			}
 			
 		}

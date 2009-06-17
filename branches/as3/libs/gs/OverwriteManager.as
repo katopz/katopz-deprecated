@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 5.02
- * DATE: 5/5/2009
+ * VERSION: 5.03
+ * DATE: 6/2/2009
  * AS3 (AS2 is also available)
  * UPDATES & DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -115,7 +115,7 @@ package gs {
  */	 
 	public class OverwriteManager {
 		/** @private **/
-		public static const version:Number = 5.02;
+		public static const version:Number = 5.03;
 		public static const NONE:int = 0;
 		public static const ALL:int = 1;
 		public static const AUTO:int = 2;
@@ -149,7 +149,7 @@ package gs {
 		 * </ul>
 		 **/
 		public static function init($mode:int=2):int {
-			if (TweenLite.version < 11.097) {
+			if (TweenLite.version < 11.099) {
 				trace("TweenLite warning: Your TweenLite class needs to be updated to work with OverwriteManager (or you may need to clear your ASO files). Please download and install the latest version from http://www.tweenlite.com.");
 			}
 			TweenLite.overwriteManager = OverwriteManager;
@@ -177,7 +177,7 @@ package gs {
 				}
 			}
 			
-			if (cousins.length != 0) { //tweens that are nested in other timelines may have various offsets and timescales so we need to translate them to a global/root one to see how they compare.
+			if (cousins.length != 0) { //tweens that are nested in other timelines may have various offsets and timeScales so we need to translate them to a global/root one to see how they compare.
 				var combinedTimeScale:Number = $tween.cachedTimeScale, combinedStartTime:Number = startTime, cousin:Tweenable, cousinStartTime:Number, timeline:SimpleTimeline;
 				timeline = $tween.timeline;
 				while (timeline != null) {
@@ -197,7 +197,7 @@ package gs {
 						timeline = timeline.timeline;
 					}
 					cousinStartTime = combinedTimeScale * combinedStartTime;
-					if (cousinStartTime <= startTime && cousinStartTime + (cousin.totalDuration * combinedTimeScale) > startTime) {
+					if (cousinStartTime <= startTime && (cousinStartTime + (cousin.totalDuration * combinedTimeScale) > startTime || cousin.cachedDuration == 0)) {
 						overlaps[overlaps.length] = cousin;
 					}
 				}

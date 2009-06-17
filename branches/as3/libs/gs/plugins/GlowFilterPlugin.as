@@ -34,7 +34,7 @@ package gs.plugins {
  * 		import gs.plugins.GlowFilterPlugin; <br />
  * 		TweenPlugin.activate([GlowFilterPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
  * 
- * 		TweenLite.to(mc, 1, {glowFilter:{color:0x00FF00, blurX:10, blurY:10, strength:1, strength:1}});<br /><br />
+ * 		TweenLite.to(mc, 1, {glowFilter:{color:0x00FF00, blurX:10, blurY:10, strength:1, alpha:1}});<br /><br />
  * </code>
  *
  * Bytes added to SWF: 187 (not including dependencies)<br /><br />
