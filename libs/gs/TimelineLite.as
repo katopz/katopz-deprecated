@@ -1,7 +1,7 @@
 /**
- * VERSION: 0.63
- * DATE: 5/7/2009
- * AS3 (AS2 version will also be available)
+ * VERSION: 0.8
+ * DATE: 6/15/2009
+ * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/timelinelite/
  **/
 package gs {
@@ -84,20 +84,20 @@ package gs {
  * 		
  * 		
  * 	insertMultiple() provides some very powerful sequencing tools, allowing you to add an Array of 
- * 	tweens (using TweenLite/Max instances or the new shorthand syntax, like <code>[mc, 1, {x:100}]</code>) and align them
- * 	as ALIGN_SEQUENCE or ALIGN_START or ALIGN_INIT, and even stagger them if you want. For example, to insert
+ * 	tweens (using TweenLite/Max instances or the new shorthand syntax, like <code>[mc, 1, {x:100}]</code>) and 
+ *  optionall align them with SEQUENCE or START modes, and even stagger them if you want. For example, to insert
  * 	3 tweens into the timeline, aligning their start times but staggering them by 0.2 seconds, <br /><br /><code>
  * 	
  * 		myTimeline.insertMultiple([new TweenLite(mc, 1, {y:"100"}),
  * 								   new TweenLite(mc2, 1, {y:"100"}),
  * 								   new TweenLite(mc3, 1, {y:"100"})], 
  * 								   0, 
- * 								   TimelineLite.ALIGN_START, 
+ * 								   TweenAlign.START, 
  * 								   0.2);</code><br /><br />
  * 								   
  * 	You can use the constructor's "vars" object to do virtually all the setup too, like this sequence:<br /><br /><code>
  * 	
- * 		var myTimeline:TimelineLite = new TimelineLite({tweens:[[mc1, 1, {y:"100"}], [mc2, 1, {y:"100"}], [mc3, 1, {y:"100"}]], align:TimelineLite.ALIGN_SEQUENCE, onComplete:myFunction});</code><br /><br />
+ * 		var myTimeline:TimelineLite = new TimelineLite({tweens:[[mc1, 1, {y:"100"}], [mc2, 1, {y:"100"}], [mc3, 1, {y:"100"}]], align:TweenAlign.SEQUENCE, onComplete:myFunction});</code><br /><br />
  * 	
  * 	If that confuses you, don't worry. Just use the append(), insert(), and prepend() methods to build your
  * 	sequence. But power users will likely appreciate the quick, compact way they can set up sequences now. <br /><br />
@@ -128,18 +128,18 @@ package gs {
  * 										to be inserted immediately. The value simply gets passed to the 
  * 										insertMultiple() method. Options are:
  * 										<ul>
- * 											<li><b> TimelineLite.ALIGN_SEQUENCE:</b> aligns the tweens one-after-the-other in a sequence
- * 											<li><b> TimelineLite.ALIGN_START:</b> aligns the start times of all of the tweens (ignores delays)
- * 											<li><b> TimelineLite.ALIGN_INIT:</b> aligns the start times of all the tweens (honors delays)
+ * 											<li><b> TweenAlign.SEQUENCE:</b> aligns the tweens one-after-the-other in a sequence
+ * 											<li><b> TweenAlign.START:</b> aligns the start times of all of the tweens (ignores delays)
+ * 											<li><b> TweenAlign.NORMAL:</b> aligns the start times of all the tweens (honors delays)
  * 										</ul>
- * 										The default is ALIGN_INIT.
+ * 										The default is NORMAL.
  * 										
  * 	<li><b> stagger : Number</b>		Only used in conjunction with the "tweens" special property when multiple tweens are
  * 										to be inserted immediately. It staggers the tweens by a set amount of time (in seconds) (or
  * 										in frames if "useFrames" is true). For example, if the stagger value is 0.5 and the "align" 
- * 										property is set to ALIGN_START, the second tween will start 0.5 seconds after the first one 
+ * 										property is set to TweenAlign.START, the second tween will start 0.5 seconds after the first one 
  * 										starts, then 0.5 seconds later the third one will start, etc. If the align property is 
- * 										ALIGN_SEQUENCE, there would be 0.5 seconds added between each tween. This value simply gets 
+ * 										TweenAlign.SEQUENCE, there would be 0.5 seconds added between each tween. This value simply gets 
  * 										passed to the insertMultiple() method. Default is 0.
  * 									
  * 	<li><b> tweenClass : Class</b>		Only used in conjunction with the "tweens" special property when multiple tweens are
@@ -185,7 +185,7 @@ package gs {
  * <ul>
  * 	<li> TimelineLite automatically inits the OverwriteManager class to prevent unexpected overwriting behavior in sequences.
  * 	  The default mode is AUTO, but you can set it to whatever you want with OverwriteManager.init() (see http://blog.greensock.com/overwritemanager/)
- * 	<li> TimelineLite adds about 2.9k to your SWF (3.5kb including OverwriteManager).
+ * 	<li> TimelineLite adds about 2.7k to your SWF (3.5kb including OverwriteManager).
  * </ul>
  * 
  * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
@@ -194,10 +194,7 @@ package gs {
  **/
 	public class TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static const version:Number = 0.63;
-		public static const ALIGN_SEQUENCE:String = "sequence";
-		public static const ALIGN_START:String = "start";
-		public static const ALIGN_INIT:String = "init";
+		public static const version:Number = 0.8;
 		/** @private **/
 		protected static var _defaultTweenClass:Class;
 		/** @private **/
@@ -206,6 +203,8 @@ package gs {
 		protected var _labels:Object;
 		/** @private Just stores the first and last tweens when the timeline is disabled (enabled=false). We do this in an Array in order to avoid circular references which can cause garbage collection issues (timeline referencing tweenable, and tweenable referencing timeline) **/
 		protected var _endCaps:Array;
+		/** @private **/
+		protected var _pauseTime:Number;
 		
 		/**
 		 * Constructor 
@@ -229,7 +228,7 @@ package gs {
 				}
 			}
 			if (this.vars.tweens is Array) {
-				this.insertMultiple(this.vars.tweens, 0, this.vars.align || ALIGN_INIT, this.vars.stagger || 0, this.vars.tweenClass);
+				this.insertMultiple(this.vars.tweens, 0, this.vars.align || "normal", this.vars.stagger || 0, this.vars.tweenClass);
 			}
 			if (this.vars.reversed == true) {
 				this.cachedReversed = true;
@@ -265,7 +264,7 @@ package gs {
 				$node.nextNode = $node.prevNode = null;
 			} else {
 				var tween:Tweenable = last, st:Number = $node.startTime;
-				while (tween != null && st < tween.startTime) {
+				while (tween != null && st <= tween.startTime) {
 					tween = tween.prevNode;
 				}
 				if (tween == null) {
@@ -326,7 +325,7 @@ package gs {
 				_firstChild = first;
 				_lastChild = last;
 			}
-
+			$node.nextNode = $node.prevNode = null;
 			setDirtyCache(true);
 		}
 		
@@ -374,11 +373,11 @@ package gs {
 		 *  
 		 * @param $tweens an Array containing any or all of the following: TweenLite, TweenMax, TimelineLite, TimelineMax, shorthand Arrays for defining tweens, Functions for callbacks, and/or objects for defining nested timelines.  
 		 * @param $timeOrLabel time in seconds (or frame if the timeline is frames-based) or label that serves as the point of insertion. For example, the number 2 would insert the tweens beginning at 2-seconds into the timeline, or "myLabel" would ihsert them wherever "myLabel" is.
-		 * @param $align determines how the tweens will be aligned in relation to each other before getting inserted. Options are: TimelineLite.ALIGN_SEQUENCE (aligns the tweens one-after-the-other in a sequence), TimelineLite.ALIGN_START (aligns the start times of all of the tweens (ignores delays)), and TimelineLite.ALIGN_INIT (aligns the start times of all the tweens (honors delays)). The default is ALIGN_INIT.
-		 * @param $stagger staggers the tweens by a set amount of time (in seconds) (or in frames for frames-based timelines). For example, if the stagger value is 0.5 and the "align" property is set to ALIGN_START, the second tween will start 0.5 seconds after the first one starts, then 0.5 seconds later the third one will start, etc. If the align property is ALIGN_SEQUENCE, there would be 0.5 seconds added between each tween. Default is 0.
+		 * @param $align determines how the tweens will be aligned in relation to each other before getting inserted. Options are: TweenAlign.SEQUENCE (aligns the tweens one-after-the-other in a sequence), TweenAlign.START (aligns the start times of all of the tweens (ignores delays)), and TweenAlign.NORMAL (aligns the start times of all the tweens (honors delays)). The default is NORMAL.
+		 * @param $stagger staggers the tweens by a set amount of time (in seconds) (or in frames for frames-based timelines). For example, if the stagger value is 0.5 and the "align" property is set to TweenAlign.START, the second tween will start 0.5 seconds after the first one starts, then 0.5 seconds later the third one will start, etc. If the align property is TweenAlign.SEQUENCE, there would be 0.5 seconds added between each tween. Default is 0.
 		 * @param $TweenClass determines the type of tweens that are created when using the shorthand syntax (like "[mc, 1, {x:100}]" instead of "new TweenLite(mc, 1, {x:100})"). Options are TweenLite or TweenMax. Default is TweenLite unless TweenMax already exists in the SWF, in which case it will be used.
 		 */
-		public function insertMultiple($tweens:Array, $timeOrLabel:*=0, $align:String="init", $stagger:Number=0, $TweenClass:Class=null):void {
+		public function insertMultiple($tweens:Array, $timeOrLabel:*=0, $align:String="normal", $stagger:Number=0, $TweenClass:Class=null):void {
 			if ($TweenClass == null) {
 				$TweenClass = _defaultTweenClass;
 			}
@@ -396,14 +395,14 @@ package gs {
 				} else if (obj is Array) { //element uses the shorthand syntax like [mc, 1, {x:100}]
 					tween = new $TweenClass(obj[0], obj[1], obj[2]);
 				} else if (obj is Function) { //element is a function that should be interpreted as a callback
-					tween = new TweenLite(obj, 0, {onComplete:obj, overwrite:0, immediateRender:false}); //add a 0.002 delay so that it doesn't execute immediately (we'll compensate later)
+					tween = new TweenLite(obj, 0, {onComplete:obj, overwrite:0, immediateRender:false});
 				} else { //element is an object that should be interpreted as a TimelineLite
 					tween = new TimelineLite(obj);
 				}
 				insert(tween, curTime);
-				if ($align == ALIGN_SEQUENCE) {
+				if ($align == "sequence") {
 					curTime = tween.startTime + tween.totalDuration;
-				} else if ($align == ALIGN_START) {
+				} else if ($align == "start") {
 					tween.startTime -= tween.delay;
 				}
 				curTime += $stagger;
@@ -418,8 +417,7 @@ package gs {
 		 * @param $tween TweenLite, TweenMax, TimelineLite, or TimelineMax instance to append
 		 */
 		public function append($tween:Tweenable):void {
-			var last:Tweenable = _lastChild || _endCaps[1];
-			insert($tween, (last == null) ? 0 : last.startTime + (last.totalDuration / last.cachedTimeScale));
+			insert($tween, this.duration);
 		}
 		
 		/**
@@ -431,22 +429,8 @@ package gs {
 		 * @param $adjustLabels If true, all existing labels will be adjusted back in time along with the existing tweens to keep them aligned. (default is false)
 		 */
 		public function prepend($tween:Tweenable, $adjustLabels:Boolean=false):void {
-			var sTime:Number = 0;
-			var first:Tweenable = _firstChild || _endCaps[0];
-			if (first != null) {
-				sTime = first.startTime;
-				var change:Number = ($tween.totalDuration / $tween.cachedTimeScale) + $tween.delay, tween:Tweenable = first;
-				while (tween != null) {
-					tween.startTime += change;
-					tween = tween.nextNode;
-				}
-				if ($adjustLabels) {
-					for (var p:String in _labels) {
-						_labels[p] += change;
-					}
-				}
-			}
-			insert($tween, sTime);
+			moveAllChildren(($tween.totalDuration / $tween.cachedTimeScale) + $tween.delay, $adjustLabels);
+			insert($tween, 0);
 		}
 		
 		/**
@@ -465,11 +449,12 @@ package gs {
 		 * Restarts the timeline and begins playing forward.
 		 * 
 		 * @param $includeDelay determines whether or not the timeline's delay (if any) should be factored in
+		 * @param $suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
-		public function restart($includeDelay:Boolean=false):void {
+		public function restart($includeDelay:Boolean=false, $suppressEvents:Boolean=true):void {
 			this.reversed = false;
 			this.paused = false;
-			this.totalTime = ($includeDelay) ? -_delay : 0;
+			this.setTotalTime(($includeDelay) ? -_delay : 0, $suppressEvents);
 		}
 		
 		/** Starts playing the timeline forwards from its current position. (essentially unpauses it and makes sure that it is not reversed) **/
@@ -492,9 +477,10 @@ package gs {
 		 * Skips to a particular time, frame, or label and plays the timeline forwards from there (unpausing it)
 		 * 
 		 * @param $timeOrLabel time in seconds (or frame if the timeline is frames-based) or label to skip to. For example, myTimeline.gotoAndPlay(2) will skip to 2-seconds into a timeline, and myTimeline.gotoAndPlay("myLabel") will skip to wherever "myLabel" is. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
-		public function gotoAndPlay($timeOrLabel:*):void {
-			goto($timeOrLabel);
+		public function gotoAndPlay($timeOrLabel:*, $suppressEvents:Boolean=true):void {
+			goto($timeOrLabel, $suppressEvents);
 			play();
 		}
 		
@@ -502,9 +488,10 @@ package gs {
 		 * Skips to a particular time, frame, or label and stops the timeline (pausing it)
 		 * 
 		 * @param $timeOrLabel time in seconds (or frame if the timeline is frames-based) or label to skip to. For example, myTimeline.gotoAndStop(2) will skip to 2-seconds into a timeline, and myTimeline.gotoAndStop("myLabel") will skip to wherever "myLabel" is. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
-		public function gotoAndStop($timeOrLabel:*):void {
-			goto($timeOrLabel);
+		public function gotoAndStop($timeOrLabel:*, $suppressEvents:Boolean=true):void {
+			goto($timeOrLabel, $suppressEvents);
 			this.paused = true;
 		}
 		
@@ -512,14 +499,15 @@ package gs {
 		 * Skips to a particular time, frame, or label without changing the paused state of the timeline
 		 * 
 		 * @param $timeOrLabel time in seconds (or frame if the timeline is frames-based) or label to skip to. For example, myTimeline.goto(2) will skip to 2-seconds into a timeline, and myTimeline.goto("myLabel") will skip to wherever "myLabel" is. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
-		public function goto($timeOrLabel:*):void {
+		public function goto($timeOrLabel:*, $suppressEvents:Boolean=true):void {
 			if (typeof($timeOrLabel) == "string") {
 				if ($timeOrLabel in _labels) {
-					this.totalTime = (this.cachedReversed) ? this.duration - Number(_labels[$timeOrLabel]) : Number(_labels[$timeOrLabel]);
+					setTotalTime((this.cachedReversed) ? this.duration - Number(_labels[$timeOrLabel]) : Number(_labels[$timeOrLabel]), $suppressEvents);
 				}
 			} else {
-				this.totalTime = Number($timeOrLabel);
+				setTotalTime(Number($timeOrLabel), $suppressEvents);
 			}
 		}
 		
@@ -544,28 +532,39 @@ package gs {
 		 * Renders all tweens and sub-timelines in the state they'd be at a particular time (or frame for frames-based timelines). 
 		 * 
 		 * @param $time time in seconds (or frames for frames-based timelines) that should be rendered. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 * @param $force Normally the tween will skip rendering if the $time matches the cachedTotalTime (to improve performance), but if $force is true, it forces a render. This is primarily used internally for tweens with durations of zero in TimelineLite/Max instances.
 		 */
-		override public function renderTime($time:Number, $force:Boolean=false):void {
+		override public function renderTime($time:Number, $suppressEvents:Boolean=false, $force:Boolean=false):void {
 			if (this.gc) {
 				this.setEnabled(true, false);
 			} else if (!this.active && !this.cachedPaused) {
-				this.active = true; 
+				this.active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
-			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, tween:Tweenable, isComplete:Boolean, rendered:Boolean, isFirstRun:Boolean;
+			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, tween:Tweenable, isComplete:Boolean, rendered:Boolean, next:Tweenable, dur:Number;
 			if ($time >= totalDur) {
-				if (this.cachedTotalTime != totalDur) {
+				if (_rawPrevTime <= totalDur && _rawPrevTime != $time) {
 					this.cachedTotalTime = this.cachedTime = totalDur;
-					forceChildrenToEnd(prevTime);
-					isComplete = rendered = true;
+					forceChildrenToEnd(totalDur, $suppressEvents);
+					isComplete = !this.hasPausedChild();
+					rendered = true;
+					if (this.cachedDuration == 0 && isComplete && ($time == 0 || _rawPrevTime < 0)) { //In order to accommodate zero-duration timelines, we must discern the momentum/direction of time in order to render values properly when the "playhead" goes past 0 in the forward direction or lands directly on it, and also when it moves past it in the backward direction (from a postitive time to a negative time).
+						$force = true;
+					}
 				}
+				
 			} else if ($time <= 0) {
 				if ($time < 0) {
 					this.active = false;
+					if (this.cachedDuration == 0 && _rawPrevTime > 0) { //In order to accommodate zero-duration timelines, we must discern the momentum/direction of time in order to render values properly when the "playhead" goes past 0 in the forward direction or lands directly on it, and also when it moves past it in the backward direction (from a postitive time to a negative time).
+						$force = true;
+						isComplete = true;
+					}
 				}
-				if (this.cachedTotalTime != 0) {
-					forceChildrenToBeginning(prevTime);
-					this.cachedTotalTime = this.cachedTime = 0;
+				if (_rawPrevTime >= 0 && _rawPrevTime != $time) {
+					forceChildrenToBeginning(0, $suppressEvents);
+					this.cachedTotalTime = 0;
+					this.cachedTime = 0;
 					rendered = true;
 					if (this.cachedReversed) {
 						isComplete = true;
@@ -574,56 +573,57 @@ package gs {
 			} else {
 				this.cachedTotalTime = this.cachedTime = $time;
 			}
+			_rawPrevTime = $time;
 			
-			if (!this.initted) {
-				this.initted = isFirstRun = true;
-				if (this.vars.onStart != null) {
-					this.vars.onStart.apply(null, this.vars.onStartParams);
-				}
-			} else if (this.cachedTime == prevTime && !$force) {
+			if (this.cachedTime == prevTime && !$force) {
 				return;
+			} else if (!this.initted) {
+				this.initted = true;
+			}
+			if (prevTime == 0 && this.vars.onStart != null && !$suppressEvents) {
+				this.vars.onStart.apply(null, this.vars.onStartParams);
 			}
 			
 			if (rendered) {
 				//already rendered
 			} else if (this.cachedTime - prevTime > 0) {
 				tween = _firstChild;
-				while (tween != null) {
-					if (tween.active || (!tween.cachedPaused && tween.cachedDuration != 0 && tween.startTime <= this.cachedTime && tween.startTime + (tween.totalDuration / tween.cachedTimeScale) >= this.cachedTime)) {
+				while (tween) {
+					next = tween.nextNode; //record it here because the value could change after rendering...
+					if (tween.active || (!tween.cachedPaused && tween.startTime <= this.cachedTime)) {
 						
 						if (!tween.cachedReversed) {
-							tween.renderTime((this.cachedTime - tween.startTime) * tween.cachedTimeScale);
+							tween.renderTime((this.cachedTime - tween.startTime) * tween.cachedTimeScale, $suppressEvents, false);
 						} else {
-							tween.renderTime(tween.cachedTotalDuration - ((this.cachedTime - tween.startTime) * tween.cachedTimeScale));
+							dur = (tween.cacheIsDirty) ? tween.totalDuration : tween.cachedTotalDuration;
+							tween.renderTime(dur - ((this.cachedTime - tween.startTime) * tween.cachedTimeScale), $suppressEvents, false);
 						}
 						
-					} else if (tween.cachedDuration == 0 && !tween.cachedPaused && (tween.startTime > prevTime || isFirstRun) && tween.startTime <= this.cachedTime) {
-						tween.renderTime(0, true);
 					}
-					tween = tween.nextNode;
+					tween = next;
 				}
 			} else {
 				tween = _lastChild;
-				while (tween != null) {
-					if (tween.active || (!tween.cachedPaused && tween.cachedDuration != 0 && tween.startTime <= this.cachedTime && tween.startTime + (tween.totalDuration / tween.cachedTimeScale) >= this.cachedTime)) {
+				while (tween) {
+					next = tween.prevNode; //record it here because the value could change after rendering...
+					if (tween.active || (!tween.cachedPaused && tween.startTime <= prevTime)) {
 						
 						if (!tween.cachedReversed) {
-							tween.renderTime((this.cachedTime - tween.startTime) * tween.cachedTimeScale);
+							tween.renderTime((this.cachedTime - tween.startTime) * tween.cachedTimeScale, $suppressEvents, false);
 						} else {
-							tween.renderTime(tween.cachedTotalDuration - ((this.cachedTime - tween.startTime) * tween.cachedTimeScale));
+							dur = (tween.cacheIsDirty) ? tween.totalDuration : tween.cachedTotalDuration;
+							tween.renderTime(dur - ((this.cachedTime - tween.startTime) * tween.cachedTimeScale), $suppressEvents, false);
 						}
 						
-					} else if (tween.cachedDuration == 0 && !tween.cachedPaused && tween.startTime < prevTime && tween.startTime >= this.cachedTime) {
-						tween.renderTime(0, true);
 					}
-					tween = tween.prevNode;
+					tween = next;
 				}
 			}
-			if (_hasUpdate) {
+			if (_hasUpdate && !$suppressEvents) {
 				this.vars.onUpdate.apply(null, this.vars.onUpdateParams);
 			}
 			if (isComplete) {
-				complete(true);
+				complete(true, $suppressEvents);
 			}
 		}
 		
@@ -634,25 +634,27 @@ package gs {
 		 * performed this.cachedTime - tween.startTime, floating point errors would return a value that
 		 * was SLIGHTLY off). This method forces them to the beginning.
 		 * 
-		 * @param $prevTime The previously rendered time (helps determine which zero-duration tweens to call)
-		 * @param $skipZeroDurations In some cases we need to skip rendering zero-duration tweens (like callbacks). For example, when a TimelineMax repeats, we need to force the children to the end and then beginning (or visa-versa if it is reversed) but zero-duration tweens would call their onComplete twice in that circumstance.
+		 * @param $time Time that should be rendered (either zero or a negative number). The reason a negative number could be important is because if there are zero-duration tweens at the very beginning (startTime=0), we need a way to sense when the timeline has gone backwards BEYOND zero so that the tweens know to render their starting values instead of their ending values. If the time is exactly zero, those tweens would render their end values.
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 */
-		protected function forceChildrenToBeginning($prevTime:Number, $skipZeroDurations:Boolean=false):void {
-			var tween:Tweenable = _lastChild;
-			while (tween != null) {
-				if (tween.active || (!tween.cachedPaused && tween.cachedTotalTime != 0)) {
+		protected function forceChildrenToBeginning($time:Number, $suppressEvents:Boolean=false):void {
+			var tween:Tweenable = _lastChild, next:Tweenable, dur:Number;
+			while (tween) {
+				next = tween.prevNode; //record it here because the value could change after rendering...
+				if (tween.active || (!tween.cachedPaused && (tween.cachedTotalTime != 0 || tween.cachedDuration == 0))) {
 					
-					if (!tween.cachedReversed) {
-						tween.renderTime(0);
+					if ($time == 0 && (tween.cachedDuration != 0 || tween.startTime == 0)) {
+						tween.renderTime(tween.cachedReversed ? tween.cachedDuration : 0, $suppressEvents, false);
+					} else if (!tween.cachedReversed) {
+						tween.renderTime(($time - tween.startTime) * tween.cachedTimeScale, $suppressEvents, false);
 					} else {
-						tween.renderTime(tween.totalDuration);
+						dur = (tween.cacheIsDirty) ? tween.totalDuration : tween.cachedTotalDuration;
+						tween.renderTime(dur - (($time - tween.startTime) * tween.cachedTimeScale), $suppressEvents, false);
 					}
 					
-				} else if (tween.cachedDuration == 0 && !$skipZeroDurations && tween.startTime < $prevTime && tween.startTime >= 0 && !tween.cachedPaused) {
-					tween.renderTime(0, true);
 				}
-				tween = tween.prevNode;
-			}		
+				tween = next;
+			}	
 		}
 		
 		/**
@@ -662,35 +664,55 @@ package gs {
 		 * performed this.cachedTime - tween.startTime, floating point errors would return a value that
 		 * was SLIGHTLY off). This method forces them to completion.
 		 * 
-		 * @param $prevTime The previously rendered time (helps determine which zero-duration tweens to call)
-		 * @param $skipZeroDurations In some cases we need to skip rendering zero-duration tweens (like callbacks). For example, when a TimelineMax repeats, we need to force the children to the end and then beginning (or visa-versa if it is reversed) but zero-duration tweens would call their onComplete twice in that circumstance.
+		 * @param $time Time that should be rendered (either this.totalDuration or greater). The reason a greater number could be important is because if there are reversed zero-duration tweens at the very end, we need a way to sense when the timeline has gone BEYOND the end so that the tweens know to render their starting values instead of their ending values. If the time is exactly this.totalDuration, those reversed zero-duration tweens would render their end values.
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 */
-		protected function forceChildrenToEnd($prevTime:Number, $skipZeroDurations:Boolean=false):void {
-			var tween:Tweenable = _firstChild;
-			while (tween != null) {
-				if (tween.active || (!tween.cachedPaused && tween.cachedTotalTime != tween.cachedTotalDuration)) {
+		protected function forceChildrenToEnd($time:Number, $suppressEvents:Boolean=false):void {
+			var tween:Tweenable = _firstChild, next:Tweenable, dur:Number;
+			while (tween) {
+				next = tween.nextNode; //record it here because the value could change after rendering...
+				if (tween.active || (!tween.cachedPaused && (tween.cachedTotalTime != tween.cachedTotalDuration || tween.cachedDuration == 0))) {
 					
-					if (!tween.cachedReversed) {
-						tween.renderTime(tween.totalDuration);
+					if ($time == this.cachedDuration && (tween.cachedDuration != 0 || tween.startTime == this.cachedDuration)) {
+						tween.renderTime(tween.cachedReversed ? 0 : tween.cachedDuration, $suppressEvents, false);
+					} else if (!tween.cachedReversed) {
+						tween.renderTime(($time - tween.startTime) * tween.cachedTimeScale, $suppressEvents, false);
 					} else {
-						tween.renderTime(0);
+						dur = (tween.cacheIsDirty) ? tween.totalDuration : tween.cachedTotalDuration;
+						tween.renderTime(dur - (($time - tween.startTime) * tween.cachedTimeScale), $suppressEvents, false);
 					}
 					
-				} else if (tween.cachedDuration == 0 && !$skipZeroDurations && tween.startTime > $prevTime && !tween.cachedPaused) {
-					tween.renderTime(0, true);
+				}
+				tween = next;
+			}
+		}
+		
+		/**
+		 * @private
+		 * Checks the timeline to see if it has any paused children (tweens/timelines). 
+		 * 
+		 * @return Indicates whether or not the timeline contains any paused children
+		 */
+		public function hasPausedChild():Boolean {
+			var tween:Tweenable = _firstChild;
+			while (tween) {
+				if (tween.cachedPaused || ((tween is TimelineLite) && (tween as TimelineLite).hasPausedChild())) {
+					return true;
 				}
 				tween = tween.nextNode;
 			}
+			return false;
 		}
 		
 		/**
 		 * Forces the timeline to completion.
 		 * 
 		 * @param $skipRender to skip rendering the final state of the timeline, set skipRender to true. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 */
-		override public function complete($skipRender:Boolean=false):void {
+		override public function complete($skipRender:Boolean=false, $suppressEvents:Boolean=false):void {
 			if (!$skipRender) {
-				renderTime(this.totalDuration); //just to force the final render
+				renderTime(this.totalDuration, $suppressEvents, false); //just to force the final render
 				return; //renderTime() will call complete(), so just return here.
 			}
 			if (this.timeline.autoRemoveChildren) {
@@ -698,12 +720,14 @@ package gs {
 			} else {
 				this.active = false;
 			}
-			if (this.cachedReversed && this.cachedTotalTime == 0 && this.cachedDuration != 0) {
-				if (this.vars.onReverseComplete != null) {
-					this.vars.onReverseComplete.apply(null, this.vars.onReverseCompleteParams);
+			if (!$suppressEvents) {
+				if (this.cachedReversed && this.cachedTotalTime == 0 && this.cachedDuration != 0) {
+					if (this.vars.onReverseComplete != null) {
+						this.vars.onReverseComplete.apply(null, this.vars.onReverseCompleteParams);
+					}
+				} else if (this.vars.onComplete != null) {
+					this.vars.onComplete.apply(null, this.vars.onCompleteParams);
 				}
-			} else if (this.vars.onComplete != null) {
-				this.vars.onComplete.apply(null, this.vars.onCompleteParams);
 			}
 		}
 		
@@ -718,7 +742,7 @@ package gs {
 		 */
 		public function getChildren($nested:Boolean=true, $tweens:Boolean=true, $timelines:Boolean=true):Array {
 			var a:Array = [], tween:Tweenable = _firstChild || _endCaps[0];
-			while (tween != null) {
+			while (tween) {
 				if (tween is TweenLite) {
 					if ($tweens) {
 						a[a.length] = tween;
@@ -755,6 +779,27 @@ package gs {
 		}
 		
 		/**
+		 * @private
+		 * Changes the startTime of all children by a certain amount and optionally adjusts labels too.
+		 * 
+		 * @param $time Number of seconds (or frames for frames-based timelines) to move each child.
+		 * @param $adjustLabels If true, the timing of all labels will be adjusted as well.
+		 */
+		protected function moveAllChildren($time:Number, $adjustLabels:Boolean=false):void {
+			var tween:Tweenable = _firstChild || _endCaps[0];
+			while (tween) {
+				tween.startTime += $time;
+				tween = tween.nextNode;
+			}
+			if ($adjustLabels) {
+				for (var p:String in _labels) {
+					_labels[p] += $time;
+				}
+			}
+			this.setDirtyCache(true);
+		}
+		
+		/**
 		 * Kills tweens of a particular object.
 		 * 
 		 * @param $target the target object of the tweens
@@ -778,7 +823,7 @@ package gs {
 		 */
 		protected function setDirtyCache($includeSelf:Boolean=true):void {
 			var tween:Tweenable = ($includeSelf) ? this : this.timeline;
-			while (tween != null) {
+			while (tween) {
 				tween.cacheIsDirty = true;
 				tween = tween.timeline;
 			}
@@ -810,13 +855,32 @@ package gs {
 					_firstChild = _lastChild = null;
 				}
 				
-				while (tween != null) {
+				while (tween) {
 					tween.setEnabled($b, true);
 					tween = tween.nextNode;
 				}
 				
 				super.setEnabled($b, $ignoreTimeline);
 			}
+		}
+		
+		/**
+		 * @private
+		 * Exactly the same as setting the totalTime property but also allows for suppression of events. 
+		 * 
+		 * @param $totalTime Time that should be rendered (includes any repeats and repeatDelays for TimelineMax)
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
+		 **/
+		protected function setTotalTime($totalTime:Number, $suppressEvents:Boolean=false):void {
+			var tlTime:Number = _pauseTime || this.timeline.cachedTotalTime;
+			if (this.cachedReversed) {
+				var dur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration;
+				this.startTime = tlTime - ((dur - $totalTime) / this.cachedTimeScale);
+			} else {
+				this.startTime = tlTime - ($totalTime / this.cachedTimeScale);
+			}
+			renderTime($totalTime, $suppressEvents, false);
+			setDirtyCache(false);
 		}
 		
 		
@@ -846,7 +910,7 @@ package gs {
 		}
 		
 		public function set progress($n:Number):void {
-			this.totalTime = this.duration * $n;
+			setTotalTime(this.duration * $n, false);
 		}
 		
 		/** 
@@ -866,7 +930,7 @@ package gs {
 		}
 		
 		public function set totalProgress($n:Number):void {
-			this.totalTime = this.totalDuration * $n;
+			setTotalTime(this.totalDuration * $n, false);
 		}
 		
 		/**
@@ -884,7 +948,7 @@ package gs {
 		}
 		
 		public function set time($n:Number):void {
-			this.totalTime = $n;
+			setTotalTime($n);
 		}
 		
 		/**
@@ -902,14 +966,7 @@ package gs {
 		}
 		
 		public function set totalTime($n:Number):void {
-			if (this.cachedReversed) {
-				var dur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration;
-				this.startTime = this.timeline.cachedTotalTime - ((dur - $n) / this.cachedTimeScale);
-			} else {
-				this.startTime = this.timeline.cachedTotalTime - ($n / this.cachedTimeScale);
-			}
-			renderTime($n);
-			setDirtyCache(false);
+			setTotalTime($n, false);
 		}
 		
 		/**
@@ -939,28 +996,28 @@ package gs {
 		 **/
 		override public function get totalDuration():Number {
 			if (this.cacheIsDirty) {
-				var disable:Boolean;
-				var min:Number = 0, max:Number = 0, end:Number, tween:Tweenable = _firstChild || _endCaps[0], prevStart:Number = -Infinity, next:Tweenable;
-				while (tween != null) {
+				var max:Number = 0, end:Number, tween:Tweenable = _firstChild || _endCaps[0], prevStart:Number = -Infinity, next:Tweenable;
+				while (tween) {
 					next = tween.nextNode; //record it here in case the tween changes position in the sequence...
-					if (!tween.cachedPaused || this.cachedPaused) {
-						if (tween.startTime < prevStart) { //in case one of the tweens shifted out of order, it needs to be re-inserted into the correct position in the sequence
-							this.addChild(tween);
-							prevStart = tween.prevNode.startTime;
-						} else {
-							prevStart = tween.startTime;
-						}
-						if (tween.startTime < min) {
-							min = tween.startTime;
-						}
-						end = tween.startTime + (tween.totalDuration / tween.cachedTimeScale);
-						if (end > max) {
-							max = end;
-						}
+					
+					if (tween.startTime < prevStart) { //in case one of the tweens shifted out of order, it needs to be re-inserted into the correct position in the sequence
+						this.addChild(tween);
+						prevStart = tween.prevNode.startTime;
+					} else {
+						prevStart = tween.startTime;
 					}
+					if (tween.startTime < 0) { //children aren't allowed to have negative startTimes, so adjust here if one is found.
+						max -= tween.startTime;
+						this.moveAllChildren(-tween.startTime, false);
+					}
+					end = tween.startTime + (tween.totalDuration / tween.cachedTimeScale);
+					if (end > max) {
+						max = end;
+					}
+					
 					tween = next;
 				}
-				this.cachedDuration = this.cachedTotalDuration = max - min;
+				this.cachedDuration = this.cachedTotalDuration = max;
 				this.cacheIsDirty = false;
 			}
 			return this.cachedTotalDuration;
@@ -981,7 +1038,8 @@ package gs {
 			if ($n == 0) { //can't allow zero because it'll throw the math off
 				$n = 0.0001;
 			}
-			this.startTime = this.timeline.cachedTotalTime - ((this.timeline.cachedTotalTime - this.startTime) * this.cachedTimeScale / $n);
+			var tlTime:Number = _pauseTime || this.timeline.cachedTotalTime;
+			this.startTime = tlTime - ((tlTime - this.startTime) * this.cachedTimeScale / $n);
 			this.cachedTimeScale = $n;
 			setDirtyCache(false);
 		}
@@ -994,7 +1052,8 @@ package gs {
 		public function set reversed($b:Boolean):void {
 			if ($b != this.cachedReversed) {
 				var p:Number = ($b) ? (1 - this.totalProgress) : this.totalProgress;
-				this.startTime = this.timeline.cachedTotalTime - (p * this.totalDuration / this.cachedTimeScale);
+				var tlTime:Number = _pauseTime || this.timeline.cachedTotalTime;
+				this.startTime = tlTime- (p * this.totalDuration / this.cachedTimeScale);
 				this.cachedReversed = $b;
 			}
 		}
@@ -1006,11 +1065,13 @@ package gs {
 		
 		public function set paused($b:Boolean):void {
 			if ($b != this.cachedPaused) {
-				if (!$b) {
-					var curTime:Number = (this.cachedReversed) ? this.totalDuration - this.cachedTotalTime : this.cachedTotalTime;
-					this.startTime = this.timeline.cachedTotalTime - (curTime / this.cachedTimeScale);
+				if ($b) {
+					_pauseTime = this.timeline.rawTime;
+				} else {
+					this.startTime += this.timeline.rawTime - _pauseTime;
+					_pauseTime = NaN;
+					var dur:Number = this.totalDuration; //ensures that the cachedDuration/cachedTotalDuration is refreshed. Otherwise, if someone created a timeline, paused it immediately, added a bunch of tweens, and then unpaused it, the cachedDuration would still be zero meaning it could get ignored in the rendering queue.
 				}
-				setDirtyCache(false);
 				this.cachedPaused = $b;
 				this.active = Boolean(!this.cachedPaused && this.cachedTotalTime > 0 && this.cachedTotalTime < this.cachedTotalDuration);
 			}
@@ -1030,6 +1091,22 @@ package gs {
 				tl = tl.timeline;
 			}
 			return Boolean(tl == TweenLite.rootFramesTimeline);
+		}
+		
+		/**
+		 * @private
+		 * Reports the totalTime of the timeline without capping the number at the totalDuration (max) and zero (minimum) which can be useful when
+		 * unpausing tweens/timelines. Imagine a case where a paused tween is in a timeline that has already reached the end, but then
+		 * the tween gets unpaused - it needs a way to place itself accurately in time AFTER what was previously the timeline's end time.
+		 * 
+		 * @return The totalTime of the timeline without capping the number at the totalDuration (max) and zero (minimum)
+		 */
+		override public function get rawTime():Number {
+			if ((this.cachedTotalTime != 0 && this.cachedTotalTime != this.cachedTotalDuration)) { //note: don't use this.totalDuration because if other tweens get unpaused before this one, the totalDuration could change.  
+				return this.cachedTotalTime;
+			} else {
+				return (this.timeline.rawTime - this.startTime) * this.cachedTimeScale;
+			}
 		}
 		
 	}

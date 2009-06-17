@@ -1,6 +1,97 @@
 CHANGE LOG : GREENSOCK TWEENING PLATFORM
 ----------------------------------------
 
+6/16/09, 9:30AM CST
+----------------
+TweenLite		11.0991
+TweenMax		11.0993
+TimelineLite	0.8
+TimelineMax		0.8
+Tweenable		0.8
+TweenLt			0.8
+	- Added new TweenLt class that is a super-lightweight (1.6k) version of TweenLite without plugin capability, OverwriteManager integration, and a few other features. TweenLt is not recommended unless you absolutely cannot afford the extra 2.4k that the regular TweenLite class would cost.
+	- Prevented timelines from rendering times less than zero or greater than the totalDuration. 
+	- Fixed very minor bug in TweenMax.isTweening()
+	- Moved the ALIGN constants into their own TweenAlign class. (TweenAlign.START, TweenAlign.NORMAL, and TweenAlign.SEQUENCE)
+	- Optimized some minor code in the easing equations.
+	- Prevented TimelineLite/Max instances from having children with negative startTimes (they'll automatically move all children if a negative startTime is encountered so that the first child starts at zero)
+
+
+6/3/2009, 6PM CST
+-----------------
+TweenMax		11.0991
+	- Fixed bug that could cause a TweenMax not to be able to restart after it completes.
+
+
+6/1/2009, 5:20PM CST
+--------------------
+TimelineLite	0.7
+TimelineMax		0.7
+TweenLite		11.099
+TweenMax		11.099
+Tweenable		0.7
+SimpleTimeline	0.7
+	- Fixed bug that caused onStart to only fire the first time through a tween/timeline
+	- Fixed issue that could cause a zero-duration tween/timeline to not render correctly if its parent timeline was rendered at a time that preceded the start time of the zero-duration tween/timeline
+
+
+5/27/2009, 11:20AM CST
+----------------------
+TimelineLite 	0.69
+	- Fixed bug that could cause timelines to get ignored in the rendering queue if they were created with zero tweens, immediately paused, and then populated, and subsequently unpaused.
+
+
+5/26/2009, 10:45PM CST
+----------------------
+TimelineLite	0.68
+TimelineMax	0.68
+	- Fixed bug in rendering a reversed timeline where some tweens or nested timelines could be skipped
+
+
+5/23/09, 11:45PM CST
+--------------------
+TweenLite		11.0988
+	- Fixed bug in TweenLite that could cause immediate renders to be skipped.
+
+
+5/23/09, 2:00PM CST
+-------------------
+TweenLite		11.0987
+TweenMax		11.0987
+TimelineLite		0.67
+TimelineMax		0.67
+	- Added "suppressEvent" capabilities throughout the classes. This is particularly useful in the timeline gotoAndStop(), gotoAndPlay(), goto(), and restart() methods because you can skip to a different time/position without having any onUpdate, onComplete, onReverseComplete, etc. callbacks or events triggered.
+	- Added logic that allows the "immediateRender" special property to be honored if it is passed in through the "from" vars in TweenMax.allFromTo() and TweenMax.fromTo(). (previously it was only honored if it was passed through the "to" vars object)
+	- Fixed bug that could cause tweens inside nested timelines that start at exactly zero seconds to render incorrectly
+
+
+5/22/09, 9:30AM CST
+-------------------
+TimelineLite	0.66
+TimelineMax	0.66
+	- Fixed bug that could cause tweens to be skipped in the rendering queue when their start and end times were between the last render and the current one.
+
+
+5/12/2009, 11:55PM CST
+----------------------
+TweenMax	11.0985
+TimelineLite	0.65
+TimelineMax	0.65
+SimpleTimeline	0.63
+	- Now if a TimelineLite or TimelineMax contains a paused child tween/timeline, it will not complete (calling an onComplete or firing a COMPLETE event) until the child is unpaused.
+	- Fixed bug in TweenMax.pauseAll()
+	- Fixed bug that could cause odd behavior if certain actions were performed on a TimelineLite/Max when it was paused
+	- Fixed bug in MotionBlurPlugin that prevented it from rendering properly initially if the tween was restarted or set back to a progress of zero.
+
+
+5/8/2009, 2:05PM CST
+--------------------
+TimelineLite 	0.64
+TimelineMax 	0.64
+SimpleTimeline	0.62
+	- Fixed bug that could cause an infinite loop under very specific circumstances
+
+
 5/6/2009, 7PM CST
 -----------------
 TweenLite	11.0984

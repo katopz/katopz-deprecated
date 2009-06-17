@@ -7,8 +7,8 @@ package gs.easing {
 			return -c *(t/=d)*(t-2) + b;
 		}
 		public static function easeInOut (t:Number, b:Number, c:Number, d:Number):Number {
-			if ((t/=d/2) < 1) return c/2*t*t + b;
-			return -c/2 * ((--t)*(t-2) - 1) + b;
+			if ((t/=d*0.5) < 1) return c*0.5*t*t + b;
+			return -c*0.5 * ((--t)*(t-2) - 1) + b;
 		}
 	}
 }

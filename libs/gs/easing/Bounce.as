@@ -15,7 +15,7 @@ package gs.easing {
 			return c - easeOut(d-t, 0, c, d) + b;
 		}
 		public static function easeInOut (t:Number, b:Number, c:Number, d:Number):Number {
-			if (t < d/2) return easeIn (t*2, 0, c, d) * .5 + b;
+			if (t < d*0.5) return easeIn (t*2, 0, c, d) * .5 + b;
 			else return easeOut (t*2-d, 0, c, d) * .5 + c*.5 + b;
 		}
 	}

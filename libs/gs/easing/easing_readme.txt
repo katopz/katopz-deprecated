@@ -1,4 +1,4 @@
-This readme file applies to all eases in this directory EXCEPT the CustomEase.
+This readme file applies to all eases in this directory EXCEPT the CustomEase and EaseLookup.
 
 ============================================================================================
  Easing Equations

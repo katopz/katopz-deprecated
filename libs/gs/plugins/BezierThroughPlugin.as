@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 1/8/2009
+ * VERSION: 1.1
+ * DATE: 5/26/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES & MORE DETAILED DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -19,20 +19,21 @@ package gs.plugins {
  * Keep in mind that you can bezierThrough tween ANY properties, not just x/y. <br /><br />
  * 
  * Also, if you'd like to rotate the target in the direction of the bezier path, 
- * use the orientToBeizer special property. In order to alter a rotation property accurately, 
- * TweenLite/Max needs 4 pieces of information: 
+ * use the orientToBezier special property. In order to alter a rotation property accurately, 
+ * TweenLite/Max needs 5 pieces of information: 
  * <ol>
  * 		<li> Position property 1 (typically <code>"x"</code>)
  * 		<li> Position property 2 (typically <code>"y"</code>)
  * 		<li> Rotational property (typically <code>"rotation"</code>)
  * 		<li> Number of degrees to add (optional - makes it easy to orient your MovieClip properly)
- * </ol>
+ * 		<li> Tolerance (default is 0.01, but increase this if the rotation seems to jitter during the tween)
+ * </ol><br />
  * 
  * The orientToBezier property should be an Array containing one Array for each set of these values. 
  * For maximum flexibility, you can pass in any number of arrays inside the container array, one 
  * for each rotational property. This can be convenient when working in 3D because you can rotate
  * on multiple axis. If you're doing a standard 2D x/y tween on a bezier, you can simply pass 
- * in a boolean value of true and TweenLite/Max will use a typical setup, <code>[["x", "y", "rotation", 0]]</code>. 
+ * in a boolean value of true and TweenLite/Max will use a typical setup, <code>[["x", "y", "rotation", 0, 0.01]]</code>. 
  * Hint: Don't forget the container Array (notice the double outer brackets) <br /><br />
  * 
  * <b>USAGE:</b><br /><br />
@@ -52,7 +53,7 @@ package gs.plugins {
  */
 	public class BezierThroughPlugin extends BezierPlugin {
 		/** @private **/
-		public static const VERSION:Number = 1.0;
+		public static const VERSION:Number = 1.1;
 		/** @private **/
 		public static const API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		

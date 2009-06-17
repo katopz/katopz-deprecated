@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.61
- * DATE: 5/7/2009
+ * VERSION: 0.8
+ * DATE: 6/15/2009
  * ACTIONSCRIPT VERSION: 3.0 (AS2 version is also available)
  * UPDATES & MORE DETAILED DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -18,15 +18,17 @@ package gs.core.tween {
 	
 	public class Tweenable {
 		/** @private **/
-		public static const version:Number = 0.61;
+		public static const version:Number = 0.8;
 		
 		/** @private **/
 		protected static var _classInitted:Boolean;
 		
 		/** @private Delay in seconds (or frames for frames-based tweenables) **/
 		protected var _delay:Number; 
-		/** @private Has onUpdate. Tracking this as a Boolean value is faster than checking this.vars.onUpdate == null. **/
-		protected var _hasUpdate:Boolean; 
+		/** @private Has onUpdate. Tracking this as a Boolean value is faster than checking this.vars.onUpdate != null. **/
+		protected var _hasUpdate:Boolean;
+		/** @private Primarily used for zero-duration tweenables to determine the direction/momentum of time which controls whether the starting or ending values should be rendered. For example, if a zero-duration tween renders and then its timeline reverses and goes back before the startTime, the zero-duration tween must render the starting values. Otherwise, if the render time is zero or later, it should always render the ending values. **/
+		protected var _rawPrevTime:Number = -1;
 		
 		/** Stores variables (things like alpha, y or whatever we're tweening as well as special properties like "onComplete"). **/
 		public var vars:Object; 
@@ -36,7 +38,7 @@ package gs.core.tween {
 		public var active:Boolean; 
 		/** @private Flagged for garbage collection **/
 		public var gc:Boolean; 
-		/** @private Indicates whether or not initTweenVals() has been called (where all the tween property start/end value information is recorded) **/
+		/** @private Indicates whether or not init() has been called (where all the tween property start/end value information is recorded) **/
 		public var initted:Boolean; 
 		 /** Every tween belongs to one timeline. By default, it uses the TweenLite.rootTimeline (or TweenLite.rootFramesTimeline for frames-based tweenables). **/
 		public var timeline:SimpleTimeline;
@@ -92,9 +94,10 @@ package gs.core.tween {
 		 * is 3, renderTime(1.5) would render it at the halfway finished point.
 		 * 
 		 * @param $time time (or frame number for frames-based tweenables) to render.
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 * @param $force Normally the tween will skip rendering if the $time matches the cachedTotalTime (to improve performance), but if $force is true, it forces a render. This is primarily used internally for tweens with durations of zero in TimelineLite/Max instances.
 		 */
-		public function renderTime($time:Number, $force:Boolean=false):void {
+		public function renderTime($time:Number, $suppressEvents:Boolean=false, $force:Boolean=false):void {
 			
 		}
 		
@@ -102,8 +105,9 @@ package gs.core.tween {
 		 * Forces the tweenable to completion.
 		 * 
 		 * @param $skipRender to skip rendering the final state of the tween, set skipRender to true. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 */
-		public function complete($skipRender:Boolean=false):void {
+		public function complete($skipRender:Boolean=false, $suppressEvents:Boolean=false):void {
 			
 		}
 		

@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.0984
- * DATE: 5/7/2009
+ * VERSION: 11.0991
+ * DATE: 6/15/2009
  * AS3 (AS2 is also available)
  * UPDATES & DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -82,7 +82,7 @@ package gs {
  * 											allows you to insert tweens into timelines and perform other actions that may affect 
  * 											its timing. However, if you prefer to force the tween to render immediately when it is 
  * 											created, set immediateRender to true. Or to prevent a tween with a duration of zero from
- * 											rendering immediately, set this to false.
+ * 											rendering immediately, set immediateRender to false.
  * 	
  * 	<li><b> overwrite : int</b>			Controls how other tweens of the same object are handled when this tween is created. Here are the options:
  * 										<ul>
@@ -219,6 +219,7 @@ package gs {
 				ScrollRectPlugin,			//tweens the scrollRect property of a DisplayObject
 				SetSizePlugin,				//tweens the width/height of components via setSize()
 				SetActualSizePlugin			//tweens the width/height of components via setActualSize()
+				TransformMatrixPlugin,		//Tweens the transform.matrix property of any DisplayObject
 					
 				//DynamicPropsPlugin,			//tweens to dynamic end values. You associate the property with a particular function that returns the target end value **Club GreenSock membership benefit**
 				//MotionBlurPlugin,			//applies a directional blur to a DisplayObject based on the velocity and angle of movement. **Club GreenSock membership benefit**
@@ -234,15 +235,16 @@ package gs {
 			rootFramesTimeline = new SimpleTimeline(null);
 			rootTimeline.startTime = getTimer() * 0.001;
 			rootFramesTimeline.startTime = rootFrame;
-			rootTimeline.autoRemoveChildren = rootFramesTimeline.autoRemoveChildren = true;
-			timingSprite.addEventListener(Event.ENTER_FRAME, updateAll, false, 0, true);
+			rootTimeline.autoRemoveChildren = true;
+			rootFramesTimeline.autoRemoveChildren = true;
+			_shape.addEventListener(Event.ENTER_FRAME, updateAll, false, 0, true);
 			if (overwriteManager == null) {
 				overwriteManager = {mode:1, enabled:false};
 			}
 		}
 		
 		/** @private **/
-		public static const version:Number = 11.0984;
+		public static const version:Number = 11.0991;
 		/** @private When plugins are activated, the class is added (named based on the special property) to this object so that we can quickly look it up in the initTweenVals() method.**/
 		public static var plugins:Object = {}; 
 		/** @private For notifying plugins of significant events like when the tween finishes initializing, when it is disabled/enabled, and when it completes (some plugins need to take actions when those events occur) **/
@@ -262,7 +264,7 @@ package gs {
 		/** @private Holds references to all our tween instances organized by target for quick lookups (for overwriting).**/
 		public static var masterList:Dictionary = new Dictionary(false); 
 		/** @private Drives all our ENTER_FRAME events.**/
-		public static var timingSprite:Sprite = new Sprite(); 
+		private static var _shape:Shape = new Shape(); 
 		/** @private Lookup for all of the reserved "special property" keywords.**/
 		protected static var _reservedProps:Object = {ease:1, delay:1, overwrite:1, onComplete:1, onCompleteParams:1, useFrames:1, runBackwards:1, startAt:1, onUpdate:1, onUpdateParams:1, roundProps:1, onStart:1, onStartParams:1, onReverseComplete:1, onReverseCompleteParams:1, onRepeat:1, onRepeatParams:1, proxiedEase:1, easeParams:1, yoyo:1, onCompleteListener:1, onUpdateListener:1, onStartListener:1, orientToBezier:1, timeScale:1, immediateRender:1, repeat:1, repeatDelay:1, timeline:1, data:1};
 		
@@ -320,7 +322,7 @@ package gs {
 			}
 			
 			if (this.active || this.vars.immediateRender) {
-				renderTime(0);
+				renderTime(0, false, true);
 			}
 		}
 		
@@ -363,7 +365,7 @@ package gs {
 			}
 			if (this.vars.runBackwards == true) {
 				var pt:PropTween = _firstPropTween;
-				while (pt != null) {
+				while (pt) {
 					pt.start += pt.change;
 					pt.change = -pt.change;
 					pt = pt.nextNode;
@@ -398,8 +400,9 @@ package gs {
 				$nextNode.prevNode = pt;
 			}
 			if ($isPlugin && $name == "_MULTIPLE_") {
-				var op:Array = $target.overwriteProps, i:int;
-				for (i = op.length - 1; i > -1; i--) {
+				var op:Array = $target.overwriteProps;
+				var i:int = op.length;
+				while (i-- > 0) {
 					propTweenLookup[op[i]] = pt;
 				}
 			} else {
@@ -414,44 +417,60 @@ package gs {
 		 * is 3, renderTime(1.5) would render it at the halfway finished point.
 		 * 
 		 * @param $time time (or frame number for frames-based tweens) to render.
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 * @param $force Normally the tween will skip rendering if the $time matches the cachedTotalTime (to improve performance), but if $force is true, it forces a render. This is primarily used internally for tweens with durations of zero in TimelineLite/Max instances.
 		 */
-		override public function renderTime($time:Number, $force:Boolean=false):void {
+		override public function renderTime($time:Number, $suppressEvents:Boolean=false, $force:Boolean=false):void {
 			var factor:Number, isComplete:Boolean, prevTime:Number = this.cachedTime;
-			this.active = true;
+			this.active = true; //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			if ($time >= this.cachedDuration) {
 				this.cachedTotalTime = this.cachedTime = this.cachedDuration;
 				factor = 1;
 				isComplete = true;
+				if (this.cachedDuration == 0) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
+					if (($time == 0 || _rawPrevTime < 0) && _rawPrevTime != $time) {
+						$force = true;
+					}		
+					_rawPrevTime = $time;
+				}
+				
 			} else if ($time <= 0) {
 				this.cachedTotalTime = this.cachedTime = factor = 0;
 				if ($time < 0) {
 					this.active = false;
+					if (this.cachedDuration == 0) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
+						if (_rawPrevTime > 0) {
+							$force = true;
+							isComplete = true;
+						}
+						_rawPrevTime = $time;
+					}
 				}
+				
 			} else {
 				this.cachedTotalTime = this.cachedTime = $time;
 				factor = this.ease($time, 0, 1, this.cachedDuration);
-			}
+			}			
 			
-			if (!this.initted) {
-				init();
-				if (this.vars.onStart != null) {
-					this.vars.onStart.apply(null, this.vars.onStartParams);
-				}
-			} else if (this.cachedTime == prevTime && !$force) {
+			if (this.cachedTime == prevTime && !$force) {
 				return;
+			} else if (!this.initted) {
+				init();
+			}
+			if (prevTime == 0 && this.vars.onStart != null && !$suppressEvents) {
+				this.vars.onStart.apply(null, this.vars.onStartParams);
 			}
 			
 			var pt:PropTween = _firstPropTween;
-			while (pt != null) {
+			while (pt) {
 				pt.target[pt.property] = pt.start + (factor * pt.change);
 				pt = pt.nextNode;
 			}
-			if (_hasUpdate) {
+			if (_hasUpdate && !$suppressEvents) {
 				this.vars.onUpdate.apply(null, this.vars.onUpdateParams);
 			}
 			if (isComplete) {
-				complete(true);
+				complete(true, $suppressEvents);
 			}
 		}
 		
@@ -459,10 +478,11 @@ package gs {
 		 * Forces the tween to completion.
 		 * 
 		 * @param $skipRender to skip rendering the final state of the tween, set skipRender to true. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 */
-		override public function complete($skipRender:Boolean = false):void {
+		override public function complete($skipRender:Boolean=false, $suppressEvents:Boolean=false):void {
 			if (!$skipRender) {
-				renderTime(this.cachedTotalDuration); //just to force the final render
+				renderTime(this.cachedTotalDuration, $suppressEvents, false); //just to force the final render
 				return; //renderTime() will call complete(), so just return here.
 			}
 			if (_hasPlugins) {
@@ -473,7 +493,7 @@ package gs {
 			} else {
 				this.active = false;
 			}
-			if (this.vars.onComplete != null && (this.cachedTotalTime != 0 || this.cachedDuration == 0)) { //if cachedTotalTime is zero, it must be a reversed TweenMax instance.
+			if (this.vars.onComplete != null && (this.cachedTotalTime != 0 || this.cachedDuration == 0) && !$suppressEvents) { //if cachedTotalTime is zero, it must be a reversed TweenMax instance.
 				this.vars.onComplete.apply(null, this.vars.onCompleteParams);
 			}
 		}
@@ -583,7 +603,16 @@ package gs {
 		 * vars object instead of the end values, and the tween will use the current values as 
 		 * the end values. This can be very useful for animating things into place on the stage
 		 * because you can build them in their end positions and do some simple TweenLite.from()
-		 * calls to animate them into place. 
+		 * calls to animate them into place. <b>NOTE:</b> By default, <code>immediateRender</code>
+		 * is <code>true</code> in from() tweens, meaning that they immediately render their starting state 
+		 * regardless of any delay that is specified. You can override this behavior by passing 
+		 * <code>immediateRender:false</code> in the <code>$vars</code> object so that it will wait to 
+		 * render until the tween actually begins (often the desired behavior when inserting into timelines). 
+		 * To illustrate the default behavior, the following code will immediately set the <code>alpha</code> of <code>mc</code> 
+		 * to 0 and then wait 2 seconds before tweening the <code>alpha</code> back to 1 over the course 
+		 * of 1.5 seconds:<br /><br /><code>
+		 * 
+		 * TweenLite.from(mc, 1.5, {alpha:0, delay:2});</code>
 		 * 
 		 * @param $target Target object whose properties this tween affects. This can be ANY object, not just a DisplayObject. 
 		 * @param $duration Duration in seconds (or in frames if the tween's timing mode is frames-based)
@@ -610,22 +639,23 @@ package gs {
 		 * @param $delay Delay in seconds (or frames if useFrames is true) before the function should be called
 		 * @param $onComplete Function to call
 		 * @param $onCompleteParams An Array of parameters to pass the function.
+		 * @param $useFrames If the delay should be measured in frames instead of seconds, set useFrames to true (default is false)
 		 * @return TweenLite instance
 		 */
 		public static function delayedCall($delay:Number, $onComplete:Function, $onCompleteParams:Array=null, $useFrames:Boolean=false):TweenLite {
-			return new TweenLite($onComplete, 0, {delay:$delay, onComplete:$onComplete, onCompleteParams:$onCompleteParams, useFrames:$useFrames, overwrite:0});
+			return new TweenLite($onComplete, 0, {delay:$delay, onComplete:$onComplete, onCompleteParams:$onCompleteParams, immediateRender:false, useFrames:$useFrames, overwrite:0});
 		}
 		
 		/**
 		 * @private
-		 * Updates the rootTimeline and rootFramesTimeline and collects garbage every 30 frames.
+		 * Updates the rootTimeline and rootFramesTimeline and collects garbage every 60 frames.
 		 * 
 		 * @param $e ENTER_FRAME Event
 		 */
 		protected static function updateAll($e:Event = null):void {
-			rootTimeline.renderTime(((getTimer() * 0.001) - rootTimeline.startTime) * rootTimeline.cachedTimeScale);
+			rootTimeline.renderTime(((getTimer() * 0.001) - rootTimeline.startTime) * rootTimeline.cachedTimeScale, false, false);
 			rootFrame++;
-			rootFramesTimeline.renderTime((rootFrame - rootFramesTimeline.startTime) * rootFramesTimeline.cachedTimeScale);
+			rootFramesTimeline.renderTime((rootFrame - rootFramesTimeline.startTime) * rootFramesTimeline.cachedTimeScale, false, false);
 			
 			if (!(rootFrame % 60)) { //garbage collect every 60 frames...
 				var ml:Dictionary = masterList, tgt:Object, a:Array, i:int;
@@ -662,14 +692,14 @@ package gs {
 		 * @param $target Object whose tweens should be immediately killed
 		 * @param $complete Indicates whether or not the tweens should be forced to completion before being killed.
 		 */
-		public static function killTweensOf($target:Object, $complete:Boolean = false):void {
-			if ($target != null && $target in masterList) {
+		public static function killTweensOf($target:Object, $complete:Boolean=false):void {
+			if ($target in masterList) {
 				var a:Array = masterList[$target];
 				var i:int = a.length;
 				while (i-- > 0) {
 					if (!a[i].gc) {
 						if ($complete) {
-							a[i].complete(false);
+							a[i].complete(false, false);
 						} else {
 							a[i].setEnabled(false, false);
 						}

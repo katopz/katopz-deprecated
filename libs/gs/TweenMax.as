@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.0984
- * DATE: 5/7/2009
+ * VERSION: 11.0993
+ * DATE: 6/15/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com 
  **/
@@ -309,9 +309,9 @@ package gs {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.0984;
+		public static const version:Number = 11.0991;
 		
-		
+		/** @private **/
 		private static var _activatedPlugins:Boolean = TweenPlugin.activate([
 			
 			
@@ -343,6 +343,7 @@ package gs {
 			//ScrollRectPlugin,			//tweens the scrollRect property of a DisplayObject
 			//SetSizePlugin,				//tweens the width/height of components via setSize()
 			//SetActualSizePlugin,		//tweens the width/height of components via setActualSize()
+			//TransformMatrixPlugin,		//Tweens the transform.matrix property of any DisplayObject
 				
 			//DynamicPropsPlugin,			//tweens to dynamic end values. You associate the property with a particular function that returns the target end value **Club GreenSock membership benefit**
 			//MotionBlurPlugin,			//applies a directional blur to a DisplayObject based on the velocity and angle of movement. **Club GreenSock membership benefit**
@@ -376,6 +377,8 @@ package gs {
 		protected var _repeatDelay:Number;
 		/** @private **/
 		protected var _cyclesComplete:uint;
+		/** @private **/
+		protected var _pauseTime:Number;
 		
 		
 		/**
@@ -394,7 +397,7 @@ package gs {
 		 */
 		public function TweenMax($target:Object, $duration:Number, $vars:Object) {
 			super($target, $duration, $vars);
-			if (TweenLite.version < 11.0984) {
+			if (TweenLite.version < 11.0991) {
 				throw new Error("TweenMax error! Please update your TweenLite class or try deleting your ASO files. TweenMax requires a more recent version. Download updates at http://www.TweenMax.com.");
 			}
 			if (typeof(this.vars.yoyo) == "number" || this.vars.loop != undefined) {
@@ -427,6 +430,7 @@ package gs {
 		override protected function init():void {
 			if (this.vars.startAt != null) {
 				this.vars.startAt.overwrite = 0;
+				this.vars.startAt.immediateRender = true;
 				new TweenMax(this.target, 0, this.vars.startAt);
 			}
 			super.init();
@@ -436,7 +440,7 @@ package gs {
 				for (i = rp.length - 1; i > -1; i--) {
 					prop = rp[i];
 					pt = this._firstPropTween;
-					while (pt != null) {
+					while (pt) {
 						if (pt.name == prop) {
 							if (pt.isPlugin) {
 								pt.target.round = true;
@@ -525,18 +529,13 @@ package gs {
 			_firstPropTween = null;
 			_overwrittenProps = null;
 			_hasUpdate = _hasUpdateListener = false;
+			_rawPrevTime = -1;
 			if (this.vars.onCompleteListener != null || this.vars.onUpdateListener != null || this.vars.onStartListener != null) {			
 				initDispatcher();
 			}
-			if (this.vars.yoyo == true || !isNaN(this.vars.yoyo)) { 
-				this.yoyo = true;
-			}
-			if (!isNaN(this.vars.repeat)) {
-				_repeat = this.vars.repeat;
-			}
-			if (!isNaN(this.vars.repeatDelay)) {
-				_repeatDelay = this.vars.repeatDelay;
-			}
+			this.yoyo = Boolean(this.vars.yoyo == true);
+			_repeat = this.vars.repeat || 0;
+			_repeatDelay = this.vars.repeatDelay || 0;
 			this.initted = this.active = false;
 		}
 		
@@ -548,12 +547,12 @@ package gs {
 		 * @param $segment (feature to be added) segmenting the update basically keeps track of the present and past values so that if the tween gets reversed, it accurately reflects the path that the values took.
 		 */
 		protected function updateProperties($vars:Object, $segment:Boolean=true):void {
-			var pt:PropTween = _firstPropTween, curTime:Number = this.cachedTotalTime, p:String, plugin:Object, prioritize:Boolean;
+			var pt:PropTween = _firstPropTween, curTime:Number = this.cachedTotalTime, p:String, plugin:Object, prioritize:Boolean, pluginKillVars:Object, i:int;
 			if (this.initted) {
 				if (!$segment) {
 					this.time = 0;
 				}
-				killVars($vars);
+				killVars($vars, false);
 				
 				for (p in $vars) {
 					if (p in _reservedProps) { 
@@ -563,6 +562,15 @@ package gs {
 						if (plugin.onInitTween(this.target, $vars[p], this) == false) { //if the plugin init fails, do a regular tween
 							_firstPropTween = insertPropTween(this.target, p, this.target[p], $vars[p], p, false, _firstPropTween); 
 						} else {
+							
+							pluginKillVars = {};
+							i = plugin.overwriteProps.length;
+							while (i-- > 0) {
+								pluginKillVars[plugin.overwriteProps[i]] = true;
+							}
+							killVars(pluginKillVars, false);
+							//TODO: adjust plugin to/from based on new value passed in. We need a way to figure out the destination value of each plugin overwriteProp and compare it to the new one. A change to the plugin architecture may be necessary.
+							
 							_firstPropTween = insertPropTween(plugin, "changeFactor", 0, 1, (plugin.overwriteProps.length == 1) ? plugin.overwriteProps[0] : "_MULTIPLE_", true, _firstPropTween); 
 							_hasPlugins = true;
 							if (plugin.priority != 0) {
@@ -615,7 +623,7 @@ package gs {
 				var factor:Number = this.ease(p, 0, 1, 1);
 				var inv:Number = 1 / (1 - factor);
 				var pt:PropTween = _firstPropTween, endValue:Number, i:int;
-				while (pt != null) {
+				while (pt) {
 					endValue = pt.start + pt.change; 
 					if (pt.isPlugin) { //can't read the "progress" value of a plugin, but we know what it is based on the factor (above)
 						pt.change = (endValue - factor) * inv;
@@ -648,21 +656,36 @@ package gs {
 		 * is 3, renderTime(1.5) would render it at the halfway finished point.
 		 * 
 		 * @param $time time (or frame number for frames-based tweens) to render.
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 * @param $force Normally the tween will skip rendering if the $time matches the cachedTotalTime (to improve performance), but if $force is true, it forces a render. This is primarily used internally for tweens with durations of zero in TimelineLite/Max instances.
 		 */
-		override public function renderTime($time:Number, $force:Boolean=false):void {
+		override public function renderTime($time:Number, $suppressEvents:Boolean=false, $force:Boolean=false):void {
 			if (!this.active && !this.cachedPaused) {
-				this.active = true; 
+				this.active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
-			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, tween:Tweenable, prevTime:Number = this.cachedTime, isComplete:Boolean, factor:Number, repeated:Boolean;
+			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, isComplete:Boolean, factor:Number, repeated:Boolean;
 			if ($time >= totalDur) {
 				this.cachedTotalTime = totalDur;
 				this.cachedTime = this.cachedDuration;
 				factor = 1;
 				isComplete = true;
+				if (this.cachedDuration == 0) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
+					if (($time == 0 || _rawPrevTime < 0) && _rawPrevTime != $time) {
+						$force = true;
+					}		
+					_rawPrevTime = $time;
+				}
+				
 			} else if ($time <= 0) {
 				if ($time < 0) {
 					this.active = false;
+					if (this.cachedDuration == 0) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
+						if (_rawPrevTime > 0) {
+							$force = true;
+							isComplete = true;
+						}
+						_rawPrevTime = $time;
+					}
 				}
 				this.cachedTotalTime = this.cachedTime = factor = 0;
 				if (this.cachedReversed && prevTime != 0) {
@@ -693,32 +716,34 @@ package gs {
 				}
 			}
 			
-			if (!this.initted) {
+			if (prevTime == this.cachedTime && !$force) {
+				return;
+			} else if (!this.initted) {
 				init();
+			}
+			if (prevTime == 0 && !$suppressEvents) {
 				if (this.vars.onStart != null) {
 					this.vars.onStart.apply(null, this.vars.onStartParams);
 				}
 				if (_dispatcher != null) {
 					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.START));
 				}
-			} else if (prevTime == this.cachedTime && !$force) {
-				return;
 			}
 			
 			var pt:PropTween = _firstPropTween;
-			while (pt != null) {
+			while (pt) {
 				pt.target[pt.property] = pt.start + (factor * pt.change);
 				pt = pt.nextNode;
 			}
-			if (_hasUpdate) {
+			if (_hasUpdate && !$suppressEvents) {
 				this.vars.onUpdate.apply(null, this.vars.onUpdateParams);
 			}
-			if (_hasUpdateListener) {
+			if (_hasUpdateListener && !$suppressEvents) {
 				_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.UPDATE));
 			}
 			if (isComplete) {
-				complete(true);
-			} else if (repeated) {
+				complete(true, $suppressEvents);
+			} else if (repeated && !$suppressEvents) {
 				if (this.vars.onRepeat != null) {
 					this.vars.onRepeat.apply(null, this.vars.onRepeatParams);
 				}
@@ -732,18 +757,21 @@ package gs {
 		 * Forces the tween to completion.
 		 * 
 		 * @param $skipRender to skip rendering the final state of the tween, set skipRender to true. 
+		 * @param $suppressEvents If true, no events or callbacks will be triggered for this render (like onComplete, onUpdate, onReverseComplete, etc.)
 		 */
-		override public function complete($skipRender:Boolean=false):void {
-			super.complete($skipRender);
-			if (this.cachedReversed && this.cachedTotalTime == 0 && this.cachedDuration != 0) {
-				if (this.vars.onReverseComplete != null) {
-					this.vars.onReverseComplete.apply(null, this.vars.onReverseCompleteParams);
+		override public function complete($skipRender:Boolean=false, $suppressEvents:Boolean=false):void {
+			super.complete($skipRender, $suppressEvents);
+			if (!$suppressEvents) {
+				if (this.cachedReversed && this.cachedTotalTime == 0 && this.cachedDuration != 0) {
+					if (this.vars.onReverseComplete != null) {
+						this.vars.onReverseComplete.apply(null, this.vars.onReverseCompleteParams);
+					}
+					if (_dispatcher != null) {
+						_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.REVERSE_COMPLETE));
+					}
+				} else if (_dispatcher != null) {
+					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.COMPLETE));
 				}
-				if (_dispatcher != null) {
-					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.REVERSE_COMPLETE));
-				}
-			} else if (_dispatcher != null) {
-				_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.COMPLETE));
 			}
 		}
 		
@@ -759,7 +787,7 @@ package gs {
 		 */
 		protected function setDirtyCache($includeSelf:Boolean=true):void {
 			var tween:Tweenable = ($includeSelf) ? this : this.timeline;
-			while (tween != null) {
+			while (tween) {
 				tween.cacheIsDirty = true;
 				tween = tween.timeline;
 			}
@@ -850,7 +878,16 @@ package gs {
 		 * vars object instead of the end values, and the tween will use the current values as 
 		 * the end values. This can be very useful for animating things into place on the stage
 		 * because you can build them in their end positions and do some simple TweenMax.from()
-		 * calls to animate them into place. 
+		 * calls to animate them into place. <b>NOTE:</b> By default, <code>immediateRender</code>
+		 * is <code>true</code> for from() tweens, meaning that they immediately render their starting state 
+		 * regardless of any delay that is specified. You can override this behavior by passing 
+		 * <code>immediateRender:false</code> in the <code>$vars</code> object so that it will wait to 
+		 * render until the tween actually begins (often the desired behavior when inserting into timelines). 
+		 * To illustrate the default behavior, the following code will immediately set the <code>alpha</code> of <code>mc</code> 
+		 * to 0 and then wait 2 seconds before tweening the <code>alpha</code> back to 1 over the course 
+		 * of 1.5 seconds:<br /><br /><code>
+		 * 
+		 * TweenMax.from(mc, 1.5, {alpha:0, delay:2});</code>
 		 * 
 		 * @param $target Target object whose properties this tween affects. This can be ANY object, not just a DisplayObject. 
 		 * @param $duration Duration in seconds (or in frames if the tween's timing mode is frames-based)
@@ -878,6 +915,9 @@ package gs {
 		 */
 		public static function fromTo($target:Object, $duration:Number, $fromVars:Object, $toVars:Object):TweenMax {
 			$toVars.startAt = $fromVars;
+			if ($fromVars.immediateRender == true) {
+				$toVars.immediateRender = true;
+			}
 			return new TweenMax($target, $duration, $toVars);
 		}
 		
@@ -930,8 +970,17 @@ package gs {
 		/**
 		 * Exactly the same as TweenMax.allTo(), but instead of tweening the properties from where they're 
 		 * at currently to whatever you define, this tweens them the opposite way - from where you define TO 
-		 * where ever they are. This is handy for when things are set up on the stage the way they should 
-		 * end up and you just want to tween them into place.
+		 * where ever they are when the tweens begin. This is useful when things are set up on the stage the way they should 
+		 * end up and you just want to tween them into place. <b>NOTE:</b> By default, <code>immediateRender</code>
+		 * is <code>true</code> for allFrom() tweens, meaning that they immediately render their starting state 
+		 * regardless of any delay or stagger that is specified. You can override this behavior by passing 
+		 * <code>immediateRender:false</code> in the <code>$vars</code> object so that each tween will wait to render until
+		 * any delay/stagger has passed (often the desired behavior when inserting into timelines). To illustrate
+		 * the default behavior, the following code will immediately set the <code>alpha</code> of <code>mc1</code>, 
+		 * <code>mc2</code>, and <code>mc3</code> to 0 and then wait 2 seconds before tweening each <code>alpha</code> 
+		 * back to 1 over the course of 1.5 seconds with 0.1 seconds lapsing between the start times of each:<br /><br /><code>
+		 * 
+		 * TweenMax.allFrom([mc1, mc2, mc3], 1.5, {alpha:0, delay:2}, 0.1);</code>
 		 * 
 		 * @param $targets An Array of objects to tween.
 		 * @param $duration Duration (in seconds) of the tween (or in frames for frames-based tweens)
@@ -964,6 +1013,9 @@ package gs {
 		 */
 		public static function allFromTo($targets:Array, $duration:Number, $fromVars:Object, $toVars:Object, $stagger:Number=0, $onCompleteAll:Function=null, $onCompleteAllParams:Array=null):Array {
 			$toVars.startAt = $fromVars;
+			if ($fromVars.immediateRender == true) {
+				$toVars.immediateRender = true;
+			}
 			return allTo($targets, $duration, $toVars, $stagger, $onCompleteAll, $onCompleteAllParams);
 		}		
 		
@@ -982,7 +1034,7 @@ package gs {
 		 * @return TweenMax instance
 		 */
 		public static function delayedCall($delay:Number, $onComplete:Function, $onCompleteParams:Array=null, $useFrames:Boolean=false):TweenMax {
-			return new TweenMax($onComplete, 0, {delay:$delay, onComplete:$onComplete, onCompleteParams:$onCompleteParams, useFrames:$useFrames, overwrite:0});
+			return new TweenMax($onComplete, 0, {delay:$delay, onComplete:$onComplete, onCompleteParams:$onCompleteParams, immediateRender:false, useFrames:$useFrames, overwrite:0});
 		}
 		
 		/**
@@ -1016,7 +1068,7 @@ package gs {
 			var a:Array = getTweensOf($target);
 			var i:int = a.length;
 			while (i-- > 0) {
-				if ((a[i].active || a[i].startTime == a[i].cachedTime) && !a[i].gc) {
+				if ((a[i].active || (a[i].startTime == a[i].timeline.cachedTime && a[i].timeline.active)) && !a[i].gc) {
 					return true;
 				}
 			}
@@ -1236,13 +1288,14 @@ package gs {
 		}
 		
 		public function set totalTime($n:Number):void {
+			var tlTime:Number = _pauseTime || this.timeline.cachedTotalTime;
 			if (this.cachedReversed) {
 				var dur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration;
-				this.startTime = this.timeline.cachedTotalTime - ((dur - $n) / this.cachedTimeScale);
+				this.startTime = tlTime - ((dur - $n) / this.cachedTimeScale);
 			} else {
-				this.startTime = this.timeline.cachedTotalTime - ($n / this.cachedTimeScale);
+				this.startTime = tlTime - ($n / this.cachedTimeScale);
 			}
-			renderTime($n);
+			renderTime($n, false, false);
 			setDirtyCache(false);
 		}
 		
@@ -1284,7 +1337,8 @@ package gs {
 			if ($n == 0) { //can't allow zero because it'll throw the math off
 				$n = 0.0001;
 			}
-			this.startTime = this.timeline.cachedTotalTime - ((this.timeline.cachedTotalTime - this.startTime) * this.cachedTimeScale / $n);
+			var tlTime:Number = _pauseTime || this.timeline.cachedTotalTime;
+			this.startTime = tlTime - ((tlTime - this.startTime) * this.cachedTimeScale / $n);
 			this.cachedTimeScale = $n;
 		}
 		
@@ -1315,7 +1369,8 @@ package gs {
 		public function set reversed($b:Boolean):void {
 			if ($b != this.cachedReversed) {
 				var p:Number = ($b) ? (1 - this.totalProgress) : this.totalProgress;
-				this.startTime = this.timeline.cachedTotalTime - (p * this.totalDuration / this.cachedTimeScale);
+				var tlTime:Number = _pauseTime || this.timeline.cachedTotalTime;
+				this.startTime = tlTime - (p * this.totalDuration / this.cachedTimeScale);
 				this.cachedReversed = $b;
 			}
 		}
@@ -1327,16 +1382,18 @@ package gs {
 		
 		public function set paused($b:Boolean):void {
 			if ($b != this.cachedPaused) {
-				if (!$b) {
-					var curTime:Number = (this.cachedReversed) ? this.totalDuration - this.cachedTotalTime : this.cachedTotalTime;
-					this.startTime = this.timeline.cachedTotalTime - (curTime / this.cachedTimeScale);
+				if ($b) {
+					_pauseTime = this.timeline.rawTime;
+				} else {
+					this.startTime += this.timeline.rawTime - _pauseTime;
+					_pauseTime = NaN;
+					setDirtyCache(false);
 				}
-				setDirtyCache(false);
 				this.cachedPaused = $b;
 				this.active = Boolean(!this.cachedPaused && this.cachedTotalTime > 0 && this.cachedTotalTime < this.cachedTotalDuration);
 			}
 			if (!$b && this.gc) {
-				this.setEnabled(true, true);
+				this.setEnabled(true, false);
 			}
 		}
 		
