@@ -1,0 +1,101 @@
+CHANGE LOG : GREENSOCK TWEENING PLATFORM
+----------------------------------------
+
+5/6/2009, 7PM CST
+-----------------
+TweenLite	11.0984
+TweenMax	11.0984
+TimelineLite	0.63
+TimelineMax	0.63
+	- Added ScrollRectPlugin
+	- Added a list of all plugins to the top of TweenLite and TweenMax to make it easy to activate/deactivate them.
+	- Fixed bug in TweenMax's timeScale and globalTimeScale properties
+	- Improved performance in timeline classes slightly
+	- Fixed minor bug in MotionBlurPlugin
+	- Minor bug fixes
+
+
+5/4/2009, 9:30PM CST
+--------------------
+TweenLite	11.0982
+TweenMax	11.0983
+TimelineLite	0.62
+TimelineMax	0.62
+	- Minor performance improvements
+
+
+5/4/2009, 5PM CST
+-----------------
+TweenMax	11.0982
+TimelineLite	0.61
+TimelineMax	0.61
+	- Added onRepeat, onRepeatParams, onReverseComplete, and onReverseCompleteParams special properties to TweenMax and TimelineMax
+	- Added onReverseComplete and onReverseCompleteParams to TimelineLite
+	- Added onStart callback functionality to TimelineMax
+	- Eliminated code that maintained backwards compatibility with the old "loop" and "yoyo" special properties in TweenMax. It seemed like it would cause more confusion than help.	
+	- Fixed bug that could cause a TweenMax/TimelineLite/Max to incorrectly report its "progress" property immediately after being reversed
+	- Fixed bug that could cause a TweenMax/TimelineLite/Max to render incorrectly when its progress/totalProgress/time/totalTime property was set immediately after being reversed
+	
+
+
+5/1/2009, 11:15PM CST
+---------------------
+TweenLite	11.0981
+TweenMax	11.0981
+TimelineLite	0.6
+TimelineMax	0.6
+SimpleTimeline	0.6
+Tweenable	0.6
+	- **IMPORTANT** By default, NO plugins are activated in TweenLite. Previously 7 plugins were activated by default in order to maintain backwards compatibility. However, after asking the community for input, the VAST majority strongly recommended removing the activation code from inside TweenLite to minimize the file size. TweenMax still has the same plugins activated that it always had.
+	- Changed the way reversing affects time/totalTime/progress/totalProgress so that they always reflect the tween's/timeline's forward position regardless of reversing.
+	- renderTime() renders consistently (according to a tween's/timeline's forward orientation) now regardless of the tween's/timeline's reversed state.
+
+
+4/30/2009, 12:09PM CST
+----------------------
+TimelineLite 	0.561
+TimelineMax	0.54
+	- Fixed a bug in goto() that could render things incorrectly when a timeline is reversed.
+
+
+4/30/2009, 12:05AM CST
+---------------------
+TweenMax	11.098
+TimelineLite	0.56
+	- **IMPORTANT** Changed reverse() and play() behavior so that play() ALWAYS forces the TweenMax/TimelineLite/TimelineMax instance to play forwards and reverse() ALWAYS forces it to play backwards. Previously, reverse() would flip directions, so if it was currently running backwards, reverse() would cause it to go forwards, etc. It proved to be confusing to end users, so I switched to the new behavior.
+	- **IMPORTANT** The "reversed" setter in TweenMax/TimelineLite/TimelineMax does NOT automatically force the tween/timeline to resume. Previously it did.
+	- Added resume() method to TweenMax/TimelineLite/TimelineMax which is similar to play() except it won't alter the direction of a tween (if it is reversed, it will stay reversed after calling resume()).
+	- Added fromTo() and allFromTo() to TweenMax.
+	- Added stop() to TweenMax to be consistent with the timeline classes
+
+
+4/28/2009, 12:35AM CST
+----------------------
+TweenMax	 11.0971
+TimelineLite 	 0.55
+OverwriteManager 5.01
+	- Fixed bug that could cause a TimelineMax repeat to render incorrectly because tweens could get overwritten
+	- Added the ability to set the "reversed" property via the constructor's vars object in TweenMax, TimelineLite, and TimelineMax. 
+
+
+4/27/2009, 1PM CST
+------------------
+TimelineLite	0.54
+	- Fixed bug that could cause a TimelineMax repeat to render incorrectly
+
+
+4/24/2009, 1:30AM CST
+---------------------
+TweenMax 	11.097
+TweenLite 	11.097
+TimelineLite 	0.53
+TimelineMax	0.53
+	- Minor changes that would prevent potential missed rendering of tweens/timelines that complete and then are re-enabled later
+	- Added TweenEvent.REPEAT Event dispatching in TweenMax
+	- Changed the way TweenLite/Max communicate with TweenPlugins (so the plugins can optionally sense when a tween gets disabled or when the plugin PropTween gets overwritten/removed) which was necessary for MotionBlurPlugin to handle overwriting properly.
+	- Removed "renderOnStart" special property functionality, and replaced it with "immediateRender" which provides more flexibility.
+	- Reduced size of TweenPlugin slightly
+	- Minor optimizations
+	- Fixed MotionBlurPlugin overwrite bug
+	- Fixed MotionBlurPlugin bug that prevented blurring when a tween was reversed or yoyo'd
+
