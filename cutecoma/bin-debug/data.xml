@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- switchable between page in group //type= radio, list -->
+<site id="site" focus="page_4/page_4_2" style="style.css">
+	<!-- single jpg asset -->
+	<content id="page_1" label="page 1">
+		<asset src="705231219605502.jpg"></asset>
+	</content>
+	
+	<!-- single swf asset -->
+	<content id="page_2" label="page 2">
+		<asset src="SimpleCube.swf"/>
+	</content>
+	
+	<!-- mix jpg, swf asset -->
+	<content id="page_3" label="page 3">
+		<asset src="705231219605518.jpg"/>
+		<asset src="TestTree.swf"/>
+	</content>
+	
+	<!-- deeplink, TODO : focus -->
+	<content id="page_4" label="page 4" focus="page_4_1">
+		<asset src="705231219605518.jpg"/>
+		<content id="page_4_1" label="page 4 1">
+			<asset src="TestTree.swf"/>
+		</content>
+		<content id="page_4_2" label="page 4 2">
+			<asset src="SimpleCube.swf"/>
+			<asset src="TestTree.swf"/>
+		</content>
+	</content>
+</site>

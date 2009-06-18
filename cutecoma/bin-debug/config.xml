@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<site id="site" label="Sample Site">
+	<page id="foreground" type="foreground" src="foreground.swf"/>
+	<page id="simple-swf" label="Simple SWF" src="simple-swf.swf"/>
+	<page id="animated-loop" label="Animated (Loop)" src="animated-loop.swf"/>
+	<page id="parent-swf" label="Parent SWF" src="parent-swf.swf">
+		<page id="child-swf" label="Child SWF" src="child-swf.swf"/>
+		<page id="child-animated-loop" label="Child Animated (Loop)" src="animated-loop.swf"/>
+		<page id="deep-parent" label="Deep Parent" src="deep-parent.swf">
+			<page id="deep-child" label="Deep Child" src="deep-child.swf"/>
+		</page>
+	</page>
+	<page id="parent-focus-swf" label="Parent Focus SWF" src="animated-loop.swf" focus="focused-child">
+		<page id="focused-child" label="Focused Child" src="child-swf.swf"/>
+		<page id="not-focused-child" label="Not Focused Child" src="deep-child.swf"/>
+	</page>
+	<page id="background" type="background" src="background.swf"/>
+</site>
