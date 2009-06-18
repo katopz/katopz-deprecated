@@ -47,7 +47,7 @@ package com.sleepydesign.core
 			//rawBytes.writeBytes(data.);
 			
 			var fileReference:FileReference = new FileReference();
-			fileReference.save(rawBytes, defaultFileName);
+			fileReference["save"](rawBytes, defaultFileName);
 		}
 		
 		public var file:FileReference;
@@ -66,13 +66,13 @@ package com.sleepydesign.core
 	        file = FileReference(event.target);
 	        trace(" ^ openHandler : " + file.name);
 	        file.addEventListener(Event.COMPLETE, onLoadComplete);
-	        file.load();
+	        file["load"]();
 	    }
 	    
 	    private function onLoadComplete(event:Event):void
 	    {   
-	        trace(" ^ onLoadComplete : " + file.data);
-	        dispatchEvent(new SDEvent(SDEvent.COMPLETE, file.data));
+	        trace(" ^ onLoadComplete : " + file["data"]);
+	        dispatchEvent(new SDEvent(SDEvent.COMPLETE, file["data"]));
 	    }
 	}	
 }
