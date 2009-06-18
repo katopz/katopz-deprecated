@@ -50,7 +50,7 @@
 		{
 			super("PlayGround", {loader: new SDMacPreloader(), loaderAlign:"c"});
 			
-			alpha=.1
+			//alpha=.1
 			SDTasks.init(this, VERSION);
 			
 			fake  = new Vector.<int>();
