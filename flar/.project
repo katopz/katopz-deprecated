@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>FLAR</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] src</name>
+			<type>2</type>
+			<location>C:/Inetpub/wwwroot/Classes/3D/FLARToolKit/trunk/src</location>
+		</link>
+		<link>
+			<name>[source path] pv3d</name>
+			<type>2</type>
+			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d</location>
+		</link>
+		<link>
+			<name>[source path] libs</name>
+			<type>2</type>
+			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
+		</link>
+	</linkedResources>
+</projectDescription>
