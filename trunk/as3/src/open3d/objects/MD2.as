@@ -1,7 +1,7 @@
 package open3d.objects
 {
 	import __AS3__.vec.Vector;
-
+	
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.net.URLLoader;
@@ -9,8 +9,9 @@ package open3d.objects
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
-
+	
 	import open3d.animation.Frame;
+	import open3d.geom.Face;
 	import open3d.geom.UV;
 	import open3d.materials.Material;
 
@@ -59,6 +60,10 @@ package open3d.objects
 			//load(filename);
 			parse(data);
 			buildFaces(material);
+			
+			_vin.fixed = !true;
+			_triangles.uvtData.fixed = !true;
+			_triangles.indices.fixed = !true;
 		}
 
 		/*
@@ -96,7 +101,7 @@ package open3d.objects
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
 			var vertices:Array = [];
-			//var faces:Array = []//TODO//this.faceList;
+			var faces:Array = []//TODO//this.faceList;
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
 			var uvDatas:Array = []
@@ -138,7 +143,7 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				trace(uvs[tc], uvs[tb], uvs[ta]);
+				trace(uvs[ta], uvs[tb], uvs[tc]);
 
 				/*
 				   _triangles.uvtData.push
@@ -148,11 +153,13 @@ package open3d.objects
 				   uvs[ta].u, uvs[ta].v
 				   );
 				 */
-				trace(_triangles.uvtData);
+				//trace(_triangles.uvtData);
+				
+				faces.push(new FaceData(vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
 
 			}
 
-			_triangles.uvtData.push(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1);
+			//_triangles.uvtData.push(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1);
 
 			// Frame animation data
 			//		This part is a little funky.
@@ -184,10 +191,41 @@ package open3d.objects
 			{
 				//
 			}
+			
+			// --------------------------------------- indices ---------------------------------------
+			
+			var n:int = -1;
+			
 
-			_triangles.indices.push(0, 1, 2);
-			_triangles.indices.push(1, 2, 3);
-
+			//_vin = new Vector.<Number>();
+			for each (var face:FaceData in faces)
+			{
+				
+				//_vin.push(face.v1.x, face.v1.y, face.v1.z);
+				//_vin.push(face.v2.x, face.v2.y, face.v2.z);
+				//_vin.push(face.v3.x, face.v3.y, face.v3.z);
+				
+				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v);
+				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v);
+				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v);
+				
+				for (i = 0; i < 3; i++)
+				{
+					n++;
+					
+				}
+				_triangles.indices.push(n - 2, n - 1, n);
+				
+				n-=2
+			}
+			trace(_triangles.indices)
+			trace(_triangles.uvtData)
+			//_triangles.uvtData = new Vector.<Number>();
+			//_triangles.uvtData.push(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1);
+			trace(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1)
+			//_triangles.indices.push(0, 1, 2);
+			//_triangles.indices.push(1, 2, 3);
+			
 			/*
 			   for (i = 0; i < num_tris/3; i+=3)
 			   {
