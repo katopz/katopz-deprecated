@@ -29,7 +29,7 @@ package
 		
 		override protected function draw():void
 		{
-			cat.rotationY+=10;// = 180*Math.abs(Math.sin(step));
+			cat.rotationY+=1;// = 180*Math.abs(Math.sin(step));
 			//step+=.01;
 		}
 	}
