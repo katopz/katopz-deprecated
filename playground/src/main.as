@@ -14,6 +14,7 @@
 	import com.sleepydesign.game.core.Characters;
 	import com.sleepydesign.game.core.Game;
 	import com.sleepydesign.game.core.Position;
+	import com.sleepydesign.game.data.CharacterData;
 	import com.sleepydesign.game.data.PlayerData;
 	import com.sleepydesign.game.events.PlayerEvent;
 	import com.sleepydesign.game.player.Player;
@@ -26,8 +27,8 @@
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.playground.debugger.PlayerDebugger;
 	
-	import flash.utils.IExternalizable;
 	import flash.filters.GlowFilter;
+	import flash.utils.IExternalizable;
 	
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class main extends SDApplication
@@ -139,7 +140,12 @@
 			
 			// ___________________________________________________________ Char
 			
-			var chars:Characters = new Characters("charactor.xml");
+			var chars:Characters = new Characters();
+			chars.addData(new CharacterData
+			(
+				"man", "assets/man1/model.dae", 1, 100, 24,
+				["stand", "walk", "sit"]
+			));
 			//char.addEventListener(SDEvent.COMPLETE, onCharactorComplete);
 			
 			//TODO : wait for user select char and add player 
@@ -154,6 +160,9 @@
 				"stand",
 				3
 			));
+			
+			// read map
+			game.player.map = area.map;
 			
 			game.addPlayer(game.player);
 			game.player.talk(VERSION);

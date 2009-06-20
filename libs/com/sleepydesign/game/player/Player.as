@@ -136,7 +136,7 @@
 			decoy.copyPosition(data.des);
 			
 			// add player to map
-			map = Map.getInstance();
+			//map = Map.getInstance();
 			//map.addElement(this);
 			
 			if(balloonClip)
@@ -193,7 +193,8 @@
 			balloonClip.material.updateBitmap();
 		}
 		
-		private var map:Map;
+		// TODO : getset
+		public var map:Map;
 		public function walkTo(position:Position):void
 		{
 			if(map)
@@ -322,7 +323,7 @@
 			Game.applyCommand(commandData.command, commandData.args);
 		}
 		
-		private function act(action:String):void
+		public function act(action:String):void
 		{
 			if (this.action == action)return;
 			
