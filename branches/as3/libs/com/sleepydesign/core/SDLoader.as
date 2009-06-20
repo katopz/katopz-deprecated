@@ -112,6 +112,9 @@ package com.sleepydesign.core
 				break;
 			}
 			
+			instance.alpha = 0;
+			instance.visible = false;
+			
 			//trace("ApplicationDisplay:"+ApplicationDisplay.stage);
 			//ApplicationDisplay.stage.addChild(txt);
 			//instance.parent.addChild(instance);

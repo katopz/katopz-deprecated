@@ -33,14 +33,20 @@ package com.sleepydesign.game.core
 				["0,0", "1,16", "18,31"],
 				["soso:assets/soso.png", "angry:assets/angry.png"]
 			)
-			*/
+			
 			data = new CharacterData
 			(
 				"man", "assets/man1/model.dae", 1, 100, 24,
 				["stand", "walk", "sit"]
 			)
+			*/
 		}
 
+		public function addData(data:CharacterData):void
+		{
+			this.data = data;
+		}
+		
 		public function getModel(id:String=null):SDModel
 		{
 			//var charactor:Character = new Character(id);
