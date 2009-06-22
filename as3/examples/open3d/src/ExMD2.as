@@ -1,6 +1,7 @@
 package  
 {
 	import open3d.materials.BitmapFileMaterial;
+	import open3d.materials.LineMaterial;
 	import open3d.objects.MD2;
 	import open3d.view.SimpleView;
 	
@@ -13,7 +14,7 @@ package
 	 */	
 	public class ExMD2 extends SimpleView
 	{
-		[Embed(source='assets/plane.md2', mimeType='application/octet-stream')]
+		[Embed(source='assets/pg.md2', mimeType='application/octet-stream')]
 		private var CatModel:Class;
 		
 		private var cat:MD2;
@@ -21,16 +22,23 @@ package
 		
 		override protected function create():void 
 		{
+			//cat = new MD2(new CatModel,new LineMaterial());
 			cat = new MD2(new CatModel, new BitmapFileMaterial("assets/pg.png"));
 			renderer.addChild(cat);
-			renderer.isFaceZSort = renderer.isMeshZSort = false;
-			cat.culling = "none";
+			//renderer.isFaceZSort = renderer.isMeshZSort = false;
+			//cat.culling = "none";
 		}
 		
 		override protected function draw():void
 		{
-			cat.rotationY+=1;// = 180*Math.abs(Math.sin(step));
+			
+			
+			cat.rotationX+=1;// = 180*Math.abs(Math.sin(step));
+			cat.rotationY+=1;
+			cat.rotationZ+=1;
 			//step+=.01;
+			
+			cat.updateFrame();
 		}
 	}
 }

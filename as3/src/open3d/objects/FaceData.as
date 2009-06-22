@@ -10,6 +10,11 @@ package open3d.objects
 	{
 		//public var meshRef:Object3D;
 		//public var material:Material;
+		
+		public var a:int;
+		public var b:int;
+		public var c:int;
+		
 		public var v1:Vector3D;
 		public var v2:Vector3D;
 		public var v3:Vector3D;
@@ -24,8 +29,11 @@ package open3d.objects
 		 * @param	material
 		 * @param	UV map for bitmap textures
 		 */
-		public function FaceData(v1:Vector3D, v2:Vector3D, v3:Vector3D, uvMap:Array = null) 
+		public function FaceData(a:Number,b:Number,c:Number,v1:Vector3D, v2:Vector3D, v3:Vector3D, uvMap:Array = null) 
 		{
+			this.a = a;
+			this.b = b;
+			this.c = c;
 			//this.meshRef = meshRef;
 			this.v1 = v1;
 			this.v2 = v2;

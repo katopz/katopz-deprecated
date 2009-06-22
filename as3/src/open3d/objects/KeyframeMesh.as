@@ -2,7 +2,7 @@ package open3d.objects
 {
 	import flash.geom.Vector3D;
 	import flash.utils.getTimer;
-
+	
 	import open3d.animation.Frame;
 	import open3d.materials.Material;
 
@@ -97,7 +97,7 @@ package open3d.objects
 			keyframe = frame;
 			_type = ANIM_STOP;
 		}
-
+public var faceLists:Array;
 		public function updateFrame():void
 		{
 			ctime = getTimer();
@@ -105,7 +105,7 @@ package open3d.objects
 			var dst:Vector3D;
 			var a:Vector3D;
 			var b:Vector3D;
-			var vertices:Vector.<Number> = _triangles.vertices;
+			var vertices:Vector.<Number> = _vin;//_triangles.vertices;
 			var cframe:Frame;
 			var nframe:Frame;
 			var i:int;
@@ -113,6 +113,7 @@ package open3d.objects
 			cframe = frames[_currentFrame];
 			nframe = frames[(_currentFrame + 1) % framesLength];
 			var verticesLength:uint = vertices.length;
+			/*
 			for (i = 0; i < verticesLength; i += 3)
 			{
 				dst = new Vector3D(vertices[i], vertices[i + 1], vertices[i + 2]);
@@ -123,7 +124,23 @@ package open3d.objects
 				dst.y = a.y + interp * (b.y - a.y);
 				dst.z = a.z + interp * (b.z - a.z);
 			}
-
+			*/
+			
+			for each (var face:FaceData in faceLists)
+			{
+				_vin[i++] = nframe.vertices[face.a].x
+				_vin[i++] = nframe.vertices[face.a].y
+				_vin[i++] = nframe.vertices[face.a].z
+				
+				_vin[i++] = nframe.vertices[face.b].x
+				_vin[i++] = nframe.vertices[face.b].y
+				_vin[i++] = nframe.vertices[face.b].z
+				
+				_vin[i++] = nframe.vertices[face.c].x
+				_vin[i++] = nframe.vertices[face.c].y
+				_vin[i++] = nframe.vertices[face.c].z
+			}
+			
 			// Update the timer part, to get time based animation
 
 			if (_type != ANIM_STOP)

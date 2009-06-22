@@ -97,11 +97,13 @@ package open3d.objects
 		 * Parse the MD2 file. This is actually pretty straight forward.
 		 * Only complicated parts (bit convoluded) are the frame loading.
 		 */
+		 
 		private function parse(data:ByteArray):void
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
 			var vertices:Array = [];
-			var faces:Array = []//TODO//this.faceList;
+			//var faceLists:Array = []//TODO//this.faceList;
+			faceLists = [];
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
 			var uvDatas:Array = []
@@ -143,105 +145,32 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				trace(uvs[ta], uvs[tb], uvs[tc]);
-
-				/*
-				   _triangles.uvtData.push
-				   (
-				   uvs[tc].u, uvs[tc].v,
-				   uvs[tb].u, uvs[tb].v,
-				   uvs[ta].u, uvs[ta].v
-				   );
-				 */
-				//trace(_triangles.uvtData);
-				
-				faces.push(new FaceData(vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
-
+				faceLists.push(new FaceData(a,b,c,vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
 			}
-
-			//_triangles.uvtData.push(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1);
 
 			// Frame animation data
 			//		This part is a little funky.
 			data.position = offset_frames;
 			readFrames(data);
-
-			j = 0;
-			for (i = 0; i < Frame(frames[0]).vertices.length; i++)
-			{
-				vin.push(Frame(frames[0]).vertices[i].x,
-					Frame(frames[0]).vertices[i].y,
-					Frame(frames[0]).vertices[i].z);
-
-				trace(Frame(frames[0]).vertices[i]);
-			}
-			/*vin.push(
-			   0,-150,-160,
-			   0,150,-160,
-			   0,150,160,
-			   0,-150,160
-			 )*/
-
-			//   ___   ___   ___         ___  
-			// 0|  /|1|  /|4|  /|(3*i)+0|  /|(3*i)+1
-			//  | / | | / | | / |		| / |
-			// 3|/__|2|/__|5|/__|(3*i)+3|/__|(3*i)+2
-
-			for (i = 0; i < num_tris; i++)
-			{
-				//
-			}
-			
+						
 			// --------------------------------------- indices ---------------------------------------
 			
 			var n:int = -1;
-			
-
-			//_vin = new Vector.<Number>();
-			for each (var face:FaceData in faces)
+			_vin = new Vector.<Number>();
+			for each (var face:FaceData in faceLists)
 			{
+				_vin.push(Frame(frames[0]).vertices[face.a].x, Frame(frames[0]).vertices[face.a].y, Frame(frames[0]).vertices[face.a].z);
+				_vin.push(Frame(frames[0]).vertices[face.b].x, Frame(frames[0]).vertices[face.b].y, Frame(frames[0]).vertices[face.b].z);
+				_vin.push(Frame(frames[0]).vertices[face.c].x, Frame(frames[0]).vertices[face.c].y, Frame(frames[0]).vertices[face.c].z);
+
+				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v,1);
+				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v,1);
+				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v,1);
 				
-				//_vin.push(face.v1.x, face.v1.y, face.v1.z);
-				//_vin.push(face.v2.x, face.v2.y, face.v2.z);
-				//_vin.push(face.v3.x, face.v3.y, face.v3.z);
+				n+=3;
 				
-				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v);
-				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v);
-				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v);
-				
-				for (i = 0; i < 3; i++)
-				{
-					n++;
-					
-				}
 				_triangles.indices.push(n - 2, n - 1, n);
-				
-				n-=2
 			}
-			trace(_triangles.indices)
-			trace(_triangles.uvtData)
-			//_triangles.uvtData = new Vector.<Number>();
-			//_triangles.uvtData.push(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1);
-			trace(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1)
-			//_triangles.indices.push(0, 1, 2);
-			//_triangles.indices.push(1, 2, 3);
-			
-			/*
-			   for (i = 0; i < num_tris/3; i+=3)
-			   {
-			   trace("Vector3D("+vin[i]+", "+vin[i+1]+", "+vin[i+2]+")");
-			   }
-			 */
-			//loader.close();
-			//visible = true;
-			trace("__________________________________" +
-				"\n_______Parsed MD2_________________" +
-				"\n|" +
-				"\n|\tvertices:" + vin.length / 3 +
-				"\n|\ttexture vertices:" + uvs.length +
-				"\n|\tfaces:" + num_tris +
-				"\n|_________________________________"
-				);
 		}
 
 		/**
