@@ -1,5 +1,7 @@
 package open3d.objects
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.geom.Vector3D;
 	import flash.utils.getTimer;
 	
@@ -60,11 +62,11 @@ package open3d.objects
 		 * framework for subclass loaders. There are some subtleties to using this class, so please, I suggest you
 		 * don't (not yet). Possible file formats are MD2, MD3, 3DS, etc...
 		 */
-		public function KeyframeMesh(material:Material, fps:int = 24, scale:Number = 1)
+		public function KeyframeMesh(material:Material, fps:int = 24)
 		{
 			super();
+			this.material = material;
 			this.fps = fps;
-			scale = scale;
 		}
 
 		public function addFrame(frame:Frame):void
@@ -97,26 +99,36 @@ package open3d.objects
 			keyframe = frame;
 			_type = ANIM_STOP;
 		}
-public var faceLists:Array;
+
+		public var faceLists:Array;
 		public function updateFrame():void
 		{
+			if(!faceLists)return;
+			
 			ctime = getTimer();
 
 			var dst:Vector3D;
-			var a:Vector3D;
-			var b:Vector3D;
-			var vertices:Vector.<Number> = _vin;//_triangles.vertices;
+			
+			var a0:Vector3D;
+			var b0:Vector3D;
+			var c0:Vector3D;
+			
+			var a1:Vector3D;
+			var b1:Vector3D;
+			var c1:Vector3D;
+			
 			var cframe:Frame;
 			var nframe:Frame;
 			var i:int;
 
 			cframe = frames[_currentFrame];
 			nframe = frames[(_currentFrame + 1) % framesLength];
-			var verticesLength:uint = vertices.length;
+			var _vinLength:uint = _vin.length;
+			
 			/*
-			for (i = 0; i < verticesLength; i += 3)
+			for (i = 0; i < _vinLength; i += 3)
 			{
-				dst = new Vector3D(vertices[i], vertices[i + 1], vertices[i + 2]);
+				dst = new Vector3D(_vin[i], _vin[i + 1], _vin[i + 2]);
 				a = cframe.vertices[i];
 				b = nframe.vertices[i];
 
@@ -126,23 +138,33 @@ public var faceLists:Array;
 			}
 			*/
 			
+			var _cframe_vertices:Vector.<Vector3D> = cframe.vertices;
+			var _nframe_vertices:Vector.<Vector3D> = nframe.vertices;
+			
 			for each (var face:FaceData in faceLists)
 			{
-				_vin[i++] = nframe.vertices[face.a].x
-				_vin[i++] = nframe.vertices[face.a].y
-				_vin[i++] = nframe.vertices[face.a].z
+				a0 = _cframe_vertices[face.a];
+				b0 = _cframe_vertices[face.b];
+				c0 = _cframe_vertices[face.c];
 				
-				_vin[i++] = nframe.vertices[face.b].x
-				_vin[i++] = nframe.vertices[face.b].y
-				_vin[i++] = nframe.vertices[face.b].z
+				a1 = _nframe_vertices[face.a];
+				b1 = _nframe_vertices[face.b];
+				c1 = _nframe_vertices[face.c];
+								
+				_vin[i++] = a0.x + interp * (a1.x - a0.x);
+				_vin[i++] = a0.y + interp * (a1.y - a0.y);
+				_vin[i++] = a0.z + interp * (a1.z - a0.z);
 				
-				_vin[i++] = nframe.vertices[face.c].x
-				_vin[i++] = nframe.vertices[face.c].y
-				_vin[i++] = nframe.vertices[face.c].z
+				_vin[i++] = b0.x + interp * (b1.x - b0.x);
+				_vin[i++] = b0.y + interp * (b1.y - b0.y);
+				_vin[i++] = b0.z + interp * (b1.z - b0.z);
+				
+				_vin[i++] = c0.x + interp * (c1.x - c0.x);
+				_vin[i++] = c0.y + interp * (c1.y - c0.y);
+				_vin[i++] = c0.z + interp * (c1.z - c0.z);
 			}
 			
 			// Update the timer part, to get time based animation
-
 			if (_type != ANIM_STOP)
 			{
 				interp += fps * (ctime - otime) / 1000;

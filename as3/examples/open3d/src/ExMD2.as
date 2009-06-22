@@ -1,7 +1,6 @@
 package
 {
 	import open3d.materials.BitmapFileMaterial;
-	import open3d.materials.LineMaterial;
 	import open3d.objects.MD2;
 	import open3d.view.SimpleView;
 
@@ -14,13 +13,11 @@ package
 	 */
 	public class ExMD2 extends SimpleView
 	{
-		[Embed(source='assets/pg.md2', mimeType = 'application/octet-stream')]
-		private var CatModel:Class;
 		private var cat:MD2;
 
 		override protected function create():void
 		{
-			cat = new MD2(new CatModel, new BitmapFileMaterial("assets/pg.png"));
+			cat = new MD2("assets/pg.md2", new BitmapFileMaterial("assets/pg.png"));
 			renderer.addChild(cat);
 		}
 
