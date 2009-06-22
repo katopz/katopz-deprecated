@@ -50,7 +50,7 @@ package open3d.objects
 		 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
 		 * @modifier katopz@sleepydesign.com
 		 */
-		public function MD2(data:ByteArray, material:Material, fps:int = 24, scale:Number = 10)
+		public function MD2(data:ByteArray, material:Material, fps:int = 24, scale:Number = 1)
 		{
 			this.material = material;
 			super(material, fps, scale);
