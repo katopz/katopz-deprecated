@@ -11,7 +11,6 @@ package open3d.objects
 	import flash.utils.Endian;
 	
 	import open3d.animation.Frame;
-	import open3d.geom.Face;
 	import open3d.geom.UV;
 	import open3d.materials.Material;
 
@@ -44,70 +43,69 @@ package open3d.objects
 		 * Md2 class lets you load a Quake 2 MD2 file with animation!
 		 *
 		 * @param material	The texture material that will be applied to object
-		 * @param filename	The path to the file that will be loaded
+		 * @param uri	The path to the file that will be loaded
 		 * @param fps		The number of frames per second to animate at
 		 * @param scale		The internal load scaling (experiment for your liking)
 		 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
 		 * @modifier katopz@sleepydesign.com
 		 */
-		public function MD2(data:ByteArray, material:Material, fps:int = 24, scale:Number = 1)
+		public function MD2(data:*=null, material:Material=null, scale:Number = 10, fps:int = 24)
 		{
-			this.material = material;
-			super(material, fps, scale);
-			loadScale = scale;
-			//file = filename;
-			//visible = false;
-			//load(filename);
-			parse(data);
-			buildFaces(material);
 			
-			_vin.fixed = !true;
-			_triangles.uvtData.fixed = !true;
-			_triangles.indices.fixed = !true;
+			super(material, fps);
+			loadScale = scale;
+			
+			if(data)
+			{
+				if(data is ByteArray)
+				{
+					parse(data);
+				}else{
+					load(data);
+				}
+			}
+				
+			
 		}
 
-		/*
-		   override protected function buildFaces(material:Material):void
-		   {
-		   this.material = material;
-		   this.material.update();
-		   }
-		 */ /**
+		/**
 		 * Actually load the file using a URLLoader instance
 		 *
-		 * @param filename	Path to MD2 file to load
+		 * @param uri	Path to MD2 file to load
 		 */
-		private function load(filename:String):void
+		private function load(uri:String):void
 		{
 			loader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.BINARY;
-			loader.addEventListener(Event.COMPLETE, parse, false, 0, true);
+			loader.addEventListener(Event.COMPLETE, onLoad, false, 0, true);
 
 			try
 			{
-				loader.load(new URLRequest(filename));
+				loader.load(new URLRequest(uri));
 			}
 			catch (e:Error)
 			{
-				trace("Error in loading MD2 file (" + filename + "): \n" + e.message + "\n" + e.getStackTrace());
+				trace("Error in loading MD2 file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
 		}
-
+		
+		private function onLoad(event:Event):void
+		{
+			parse(ByteArray(event.target.data));
+		}
+		
 		/**
 		 * Parse the MD2 file. This is actually pretty straight forward.
 		 * Only complicated parts (bit convoluded) are the frame loading.
 		 */
-		 
 		private function parse(data:ByteArray):void
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
 			var vertices:Array = [];
-			//var faceLists:Array = []//TODO//this.faceList;
 			faceLists = [];
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
 			var uvDatas:Array = []
-			//var data:ByteArray = loader.data;
 
 			// Make sure to have this in Little Endian or you will hate you life.
 			// At least I did the first time I did this for a while.
@@ -171,6 +169,8 @@ package open3d.objects
 				
 				_triangles.indices.push(n - 2, n - 1, n);
 			}
+			
+			buildFaces(this.material);
 		}
 
 		/**
