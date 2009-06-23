@@ -6,6 +6,7 @@ package open3d.objects
 	import flash.utils.getTimer;
 	
 	import open3d.animation.Frame;
+	import open3d.geom.FaceData;
 	import open3d.materials.Material;
 
 	/**
@@ -100,7 +101,7 @@ package open3d.objects
 			_type = ANIM_STOP;
 		}
 
-		public var faceDatas:Array;
+		public var faceDatas:Vector.<FaceData>;
 		public function updateFrame():void
 		{
 			if(!faceDatas)return;
