@@ -178,8 +178,8 @@ package open3d.render
 					totalFaces += int(Mesh(child).numFaces);
 					
 					// DRAW TYPE #3 drawPath 
-					//if(_isFaceDebug)
-						//Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
+					if(_isFaceDebug)
+						Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
 				}
 			}
 			
