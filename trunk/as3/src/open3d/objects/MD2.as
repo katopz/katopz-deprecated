@@ -1,7 +1,7 @@
 package open3d.objects
 {
 	import __AS3__.vec.Vector;
-	
+
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.net.URLLoader;
@@ -9,7 +9,7 @@ package open3d.objects
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
-	
+
 	import open3d.animation.Frame;
 	import open3d.geom.UV;
 	import open3d.materials.Material;
@@ -26,7 +26,7 @@ package open3d.objects
 		// [internal] Used for loading the MD2 file
 		private var file:String;
 		private var loader:URLLoader;
-		private var loadScale:Number;
+		private var _scale:Number;
 
 		// [internal] Md2 file format has a bunch of header information
 		// that is typically just read straight into a C-style struct, but
@@ -49,23 +49,23 @@ package open3d.objects
 		 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
 		 * @modifier katopz@sleepydesign.com
 		 */
-		public function MD2(data:*=null, material:Material=null, scale:Number = 10, fps:int = 24)
+		public function MD2(data:* = null, material:Material = null, scale:Number = 10, fps:int = 24)
 		{
 			
 			super(material, fps);
-			loadScale = scale;
-			
-			if(data)
+			_scale = scale;
+
+			if (data)
 			{
-				if(data is ByteArray)
+				if (data is ByteArray)
 				{
 					parse(data);
-				}else{
+				}
+				else
+				{
 					load(data);
 				}
 			}
-				
-			
 		}
 
 		/**
@@ -85,15 +85,15 @@ package open3d.objects
 			}
 			catch (e:Error)
 			{
-				trace("Error in loading MD2 file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
+				trace(" ! Error in loading MD2 file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
 		}
-		
+
 		private function onLoad(event:Event):void
 		{
 			parse(ByteArray(event.target.data));
 		}
-		
+
 		/**
 		 * Parse the MD2 file. This is actually pretty straight forward.
 		 * Only complicated parts (bit convoluded) are the frame loading.
@@ -143,33 +143,32 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				faceLists.push(new FaceData(a,b,c,vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
+				faceLists.push(new FaceData(a, b, c, vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
 			}
 
 			// Frame animation data
 			//		This part is a little funky.
 			data.position = offset_frames;
 			readFrames(data);
-						
+
 			// --------------------------------------- indices ---------------------------------------
-			
+
 			var n:int = -1;
-			_vin = new Vector.<Number>();
 			for each (var face:FaceData in faceLists)
 			{
 				_vin.push(Frame(frames[0]).vertices[face.a].x, Frame(frames[0]).vertices[face.a].y, Frame(frames[0]).vertices[face.a].z);
 				_vin.push(Frame(frames[0]).vertices[face.b].x, Frame(frames[0]).vertices[face.b].y, Frame(frames[0]).vertices[face.b].z);
 				_vin.push(Frame(frames[0]).vertices[face.c].x, Frame(frames[0]).vertices[face.c].y, Frame(frames[0]).vertices[face.c].z);
 
-				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v,1);
-				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v,1);
-				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v,1);
-				
-				n+=3;
-				
+				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v, 1);
+				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v, 1);
+				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v, 1);
+
+				n += 3;
+
 				_triangles.indices.push(n - 2, n - 1, n);
 			}
-			
+
 			buildFaces(this.material);
 		}
 
@@ -203,10 +202,7 @@ package open3d.objects
 				// Note, the extra data.position++ in the for loop is there 
 				// to skip over a byte that holds the "vertex normal index"
 				for (j = 0; j < num_vertices; j++, data.position++)
-					verts.push(new Vector3D(
-						(sx * data.readUnsignedByte() + tx) * loadScale,
-						(sy * data.readUnsignedByte() + ty) * loadScale,
-						(sz * data.readUnsignedByte() + tz) * loadScale));
+					verts.push(new Vector3D((sx * data.readUnsignedByte() + tx) * _scale, (sy * data.readUnsignedByte() + ty) * _scale, (sz * data.readUnsignedByte() + tz) * _scale));
 
 				addFrame(frame);
 
