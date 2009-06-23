@@ -40,14 +40,14 @@ package
 			world.rotationX = (mouseX - stage.stageWidth / 2) / 5;
 			world.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
 			world.rotationY++;
-			/*
-			   var _renderer_childs:Array = renderer.childs;
+			
+			var _renderer_childs:Array = renderer.childs;
 
-			   for each (var md2:MD2 in _renderer_childs)
-			   {
+			for each (var md2:MD2 in _renderer_childs)
+			{
 			   md2.updateFrame();
-			   }
-			 */
+			}
+			
 			debugText.appendText(", ZSort : " + renderer.isMeshZSort + ", Right click for more option");
 		}
 	}

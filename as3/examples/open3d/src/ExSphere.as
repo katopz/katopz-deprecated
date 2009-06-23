@@ -20,7 +20,8 @@ package
 
 		override protected function create():void
 		{
-			var segment:uint = 56;
+			// Single Core = 34, Quad Core = 56;
+			var segment:uint = 34;
 
 			sphere = new Sphere(100, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(sphere);

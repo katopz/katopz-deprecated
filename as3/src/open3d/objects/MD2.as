@@ -1,7 +1,7 @@
 package open3d.objects
 {
 	import __AS3__.vec.Vector;
-
+	
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.net.URLLoader;
@@ -9,8 +9,9 @@ package open3d.objects
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
-
+	
 	import open3d.animation.Frame;
+	import open3d.geom.FaceData;
 	import open3d.geom.UV;
 	import open3d.materials.Material;
 
@@ -102,7 +103,6 @@ package open3d.objects
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
 			var vertices:Array = [];
-			faceDatas = [];
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
 			var uvDatas:Array = []
@@ -133,6 +133,7 @@ package open3d.objects
 			//		NOTE: DO NOT change the order of the variable assignments here, 
 			//			  or nothing will work.
 			data.position = offset_tris;
+			faceDatas = new Vector.<FaceData>(num_tris, true);
 			var j:int = 0;
 			for (i = 0; i < num_tris; i++)
 			{
@@ -143,16 +144,15 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				faceDatas.push(new FaceData(a, b, c, vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
+				faceDatas[i] = new FaceData(a, b, c, vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]);
 			}
-
+			
 			// Frame animation data
 			//		This part is a little funky.
 			data.position = offset_frames;
 			readFrames(data);
 
-			// --------------------------------------- indices ---------------------------------------
-
+			// TODO : optimize/promote to face class
 			var n:int = -1;
 			for each (var face:FaceData in faceDatas)
 			{
@@ -169,7 +169,9 @@ package open3d.objects
 				_triangles.indices.push(n - 2, n - 1, n);
 			}
 
-			buildFaces(this.material);
+			buildFaces(material);
+			
+			
 		}
 
 		/**
