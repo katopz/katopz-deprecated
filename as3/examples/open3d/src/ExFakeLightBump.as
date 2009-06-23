@@ -8,19 +8,18 @@ package
 	import open3d.materials.ColorMaterial;
 	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
-	
+
 	[SWF(width=800, height = 600, backgroundColor = 0x666666, frameRate = 30)]
-	
+
 	/**
-	 * forked from psyark's BumpyPlanet 
+	 * forked from psyark's BumpyPlanet
 	 * @author katopz
-	 * 
 	 */
 	public class ExFakeLightBump extends SimpleView
 	{
 		private var sphere:Sphere;
 		private var lightSphere:Sphere;
-		
+
 		private var step:Number = 0;
 
 		private var heightMap:BitmapData = new HeightMap(512, 512);
@@ -34,7 +33,7 @@ package
 			var segment:uint = 38;
 			sphere = new Sphere(100, segment, segment, new BitmapMaterial(tmp2));
 			renderer.addChild(sphere);
-			
+
 			lightSphere = new Sphere(10, 4, 4, new ColorMaterial(0x00FFFF));
 			renderer.addChild(lightSphere);
 		}
@@ -42,24 +41,19 @@ package
 		override protected function draw():void
 		{
 			//sphere.rotationY += 2;
-			
+
 			var light:Vector3D = new Vector3D();
-			light.x = (mouseX-400) / 400 / Math.SQRT2;
-            light.y = (mouseY-300) / 300 / Math.SQRT2;
-            light.z = -Math.sqrt(1 - light.x * light.x - light.y * light.y);
-			
-			lightSphere.x = light.x*200;
-			lightSphere.y = light.y*200;
-			lightSphere.z = light.z*200;
+			light.x = (mouseX - 400) / 400 / Math.SQRT2;
+			light.y = (mouseY - 300) / 300 / Math.SQRT2;
+			light.z = -Math.sqrt(1 - light.x * light.x - light.y * light.y);
+
+			lightSphere.x = light.x * 200;
+			lightSphere.y = light.y * 200;
+			lightSphere.z = light.z * 200;
 
 			step += 0.1;
 
-			var lighting:ColorMatrixFilter = new ColorMatrixFilter([
-					2 * light.x, 2 * light.y, 2 * light.z, 0, (light.x + light.y + light.z) * -0xFF,
-					2 * light.x, 2 * light.y, 2 * light.z, 0, (light.x + light.y + light.z) * -0xFF,
-					2 * light.x, 2 * light.y, 2 * light.z, 0, (light.x + light.y + light.z) * -0xFF,
-					0, 0, 0, 1, 0
-				]);
+			var lighting:ColorMatrixFilter = new ColorMatrixFilter([2 * light.x, 2 * light.y, 2 * light.z, 0, (light.x + light.y + light.z) * -0xFF, 2 * light.x, 2 * light.y, 2 * light.z, 0, (light.x + light.y + light.z) * -0xFF, 2 * light.x, 2 * light.y, 2 * light.z, 0, (light.x + light.y + light.z) * -0xFF, 0, 0, 0, 1, 0]);
 
 			// 2-3fps lost here in single core, maybe Pixel Bender should be faster?
 			// notice : biger sphere size -> lost more fps
