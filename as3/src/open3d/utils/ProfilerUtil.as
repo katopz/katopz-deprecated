@@ -16,7 +16,7 @@ package open3d.utils
 		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function):void
 		{
 			var _contextMenu:ContextMenu = container.contextMenu = new ContextMenu();
-			_contextMenu.hideBuiltInItems();
+			//_contextMenu.hideBuiltInItems();
 			
 			var item:ContextMenuItem = new ContextMenuItem(label);
             _contextMenu.customItems.push(item);

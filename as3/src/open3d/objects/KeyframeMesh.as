@@ -100,10 +100,10 @@ package open3d.objects
 			_type = ANIM_STOP;
 		}
 
-		public var faceLists:Array;
+		public var faceDatas:Array;
 		public function updateFrame():void
 		{
-			if(!faceLists)return;
+			if(!faceDatas)return;
 			
 			ctime = getTimer();
 
@@ -125,23 +125,11 @@ package open3d.objects
 			nframe = frames[(_currentFrame + 1) % framesLength];
 			var _vinLength:uint = _vin.length;
 			
-			/*
-			for (i = 0; i < _vinLength; i += 3)
-			{
-				dst = new Vector3D(_vin[i], _vin[i + 1], _vin[i + 2]);
-				a = cframe.vertices[i];
-				b = nframe.vertices[i];
-
-				dst.x = a.x + interp * (b.x - a.x);
-				dst.y = a.y + interp * (b.y - a.y);
-				dst.z = a.z + interp * (b.z - a.z);
-			}
-			*/
-			
+			// TODO : optimize
 			var _cframe_vertices:Vector.<Vector3D> = cframe.vertices;
 			var _nframe_vertices:Vector.<Vector3D> = nframe.vertices;
 			
-			for each (var face:FaceData in faceLists)
+			for each (var face:FaceData in faceDatas)
 			{
 				a0 = _cframe_vertices[face.a];
 				b0 = _cframe_vertices[face.b];

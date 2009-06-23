@@ -102,7 +102,7 @@ package open3d.objects
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
 			var vertices:Array = [];
-			faceLists = [];
+			faceDatas = [];
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
 			var uvDatas:Array = []
@@ -143,7 +143,7 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				faceLists.push(new FaceData(a, b, c, vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
+				faceDatas.push(new FaceData(a, b, c, vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]));
 			}
 
 			// Frame animation data
@@ -154,7 +154,7 @@ package open3d.objects
 			// --------------------------------------- indices ---------------------------------------
 
 			var n:int = -1;
-			for each (var face:FaceData in faceLists)
+			for each (var face:FaceData in faceDatas)
 			{
 				_vin.push(Frame(frames[0]).vertices[face.a].x, Frame(frames[0]).vertices[face.a].y, Frame(frames[0]).vertices[face.a].z);
 				_vin.push(Frame(frames[0]).vertices[face.b].x, Frame(frames[0]).vertices[face.b].y, Frame(frames[0]).vertices[face.b].z);
