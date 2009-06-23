@@ -1,17 +1,19 @@
 package open3d.view
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
+	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import flash.utils.*;
-
-	import net.hires.debug.Stats;
-
-	import open3d.debug.SimpleTextField;
+	
 	import open3d.objects.Mesh;
 	import open3d.render.Renderer;
+	import open3d.utils.ProfilerUtil;
+	import open3d.utils.TextUtil;
 
 	/**
 	 * SimpleView
@@ -21,9 +23,9 @@ package open3d.view
 	{
 		protected var renderer:Renderer;
 
-		protected var _isDebug:Boolean = false;
-		protected var debugText:SimpleTextField;
-		protected var stat:Stats;
+		protected var _isDebug:Boolean;
+		protected var debugText:TextField;
+		protected var stat:DisplayObject;
 
 		public function SimpleView()
 		{
@@ -43,28 +45,34 @@ package open3d.view
 			renderer = new Renderer(this);
 			renderer.world.z = 500;
 
-			debugText = new SimpleTextField();
+			debugText = TextUtil.getTextField();
 			debugText.x = 80;
 
 			isDebug = true;
-			stat = new Stats();
 
 			create();
 
+			stat = ProfilerUtil.getStat();
 			addChild(stat);
 			addChild(debugText);
 
 			stat.visible = isDebug;
 			debugText.visible = isDebug;
+			
+			ProfilerUtil.addContext(this, "Toggle Z-Sort", toggleZSort);
 
 			start();
+		}
+		
+		private function toggleZSort(event:ContextMenuEvent):void
+		{
+			renderer.isFaceZSort = renderer.isMeshZSort = !renderer.isFaceZSort;
 		}
 
 		protected function create():void
 		{
 			// override me
 		}
-
 
 		protected function start():void
 		{

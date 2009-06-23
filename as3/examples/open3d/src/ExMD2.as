@@ -23,9 +23,9 @@ package
 
 		override protected function draw():void
 		{
-			cat.rotationX += 1;
-			cat.rotationY += 1;
-			cat.rotationZ += 1;
+			cat.rotationX++;
+			cat.rotationY++;
+			cat.rotationZ++;
 
 			cat.updateFrame();
 		}

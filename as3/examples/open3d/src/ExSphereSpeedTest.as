@@ -26,12 +26,6 @@ package
 			
 			// your turn
 			stage.addEventListener(MouseEvent.CLICK, onClick);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, toggleZSort);
-		}
-		
-		private function toggleZSort(event:MouseEvent):void
-		{
-			renderer.isFaceZSort = renderer.isMeshZSort = (mouseX>stage.stageWidth/2);
 		}
 		
 		private function onClick(event:MouseEvent=null):void
@@ -67,7 +61,7 @@ package
 				mesh.rotationZ++;
 			}
 			
-			debugText.appendText(", Click to add more, Move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
+			debugText.appendText(", ZSort : " + renderer.isMeshZSort + ", Right click for more option, Click to add more sphere");
 		}
 	}
 }

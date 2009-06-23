@@ -1,43 +1,37 @@
 package
 {
-	import __AS3__.vec.Vector;
-
 	import open3d.materials.BitmapFileMaterial;
+	import open3d.objects.MD2;
 	import open3d.objects.Object3D;
-	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
 
 	[SWF(width=800, height = 600, backgroundColor = 0x666666, frameRate = 30)]
 
 	/**
-	 * ExSphereCubic
+	 * ExMD2Cubic
 	 * @author katopz
 	 */
-	public class ExSphereCubic extends SimpleView
+	public class ExMD2Cubic extends SimpleView
 	{
-		private var spheres:Vector.<Sphere>;
-
 		override protected function create():void
 		{
-			var segment:uint = 8;
-			var amount:uint = 4;
-			var radius:uint = 30;
+			var amount:uint = 3;
+			var radius:uint = 80;
 			var gap:uint = amount;
 
-			var sphere:Sphere;
 			for (var i:int = -amount / 2; i < amount / 2; ++i)
 				for (var j:int = -amount / 2; j < amount / 2; ++j)
 					for (var k:int = -amount / 2; k < amount / 2; ++k)
 					{
-						var bitmapFileMaterial:BitmapFileMaterial = new BitmapFileMaterial("assets/earth.jpg");
-						sphere = new Sphere(radius, segment, segment, bitmapFileMaterial);
-						renderer.addChild(sphere);
-						sphere.x = gap * radius * i + gap * radius / 2;
-						sphere.y = gap * radius * j + gap * radius / 2;
-						sphere.z = gap * radius * k + gap * radius / 2;
+						var md2:MD2 = new MD2("assets/pg.md2", new BitmapFileMaterial("assets/pg.png"));
+						renderer.addChild(md2);
+						md2.x = gap * radius * i;
+						md2.y = gap * radius * j;
+						md2.z = gap * radius * k;
 					}
 
 			renderer.world.rotationX = 30;
+			renderer.world.z = 1000;
 		}
 
 		override protected function draw():void
@@ -47,6 +41,13 @@ package
 			world.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
 			world.rotationY++;
 
+			var _renderer_childs:Array = renderer.childs;
+
+			for each (var md2:MD2 in _renderer_childs)
+			{
+				md2.updateFrame();
+			}
+			
 			debugText.appendText(", ZSort : " + renderer.isMeshZSort + ", Right click for more option");
 		}
 	}
