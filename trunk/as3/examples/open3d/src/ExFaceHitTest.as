@@ -39,7 +39,7 @@ package
 
 		override protected function draw():void
 		{
-			var _length:int = plane.vin.length / 3 - 2;
+			var _length:int = plane.vin.length / 3;
 			for (var i:int = 0; i < _length; ++i)
 			{
 				plane.setVertices(i, "z", (i + 1) * 0.1 * Math.sin(step + i / 10));
