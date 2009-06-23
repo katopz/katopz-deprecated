@@ -1,11 +1,9 @@
 package
 {
 	import flash.geom.Vector3D;
-
-	import open3d.materials.Material;
+	
 	import open3d.objects.Line3D;
 	import open3d.objects.Object3D;
-	import open3d.objects.Plane;
 	import open3d.view.SimpleView;
 
 	[SWF(width=800, height = 600, backgroundColor = 0x666666, frameRate = 30)]
