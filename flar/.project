@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>FLAR</name>
+	<name>FLARBob</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -18,17 +18,17 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/3D/FLARToolKit/trunk/src</location>
+			<location>D:/katopz/as3/FLARToolKit/trunk/src</location>
 		</link>
 		<link>
 			<name>[source path] pv3d</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d</location>
+			<location>D:/katopz/as3/pv3d</location>
 		</link>
 		<link>
 			<name>[source path] libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
+			<location>D:/katopz/as3/libs</location>
 		</link>
 	</linkedResources>
 </projectDescription>
