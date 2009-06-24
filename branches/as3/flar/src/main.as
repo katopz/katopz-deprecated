@@ -57,8 +57,8 @@
 			var chars:Characters = new Characters();
 			chars.addData(new CharacterData
 			(
-				"man", "assets/man1/model.dae", 1, 100, 24,
-				["stand", "walk", "sit"]
+				"man", "assets/spongebob.dae", 1, 70, 24,
+				["stand", "jump"]
 			));
 			
 			// ___________________________________________________________ Player
@@ -90,7 +90,9 @@
 				<Debugger/>
 				<Player>
 					<Stand/>
-					<Sit/>
+					<Jump/>
+					<Happy/>
+					<Walking/>
 				</Player>
 			</Option>)
 			
@@ -125,8 +127,14 @@
 				case "Stand":
 					player.act("stand");
 				break;
-				case "Sit":
-					player.act("sit");
+				case "Jump":
+					player.act("jump");
+				break;
+				case "Happy":
+					player.act("happy");
+				break;
+				case "Walking":
+					player.act("walking");
 				break;
 			}
 		}
