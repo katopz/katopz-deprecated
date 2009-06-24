@@ -12,14 +12,14 @@ package com.sleepydesign.components
 	{
 		private var _back:Shape;
 		private var _text:String = "";
-		private var _htmlText:String = "";
+		protected var _htmlText:String = "";
 		
-		public var pad :uint = 4;
+		public var pad :uint = 8;
 		public var length :uint = 8;
 		
-		private var _tf:TextField;
+		protected var _tf:SDTextField;
 		
-		public function get label():TextField{return _tf}
+		public function get label():SDTextField{return _tf}
 		
 		public function SDBalloon( text:String="" )
 		{
@@ -101,7 +101,7 @@ package com.sleepydesign.components
 			return _text;
 		}
 		
-		public function set htmlText(t:String):void
+		public function set htmlText(t:*):void
 		{
 			_htmlText = t;
 			draw();

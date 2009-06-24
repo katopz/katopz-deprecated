@@ -24,7 +24,7 @@ package com.sleepydesign.site.view.components
 	import flash.text.TextField;
 	import flash.utils.*;
 	
-	import gs.TweenLite;
+	import gs.TweenMax;
 	
 	/* ---------------------------------------------------------------
 	
@@ -423,7 +423,7 @@ package com.sleepydesign.site.view.components
 				var _alpha:Number= !StringUtil.isNull(itemXML.@alpha)?Number(itemXML.@alpha):1;
 			
 				trace(" ! Clip\t: "+clip, idString, _alpha);
-				//TweenLite.to(clip, 1, {delay:4, alphaTo:_alpha});
+				//TweenMax.to(clip, 1, {delay:4, alphaTo:_alpha});
 				clip.alpha = _alpha;
 			} 
 			*/
@@ -635,7 +635,7 @@ package com.sleepydesign.site.view.components
 				{
 					// auto reveal
 					if(!config.alpha)config.alpha = 1;
-					TweenLite.to(content, .5, {autoAlpha:config.alpha});
+					TweenMax.to(content, .5, {autoAlpha:config.alpha});
 				}
 			}
 			
@@ -660,7 +660,7 @@ package com.sleepydesign.site.view.components
 			////addChild(cachedBitmap);
 			
 			// effect -> destroy
-			////TweenLite.to(cachedBitmap, 1, {autoAlpha:0, onComplete:destroy, onCompleteParams:[[cachedBitmap]]});
+			////TweenMax.to(cachedBitmap, 1, {autoAlpha:0, onComplete:destroy, onCompleteParams:[[cachedBitmap]]});
 			
 			// bye
 			////removeChild(content);

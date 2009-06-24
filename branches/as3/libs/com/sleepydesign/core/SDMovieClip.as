@@ -11,7 +11,7 @@ package com.sleepydesign.core
     import flash.events.Event;
     import flash.events.IEventDispatcher;
     
-    import gs.TweenLite;
+    import gs.TweenMax;
     
     /**
 	 * SleepyDesign MovieClip : destroyable, lazyplay, cloak
@@ -114,7 +114,7 @@ package com.sleepydesign.core
 			
 			// MovieClip : auto show
 			clip.gotoAndPlay("show");
-			TweenLite.to(content, .5, {autoAlpha:1});
+			TweenMax.to(content, .5, {autoAlpha:1});
 			trace(" ------------------------------------------ /");
 			*/
 		}
@@ -203,7 +203,7 @@ package com.sleepydesign.core
 		
 		public function hide(transition:Object = null):void 
 		{
-			TweenLite.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 0 }));
+			TweenMax.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 0 }));
 			
 			if(clip.currentLabels.length>1)
 			{
@@ -214,7 +214,7 @@ package com.sleepydesign.core
 		
 		public function show(transition:Object = null):void 
 		{
-			TweenLite.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 1 }));
+			TweenMax.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 1 }));
 			
 			if(clip.currentLabels.length>1)
 			{

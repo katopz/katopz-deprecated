@@ -11,7 +11,7 @@ package com.sleepydesign.core
 	import flash.display.Sprite;
 	import flash.events.IEventDispatcher;
 
-	import gs.TweenLite;
+	import gs.TweenMax;
 
 	/**
 	 * SleepyDesign Sprite
@@ -60,7 +60,7 @@ package com.sleepydesign.core
 			//trace(" * removeChild	: "+DisplayObjectUtil.toString(child));
 
 			// Tween?
-			TweenLite.killTweensOf(child);
+			TweenMax.killTweensOf(child);
 
 			if (child is Shape)
 			{

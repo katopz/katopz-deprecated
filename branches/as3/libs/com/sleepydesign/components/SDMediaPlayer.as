@@ -180,7 +180,7 @@ package com.sleepydesign.components
 			
 			if(_volume>0)
 			{
-				//TweenLite.to(_channel, .25, {volume:_volume, onUpdate:updateChannel});
+				//TweenMax.to(_channel, .25, {volume:_volume, onUpdate:updateChannel});
 				_channel.soundTransform = new SoundTransform(_volume, 0);
 			}else{
 				 _channel.soundTransform = new SoundTransform(0, 0);
@@ -197,7 +197,7 @@ package com.sleepydesign.components
 			{
 				event.target.alpha = 0;
 				_channel.soundTransform = new SoundTransform(0, 0);
-				//TweenLite.to(_channel, .25, {volume:0, onUpdate:updateChannel});
+				//TweenMax.to(_channel, .25, {volume:0, onUpdate:updateChannel});
 			}else{
 				event.target.alpha = 1;
 				setVolume(_volume);

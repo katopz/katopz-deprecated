@@ -91,9 +91,9 @@ package com.sleepydesign.site.view.components
 		{
 			//trace("//////////// Authentication.update ///////////");
 			
-			TweenLite.killTweensOf(authenClip);
-			TweenLite.killTweensOf(logInClip);
-			TweenLite.killTweensOf(logOutClip);
+			TweenMax.killTweensOf(authenClip);
+			TweenMax.killTweensOf(logInClip);
+			TweenMax.killTweensOf(logOutClip);
 			
 			authenClip.visible = false;
 			logInClip.visible = false;
@@ -131,7 +131,7 @@ package com.sleepydesign.site.view.components
 			trace("childContent:"+childContent);
 			
 			childContent.content.alpha = 0;
-			TweenLite.to(childContent.content, .5, {autoAlpha:1});
+			TweenMax.to(childContent.content, .5, {autoAlpha:1});
 			childContent.addEventListener(SDEvent.DATA, onContentData);
 			
 			switch(String(xml.@id))
@@ -169,7 +169,7 @@ package com.sleepydesign.site.view.components
 			
 			var childContent:Content = Content(contents.findBy(String(xml.@id))); 
 			childContent.content.alpha = 0;
-			TweenLite.to(childContent.content, .5, {autoAlpha:1});
+			TweenMax.to(childContent.content, .5, {autoAlpha:1});
 			childContent.addEventListener(SDEvent.UPDATE, onContentData);
 			
 			switch(String(xml.@id))
