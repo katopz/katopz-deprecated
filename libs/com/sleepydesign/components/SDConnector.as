@@ -84,7 +84,7 @@ package com.sleepydesign.components
 		private function onConnect(event:NetEvent):void
 		{
 			trace( " ^ onConnect");
-			
+			/*
 			// go out
 			if(currentRoom==room)
 			{
@@ -93,6 +93,7 @@ package com.sleepydesign.components
 			
 			// go in
 			currentRoom = room;
+			*/
 			enterRoom(room);
 		}
 		
@@ -114,7 +115,7 @@ package com.sleepydesign.components
 			serverInputText.text = "Enter		: "+room;
 		}
 		
-		public function exitRoom(room:String):void
+		public function exitRoom():void
 		{
 			trace( " * Exit			: "+room);
 			
@@ -199,6 +200,13 @@ package com.sleepydesign.components
 			}else{
 				trace( " ! Not Connect yet");
 			}
+		}
+		
+		public function onClientRemove(event:SDEvent):void
+		{
+			trace( " ^ onClientRemove : "+ event.data);
+			if(connector)
+				connector.send(event.data);
 		}
 	}
 }

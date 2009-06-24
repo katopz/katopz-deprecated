@@ -1,6 +1,6 @@
 ﻿﻿package
 {
-	//import __AS3__.vec.Vector;
+	import __AS3__.vec.Vector;
 	
 	import com.sleepydesign.components.SDChatBox;
 	import com.sleepydesign.components.SDConnector;
@@ -33,7 +33,7 @@
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class main extends SDApplication
 	{
-		//private var fake		: Vector.<int>;
+		private var fake		: Vector.<int>;
 		
 		private var engine3D	: Engine3D;
 		private var game		: Game;
@@ -45,7 +45,7 @@
 		
 		private var area		:Area;
 		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
-		private const SERVER_URI:String = "rtmp://localhost/SOSample";
+		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 		
 		public function main()
 		{
@@ -54,7 +54,7 @@
 			//alpha=.1;
 			addChild(ProfilerUtil.getStat());
 			
-			//fake  = new Vector.<int>();
+			fake  = new Vector.<int>();
 		}
 		
         // ______________________________ Initialize ______________________________
@@ -80,6 +80,7 @@
 			
 			// bind player -> connector
 			game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
+			game.player.addEventListener(PlayerEvent.REMOVED, connector.onClientRemove);
 			
 			// start
 			game.start();
@@ -159,7 +160,7 @@
 			(
 				"player_"+(new Date().valueOf()),
 				area.map.getSpawnPoint(),
-				"man1",
+				["man1","man2","woman1","woman2"][int(4*Math.random())],
 				"stand",
 				3
 			));
@@ -254,7 +255,7 @@
 			</Option>)
 			
 			tree.x=10;
-			tree.y=70;
+			tree.y=100;
 			tree.filters = [new GlowFilter(0xFFFFFF, 1, 2, 2)]
 			system.addChild(tree);
 			tree.addEventListener(SDMouseEvent.CLICK, onExplorer);
@@ -329,29 +330,43 @@
 		
 		override public function update(data:Object=null):void
 		{
-			if(data.command=="warp")
+			var _player:Player = Player(data.args[1]);
+			
+			// it's my command?
+			if(_player==game.player)
 			{
-				//TODO : get config by area id
-				this.data = configs[data.args[0]];
-				
-				if(!this.data)return;
-				
-				// dirty
-				if(this.data.id!=id)
+				// and command is? 
+				if(data.command=="warp")
 				{
-					//update server
-					id = this.data.id;
-					connector.enterRoom(id);
+					//TODO : get config by area id
+					this.data = configs[data.args[0]];
 					
-					// TODO : actually we need to wait for connection success?
+					if(!this.data)return;
 					
-					// destroy
-					game.removeOtherPlayer();
-					
-					//update area
-					area.update(this.data);
-					engine3D.update(this.data.scene);
-					game.player.warp(area.map.getWarpPoint());
+					// dirty
+					if(this.data.id!=id)
+					{
+						// tell everybody i'm exit
+						game.player.exit();
+						
+						//update server
+						connector.exitRoom();
+						
+						// wait for exit complete?
+						
+						id = this.data.id;
+						connector.enterRoom(id);
+						
+						// TODO : actually we need to wait for connection success?
+						
+						// destroy
+						game.removeOtherPlayer();
+						
+						//update area
+						area.update(this.data);
+						engine3D.update(this.data.scene);
+						game.player.warp(area.map.getWarpPoint());
+					}
 				}
 			}
 		}

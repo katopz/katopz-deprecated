@@ -6,9 +6,11 @@ package com.sleepydesign.game.events
 	{
 		public static const UPDATE			: String = "update";
 		public static const COMPLETE		: String = "complete";
+		public static const REMOVED			: String = "removed";
 		
 		public static const SPAWN			: String = "spawn";
 		public static const IDLE			: String = "idle";
+		public static const EXIT			: String = "exit";
 		
 		public static const SIT				: String = "sit";
 		public static const STAND			: String = "stand";

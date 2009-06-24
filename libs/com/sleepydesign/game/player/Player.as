@@ -87,7 +87,7 @@
 			data.des = Position.parse(decoy).toObject();
 			
 			// tell mom i'm dirty!
-			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, data));
+			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
 			
 			// all clean now
 			_dirty = false;
@@ -221,9 +221,9 @@
 		
 		private function onWalkTo( event:SDEvent ):void
 		{
-			trace(" ! onWalkTo : "+event.data.id);
 			if(event.data.id == id)
 			{
+				trace(" ! onWalkTo : "+event.data.id);
 				map.removeEventListener(SDEvent.UPDATE, onWalkTo);
 				walk(event.data.positions);
 			}
@@ -332,17 +332,30 @@
 			
 			// drop command point?
 			var commandData:* = map.getCommand(dolly.position);
-			Game.applyCommand(commandData.command, commandData.args);
+			
+			if(commandData.args)
+			{
+				commandData.args.push(this);
+				Game.applyCommand(commandData.command, commandData.args);
+			}
 		}
 		
 		public function act(action:String):void
 		{
-			if (this.action == action)return;
+			//if (this.action == action)return;
 			
-			//trace(" ! Action	:"+action);
+			///trace(" ! Action	:"+action);
 			
 			char.model.play(action);
 			this.action = action;
+		}
+		
+		public function exit():void
+		{
+			//act("exit");
+			//dirty = true;
+			data.act = PlayerEvent.EXIT;
+			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
 		}
 		
 		// ______________________________ Update ____________________________
