@@ -39,7 +39,7 @@ package com.sleepydesign.net
 			
 			//set
 			nc = new NetConnection();
-			nc.objectEncoding = ObjectEncoding.AMF0;
+			nc.objectEncoding = ObjectEncoding.AMF3;
 			
 			//listen
 			nc.addEventListener(NetStatusEvent.NET_STATUS, onConnectHandler, false, 0, true);

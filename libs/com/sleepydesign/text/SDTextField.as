@@ -42,7 +42,7 @@ package com.sleepydesign.text
 				css = p + aLink + aHover;
 			}
 			style.parseCSS(css);
-			styleSheet = style;
+			//styleSheet = style;
 		}
 	}
 }

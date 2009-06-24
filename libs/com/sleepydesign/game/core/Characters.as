@@ -1,5 +1,6 @@
 package com.sleepydesign.game.core
 {
+	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.core.SDObject;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.data.CharacterData;
@@ -11,7 +12,7 @@ package com.sleepydesign.game.core
 
 	public class Characters extends SDObject
 	{
-		private var data:CharacterData;
+		private var lists:SDGroup;
 		
 		public static var instance:Characters;
 		public static function getInstance():Characters
@@ -24,35 +25,21 @@ package com.sleepydesign.game.core
 		public function Characters(modelURI:String=null)
 		{
 			instance = this;
-
 			super();
-			//"man", "assets/man_test.dae", ["stand","walk","sit"], ["0,0", "1,16", "18,31"], ["angry:angry.png"]
-			/*
-			data = new CharacterData
-			(
-				"cat", "assets/cat.md2", 4, 100, 15,
-				["stand", "walk", "sit"],
-				["0,0", "1,16", "18,31"],
-				["soso:assets/soso.png", "angry:assets/angry.png"]
-			)
-			
-			data = new CharacterData
-			(
-				"man", "assets/man1/model.dae", 1, 100, 24,
-				["stand", "walk", "sit"]
-			)
-			*/
 		}
 
-		public function addData(data:CharacterData):void
+		public function addCharacter(data:CharacterData):void
 		{
-			this.data = data;
+			if(!lists)lists = new SDGroup("Characters");
+			lists.insert(data, data.id);
 		}
 		
 		public function getModel(id:String=null):SDModel
 		{
 			//var charactor:Character = new Character(id);
 			var model:SDModel = new SDModel();
+			
+			var data:CharacterData = lists.findBy(id);
 			
 			switch (data.type)
 			{
@@ -69,7 +56,7 @@ package com.sleepydesign.game.core
 					dae.addEventListener(FileLoadEvent.LOAD_COMPLETE, onModelComplete);
 					dae.addEventListener(FileLoadEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 					dae.load(data.source);
-					
+					trace(" Load : " + data.source);
 					dae.scale = data.scale;
 					
 					model.instance = dae;

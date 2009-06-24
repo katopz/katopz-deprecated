@@ -145,10 +145,10 @@ package com.sleepydesign.game.core
 			}
 			*/
 			
-			var platerData:PlayerData = new PlayerData();
-			platerData.parse(data);
+			var playerData:PlayerData = new PlayerData();
+			playerData.parse(data);
 			
-			var _player:Player = getPlayerByID(platerData.id);
+			var _player:Player = getPlayerByID(playerData.id);
 			
 			if(_player != player)
 			{
@@ -156,12 +156,11 @@ package com.sleepydesign.game.core
 				if(!_player)
 				{
 					// new guy! not in list
-					_player = new Player(platerData);
+					_player = new Player(playerData);
 					addPlayer(_player);
 				}
 				
-				_player.update(platerData);
-				
+				_player.update(playerData);
 			}else{
 				// it's me
 				// do someting? maybe god speech from server?
