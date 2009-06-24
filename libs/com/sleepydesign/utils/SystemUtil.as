@@ -20,7 +20,7 @@ package com.sleepydesign.utils
 	                new LocalConnection().connect("foo");
                 }else{
                 	// Flash Player 10
-        			System.gc();
+        			System["gc"]();
                 }
             }
             catch (e:*)

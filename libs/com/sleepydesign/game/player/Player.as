@@ -17,6 +17,7 @@
 	
 	import org.papervision3d.core.geom.Particles;
 	import org.papervision3d.core.geom.renderables.Particle;
+	import org.papervision3d.events.FileLoadEvent;
 	import org.papervision3d.materials.special.SDParticleMaterial;
 	//import org.papervision3d.objects.SDObject3D;
 
@@ -122,6 +123,7 @@
 			
 			char =  new Character();
 			char.addEventListener(SDEvent.COMPLETE, onCharacterComplete);
+			char.addEventListener(FileLoadEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 			char.create(config);
 			
 			instance = char.instance;
@@ -148,7 +150,17 @@
 		private function onCharacterComplete(event:SDEvent):void
 		{
 			// i'm taller?
-			//balloonClip.y = char.height;
+			if(balloonClip)
+				balloonClip.y = char.height;
+
+			trace("onCharacterComplete");
+		}
+		
+		private function onAnimationComplete(event:FileLoadEvent):void
+		{
+			trace("onAnimationComplete#3");
+			//balloonClip.y = 70;
+			dispatchEvent(event.clone());
 		}
 		
 		// ______________________________ Action ______________________________
