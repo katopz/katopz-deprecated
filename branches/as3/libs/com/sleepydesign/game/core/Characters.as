@@ -1,8 +1,10 @@
 package com.sleepydesign.game.core
 {
 	import com.sleepydesign.core.SDObject;
+	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.data.CharacterData;
 	
+	import org.papervision3d.events.FileLoadEvent;
 	import org.papervision3d.materials.BitmapFileMaterial;
 	import org.papervision3d.objects.parsers.DAE;
 	import org.papervision3d.objects.parsers.MD2;
@@ -64,7 +66,11 @@ package com.sleepydesign.game.core
 					break;
 				case "dae":
 					var dae:DAE = new DAE(true, "", true);
+					dae.addEventListener(FileLoadEvent.LOAD_COMPLETE, onModelComplete);
+					dae.addEventListener(FileLoadEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 					dae.load(data.source);
+					
+					dae.scale = data.scale;
 					
 					model.instance = dae;
 					
@@ -83,6 +89,19 @@ package com.sleepydesign.game.core
 			
 			return model;
 		}
+		
+		private function onModelComplete(event:FileLoadEvent):void
+		{
+			trace("onModelComplete");
+			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
+		}
+		
+		private function onAnimationComplete(event:FileLoadEvent):void
+		{
+			trace("onAnimationComplete#1");
+			dispatchEvent(event.clone());
+		}
+		
 		/*
 		private function onModelComplete(event:SDEvent):void
 		{
