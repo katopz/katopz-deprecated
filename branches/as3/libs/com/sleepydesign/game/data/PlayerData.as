@@ -73,12 +73,9 @@ package com.sleepydesign.game.data
 			);*/
 		}
 		
-		// _______________________________________________________ external
-		
-		public function writeExternal( output: IDataOutput ): void
+		public function toObject():Object
 		{
-			output.writeObject(
-			{
+			return {
 				ms:ms,
 				id:id,
 				pos:pos,
@@ -88,7 +85,14 @@ package com.sleepydesign.game.data
 				des:des,
 				msg:msg
 				//chr:chr
-			});
+			}
+		}
+		
+		// _______________________________________________________ external
+		
+		public function writeExternal( output: IDataOutput ): void
+		{
+			output.writeObject(toObject());
 		}
 		
 		public function readExternal( input: IDataInput ): void

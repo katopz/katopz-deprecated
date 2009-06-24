@@ -70,7 +70,7 @@ package com.sleepydesign.game.core
 		public function addPlayer(player:Player):void
 		{
 			// remove if any
-			removePlayer(player);
+			//removePlayer(player);
 			
 			// plug to game
 			addElement(player, player.id);
@@ -79,27 +79,27 @@ package com.sleepydesign.game.core
 			engine.addChild(player.instance);
 		}
 		
-		public function removePlayer(player:Player=null):void
+		public function removePlayer(_player:Player=null):void
 		{
 			// exist?
-			if(player)
+			if(_player)
 			{
 				//var _player:Player = getElementById(player.id);
-				trace(" - removePlayer	: "+player);
+				trace(" - removePlayer	: "+_player);
 			
 				// unplug from 3d Engine
-				engine.removeChild(player.instance);
+				engine.removeChild(_player.instance);
 				
 				// unplug from game
-				removeElement(player);
-				player.destroy();
-				player = null;
+				removeElement(_player);
+				_player.destroy();
+				_player = null;
 			}
 			else
 			{
 				// remove all player
-				for each(var _player:Player in elements.childs)
-					removePlayer(_player);
+				for each(var __player:Player in elements.childs)
+					removePlayer(__player);
 			}
 		}
 		
@@ -160,7 +160,13 @@ package com.sleepydesign.game.core
 					addPlayer(_player);
 				}
 				
-				_player.update(playerData);
+				// he's gone!
+				if(playerData.act=="exit")
+				{
+					removePlayer(_player);
+				}else{
+					_player.update(playerData);
+				}
 			}else{
 				// it's me
 				// do someting? maybe god speech from server?
