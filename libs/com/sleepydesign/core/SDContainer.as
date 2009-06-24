@@ -6,7 +6,7 @@
     import flash.display.DisplayObject;
     import flash.events.Event;
     
-    import gs.TweenLite;
+    import gs.TweenMax;
     
     /**
 	 * SleepyDesign Container
@@ -175,7 +175,7 @@
 		
         override public function removeChild(displayObject:DisplayObject):DisplayObject
         {
-        	//TweenLite.killTweensOf(displayObject);
+        	//TweenMax.killTweensOf(displayObject);
         	//if(displayObject is SDContainer && displayObject["id"])
         	if(!displayObject)return null;
         	collector.remove(displayObject);
@@ -263,12 +263,12 @@
 		
 		public function hide(transition:Object = null):void 
 		{
-			TweenLite.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 0 }));
+			TweenMax.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 0 }));
 		}
 		
 		public function show(transition:Object = null):void 
 		{
-			TweenLite.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 1 }));
+			TweenMax.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 1 }));
 		}
 	}	
 }

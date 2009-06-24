@@ -2115,6 +2115,8 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <technique profile="FCOLLADA">
           <start_time>0.041666</start_time>
           <end_time>8.75</end_time>
+          <labels>stand,walk,sit</labels>
+          <frames>6-59,60-89,100-160</frames>
         </technique>
       </extra>
     </visual_scene>

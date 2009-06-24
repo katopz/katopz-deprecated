@@ -16,7 +16,7 @@ package com.sleepydesign.site.view.components
 	import flash.events.MouseEvent;
 	import flash.utils.*;
 	
-	import gs.TweenLite;
+	import gs.TweenMax;
 	
 	/* ---------------------------------------------------------------
 	
@@ -290,7 +290,7 @@ package com.sleepydesign.site.view.components
 		{
 			this.dataURI = dataURI;
 			trace(" * Reload ("+delay+") : "+dataURI);
-			TweenLite.to(this, delay, {onComplete:reload, onCompleteParams:[dataURI, delay]});
+			TweenMax.to(this, delay, {onComplete:reload, onCompleteParams:[dataURI, delay]});
 			loader.addEventListener(SDEvent.COMPLETE, onGetData, false, 0, true);
 			loader.load(dataURI);
 		}

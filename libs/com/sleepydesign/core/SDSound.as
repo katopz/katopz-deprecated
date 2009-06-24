@@ -8,7 +8,7 @@
     import flash.media.SoundChannel;
     import flash.media.SoundTransform;
     
-    import gs.TweenLite;
+    import gs.TweenMax;
 	
 	public class SDSound 
 	{
@@ -43,13 +43,13 @@
 		public function unmute():void
 		{
 			trace("unmute")
-			TweenLite.to(channel, 2, {volume:1, onUpdate:updateChannel});
+			TweenMax.to(channel, 2, {volume:1, onUpdate:updateChannel});
 		}
 		
 		public function mute():void
 		{
 			trace("mute")
-			TweenLite.to(channel, .5, {volume:0, onUpdate:updateChannel});
+			TweenMax.to(channel, .5, {volume:0, onUpdate:updateChannel});
 		}
 	}
 }

@@ -2,6 +2,7 @@ package
 {
 	 import com.sleepydesign.components.SDBalloon;
 	 import com.sleepydesign.components.SDButton;
+	 import com.sleepydesign.components.SDDialog;
 	 import com.sleepydesign.components.SDInputText;
 	 import com.sleepydesign.components.SDScrollPane;
 	 import com.sleepydesign.core.SDSprite;
@@ -42,11 +43,34 @@ package
 			_SDButton.y = 30;
 			content.addChild(_SDButton);
 			 
-			 // SDButton
+			 // SDBalloon
 			var _SDBalloon:SDBalloon = new SDBalloon("SDBalloon test");
 			_SDBalloon.x = 100;
 			_SDBalloon.y = 100;
-			addChild(_SDBalloon);
+			//addChild(_SDBalloon);
+			 
+			 // SDDialog
+			var _SDDialog:SDDialog = new SDDialog(
+<question id="0">
+	<![CDATA[Who say <b>Hello World</b>?<br/>Do you remember?]]>
+	<answer src="as:jump(1)"><![CDATA[Maybe me]]></answer>
+	<question id="1">
+		<![CDATA[Really you?]]>
+		<answer src="as:jump(2)"><![CDATA[Yes!]]></answer>
+		<question id="2">
+			<![CDATA[Are you Sure?]]>
+			<answer src="as:jump(3)"><![CDATA[Holy Yes!]]></answer>
+			<question id="3" src="as:hide()"><![CDATA[OK!]]></question>
+			<answer src="as:jump(1)"><![CDATA[Hell No!]]></answer>
+		</question>
+		<answer src="as:jump(0)"><![CDATA[No!]]></answer>
+	</question>
+	<answer src="http://www.google.com"><![CDATA[Try ask google!]]></answer>
+</question>);
+		
+			_SDDialog.x = 100;
+			_SDDialog.y = 200;
+			addChild(_SDDialog);			 
 			 
 			 // link
 			 container.addContent(content);

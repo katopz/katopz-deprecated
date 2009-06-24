@@ -8,7 +8,7 @@ package com.sleepydesign.draw
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	
-	import gs.TweenLite;
+	import gs.TweenMax;
 
 	public class SDParallax extends SDContainer
 	{
@@ -63,7 +63,7 @@ package com.sleepydesign.draw
 			for each(var itemParallax:ItemParallax in elements.childs)
 			{
 				var newX:Number = itemParallax._x+_x/itemParallax.z;//+ (_x - itemParallax._x)/itemParallax.z;
-				TweenLite.to(itemParallax, 0.5, {x:newX});
+				TweenMax.to(itemParallax, 0.5, {x:newX});
 			}
 		}
 	}
