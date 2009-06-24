@@ -11,6 +11,7 @@ package com.sleepydesign.components
 	{
 		public var uri:String;
 		private var room:String;
+		private var currentRoom:String="";
 		
 		private var connector:Red5Connector;
 		
@@ -83,13 +84,20 @@ package com.sleepydesign.components
 		private function onConnect(event:NetEvent):void
 		{
 			trace( " ^ onConnect");
+			
+			// go out
+			if(currentRoom==room)
+			{
+				exitRoom(room);
+			}
+			
+			// go in
+			currentRoom = room;
 			enterRoom(room);
 		}
 		
 		public function enterRoom(room:String):void
 		{
-			exitRoom(this.room);
-			
 			this.room = room;
 			
 			trace( " * Enter		: "+room);
@@ -165,7 +173,7 @@ package com.sleepydesign.components
 		// Client
 		public function onClientUpdate(event:SDEvent):void
 		{
-			trace( " ^ onClientUpdate");
+			trace( " ^ onClientUpdate : "+ event.data);
 			if(connector)
 			{
 				var domain:String = String(stage.loaderInfo.applicationDomain.parentDomain);
@@ -173,6 +181,7 @@ package com.sleepydesign.components
 				
 				var sid:String = String(event.data.ms+"@"+domain);
 				
+				/*
 				connector.send( 
 				{
 					// time stamp, TODO : ip
@@ -184,8 +193,9 @@ package com.sleepydesign.components
 				
 				trace( " ! sid : "+sid);
 				trace( " ! data : "+event.data);
+				*/
 				
-				//connector.send(event.data);
+				connector.send(event.data);
 			}else{
 				trace( " ! Not Connect yet");
 			}

@@ -19,7 +19,7 @@ package com.sleepydesign.components
 		private var _back:Sprite;
 		private var _password:Boolean 		= false;
 		private var _text:String 			= "";
-		private var _tf:TextField;
+		private var _tf:SDTextField;
 		
 		private var type:String 			= "";
 		
@@ -80,6 +80,7 @@ package com.sleepydesign.components
 	    		_tf.background = true;
 	    		_tf.type = TextFieldType.INPUT;
 	    		_tf.autoSize = TextFieldAutoSize.NONE;
+	    		_tf.styleSheet = null;
 	    		
 				addChild(_tf);
 				setSize(100, 18);

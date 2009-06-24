@@ -138,8 +138,8 @@
 			decoy.copyPosition(data.des);
 			
 			// add player to map
-			//map = Map.getInstance();
-			//map.addElement(this);
+			map = Map.getInstance();
+			map.addElement(this);
 			
 			if(balloonClip)
 				balloonClip.y = char.height;
