@@ -358,10 +358,14 @@
 			this.action = action;
 		}
 		
+		public function enter():void
+		{
+			data.act = PlayerEvent.ENTER;
+			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+		}
+		
 		public function exit():void
 		{
-			//act("exit");
-			//dirty = true;
 			data.act = PlayerEvent.EXIT;
 			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
 		}

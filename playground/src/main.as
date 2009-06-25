@@ -89,7 +89,6 @@
 			
 			// bind player -> connector
 			game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
-			game.player.addEventListener(PlayerEvent.REMOVED, connector.onClientRemove);
 			
 			// start
 			game.start();
@@ -368,6 +367,8 @@
 						
 						// wait for exit complete?
 						
+						connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
+						connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
 						connector.enterRoom(this._data.id);
 						
 						// TODO : actually we need to wait for connection success?
@@ -383,6 +384,14 @@
 					}
 				}
 			}
+		}
+		
+		private function onEnterRoom(event:SDEvent):void
+		{
+			connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
+			connector.removeEventListener(SDEvent.UPDATE, onEnterRoom);
+			// tell everybody i'm enter
+			game.player.enter();
 		}
 		
 		// ______________________________ Destroy ____________________________

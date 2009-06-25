@@ -4,8 +4,6 @@ package com.sleepydesign.components
     import com.sleepydesign.events.SDMouseEvent;
     import com.sleepydesign.net.Red5Connector;
     import com.sleepydesign.net.events.NetEvent;
-    
-    import flash.display.DisplayObjectContainer;
 	
 	public class SDConnector extends SDComponent
 	{
@@ -160,6 +158,7 @@ package com.sleepydesign.components
 			serverInputText.text = " ^ onServerInit";
 			connectButton.label = "Disconnect";
 			isConnect = true;
+			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
 		}
 		
 		private function onServerUpdate(event:SDEvent):void
@@ -201,12 +200,13 @@ package com.sleepydesign.components
 				trace( " ! Not Connect yet");
 			}
 		}
-		
+		/*
 		public function onClientRemove(event:SDEvent):void
 		{
 			trace( " ^ onClientRemove : "+ event.data);
 			if(connector)
 				connector.send(event.data);
 		}
+		*/
 	}
 }

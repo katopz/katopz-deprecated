@@ -160,12 +160,19 @@ package com.sleepydesign.game.core
 					addPlayer(_player);
 				}
 				
-				// he's gone!
-				if(playerData.act=="exit")
+				switch(playerData.act)
 				{
-					removePlayer(_player);
-				}else{
-					_player.update(playerData);
+					// someone enter
+					case "enter":
+						// do something?
+					break;
+					// he's gone!
+					case "exit":
+						removePlayer(_player);
+					break;
+					default :
+						_player.update(playerData);
+					break;
 				}
 			}else{
 				// it's me
