@@ -226,7 +226,7 @@
 			trace(" ^ onUpdate : "+event);
 			trace(" ^ Data : "+event.data);
 			try{
-			game.update(event.data);
+				game.update(event.data);
 			}catch(e:*){trace(e)};
 		}
 		
@@ -302,7 +302,11 @@
 					game.update(fakeData)
 				break;
 				case "Save":
-					system.save(config1, "l0r0.ara");
+					// TODO : new area id input box here
+					var _config:AreaData = new AreaData().parse(area.data);
+					_config.scene = new SceneData(new CameraData().parse(engine3D.camera));
+					
+					system.save(_config, "l0r0.ara");
 				break;
 				case "Open":
 					system.addEventListener(SDEvent.COMPLETE, onOpenComplete);
@@ -339,12 +343,12 @@
 				if(data.command=="warp")
 				{
 					//TODO : get config by area id
-					this.data = configs[data.args[0]];
+					this._data = configs[data.args[0]];
 					
-					if(!this.data)return;
+					if(!this._data)return;
 					
 					// dirty
-					if(this.data.id!=id)
+					if(this._data.id!=area.data.id)
 					{
 						// tell everybody i'm exit
 						game.player.exit();
@@ -354,7 +358,7 @@
 						
 						// wait for exit complete?
 						
-						id = this.data.id;
+						id = this._data.id;
 						connector.enterRoom(id);
 						
 						// TODO : actually we need to wait for connection success?
@@ -363,8 +367,8 @@
 						game.removeOtherPlayer();
 						
 						//update area
-						area.update(this.data);
-						engine3D.update(this.data.scene);
+						area.update(this._data);
+						engine3D.update(this._data.scene);
 						game.player.warp(area.map.getWarpPoint());
 					}
 				}

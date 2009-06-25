@@ -22,8 +22,8 @@
 		protected var _id : String;
 		//public var group : SDGroup;
 		
-		public var data : *;
-		public var config : *;
+		protected var _data : *;
+		protected var _config : *;
 		
 		private static var collector:SDGroup;
         public static function getCollector() : SDGroup 
@@ -169,8 +169,8 @@
 		public function create(config:Object=null):void
 		{
 			// create : config -> elements
-			config = this.config = config?config:this.config;
-			//config = this.config = ObjectUtil.merge(config, this.config);
+			_config = this._config = _config?_config:this._config;
+			//_config = this._config = ObjectUtil.merge(_config, this._config);
 		}
 		
         override public function removeChild(displayObject:DisplayObject):DisplayObject
@@ -197,8 +197,8 @@
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 				
-			data = null;
-			config = null;
+			_data = null;
+			_config = null;
 			
 			if(elements)
 			{
@@ -240,12 +240,12 @@
 		// ______________________________ Update ____________________________
 		
 		// update dynamic content
-		public function update(data:Object=null):void
+		public function update(_data:Object=null):void
 		{
 			// data is update somewhere
-			if(data && this.data != data)
+			if(_data && this._data != _data)
 			{
-				data = this.data = data?data:this.data;
+				_data = this._data = _data?_data:this._data;
 				dispatchEvent(new SDEvent(SDEvent.UPDATE));
 			}
 		}

@@ -144,6 +144,10 @@
 			if(balloonClip)
 				balloonClip.y = char.height;
 			
+			// hide 1st
+			instance.visible = false;
+			
+			// ready to roll
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE, data));
 		}
 		
@@ -160,6 +164,7 @@
 		{
 			trace("onAnimationComplete#3");
 			//balloonClip.y = 70;
+			TweenMax.to(instance, 1, {autoAlpha:1});
 			dispatchEvent(event.clone());
 		}
 		
@@ -335,7 +340,10 @@
 			
 			if(commandData.args)
 			{
+				// it's my command
 				commandData.args.push(this);
+				
+				// apply
 				Game.applyCommand(commandData.command, commandData.args);
 			}
 		}

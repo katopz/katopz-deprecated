@@ -38,7 +38,7 @@ package com.sleepydesign.playground.data
 
 		// _______________________________________________________internal
 
-		public function parse(raw:*):void
+		public function parse(raw:*):CameraData
 		{
 			x = raw.x ? Number(raw.x) : x;
 			y = raw.y ? Number(raw.y) : y;
@@ -51,6 +51,8 @@ package com.sleepydesign.playground.data
 			fov = raw.fov ? Number(raw.fov) : fov;
 			focus = raw.focus ? Number(raw.focus) : focus;
 			zoom = raw.zoom ? Number(raw.zoom) : zoom;
+			
+			return this;
 		}
 
 		// _______________________________________________________ external

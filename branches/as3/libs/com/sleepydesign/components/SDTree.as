@@ -51,15 +51,15 @@ ___________________________________________________________
 		
 		override public function init(raw:Object=null):void
 		{
-			if(!config)
-				config = raw?raw:{needLabel:false, isRadio:false};
+			if(!_config)
+				_config = raw?raw:{needLabel:false, isRadio:false};
 			super.init(raw);
 		}
 		
 		override public function parse(raw:Object=null):void
 		{
 			// default
-			config = raw;
+			_config = raw;
 		}
 		
 		override public function create(config:Object=null):void
@@ -91,7 +91,7 @@ ___________________________________________________________
 			
 			var _id:String;
 			
-			if(!config.needLabel)
+			if(!_config.needLabel)
 			{
 				if(node)
 				{
@@ -166,7 +166,7 @@ ___________________________________________________________
 			node.isOpen = isOpen;
 			for each (var child:SDTreeNode in node.childs)
 			{
-				if(config.isRadio)
+				if(_config.isRadio)
 				{
 					// single instance
 					if(!child.parentNode||!child.parentNode.selectedNode)
@@ -204,7 +204,7 @@ ___________________________________________________________
 
 		public function setFocus(node:SDTreeNode) : SDTreeNode
 		{
-			if(config.isRadio)
+			if(_config.isRadio)
 			{
 				// clear old
 				if(currentNode)

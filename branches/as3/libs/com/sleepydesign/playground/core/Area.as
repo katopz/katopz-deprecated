@@ -2,12 +2,15 @@
 {
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.game.core.BackGround;
+	import com.sleepydesign.playground.data.AreaData;
 	
 	public class Area extends SDContainer
 	{
-		public var background	: BackGround;
-		public var map			: Map;
-		public var ground		: Ground;
+		public var background:BackGround;
+		public var map:Map;
+		public var ground:Ground;
+
+		public var data:AreaData;
 		
 		public function Area(config:*)
 		{
@@ -28,6 +31,7 @@
 		override public function init(raw:Object=null):void
 		{
 			id  = raw.id;
+			data = AreaData(raw);
 			create(raw);
 		}
 		

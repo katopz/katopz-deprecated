@@ -33,7 +33,7 @@ package com.sleepydesign.playground.data
 
 		// _______________________________________________________internal
 
-		public function parse(raw:*):void
+		public function parse(raw:*):AreaData
 		{
 			id = raw.id ? String(raw.id) : id;
 			background = raw.background ? String(raw.background) : background;
@@ -41,6 +41,8 @@ package com.sleepydesign.playground.data
 			width = raw.width ? Number(raw.width) : width;
 			height = raw.height ? Number(raw.height) : height;
 			scene = raw.scene ? SceneData(raw.scene) : scene;
+			
+			return this;
 		}
 
 		// _______________________________________________________ external
