@@ -102,12 +102,12 @@ package com.sleepydesign.core
 			var __childs:Dictionary = new Dictionary();
 			for (var object:* in _childs)
 			{
-				if (object[arg] != str)
+				if (_childs[object][arg] != str)
 				{
-					__childs[arg] = _childs[arg];
+					__childs[object] = _childs[object];
 				}else {
-					delete _childs[arg];
-					_childs[arg] = null;
+					delete _childs[object];
+					//_childs[object] = null;
 				}
 			}
 			_childs = __childs;

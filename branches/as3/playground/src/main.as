@@ -28,6 +28,7 @@
 	import com.sleepydesign.utils.ProfilerUtil;
 	
 	import flash.filters.GlowFilter;
+	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
 	
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
@@ -41,17 +42,19 @@
 		
 		private var areaBuilder	: AreaBuilder;
 		
-		private const VERSION	:String = "PlayGround 2.1";
+		private const VERSION	: String = "PlayGround 2.1";
 		
-		private var area		:Area;
+		private var area		: Area;
 		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
 		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
+		
+		private var currentRoomID:String = "";
 		
 		public function main()
 		{
 			super("PlayGround", {loader: new SDMacPreloader(), loaderAlign:"c"});
 			
-			//alpha=.1;
+			alpha=.1;
 			addChild(ProfilerUtil.getStat());
 			
 			fake  = new Vector.<int>();
@@ -64,13 +67,19 @@
 		
         private var config2:AreaData = new AreaData("l0r1", "assets/day2.jpg", "l0r1.dat", 40, 40,
 		new SceneData(new CameraData(190.43,188.76,-1073.33,-0.05,-7.55,-0.55,43.02,8.70,70.00)));
-		
-		private var configs:Array = [config1, config2];
+
+		private var configs:Dictionary;
 		
 		override public function init(raw:Object=null):void
 		{
+			// TODO load from external and put to group
+			configs = new Dictionary();
+			
+			configs[3] = config1;
+			configs[4] = config2;
+			
 			// load config?
-			create(configs[0]);
+			create(configs[3]);
 			
 			// ___________________________________________________________ System Layer
 			
@@ -343,25 +352,26 @@
 				if(data.command=="warp")
 				{
 					//TODO : get config by area id
+					trace(" ! Warp to : "+ data.args[0]);
 					this._data = configs[data.args[0]];
 					
 					if(!this._data)return;
 					
 					// dirty
-					if(this._data.id!=area.data.id)
+					if(currentRoomID!=this._data.id)
 					{
 						// tell everybody i'm exit
 						game.player.exit();
 						
-						//update server
+						// update server
 						connector.exitRoom();
 						
 						// wait for exit complete?
 						
-						id = this._data.id;
-						connector.enterRoom(id);
+						connector.enterRoom(this._data.id);
 						
 						// TODO : actually we need to wait for connection success?
+						currentRoomID = this._data.id;
 						
 						// destroy
 						game.removeOtherPlayer();
