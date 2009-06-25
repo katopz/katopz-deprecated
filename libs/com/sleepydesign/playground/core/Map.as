@@ -203,7 +203,7 @@ package com.sleepydesign.playground.core
 			if(color<255)
 			{
 				command = "warp";
-				args = [255-color-3];
+				args = [255-color];
 			}else{
 				command = "";
 			}

@@ -67,16 +67,16 @@ package com.sleepydesign.game.core
 			}
 		}
 		
-		public function addPlayer(player:Player):void
+		public function addPlayer(_player:Player):void
 		{
 			// remove if any
 			//removePlayer(player);
 			
 			// plug to game
-			addElement(player, player.id);
+			addElement(_player, _player.id);
 			
 			// plug to 3d Engine
-			engine.addChild(player.instance);
+			engine.addChild(_player.instance);
 		}
 		
 		public function removePlayer(_player:Player=null):void
@@ -85,13 +85,13 @@ package com.sleepydesign.game.core
 			if(_player)
 			{
 				//var _player:Player = getElementById(player.id);
-				trace(" - removePlayer	: "+_player);
+				trace(" - removePlayer	: "+_player.id);
 			
 				// unplug from 3d Engine
 				engine.removeChild(_player.instance);
 				
 				// unplug from game
-				removeElement(_player);
+				removeElement(_player, _player.id);
 				_player.destroy();
 				_player = null;
 			}
