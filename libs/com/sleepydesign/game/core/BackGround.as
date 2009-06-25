@@ -45,15 +45,16 @@
 			loader.load(data.background);
 			loader.addEventListener(SDEvent.COMPLETE, onBackground);
 			
-			this.data = data;
+			// TODO : BackGroundData
+			this._data = data;
 		}
 		
 		private function onBackground(event:SDEvent):void
 		{
-			if(loader.isContent(data.background))
+			if(loader.isContent(_data.background))
 			{
 				loader.removeEventListener(SDEvent.COMPLETE, onBackground);
-				background = Bitmap(loader.getContent(data.background));
+				background = Bitmap(loader.getContent(_data.background));
 				addChild(background);
 			}
 		}

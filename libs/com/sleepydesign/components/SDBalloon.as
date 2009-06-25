@@ -37,26 +37,26 @@ package com.sleepydesign.components
 		override public function create(config:Object=null):void
 		{
 			//default
-			if(!this.config)
-				this.config = 
+			if(!this._config)
+				this._config = 
 				{
 					color		:0xFFFFFF,
 					multiline	:true
 				}
 			
-			super.create(config);
+			super.create(_config);
 			
 			_back = new Shape();
 			addChild(_back);
 
-			_tf = new SDTextField(_text, this.config.textFormat);
-			_tf.multiline = this.config.multiline;
+			_tf = new SDTextField(_text, this._config.textFormat);
+			_tf.multiline = this._config.multiline;
     		_tf.selectable = false;
     		_tf.mouseEnabled = false;
     		
 			addChild(_tf);
 			
-			filters = this.config.filters;
+			filters = this._config.filters;
 			
 			_tf.addEventListener(Event.CHANGE, onChange);			
 		}
@@ -73,7 +73,7 @@ package com.sleepydesign.components
 			_tf.y = int( -pad - length - h + pad*.25 - 1);
 			
 			_back.graphics.clear();
-			_back.graphics.beginFill(config.color);
+			_back.graphics.beginFill(_config.color);
 			_back.graphics.drawRoundRect(-w*.5-pad*.5+pad*.25, -h-pad-length, w+pad*.5,h+pad*.5,pad,pad);
 			_back.graphics.moveTo(0,0);
 			_back.graphics.lineTo(-4,-length-pad*.5);

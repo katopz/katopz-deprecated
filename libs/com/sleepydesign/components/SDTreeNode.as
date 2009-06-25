@@ -6,7 +6,6 @@ package com.sleepydesign.components
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.styles.SDStyle;
 	
-	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	
 	public class SDTreeNode extends SDComponent
@@ -26,6 +25,8 @@ package com.sleepydesign.components
 		
 		public var numNode:uint = 0;
 		private var closeFolder:SDSquare = new SDSquare(SDStyle.SIZE, SDStyle.SIZE, SDStyle.BACKGROUND);
+		
+		public var data:XML;
 		
 		public function SDTreeNode(label:String = "")
 		{

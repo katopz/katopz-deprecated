@@ -32,6 +32,8 @@ package com.sleepydesign.playground.core
 		
 		private var routes:Array = [];
 		
+		public var data:MapData;
+		
 		public static const commands : Dictionary = new Dictionary(true);
 		
 		//public var pathData:MapData
@@ -59,9 +61,9 @@ package com.sleepydesign.playground.core
 			Map.factorX = raw.factorX;
 			Map.factorZ = raw.factorZ;
 			
-			config = load(raw.source)
+			_config = load(raw.source)
 			
-			create(config);
+			create(_config);
 		}
 		
 		public function load(sourceURI:String=null):Object
@@ -257,12 +259,12 @@ package com.sleepydesign.playground.core
 		{
 			Map.factorX = data.width;
 			Map.factorZ = data.height;
-			config = load(data.src);
+			_config = load(data.src);
 			
 			this.data = new MapData();
-			this.data.parse(config.nodes, config.col, config.scaleX, config.scaleZ);
+			this.data.parse(_config.nodes, _config.col, _config.scaleX, _config.scaleZ);
 			
-			routes.push(config.id);
+			routes.push(_config.id);
 			
 			// _______________________________________________________ MiniMap
 			
