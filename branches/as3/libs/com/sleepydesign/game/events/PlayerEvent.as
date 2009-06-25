@@ -9,6 +9,7 @@ package com.sleepydesign.game.events
 		public static const REMOVED			: String = "removed";
 		
 		public static const SPAWN			: String = "spawn";
+		public static const ENTER			: String = "enter";
 		public static const IDLE			: String = "idle";
 		public static const EXIT			: String = "exit";
 		
