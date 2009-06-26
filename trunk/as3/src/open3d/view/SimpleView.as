@@ -52,8 +52,7 @@ package open3d.view
 
 			create();
 
-			stat = ProfilerUtil.getStat();
-			addChild(stat);
+			stat = ProfilerUtil.addStat(this);
 			addChild(debugText);
 
 			stat.visible = isDebug;
@@ -87,8 +86,8 @@ package open3d.view
 		protected function run(event:Event):void
 		{
 			if (_isDebug)debug();
-			draw();
 			renderer.render();
+			draw();
 		}
 
 		protected function debug():void

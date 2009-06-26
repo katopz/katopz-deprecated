@@ -8,9 +8,9 @@ package open3d.utils
 	
 	public class ProfilerUtil
 	{
-		public static function getStat():DisplayObject
+		public static function addStat(container:DisplayObjectContainer):Stats
 		{
-			return new Stats();
+			return container.addChild(new Stats()) as Stats;
 		}
 		
 		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function):void
