@@ -1,7 +1,11 @@
 package open3d.geom
 {
 	import flash.geom.Vector3D;
-
+	
+	/**
+	 * Old Face Style, to be merge with new Face style
+	 * @author katopz
+	 */
 	public class FaceData
 	{
 		public var a:int;
