@@ -13,7 +13,7 @@ package open3d.render
 	 * Renderer
 	 *
 	 * The default PerspectiveProjection object created on the root has the following values:
-	 * 	• fieldOfView: 55 (but 53 it's look more precise)
+	 * 	• fieldOfView: 55
 	 * 	• perspectiveCenter: stagewidth/2, stageHeight/2
 	 * 	• focalLength: stageWidth/ 2 * ( cos(fieldOfView/2) / sin(fieldOfView/2) )
 	 *
@@ -105,9 +105,7 @@ package open3d.render
 			canvas.addChild(_view);
 			
 			projection = _projection = new PerspectiveProjection();
-			_projection.fieldOfView = 53;
 			_projection.projectionCenter = new Point(canvas.stage.stageWidth / 2, canvas.stage.stageHeight / 2);
-			_projectionMatrix3D = _projection.toMatrix3D();
 
 			world = new Object3D();
 			_worldMatrix3D = world.transform.matrix3D;
@@ -116,8 +114,17 @@ package open3d.render
 
 			isMeshZSort = true;
 			isFaceZSort = true;
+			
+			// projection dirty
+			update();
 		}
-
+		
+		public function set fieldOfView(value:Number):void
+		{
+			_projection.fieldOfView = value;
+			update();
+		}
+		
 		public function addChild(object3D:Object3D):void
 		{
 			if (!object3D)

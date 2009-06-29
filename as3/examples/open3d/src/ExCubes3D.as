@@ -191,7 +191,7 @@ package
 			var j:int = 0;
 			for each(var tri:Triangle3D in triangles_arr)
 			{
-				tri.project2(m, lightVecN, lightVec)
+				tri.projectLight(m, lightVecN, lightVec)
 
 				graphicsData[j++] = new GraphicsSolidFill(tri.color, 1);
 				graphicsData[j++] = new GraphicsTrianglePath(tri.vout, indicies, null, TriangleCulling.POSITIVE);

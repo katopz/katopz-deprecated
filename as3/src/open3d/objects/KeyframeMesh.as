@@ -6,7 +6,7 @@ package open3d.objects
 	import flash.utils.getTimer;
 	
 	import open3d.animation.Frame;
-	import open3d.geom.FaceData;
+	import open3d.data.FaceData;
 	import open3d.materials.Material;
 
 	/**
