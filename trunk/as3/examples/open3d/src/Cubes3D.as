@@ -205,7 +205,7 @@ package
 			for (var i:int = 0; i < triangles_arr.length; i++)
 			{
 				var tri:Triangle3D = triangles_arr[i]
-				tri.project2(m, lightVecN, lightVec)
+				tri.projectLight(m, lightVecN, lightVec)
 
 				//graphicsData.push(new GraphicsBitmapFill(bmd, null));
 				//graphicsData.push(new GraphicsTrianglePath(tri.vertices, indicies, tri.uvts, TriangleCulling.POSITIVE));

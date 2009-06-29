@@ -1,4 +1,4 @@
-package open3d.geom
+package open3d.data
 {
 	import flash.geom.Vector3D;
 	

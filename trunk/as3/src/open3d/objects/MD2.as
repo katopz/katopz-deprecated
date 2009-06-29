@@ -11,7 +11,7 @@ package open3d.objects
 	import flash.utils.Endian;
 	
 	import open3d.animation.Frame;
-	import open3d.geom.FaceData;
+	import open3d.data.FaceData;
 	import open3d.geom.UV;
 	import open3d.materials.Material;
 
@@ -43,10 +43,11 @@ package open3d.objects
 		/**
 		 * Md2 class lets you load a Quake 2 MD2 file with animation!
 		 *
+		 * @param data		MD2 binary data
 		 * @param material	The texture material that will be applied to object
-		 * @param uri	The path to the file that will be loaded
-		 * @param fps		The number of frames per second to animate at
 		 * @param scale		The internal load scaling (experiment for your liking)
+		 * @param fps		The number of frames per second to animate at
+		 * 
 		 * @author Philippe Ajoux (philippe.ajoux@gmail.com)
 		 * @modifier katopz@sleepydesign.com
 		 */

@@ -43,6 +43,7 @@ package open3d.view
 			stage.quality = StageQuality.MEDIUM;
 
 			renderer = new Renderer(this);
+			renderer.fieldOfView = 53;
 			renderer.world.z = 500;
 
 			debugText = TextUtil.getTextField();

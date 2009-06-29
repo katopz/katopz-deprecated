@@ -49,7 +49,7 @@ package
 			vecZ = new Vector3D(p0.x + p1.x + p2.x, p0.y + p1.y + p2.y, p0.z + p1.z + p2.z)
 		}
 
-		public function project2(m:Matrix3D, lightVecN:Vector3D, lightVec:Vector3D):void
+		public function projectLight(m:Matrix3D, lightVecN:Vector3D, lightVec:Vector3D):void
 		{
 			vout = _vout = new Vector.<Number>(_vin.length, true);
 
