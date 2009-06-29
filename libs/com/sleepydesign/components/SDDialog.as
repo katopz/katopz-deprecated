@@ -1,6 +1,7 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
 	import flash.display.DisplayObject;
@@ -23,10 +24,13 @@ package com.sleepydesign.components
 		private var begPoint:Point = new Point(0, 0);
 
 		private var iText:*;
+		private var isTail:Boolean;
 
-		public function SDDialog(iText:* = "")
+		public function SDDialog(iText:* = "", isTail:Boolean = true)
 		{
 			this.iText = iText;
+			this.isTail = isTail;
+			
 			super();
 		}
 
@@ -40,8 +44,8 @@ package com.sleepydesign.components
 		override public function create(config:Object = null):void
 		{
 			//default
-			if (!this.config)
-				this.config = {color: 0xFFFFFF, multiline: true}
+			if (!_config)
+				_config = {color: 0xFFFFFF, multiline: true}
 
 			super.create(config);
 
@@ -85,11 +89,15 @@ package com.sleepydesign.components
 			label.y = int(-pad - length - h + pad * .25 - 1);
 
 			_back.graphics.clear();
-			_back.graphics.beginFill(config.color);
+			_back.graphics.beginFill(_config.color);
 			_back.graphics.drawRoundRect(-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, h + pad * .5, pad, pad);
-			_back.graphics.moveTo(0, 0);
-			_back.graphics.lineTo(-4, -length - pad * .5);
-			_back.graphics.lineTo(4, -length - pad * .5);
+			
+			if(isTail)
+			{
+				_back.graphics.moveTo(0, 0);
+				_back.graphics.lineTo(-4, -length - pad * .5);
+				_back.graphics.lineTo(4, -length - pad * .5);
+			}
 
 			dispatchEvent(new Event(Event.CHANGE));
 		}
@@ -260,9 +268,22 @@ package com.sleepydesign.components
 					break;
 
 				case "js":
-					URLUtil.getURL(String(e.text));
+					var isExternal:Boolean = false; 
+					if (argumentString.length > 0)
+					{
+						isExternal = SystemUtil.callJS(functionName, argument);
+					}
+					else
+					{
+						isExternal = SystemUtil.callJS(functionName);
+					}
+					
+					if(!isExternal)
+					{
+						URLUtil.getURL(String(e.text));
+					}
+					
 					break;
-
 				case "http":
 					URLUtil.getURL(String(e.text));
 					break;

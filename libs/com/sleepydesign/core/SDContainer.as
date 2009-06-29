@@ -169,7 +169,7 @@
 		public function create(config:Object=null):void
 		{
 			// create : config -> elements
-			_config = this._config = _config?_config:this._config;
+			config = this._config = config?config:this._config;
 			//_config = this._config = ObjectUtil.merge(_config, this._config);
 		}
 		

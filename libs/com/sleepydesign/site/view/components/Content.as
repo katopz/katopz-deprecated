@@ -340,26 +340,26 @@ package com.sleepydesign.site.view.components
 		protected function onGetContent(event:Event=null):void
 		{
 			// direct load
-			if(!data || !data.xml)
+			if(!_data || !_data.xml)
 			{
 				//by pass
 				trace(" ! No XML config");
-				create(data);
+				create(_data);
 				dispatchEvent(new SDEvent(SDEvent.COMPLETE, {content:content}));
 				return;
 			}
 			
 			// create base asset
-			parse(data);
+			parse(_data);
 			
 			// internal config element
 			applyConfig();
 			
 			// external config
-			if(config && config.xml && !StringUtil.isNull(config.xml.@config))
+			if(_config && _config.xml && !StringUtil.isNull(_config.xml.@config))
 			{
-				trace(" ! External config\t: "+ config.xml.@config);
-				getConfig(config.xml.@config);
+				trace(" ! External config\t: "+ _config.xml.@config);
+				getConfig(_config.xml.@config);
 			}else{
 				dispatchEvent(new SDEvent(SDEvent.COMPLETE, {content:content}));
 			}
@@ -379,7 +379,7 @@ package com.sleepydesign.site.view.components
             if(!elements)elements = new SDGroup(id+"_elements");
 			
 			// apply config -> content(s)
-			var xmlList:XMLList = data.xml.children();
+			var xmlList:XMLList = _data.xml.children();
 			for (var i:uint = 0; i < xmlList.length(); i++ ) 
 			{
 				var itemXML:XML = xmlList[i];
@@ -394,10 +394,10 @@ package com.sleepydesign.site.view.components
 		protected function parseItem(itemXML:XML):DisplayObject
 		{
 			var clip:DisplayObjectContainer;
-			if(config.source is DisplayObjectContainer)
+			if(_config.source is DisplayObjectContainer)
 			{
 				// specified source from caller
-				clip = DisplayObjectContainer(config.source);
+				clip = DisplayObjectContainer(_config.source);
 			}else{
 				// direct export
 				clip = this;
@@ -407,7 +407,7 @@ package com.sleepydesign.site.view.components
 			if(clip is Content && clip["content"] && clip["content"] is DisplayObjectContainer)
 				clip = clip["content"];
 			
-			var child:* = clip.getChildByName(String(data.xml.@id));
+			var child:* = clip.getChildByName(String(_data.xml.@id));
 			
 			try{
 				// cloaked source
@@ -508,9 +508,9 @@ package com.sleepydesign.site.view.components
 			super.parse(raw);
 			
 			// try to parse string -> content.MovieClip
-			if(data && data.xml)
+			if(_data && _data.xml)
 			{
-				var itemXML:XML = data.xml;
+				var itemXML:XML = _data.xml;
 				switch(URLUtil.getType(itemXML.@src))
 				{
 					// internal : source is MovieClip but itemXML.@src is String
@@ -555,7 +555,7 @@ package com.sleepydesign.site.view.components
 					kill(content);
 				}
 				
-				content = loader.getContent(config.source);
+				content = loader.getContent(_config.source);
 				
 				// DIRTY
 				if(content is Bitmap)
@@ -634,8 +634,8 @@ package com.sleepydesign.site.view.components
 				else
 				{
 					// auto reveal
-					if(!config.alpha)config.alpha = 1;
-					TweenMax.to(content, .5, {autoAlpha:config.alpha});
+					if(!_config.alpha)_config.alpha = 1;
+					TweenMax.to(content, .5, {autoAlpha:_config.alpha});
 				}
 			}
 			

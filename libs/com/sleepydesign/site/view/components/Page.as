@@ -64,9 +64,9 @@ package com.sleepydesign.site.view.components
 		//currentContentPath
 		public function get path():String
 		{
-			if(!data)return null;
-			trace(" ! id :"+ContentVO(data).id);
-			return Site.getPathById(ContentVO(data).id);
+			if(!_data)return null;
+			trace(" ! id :"+ContentVO(_data).id);
+			return Site.getPathById(ContentVO(_data).id);
 		}
 		
 		//public function Page(id:String=null, source:*=null, xml:XML=null)
@@ -98,15 +98,15 @@ package com.sleepydesign.site.view.components
 		
 		override protected function applyConfig():void
 		{		
-			//if(!data.xml || StringUtil.isNull(data.xml))return;
+			//if(!_data.xml || StringUtil.isNull(_data.xml))return;
 			trace(" ! Page.applyConfig");
 			super.applyConfig();
 			
 			// focus page/content
-            if (data && data.xml && String(data.xml.@focus).length > 0)
+            if (_data && _data.xml && String(_data.xml.@focus).length > 0)
             {
-				trace(" ! Page Focus Content\t: " + data.xml.@focus);
-				Navigation.setFocusById(String(data.xml.@focus));
+				trace(" ! Page Focus Content\t: " + _data.xml.@focus);
+				Navigation.setFocusById(String(_data.xml.@focus));
             }
   		}
 		
@@ -179,7 +179,7 @@ package com.sleepydesign.site.view.components
 				case "background":
 				case "any":
 					//new one?
-					if(!this.data || this.data.xml != data.xml)
+					if(!_data || _data.xml != data.xml)
 						super.update(new ContentVO(data.xml.@id, data.xml.@src, data.xml));
 				break;
 				case "layer":
@@ -222,7 +222,7 @@ package com.sleepydesign.site.view.components
 					trace("\n / [Page.update:"+currentSection+"] --------------------------------------");
 					
 					//new one?
-					if(!this.data || this.data.xml != data.xml)
+					if(!_data || _data.xml != data.xml)
 					{
 						removeContainer();
 						super.update(data);
@@ -268,7 +268,7 @@ package com.sleepydesign.site.view.components
 			
 			// onLoad
 			// TODO : real command
-			if(config && !StringUtil.isNull(data.xml.@onLoad))
+			if(_config && !StringUtil.isNull(data.xml.@onLoad))
 			{
 				var onLoadCommand:String = data.xml.@onLoad;
 				if(URLUtil.isURL(onLoadCommand))
@@ -405,7 +405,7 @@ package com.sleepydesign.site.view.components
 					{
 						//for each(var contentXML:XML in data.xml)
 						// tricky : reprase parent for inner flash content
-						var xmlList:XMLList = data.xml.children();
+						var xmlList:XMLList = _data.xml.children();
 						for (var i:uint = 0; i < xmlList.length(); i++ ) 
 						{
 							var contentXML:XML = xmlList[i];
@@ -478,9 +478,9 @@ package com.sleepydesign.site.view.components
 					
 					//trace("+++++++++++++++++"+itemXML.@id, data.xml.@focus)
 					
-					if(type=="layer" && innerContent && (data.xml.@focus || config.focus))
+					if(type=="layer" && innerContent && (_data.xml.@focus || _config.focus))
 					{
-						innerContent.visible = (itemXML.@id==data.xml.@focus) || (idString==config.focus)
+						innerContent.visible = (itemXML.@id==_data.xml.@focus) || (idString==_config.focus)
 					}else{
 						innerContent.visible = true;
 					}

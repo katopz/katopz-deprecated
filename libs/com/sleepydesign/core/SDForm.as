@@ -153,9 +153,9 @@ package com.sleepydesign.core
 		{
 			trace( " ^ " + event.type);
 			
-			data = validateData();
+			_data = validateData();
 			
-			if (data) 
+			if (_data) 
 			{
 				submit();
 			}else {
@@ -279,7 +279,7 @@ package com.sleepydesign.core
 			loader.addEventListener(SDEvent.COMPLETE, onGetFormData);
 			loader.addEventListener(SDEvent.ERROR, onGetFormData);
 			
-			loader.load(action, data);
+			loader.load(action, _data);
 		}
 		
 		// ____________________________________________ Data ____________________________________________
