@@ -71,7 +71,7 @@ package com.sleepydesign.site.view.components
 				//navSources[ id ] = vo.source
 			} 
 			
-			config = {xml:data.xml};//, navIDs:navIDs, navLabels:navLabels, navSources:navSources}
+			_config = {xml:data.xml};//, navIDs:navIDs, navLabels:navLabels, navSources:navSources}
 			
 		} 
 		
@@ -79,7 +79,7 @@ package com.sleepydesign.site.view.components
 		
 		override public function create(config:Object=null):void
 		{
-			config = this.config = config?config:this.config;
+			config = _config = config?config:_config;
 			/*
 			for ( var i:uint=0; i<this.config.navIDs.length; i++ ) 
 			{

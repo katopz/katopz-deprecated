@@ -36,6 +36,11 @@ package com.sleepydesign.site.view.components
             return instance as Site;
         }
         
+        public function get config():Object
+        {
+        	return _config;
+        }
+        
         // TODO : site vo
 		public function Site()
 		{

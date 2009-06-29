@@ -73,5 +73,27 @@ package com.sleepydesign.utils
         		trace("\n ! Alert : " + msg + "\n");
         	}
         }
+        
+        public static function callJS(functionName:String, argument:String=""):Boolean
+        {
+			var isDone:Boolean = false;
+			if (isExternal())
+			{
+				ExternalInterface.marshallExceptions = true;
+               	//ExternalInterface.addCallback("setProperty",setProperty);
+               	try
+               	{
+	               	ExternalInterface.call(functionName, argument);
+	               	isDone = true;
+	          	}
+	           	catch(e:Error)
+	           	{
+	           		isDone = false;
+	           		trace(e);
+    			}
+			}
+			
+			return isDone;
+        }
     }
 }
