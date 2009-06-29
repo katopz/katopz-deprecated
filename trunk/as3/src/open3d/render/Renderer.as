@@ -152,8 +152,8 @@ package open3d.render
 			
 			// project children
 			var child:Object3D;
-			//for each (child in _childs)
-				//child.project(_projectionMatrix3D, _worldMatrix3D);
+			for each (child in _childs)
+				child.project(_projectionMatrix3D, _worldMatrix3D);
 			
 			// z-sort Object3D
 			if (_isMeshZSort)

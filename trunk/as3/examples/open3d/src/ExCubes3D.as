@@ -7,7 +7,6 @@ package
 	import flash.display.IGraphicsData;
 	import flash.display.Sprite;
 	import flash.display.TriangleCulling;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.Matrix3D;
@@ -140,15 +139,17 @@ package
 			renderer.world.rotationX = rotX;
 			renderer.world.rotationY = rotY;
 			
-			var m:Matrix3D =  renderer.world.transform.matrix3D;
+			/*
+			var m:Matrix3D =  new Matrix3D();
 
 			var pp:Vector3D = new Vector3D(0, 0, 0)
-			//m.prependTranslation(0, 0, 0)
+			m.prependTranslation(0, 0, 0)
 
-			//m.prependRotation(rotY, Vector3D.X_AXIS, pp)
-			//m.prependRotation(rotX, Vector3D.Y_AXIS, pp)
+			m.prependRotation(rotY, Vector3D.X_AXIS, pp)
+			m.prependRotation(rotX, Vector3D.Y_AXIS, pp)
+			*/
 			
-			
+			var m:Matrix3D = renderer.world.transform.matrix3D;
 
 			var mLight:Matrix3D = new Matrix3D()
 			mLight.interpolateTo(m, 100)
