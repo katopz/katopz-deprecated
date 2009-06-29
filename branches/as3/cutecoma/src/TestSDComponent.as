@@ -71,6 +71,17 @@ package
 			_SDDialog.x = 100;
 			_SDDialog.y = 200;
 			addChild(_SDDialog);
+			
+			// SDDialog#2
+			var _SDDialog2:SDDialog = new SDDialog(
+				<question id="0">
+					<![CDATA[Welcome! please log-in]]>
+					<answer src="js:login()"><![CDATA[login]]></answer>
+				</question>, false);
+
+			_SDDialog2.x = 300;
+			_SDDialog2.y = 200;
+			addChild(_SDDialog2);
 
 			// link
 			container.addContent(content);
