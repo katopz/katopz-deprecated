@@ -55,7 +55,7 @@
 			super("PlayGround", {loader: new SDMacPreloader(), loaderAlign:"c"});
 			
 			alpha=.1;
-			addChild(ProfilerUtil.getStat());
+			ProfilerUtil.addStat(this);
 			
 			fake  = new Vector.<int>();
 		}
