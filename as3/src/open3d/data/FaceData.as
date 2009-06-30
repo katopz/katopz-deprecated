@@ -1,5 +1,7 @@
 package open3d.data
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.geom.Vector3D;
 	
 	/**
@@ -12,21 +14,21 @@ package open3d.data
 		public var b:int;
 		public var c:int;
 
+		public var v0:Vector3D;
 		public var v1:Vector3D;
 		public var v2:Vector3D;
-		public var v3:Vector3D;
 		
 		public var uvMap:Array;
 
-		public function FaceData(a:Number, b:Number, c:Number, v1:Vector3D, v2:Vector3D, v3:Vector3D, uvMap:Array = null)
+		public function FaceData(a:Number, b:Number, c:Number, v:Vector.<Vector3D>, uvMap:Array = null)
 		{
 			this.a = a;
 			this.b = b;
 			this.c = c;
 
-			this.v1 = v1;
-			this.v2 = v2;
-			this.v3 = v3;
+			this.v0 = v[a];
+			this.v1 = v[b];
+			this.v2 = v[c];
 
 			this.uvMap = uvMap;
 		}
@@ -34,8 +36,8 @@ package open3d.data
 		public function getNormal():Vector3D
 		{
 			// TODO : optimize
-			var ab:Vector3D = new Vector3D(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
-			var ac:Vector3D = new Vector3D(v3.x - v1.x, v3.y - v1.y, v3.z - v1.z);
+			var ab:Vector3D = new Vector3D(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
+			var ac:Vector3D = new Vector3D(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
 			var n:Vector3D = ac.crossProduct(ab);
 			n.normalize();
 			return n;

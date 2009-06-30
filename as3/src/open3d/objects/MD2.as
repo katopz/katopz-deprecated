@@ -103,7 +103,7 @@ package open3d.objects
 		private function parse(data:ByteArray):void
 		{
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
-			var vertices:Array = [];
+			var vertices:Vector.<Vector3D> = new Vector.<Vector3D>();
 			var i:int, uvs:Array = [];
 			var indices:Array = [];
 			var uvDatas:Array = []
@@ -145,7 +145,7 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				faceDatas[i] = new FaceData(a, b, c, vertices[a], vertices[b], vertices[c], [uvs[ta], uvs[tb], uvs[tc]]);
+				faceDatas[i] = new FaceData(a, b, c, vertices, [uvs[ta], uvs[tb], uvs[tc]]);
 			}
 			
 			// Frame animation data
@@ -155,11 +155,29 @@ package open3d.objects
 
 			// TODO : optimize/promote to face class
 			var n:int = -1;
+			i = 0;
+			
+			var a0:Vector3D;
+			var b0:Vector3D;
+			var c0:Vector3D;
+			
 			for each (var face:FaceData in faceDatas)
 			{
-				_vin.push(Frame(frames[0]).vertices[face.a].x, Frame(frames[0]).vertices[face.a].y, Frame(frames[0]).vertices[face.a].z);
-				_vin.push(Frame(frames[0]).vertices[face.b].x, Frame(frames[0]).vertices[face.b].y, Frame(frames[0]).vertices[face.b].z);
-				_vin.push(Frame(frames[0]).vertices[face.c].x, Frame(frames[0]).vertices[face.c].y, Frame(frames[0]).vertices[face.c].z);
+				a0 = Frame(frames[0]).vertices[face.a];
+				b0 = Frame(frames[0]).vertices[face.b];
+				c0 = Frame(frames[0]).vertices[face.c];
+				
+				_vin[i++] = a0.x;
+				_vin[i++] = a0.y;
+				_vin[i++] = a0.z;
+				
+				_vin[i++] = b0.x;
+				_vin[i++] = b0.y;
+				_vin[i++] = b0.z;
+
+				_vin[i++] = c0.x;
+				_vin[i++] = c0.y;
+				_vin[i++] = c0.z;
 
 				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v, 1);
 				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v, 1);
@@ -171,8 +189,6 @@ package open3d.objects
 			}
 
 			buildFaces(material);
-			
-			
 		}
 
 		/**
@@ -184,7 +200,7 @@ package open3d.objects
 			var tx:Number, ty:Number, tz:Number;
 			var verts:Vector.<Vector3D>, frame:Frame;
 			var i:int, j:int, char:int;
-
+			
 			for (i = 0; i < num_frames; i++)
 			{
 				verts = new Vector.<Vector3D>();
@@ -206,7 +222,7 @@ package open3d.objects
 				// to skip over a byte that holds the "vertex normal index"
 				for (j = 0; j < num_vertices; j++, data.position++)
 					verts.push(new Vector3D((sx * data.readUnsignedByte() + tx) * _scale, (sy * data.readUnsignedByte() + ty) * _scale, (sz * data.readUnsignedByte() + tz) * _scale));
-
+				
 				addFrame(frame);
 
 			}
