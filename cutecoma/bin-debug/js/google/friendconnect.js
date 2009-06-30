@@ -1,41 +1,46 @@
-   google.friendconnect.container.setParentUrl('/' /* location of rpc_relay.html and canvas.html */);
-   google.friendconnect.container.loadOpenSocialApi({
-     site: '09412210533340333505', // Change this on your site
-     onload: function() { initFriendConnect(); }
-   });
-   
+	
+	google.friendconnect.container.setParentUrl('/' /* location of rpc_relay.html and canvas.html */);
+	google.friendconnect.container.loadOpenSocialApi({
+	  site: '09412210533340333505', // Change this on your site
+	  onload: function() { initFriendConnect(); }
+	});
+	
 	// ------------------------- Authen ------------------------- 
 
-   function initFriendConnect() {
-     // Create a request to grab the current viewer.
-     var req = opensocial.newDataRequest();
-     req.add(req.newFetchPersonRequest('VIEWER'), 'viewer_data');
-     // Sent the request
-     req.send(onAuthenData);
-   }
+	function initFriendConnect() 
+	{
+		// Create a request to grab the current viewer.
+		var req = opensocial.newDataRequest();
+		req.add(req.newFetchPersonRequest('VIEWER'), 'viewer_data');
+		// Sent the request
+		req.send(onAuthenData);
+	}
    
-   function onAuthenData(data) {
-     // If the view_data had an error, then user is not signed in
-     if (data.get('viewer_data').hadError()) {
-       // Create the sign in link
-       var options = {
-         id: "content"
-       };
-       google.friendconnect.renderSignInButton(options);
-     } else {
-       var content = document.getElementById('content');
-       // If the view_data is not empty, we can display the current user
-       // Create html to display the user's name, and a sign-out link.
+	function onAuthenData(data) 
+	{
+	   // If the view_data had an error, then user is not signed in
+	   if (data.get('viewer_data').hadError()) 
+	   {
+			// Create the sign in link
+			var options = {
+			  id: "content"
+			};
+			google.friendconnect.renderSignInButton(options);
+	   } 
+	   else 
+	   {
+			var content = document.getElementById('content');
+			// If the view_data is not empty, we can display the current user
+			// Create html to display the user's name, and a sign-out link.
+			var nick = data.get('viewer_data').getData().getDisplayName();
+			var html = 'Welcome, ' + nick;
+			html += '<br><a href="#" onclick="google.friendconnect.requestSignOut()">Sign out</a>';
+			content.innerHTML = html;
 	
-	var nick = data.get('viewer_data').getData().getDisplayName();
-       var html = 'Welcome, ' + nick;
-       html += '<br><a href="#" onclick="google.friendconnect.requestSignOut()">Sign out</a>';
-       content.innerHTML = html;
-	
-	// call flash
-	
-     }
-   }
+			// call flash
+			flashContent.apply("logIn", nick);
+	   }
+	}
 
 // ------------------------- User data ------------------------- 
 /*

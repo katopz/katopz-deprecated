@@ -277,12 +277,12 @@ package com.sleepydesign.components
 					{
 						isExternal = SystemUtil.callJS(functionName);
 					}
-					
+					/*
 					if(!isExternal)
 					{
 						URLUtil.getURL(String(e.text));
 					}
-					
+					*/
 					break;
 				case "http":
 					URLUtil.getURL(String(e.text));
