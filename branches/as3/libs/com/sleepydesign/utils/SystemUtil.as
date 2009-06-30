@@ -74,13 +74,22 @@ package com.sleepydesign.utils
         	}
         }
         
+        public static function listenJS(functionName:String, callBack:Function):void
+        {
+        	if (isExternal())
+        	{
+        		ExternalInterface.marshallExceptions = true;
+        		ExternalInterface.addCallback(functionName, callBack);
+        	}
+        }
+        
         public static function callJS(functionName:String, argument:String=""):Boolean
         {
 			var isDone:Boolean = false;
 			if (isExternal())
 			{
 				ExternalInterface.marshallExceptions = true;
-               	//ExternalInterface.addCallback("setProperty",setProperty);
+               	
                	try
                	{
 	               	ExternalInterface.call(functionName, argument);

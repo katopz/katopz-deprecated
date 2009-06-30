@@ -7,13 +7,23 @@ package
 	import com.sleepydesign.components.SDScrollPane;
 	import com.sleepydesign.core.SDSprite;
 	import com.sleepydesign.draw.SDSquare;
-
+	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.utils.SystemUtil;
+	
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
+	import flash.external.ExternalInterface;
 
 	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "400", height = "300")]
 	public class TestSDComponent extends Sprite
 	{
+		public function logIn(nick:String):void
+		{
+			alpha = .1;
+		} 
+		
+		public var _SDTextField:SDTextField;
+		
 		public function TestSDComponent()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -82,9 +92,25 @@ package
 			_SDDialog2.x = 300;
 			_SDDialog2.y = 200;
 			addChild(_SDDialog2);
+			
+			// External Interface
+			SystemUtil.listenJS("logIn", logIn);
+			_SDTextField = new SDTextField("wait...");
+			_SDTextField.x = 200;
+			addChild(_SDTextField);
 
 			// link
 			container.addContent(content);
+			
+			_SDTextField.text = "setProperty";
+			ExternalInterface.marshallExceptions = true;
+			ExternalInterface.addCallback("setProperty",setProperty);
 		}
+		
+		public function setProperty(pText:String):void
+		{
+			trace("setProperty()")
+			_SDTextField.text = pText;
+		}	
 	}
 }
