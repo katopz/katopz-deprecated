@@ -35,39 +35,18 @@ package open3d.objects
 			_triangles.culling = _culling;
 		}
 		
-		public function get culling():String
-		{
-			return _culling;
-		}
-		
-		private var _isFaceDebug:Boolean = true;
-		public function set isFaceDebug(value:Boolean):void
-		{
-			_isFaceDebug = value;
-		}
-		
-		public function get isFaceDebug():Boolean
-		{
-			return _isFaceDebug;
-		}
-		
 		private var _isFaceZSort:Boolean = true;
 		public function set isFaceZSort(value:Boolean):void
 		{
 			_isFaceZSort = value;
 		}
 		
-		public function get isFaceZSort():Boolean
-		{
-			return _isFaceZSort;
-		}
-			
 		private var _commands:Vector.<int> = new Vector.<int>(3, true); // commands to draw triangle
 		private var _data:Vector.<Number>  = new Vector.<Number>(6, true); // data to draw shape
 
 		public function Mesh()
 		{
-			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), culling);
+			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), _culling);
 			_commands[0] = 1;
 			_commands[1] = 2;
 			_commands[2] = 2;

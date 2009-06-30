@@ -120,7 +120,7 @@ package open3d.objects
 			
 			var cframe:Frame;
 			var nframe:Frame;
-			var i:int;
+			var i:int = 0;
 
 			cframe = frames[_currentFrame];
 			nframe = frames[(_currentFrame + 1) % framesLength];
