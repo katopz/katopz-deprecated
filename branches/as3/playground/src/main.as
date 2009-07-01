@@ -46,6 +46,7 @@
 		
 		private var area		: Area;
 		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
+		//rtmp://203.150.230.224/oflaDemo
 		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 		
 		private var currentRoomID:String = "";
