@@ -5,53 +5,53 @@ package
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.Sprite;
-	import flash.external.ExternalInterface;
 
 	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "400", height = "300")]
 	public class TestExternalInterface extends Sprite
 	{
-		public var _SDTextField:SDTextField;
+		public var _SDDialog:SDDialog;
 
 		public function TestExternalInterface()
 		{
-			_SDTextField = new SDTextField("123");
-			addChild(_SDTextField);
 			createUI();
 		}
 		
 		private function createUI():void
 		{
-			// SDDialog#2
-			var _SDDialog2:SDDialog = new SDDialog(
+			// SDDialog
+			_SDDialog = new SDDialog(
 				<question id="0">
 					<![CDATA[Welcome! please log-in]]>
-					<answer src="js:logIn()"><![CDATA[login]]></answer>
+					<answer src="js:logInJS()"><![CDATA[login]]></answer>
 				</question>, false);
 
-			_SDDialog2.x = 300;
-			_SDDialog2.y = 200;
-			addChild(_SDDialog2);
+			_SDDialog.x = stage.stageWidth/2;
+			_SDDialog.y = stage.stageHeight/2;
+			addChild(_SDDialog);
 			
-			// External Interface
-			SystemUtil.listenJS("apply", apply);
+			// External Interface Proxy
+			SystemUtil.listenJS("logIn", logIn);
+			SystemUtil.listenJS("logOut", logOut);
 		}
 		
-		private function OnClick():void
+		public function logIn(personID:String="", personDisplayName:String=""):void
 		{
-			trace("OnClick()");
-			ExternalInterface.call("fromSwf", "OnClick");
+			trace(" ! logIn");
+			_SDDialog.xmlText = '<question id="0"><![CDATA[Welcomme ('+ personID +'): '+personDisplayName+']]>'+'<answer src="js:logOutJS()"><![CDATA[logout]]></answer></question>';
 		}
 		
-		public function logIn(pText:String=null):void
+		public function logOut():void
 		{
-			trace("logIn()");
-			_SDTextField.text = "Welcomme : "+pText;
+			trace(" ! logOut");
+			_SDDialog.xmlText = <question id="0">
+					<![CDATA[Bye!]]>
+					<answer src="js:logInJS()"><![CDATA[login]]></answer>
+				</question>;
 		}
 		
+		// proxy for js
 		public function apply(functionName:String, arg:String):void
 		{
-			trace("setProperty()");
-			//_SDTextField.text = pText;
 			this[functionName].apply(this, [arg]);
 		}
 	}

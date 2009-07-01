@@ -11,21 +11,23 @@
 	
 	<script type="text/javascript" src="js/swfobject/swfobject.js"></script>
 	<script type="text/javascript" src="js/swfaddress/swfaddress.js"></script>
-		
+	
 	<script type="text/javascript">
 		var flashContent;
 		
 		if (swfobject.hasFlashPlayerVersion("10.0.0"))
 		{
-			swfobject.addDomLoadEvent(initializeSwf);
+			swfobject.addDomLoadEvent(initSWF);
 		}
-			
-		function initializeSwf()
+		
+		function initSWF()
 		{
-			var properties = { data:"TestExternalInterface.swf", width:"400", height:"300"};
-			var parameters = { menu:"false" };
-			var id = "flashCanvas";
-			flashContent = swfobject.createSWF(properties, parameters, id);
+			flashContent = swfobject.createSWF
+			(
+				{ data:"TestExternalInterface.swf", width:"400", height:"300" },
+				{ menu:"false" },
+				"flashCanvas"
+			);
 		}
 	</script>
 </head>
