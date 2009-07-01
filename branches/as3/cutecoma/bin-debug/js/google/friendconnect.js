@@ -1,4 +1,3 @@
-	
 	google.friendconnect.container.setParentUrl('/' /* location of rpc_relay.html and canvas.html */);
 	google.friendconnect.container.loadOpenSocialApi({
 	  site: '09412210533340333505', // Change this on your site
@@ -22,26 +21,42 @@
 	   if (data.get('viewer_data').hadError()) 
 	   {
 			// Create the sign in link
-			var options = {
-			  id: "content"
-			};
-			google.friendconnect.renderSignInButton(options);
+			google.friendconnect.renderSignInButton({id: "content"});
+			
+			// call flash function logOut
+			flashContent.logOut();
 	   } 
 	   else 
 	   {
 			var content = document.getElementById('content');
 			// If the view_data is not empty, we can display the current user
 			// Create html to display the user's name, and a sign-out link.
-			var nick = data.get('viewer_data').getData().getDisplayName();
-			var html = 'Welcome, ' + nick;
+			
+			var personData = data.get('viewer_data').getData();
+			
+			var personID = personData.getId();
+			var personDisplayName = personData.getDisplayName();
+			
+			var html = 'Welcome, ('+ personID +')' + personDisplayName;
 			html += '<br><a href="#" onclick="google.friendconnect.requestSignOut()">Sign out</a>';
 			content.innerHTML = html;
 	
-			// call flash
-			flashContent.apply("logIn", nick);
+			// call flash function logIn
+			flashContent.logIn(personID, personDisplayName);
 	   }
 	}
-
+	
+	// call by Flash
+	function logInJS()
+	{
+		google.friendconnect.requestSignIn();
+	}
+	
+	function logOutJS()
+	{
+		google.friendconnect.requestSignOut();
+	}
+	
 // ------------------------- User data ------------------------- 
 /*
   function addData() {
