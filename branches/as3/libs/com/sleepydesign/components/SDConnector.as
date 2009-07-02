@@ -18,7 +18,7 @@ package com.sleepydesign.components
 		
 		private var isConnect:Boolean = false;
 		
-		public function SDConnector(uri:String="rtmp://localhost/SOSample", room:String = "lobby" )
+		public function SDConnector(uri:String="rtmp://localhost/SOSample", room:String = "lobby" , autorun:Boolean = true)
 		{
 			this.uri = uri;
 			this.room = room;
@@ -44,6 +44,11 @@ package com.sleepydesign.components
 			connectButton.addEventListener(SDMouseEvent.CLICK, onClick);
 			
 			super();
+			
+			if(autorun)
+			{
+				connect(uri, room);
+			}
 		}
 		
 		private function onClick(event:SDMouseEvent):void
