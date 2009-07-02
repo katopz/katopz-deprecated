@@ -134,12 +134,16 @@ package com.sleepydesign.components
 			return iText;
 		}
 
-
 		public function set htmlText(iText:*):void
 		{
 			visible = (iText != "")
 			setLabel(iText);
 			draw();
+		}
+		
+		public function set xmlText(iText:*):void
+		{
+			htmlText = XML(iText);
 		}
 
 		public function parseCSS(iCSSText:String = null):void
@@ -164,7 +168,7 @@ package com.sleepydesign.components
 			var link:String = "";
 			link += " … <font color='#009900'>";
 			link += "<u>";
-			link += "<a href='event:" + url + "'>" + iText + "</a>";
+			link += '<a href="event:' + url + '">' + iText + "</a>";
 			link += "</u>";
 			link += "</font>";
 			return link;
@@ -233,15 +237,20 @@ package com.sleepydesign.components
 		{
 			var src:Array = e.text.split(":")
 			var protocal:String = src[0];
-			var functionString:String = src[1];
+			var functionString:String = e.text.substring(1 + e.text.indexOf(":"));
 			var functionName:String = functionString.split("(")[0];
-			var argumentString:String = functionString.substring(1 + functionString.indexOf("("), functionString.indexOf(")"))
+			var argumentString:String = functionString.substring(1 + functionString.indexOf("("), functionString.lastIndexOf(")"))
 			var argumentArray:Array = argumentString.split(",");
 			var argument:*;
 
 			//TODO arguments
 			var arg:String = argumentArray[0];
-			if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length))
+			if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length-1))
+			{
+				//string
+				argument = arg.substring(1, arg.length - 1);
+			}
+			else if ((arg.indexOf('"') == 0) && (arg.lastIndexOf('"') == arg.length-1))
 			{
 				//string
 				argument = arg.substring(1, arg.length - 1);
