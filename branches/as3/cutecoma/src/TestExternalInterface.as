@@ -1,7 +1,6 @@
 package
 {
 	import com.sleepydesign.components.SDDialog;
-	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.Sprite;
@@ -9,8 +8,10 @@ package
 	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "400", height = "300")]
 	public class TestExternalInterface extends Sprite
 	{
-		public var _SDDialog:SDDialog;
-
+		private var _SDDialog:SDDialog;
+		private var _viewerID:String = "";
+		private var _viewerDisplayName:String = "";
+		
 		public function TestExternalInterface()
 		{
 			createUI();
@@ -21,8 +22,8 @@ package
 			// SDDialog
 			_SDDialog = new SDDialog(
 				<question id="0">
-					<![CDATA[Welcome! please log-in]]>
-					<answer src="js:logInJS()"><![CDATA[login]]></answer>
+					<![CDATA[Welcome! Guest, please log-in]]>
+					<answer src="js:signIn()"><![CDATA[Sign In]]></answer>
 				</question>, false);
 
 			_SDDialog.x = stage.stageWidth/2;
@@ -30,24 +31,40 @@ package
 			addChild(_SDDialog);
 			
 			// External Interface Proxy
-			SystemUtil.listenJS("logIn", logIn);
-			SystemUtil.listenJS("logOut", logOut);
+			SystemUtil.listenJS("onJSSignIn", onJSSignIn);
+			SystemUtil.listenJS("onJSSignOut", onJSSignOut);
+			SystemUtil.listenJS("onJSGetData", onJSGetData);
 		}
 		
-		public function logIn(personID:String="", personDisplayName:String=""):void
+		public function onJSSignIn(viewerID:String, viewerDisplayName:String):void
 		{
-			trace(" ! logIn");
-			_SDDialog.xmlText = '<question id="0"><![CDATA[Welcomme ('+ personID +'): '+personDisplayName+']]>'+'<answer src="js:logOutJS()"><![CDATA[logout]]></answer></question>';
+			trace(" ! onJSSignIn");
+			_viewerID = viewerID;
+			_viewerDisplayName = viewerDisplayName;
+			
+			_SDDialog.xmlText = '<question id="0"><![CDATA[Welcome ('+ viewerID +'): '
+			+ viewerDisplayName+']]>'
+			+ '<answer src="js:loadData()"><![CDATA[Load]]></answer>'
+			+ '<answer src="js:signOut()"><![CDATA[Sign Out]]></answer></question>';
 		}
 		
-		public function logOut():void
+		public function onJSSignOut():void
 		{
-			trace(" ! logOut");
+			trace(" ! onJSSignOut");
 			_SDDialog.xmlText = <question id="0">
 					<![CDATA[Bye!]]>
-					<answer src="js:logInJS()"><![CDATA[login]]></answer>
+					<answer src="js:signIn()"><![CDATA[Sign In]]></answer>
 				</question>;
 		}
+		
+		public function onJSGetData(saveData:Object):void
+		{
+			trace("'"+"132"+"'");
+			_SDDialog.xmlText = '<question id="0"><![CDATA[Welcome ('+ _viewerID +'): '
+			+ _viewerDisplayName+'<br/>Data : '+saveData['time']+']]>'
+			+ '<answer src="js:saveData('+("'"+String(new Date())+"'")+')"><![CDATA[Save : '+String(new Date())+']]></answer>'
+			+ '<answer src="js:signOut()"><![CDATA[Sign Out]]></answer></question>';
+		}	
 		
 		// proxy for js
 		public function apply(functionName:String, arg:String):void
