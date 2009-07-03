@@ -24,9 +24,7 @@
  */
  
 package org.ascollada.io {
-	import org.ascollada.core.DaeDocument;
-	import org.ascollada.utils.Logger;
-	
+	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -34,8 +32,12 @@ package org.ascollada.io {
 	import flash.events.TimerEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.system.ApplicationDomain;
+	import flash.utils.ByteArray;
 	import flash.utils.Timer;
-	import flash.display.Loader;	
+	
+	import org.ascollada.core.DaeDocument;
+	import org.ascollada.utils.Logger;	
 
 	/**
 	 * @author Tim Knip
@@ -71,7 +73,7 @@ package org.ascollada.io {
 			if( _animTimer.running )
 				_animTimer.stop();
 			
-			var loader:URLLoader = new URLLoader();
+			var loader:Loader = new Loader();
 			addListenersToLoader(loader);
 			loader.load( new URLRequest(filename) );
 		}
@@ -134,12 +136,16 @@ package org.ascollada.io {
 		 */
 		private function completeHandler( event:Event ):void
 		{
-			var loader:URLLoader = event.target as URLLoader;
+			var loader:Loader = event.target as Loader;
 			
 			Logger.log( "complete!" );
 			removeListenersFromLoader(loader);
 
-			loadDocument( loader.data );
+			var _Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition("Model") as Class;
+			var model:ByteArray = new _Class();
+		    loadDocument(model);
+
+			//loadDocument( loader.data );
 		}
 		
 		private function progressHandler( event:ProgressEvent ):void
@@ -152,7 +158,7 @@ package org.ascollada.io {
 		
 		private function handleIOError( event:IOErrorEvent ):void
 		{
-			removeListenersFromLoader(URLLoader(event.target));
+			removeListenersFromLoader(Loader(event.target));
 			dispatchEvent(event);
 		}
 		
@@ -199,14 +205,14 @@ package org.ascollada.io {
 		
 		// added by harveysimon
 		
-		private function addListenersToLoader(loader:URLLoader):void
+		private function addListenersToLoader(loader:Loader):void
 		{
 			loader.addEventListener( Event.COMPLETE, completeHandler );
 			loader.addEventListener( ProgressEvent.PROGRESS, progressHandler );
 			loader.addEventListener( IOErrorEvent.IO_ERROR, handleIOError );
 		}
 		
-		private function removeListenersFromLoader(loader:URLLoader):void
+		private function removeListenersFromLoader(loader:*):void
 		{
 			loader.removeEventListener( Event.COMPLETE, completeHandler );
 			loader.removeEventListener( ProgressEvent.PROGRESS, progressHandler );

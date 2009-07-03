@@ -3,11 +3,12 @@
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDObject;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 
 	public class AbstractEngine extends SDObject
 	{
-		protected var container : SDContainer;
+		protected var container : DisplayObjectContainer;
 		
 		public function AbstractEngine():void
 		{

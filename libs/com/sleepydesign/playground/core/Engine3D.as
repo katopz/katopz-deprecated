@@ -1,6 +1,5 @@
 package com.sleepydesign.playground.core
 {
-	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.core.AbstractEngine;
 	import com.sleepydesign.playground.components.Axis;
@@ -9,8 +8,8 @@ package com.sleepydesign.playground.core
 	import com.sleepydesign.playground.data.CameraData;
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.ui.SDMouse;
-	import com.sleepydesign.utils.ObjectUtil;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	
 	import org.papervision3d.cameras.Camera3D;
@@ -150,7 +149,7 @@ package com.sleepydesign.playground.core
 			_config = value;
 		}
 		
-		public function Engine3D(container:SDContainer, engine3DData:Object=null):void
+		public function Engine3D(container:DisplayObjectContainer, engine3DData:Object=null):void
 		{
 			this.container = container;
 			init(engine3DData);
@@ -168,7 +167,7 @@ package com.sleepydesign.playground.core
 			
 			//ObjectUtil.merge(raw, defaultRaw);
 			
-			parse(raw);
+			parse(raw?raw:new SceneData(new CameraData()));
 		}
 		
 		// ______________________________ Parse ______________________________
@@ -193,7 +192,7 @@ package com.sleepydesign.playground.core
 		override public function create(config:Object=null):void
 		{
 			//super.create(config);
-			config = config;
+			this.config = config;
 			
 			dolly = new Camera3D();
 			//decoy = new DisplayObject3D();
