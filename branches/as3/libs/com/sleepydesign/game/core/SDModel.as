@@ -14,7 +14,9 @@ package com.sleepydesign.game.core
 		
 		public function play(action:String):void
 		{
-			instance.play(action)
+			try{
+				instance.play(action)
+			}catch(e:*){};
 		}
 	}
 }

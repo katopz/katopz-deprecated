@@ -21,7 +21,7 @@ package com.sleepydesign.playground.data
 		public var focus:Number;
 		public var zoom:Number;
 
-		public function CameraData(x:Number=0, y:Number=0, z:Number=0, rotationX:Number=0, rotationY:Number=0, rotationZ:Number=0, fov:Number=0, focus:Number=0, zoom:Number=0)
+		public function CameraData(x:Number = 0, y:Number = 0, z:Number = -500, rotationX:Number = 0, rotationY:Number = 0, rotationZ:Number = 0, fov:Number = 50, focus:Number = 500, zoom:Number = 2)
 		{
 			this.x = x;
 			this.y = y;
@@ -51,7 +51,7 @@ package com.sleepydesign.playground.data
 			fov = raw.fov ? Number(raw.fov) : fov;
 			focus = raw.focus ? Number(raw.focus) : focus;
 			zoom = raw.zoom ? Number(raw.zoom) : zoom;
-			
+
 			return this;
 		}
 

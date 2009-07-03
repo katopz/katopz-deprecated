@@ -1045,7 +1045,7 @@ package org.papervision3d.objects.parsers
 		 */
 		protected function buildFileInfo( asset:* ):void
 		{
-			this.filename = asset is String ? String(asset) : "./meshes/rawdata_dae";
+			this.filename = asset is String ? String(asset) : "./rawdata_dae";
 			
 			// make sure we've got forward slashes!
 			this.filename = this.filename.split("\\").join("/");

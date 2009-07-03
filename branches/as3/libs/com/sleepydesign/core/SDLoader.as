@@ -212,10 +212,10 @@ package com.sleepydesign.core
 		{
 			trace(" * Start\t: "+engine._itemsTotal);
 			percent = 0;
-			if(!engine.hasEventListener(BulkProgressEvent.PROGRESS))
+			//BUG//if(!engine.hasEventListener(BulkProgressEvent.PROGRESS))
 		    	engine.addEventListener(BulkProgressEvent.PROGRESS, onProgress, false, 0, true) ;
 		    
-		    if(!engine.hasEventListener(BulkProgressEvent.COMPLETE))
+		    //BUG//if(!engine.hasEventListener(BulkProgressEvent.COMPLETE))
 		    	engine.addEventListener(BulkProgressEvent.COMPLETE, onComplete);
 			
 			engine.start();
@@ -230,8 +230,8 @@ package com.sleepydesign.core
 		
 		public function unregister():void
 		{
-			engine.removeEventListener(BulkProgressEvent.PROGRESS, onProgress);
-		    engine.removeEventListener(BulkProgressEvent.COMPLETE, onComplete);
+			//engine.removeEventListener(BulkProgressEvent.PROGRESS, onProgress);
+		    //engine.removeEventListener(BulkProgressEvent.COMPLETE, onComplete);
 		    //remove(uri);
 		}
 		
