@@ -76,7 +76,7 @@ package open3d.objects
 			framesLength++;
 		}
 
-		public function gotoAndPlay(frame:int):void
+		public function gotoAndPlay(frame:*):void
 		{
 			keyframe = frame;
 			_type = ANIM_NORMAL;
@@ -84,12 +84,24 @@ package open3d.objects
 
 		public function loop(start:int, end:int):void
 		{
-			this.start = (start % framesLength);
+			if(framesLength>0)
+			{
+				this.start = (start % framesLength);
+				this.end = (end % framesLength);
+			}else{
+				this.start = start;
+				this.end = end;
+			}
+			
 			keyframe = start;
-			this.end = (end % framesLength);
 			_type = ANIM_LOOP;
 		}
 
+		public function play():void
+		{
+			loop(_currentFrame, framesLength);
+		}
+		
 		public function stop():void
 		{
 			_type = ANIM_STOP;
@@ -164,6 +176,8 @@ package open3d.objects
 					else
 						keyframe++;
 					interp = 0;
+					
+					trace(keyframe,end);
 				}
 			}
 			otime = ctime;

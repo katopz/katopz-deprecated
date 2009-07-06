@@ -4,6 +4,8 @@ package open3d.data
 	
 	import flash.geom.Vector3D;
 	
+	import open3d.geom.UV;
+	
 	/**
 	 * Old Face Style, to be merge with new Face style
 	 * @author katopz
@@ -18,9 +20,9 @@ package open3d.data
 		public var v1:Vector3D;
 		public var v2:Vector3D;
 		
-		public var uvMap:Array;
+		public var uvMap:Vector.<UV>;
 
-		public function FaceData(a:Number, b:Number, c:Number, v:Vector.<Vector3D>, uvMap:Array = null)
+		public function FaceData(a:Number, b:Number, c:Number, v:Vector.<Vector3D>, uvMap:Vector.<UV> = null)
 		{
 			this.a = a;
 			this.b = b;

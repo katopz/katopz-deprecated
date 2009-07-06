@@ -139,7 +139,6 @@ package
 			renderer.world.rotationX = rotX;
 			renderer.world.rotationY = rotY;
 			
-			/*
 			var m:Matrix3D =  new Matrix3D();
 
 			var pp:Vector3D = new Vector3D(0, 0, 0)
@@ -147,9 +146,8 @@ package
 
 			m.prependRotation(rotY, Vector3D.X_AXIS, pp)
 			m.prependRotation(rotX, Vector3D.Y_AXIS, pp)
-			*/
 			
-			var m:Matrix3D = renderer.world.transform.matrix3D;
+			//var m:Matrix3D = renderer.world.transform.matrix3D;
 
 			var mLight:Matrix3D = new Matrix3D()
 			mLight.interpolateTo(m, 100)

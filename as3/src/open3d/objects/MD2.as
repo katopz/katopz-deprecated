@@ -145,7 +145,7 @@ package open3d.objects
 				tb = data.readUnsignedShort();
 				tc = data.readUnsignedShort();
 
-				faceDatas[i] = new FaceData(a, b, c, vertices, [uvs[ta], uvs[tb], uvs[tc]]);
+				faceDatas[i] = new FaceData(a, b, c, vertices, Vector.<UV>([uvs[ta], uvs[tb], uvs[tc]]));
 			}
 			
 			// Frame animation data
@@ -224,8 +224,9 @@ package open3d.objects
 					verts.push(new Vector3D((sx * data.readUnsignedByte() + tx) * _scale, (sy * data.readUnsignedByte() + ty) * _scale, (sz * data.readUnsignedByte() + tz) * _scale));
 				
 				addFrame(frame);
-
 			}
+			
+			verts.fixed = true;
 		}
 
 		/**
