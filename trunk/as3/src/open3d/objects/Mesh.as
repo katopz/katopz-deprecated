@@ -28,11 +28,9 @@ package open3d.objects
 			return _faceIndexes?_faceIndexes.length:0;
 		}
 		
-		protected var _culling:String = TriangleCulling.NEGATIVE;
 		public function set culling(value:String):void
 		{
-			_culling = value;
-			_triangles.culling = _culling;
+			_triangles.culling = value;
 		}
 		
 		private var _isFaceZSort:Boolean = true;
@@ -46,7 +44,7 @@ package open3d.objects
 
 		public function Mesh()
 		{
-			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), _culling);
+			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), TriangleCulling.NEGATIVE);
 			_commands[0] = 1;
 			_commands[1] = 2;
 			_commands[2] = 2;
@@ -114,11 +112,11 @@ package open3d.objects
 				// push back (faster than Vector concat)
 				var _triangles_indices:Vector.<int> = _triangles.indices = new Vector.<int>(_faceIndexes_length * 3, true);
 				var i:int = -1;
-				for each(var face:Vector3D in _faceIndexes)
+				for each(var index:Vector3D in _faceIndexes)
 				{
-					_triangles_indices[++i] = face.x;
-					_triangles_indices[++i] = face.y;
-					_triangles_indices[++i] = face.z;
+					_triangles_indices[++i] = index.x;
+					_triangles_indices[++i] = index.y;
+					_triangles_indices[++i] = index.z;
 				}
 			}
 			

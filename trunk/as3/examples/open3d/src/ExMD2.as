@@ -19,6 +19,9 @@ package
 		{
 			cat = new MD2("assets/pg.md2", new BitmapFileMaterial("assets/pg.png"));
 			renderer.addChild(cat);
+			
+			// walk
+			cat.loop(2,18);
 		}
 
 		override protected function draw():void
