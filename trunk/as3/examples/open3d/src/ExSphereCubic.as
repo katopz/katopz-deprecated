@@ -19,9 +19,9 @@ package
 
 		override protected function create():void
 		{
-			var segment:uint = 8;
-			var amount:uint = 3;
-			var radius:uint = 30;
+			var segment:uint = 10;
+			var amount:uint = 4;
+			var radius:uint = 25;
 			var gap:uint = amount;
 
 			var sphere:Sphere;

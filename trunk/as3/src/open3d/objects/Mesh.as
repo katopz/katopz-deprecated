@@ -94,9 +94,9 @@ package open3d.objects
 		
 		override public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
 		{
-			super.project(projectionMatrix3D, matrix3D);
-			
 			if(!_faceIndexes)return;
+			
+			super.project(projectionMatrix3D, matrix3D);
 			
 			var _faceIndexes_length:int = _faceIndexes.length;
 			if(_faceIndexes_length<=0)return;

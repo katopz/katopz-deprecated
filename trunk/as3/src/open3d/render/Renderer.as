@@ -150,19 +150,13 @@ package open3d.render
 			var _view_graphics:Graphics = _view.graphics;
 			_view_graphics.clear();
 			
-			// project children
+			// child.project faster than project(child) ~4-7fps
 			var child:Object3D;
 			for each (child in _childs)
+			{
 				child.project(_projectionMatrix3D, _worldMatrix3D);
 			
-			// z-sort Object3D
-			if (_isMeshZSort)
-				_childs.sortOn("screenZ", 18);
-			
-			// draw TODO : auto select render type
-			var childNum:int = 0;
-			for each (child in _childs)
-			{
+				// draw TODO : auto select render type
 				if(_type==1)
 				{
 					// DRAW TYPE #1 drawGraphicsData
@@ -189,6 +183,10 @@ package open3d.render
 						Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
 				}
 			}
+			
+			// z-sort Object3D
+			if (_isMeshZSort)
+				_childs.sortOn("screenZ", 18);
 			
 			/*
 			

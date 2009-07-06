@@ -1,10 +1,10 @@
 package open3d.objects
 {
 	import __AS3__.vec.Vector;
-
+	
 	import flash.display.*;
 	import flash.geom.*;
-
+	
 	import open3d.materials.Material;
 
 	/**
@@ -24,38 +24,50 @@ package open3d.objects
 		protected var _vout:Vector.<Number>;
 
 		protected var _material:Material;
-
+		
+		// internal
+		private var _transform_matrix3D:Matrix3D;
+		private var _vertices:Vector.<Number>;
+		private var _uvtData:Vector.<Number>;
+		
 		public function Object3D():void
 		{
 			vin = _vin = new Vector.<Number>();
-			transform.matrix3D = new Matrix3D();
+			_transform_matrix3D = transform.matrix3D = new Matrix3D();
 			_material = new Material();
 		}
 
 		/**
-		 * must do this when vin is dirty before project or using vertices
+		 * must update once before project loop
 		 */
 		public function update():void
 		{
+			// speed up
 			_vin.fixed = true;
 			_triangles.uvtData.fixed = true;
 			_triangles.indices.fixed = true;
-
+			
+			// private use
+			_vertices = _triangles.vertices;
+			_uvtData = _triangles.uvtData;
+			
+			// public use
 			triangles = _triangles;
+			
+			// dispose vout 
+			vout = _vout = new Vector.<Number>(_vin.length, true);
 		}
 
 		public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
 		{
-			vout = _vout = new Vector.<Number>(_vin.length, true);
-			
 			// local
-			transform.matrix3D.transformVectors(_vin, _vout);
+			_transform_matrix3D.transformVectors(_vin, _vout);
 			
 			// global
 			matrix3D.transformVectors(_vout, _vout);
 			
 			// project
-			Utils3D.projectVectors(projectionMatrix3D, _vout, _triangles.vertices, _triangles.uvtData);
+			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
 		}
 
 		public function set material(value:Material):void
