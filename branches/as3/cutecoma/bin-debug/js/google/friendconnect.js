@@ -37,6 +37,12 @@
 		
 		// Sent the request
 		req.send(onAuthenData);
+		
+		// call flash function dialog
+		flashContent.onJSDialog('<question id="0">'
+								+ '<![CDATA[JS init Please wait...]]>'
+								+ '<answer src="js:signIn()"><![CDATA[Sign In]]></answer>'
+								+ '</question>');
 	}
 	
 	function onFail()

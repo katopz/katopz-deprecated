@@ -34,6 +34,7 @@ package
 			SystemUtil.listenJS("onJSSignIn", onJSSignIn);
 			SystemUtil.listenJS("onJSSignOut", onJSSignOut);
 			SystemUtil.listenJS("onJSGetData", onJSGetData);
+			SystemUtil.listenJS("onJSDialog", onJSDialog);
 		}
 		
 		public function onJSSignIn(viewerID:String, viewerDisplayName:String):void
@@ -48,13 +49,10 @@ package
 			+ '<answer src="js:signOut()"><![CDATA[Sign Out]]></answer></question>';
 		}
 		
-		public function onJSSignOut():void
+		public function onJSDialog(string:String):void
 		{
-			trace(" ! onJSSignOut");
-			_SDDialog.xmlText = <question id="0">
-					<![CDATA[Bye!]]>
-					<answer src="js:signIn()"><![CDATA[Sign In]]></answer>
-				</question>;
+			trace(" ! onJSDialog : " + string);
+			_SDDialog.xmlText = string;
 		}
 		
 		public function onJSGetData(saveData:Object):void
@@ -65,6 +63,11 @@ package
 			+ '<answer src="js:saveData('+("'"+String(new Date())+"'")+')"><![CDATA[Save : '+String(new Date())+']]></answer>'
 			+ '<answer src="js:signOut()"><![CDATA[Sign Out]]></answer></question>';
 		}	
+		
+		public function onJSSignOut():void
+		{
+			
+		}
 		
 		// proxy for js
 		public function apply(functionName:String, arg:String):void
