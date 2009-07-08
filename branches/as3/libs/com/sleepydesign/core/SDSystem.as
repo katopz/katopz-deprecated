@@ -2,7 +2,7 @@ package com.sleepydesign.core
 {
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.utils.URLUtil;
-
+	
 	import flash.events.Event;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
@@ -60,15 +60,17 @@ package com.sleepydesign.core
 			file = new FileReference();
 			//typeFilter = [new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg;*.jpeg;*.gif;*.png")];
 
-			var typeFilter:Array = [new FileFilter("Area Data (" + fileTypes.join(",").toString() + ")", fileTypes.join(";").toString())];
+			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
 			file.addEventListener(Event.SELECT, openHandler);
 			file.browse(typeFilter);
 		}
-
+		
+		public static var openFileName:String; 
 		private function openHandler(event:Event):void
 		{
 			file = FileReference(event.target);
 			trace(" ^ openHandler : " + file.name);
+			openFileName = file.name;
 			file.addEventListener(Event.COMPLETE, onLoadComplete);
 			file["load"]();
 		}
@@ -76,6 +78,7 @@ package com.sleepydesign.core
 		private function onLoadComplete(event:Event):void
 		{
 			trace(" ^ onLoadComplete : " + file["data"]);
+			file.removeEventListener(Event.COMPLETE, onLoadComplete);
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE, file["data"]));
 		}
 	}

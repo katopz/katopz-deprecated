@@ -103,8 +103,12 @@ package
 			container.addContent(content);
 			
 			_SDTextField.text = "setProperty";
-			ExternalInterface.marshallExceptions = true;
-			ExternalInterface.addCallback("setProperty",setProperty);
+			
+			if(SystemUtil.isExternal())
+			{
+				ExternalInterface.marshallExceptions = true;
+				ExternalInterface.addCallback("setProperty",setProperty);
+			}
 		}
 		
 		public function setProperty(pText:String):void
