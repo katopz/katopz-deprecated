@@ -54,11 +54,61 @@ package
 				
 				parseGeomXMLFull(geomXML)
 				parseGeomXMLTriangles(geomXML)
+				
+				
+			}
+			var i:int=0;
+			var j:int=0;
+			var n:int=0;
+			_vin = new Vector.<Number>();
+			_triangles.uvtData = new Vector.<Number>();
+			_triangles.indices = new Vector.<int>();
+			trace(__triangles.length)
+			for each (var tri:Triangle in __triangles)
+			{
+				_vin[i++] = tri.vertices[0];
+				_vin[i++] = tri.vertices[1];
+				_vin[i++] = tri.vertices[2];
+				
+				_vin[i++] = tri.vertices[3];
+				_vin[i++] = tri.vertices[4];
+				_vin[i++] = tri.vertices[5];
+
+				_vin[i++] = tri.vertices[6];
+				_vin[i++] = tri.vertices[7];
+				_vin[i++] = tri.vertices[8];
+
+				_triangles.uvtData.push(tri.uvData[0]);
+				
+				_triangles.uvtData.push(tri.uvData[1]);
+				_triangles.uvtData.push(tri.uvData[2]);
+				/*
+				_triangles.uvtData.push(tri.uvData[3]);
+				_triangles.uvtData.push(tri.uvData[4]);
+				_triangles.uvtData.push(tri.uvData[5]);
+				_triangles.uvtData.push(tri.uvData[6]);
+				_triangles.uvtData.push(tri.uvData[7]);
+				_triangles.uvtData.push(tri.uvData[8]);
+				*/
+				
+				/*
+				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v, 1);
+				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v, 1);
+				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v, 1);
+				*/
+
+				//n += 3;
+
+				//_triangles.indices.push(n - 2, n - 1, n);
+				/*
+				_triangles.indices[j++] = n - 2;
+				_triangles.indices[j++] = n - 1;
+				_triangles.indices[j++] = n;
+				*/
 			}
 			
-			
 			_vin = verticesFull.concat();
-			_triangles.uvtData = uvtsFull.concat();
+			//_triangles.uvtData = uvtsFull.concat();
 			//_triangles.uvtData = new Vector.<Number>(_vin.length);
 			
 			_triangles.indices = indicesFull.concat();
@@ -69,6 +119,7 @@ package
 				indices = ii++
 			}
 			*/
+			trace(15360, 15360, 30882);
 			trace(_vin.length, _triangles.uvtData.length, _triangles.indices.length)
 			
 			//var bitmapMaterial:BitmapMaterial = new BitmapMaterial(new BitmapData(100,100,false,0xFF0000));
@@ -143,7 +194,7 @@ package
 					var nitri : int = int(indices_arr[i + 2]) 
 					indicesUV.push(nitri)
 				}
-				
+				var j:int = 0;
 				for (i = 0;i < indices.length; i += 3) 
 				{
 					var triangle : Triangle = new Triangle()
@@ -172,10 +223,22 @@ package
 					triangle.uvData[6] = uvts[ indicesUV[i + 2] * 2 + 0];
 					triangle.uvData[7] = uvts[ indicesUV[i + 2] * 2 + 1];
 					triangle.uvData[8] = triangle.vertices[8];
-					
+					/*
+					uvtsFull[j++] = triangle.uvData[0];
+					uvtsFull[j++] = triangle.uvData[1];
+					uvtsFull[j++] = triangle.uvData[2];
+					uvtsFull[j++] = triangle.uvData[3];
+					uvtsFull[j++] = triangle.uvData[4];
+					uvtsFull[j++] = triangle.uvData[5];
+					uvtsFull[j++] = triangle.uvData[6];
+					uvtsFull[j++] = triangle.uvData[7];
+					uvtsFull[j++] = triangle.uvData[8];
+					*/
 					triangle.mat = mats;
 					__triangles.push(triangle)
 				}
+				
+				
 			}
 		}
 
