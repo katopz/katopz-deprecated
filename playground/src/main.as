@@ -1,13 +1,14 @@
 ﻿package
 {
 	import __AS3__.vec.Vector;
-
+	
 	import com.sleepydesign.components.SDChatBox;
 	import com.sleepydesign.components.SDConnector;
 	import com.sleepydesign.components.SDMacPreloader;
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.components.SDTreeNode;
 	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.core.SDSystem;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.game.core.Characters;
@@ -26,7 +27,9 @@
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.utils.ProfilerUtil;
-
+	
+	import flash.display.Bitmap;
+	import flash.display.Loader;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
@@ -276,6 +279,10 @@
 						areaBuilder = null;
 					}
 					break;
+				case "Background":
+					system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
+					system.open();
+					break;
 				case "Grid":
 					engine3D.grid = !engine3D.grid;
 					break;
@@ -302,16 +309,33 @@
 					system.save(_config, "l0r0.ara");
 					break;
 				case "Open":
-					system.addEventListener(SDEvent.COMPLETE, onOpenComplete);
+					system.addEventListener(SDEvent.COMPLETE, onOpenAreaComplete);
 					system.open();
 					break;
 			}
 		}
 
-		private function onOpenComplete(event:SDEvent):void
+		private function onOpenBackgroundComplete(event:SDEvent):void
+		{
+			trace(" onOpenBackgroundComplete");
+			system.removeEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
+			
+			// destroy
+			area.background.destroy();
+			
+			// logical
+			area.data.background = SDSystem.openFileName;
+			
+			// physical
+			var loader:Loader = new Loader();
+			loader.loadBytes(event.data);
+			area.background.addChild(loader);
+		}
+		
+		private function onOpenAreaComplete(event:SDEvent):void
 		{
 			trace(" openHandler : name = " + event.data);
-			system.removeEventListener(SDEvent.COMPLETE, onOpenComplete);
+			system.removeEventListener(SDEvent.COMPLETE, onOpenAreaComplete);
 
 			var areaData:AreaData = new AreaData();
 			IExternalizable(areaData).readExternal(event.data);

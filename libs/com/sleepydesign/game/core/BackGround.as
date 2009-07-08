@@ -10,7 +10,7 @@
 	public class BackGround extends SDContainer
 	{
 		private var loader:SDLoader;
-		private var background:Bitmap;
+		private var bitmap:Bitmap;
 		
 		public function BackGround(raw:Object)
 		{
@@ -39,8 +39,8 @@
 		{
 			trace("update:"+data.background);
 			
-			if(background)
-				removeChild(background);
+			if(bitmap)
+				removeChild(bitmap);
 			
 			loader.load(data.background);
 			loader.addEventListener(SDEvent.COMPLETE, onBackground);
@@ -54,19 +54,19 @@
 			if(loader.isContent(_data.background))
 			{
 				loader.removeEventListener(SDEvent.COMPLETE, onBackground);
-				background = Bitmap(loader.getContent(_data.background));
-				addChild(background);
+				bitmap = Bitmap(loader.getContent(_data.background));
+				addChild(bitmap);
 			}
 		}
 		
 		// ______________________________ Destroy ______________________________
-/*
+
 		override public function destroy():void
 		{
-			if(background)
-				removeChild(background);
+			if(bitmap)
+				removeChild(bitmap);
 		}
-*/
+
 		/*
 		public function toCenter(obj) {
 			obj.x = (stage.stageWidth - obj.width) * .5;
