@@ -214,9 +214,13 @@ private var colladaParser: ColladaParser
 					holder3D.graphics.drawTriangles(vertices2D, t.indices, t.uvData, TriangleCulling.NEGATIVE); 
 				}
 				drawcount += __trianglesperDraw
-				resultBmd.draw(holder3D, null, null, null, null, true)
+				//resultBmd.draw(holder3D, null, null, null, null, true)
 			
 				bitmap.bitmapData = resultBmd
+				
+				
+				colladaParser.rotationX+=10
+				colladaParser.rotationY+=10
 			}
 			//if (stateCount == 3)
 			{
