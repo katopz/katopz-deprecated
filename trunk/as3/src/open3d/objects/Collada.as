@@ -5,7 +5,11 @@ package open3d.objects
 	import open3d.materials.*;
 
 	/**
+	 * Collada Parser
 	 * @author kris@neuroproductions.be
+	 *
+	 * Modify/Optimize
+	 * @author katopz
 	 */
 	public class Collada extends Mesh
 	{
@@ -15,26 +19,21 @@ package open3d.objects
 		private var indicesPos : int = 0
 		private var scale : Number
 
-		public function parse(xml : XML,scale : Number) : void
+		public function parse(xml : XML, scale : Number) : void
 		{
 			default xml namespace = "http://www.collada.org/2005/11/COLLADASchema";
 			this.scale = scale;
 			
-			/*
-			TODO : replace with BitmapFileMaterial
-			
+			var mat : BitmapFileMaterial;
 			for each (var imgXML:XML in xml.library_images.image)
 			{
-				
-				var mat : Material2 = new Material2()
-				mat.url = imgXML.init_from
-
-				var idName : String = imgXML.@name.toString()
-				mat.id = idName.replace("-image", "")
-				materials[mat.id] = mat
-				mat.load()
+				mat = new BitmapFileMaterial(String(imgXML.init_from));
+				//var idName : String = imgXML.@name.toString();
+				//mat.id = idName.replace("-image", "");
+				//materials[mat.id] = mat;
 			}
 			
+			/*
 			var defaultMat : Material2 = new Material2()
 			defaultMat.id = "FrontColorNoCullingID"
 			defaultMat.load()
@@ -50,8 +49,7 @@ package open3d.objects
 				parseGeomXMLTriangles(geomXML)
 			}
 			
-			var bitmapMaterial:BitmapFileMaterial = new BitmapFileMaterial("images/texture0.jpg");
-			buildFaces(bitmapMaterial);
+			buildFaces(mat);
 		}
 			
 		private function parseGeomXMLTriangles(geomXML : XML) : void
