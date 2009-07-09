@@ -1,10 +1,9 @@
 package
 {
-	import flash.display.TriangleCulling;
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	
+
 	import open3d.objects.Collada;
 	import open3d.objects.Object3D;
 	import open3d.view.SimpleView;
@@ -12,8 +11,8 @@ package
 	[SWF(width=800,height=600,backgroundColor=0x666666,frameRate=30)]
 
 	/**
-	 * @author kris@neuroproductions.be
-	 * @mod katopz
+	 * ExCollada
+	 * @author katopz
 	 */
 	public class ExCollada extends SimpleView
 	{
@@ -21,17 +20,17 @@ package
 
 		public function ExCollada()
 		{
-			var urlLoader:URLLoader = new URLLoader()
-			urlLoader.addEventListener(Event.COMPLETE, urlComplete)
-			urlLoader.load(new URLRequest(Collada.LOCATION + "Chameleon.dae"))
+			var urlLoader:URLLoader = new URLLoader();
+			urlLoader.addEventListener(Event.COMPLETE, onComplete);
+			urlLoader.load(new URLRequest("assets/chameleon.dae"));
 		}
 
-		private function urlComplete(event:Event):void
+		private function onComplete(event:Event):void
 		{
-			var loader:URLLoader = event.currentTarget as URLLoader
-			collada = new Collada()
-			collada.parse(new XML(loader.data), 0.01)
-			
+			var loader:URLLoader = event.currentTarget as URLLoader;
+			collada = new Collada();
+			collada.parse(new XML(loader.data), 0.01);
+
 			renderer.addChild(collada);
 			renderer.world.z = 4000;
 		}
