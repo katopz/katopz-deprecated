@@ -1,4 +1,4 @@
-package  
+package open3d.objects  
 {
 	import __AS3__.vec.Vector;
 	
@@ -7,20 +7,17 @@ package
 	
 	import open3d.materials.*;
 	import open3d.objects.Mesh;
-	
 
 	/**
 	 * @author kris@neuroproductions.be
 	 */
-	public class ColladaParser extends Mesh
+	public class Collada extends Mesh
 	{
 		public static var LOCATION:String =""//"http://www.neuroproductions.be/uploads/blog/examples/collada/"
 		public var indicesFull : Vector.<int> = new Vector.<int>();
-		/*public var indicesUV : Vector.<int> = new Vector.<int>();
-		public var uvtsTriangle : Vector.<Number> = new Vector.<Number>();*/
 		public var uvtsFull : Vector.<Number> = new Vector.<Number>();
+		
 		public var verticesFull : Vector.<Number> = new Vector.<Number>();
-		public  var __triangles : Array = new Array();
 		public var materials : Object = new Object()
 		private var indicesPos : int = 0
 		private var scale : Number
@@ -28,7 +25,11 @@ package
 		public function parse(xml : XML,scale : Number) : void
 		{
 			default xml namespace = "http://www.collada.org/2005/11/COLLADASchema";
-			this.scale = scale
+			this.scale = scale;
+			
+			/*
+			TODO : replace with BitmapFileMaterial
+			
 			for each (var imgXML:XML in xml.library_images.image)
 			{
 				
@@ -45,101 +46,25 @@ package
 			defaultMat.id = "FrontColorNoCullingID"
 			defaultMat.load()
 			materials["FrontColorNoCullingID"] = defaultMat
+			*/
 			
-			
-			
+			_vin = verticesFull.concat();
+			_triangles.uvtData = new Vector.<Number>();
+			_triangles.indices = new Vector.<int>();
 			
 			for each (var geomXML:XML in xml.library_geometries.geometry)
 			{
-				
 				parseGeomXMLFull(geomXML)
 				parseGeomXMLTriangles(geomXML)
-				
-				
-			}
-			var i:int=0;
-			var j:int=0;
-			var n:int=0;
-			_vin = new Vector.<Number>();
-			_triangles.uvtData = new Vector.<Number>();
-			_triangles.indices = new Vector.<int>();
-			trace(__triangles.length)
-			for each (var tri:Triangle in __triangles)
-			{
-				_vin[i++] = tri.vertices[0];
-				_vin[i++] = tri.vertices[1];
-				_vin[i++] = tri.vertices[2];
-				
-				_vin[i++] = tri.vertices[3];
-				_vin[i++] = tri.vertices[4];
-				_vin[i++] = tri.vertices[5];
-
-				_vin[i++] = tri.vertices[6];
-				_vin[i++] = tri.vertices[7];
-				_vin[i++] = tri.vertices[8];
-
-				_triangles.uvtData.push(tri.uvData[0]);
-				
-				_triangles.uvtData.push(tri.uvData[1]);
-				_triangles.uvtData.push(tri.uvData[2]);
-				/*
-				_triangles.uvtData.push(tri.uvData[3]);
-				_triangles.uvtData.push(tri.uvData[4]);
-				_triangles.uvtData.push(tri.uvData[5]);
-				_triangles.uvtData.push(tri.uvData[6]);
-				_triangles.uvtData.push(tri.uvData[7]);
-				_triangles.uvtData.push(tri.uvData[8]);
-				*/
-				
-				/*
-				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v, 1);
-				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v, 1);
-				_triangles.uvtData.push(face.uvMap[2].u, face.uvMap[2].v, 1);
-				*/
-
-				//n += 3;
-
-				//_triangles.indices.push(n - 2, n - 1, n);
-				/*
-				_triangles.indices[j++] = n - 2;
-				_triangles.indices[j++] = n - 1;
-				_triangles.indices[j++] = n;
-				*/
 			}
 			
-			_vin = verticesFull.concat();
-			//_triangles.uvtData = uvtsFull.concat();
-			//_triangles.uvtData = new Vector.<Number>(_vin.length);
-			
-			_triangles.indices = indicesFull.concat();
-			/*
-			var ii:Number=0;
-			for each(var indices:Number in _triangles.indices)
-			{
-				indices = ii++
-			}
-			*/
-			trace(15360, 15360, 30882);
-			trace(_vin.length, _triangles.uvtData.length, _triangles.indices.length)
-			
-			//var bitmapMaterial:BitmapMaterial = new BitmapMaterial(new BitmapData(100,100,false,0xFF0000));
 			var bitmapMaterial:BitmapFileMaterial = new BitmapFileMaterial("images/texture0.jpg");
-			
-			//var bitmapMaterial:LineMaterial = new LineMaterial()
-			
 			buildFaces(bitmapMaterial);
 		}
-		
-        [Embed(source = "assets/sea01.jpg")]
-        private var Texture		:Class;
-		private var texture		:BitmapData = Bitmap(new Texture()).bitmapData;
-		
+			
 		private function parseGeomXMLTriangles(geomXML : XML) : void
 		{
 			var id : String = geomXML.@id
-			
-			
-			
 			var uvts : Vector.<Number> = new Vector.<Number>();
 			var vertices : Vector.<Number> = new Vector.<Number>();
 			
@@ -162,20 +87,20 @@ package
 			{
 				var n : Number = vertices_arr[i]
 				vertices.push(n * scale)
-				
 			}
+			
 			for (i = 0;i < uv_arr.length; i++) 
 			{
 				n = Number(uv_arr[i])
-				
 				uvts.push(n)
 			}
 			
-			
+			var j:int = 0;
+			var k:int = 0;
+			var _triangles_uvtData:Vector.<Number> = _triangles.uvtData;
 			
 			for each (var trian : XML in geomXML.mesh.triangles) 
 			{
-				
 				var indices : Vector.<int> = new Vector.<int>();
 				var indicesUV : Vector.<int> = new Vector.<int>();
 				
@@ -188,57 +113,36 @@ package
 					var ni : int = int(indices_arr[i])
 					indices.push(ni)
 					
-					//katopz
-					//_triangles.indices.push(ni);
-					
 					var nitri : int = int(indices_arr[i + 2]) 
 					indicesUV.push(nitri)
 				}
-				var j:int = 0;
+				
 				for (i = 0;i < indices.length; i += 3) 
 				{
-					var triangle : Triangle = new Triangle()
-				
-					triangle.vertices[0] = vertices[ indices[i + 0] * 3 + 0];
-					triangle.vertices[1] = vertices[ indices[i + 0] * 3 + 1];
-					triangle.vertices[2] = vertices[ indices[i + 0] * 3 + 2];
+					_vin[j++] = -vertices[ indices[i + 0] * 3 + 0];
+					_vin[j++] = vertices[ indices[i + 0] * 3 + 1];
+					_vin[j++] = vertices[ indices[i + 0] * 3 + 2];
 					
-					triangle.vertices[3] = vertices[ indices[i + 1] * 3 + 0];
-					triangle.vertices[4] = vertices[ indices[i + 1] * 3 + 1];
-					triangle.vertices[5] = vertices[ indices[i + 1] * 3 + 2];
+					_vin[j++] = -vertices[ indices[i + 1] * 3 + 0];
+					_vin[j++] = vertices[ indices[i + 1] * 3 + 1];
+					_vin[j++] = vertices[ indices[i + 1] * 3 + 2];
 					
-					triangle.vertices[6] = vertices[ indices[i + 2] * 3 + 0];
-					triangle.vertices[7] = vertices[ indices[i + 2] * 3 + 1];
-					triangle.vertices[8] = vertices[ indices[i + 2] * 3 + 2];
+					_vin[j++] = -vertices[ indices[i + 2] * 3 + 0];
+					_vin[j++] = vertices[ indices[i + 2] * 3 + 1];
+					_vin[j++] = vertices[ indices[i + 2] * 3 + 2];
 				
-				
-					triangle.uvData[0] = uvts[ indicesUV[i + 0] * 2 + 0];
-					triangle.uvData[1] = uvts[ indicesUV[i + 0] * 2 + 1];
-					triangle.uvData[2] = triangle.vertices[2];
+					_triangles_uvtData[k++] = uvts[ indicesUV[i + 0] * 2 + 0];
+					_triangles_uvtData[k++] = uvts[ indicesUV[i + 0] * 2 + 1];
+					_triangles_uvtData[k++] = 1;
 			
-					triangle.uvData[3] = uvts[ indicesUV[i + 1] * 2 + 0];
-					triangle.uvData[4] = uvts[ indicesUV[i + 1] * 2 + 1];
-					triangle.uvData[5] = triangle.vertices[5];
+					_triangles_uvtData[k++] = uvts[ indicesUV[i + 1] * 2 + 0];
+					_triangles_uvtData[k++] = uvts[ indicesUV[i + 1] * 2 + 1];
+					_triangles_uvtData[k++] = 1;
 				
-					triangle.uvData[6] = uvts[ indicesUV[i + 2] * 2 + 0];
-					triangle.uvData[7] = uvts[ indicesUV[i + 2] * 2 + 1];
-					triangle.uvData[8] = triangle.vertices[8];
-					/*
-					uvtsFull[j++] = triangle.uvData[0];
-					uvtsFull[j++] = triangle.uvData[1];
-					uvtsFull[j++] = triangle.uvData[2];
-					uvtsFull[j++] = triangle.uvData[3];
-					uvtsFull[j++] = triangle.uvData[4];
-					uvtsFull[j++] = triangle.uvData[5];
-					uvtsFull[j++] = triangle.uvData[6];
-					uvtsFull[j++] = triangle.uvData[7];
-					uvtsFull[j++] = triangle.uvData[8];
-					*/
-					triangle.mat = mats;
-					__triangles.push(triangle)
+					_triangles_uvtData[k++] = uvts[ indicesUV[i + 2] * 2 + 0];
+					_triangles_uvtData[k++] = uvts[ indicesUV[i + 2] * 2 + 1];
+					_triangles_uvtData[k++] = 1;
 				}
-				
-				
 			}
 		}
 
@@ -246,24 +150,17 @@ package
 
 		private function parseGeomXMLFull(geomXML : XML) : void
 		{
-			
-				
-			
 			var id : String = geomXML.@id
 			var mats : String
 			var indicesString : String
 			var s : String = ""
 			for each (var trian : XML in geomXML.mesh.triangles) 
 			{
-				
 				indicesString += s + trian.p.toString()	
 				s = " "		
 			}
 			
-			
 			if (indicesString == "" || indicesString == null)return;
-			
-			
 			
 			for each (var xmls:XML in geomXML.mesh.source)
 			{

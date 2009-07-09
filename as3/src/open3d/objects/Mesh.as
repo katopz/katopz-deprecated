@@ -59,7 +59,7 @@ package open3d.objects
 			
 			_faces = new Vector.<Face>(_indices_length, true);
 			_faceIndexes = [];
-			
+			trace("_indices_length:"+_indices_length)
 			var i0:Number, i1:Number, i2:Number;
 			for (var i:int = 0; i < _indices_length; ++i)
 			{
