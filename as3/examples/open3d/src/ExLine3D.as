@@ -22,18 +22,16 @@ package
 
 			// X
 			var lineX:Line3D = new Line3D(Vector.<Vector3D>([new Vector3D(size, 0, 0)]), 0xFF0000);
-
 			// y
 			var lineY:Line3D = new Line3D(Vector.<Vector3D>([new Vector3D(0, size, 0)]), 0x00FF00);
-
 			// Z
 			var lineZ:Line3D = new Line3D(Vector.<Vector3D>([new Vector3D(0, 0, size)]), 0x0000FF);
-
+			
 			renderer.addChild(lineX);
 			renderer.addChild(lineY);
 			renderer.addChild(lineZ);
 
-			isDebug = false;
+			//isDebug = false;
 		}
 
 		override protected function draw():void

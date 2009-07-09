@@ -86,14 +86,20 @@ package open3d.view
 
 		protected function run(event:Event):void
 		{
-			if (_isDebug)debug();
+			prerender()
 			renderer.render();
 			draw();
+			if (_isDebug)debug();
 		}
 
 		protected function debug():void
 		{
 			debugText.text = String("Object3D(s) : " + renderer.numChildren + ", Face(s) : " + renderer.totalFaces);
+		}
+		
+		protected function prerender():void
+		{
+			// override me
 		}
 		
 		protected function draw():void
