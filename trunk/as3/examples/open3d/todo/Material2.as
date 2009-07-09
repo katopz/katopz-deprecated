@@ -1,10 +1,12 @@
 package  
 {
-	import flash.net.URLRequest;	
-	import flash.display.Bitmap;	
-	import flash.events.Event;	
-	import flash.display.BitmapData;	
-	import flash.display.Loader;	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.events.Event;
+	import flash.net.URLRequest;
+	
+	import open3d.objects.Collada;	
 	
 	/**
 	 * @author kris@neuroproductions.be
@@ -24,7 +26,7 @@ package
 			
 			if (url != "")// && url!= "../images/Material__2noCulling.JPG")
 			{
-				url = ColladaParser.LOCATION + url.replace("../", "")
+				url = Collada.LOCATION + url.replace("../", "")
 				//trace(url,"--")
 			loader =new Loader()
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, LoadComplet)

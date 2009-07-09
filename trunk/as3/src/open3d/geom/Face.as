@@ -39,7 +39,7 @@ package open3d.geom
 			this.i0 = indice.x;
 			this.i1 = indice.y;
 			this.i2 = indice.z;
-			
+
 			this.j0 = j0;
 			this.j1 = j1;
 			this.j2 = j2;
