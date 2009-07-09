@@ -9,7 +9,6 @@ package
 	/**
 	 * ExSphere
 	 * @author katopz
-	 *
 	 */
 	public class ExSphere extends SimpleView
 	{

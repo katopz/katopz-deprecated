@@ -32,13 +32,13 @@ package
 			
 			screenZ = a.z +b.z +c.z
 			
-		/*
+		
 			uvData[2] = a.z
 
 			uvData[5] = b.z
 
 			uvData[8] = c.z
-			*/
+			
 			indices[0] = 0
 			indices[1] = 1
 			indices[2] = 2

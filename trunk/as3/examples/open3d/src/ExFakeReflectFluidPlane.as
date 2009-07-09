@@ -69,7 +69,7 @@ package
 
 		private var blank:Rectangle = new Rectangle(0, 0, 800, 600)
 
-		override protected function draw():void
+		override protected function prerender():void
 		{
 
 			for (var i:int = 0; i < plane.vin.length / 3; ++i)

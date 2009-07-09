@@ -57,7 +57,7 @@ package
 
 		private var blank:Rectangle = new Rectangle(0, 0, 800, 600)
 
-		override protected function draw():void
+		override protected function prerender():void
 		{
 			stat.visible = false;
 
