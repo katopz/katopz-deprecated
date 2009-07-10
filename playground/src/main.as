@@ -61,11 +61,17 @@
 			ProfilerUtil.addStat(this);
 
 			fake = new Vector.<int>();
+			
+			alpha = .1
 		}
 
 		// ______________________________ Initialize ______________________________
 
-		private var config1:AreaData = new AreaData("l0r0", "assets/day1.jpg", "l0r0.dat", 40, 40, new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)));
+		private var config1:AreaData = new AreaData(
+		"l0r0", 
+		"assets/day1.jpg", 
+		"l0r0.dat", 
+		40, 40, new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)));
 
 		private var config2:AreaData = new AreaData("l0r1", "assets/day2.jpg", "l0r1.dat", 40, 40, new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)));
 
@@ -232,6 +238,7 @@
 				<Option>
 					<Editor>
 						<Background/>
+						<MapData/>
 						<Grid/>
 						<Axis/>
 						<Open/>
@@ -270,7 +277,7 @@
 				case "Editor":
 					if (!areaBuilder)
 					{
-						areaBuilder = new AreaBuilder(engine3D);
+						areaBuilder = new AreaBuilder(engine3D, area);
 						addChild(areaBuilder);
 					}
 					else
@@ -280,8 +287,7 @@
 					}
 					break;
 				case "Background":
-					system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-					system.open();
+					areaBuilder.setupBackground();
 					break;
 				case "Grid":
 					engine3D.grid = !engine3D.grid;
@@ -315,23 +321,6 @@
 			}
 		}
 
-		private function onOpenBackgroundComplete(event:SDEvent):void
-		{
-			trace(" onOpenBackgroundComplete");
-			system.removeEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-			
-			// destroy
-			area.background.destroy();
-			
-			// logical
-			area.data.background = SDSystem.openFileName;
-			
-			// physical
-			var loader:Loader = new Loader();
-			loader.loadBytes(event.data);
-			area.background.addChild(loader);
-		}
-		
 		private function onOpenAreaComplete(event:SDEvent):void
 		{
 			trace(" openHandler : name = " + event.data);

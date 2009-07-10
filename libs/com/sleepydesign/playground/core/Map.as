@@ -1,6 +1,7 @@
 package com.sleepydesign.playground.core
 {
 	import com.sleepydesign.core.SDContainer;
+	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDSprite;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.core.Position;
@@ -12,14 +13,6 @@ package com.sleepydesign.playground.core
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
-	/**
-	 * 
-	 *	TODO : get mapdata from file
-	 * - Image -> MapData
-	 * - Array -> MapData
-	 * - AMF IOMapData -> MapData
-	 * 
-	 */	
 	public class Map extends SDContainer
 	{
 		private var pathFinder:AStar3D;
@@ -62,6 +55,8 @@ package com.sleepydesign.playground.core
 			Map.factorZ = raw.factorZ;
 			
 			_config = load(raw.source)
+			//var _loader:SDLoader = new SDLoader();
+			//_loader.load(raw.source);
 			
 			create(_config);
 		}
@@ -118,6 +113,7 @@ package com.sleepydesign.playground.core
 					scaleZ:4
 				}
 			}
+			
 			return raw;
 		}
 		
@@ -127,9 +123,7 @@ package com.sleepydesign.playground.core
 		{
 			super.create(config);
 			
-			data = new MapData();
-			data.parse(config.nodes, config.col, config.scaleX, config.scaleZ);
-			
+			data = new MapData(config.id, config.nodes, config.col, config.scaleX, config.scaleZ);
 			routes.push(config.id);
 			
 			// _______________________________________________________ MiniMap
@@ -261,8 +255,7 @@ package com.sleepydesign.playground.core
 			Map.factorZ = data.height;
 			_config = load(data.src);
 			
-			this.data = new MapData();
-			this.data.parse(_config.nodes, _config.col, _config.scaleX, _config.scaleZ);
+			this.data = new MapData(_config.nodes, _config.col, _config.scaleX, _config.scaleZ);
 			
 			routes.push(_config.id);
 			

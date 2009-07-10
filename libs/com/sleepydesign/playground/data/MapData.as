@@ -4,32 +4,48 @@ package com.sleepydesign.playground.data
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	
+	import flash.net.registerClassAlias;
+	import flash.utils.IDataInput;
+	import flash.utils.IDataOutput;
+	import flash.utils.IExternalizable;
+
 	/**
-	* MapData
-	* @author katopz@sleepydesign.com
-	* @version 0.1
-	*/
-	public class MapData
+	 * MapData
+	 * @author katopz
+	 * 
+	 * TODO : get mapdata from file
+	 * - Image -> MapData
+	 * - Array -> MapData
+	 * - AMF IOMapData -> MapData
+	 */	
+	public class MapData implements IExternalizable
 	{
 		public var bitmapData 	: BitmapData;
 		public var spawnPoint	: Point;
 		public var warpPoint	: Dictionary = new Dictionary(true);
 		
-		public function MapData(bitmapData:BitmapData=null)
+		private var _scaleX		:Number;
+		private var _scaleZ		:Number;
+		
+		public function MapData(id:String, data:*, col:uint, scaleX:Number = 2, scaleZ:Number = 2)
 		{
-			if(bitmapData)
-				this.bitmapData = bitmapData;
+			_scaleX = scaleX;
+			_scaleZ = scaleZ;
+			
+			parse({data:data, col:col, scaleX:scaleX, scaleZ:scaleZ});
 		}
 		
 		// ______________________________ Parse ______________________________
 		
-		public function parse(nodes:Array, colSize:uint, _scaleX:Number = 2, _scaleY:Number = 2):void
+		public function parse(raw:*):MapData
 		{
-			if(!nodes || nodes.length<1)return;
+			var nodes:Array = raw.data;
+			var col:uint = raw.col;
+			
+			if(!nodes || nodes.length<1)return null;
 			
 			var _length:int = nodes.length;
-			var w:uint=colSize;
+			var w:uint=col;
 			var h:uint=uint(_length/w);
 			
 			var _bitmapData:BitmapData = new BitmapData(w,h,true,0xFF000000);
@@ -49,13 +65,13 @@ package com.sleepydesign.playground.data
 					// spawn
 					case 2	: 
 						_bitmapData.setPixel(i, j, 0xFF00FF00); 
-						spawnPoint = new Point(i*_scaleX,j*_scaleY); 
+						spawnPoint = new Point(i*_scaleX,j*_scaleZ); 
 					break;
 					
 					//warp
 					default	: 
 						_bitmapData.setPixel(i, j, 0xFF0000FF - nodes[k]);
-						warpPoint[nodes[k]] = new Point(i*_scaleX,j*_scaleY);
+						warpPoint[nodes[k]] = new Point(i*_scaleX,j*_scaleZ);
 						// no spawnPoint?
 						if(!spawnPoint)spawnPoint=warpPoint[nodes[k]];
 					break;
@@ -65,8 +81,10 @@ package com.sleepydesign.playground.data
 			trace(" ! MapData.spawnPoint	: "+spawnPoint);
 			
 			if(bitmapData)bitmapData.dispose();
-			bitmapData = new BitmapData(w*_scaleX, h*_scaleY);
-			bitmapData.draw(_bitmapData,new Matrix(_scaleX,0,0,_scaleY));
+			bitmapData = new BitmapData(w*_scaleX, h*_scaleZ);
+			bitmapData.draw(_bitmapData,new Matrix(_scaleX,0,0,_scaleZ));
+			
+			return this;
 		}
 		
 		/*
@@ -82,5 +100,17 @@ package com.sleepydesign.playground.data
 			bitmapData.height = value;
 		}
 		*/
+
+		// _______________________________________________________ external
+
+		public function writeExternal(output:IDataOutput):void
+		{
+			output.writeObject({});
+		}
+
+		public function readExternal(input:IDataInput):void
+		{
+			parse(input.readObject());
+		}
 	}
 }

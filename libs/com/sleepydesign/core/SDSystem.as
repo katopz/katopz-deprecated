@@ -37,15 +37,20 @@ package com.sleepydesign.core
 
 		// ______________________________ File ______________________________
 
-		public function save(data:*, defaultFileName:String = null):void
+		public function save(data:*, defaultFileName:String = "undefined"):void
 		{
-			var type:String = URLUtil.getType(defaultFileName);
+			//var type:String = URLUtil.getType(defaultFileName);
 
 			// TODO : save image
 
 			//save AMF like Object
 			var rawBytes:ByteArray = new ByteArray();
-			IExternalizable(data).writeExternal(rawBytes);
+			if(data is IExternalizable)
+			{
+				IExternalizable(data).writeExternal(rawBytes);
+			}else{
+				rawBytes = data;
+			}
 
 			//rawBytes.writeBytes(data.);
 

@@ -1,15 +1,20 @@
 ﻿package com.sleepydesign.playground.builder
 {
+	import com.sleepydesign.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
+	import com.sleepydesign.core.SDSystem;
 	import com.sleepydesign.draw.SDSquare;
-	import com.sleepydesign.game.core.Game;
+	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDKeyboardEvent;
 	import com.sleepydesign.events.SDMouseEvent;
+	import com.sleepydesign.game.core.Game;
+	import com.sleepydesign.playground.core.Area;
 	import com.sleepydesign.playground.core.Engine3D;
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
 	
+	import flash.display.Loader;
 	import flash.events.MouseEvent;
 	
 	import org.papervision3d.core.math.Matrix3D;
@@ -19,13 +24,15 @@
 	{		
 		public var log			:SDTextField;
 		private var engine3D	:Engine3D;
+		private var area		:Area;
 		private static const FORWARD:Number3D = new Number3D(0, 0, -1);
 		
-		public function AreaBuilder(engine3D:Engine3D)
+		public function AreaBuilder(engine3D:Engine3D, area:Area)
 		{
 			super("AreaBuilder");
 			
 			this.engine3D = engine3D;
+			this.area = area;
 			
 			// log
 			var bg:SDSquare = new SDSquare(this.width, this.height, 0xFF0000);
@@ -41,6 +48,29 @@
 			Game.inputController.mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
+		}
+		
+		public function setupBackground():void
+		{
+			SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
+			SDApplication.system.open();
+		}
+		
+		private function onOpenBackgroundComplete(event:SDEvent):void
+		{
+			trace(" onOpenBackgroundComplete");
+			SDApplication.system.removeEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
+			
+			// destroy
+			area.background.destroy();
+			
+			// logical
+			area.data.background = SDSystem.openFileName;
+			
+			// physical
+			var loader:Loader = new Loader();
+			loader.loadBytes(event.data);
+			area.background.addChild(loader);
 		}
 		
 		private function onKeyIsPress(event:SDKeyboardEvent):void
