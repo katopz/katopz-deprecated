@@ -3,6 +3,7 @@ package open3d.objects
 	import __AS3__.vec.Vector;
 	
 	import flash.geom.Vector3D;
+	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	
 	import open3d.animation.Frame;
@@ -50,14 +51,19 @@ package open3d.objects
 		 */
 		private var _currentFrame:int = 0;
 		private var interp:Number = 0;
-		private var start:int, end:int, _type:int;
+		private var begin:int, end:int, _type:int;
 		private var ctime:Number = 0, otime:Number = 0;
 
 		/**
 		 * Number of animation frames to display per second
 		 */
 		public var fps:int;
-
+		
+		private var labels:Dictionary;
+		private var _currentLabel:String;
+		
+		protected var faceDatas:Vector.<FaceData>;
+		
 		/**
 		 * KeyframeMesh is a class used [internal] to provide a "keyframe animation"/"vertex animation"/"mesh deformation"
 		 * framework for subclass loaders. There are some subtleties to using this class, so please, I suggest you
@@ -70,36 +76,49 @@ package open3d.objects
 			this.fps = fps;
 		}
 
-		public function addFrame(frame:Frame):void
+		protected function addFrame(frame:Frame):void
 		{
+			if(!labels)labels = new Dictionary(true);
+			var _name:String = frame.name.slice(0, frame.name.length-3);
+			if(!labels[_name])
+			{
+				// new begin->end
+				labels[_name] = {begin:framesLength, end:framesLength};
+			}else{
+				// increase end
+				++labels[_name].end;
+			}
+			
 			frames.push(frame);
 			framesLength++;
 		}
 
-		public function gotoAndPlay(frame:*):void
-		{
-			keyframe = frame;
-			_type = ANIM_NORMAL;
-		}
-
-		public function loop(start:int, end:int):void
+		public function loop(begin:int, end:int):void
 		{
 			if(framesLength>0)
 			{
-				this.start = (start % framesLength);
+				this.begin = (begin % framesLength);
 				this.end = (end % framesLength);
 			}else{
-				this.start = start;
+				this.begin = begin;
 				this.end = end;
 			}
 			
-			keyframe = start;
+			keyframe = begin;
 			_type = ANIM_LOOP;
 		}
 
-		public function play():void
+		public function play(label:String=""):void
 		{
-			loop(_currentFrame, framesLength);
+			if(!labels)return;
+			
+			if(_currentLabel != label)
+			{
+				_currentLabel = label;
+				loop(labels[label].begin, labels[label].end);
+			}
+			
+			updateFrame();
 		}
 		
 		public function stop():void
@@ -107,13 +126,6 @@ package open3d.objects
 			_type = ANIM_STOP;
 		}
 
-		public function gotoAndStop(frame:int):void
-		{
-			keyframe = frame;
-			_type = ANIM_STOP;
-		}
-
-		public var faceDatas:Vector.<FaceData>;
 		public function updateFrame():void
 		{
 			if(!faceDatas)return;
@@ -172,12 +184,10 @@ package open3d.objects
 				if (interp >= 1)
 				{
 					if (_type == ANIM_LOOP && _currentFrame + 1 == end)
-						keyframe = start;
+						keyframe = begin;
 					else
 						keyframe++;
 					interp = 0;
-					
-					trace(keyframe,end);
 				}
 			}
 			otime = ctime;

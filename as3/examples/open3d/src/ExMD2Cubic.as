@@ -45,7 +45,7 @@ package
 
 			for each (var md2:MD2 in _renderer_childs)
 			{
-			   md2.updateFrame();
+			   md2.play("walk");
 			}
 			
 			debugText.appendText(", ZSort : " + renderer.isMeshZSort + ", Right click for more option");

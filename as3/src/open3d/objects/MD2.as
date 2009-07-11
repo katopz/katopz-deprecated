@@ -199,7 +199,7 @@ package open3d.objects
 			var sx:Number, sy:Number, sz:Number;
 			var tx:Number, ty:Number, tz:Number;
 			var verts:Vector.<Vector3D>, frame:Frame;
-			var i:int, j:int, char:int;
+			var i:int, j:int, k:int, char:int;
 			
 			for (i = 0; i < num_frames; i++)
 			{
@@ -214,9 +214,16 @@ package open3d.objects
 				ty = data.readFloat();
 				tz = data.readFloat();
 
+				k = 0;
 				for (j = 0; j < 16; j++)
-					if ((char = data.readUnsignedByte()) != 0)
+				{
+					char = data.readUnsignedByte();
+					if (int(char) >= 0x30 && int(char) <= 0x7A && k<3)
+					{
 						frame.name += String.fromCharCode(char);
+					}
+					if (int(char) >= 0x30 && int(char) <= 0x39)k++; 
+				}
 
 				// Note, the extra data.position++ in the for loop is there 
 				// to skip over a byte that holds the "vertex normal index"
