@@ -22,6 +22,10 @@ package
 			
 			var system:SDSystem = new SDSystem();
 			system.save(byteArray);
+			
+			var png:PNGDecoder = new PNGDecoder();
+			var text:String = png.getText(byteArray);
+			trace("tEXt:"+text);
 		}
 	}
 }
