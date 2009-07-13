@@ -11,6 +11,22 @@ package com.sleepydesign.utils {
 	
 	public class URLUtil 
 	{
+		public static function getFileName(value:String):String
+		{
+			var result:String;
+			if (value.indexOf("?") == -1) 
+			{
+				result = value.split("#")[0];
+			}else{
+				result = value.split("?")[0];
+			}
+			result = result.substr(result.lastIndexOf("/")+1);
+			if(result.indexOf("//")>-1)
+				result = result.substr(result.lastIndexOf("//")+1);
+			var results:Array = result.split(".");
+			return results[0];
+		} 
+		
 		public static function getType(value:String):String 
 		{
 			var result:String;
@@ -28,7 +44,7 @@ package com.sleepydesign.utils {
 		{
 			var result:String = "";
 			
-			if (unescape(value).indexOf("http://")==0 || SystemUtil.isBowser()) 
+			if (unescape(value).indexOf("http://")==0 || SystemUtil.isBrowser()) 
 			{
 				var myDate:Date = new Date();
 				if (value.indexOf("?") == -1) 
@@ -71,7 +87,7 @@ package com.sleepydesign.utils {
 				trace(" < html\t: " + uri);
 				navigateToURL(new URLRequest(uri), window);
 			}else {
-	        	if(SystemUtil.isBowser())
+	        	if(SystemUtil.isBrowser())
 	        	{
 	        		navigateToURL(new URLRequest(uri), "_self");
 	        	}else{

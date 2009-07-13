@@ -2,7 +2,6 @@
 {
 	import com.sleepydesign.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
-	import com.sleepydesign.core.SDSystem;
 	import com.sleepydesign.draw.SDSquare;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDKeyboardEvent;
@@ -13,13 +12,13 @@
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.Loader;
 	import flash.events.MouseEvent;
 	
 	import org.papervision3d.core.math.Matrix3D;
 	import org.papervision3d.core.math.Number3D;
-	
 	public class AreaBuilder extends SDContainer
 	{		
 		public var log			:SDTextField;
@@ -53,7 +52,7 @@
 		public function setupBackground():void
 		{
 			SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-			SDApplication.system.open();
+			SystemUtil.open();
 		}
 		
 		private function onOpenBackgroundComplete(event:SDEvent):void
@@ -65,7 +64,7 @@
 			area.background.destroy();
 			
 			// logical
-			area.data.background = SDSystem.openFileName;
+			area.data.background = SystemUtil.openFileName;
 			
 			// physical
 			var loader:Loader = new Loader();
