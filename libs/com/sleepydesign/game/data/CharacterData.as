@@ -1,5 +1,7 @@
 package com.sleepydesign.game.data
 {
+	import com.sleepydesign.game.core.SDModel;
+	
 	import flash.net.registerClassAlias;
 	import flash.utils.IDataInput;
 	import flash.utils.IDataOutput;
@@ -20,6 +22,8 @@ package com.sleepydesign.game.data
 		
 		public var type		:String;
 		public var height	:Number;
+		
+		public var model	:SDModel;
 		
 		public function CharacterData(id:String="default", source:String="default.md2", scale:Number=1, height:Number=100, fps:uint=15, labels:Array=null, frames:Array=null, skins:Array=null, type:String="") 
 		{

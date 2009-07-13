@@ -34,6 +34,8 @@ public class PNGEncoder
 	 *  The MIME type for a PNG image.
      */
     private static const CONTENT_TYPE:String = "image/png";
+    
+    public var tEXt:String;
 
 	//--------------------------------------------------------------------------
 	//
@@ -185,10 +187,13 @@ public class PNGEncoder
         IHDR.writeByte(0); // interlace method
         writeChunk(png, 0x49484452, IHDR);
         
-        // Build tEXt chunk
-        var tEXt:ByteArray = new ByteArray();
-        tEXt.writeUTF("HELLO");
-        writeChunk(png, 0x74455874, tEXt);
+        // Build tEXt chunk if any
+        if(tEXt)
+        {
+        	var tEXtByteArray:ByteArray = new ByteArray();
+        	tEXtByteArray.writeUTF(tEXt);
+        	writeChunk(png, 0x74455874, tEXtByteArray);
+        }
 
         // Build IDAT chunk
         var IDAT:ByteArray = new ByteArray();

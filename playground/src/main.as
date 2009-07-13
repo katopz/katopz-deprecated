@@ -8,7 +8,6 @@
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.components.SDTreeNode;
 	import com.sleepydesign.core.SDApplication;
-	import com.sleepydesign.core.SDSystem;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.game.core.Characters;
@@ -27,9 +26,8 @@
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.utils.ProfilerUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
-	import flash.display.Bitmap;
-	import flash.display.Loader;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
@@ -312,11 +310,11 @@
 					var _config:AreaData = new AreaData().parse(area.data);
 					_config.scene = new SceneData(new CameraData().parse(engine3D.camera));
 
-					system.save(_config, "l0r0.ara");
+					SystemUtil.save(_config, "l0r0.ara");
 					break;
 				case "Open":
 					system.addEventListener(SDEvent.COMPLETE, onOpenAreaComplete);
-					system.open();
+					SystemUtil.open();
 					break;
 			}
 		}

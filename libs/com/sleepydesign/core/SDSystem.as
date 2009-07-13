@@ -34,57 +34,5 @@ package com.sleepydesign.core
 				return;
 			raw.stage.addChild(this);
 		}
-
-		// ______________________________ File ______________________________
-
-		public function save(data:*, defaultFileName:String = "undefined"):void
-		{
-			//var type:String = URLUtil.getType(defaultFileName);
-
-			// TODO : save image
-
-			//save AMF like Object
-			var rawBytes:ByteArray = new ByteArray();
-			if(data is IExternalizable)
-			{
-				IExternalizable(data).writeExternal(rawBytes);
-			}else{
-				rawBytes = data;
-			}
-
-			//rawBytes.writeBytes(data.);
-
-			var fileReference:FileReference = new FileReference();
-			fileReference["save"](rawBytes, defaultFileName);
-		}
-
-		public function open(fileTypes:Array = null):void
-		{
-			fileTypes = fileTypes ? fileTypes : ["*.jpg", "*.jpeg", "*.gif", "*.png"];
-
-			file = new FileReference();
-			//typeFilter = [new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg;*.jpeg;*.gif;*.png")];
-
-			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
-			file.addEventListener(Event.SELECT, openHandler);
-			file.browse(typeFilter);
-		}
-		
-		public static var openFileName:String; 
-		private function openHandler(event:Event):void
-		{
-			file = FileReference(event.target);
-			trace(" ^ openHandler : " + file.name);
-			openFileName = file.name;
-			file.addEventListener(Event.COMPLETE, onLoadComplete);
-			file["load"]();
-		}
-
-		private function onLoadComplete(event:Event):void
-		{
-			trace(" ^ onLoadComplete : " + file["data"]);
-			file.removeEventListener(Event.COMPLETE, onLoadComplete);
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE, file["data"]));
-		}
 	}
 }

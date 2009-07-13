@@ -1,18 +1,14 @@
 package com.sleepydesign.game.core
 {
 	import com.sleepydesign.core.SDGroup;
+	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDObject;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.data.CharacterData;
 	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.utils.URLUtil;
 	
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.net.URLRequest;
-	import flash.system.ApplicationDomain;
-	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
 	
 	import org.papervision3d.core.geom.Particles;
@@ -26,7 +22,7 @@ package com.sleepydesign.game.core
 	public class Characters extends SDObject
 	{
 		private var lists:SDGroup;
-		public static var models:SDGroup;
+		//public static var models:SDGroup;
 		
 		public static var instance:Characters;
 		public static function getInstance():Characters
@@ -52,12 +48,14 @@ package com.sleepydesign.game.core
 		{
 			//var charactor:Character = new Character(id);
 			var model:SDModel = new SDModel();
-			
 			var data:CharacterData = lists.findBy(id);
+			data.model = model;
 			
+			/*
 			// TODO : can we merge this with lists?
 			if(!models)models = new SDGroup("Models");
 			models.insert(model, data.id);
+			*/
 			
 			switch (data.type)
 			{
@@ -89,12 +87,12 @@ package com.sleepydesign.game.core
 					//charactor.model = charactor.instance.addChild(dae);
 					break;
 				case "swf":
-					var sdLoader:Loader = new Loader();
-					sdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onSWFComplete);
+					var sdLoader:SDLoader = new SDLoader();
+					sdLoader.addEventListener(SDEvent.COMPLETE, onSWFComplete);
 					
-					var ldrContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
-					var request:URLRequest = new URLRequest(data.source);
-					sdLoader.load(request, ldrContext);
+					//var ldrContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
+					//var request:URLRequest = new URLRequest(data.source);
+					sdLoader.load(data.source);
 					
 					var loaderText:SDTextField = new SDTextField("loading...");
 					var spm:SDParticleMaterial = new SDParticleMaterial(loaderText, "loaderText");
@@ -120,16 +118,27 @@ package com.sleepydesign.game.core
 			return model;
 		}
 		
-		private function onSWFComplete(event:Event):void
+		private function onSWFComplete(event:SDEvent):void
 		{
-			var _url:String = LoaderInfo(event.target).url;
-			var _id:String = Sprite(event.target.content)["id"];
-			//trace("onSWFComplete:"+_url);
-			var _Class:Class = ApplicationDomain.currentDomain.getDefinition("model_Model") as Class;
+			// finish load model? let's chk in list
+			var swf:Sprite;
+			var characterData:CharacterData;
+			for each(var _characterData:CharacterData in lists.childs)
+			{
+				if(SDLoader(event.target).isContent(_characterData.source))
+				{
+					// TODO : keep object pooling
+					swf = SDLoader(event.target).getContent(_characterData.source) as Sprite;
+					characterData = _characterData;
+				}
+			}
+			
+			var _id:String = swf["id"];
+			var _className:String = URLUtil.getFileName(characterData.source)+"_Model";
+			var _Class:Class = swf.loaderInfo.applicationDomain.getDefinition(_className) as Class;
 			var _ByteArray:ByteArray = new _Class();
 			
-			var model:SDModel = models.find(_id);
-			model.instance.load(_ByteArray);
+			characterData.model.instance.load(_ByteArray);
 		}
 		
 		private function onModelComplete(event:FileLoadEvent):void
