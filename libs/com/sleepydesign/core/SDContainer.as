@@ -136,7 +136,7 @@
         
 		public function init(raw:Object=null):void
 		{
-			// build base elements
+			// initialize logical elements
 		}
 		
 		protected function onStage(event:Event=null):void
@@ -147,7 +147,7 @@
 		// ______________________________ Parse ______________________________
 		
 		/**
-		 * Initialize Strategy
+		 * Parse Strategy
 		 * - Provide default data if external data not exist 
 		 * - Serialize external data from config collector
 		 * 

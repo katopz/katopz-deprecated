@@ -4,6 +4,7 @@
 	
 	import com.sleepydesign.components.SDChatBox;
 	import com.sleepydesign.components.SDConnector;
+	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDMacPreloader;
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.components.SDTreeNode;
@@ -28,9 +29,12 @@
 	import com.sleepydesign.utils.ProfilerUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
+	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
+	
+	import gs.TweenMax;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate = "30", width = "800", height = "480")]
 	public class main extends SDApplication
@@ -60,7 +64,6 @@
 
 			fake = new Vector.<int>();
 			
-			alpha = .1
 		}
 
 		// ______________________________ Initialize ______________________________
@@ -82,21 +85,31 @@
 
 			configs[3] = config1;
 			configs[4] = config2;
+		}
+		
+		private var areaDialog:SDDialog;
+		override protected function onStage(event:Event=null):void
+		{
+			// ___________________________________________________________ Area
 
+			//TODO : ask from external call, add user name 
+			areaDialog = new SDDialog(
+				<question>
+					<![CDATA[Welcome!]]>
+					<answer src="as:onUserSelectArea(3)"><![CDATA[select area 3]]></answer>
+					<answer src="as:onUserSelectArea(4)"><![CDATA[select area 4]]></answer>
+				</question>, false, this);
+			
+			system.addChild(areaDialog);
+		}
+		
+		public function onUserSelectArea(id:int):void
+		{
+			// hide dialog
+			areaDialog.hide();
+			
 			// load config?
-			create(configs[3]);
-
-			// ___________________________________________________________ System Layer
-
-			createSystem();
-			createConnector();
-			createChatBox();
-
-			// bind player -> connector
-			game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
-
-			// start
-			game.start();
+			create(configs[id]);
 		}
 
 		// ______________________________ Create ______________________________
@@ -104,13 +117,13 @@
 		override public function create(config:Object = null):void
 		{
 			super.create(config);
-
+			
 			// ___________________________________________________________ 2D Layer
 
 			// game
 			game = new Game();
 
-			area = new Area(config);
+			area = new Area(_config);
 			addChild(area);
 
 			area.map.x = stage.stageWidth - area.map.width;
@@ -119,17 +132,13 @@
 			// ___________________________________________________________ 3D Layer
 
 			// 3D engine
-			engine3D = new Engine3D(this, config.scene);
+			engine3D = new Engine3D(this, _config.scene);
 			//engine3D.axis = true;
 			//engine3D.grid = true;
 			//engine3D.compass = true;
 
 			// bind
 			game.engine = engine3D;
-
-			// ___________________________________________________________ Area
-
-			//TODO : wait for user select area 
 
 			// Ground
 			area.ground = new Ground(engine3D, area.map, true, !true);
@@ -161,6 +170,18 @@
 
 			game.addPlayer(game.player);
 			game.player.talk(VERSION);
+			
+			// ___________________________________________________________ System Layer
+
+			createExplorer();
+			createConnector(area.id);
+			createChatBox();
+
+			// bind player -> connector
+			game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
+
+			// start
+			game.start();
 		}
 
 		// _______________________________________________________ Action
@@ -172,10 +193,10 @@
 
 		// _______________________________________________________ Connector
 
-		private function createConnector():void
+		private function createConnector(id:String):void
 		{
 			//connector = new SDConnector(this, "rtmp://localhost/SOSample", "lobby");
-			connector = new SDConnector(SERVER_URI, area.id);
+			connector = new SDConnector(SERVER_URI, id);
 			connector.x = 100;
 			connector.y = 20;
 			system.addChild(connector);
@@ -229,7 +250,7 @@
 
 		// _______________________________________________________ System
 
-		private function createSystem():void
+		private function createExplorer():void
 		{
 			// Engine Explorer
 			var tree:SDTree = new SDTree(
