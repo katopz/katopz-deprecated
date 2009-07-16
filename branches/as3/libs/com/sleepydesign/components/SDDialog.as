@@ -25,13 +25,24 @@ package com.sleepydesign.components
 
 		private var iText:*;
 		private var isTail:Boolean;
+		
+		private var caller:Object
 
-		public function SDDialog(iText:* = "", isTail:Boolean = true)
+		public function SDDialog(iText:* = "", isTail:Boolean = true, caller:Object=null)
 		{
 			this.iText = iText;
 			this.isTail = isTail;
 			
+			this.caller = caller;
+			
 			super();
+		}
+		
+		override protected function onStage(event:Event=null):void
+		{
+			align = "center";
+			this.caller = caller?caller:this.parent;
+			super.onStage(event);
 		}
 
 		override public function init(raw:Object = null):void
@@ -102,10 +113,10 @@ package com.sleepydesign.components
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 
-		public function setPosition(iX:Number, iY:Number):void
+		public function setPosition(iX:Number=0, iY:Number=0):void
 		{
-			x = begPoint.x + iX;
-			y = begPoint.y + iY;
+			x = begPoint.x + ((iX>0)?iX:x);
+			y = begPoint.y + ((iY>0)?iY:y);
 		}
 
 		public function copyPosition(iTarget:DisplayObject):void
@@ -115,12 +126,12 @@ package com.sleepydesign.components
 
 		public function get text():String
 		{
-			return label.text
+			return label.text;
 		}
 
 		public function set text(iText:*):void
 		{
-			label.text = iText
+			label.text = iText;
 			draw();
 		}
 
@@ -144,6 +155,25 @@ package com.sleepydesign.components
 		public function set xmlText(iText:*):void
 		{
 			htmlText = XML(iText);
+		}
+		
+		private var _align:String = "center";
+		public function get align():String
+		{
+			return _align;
+		}
+		
+		public function set align(value:String):void
+		{
+			_align = value;
+			switch(_align)
+			{
+				case "center" :
+					begPoint.x = stage.stageWidth/2 - width/2;
+					begPoint.y = stage.stageHeight/2 - height/2;
+				break;
+			}
+			setPosition();
 		}
 
 		public function parseCSS(iCSSText:String = null):void
@@ -267,12 +297,12 @@ package com.sleepydesign.components
 					if (argumentString.length > 0)
 					{
 						//custom::[functionName](argument);
-						this[functionName].apply(this, [argument]);
+						caller[functionName].apply(caller, [argument]);
 					}
 					else
 					{
 						//custom::[functionName]();
-						this[functionName].apply(this);
+						caller[functionName].apply(caller);
 					}
 					break;
 
