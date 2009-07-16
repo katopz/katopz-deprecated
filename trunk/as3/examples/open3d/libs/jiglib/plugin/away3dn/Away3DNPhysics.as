@@ -6,8 +6,7 @@ package jiglib.plugin.away3dn
 	import jiglib.math.JMatrix3D;
 	import jiglib.physics.RigidBody;
 	import jiglib.plugin.AbstractPhysics;
-	
-	import open3d.materials.BitmapMaterial;
+
 	import open3d.materials.Material;
 	import open3d.objects.Object3D;
 	import open3d.objects.Plane;
@@ -17,13 +16,14 @@ package jiglib.plugin.away3dn
 
 	/**
 	 * @author bartekd
+	 * @author katopz
 	 */
-	public class NativePhysics extends AbstractPhysics
+	public class Away3DNPhysics extends AbstractPhysics
 	{
 
 		private var renderer:Renderer;
 
-		public function NativePhysics(renderer:Renderer, speed:Number = 1)
+		public function Away3DNPhysics(renderer:Renderer, speed:Number = 1)
 		{
 			super(speed);
 			this.renderer = renderer;
@@ -31,14 +31,14 @@ package jiglib.plugin.away3dn
 
 		public function getMesh(body:RigidBody):Object3D
 		{
-			return NativeMesh(body.skin).mesh;
+			return Away3DNMesh(body.skin).mesh;
 		}
 
 		public function createSphere(material:Material, radius:Number = 100, segmentsW:int = 8, segmentsH:int = 6):RigidBody
 		{
 			var sphere:Sphere = new Sphere(radius, segmentsW, segmentsH, material);
 			renderer.addChild(sphere);
-			var jsphere:JSphere = new JSphere(new NativeMesh(sphere), radius);
+			var jsphere:JSphere = new JSphere(new Away3DNMesh(sphere), radius);
 			addBody(jsphere);
 			return jsphere;
 		}
@@ -47,7 +47,7 @@ package jiglib.plugin.away3dn
 		{
 			var cube:SimpleCube = new SimpleCube(width, material);
 			renderer.addChild(cube);
-			var jbox:JBox = new JBox(new NativeMesh(cube), width, depth, height);
+			var jbox:JBox = new JBox(new Away3DNMesh(cube), width, depth, height);
 			addBody(jbox);
 			return jbox;
 		}
@@ -57,7 +57,7 @@ package jiglib.plugin.away3dn
 			var ground:Plane = new Plane(size, size, material);
 			ground.culling = "none";
 			renderer.addChild(ground);
-			var jGround:JPlane = new JPlane(new NativeMesh(ground));
+			var jGround:JPlane = new JPlane(new Away3DNMesh(ground));
 			jGround.movable = false;
 			jGround.setOrientation(JMatrix3D.rotationX(Math.PI / 2));
 			jGround.y = level;
