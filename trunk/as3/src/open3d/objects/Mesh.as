@@ -1,7 +1,5 @@
 package open3d.objects
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.display.*;
 	import flash.geom.*;
 	
@@ -220,6 +218,24 @@ package open3d.objects
 				}
         	}
         	_view_graphics.endFill();
+		}
+		
+		
+		override public function hitTestPoint(x:Number, y:Number, shapeFlag:Boolean=false):Boolean
+		{
+        	var _vertices:Vector.<Number> = _triangles.vertices;
+        	var isHit:Boolean;
+        	
+        	for each (var face:Face in _faces)
+        	{
+				// get path data grom face
+				var _data:Vector.<Number> = face.getPathData(_vertices);
+				
+				// chk point in triangle
+				if(insideTriangle(x, y, _data[0], _data[1], _data[2], _data[3], _data[4], _data[5]))
+					return true;
+        	}
+        	return false; 
 		}
 		
         /**
