@@ -88,8 +88,8 @@ package open3d.view
 		{
 			prerender()
 			renderer.render();
-			draw();
 			if (_isDebug)debug();
+			draw();
 		}
 
 		protected function debug():void
