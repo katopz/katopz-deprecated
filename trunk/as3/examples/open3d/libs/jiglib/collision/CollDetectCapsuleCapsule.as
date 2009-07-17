@@ -38,7 +38,7 @@ package jiglib.collision {
 			type1 = "CAPSULE";
 		}
 		
-		override public function collDetect(info:CollDetectInfo, collArr:Array):void {
+		override public function collDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>):void {
 			var capsule0:JCapsule = info.body0 as JCapsule;
 			var capsule1:JCapsule = info.body1 as JCapsule;
 			

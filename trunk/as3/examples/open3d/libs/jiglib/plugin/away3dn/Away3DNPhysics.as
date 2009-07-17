@@ -43,7 +43,7 @@ package jiglib.plugin.away3dn
 			return jsphere;
 		}
 
-		public function createCube(material:Material, width:Number = 500, depth:Number = 500, height:Number = 500, segmentsS:int = 1, segmentsT:int = 1, segmentsH:int = 1, insideFaces:int = 0, excludeFaces:int = 0):RigidBody
+		public function createCube(material:Material, width:Number = 100, depth:Number = 100, height:Number = 100, segmentsS:int = 1, segmentsT:int = 1, segmentsH:int = 1, insideFaces:int = 0, excludeFaces:int = 0):RigidBody
 		{
 			var cube:SimpleCube = new SimpleCube(width, material);
 			renderer.addChild(cube);
@@ -55,7 +55,6 @@ package jiglib.plugin.away3dn
 		public function createGround(material:Material, size:Number, level:Number):RigidBody
 		{
 			var ground:Plane = new Plane(size, size, material);
-			ground.culling = "none";
 			renderer.addChild(ground);
 			var jGround:JPlane = new JPlane(new Away3DNMesh(ground));
 			jGround.movable = false;

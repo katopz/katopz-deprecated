@@ -36,6 +36,8 @@
 // ______________________________________________________________________ Matrix3D
 
 package jiglib.math {
+	import flash.geom.Matrix3D;
+	
 
 	/**
 	 * The Matrix3D class lets you create and manipulate 4x3 3D transformation matrices.
@@ -52,7 +54,7 @@ package jiglib.math {
 
 	 */
 
-	public class JMatrix3D {
+	public class JMatrix3D extends Matrix3D {
 		/**
 		 * X O O O
 		 * O O O O

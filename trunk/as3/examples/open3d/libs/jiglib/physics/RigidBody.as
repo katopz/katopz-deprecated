@@ -105,7 +105,7 @@ package jiglib.physics {
 			_velChanged = false;
 			_inactiveTime = 0;
 			 
-			_activity = true;
+			isActive = _activity = true;
 			_movable = true;
 			_origMovable = true;
 			 
@@ -516,9 +516,7 @@ package jiglib.physics {
 			_worldInvInertia = JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, _bodyInvInertia), _invOrientation);
 		}
 		
-		public function isActive():Boolean {
-			return _activity;
-		}
+		public var isActive:Boolean;
 		
 		public function get movable():Boolean {
 			return _movable;
@@ -526,7 +524,7 @@ package jiglib.physics {
 
 		public function set movable(mov:Boolean):void {
 			_movable = mov;
-			_activity = mov;
+			isActive = _activity = mov;
 			_origMovable = mov;
 		}
 		
@@ -549,14 +547,14 @@ package jiglib.physics {
 		 
 		public function setActive(activityFactor:Number = 1):void {
 			if (_movable) {
-				_activity = true;
+				isActive = _activity = true;
 				_inactiveTime = (1 - activityFactor) * JConfig.deactivationTime;
 			}
 		}
 		
 		public function setInactive():void {
 			if (_movable) {
-				_activity = false;
+				isActive = _activity = false;
 			}
 		}
 		

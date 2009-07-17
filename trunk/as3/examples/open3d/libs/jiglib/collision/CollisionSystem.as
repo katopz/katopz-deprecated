@@ -24,6 +24,8 @@ distribution.
  */
 
 package jiglib.collision {
+	import __AS3__.vec.Vector;
+	
 	import jiglib.geometry.JSegment;
 	import jiglib.math.*;
 	import jiglib.physics.RigidBody;
@@ -73,8 +75,8 @@ package jiglib.collision {
 			collBody = [];
 		}
 		
-		public function detectCollisions(body:RigidBody, collArr:Array):void {
-			if (!body.isActive()) {
+		public function detectCollisions(body:RigidBody, collArr:Vector.<CollisionInfo>):void {
+			if (!body.isActive) {
 				return;
 			}
 			var info:CollDetectInfo;
@@ -91,7 +93,7 @@ package jiglib.collision {
 			}
 		}
 		
-		public function detectAllCollisions(bodies:Array, collArr:Array):void {
+		public function detectAllCollisions(bodies:Vector.<RigidBody>, collArr:Vector.<CollisionInfo>):void {
 			var info:CollDetectInfo;
 			var fu:CollDetectFunctor;
 			for (var i:String in bodies) {
@@ -100,7 +102,7 @@ package jiglib.collision {
 						continue;
 					}
 					
-					if (collBody[j].isActive() && bodies[i].id > collBody[j].id) {
+					if (collBody[j].isActive && bodies[i].id > collBody[j].id) {
 						continue;
 					}
 					

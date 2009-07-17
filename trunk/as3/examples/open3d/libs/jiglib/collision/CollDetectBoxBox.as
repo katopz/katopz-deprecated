@@ -231,7 +231,7 @@ package jiglib.collision {
 			return true;
 		}
 		 
-		override public function collDetect(info:CollDetectInfo, collArr:Array):void {
+		override public function collDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>):void {
 			var box0:JBox = info.body0 as JBox;
 			var box1:JBox = info.body1 as JBox;
 			 
@@ -301,7 +301,7 @@ package jiglib.collision {
 			}
 		}
 		
-		private function boxEdgesCollDetect(info:CollDetectInfo, collArr:Array, box0:JBox, box1:JBox, N:JNumber3D, depth:Number, axis:int):void {
+		private function boxEdgesCollDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>, box0:JBox, box1:JBox, N:JNumber3D, depth:Number, axis:int):void {
 			var contactPointsFromOld:Boolean = true;
 			var contactPoint:Array = [];
 			combinationDist = 0.5 * Math.min(Math.min(box0.sideLengths.x, box0.sideLengths.y, box0.sideLengths.z), Math.min(box1.sideLengths.x, box1.sideLengths.y, box1.sideLengths.z));
@@ -354,7 +354,7 @@ package jiglib.collision {
 			}
 		}
 		
-		private function boxSortCollDetect(info:CollDetectInfo, collArr:Array, box0:JBox, box1:JBox, N:JNumber3D, depth:Number):void {
+		private function boxSortCollDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>, box0:JBox, box1:JBox, N:JNumber3D, depth:Number):void {
 			var contactA:Array = [];
 			var contactB:Array = [];
 			var supportVertA:Array = box0.getSupportVertices(N);

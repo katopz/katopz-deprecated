@@ -38,7 +38,7 @@ package jiglib.collision {
 			type1 = "SPHERE";
 		}
 		
-		override public function collDetect(info:CollDetectInfo, collArr:Array):void {
+		override public function collDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>):void {
 			var sphere0:JSphere = info.body0 as JSphere;
 			var sphere1:JSphere = info.body1 as JSphere;
 			
