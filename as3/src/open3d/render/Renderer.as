@@ -1,6 +1,7 @@
 package open3d.render
 {
 	import flash.display.*;
+	import flash.events.MouseEvent;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
 	import flash.geom.Point;
@@ -81,6 +82,18 @@ package open3d.render
 		public function get isMeshZSort():Boolean
 		{
 			return _isMeshZSort;
+		}
+		
+		private var _mouseEnable:Boolean = false;
+
+		public function set mouseEnable(value:Boolean):void
+		{
+			_mouseEnable = value;
+		}
+
+		public function get mouseEnable():Boolean
+		{
+			return _mouseEnable;
 		}
 		
 		private var _type:uint = 1;
@@ -181,6 +194,13 @@ package open3d.render
 					// DRAW TYPE #3 drawPath 
 					if(_isFaceDebug)
 						Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
+					
+					// interactive	
+					if(_mouseEnable)
+					{
+						if(Mesh(child).hitTestPoint(view.mouseX, view.mouseY))
+							child.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE));
+					}
 				}
 			}
 			
