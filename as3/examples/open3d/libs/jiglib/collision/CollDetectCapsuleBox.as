@@ -40,7 +40,7 @@ package jiglib.collision {
 			type1 = "BOX";
 		}
 		
-		override public function collDetect(info:CollDetectInfo, collArr:Array):void {
+		override public function collDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>):void {
 			var tempBody:RigidBody;
 			if(info.body0.type=="BOX") {
 				tempBody=info.body0;

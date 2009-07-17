@@ -30,7 +30,7 @@ package jiglib.collision {
 		public var type0:String;
 		public var type1:String;
 
-		public function collDetect(info:CollDetectInfo, collArr:Array):void {
+		public function collDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>):void {
 		}
 	}
 }
