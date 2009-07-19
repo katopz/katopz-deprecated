@@ -1,0 +1,17 @@
+<languageVersion: 1.0;>
+kernel HelloWorld
+<
+	namespace: "PBDT";
+	vendor: "katopz";
+	version: 1;
+	description: "hello world";
+>
+{
+	input image4 source;
+	output pixel4 target;
+
+	void evaluatePixel()
+	{
+		target = sampleNearest(source, outCoord());
+	}
+}
