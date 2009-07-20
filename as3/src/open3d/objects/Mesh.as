@@ -112,9 +112,9 @@ package open3d.objects
 				var i:int = -1;
 				for each(var index:Vector3D in _faceIndexes)
 				{
-					_triangles_indices[++i] = index.x;
-					_triangles_indices[++i] = index.y;
-					_triangles_indices[++i] = index.z;
+					_triangles_indices[int(++i)] = index.x;
+					_triangles_indices[int(++i)] = index.y;
+					_triangles_indices[int(++i)] = index.z;
 				}
 			}
 			
