@@ -1,0 +1,18 @@
+<languageVersion: 1.0;>
+kernel PBAdd
+<
+	namespace: "PBDT";
+	vendor: "katopz";
+	version: 1;
+	description: "Add 3 vertices";
+>
+{
+	input image3 source;
+	output pixel3 target;
+
+	void evaluatePixel()
+	{
+		pixel3 px = sample(source, outCoord());
+		target = pixel3(px[0] + px[1] + px[2], 0, 0);
+	}
+}

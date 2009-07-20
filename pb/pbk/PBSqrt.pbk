@@ -1,5 +1,5 @@
 <languageVersion: 1.0;>
-kernel SQRT
+kernel PBSqrt
 <
 	namespace: "PBDT";
 	vendor: "katopz";
