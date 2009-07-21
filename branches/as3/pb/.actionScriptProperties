@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="ExPBMath.as" version="3">
+<actionScriptProperties mainApplicationPath="ExPBAlphaMatteComposite.as" version="3">
 <compiler additionalCompilerArguments="" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath/>
 <libraryPath defaultLinkType="1">
@@ -22,6 +22,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
+<application path="ExPBAlphaMatteComposite.as"/>
 <application path="ExPBMath.as"/>
 <application path="ExPBBloomBrightness.as"/>
 </applications>
