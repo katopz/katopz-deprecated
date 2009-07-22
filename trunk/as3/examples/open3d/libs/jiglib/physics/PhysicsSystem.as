@@ -27,7 +27,7 @@
 package jiglib.physics
 {
 
-	import __AS3__.vec.Vector;
+	
 	
 	import jiglib.cof.JConfig;
 	import jiglib.collision.CollPointInfo;
