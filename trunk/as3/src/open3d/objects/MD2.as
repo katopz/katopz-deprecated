@@ -3,8 +3,6 @@ package open3d.objects
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
 	
@@ -12,6 +10,7 @@ package open3d.objects
 	import open3d.data.FaceData;
 	import open3d.geom.UV;
 	import open3d.materials.Material;
+	import open3d.utils.LoaderUtil;
 
 	/**
 	 * File loader for the Md2 file format.
@@ -51,7 +50,6 @@ package open3d.objects
 		 */
 		public function MD2(data:* = null, material:Material = null, scale:Number = 10, fps:int = 24)
 		{
-			
 			super(material, fps);
 			_scale = scale;
 
@@ -75,23 +73,13 @@ package open3d.objects
 		 */
 		private function load(uri:String):void
 		{
-			loader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.BINARY;
-			loader.addEventListener(Event.COMPLETE, onLoad, false, 0, true);
-
-			try
-			{
-				loader.load(new URLRequest(uri));
-			}
-			catch (e:Error)
-			{
-				trace(" ! Error in loading MD2 file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
-			}
+			LoaderUtil.load(uri, onLoad);
 		}
 
 		private function onLoad(event:Event):void
 		{
-			parse(ByteArray(event.target.data));
+			if(event.type == Event.COMPLETE)
+				parse(ByteArray(event.target.data));
 		}
 
 		/**
@@ -155,27 +143,27 @@ package open3d.objects
 			var n:int = -1;
 			i = 0;
 			
-			var a0:Vector3D;
-			var b0:Vector3D;
-			var c0:Vector3D;
+			var v0:Vector3D;
+			var v1:Vector3D;
+			var v2:Vector3D;
 			
 			for each (var face:FaceData in faceDatas)
 			{
-				a0 = Frame(frames[0]).vertices[face.a];
-				b0 = Frame(frames[0]).vertices[face.b];
-				c0 = Frame(frames[0]).vertices[face.c];
+				v0 = Frame(frames[0]).vertices[face.a];
+				v1 = Frame(frames[0]).vertices[face.b];
+				v2 = Frame(frames[0]).vertices[face.c];
 				
-				_vin[i++] = a0.x;
-				_vin[i++] = a0.y;
-				_vin[i++] = a0.z;
+				_vin[i++] = v0.x;
+				_vin[i++] = v0.y;
+				_vin[i++] = v0.z;
 				
-				_vin[i++] = b0.x;
-				_vin[i++] = b0.y;
-				_vin[i++] = b0.z;
+				_vin[i++] = v1.x;
+				_vin[i++] = v1.y;
+				_vin[i++] = v1.z;
 
-				_vin[i++] = c0.x;
-				_vin[i++] = c0.y;
-				_vin[i++] = c0.z;
+				_vin[i++] = v2.x;
+				_vin[i++] = v2.y;
+				_vin[i++] = v2.z;
 
 				_triangles.uvtData.push(face.uvMap[0].u, face.uvMap[0].v, 1);
 				_triangles.uvtData.push(face.uvMap[1].u, face.uvMap[1].v, 1);

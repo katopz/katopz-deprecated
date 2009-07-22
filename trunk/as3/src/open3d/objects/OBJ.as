@@ -1,11 +1,19 @@
 package open3d.objects
 {
 	import flash.events.*;
+	import flash.geom.Vector3D;
 	import flash.net.*;
+	import flash.utils.ByteArray;
 	
+	import open3d.data.FaceData;
+	import open3d.geom.Face;
 	import open3d.geom.UV;
 	import open3d.materials.BitmapFileMaterial;
-
+	import open3d.materials.Material;
+	import open3d.utils.LoaderUtil;
+	
+	//TODO : clean this!, mtl + group not done yet
+	
 	/**
 	 * File loader for the OBJ file format.<br/>
 	 * <br/>
@@ -24,28 +32,35 @@ package open3d.objects
 	 * <br/>
 	 * export from apps as polygon group or mesh as .obj file.<br/>
 	 * added support for 3dmax negative vertexes references
+	 * 
+	 * @author katopz
 	 */
-	public class OBJ
+	public class OBJ extends Mesh
 	{
 		public var mesh:Mesh;
 		private var mtlPath:String;
 		private var aMeshes:Array = [];
 		private var aSources:Array;
 		private var aMats:Array;
-		private var vertices:Array = [];
+		private var vertices:Vector.<Vector3D>;
 		private var uvs:Array = [];
-		private var scaling:Number;
-
-		private function parseObj(data:String):void
+		private var scaling:Number = 1;
+		
+		private var faceDatas:Vector.<Face>;
+		private var container:Object3D;
+		 
+		private function parse(data:String):void
 		{
 			var lines:Array = data.split('\n');
 			if (lines.length == 1)
 				lines = data.split(String.fromCharCode(13));
 			var trunk:Array;
 			var isNew:Boolean = true;
-			var group:ObjectContainer3D;
-
-			vertices = [new Vertex()];
+			var group:Object3D;
+			
+			faceDatas = new Vector.<Face>();
+			vertices= new Vector.<Vector3D>();
+			vertices[0] = new Vector3D();
 			uvs = [new UV()];
 
 			var isNeg:Boolean;
@@ -62,47 +77,40 @@ package open3d.objects
 				switch (trunk[0])
 				{
 					case "g":
-						group = new ObjectContainer3D();
+						group = new Object3D();
 						group.name = trunk[1];
 
 						if (container == null)
 						{
-							if (aMeshes.length == 1)
-							{
-								container = new ObjectContainer3D(aMeshes[0].mesh);
-							}
-							else
-							{
-								container = new ObjectContainer3D();
-							}
+							container = new Object3D();
 						}
 
-						(container as ObjectContainer3D).addChild(group);
+						(container as Object3D).addChild(group);
 						isNew = true;
 
 						break;
 
 					case "usemtl":
-						aMeshes[aMeshes.length - 1].materialid = trunk[1];
+						//aMeshes[aMeshes.length - 1].materialid = trunk[1];
 						break;
 
 					case "v":
 						if (isNew)
 						{
-							generateNewMesh();
+							//generateNewMesh();
 							isNew = false;
 							if (group != null)
 							{
-								group.addChild(mesh);
+								//group.addChild(mesh);
 							}
 						}
-
-						vertices.push(new Vertex(-parseFloat(trunk[1]) * scaling, parseFloat(trunk[2]) * scaling, -parseFloat(trunk[3]) * scaling));
+						var _v:Vector3D = new Vector3D(-parseFloat(trunk[1]) * scaling, parseFloat(trunk[2]) * scaling, -parseFloat(trunk[3]) * scaling);
+						vertices.push(_v);
 
 						break;
 
 					case "vt":
-						uvs.push(new UV(parseFloat(trunk[1]), parseFloat(trunk[2])));
+						uvs.push(new UV(parseFloat(trunk[1]), 1-parseFloat(trunk[2])));
 						break;
 
 					case "f":
@@ -146,7 +154,6 @@ package open3d.objects
 							isNeg = true;
 						}
 
-
 						try
 						{
 
@@ -155,22 +162,51 @@ package open3d.objects
 
 								if (isNeg)
 								{
+									/*
+									addFace
+									(
+										vertices[vertices.length - parseInt(face1[0])], 
+										vertices[vertices.length - parseInt(face0[0])], 
+										vertices[vertices.length - parseInt(face3[0])],
+										Vector.<UV>([
+											checkUV(1, uvs[uvs.length - parseInt(face1[1])]), 
+											checkUV(2, uvs[uvs.length - parseInt(face0[1])]), 
+											checkUV(3, uvs[uvs.length - parseInt(face3[1])])
+										])
+									);
 
-									mesh.addFace(new Face(vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face0[0])], vertices[vertices.length - parseInt(face3[0])],
-										null, checkUV(1, uvs[uvs.length - parseInt(face1[1])]), checkUV(2, uvs[uvs.length - parseInt(face0[1])]), checkUV(3, uvs[uvs.length - parseInt(face3[1])])));
-
-									mesh.addFace(new Face(vertices[vertices.length - parseInt(face2[0])], vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face3[0])],
-										null, checkUV(1, uvs[uvs.length - parseInt(face2[1])]), checkUV(2, uvs[uvs.length - parseInt(face1[1])]), checkUV(3, uvs[uvs.length - parseInt(face3[1])])));
-
+									addFace
+									(
+										vertices[vertices.length - parseInt(face2[0])], vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face3[0])],
+										Vector.<UV>([
+											checkUV(1, uvs[uvs.length - parseInt(face2[1])]), 
+											checkUV(2, uvs[uvs.length - parseInt(face1[1])]), 
+											checkUV(3, uvs[uvs.length - parseInt(face3[1])])
+										])
+									);
+									*/
 								}
 								else
 								{
+									addFace
+									(
+										vertices[parseInt(face1[0])], vertices[parseInt(face0[0])], vertices[parseInt(face3[0])],
+										Vector.<UV>([
+											checkUV(1, uvs[parseInt(face1[1])]), 
+											checkUV(2, uvs[parseInt(face0[1])]), 
+											checkUV(3, uvs[parseInt(face3[1])])
+										])
+									);
 
-									mesh.addFace(new Face(vertices[parseInt(face1[0])], vertices[parseInt(face0[0])], vertices[parseInt(face3[0])],
-										null, checkUV(1, uvs[parseInt(face1[1])]), checkUV(2, uvs[parseInt(face0[1])]), checkUV(3, uvs[parseInt(face3[1])])));
-
-									mesh.addFace(new Face(vertices[parseInt(face2[0])], vertices[parseInt(face1[0])], vertices[parseInt(face3[0])],
-										null, checkUV(1, uvs[parseInt(face2[1])]), checkUV(2, uvs[parseInt(face1[1])]), checkUV(3, uvs[parseInt(face3[1])])));
+									addFace
+									(
+										vertices[parseInt(face2[0])], vertices[parseInt(face1[0])], vertices[parseInt(face3[0])],
+										Vector.<UV>([
+											checkUV(1, uvs[parseInt(face2[1])]), 
+											checkUV(2, uvs[parseInt(face1[1])]), 
+											checkUV(3, uvs[parseInt(face3[1])])
+										])
+									);
 								}
 
 							}
@@ -179,20 +215,29 @@ package open3d.objects
 
 								if (isNeg)
 								{
-
-									mesh.addFace(new Face(vertices[vertices.length - parseInt(face2[0])], vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face0[0])],
-										null, checkUV(1, uvs[uvs.length - parseInt(face2[1])]), checkUV(2, uvs[uvs.length - parseInt(face1[1])]), checkUV(3, uvs[uvs.length - parseInt(face0[1])])));
+									addFace
+									(
+										vertices[vertices.length - parseInt(face2[0])], vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face0[0])],
+										Vector.<UV>([
+											checkUV(1, uvs[uvs.length - parseInt(face2[1])]), 
+											checkUV(2, uvs[uvs.length - parseInt(face1[1])]), 
+											checkUV(3, uvs[uvs.length - parseInt(face0[1])])
+										])
+									);
 								}
 								else
 								{
-
-									mesh.addFace(new Face(vertices[parseInt(face2[0])], vertices[parseInt(face1[0])], vertices[parseInt(face0[0])],
-										null, checkUV(1, uvs[parseInt(face2[1])]), checkUV(2, uvs[parseInt(face1[1])]), checkUV(3, uvs[parseInt(face0[1])])));
+									addFace
+									(
+										vertices[parseInt(face2[0])], vertices[parseInt(face1[0])], vertices[parseInt(face0[0])],
+										Vector.<UV>([
+											checkUV(1, uvs[parseInt(face2[1])]), 
+											checkUV(2, uvs[parseInt(face1[1])]), 
+											checkUV(3, uvs[parseInt(face0[1])])
+										])
+									);
 								}
-
 							}
-
-
 						}
 						catch (e:Error)
 						{
@@ -206,11 +251,35 @@ package open3d.objects
 
 			vertices = null;
 			uvs = null;
-
-			if (container == null)
-				container = mesh;
+			
+			buildFaces(material);
 		}
 
+		private var i:int = 0;
+		private var n:int = -1;
+		private function addFace(v0:Vector3D,v1:Vector3D,v2:Vector3D, uvs:Vector.<UV>):void
+		{
+			_vin[i++] = v0.x;
+			_vin[i++] = v0.y;
+			_vin[i++] = v0.z;
+			
+			_vin[i++] = v1.x;
+			_vin[i++] = v1.y;
+			_vin[i++] = v1.z;
+
+			_vin[i++] = v2.x;
+			_vin[i++] = v2.y;
+			_vin[i++] = v2.z;
+			
+			_triangles.uvtData.push(uvs[0].u, uvs[0].v, 1);
+			_triangles.uvtData.push(uvs[1].u, uvs[1].v, 1);
+			_triangles.uvtData.push(uvs[2].u, uvs[2].v, 1);
+			
+			n += 3;
+
+			_triangles.indices.push(n - 2, n - 1, n);
+		}
+		
 		private function checkUV(id:int, uv:UV = null):UV
 		{
 			if (uv == null)
@@ -287,7 +356,7 @@ package open3d.objects
 			var trunk:Array;
 			var i:int;
 			var j:int;
-			var _face:Face;
+			var _face:FaceData;
 			var mat:BitmapFileMaterial;
 			aMats = [];
 
@@ -342,7 +411,8 @@ package open3d.objects
 			aMats.push({url: url, material: mat});
 			return mat;
 		}
-
+		
+		/*
 		private function generateNewMesh():void
 		{
 			mesh = new Mesh(ini);
@@ -351,13 +421,14 @@ package open3d.objects
 			mesh.url = "External";
 
 			if (aMeshes.length == 1 && container == null)
-				container = new ObjectContainer3D(aMeshes[0].mesh);
+				container = new Object3D(aMeshes[0].mesh);
 
 			aMeshes.push({materialid: "", mesh: mesh});
 
 			if (aMeshes.length > 1 || container != null)
-				(container as ObjectContainer3D).addChild(mesh);
+				(container as Object3D).addChild(mesh);
 		}
+		*/
 
 		/**
 		 * Creates a new <code>Obj</code> object. Not intended for direct use, use the static <code>parse</code> or <code>load</code> methods.
@@ -370,31 +441,28 @@ package open3d.objects
 		 * @see away3d.loaders.Obj#load()
 		 */
 
-		public function Obj(data:*, init:Object = null)
+		public function OBJ(data:* = null, material:Material = null, scale:int=1)
 		{
-			var dataString:String = Cast.string(data);
-
-			ini = Init.parse(init);
-
-			mtlPath = ini.getString("mtlPath", "");
-			scaling = ini.getNumber("scaling", 1) * 10;
-
-			parseObj(dataString);
-			checkMtl(dataString);
-		}
-
-		/**
-		 * Creates a 3d mesh object from the raw ascii data of a obj file.
-		 *
-		 * @param	data				The ascii data of a loaded file.
-		 * @param	init				[optional]	An initialisation object for specifying default instance properties.
-		 *
-		 * @return						A 3d mesh object representation of the obj file.
-		 */
-
-		public static function parse(data:*, init:Object = null):Object3D
-		{
-			return Object3DLoader.parseGeometry(data, Obj, init).handle;
+			super();
+			
+			this.material = material;
+			
+			if (data)
+			{
+				if (data is ByteArray)
+				{
+					parse(data);
+				}
+				else
+				{
+					load(data);
+				}
+			}
+			
+			scaling = scale;
+			
+			//parseObj(dataString);
+			//checkMtl(dataString);
 		}
 
 		/**
@@ -404,25 +472,23 @@ package open3d.objects
 		 * @param	init	[optional]	An initialisation object for specifying default instance properties.
 		 * @return						A 3d loader object that can be used as a placeholder in a scene while the file is loading.
 		 */
-
-		public static function load(url:String, init:Object = null):Object3DLoader
+		private function load(uri:String, mtlPath:String = null):void
 		{
+			/*
+			TODO : mtl
 			//mtlPath as model folder
-			if (url)
-			{
-				var _pathArray:Array = url.split("/");
-				_pathArray.pop();
-				var _mtlPath:String = (_pathArray.length > 0) ? _pathArray.join("/") + "/" : _pathArray.join("/");
-				if (init)
-				{
-					init["mtlPath"] = (init["mtlPath"]) ? init["mtlPath"] : _mtlPath;
-				}
-				else
-				{
-					init = {mtlPath: _mtlPath};
-				}
-			}
-			return Object3DLoader.loadGeometry(url, Obj, false, init);
+			var _pathArray:Array = url.split("/");
+			_pathArray.pop();
+			this.mtlPath = (_pathArray.length > 0) ? _pathArray.join("/") + "/" : _pathArray.join("/");
+			*/
+			
+			LoaderUtil.load(uri, onLoad, URLLoaderDataFormat.TEXT);
+		}
+
+		private function onLoad(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+				parse(String(event.target.data));
 		}
 	}
 }
