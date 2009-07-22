@@ -27,8 +27,6 @@
 
 package
 {
-	import __AS3__.vec.Vector;
-	
 	import com.derschmale.stok3d.filters.EnvMapFaces;
 	import com.derschmale.stok3d.filters.EnvMapPhongFilter;
 	

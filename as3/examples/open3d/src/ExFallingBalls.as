@@ -1,7 +1,5 @@
 package
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 	

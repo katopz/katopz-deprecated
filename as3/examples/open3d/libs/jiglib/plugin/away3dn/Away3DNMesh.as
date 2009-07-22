@@ -1,6 +1,6 @@
 package jiglib.plugin.away3dn
 {
-	import __AS3__.vec.Vector;
+	
 
 	import flash.geom.Matrix3D;
 

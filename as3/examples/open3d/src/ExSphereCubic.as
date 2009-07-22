@@ -1,7 +1,5 @@
 package
 {
-	import __AS3__.vec.Vector;
-	
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Object3D;
 	import open3d.objects.Sphere;

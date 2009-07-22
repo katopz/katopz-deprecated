@@ -24,7 +24,7 @@ distribution.
  */
 
 package jiglib.collision {
-	import __AS3__.vec.Vector;
+	
 	
 	import jiglib.geometry.JSegment;
 	import jiglib.math.*;
