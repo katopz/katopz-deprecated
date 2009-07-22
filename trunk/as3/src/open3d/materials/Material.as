@@ -1,7 +1,5 @@
 package open3d.materials
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.display.GraphicsSolidFill;
 	import flash.display.GraphicsStroke;
 	import flash.display.GraphicsTrianglePath;

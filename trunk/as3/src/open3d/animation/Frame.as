@@ -1,7 +1,5 @@
 package open3d.animation
 {
-	import __AS3__.vec.Vector;
-
 	import flash.geom.Vector3D;
 
 	/**

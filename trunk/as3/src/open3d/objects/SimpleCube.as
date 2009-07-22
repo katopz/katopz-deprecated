@@ -1,6 +1,4 @@
-package open3d.objects{	import __AS3__.vec.Vector;
-	
-	import flash.geom.Vector3D;
+package open3d.objects{	import flash.geom.Vector3D;
 	
 	import open3d.data.FaceData;
 	import open3d.geom.UV;

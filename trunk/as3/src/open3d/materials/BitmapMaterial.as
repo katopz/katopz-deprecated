@@ -1,7 +1,5 @@
 package open3d.materials
 {
-	import __AS3__.vec.Vector;
-
 	import flash.display.*;
 	import flash.display.BitmapData;
 	import flash.display.GraphicsBitmapFill;
