@@ -3,6 +3,7 @@ package open3d.objects
 	import flash.events.*;
 	import flash.net.*;
 	
+	import open3d.geom.UV;
 	import open3d.materials.BitmapFileMaterial;
 
 	/**

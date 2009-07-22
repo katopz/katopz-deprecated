@@ -1,7 +1,5 @@
 package open3d.objects  
 {
-	import __AS3__.vec.Vector;
-	
 	import open3d.materials.*;
 
 	/**
