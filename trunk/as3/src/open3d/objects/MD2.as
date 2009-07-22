@@ -1,7 +1,5 @@
 package open3d.objects
 {
-	
-	
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.net.URLLoader;
