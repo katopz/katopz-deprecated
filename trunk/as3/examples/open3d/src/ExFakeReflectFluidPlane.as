@@ -41,8 +41,8 @@ package
 		{
 			shuttle = new ASE(new ShuttleModel, new BitmapFileMaterial("assets/shuttle.jpg"));
 			shuttle.scaleX = shuttle.scaleY = shuttle.scaleZ = 2;
-			shuttle.rotationX = -90
-			shuttle.rotationZ = 180
+			shuttle.rotationX = -90;
+			shuttle.rotationZ = 180;
 			renderer.addChild(shuttle);
 
 			bmp = new BitmapData(800, 600);
@@ -62,12 +62,12 @@ package
 			renderer.isMeshZSort = false;
 
 			renderer.world.y = -100;
-			renderer.world.z = 600
+			renderer.world.z = 600;
 
 			isDebug = false;
 		}
 
-		private var blank:Rectangle = new Rectangle(0, 0, 800, 600)
+		private var blank:Rectangle = new Rectangle(0, 0, 800, 600);
 
 		override protected function prerender():void
 		{

@@ -1,7 +1,5 @@
 package
 {
-	import flash.utils.Dictionary;
-	
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Plane;
 	import open3d.objects.Sphere;
@@ -17,7 +15,6 @@ package
 	{
 		private var sphere:Sphere;
 		private var plane:Plane;
-		private var lines:Dictionary;
 
 		override protected function create():void
 		{

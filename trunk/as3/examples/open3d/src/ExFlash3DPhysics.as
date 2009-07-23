@@ -7,7 +7,6 @@ package
 	import flash.utils.Dictionary;
 	
 	import jiglib.cof.JConfig;
-	import jiglib.geometry.*;
 	import jiglib.math.*;
 	import jiglib.physics.*;
 	import jiglib.physics.constraint.*;
@@ -24,14 +23,12 @@ package
 		private var ground:RigidBody;
 		private var ballBody:Dictionary;
 		private var boxBody:Array;
-		private var capsuleBody:Array;
 
 		private var onDraging:Boolean = false;
 
 		private var _ball:RigidBody;
 		private var currDragBody:RigidBody;
 		private var dragConstraint:JConstraintWorldPoint;
-		private var startMousePos:JNumber3D;
 		//private var planeToDragOn:Plane3D;
 
 		private var keyRight:Boolean = false;
@@ -135,7 +132,7 @@ package
 		
 		private function handleMousePress(event:Event):void
 		{
-			trace(handleMousePress)
+			trace(handleMousePress);
 		/*
 		   onDraging = true;
 		   startMousePos = new JNumber3D(mouse3D.x, mouse3D.y, mouse3D.z);
@@ -238,33 +235,6 @@ package
 			}
 		}
 
-		private function resetBox():void
-		{
-			for (var i:String in ballBody)
-			{
-				if (ballBody[i].currentState.position.y < -200)
-				{
-					ballBody[i].moveTo(new JNumber3D(0, 1000 + (60 * Number(i) + 60), 0));
-				}
-			}
-
-			for (i in boxBody)
-			{
-				if (boxBody[i].currentState.position.y < -200)
-				{
-					boxBody[i].moveTo(new JNumber3D(0, 1000 + (60 * Number(i) + 60), 0));
-				}
-			}
-
-			for (i in capsuleBody)
-			{
-				if (capsuleBody[i].currentState.position.y < -200)
-				{
-					capsuleBody[i].moveTo(new JNumber3D(0, 1000 + (60 * Number(i) + 60), 0));
-				}
-			}
-		}
-
 		override protected function draw():void
 		{
 			if (keyLeft)
@@ -295,8 +265,8 @@ package
 			world.rotationZ = 180;// + (mouseY - stage.stageHeight / 2) / 10;
 			//world.rotationY++;
 
-			world.y = 500
-			world.z = 2000
+			world.y = 500;
+			world.z = 2000;
 			world.rotationX = 10;
 		}
 	}

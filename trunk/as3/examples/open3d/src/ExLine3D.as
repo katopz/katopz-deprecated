@@ -14,8 +14,6 @@ package
 	 */
 	public class ExLine3D extends SimpleView
 	{
-		private var line:Line3D;
-
 		override protected function create():void
 		{
 			var size:int = 300;

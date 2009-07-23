@@ -18,8 +18,6 @@ package
 		private var plane:Plane;
 		private var step:Number = 0;
 
-		private var hit:Mesh;
-
 		override protected function create():void
 		{
 			plane = new Plane(256, 128, new BitmapFileMaterial("assets/sea01.jpg"), 10, 10);

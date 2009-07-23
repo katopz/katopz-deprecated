@@ -40,7 +40,6 @@ package
 	
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Object3D;
-	import open3d.objects.Plane;
 	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
 
@@ -90,10 +89,6 @@ package
 		private var _lightRotation:Number = 0;
 
 		private var bitmapData:BitmapData;
-		private var plane:Plane;
-		private var step:Number = 0;
-
-		private var spheres:Vector.<Sphere>;
 
 		override protected function create():void
 		{
