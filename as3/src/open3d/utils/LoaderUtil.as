@@ -13,7 +13,7 @@ package open3d.utils
 	
 	public class LoaderUtil
 	{
-		public static function load(uri:String, onLoad:Function = null, dataFormat:String = "binary"):void
+		public static function load(uri:String, onLoad:Function = null, dataFormat:String = "binary"):Object
 		{
 			if(uri.lastIndexOf(".jpg")==uri.length-4 || uri.lastIndexOf(".png")==uri.length-4)
 			{
@@ -51,6 +51,7 @@ package open3d.utils
 				{
 					trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 				}
+				return urlLoader;
 			}else{
 				var loader:Loader = new Loader();
 				
@@ -81,6 +82,7 @@ package open3d.utils
 				{
 					trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 				}
+				return loader;
 			}
 		}
 	}
