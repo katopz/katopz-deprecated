@@ -16,16 +16,6 @@ package
 	 */
 	public class ExASE extends SimpleView
 	{
-		[Embed(source='assets/shuttle.ase', mimeType = 'application/octet-stream')]
-		private var ShuttleModel:Class;
-
-		[Embed(source='assets/shuttle.jpg')]
-		private var ShuttleTexture:Class;
-		private var shuttleTexture:BitmapData = Bitmap(new ShuttleTexture()).bitmapData;
-
-		[Embed(source='assets/barge.ase', mimeType = 'application/octet-stream')]
-		private var BargeModel:Class;
-
 		private var shuttle:ASE;
 		private var barge:ASE;
 
@@ -34,11 +24,11 @@ package
 		override protected function create():void
 		{
 			// Embed image
-			shuttle = new ASE(new ShuttleModel, new BitmapMaterial(shuttleTexture));
+			shuttle = new ASE("assets/shuttle.ase", new BitmapFileMaterial("assets/shuttle.jpg"));
 			renderer.addChild(shuttle);
 
 			// File image
-			barge = new ASE(new BargeModel, new BitmapFileMaterial("assets/barge.jpg"));
+			barge = new ASE("assets/barge.ase", new BitmapFileMaterial("assets/barge.jpg"));
 			renderer.addChild(barge);
 		}
 

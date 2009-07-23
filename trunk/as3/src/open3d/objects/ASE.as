@@ -1,11 +1,13 @@
 package open3d.objects
 {
+	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
 	import flash.utils.unescapeMultiByte;
-
+	
 	import open3d.geom.UV;
 	import open3d.materials.Material;
+	import open3d.utils.LoaderUtil;
 
 	/**
 	 * Parses single ASE mesh from ByteArray.
@@ -18,10 +20,11 @@ package open3d.objects
 	public class ASE extends Mesh
 	{
 		private var vertexCoords:Vector.<Vector3D> = new Vector.<Vector3D>();
-
+		private var _scale:Number;
+		
 		private function createVertex(x:Number, y:Number, z:Number, id:int):void
 		{
-			vertexCoords[id] = new Vector3D(x, y, z);
+			vertexCoords[id] = new Vector3D(_scale*x, _scale*y, _scale*z);
 		}
 
 		private var uvs:Array = [];
@@ -76,9 +79,40 @@ package open3d.objects
 			super.buildFaces(material);
 		}
 
-		public function ASE(ba:ByteArray, material:Material):void
+		public function ASE(data:* = null, material:Material = null, scale:Number = 1)
 		{
-			var lines:Array = unescapeMultiByte(ba.toString()).split('\n');
+			_material = material;
+			_scale = scale;
+
+			if (data)
+			{
+				if (data is ByteArray)
+				{
+					parse(data, material);
+				}
+				else
+				{
+					load(data);
+				}
+			}
+		}
+		
+		public function load(uri:String):Object
+		{
+			return LoaderUtil.load(uri, onLoad);
+		}
+		
+		private function onLoad(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+				parse(ByteArray(event.target.data), material);
+		}
+		
+		public function parse(data:ByteArray, material:Material):void
+		{
+			this.material = material;
+			
+			var lines:Array = unescapeMultiByte(data.toString()).split('\n');
 			while (lines.length > 0)
 			{
 				var parsed:Array = String(lines.shift()).split(/^\s*\*MESH_([^\s]+)\s*([^\s].*)\s+$/);

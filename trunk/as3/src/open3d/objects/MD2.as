@@ -57,7 +57,7 @@ package open3d.objects
 			{
 				if (data is ByteArray)
 				{
-					parse(data);
+					parse(data, material);
 				}
 				else
 				{
@@ -71,23 +71,25 @@ package open3d.objects
 		 *
 		 * @param uri	Path to MD2 file to load
 		 */
-		private function load(uri:String):void
+		public function load(uri:String):Object
 		{
-			LoaderUtil.load(uri, onLoad);
+			return LoaderUtil.load(uri, onLoad);
 		}
 
 		private function onLoad(event:Event):void
 		{
 			if(event.type == Event.COMPLETE)
-				parse(ByteArray(event.target.data));
+				parse(ByteArray(event.target.data), material);
 		}
 
 		/**
 		 * Parse the MD2 file. This is actually pretty straight forward.
 		 * Only complicated parts (bit convoluded) are the frame loading.
 		 */
-		private function parse(data:ByteArray):void
+		private function parse(data:ByteArray, material:Material):void
 		{
+			this.material = material;
+			
 			var a:int, b:int, c:int, ta:int, tb:int, tc:int;
 			var vertices:Vector.<Vector3D> = new Vector.<Vector3D>();
 			var i:int, uvs:Array = [];

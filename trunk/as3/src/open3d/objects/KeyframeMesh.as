@@ -1,5 +1,7 @@
 package open3d.objects
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.geom.Vector3D;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
@@ -41,7 +43,7 @@ package open3d.objects
 		/**
 		 * The array of frames that make up the animation sequence.
 		 */
-		protected var frames:Array = [];
+		protected var frames:Vector.<Frame> = new Vector.<Frame>();
 		private var framesLength:int = 0;
 
 		/**

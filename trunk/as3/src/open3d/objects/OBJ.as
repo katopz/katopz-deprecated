@@ -47,6 +47,9 @@ package open3d.objects
 		
 		private var faceDatas:Vector.<Face>;
 		private var container:Object3D;
+		
+		private var i:int = 0;
+		private var n:int = -1;
 		 
 		private function parse(data:String):void
 		{
@@ -161,7 +164,6 @@ package open3d.objects
 
 								if (isNeg)
 								{
-									/*
 									addFace
 									(
 										vertices[vertices.length - parseInt(face1[0])], 
@@ -183,7 +185,6 @@ package open3d.objects
 											checkUV(3, uvs[uvs.length - parseInt(face3[1])])
 										])
 									);
-									*/
 								}
 								else
 								{
@@ -254,8 +255,6 @@ package open3d.objects
 			buildFaces(material);
 		}
 
-		private var i:int = 0;
-		private var n:int = -1;
 		private function addFace(v0:Vector3D,v1:Vector3D,v2:Vector3D, uvs:Vector.<UV>):void
 		{
 			_vin[i++] = v0.x;
@@ -472,7 +471,7 @@ package open3d.objects
 		 * @param	init	[optional]	An initialisation object for specifying default instance properties.
 		 * @return						A 3d loader object that can be used as a placeholder in a scene while the file is loading.
 		 */
-		private function load(uri:String, mtlPath:String = null):void
+		public function load(uri:String, mtlPath:String = null):Object
 		{
 			/*
 			TODO : mtl
@@ -482,7 +481,7 @@ package open3d.objects
 			this.mtlPath = (_pathArray.length > 0) ? _pathArray.join("/") + "/" : _pathArray.join("/");
 			*/
 			
-			LoaderUtil.load(uri, onLoad);
+			return LoaderUtil.load(uri, onLoad);
 		}
 
 		private function onLoad(event:Event):void
