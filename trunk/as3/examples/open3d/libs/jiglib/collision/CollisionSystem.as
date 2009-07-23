@@ -36,23 +36,23 @@ package jiglib.collision {
 		private var collBody:Array;
 		
 		public function CollisionSystem() {
-			collBody = new Array();
-			detectionFunctors = new Array();
-			detectionFunctors["BOX"] = new Array();
+			collBody = [];
+			detectionFunctors = [];
+			detectionFunctors["BOX"] = [];
 			detectionFunctors["BOX"]["BOX"] = new CollDetectBoxBox();
 			detectionFunctors["BOX"]["SPHERE"] = new CollDetectSphereBox();
 			detectionFunctors["BOX"]["CAPSULE"]=new CollDetectCapsuleBox();
 			detectionFunctors["BOX"]["PLANE"] = new CollDetectBoxPlane();
-			detectionFunctors["SPHERE"] = new Array();
+			detectionFunctors["SPHERE"] = [];
 			detectionFunctors["SPHERE"]["BOX"] = new CollDetectSphereBox();
 			detectionFunctors["SPHERE"]["SPHERE"] = new CollDetectSphereSphere();
 			detectionFunctors["SPHERE"]["CAPSULE"]=new CollDetectSphereCapsule();
 			detectionFunctors["SPHERE"]["PLANE"] = new CollDetectSpherePlane();
-			detectionFunctors["PLANE"] = new Array();
+			detectionFunctors["PLANE"] = [];
 			detectionFunctors["PLANE"]["BOX"] = new CollDetectBoxPlane();
 			detectionFunctors["PLANE"]["SPHERE"] = new CollDetectSpherePlane();
 			detectionFunctors["PLANE"]["CAPSULE"]=new CollDetectCapsulePlane();
-			detectionFunctors["CAPSULE"] = new Array();
+			detectionFunctors["CAPSULE"] = [];
 			detectionFunctors["CAPSULE"]["CAPSULE"] = new CollDetectCapsuleCapsule();
 			detectionFunctors["CAPSULE"]["BOX"] = new CollDetectCapsuleBox();
 			detectionFunctors["CAPSULE"]["SPHERE"] = new CollDetectSphereCapsule();

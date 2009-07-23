@@ -108,12 +108,12 @@ package jiglib.physics {
 			_movable = true;
 			_origMovable = true;
 			 
-			collisions = new Array();
-			_constraints = new Array();
-			_nonCollidables = new Array();
+			collisions = [];
+			_constraints = [];
+			_nonCollidables = [];
 			 
 			_storedPositionForActivation = new JNumber3D();
-			_bodiesToBeActivatedOnMovement = new Array();
+			_bodiesToBeActivatedOnMovement = [];
 			_lastPositionForDeactivation = _currState.position.clone();
 			_lastOrientationForDeactivation = JMatrix3D.clone(_currState.orientation);
 			
