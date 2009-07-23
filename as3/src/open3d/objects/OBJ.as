@@ -1,17 +1,16 @@
-package open3d.objects
+package open3d.objects 
 {
-	import flash.events.*;
-	import flash.geom.Vector3D;
-	import flash.net.*;
-	import flash.utils.ByteArray;
-	
-	import open3d.data.FaceData;
 	import open3d.geom.Face;
 	import open3d.geom.UV;
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.materials.Material;
 	import open3d.utils.LoaderUtil;
 	
+	import flash.events.*;
+	import flash.geom.Vector3D;
+	import flash.net.*;
+	import flash.utils.ByteArray;	
+
 	//TODO : clean this!, mtl + group not done yet
 	
 	/**
@@ -311,7 +310,8 @@ package open3d.objects
 
 			return source.split(by);
 		}
-
+		
+		/*
 		private function checkMtl(data:String):void
 		{
 			var index:int = data.indexOf("mtllib");
@@ -321,7 +321,8 @@ package open3d.objects
 				loadMtl(parseUrl(index, data));
 			}
 		}
-
+		*/
+		
 		private function errorMtl(event:Event):void
 		{
 			trace("Obj MTL LOAD ERROR: unable to load .mtl file at " + mtlPath);
@@ -356,7 +357,6 @@ package open3d.objects
 			var trunk:Array;
 			var i:int;
 			var j:int;
-			var _face:FaceData;
 			var mat:BitmapFileMaterial;
 			aMats = [];
 
@@ -482,7 +482,7 @@ package open3d.objects
 			this.mtlPath = (_pathArray.length > 0) ? _pathArray.join("/") + "/" : _pathArray.join("/");
 			*/
 			
-			LoaderUtil.load(uri, onLoad, URLLoaderDataFormat.TEXT);
+			LoaderUtil.load(uri, onLoad);
 		}
 
 		private function onLoad(event:Event):void

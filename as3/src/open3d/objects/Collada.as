@@ -13,7 +13,7 @@ package open3d.objects
 	{
 		public static var LOCATION:String =""//"http://www.neuroproductions.be/uploads/blog/examples/collada/"
 		
-		public var materials : Object = new Object()
+		public var materials : Object = {}
 		private var indicesPos : int = 0
 		private var scale : Number
 
