@@ -96,7 +96,7 @@ package jiglib.geometry {
 		}
 		
 		public function getSpan(axis:JNumber3D):Object {
-			var obj:Object = new Object();
+			var obj:Object = {};
 			var s:Number = Math.abs(JNumber3D.dot(axis, currentState.orientation.getCols()[0])) * (0.5 * _sideLengths.x);
 			var u:Number = Math.abs(JNumber3D.dot(axis, currentState.orientation.getCols()[1])) * (0.5 * _sideLengths.y);
 			var d:Number = Math.abs(JNumber3D.dot(axis, currentState.orientation.getCols()[2])) * (0.5 * _sideLengths.z);
@@ -246,7 +246,7 @@ package jiglib.geometry {
 			var p:JNumber3D = JNumber3D.sub(state.position, seg.origin);
 			var h:JNumber3D = JNumber3D.multiply(_sideLengths, 0.5);
 			
-			var tempV:JNumber3D;
+			//var tempV:JNumber3D;
 			var e:Number;
 			var f:Number;
 			var t:Number;
@@ -301,7 +301,7 @@ package jiglib.geometry {
 			return true;
 		}
 		
-		override public function getInertiaProperties(m:Number):JMatrix3D {
+		override public function getInertiaProperties(m : Number):JMatrix3D {
 			var inertiaTensor:JMatrix3D = new JMatrix3D();
 			inertiaTensor.n11 = (m / 12) * (_sideLengths.y * _sideLengths.y + _sideLengths.z * _sideLengths.z);
 			inertiaTensor.n22 = (m / 12) * (_sideLengths.x * _sideLengths.x + _sideLengths.z * _sideLengths.z);

@@ -43,7 +43,7 @@ package jiglib.plugin.away3dn
 			return jsphere;
 		}
 
-		public function createCube(material:Material, width:Number = 100, depth:Number = 100, height:Number = 100, segmentsS:int = 1, segmentsT:int = 1, segmentsH:int = 1, insideFaces:int = 0, excludeFaces:int = 0):RigidBody
+		public function createCube(material:Material, width:Number = 100, depth:Number = 100, height:Number = 100):RigidBody
 		{
 			var cube:SimpleCube = new SimpleCube(width, material);
 			renderer.addChild(cube);

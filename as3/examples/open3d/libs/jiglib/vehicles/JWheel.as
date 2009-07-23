@@ -140,7 +140,7 @@ package jiglib.vehicles {
 			return _lastOnFloor;
 		}
 		
-		public function addForcesToCar(dt:Number):Boolean {
+		public function addForcesToCar():Boolean {
 			var force:JNumber3D = new JNumber3D();
 			_lastDisplacement = _displacement;
 			_displacement = 0;
@@ -180,7 +180,7 @@ package jiglib.vehicles {
 			var bestIRay:int = 0;
 			var iRay:int = 0;
 			for (iRay = 0; iRay < numRays; iRay++) {
-				objArr[iRay] = new Object();
+				objArr[iRay] = {};
 				distFwd = (deltaFwdStart + iRay * deltaFwd) - _radius;
 				yOffset = _radius * (1 - Math.cos( 90 * (distFwd / _radius) * Math.PI / 180));
 				segments[iRay] = wheelRay.clone();

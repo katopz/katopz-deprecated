@@ -55,7 +55,7 @@ package jiglib.geometry {
 			return JNumber3D.dot(_normal, pt) - _distance;
 		}
 		
-		override public function segmentIntersect(out:Object, seg:JSegment,state:PhysicsState):Boolean {
+		override public function segmentIntersect(out:Object, seg:JSegment, state:PhysicsState):Boolean {
 			out.fracOut = 0;
 			out.posOut = new JNumber3D();
 			out.normalOut = new JNumber3D();

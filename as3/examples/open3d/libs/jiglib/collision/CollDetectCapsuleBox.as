@@ -62,9 +62,9 @@ package jiglib.collision {
 			var newSeg:JSegment = new JSegment(capsule.getBottomPos(capsule.currentState), JNumber3D.multiply(capsule.currentState.orientation.getCols()[1], capsule.length));
 			var radius:Number = capsule.radius;
 			
-			var oldObj:Object = new Object();
+			var oldObj:Object = {};
 			var oldDistSq:Number = oldSeg.segmentBoxDistanceSq(oldObj, box, box.oldState);
-			var newObj:Object = new Object();
+			var newObj:Object = {};
 			var newDistSq:Number = newSeg.segmentBoxDistanceSq(newObj, box, box.currentState);
 			var arr:Array = box.oldState.orientation.getCols();
 			
@@ -103,9 +103,9 @@ package jiglib.collision {
 			oldSeg = new JSegment(capsule.getEndPos(capsule.oldState), JNumber3D.multiply(capsule.oldState.orientation.getCols()[1], capsule.length));
 			newSeg = new JSegment(capsule.getEndPos(capsule.currentState), JNumber3D.multiply(capsule.currentState.orientation.getCols()[1], capsule.length));
 			 
-			oldObj = new Object();
+			oldObj = {};
 			oldDistSq = oldSeg.segmentBoxDistanceSq(oldObj, box, box.oldState);
-			newObj = new Object();
+			newObj = {};
 			newDistSq = newSeg.segmentBoxDistanceSq(newObj, box, box.currentState);
 			
 			if (Math.min(oldDistSq, newDistSq) < Math.pow(radius + JConfig.collToll, 2)) {

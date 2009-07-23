@@ -53,11 +53,11 @@ package jiglib.collision {
 			if (!sphere.hitTestObject3D(box)) {
 				return;
 			}
-			var spherePos:JNumber3D = sphere.oldState.position;
-			var boxPos:JNumber3D = box.oldState.position;
+			//var spherePos:JNumber3D = sphere.oldState.position;
+			//var boxPos:JNumber3D = box.oldState.position;
 			
-			var oldBoxPoint:Object=new Object();
-			var newBoxPoint:Object=new Object();
+			var oldBoxPoint:Object={};
+			var newBoxPoint:Object={};
 			
 			var oldDist:Number = box.getDistanceToPoint(box.oldState, oldBoxPoint, sphere.oldState.position);
 			var newDist:Number = box.getDistanceToPoint(box.currentState, newBoxPoint, sphere.currentState.position);

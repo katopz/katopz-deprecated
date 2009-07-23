@@ -45,11 +45,11 @@ package jiglib.physics.constraint {
 		}
 		
 		public function preApply(dt:Number):void {
-			_satisfied = false;
+			_satisfied = false;dt;
 		}
 		
 		public function apply(dt:Number):Boolean {
-			return false;
+			return false;dt;
 		}
 		
 		public function enableConstraint():void {

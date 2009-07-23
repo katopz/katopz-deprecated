@@ -24,10 +24,9 @@ distribution.
  */
 
 package jiglib.physics {
-	
+	import jiglib.geometry.JSegment;	
 	import jiglib.cof.JConfig;
 	import jiglib.physics.constraint.JConstraint;
-	import jiglib.geometry.JSegment;
 	import jiglib.math.JMatrix3D;
 	import jiglib.math.JNumber3D;
 	import jiglib.plugin.ISkin3D;
@@ -173,19 +172,19 @@ package jiglib.physics {
 		
 		public function pitch(rot:Number):void
 		{
-			var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
+			//var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
 			setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationX(rot)));
 		}
 		
 		public function yaw(rot:Number):void
 		{
-			var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
+			//var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
 			setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationY(rot)));
 		}
 		
 		public function roll(rot:Number):void
 		{
-			var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
+			//var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
 			setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationZ(rot)));
 		}
 		 
@@ -630,9 +629,9 @@ package jiglib.physics {
 		public function segmentIntersect(out:Object, seg:JSegment, state:PhysicsState):Boolean {
 			return false;
 		}
-		
+
 		public function getInertiaProperties(m:Number):JMatrix3D {
-			return new JMatrix3D();
+			return new JMatrix3D();m;
 		}
 		
 		public function hitTestObject3D(obj3D:RigidBody):Boolean {

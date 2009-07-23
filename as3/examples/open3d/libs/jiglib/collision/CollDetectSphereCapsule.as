@@ -58,9 +58,9 @@ package jiglib.collision {
 			var newSeg:JSegment = new JSegment(capsule.getBottomPos(capsule.currentState), JNumber3D.multiply(capsule.currentState.orientation.getCols()[1], capsule.length));
 			var radSum:Number = sphere.radius + capsule.radius;
 			
-			var oldObj:Object = new Object();
+			var oldObj:Object = {};
 			var oldDistSq:Number = oldSeg.pointSegmentDistanceSq(oldObj, sphere.oldState.position);
-			var newObj:Object = new Object();
+			var newObj:Object = {};
 			var newDistSq:Number = newSeg.pointSegmentDistanceSq(newObj, sphere.currentState.position);
 			
 			if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JConfig.collToll, 2)) {
