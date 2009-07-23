@@ -527,7 +527,7 @@ package jiglib.physics
 			}
 		}
 
-		private function processCollision(collision:CollisionInfo, dt:Number):Boolean
+		private function processCollision(collision:CollisionInfo):Boolean
 		{
 			collision.satisfied = true;
 
@@ -619,7 +619,7 @@ package jiglib.physics
 			return gotOne;
 		}
 
-		private function processCollisionAccumulated(collision:CollisionInfo, dt:Number):Boolean
+		private function processCollisionAccumulated(collision:CollisionInfo):Boolean
 		{
 			collision.satisfied = true;
 			var gotOne:Boolean = false;
@@ -760,7 +760,7 @@ package jiglib.physics
 					ptInfo = collInfo.pointInfo[j];
 					fricImpulse = (collInfo.objInfo.body0.id > collInfo.objInfo.body1.id) ? ptInfo.accumulatedFrictionImpulse : JNumber3D.multiply(ptInfo.accumulatedFrictionImpulse, -1);
 
-					contact = new Object();
+					contact = {};
 					contact.Pair = new BodyPair(collInfo.objInfo.body0, collInfo.objInfo.body1, ptInfo.r0, ptInfo.r1);
 					contact.Impulse = new CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
 
@@ -1022,7 +1022,7 @@ package jiglib.physics
 		private function findAllActiveBodies():void
 		{
 			_activeBodies = new Vector.<RigidBody>();
-			var i:int = 0;
+			//var i:int = 0;
 			for each(var _body:RigidBody in _bodies)
 			{
 				if (_body.isActive)

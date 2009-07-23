@@ -122,7 +122,7 @@ package jiglib.collision {
 			out.posOut = new JNumber3D();
 			out.normalOut = new JNumber3D();
 			
-			var obj:Object = new Object();
+			var obj:Object = {};
 			for (var i:String in collBody) {
 				if (collBody[i] != ownerBody && segmentBounding(seg, collBody[i])) {
 					if (collBody[i].segmentIntersect(obj, seg, collBody[i].currentState)) {

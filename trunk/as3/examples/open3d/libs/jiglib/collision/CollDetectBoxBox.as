@@ -81,7 +81,7 @@ package jiglib.collision {
 			var boxEdges:Array = box1.edges;
 			var outObj:Object;
 			for (var i:String in boxEdges) {
-				outObj=new Object();
+				outObj={};
 				seg=new JSegment(boxPts[boxEdges[i].ind0],JNumber3D.sub(boxPts[boxEdges[i].ind1],boxPts[boxEdges[i].ind0]));
 				if (box0.segmentIntersect(outObj, seg, box0State)) {
 					if (addPoint(contactPoint, outObj.posOut, combinationDist)) {
@@ -257,7 +257,7 @@ package jiglib.collision {
 			var l2:Number;
 			var overlapDepths:Array = [];
 			for (var i:String in axes) {
-				overlapDepths[i] = new Object();
+				overlapDepths[i] = {};
 				overlapDepths[i].flag = false;
 			    overlapDepths[i].depth = JNumber3D.NUM_HUGE;
 				l2 = axes[i].modulo2;
@@ -295,13 +295,13 @@ package jiglib.collision {
 			N.normalize();
 			 
 			if (JConfig.boxCollisionsType == "EDGEBASE") {
-				boxEdgesCollDetect(info, collArr, box0, box1, N, minDepth, minAxis);
+				boxEdgesCollDetect(info, collArr, box0, box1, N, minDepth);
 			} else {
 				boxSortCollDetect(info, collArr, box0, box1, N, minDepth);
 			}
 		}
 		
-		private function boxEdgesCollDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>, box0:JBox, box1:JBox, N:JNumber3D, depth:Number, axis:int):void {
+		private function boxEdgesCollDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>, box0:JBox, box1:JBox, N:JNumber3D, depth:Number):void {
 			var contactPointsFromOld:Boolean = true;
 			var contactPoint:Array = [];
 			combinationDist = 0.5 * Math.min(Math.min(box0.sideLengths.x, box0.sideLengths.y, box0.sideLengths.z), Math.min(box1.sideLengths.x, box1.sideLengths.y, box1.sideLengths.z));

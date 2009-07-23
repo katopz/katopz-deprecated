@@ -212,12 +212,7 @@ package jiglib.math {
 			if(w != 0) {
 				return new JNumber3D(v.x / w, v.y / w, v.z / w);
 			} else {
-				return new JNumber3D
-				{
-				0,
-				0,
-				0
-				};
+				return new JNumber3D(0,0,0);
 			}
 		}
 		

@@ -36,6 +36,7 @@
 // ______________________________________________________________________ Matrix3D
 
 package jiglib.math {
+	import flash.geom.Vector3D;	
 	import flash.geom.Matrix3D;
 	
 
@@ -329,7 +330,7 @@ package jiglib.math {
 			var a31:Number = a.n31; 
 			var b31:Number = b.n31;
 			var a41:Number = a.n41; 
-			var b41:Number = b.n41;
+			//var b41:Number = b.n41;
 		
 			var a12:Number = a.n12; 
 			var b12:Number = b.n12;
@@ -338,7 +339,7 @@ package jiglib.math {
 			var a32:Number = a.n32; 
 			var b32:Number = b.n32;
 			var a42:Number = a.n42; 
-			var b42:Number = b.n42;
+			//var b42:Number = b.n42;
 		
 			var a13:Number = a.n13; 
 			var b13:Number = b.n13;
@@ -347,7 +348,7 @@ package jiglib.math {
 			var a33:Number = a.n33; 
 			var b33:Number = b.n33;
 			var a43:Number = a.n43; 
-			var b43:Number = b.n43;
+			//var b43:Number = b.n43;
 		
 			var a14:Number = a.n14; 
 			var b14:Number = b.n14;
@@ -356,7 +357,7 @@ package jiglib.math {
 			var a34:Number = a.n34; 
 			var b34:Number = b.n34;
 			var a44:Number = a.n44; 
-			var b44:Number = b.n44;
+			//var b44:Number = b.n44;
 
 			this.n11 = a11 * b11 + a12 * b21 + a13 * b31;
 			this.n12 = a11 * b12 + a12 * b22 + a13 * b32;
@@ -780,12 +781,12 @@ package jiglib.math {
 
 		// _________________________________________________________________________________ QUATERNIONS
 
-		public static function magnitudeQuaternion( q:Object ):Number {
+		public static function magnitudeQuaternion( q : Vector3D ) : Number {
 			return( Math.sqrt(q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z) );
 		}
 
 		
-		public static function normalizeQuaternion( q:Object ):Object {
+		public static function normalizeQuaternion( q:Vector3D ):Object {
 			var mag:Number = magnitudeQuaternion(q);
 
 			q.x /= mag;
@@ -801,7 +802,7 @@ package jiglib.math {
 			var sin:Number = Math.sin(angle / 2);
 			var cos:Number = Math.cos(angle / 2);
 
-			var q:Object = new Object();
+			var q:Vector3D = new Vector3D();
 
 			q.x = x * sin;
 			q.y = y * sin;
@@ -822,7 +823,7 @@ package jiglib.math {
 			var fCosPitchCosYaw:Number = fCosPitch * fCosYaw;
 			var fSinPitchSinYaw:Number = fSinPitch * fSinYaw;
 
-			var q:Object = new Object();
+			var q:Vector3D = new Vector3D();
 
 			q.x = fSinRoll * fCosPitchCosYaw - fCosRoll * fSinPitchSinYaw;
 			q.y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
@@ -864,7 +865,7 @@ package jiglib.math {
 		}
 
 		
-		public static function multiplyQuaternion( a:Object, b:Object ):Object {
+		public static function multiplyQuaternion( a:Vector3D, b:Vector3D ):Vector3D {
 			var ax:Number = a.x;  
 			var ay:Number = a.y;  
 			var az:Number = a.z;  
@@ -874,7 +875,7 @@ package jiglib.math {
 			var bz:Number = b.z;  
 			var bw:Number = b.w;
 
-			var q:Object = new Object();
+			var q:Vector3D = new Vector3D();
 
 			q.x = aw * bx + ax * bw + ay * bz - az * by;
 			q.y = aw * by + ay * bw + az * bx - ax * bz;

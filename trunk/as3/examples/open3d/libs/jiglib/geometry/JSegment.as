@@ -331,7 +331,7 @@ package jiglib.geometry {
 			out.pfLParam1 = 0;
 			out.pfLParam2 = 0;
 			 
-			var obj:Object = new Object();
+			var obj:Object = {};
 			var kRay:JRay = new JRay(_origin, _delta);
 			var fSqrDistance:Number = sqrDistanceLine(obj, kRay, rkBox, boxState);
 			 
@@ -385,7 +385,7 @@ package jiglib.geometry {
 			  kPnt.copyFromArray(kPntArr);
 			  kDir.copyFromArray(kDirArr);
 			  
-			  var obj:Object = new Object();
+			  var obj:Object = {};
 			  obj.rkPnt = kPnt.clone();
 			  obj.pfLParam = 0;
 			  obj.rfSqrDistance = 0;
