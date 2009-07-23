@@ -26,9 +26,6 @@
 
 package jiglib.physics
 {
-
-	
-	
 	import jiglib.cof.JConfig;
 	import jiglib.collision.CollPointInfo;
 	import jiglib.collision.CollisionInfo;
@@ -39,19 +36,16 @@ package jiglib.physics
 
 	public class PhysicsSystem
 	{
-
 		private static var _currentPhysicsSystem:PhysicsSystem;
 
 		private const _maxVelMag:Number = 0.5;
 		private const _minVelForProcessing:Number = 0.001;
-
 
 		private var _bodies:Vector.<RigidBody>;
 		private var _activeBodies:Vector.<RigidBody>;
 		private var _collisions:Vector.<CollisionInfo>;
 		private var _constraints:Vector.<JConstraint>;
 		private var _controllers:Vector.<PhysicsController>;
-
 
 		private var _gravityAxis:int;
 		private var _gravity:JNumber3D;
@@ -79,7 +73,6 @@ package jiglib.physics
 
 		public function PhysicsSystem()
 		{
-
 			setSolverType(JConfig.solverType);
 			_doingIntegration = false;
 			_bodies = new Vector.<RigidBody>();
@@ -527,7 +520,7 @@ package jiglib.physics
 			}
 		}
 
-		private function processCollision(collision:CollisionInfo):Boolean
+		private function processCollision(collision:CollisionInfo, dt:Number):Boolean
 		{
 			collision.satisfied = true;
 
@@ -619,7 +612,7 @@ package jiglib.physics
 			return gotOne;
 		}
 
-		private function processCollisionAccumulated(collision:CollisionInfo):Boolean
+		private function processCollisionAccumulated(collision:CollisionInfo, dt:Number):Boolean
 		{
 			collision.satisfied = true;
 			var gotOne:Boolean = false;
@@ -943,7 +936,7 @@ package jiglib.physics
 
 		private function updateAllVelocities(dt:Number):void
 		{
-			for each(var _activeBody:RigidBody in _activeBodies)
+			for each (var _activeBody:RigidBody in _activeBodies)
 			{
 				_activeBody.updateVelocity(dt);
 			}
@@ -951,7 +944,7 @@ package jiglib.physics
 
 		private function updateAllPositions(dt:Number):void
 		{
-			for each(var _activeBody:RigidBody in _activeBodies)
+			for each (var _activeBody:RigidBody in _activeBodies)
 			{
 				_activeBody.updatePositionWithAux(dt);
 			}
@@ -959,7 +952,7 @@ package jiglib.physics
 
 		private function notifyAllPostPhysics(dt:Number):void
 		{
-			for each(var _body:RigidBody in _bodies)
+			for each (var _body:RigidBody in _bodies)
 			{
 				_body.postPhysics(dt);
 			}
@@ -975,7 +968,7 @@ package jiglib.physics
 
 		private function limitAllVelocities():void
 		{
-			for each(var _activeBody:RigidBody in _activeBodies)
+			for each (var _activeBody:RigidBody in _activeBodies)
 			{
 				_activeBody.limitVel();
 				_activeBody.limitAngVel();
@@ -984,7 +977,7 @@ package jiglib.physics
 
 		private function tryToFreezeAllObjects(dt:Number):void
 		{
-			for each(var _activeBody:RigidBody in _activeBodies)
+			for each (var _activeBody:RigidBody in _activeBodies)
 			{
 				_activeBody.tryToFreeze(dt);
 			}
@@ -992,25 +985,25 @@ package jiglib.physics
 
 		private function detectAllCollisions(dt:Number):void
 		{
-			for each(var _activeBody:RigidBody in _activeBodies)
+			for each (var _activeBody:RigidBody in _activeBodies)
 				_activeBody.storeState();
-				
+
 			updateAllVelocities(dt);
 			updateAllPositions(dt);
 
-			for each(var _body:RigidBody in _bodies)
+			for each (var _body:RigidBody in _bodies)
 				_body.collisions = [];
-			
+
 			_collisions = new Vector.<CollisionInfo>();
 			_collisionSystem.detectAllCollisions(_activeBodies, _collisions);
 
-			for each(_activeBody in _activeBodies)
+			for each (_activeBody in _activeBodies)
 				_activeBody.restoreState();
 		}
 
 		private function copyAllCurrentStatesToOld():void
 		{
-			for each(var _body:RigidBody in _bodies)
+			for each (var _body:RigidBody in _bodies)
 			{
 				if (_body.isActive || _body.getVelChanged())
 				{
@@ -1023,7 +1016,7 @@ package jiglib.physics
 		{
 			_activeBodies = new Vector.<RigidBody>();
 			//var i:int = 0;
-			for each(var _body:RigidBody in _bodies)
+			for each (var _body:RigidBody in _bodies)
 			{
 				if (_body.isActive)
 				{
@@ -1059,7 +1052,7 @@ package jiglib.physics
 			{
 				updateContactCache();
 			}
-			for each(var _body:RigidBody in _bodies)
+			for each (var _body:RigidBody in _bodies)
 			{
 				_body.clearForces();
 			}
