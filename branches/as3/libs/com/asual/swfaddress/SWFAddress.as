@@ -37,7 +37,7 @@ package com.asual.swfaddress
         private static var _initChanged:Boolean = false;
         private static var _strict:Boolean = true;
         private static var _value:String = '';
-        private static var _queue:Array = new Array();
+        private static var _queue:Array = [];
         private static var _queueTimer:Timer = new Timer(10);
         private static var _initTimer:Timer = new Timer(10);
         private static var _availability:Boolean = ExternalInterface.available;
@@ -158,7 +158,7 @@ package com.asual.swfaddress
                     if (obj.param is String) obj.param = '"' + obj.param + '"';
                     script += obj.fn + '(' + obj.param + ');';
                 }
-                _queue = new Array();
+                _queue = [];
                 navigateToURL(new URLRequest('javascript:' + script + 'void(0);'), '_self');
             } else {
                 _queueTimer.stop();
@@ -470,7 +470,7 @@ package com.asual.swfaddress
         public static function getParameterNames():Array {
             var value:String = SWFAddress.getValue();
             var index:Number = value.indexOf('?');
-            var names:Array = new Array();
+            var names:Array = [];
             if (index != -1) {
                 value = value.substr(index + 1);
                 if (value != '' && value.indexOf('=') != -1) {
