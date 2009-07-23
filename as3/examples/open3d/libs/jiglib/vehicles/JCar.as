@@ -47,8 +47,8 @@ package jiglib.vehicles {
 		
 		public function JCar(skin:ISkin3D):void {
 			_chassis = new JChassis(this, skin);
-			_wheels = new Array();
-			_steerWheels = new Array();
+			_wheels = [];
+			_steerWheels = [];
 			_destSteering = _destAccelerate = _steering = _accelerate = _HBrake = 0;
 			setCar();
 		}

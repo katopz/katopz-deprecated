@@ -904,7 +904,7 @@ package jiglib.math {
 		 * modify by Muzer
 		 */
 		public function getCols():Array {
-			var cols:Array = new Array();
+			var cols:Array = [];
 			cols[0] = new JNumber3D(n11, n21, n31);
 			cols[1] = new JNumber3D(n12, n22, n32);
 			cols[2] = new JNumber3D(n13, n23, n33);
