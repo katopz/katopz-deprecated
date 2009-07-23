@@ -16,7 +16,7 @@ package
 	 */
 	public class ExCollada extends SimpleView
 	{
-		private var collada:Collada
+		private var collada:Collada;
 
 		public function ExCollada()
 		{

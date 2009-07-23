@@ -26,15 +26,14 @@ package
 			physics = new Away3DNPhysics(renderer, 10);
 			physics.createGround(new LineMaterial(), 1800, 200);
 
-			cubes = new Vector.<RigidBody>();
+			cubes = new Vector.<RigidBody>(20, true);
 			for (var i:int = 0; i < 20; i++)
 			{
 				var cube:RigidBody = physics.createCube(new LineMaterial(), 50, 50, 50);
 				cube.material.restitution = .1;
-				cubes.push(cube);
+				cubes[i] = cube;
 			}
 
-			cubes.fixed = true;
 			refresh();
 
 			stage.addEventListener(MouseEvent.CLICK, refresh);
@@ -65,8 +64,8 @@ package
 			world.rotationZ = 180;// + (mouseY - stage.stageHeight / 2) / 10;
 			//world.rotationY++;
 
-			world.y = 500
-			world.z = 2000
+			world.y = 500;
+			world.z = 2000;
 			world.rotationX = 10;
 			
 			time = getTimer()-time;

@@ -2,7 +2,6 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.TriangleCulling;
 	
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.SimpleCube;

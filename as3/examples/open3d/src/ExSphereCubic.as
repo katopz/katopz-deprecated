@@ -13,8 +13,6 @@ package
 	 */
 	public class ExSphereCubic extends SimpleView
 	{
-		private var spheres:Vector.<Sphere>;
-
 		override protected function create():void
 		{
 			var segment:uint = 10;

@@ -33,8 +33,8 @@ package
 		{
 			shuttle = new ASE(new ShuttleModel, new BitmapFileMaterial("assets/shuttle.jpg"));
 			shuttle.scaleX = shuttle.scaleY = shuttle.scaleZ = 4;
-			shuttle.rotationX = -90
-			shuttle.rotationZ = 180
+			shuttle.rotationX = -90;
+			shuttle.rotationZ = 180;
 			renderer.addChild(shuttle);
 
 			bmp = new BitmapData(800, 600);
@@ -55,7 +55,7 @@ package
 			isDebug = false;
 		}
 
-		private var blank:Rectangle = new Rectangle(0, 0, 800, 600)
+		private var blank:Rectangle = new Rectangle(0, 0, 800, 600);
 
 		override protected function prerender():void
 		{
@@ -99,7 +99,7 @@ package
 			gradient.graphics.beginGradientFill("linear", [0xffffff, 0xffffff], [0, .75], [0, 255], gradMat);
 			gradient.graphics.drawRect(0, 0, w, h);
 			gradient.graphics.endFill();
-			return gradient
+			return gradient;
 		}
 	}
 }
