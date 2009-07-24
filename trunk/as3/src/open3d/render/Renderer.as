@@ -24,8 +24,6 @@ package open3d.render
 	{
 		public var totalFaces:int = 0;
 
-		private var canvas:Sprite;
-
 		// public var faster than get/set view
 		public var view:Sprite;
 		private var _view:Sprite;
@@ -108,10 +106,8 @@ package open3d.render
 			return _type;
 		}
 		
-		public function Renderer(canvas:Sprite)
+		public function Renderer(canvas:DisplayObjectContainer)
 		{
-			this.canvas = canvas;
-
 			view = _view = new Sprite();
 			_view.x = canvas.stage.stageWidth / 2;
 			_view.y = canvas.stage.stageHeight / 2;
@@ -159,16 +155,29 @@ package open3d.render
 			// dispose
 			totalFaces = 0;
 			
-			// view
 			var _view_graphics:Graphics = _view.graphics;
 			_view_graphics.clear();
 			
-			// child.project faster than project(child) ~4-7fps
 			var child:Object3D;
 			for each (child in _childs)
 			{
-				child.project(_projectionMatrix3D, _worldMatrix3D);
+				if(child.layer)
+					child.layer.graphics.clear();
+			}
 			
+			// child.project faster than project(child) ~4-7fps
+			for each (child in _childs)
+			{
+				child.project(_projectionMatrix3D, _worldMatrix3D);
+				
+				//select layer
+				if(child.layer)
+				{
+					_view_graphics = child.layer.graphics;
+				}else{
+					_view_graphics = _view.graphics;
+				}
+				
 				// draw TODO : auto select render type
 				if(_type==1)
 				{

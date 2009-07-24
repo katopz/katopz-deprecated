@@ -1,10 +1,10 @@
 package open3d.objects 
 {
-	import open3d.materials.Material;
-	import open3d.materials.shaders.IShader;
-
 	import flash.display.*;
 	import flash.geom.*;
+	
+	import open3d.materials.Material;
+	import open3d.materials.shaders.IShader;
 
 	/**
 	 * Object3D
@@ -29,6 +29,18 @@ package open3d.objects
 		private var _vertices : Vector.<Number>;
 		private var _uvtData : Vector.<Number>;
 
+		// Z-Sort for Mesh
+		public var screenZ:Number = 0;
+		private var _layer:Sprite;
+		public function set layer(value:Sprite):void
+		{
+			_layer = value;
+		}
+		public function get layer():Sprite
+		{
+			return _layer;
+		}
+		
 		public function Object3D() : void 
 		{
 			vin = _vin = new Vector.<Number>();
@@ -64,6 +76,9 @@ package open3d.objects
 			
 			// global
 			matrix3D.transformVectors(_vout, _vout);
+			
+			// z
+			screenZ = _vin[0];
 			
 			// project
 			if (material is IShader) 

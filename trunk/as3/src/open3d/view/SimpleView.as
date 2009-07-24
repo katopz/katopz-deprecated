@@ -7,6 +7,7 @@ package open3d.view
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.utils.*;
 	
@@ -42,12 +43,17 @@ package open3d.view
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.quality = StageQuality.MEDIUM;
 
-			renderer = new Renderer(this);
+			var canvas:Sprite = new Sprite();
+			addChild(canvas);
+			
+			renderer = new Renderer(canvas);
 			renderer.fieldOfView = 53;
 			renderer.world.z = 500;
 
 			debugText = TextUtil.getTextField();
 			debugText.x = 80;
+			debugText.textColor = 0xFFFFFF;
+			debugText.filters = [new GlowFilter(0x000000, 1, 4, 4, 2, 1)];
 
 			isDebug = true;
 
