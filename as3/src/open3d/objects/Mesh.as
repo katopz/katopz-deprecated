@@ -12,8 +12,6 @@ package open3d.objects
 	 */	
 	public class Mesh extends Object3D
 	{
-		public var screenZ:Number = 0;
-		
 		// public var faster than get/set
 		public var faces:Vector.<Face>;
 		protected var _faces:Vector.<Face>;
