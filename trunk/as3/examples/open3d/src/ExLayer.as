@@ -1,12 +1,12 @@
 package
 {
-	import flash.display.Sprite;
 	import flash.filters.GlowFilter;
 	
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Object3D;
 	import open3d.objects.Plane;
 	import open3d.objects.Sphere;
+	import open3d.render.Layer;
 	import open3d.view.SimpleView;
 
 	[SWF(width=800,height=600,backgroundColor=0x666666,frameRate=30)]
@@ -23,14 +23,10 @@ package
 		override protected function create():void
 		{
 			// defined layer
-			var layer0:Sprite = new Sprite();
-			layer0.x = renderer.view.x;			
-			layer0.y = renderer.view.y;
+			var layer0:Layer = new Layer();
 			addChild(layer0);
 			
-			var layer1:Sprite = new Sprite();
-			layer1.x = renderer.view.x;			
-			layer1.y = renderer.view.y;
+			var layer1:Layer = new Layer();
 			addChild(layer1);
 			
 			// we can add layer filters
@@ -39,7 +35,6 @@ package
 			for (var i:int = 0; i < 9; ++i)
 			{
 				sphere = new Sphere(100, 10, 10, new BitmapFileMaterial("assets/earth.jpg"));
-				sphere.name = String(i);
 				sphere.x = int(i / 3) * (256+10) - (256+10);
 				sphere.z = int(i % 3) * (128+10);
 				sphere.layer = layer1;
