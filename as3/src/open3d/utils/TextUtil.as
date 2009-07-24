@@ -1,6 +1,5 @@
 package open3d.utils
 {
-	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 
@@ -17,11 +16,10 @@ package open3d.utils
 			_textField.selectable = false;
 			_textField.mouseEnabled = false;
 			_textField.mouseWheelEnabled = false;
-			_textField.defaultTextFormat = textFormat ? textFormat : new TextFormat("Tahoma", 12, 0xFFFFFF);
+			_textField.defaultTextFormat = textFormat ? textFormat : new TextFormat("Tahoma", 12, 0x000000);
 			_textField.autoSize = "left";
-			_textField.filters = [new GlowFilter(0x000000, 1, 4, 4, 2, 1)];
 
-			if (_textField.text)
+			if (text)
 				_textField.text = text;
 
 			return _textField;
