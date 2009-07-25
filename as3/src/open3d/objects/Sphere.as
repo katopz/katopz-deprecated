@@ -56,8 +56,8 @@ package open3d.objects
 					{ // not first meridian (texture edge)
 						if (p != parallelStops)
 						{ // not last parallel (no next parallel to connect)
-							_triangles.indices.push(n, n + meridians, n + meridians - 1);
-							_triangles.indices.push(n, n + meridians - 1, n - 1);
+							_triangles.indices.push(n, n + meridians -1, n + meridians);
+							_triangles.indices.push(n, n - 1, n + meridians - 1);
 						}
 					}
 					n++;

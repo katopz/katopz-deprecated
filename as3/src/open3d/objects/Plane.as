@@ -45,17 +45,19 @@ package open3d.objects
 					_triangles.uvtData.push(u, v, 1);
 
 					// The winding for a path is either positive (clockwise)
+					//   <-
 					//   ___
-					// 0|  /|1
+					// 0|  /|2
 					//  | / |
-					// 3|/__|2
+					// 1|/__|3
+					//   ->
 					//
 					if (j > 0)
 					{
 						if (i < segmentW_1)
 						{
-							_triangles.indices.push(k, k + segmentH, k + segmentH - 1);
-							_triangles.indices.push(k, k + segmentH - 1, k - 1);
+							_triangles.indices.push(k, k + segmentH-1, k + segmentH);
+							_triangles.indices.push(k, k - 1, k + segmentH - 1);
 						}
 					}
 					++k;

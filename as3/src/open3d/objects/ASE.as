@@ -73,7 +73,7 @@ package open3d.objects
 					var uv:UV = uvs[faceUVs[id][i]];
 					_triangles.uvtData.push(uv.u, uv.v, 1);
 				}
-				_triangles.indices.push(n - 2, n - 1, n);
+				_triangles.indices.push(n, n - 1, n - 2);
 			}
 
 			super.buildFaces(material);

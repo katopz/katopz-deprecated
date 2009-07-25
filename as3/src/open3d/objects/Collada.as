@@ -131,7 +131,7 @@ package open3d.objects
 					_triangles_uvtData[k++] = uvts[ indicesUV[i + 2] * 2 + 1];
 					_triangles_uvtData[k++] = vertices[ indices[i + 2] * 3 + 2];
 					
-					_triangles.indices.push(i, i+1, i+2);
+					_triangles.indices.push(i+2, i+1, i);
 				}
 			}
 		}
