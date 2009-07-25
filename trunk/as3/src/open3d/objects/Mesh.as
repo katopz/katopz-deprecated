@@ -40,7 +40,7 @@ package open3d.objects
 
 		public function Mesh()
 		{
-			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), TriangleCulling.NEGATIVE);
+			_triangles = new GraphicsTrianglePath(new Vector.<Number>(), new Vector.<int>(), new Vector.<Number>(), TriangleCulling.POSITIVE);
 			_commands[0] = 1;
 			_commands[1] = 2;
 			_commands[2] = 2;

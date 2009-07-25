@@ -275,7 +275,7 @@ package open3d.objects
 			
 			n += 3;
 
-			_triangles.indices.push(n - 2, n - 1, n);
+			_triangles.indices.push(n, n - 1, n - 2);
 		}
 		
 		private function checkUV(id:int, uv:UV = null):UV

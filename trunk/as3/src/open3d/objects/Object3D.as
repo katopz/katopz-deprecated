@@ -77,10 +77,8 @@ package open3d.objects
 			// global
 			matrix3D.transformVectors(_vout, _vout);
 			
-
-			
 			// z
-			screenZ = _vin[0];
+			screenZ = _vout[0];
 			
 			// project
 			if (material is IShader) 
@@ -91,9 +89,6 @@ package open3d.objects
 				_triangles.uvtData = shader.getUVData(projectionMatrix3D);
 			}
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
-			
-			
-			
 		}
 
 		public function set material(value : Material) : void 

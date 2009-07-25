@@ -1,11 +1,9 @@
 package open3d.objects
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.geom.Vector3D;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
-	
+
 	import open3d.animation.Frame;
 	import open3d.data.FaceData;
 	import open3d.materials.Material;
@@ -58,12 +56,12 @@ package open3d.objects
 		 * Number of animation frames to display per second
 		 */
 		public var fps:int;
-		
+
 		private var labels:Dictionary;
 		private var _currentLabel:String;
-		
+
 		protected var faceDatas:Vector.<FaceData>;
-		
+
 		/**
 		 * KeyframeMesh is a class used [internal] to provide a "keyframe animation"/"vertex animation"/"mesh deformation"
 		 * framework for subclass loaders. There are some subtleties to using this class, so please, I suggest you
@@ -78,49 +76,55 @@ package open3d.objects
 
 		protected function addFrame(frame:Frame):void
 		{
-			if(!labels)labels = new Dictionary(true);
-			var _name:String = frame.name.slice(0, frame.name.length-3);
-			if(!labels[_name])
+			if (!labels)
+				labels = new Dictionary(true);
+			var _name:String = frame.name.slice(0, frame.name.length - 3);
+			if (!labels[_name])
 			{
 				// new begin->end
-				labels[_name] = {begin:framesLength, end:framesLength};
-			}else{
+				labels[_name] = {begin: framesLength, end: framesLength};
+			}
+			else
+			{
 				// increase end
 				++labels[_name].end;
 			}
-			
+
 			frames.push(frame);
 			framesLength++;
 		}
 
 		public function loop(begin:int, end:int):void
 		{
-			if(framesLength>0)
+			if (framesLength > 0)
 			{
 				this.begin = (begin % framesLength);
 				this.end = (end % framesLength);
-			}else{
+			}
+			else
+			{
 				this.begin = begin;
 				this.end = end;
 			}
-			
+
 			keyframe = begin;
 			_type = ANIM_LOOP;
 		}
 
-		public function play(label:String=""):void
+		public function play(label:String = ""):void
 		{
-			if(!labels)return;
-			
-			if(_currentLabel != label)
+			if (!labels)
+				return;
+
+			if (_currentLabel != label)
 			{
 				_currentLabel = label;
 				loop(labels[label].begin, labels[label].end);
 			}
-			
+
 			updateFrame();
 		}
-		
+
 		public function stop():void
 		{
 			_type = ANIM_STOP;
@@ -128,20 +132,21 @@ package open3d.objects
 
 		public function updateFrame():void
 		{
-			if(!faceDatas)return;
-			
+			if (!faceDatas)
+				return;
+
 			ctime = getTimer();
 
 			var dst:Vector3D;
-			
+
 			var a0:Vector3D;
 			var b0:Vector3D;
 			var c0:Vector3D;
-			
+
 			var a1:Vector3D;
 			var b1:Vector3D;
 			var c1:Vector3D;
-			
+
 			var cframe:Frame;
 			var nframe:Frame;
 			var i:int = 0;
@@ -149,34 +154,34 @@ package open3d.objects
 			cframe = frames[_currentFrame];
 			nframe = frames[(_currentFrame + 1) % framesLength];
 			var _vinLength:uint = _vin.length;
-			
+
 			// TODO : optimize
 			var _cframe_vertices:Vector.<Vector3D> = cframe.vertices;
 			var _nframe_vertices:Vector.<Vector3D> = nframe.vertices;
-			
+
 			for each (var face:FaceData in faceDatas)
 			{
 				a0 = _cframe_vertices[face.a];
 				b0 = _cframe_vertices[face.b];
 				c0 = _cframe_vertices[face.c];
-				
+
 				a1 = _nframe_vertices[face.a];
 				b1 = _nframe_vertices[face.b];
 				c1 = _nframe_vertices[face.c];
-								
+
 				_vin[i++] = a0.x + interp * (a1.x - a0.x);
 				_vin[i++] = a0.y + interp * (a1.y - a0.y);
 				_vin[i++] = a0.z + interp * (a1.z - a0.z);
-				
+
 				_vin[i++] = b0.x + interp * (b1.x - b0.x);
 				_vin[i++] = b0.y + interp * (b1.y - b0.y);
 				_vin[i++] = b0.z + interp * (b1.z - b0.z);
-				
+
 				_vin[i++] = c0.x + interp * (c1.x - c0.x);
 				_vin[i++] = c0.y + interp * (c1.y - c0.y);
 				_vin[i++] = c0.z + interp * (c1.z - c0.z);
 			}
-			
+
 			// Update the timer part, to get time based animation
 			if (_type != ANIM_STOP)
 			{
