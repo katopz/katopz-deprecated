@@ -84,8 +84,9 @@ package open3d.objects
 			if (material is IShader) 
 			{
 				var shader : IShader = material as IShader;
-				shader.calculateNormals(_vout, _triangles.indices);
-				_triangles.uvtData = shader.getUVData(_transform_matrix3D);
+				shader.calculateNormals(_vin , _triangles.indices);
+			
+				_triangles.uvtData = shader.getUVData(projectionMatrix3D);
 			}
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
 		}

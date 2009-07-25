@@ -7,7 +7,7 @@ package open3d.geom {
 	public class Vertex 
 	{
 		private var faceNormals : Vector.<Vector3D> = new Vector.<Vector3D>();
-		public var normal:Vector3D ;
+		public var normal:Vector3D =new Vector3D() ;
 		public function addFaceNormal(faceNormal:Vector3D):void
 		{
 			faceNormals.push(faceNormal);
