@@ -95,6 +95,8 @@ package open3d.objects
 				_triangles.uvtData = shader.getUVData(projectionMatrix3D);
 			}
 			//Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
+			projMatrix.transformVectors( _vin,_vout);
+			
 			Utils3D.projectVectors(projMatrix, _vin, _vertices, _uvtData);
 			
 			
