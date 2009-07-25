@@ -72,10 +72,16 @@ package open3d.objects
 		public function project(projectionMatrix3D : Matrix3D, matrix3D : Matrix3D) : void 
 		{
 			// local
-			_transform_matrix3D.transformVectors(_vin, _vout);
+			//_transform_matrix3D.transformVectors(_vin, _vout);
 			
 			// global
-			matrix3D.transformVectors(_vout, _vout);
+			//matrix3D.transformVectors(_vout, _vout);
+			
+			var projMatrix:Matrix3D = _transform_matrix3D.clone();
+			projMatrix.append(matrix3D);
+			projMatrix.append(projectionMatrix3D);
+			
+			
 			
 			// z
 			screenZ = _vin[0];
@@ -88,7 +94,10 @@ package open3d.objects
 			
 				_triangles.uvtData = shader.getUVData(projectionMatrix3D);
 			}
-			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
+			//Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
+			Utils3D.projectVectors(projMatrix, _vin, _vertices, _uvtData);
+			
+			
 		}
 
 		public function set material(value : Material) : void 
