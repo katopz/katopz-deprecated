@@ -19,7 +19,7 @@ package
 
 		override protected function create():void
 		{
-			// Single Core = 34, Quad Core = 57;
+			// Single Core = 35, Quad Core = 58
 			var segment:uint = 58;
 
 			sphere = new Sphere(100, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
