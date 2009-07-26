@@ -31,7 +31,7 @@ package jiglib.collision {
 		public var mat:MaterialProperties = new MaterialProperties();
 		public var objInfo:CollDetectInfo;
 		public var dirToBody:JNumber3D;
-		public var pointInfo:Array;
+		public var pointInfo:Vector.<CollPointInfo>;
 		public var satisfied:Boolean;
 	}
 }

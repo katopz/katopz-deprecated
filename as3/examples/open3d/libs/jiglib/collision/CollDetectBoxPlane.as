@@ -28,8 +28,8 @@ package jiglib.collision {
 	import jiglib.cof.JConfig;
 	import jiglib.geometry.*;
 	import jiglib.math.*;
-	import jiglib.physics.RigidBody;
 	import jiglib.physics.MaterialProperties;
+	import jiglib.physics.RigidBody;
 	
 	public class CollDetectBoxPlane extends CollDetectFunctor {
 		
@@ -55,9 +55,9 @@ package jiglib.collision {
 				return;
 			}
 			
-			var newPts:Array = box.getCornerPoints(box.currentState);
-			var oldPts:Array = box.getCornerPoints(box.oldState);
-			var collPts:Array = [];
+			var newPts:Vector.<JNumber3D> = box.getCornerPoints(box.currentState);
+			var oldPts:Vector.<JNumber3D> = box.getCornerPoints(box.oldState);
+			var collPts:Vector.<CollPointInfo> = new Vector.<CollPointInfo>();
 			var cpInfo:CollPointInfo;
 			var newPt:JNumber3D;
 			var oldPt:JNumber3D;

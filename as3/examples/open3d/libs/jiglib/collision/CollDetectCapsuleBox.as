@@ -55,7 +55,7 @@ package jiglib.collision {
 				return;
 			}
 			
-			var collPts:Array = [];
+			var collPts:Vector.<CollPointInfo> = new Vector.<CollPointInfo>();
 			var cpInfo:CollPointInfo;
 			
 			var oldSeg:JSegment = new JSegment(capsule.getBottomPos(capsule.oldState), JNumber3D.multiply(capsule.oldState.orientation.getCols()[1], capsule.length));
@@ -66,7 +66,7 @@ package jiglib.collision {
 			var oldDistSq:Number = oldSeg.segmentBoxDistanceSq(oldObj, box, box.oldState);
 			var newObj:Object = {};
 			var newDistSq:Number = newSeg.segmentBoxDistanceSq(newObj, box, box.currentState);
-			var arr:Array = box.oldState.orientation.getCols();
+			var arr:Vector.<JNumber3D> = box.oldState.orientation.getCols();
 			
 			if (Math.min(oldDistSq, newDistSq) < Math.pow(radius + JConfig.collToll, 2)) {
 				var segPos:JNumber3D = oldSeg.getPoint(Number(oldObj.pfLParam));
