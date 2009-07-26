@@ -24,11 +24,12 @@ distribution.
  */
 
 package jiglib.physics {
-	import jiglib.geometry.JSegment;	
 	import jiglib.cof.JConfig;
-	import jiglib.physics.constraint.JConstraint;
+	import jiglib.collision.CollisionInfo;
+	import jiglib.geometry.JSegment;
 	import jiglib.math.JMatrix3D;
 	import jiglib.math.JNumber3D;
+	import jiglib.physics.constraint.JConstraint;
 	import jiglib.plugin.ISkin3D;
 	
 	public class RigidBody {
@@ -63,7 +64,7 @@ package jiglib.physics {
 		private var _origMovable:Boolean;
 		private var _inactiveTime:Number;
 		 
-		private var _bodiesToBeActivatedOnMovement:Array;
+		private var _bodiesToBeActivatedOnMovement:Vector.<RigidBody>;
 		 
 		private var _storedPositionForActivation:JNumber3D;
 		private var _lastPositionForDeactivation:JNumber3D;
@@ -76,9 +77,9 @@ package jiglib.physics {
 		private var _rotationZ:Number = 0;
 		private var _useDegrees:Boolean;
 	     
-		private var _nonCollidables:Array;
-		private var _constraints:Array;
-		public var collisions:Array;
+		private var _nonCollidables:Vector.<RigidBody>;
+		private var _constraints:Vector.<JConstraint>;
+		public var collisions:Vector.<CollisionInfo>;
 		 
 	    public function RigidBody(skin:ISkin3D) {
 			_useDegrees = (JConfig.rotationType == "DEGREES") ? true : false;
@@ -108,12 +109,12 @@ package jiglib.physics {
 			_movable = true;
 			_origMovable = true;
 			 
-			collisions = [];
-			_constraints = [];
-			_nonCollidables = [];
+			collisions = new Vector.<CollisionInfo>();
+			_constraints = new Vector.<JConstraint>();
+			_nonCollidables = new Vector.<RigidBody>();
 			 
 			_storedPositionForActivation = new JNumber3D();
-			_bodiesToBeActivatedOnMovement = [];
+			_bodiesToBeActivatedOnMovement = new Vector.<RigidBody>();
 			_lastPositionForDeactivation = _currState.position.clone();
 			_lastOrientationForDeactivation = JMatrix3D.clone(_currState.orientation);
 			
@@ -377,12 +378,12 @@ package jiglib.physics {
 		}
 		
 		public function removeAllConstraints():void {
-			_constraints = [];
+			_constraints = new Vector.<JConstraint>();
 		}
 		
 		private function findConstraint(constraint:JConstraint):Boolean {
-			for (var i:String in _constraints) {
-				if (constraint == _constraints[i]) {
+			for each (var _constraint:JConstraint in _constraints) {
+				if (constraint == _constraint) {
 					return true;
 				}
 			}
@@ -601,7 +602,7 @@ package jiglib.physics {
 			for (var i:int = 0; i < _bodiesToBeActivatedOnMovement.length; i++ ) {
 				PhysicsSystem.getInstance().activateObject(_bodiesToBeActivatedOnMovement[i]);
 			}
-			_bodiesToBeActivatedOnMovement = [];
+			_bodiesToBeActivatedOnMovement = new Vector.<RigidBody>();
 		}
 		
 		public function addMovementActivation(pos:JNumber3D, otherBody:RigidBody):void {
@@ -618,11 +619,11 @@ package jiglib.physics {
 		}
 		
 		public function setConstraintsAndCollisionsUnsatisfied():void {
-			for (var i:String in _constraints) {
-				_constraints[i].satisfied = false;
+			for each (var _constraint:JConstraint in _constraints) {
+				_constraint.satisfied = false;
 			}
-			for (i in collisions) {
-				collisions[i].satisfied = false;
+			for each (var _collision:CollisionInfo in collisions) {
+				_collision.satisfied = false;
 			}
 		}
 		
@@ -646,8 +647,8 @@ package jiglib.physics {
 		}
 		
 		private function findNonCollidablesBody(body:RigidBody):Boolean {
-			for (var i:String in _nonCollidables) {
-				if (body == _nonCollidables[i]) {
+			for each(var _body:RigidBody in _nonCollidables) {
+				if (body == _body) {
 					return true;
 				}
 			}
@@ -731,7 +732,7 @@ package jiglib.physics {
 			return _worldInvInertia;
 		}
 		
-		public function get nonCollidables():Array {
+		public function get nonCollidables():Vector.<RigidBody> {
 			return _nonCollidables;
 		}
 		

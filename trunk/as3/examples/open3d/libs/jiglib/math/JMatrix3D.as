@@ -36,8 +36,8 @@
 // ______________________________________________________________________ Matrix3D
 
 package jiglib.math {
-	import flash.geom.Vector3D;	
 	import flash.geom.Matrix3D;
+	import flash.geom.Vector3D;
 	
 
 	/**
@@ -903,8 +903,8 @@ package jiglib.math {
 		/*
 		 * modify by Muzer
 		 */
-		public function getCols():Array {
-			var cols:Array = [];
+		public function getCols():Vector.<JNumber3D> {
+			var cols:Vector.<JNumber3D> = new Vector.<JNumber3D>();
 			cols[0] = new JNumber3D(n11, n21, n31);
 			cols[1] = new JNumber3D(n12, n22, n32);
 			cols[2] = new JNumber3D(n13, n23, n33);

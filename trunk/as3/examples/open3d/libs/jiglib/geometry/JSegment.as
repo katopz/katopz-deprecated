@@ -372,7 +372,7 @@ package jiglib.geometry {
 			var kPntArr:Array = kPnt.toArray();
 			var kDirArr:Array = kDir.toArray();
 			 
-			  var bReflect:Array = new Array(3);
+			  var bReflect:Vector.<Boolean> = new Vector.<Boolean>(3, true);
 			  for (var i:int = 0; i < 3; i++) {
 				if ( kDirArr[i] < 0 ) {
 				  kPntArr[i] = -kPntArr[i];

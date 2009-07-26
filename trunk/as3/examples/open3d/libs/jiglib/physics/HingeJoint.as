@@ -42,7 +42,7 @@ package jiglib.physics {
 		private var _damping:Number;
 		private var _extraTorque:Number;
 		
-		private var sidePointConstraints:Array;
+		private var sidePointConstraints:Vector.<JConstraintMaxDistance>;
 		private var midPointConstraint:JConstraintPoint;
 		private var maxDistanceConstraint:JConstraintMaxDistance;
 		
@@ -74,7 +74,7 @@ package jiglib.physics {
 			var allowedDistanceMid:Number = 0.005;
 			var allowedDistanceSide:Number = sidewaysSlack * hingeHalfWidth;
 			
-			sidePointConstraints = [];
+			sidePointConstraints = new Vector.<JConstraintMaxDistance>();
 			sidePointConstraints[0] = new JConstraintMaxDistance(_body0, relPos0a, _body1, relPos1a, allowedDistanceSide);
 			sidePointConstraints[1] = new JConstraintMaxDistance(_body0, relPos0b, _body1, relPos1b, allowedDistanceSide);
 			

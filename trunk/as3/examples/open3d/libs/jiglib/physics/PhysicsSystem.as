@@ -302,7 +302,7 @@ package jiglib.physics
 				avR1 = JNumber3D.divide(avR1, Number(ptNum));
 				avDepth /= ptNum;
 
-				collision.pointInfo = [];
+				collision.pointInfo = new Vector.<CollPointInfo>();
 				collision.pointInfo[0] = new CollPointInfo();
 				collision.pointInfo[0].r0 = avR0;
 				collision.pointInfo[0].r1 = avR1;
@@ -992,7 +992,7 @@ package jiglib.physics
 			updateAllPositions(dt);
 
 			for each (var _body:RigidBody in _bodies)
-				_body.collisions = [];
+				_body.collisions = new Vector.<CollisionInfo>();
 
 			_collisions = new Vector.<CollisionInfo>();
 			_collisionSystem.detectAllCollisions(_activeBodies, _collisions);

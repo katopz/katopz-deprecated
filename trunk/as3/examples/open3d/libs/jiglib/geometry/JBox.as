@@ -25,23 +25,23 @@ distribution.
 
 package jiglib.geometry {
 
-	import jiglib.physics.PhysicsState;
-	import jiglib.plugin.ISkin3D;
 	import jiglib.math.*;
+	import jiglib.physics.PhysicsState;
 	import jiglib.physics.RigidBody;
+	import jiglib.plugin.ISkin3D;
 	
 	public class JBox extends RigidBody {
 		
 		private var _sideLengths:JNumber3D;
-		private var _points:Array;
-		private var _edges:Array = [ { ind0:0, ind1:1 }, { ind0:3, ind1:1 }, { ind0:2, ind1:3 },
+		private var _points:Vector.<JNumber3D>;
+		private var _edges:Vector.<*> = Vector.<*>([ { ind0:0, ind1:1 }, { ind0:3, ind1:1 }, { ind0:2, ind1:3 },
 			                         { ind0:2, ind1:0 }, { ind0:4, ind1:5 }, { ind0:5, ind1:7 },
 							         { ind0:6, ind1:7 }, { ind0:4, ind1:6 }, { ind0:7, ind1:1 },
-							         { ind0:5, ind1:3 }, { ind0:4, ind1:2 }, { ind0:6, ind1:0 } ];
+							         { ind0:5, ind1:3 }, { ind0:4, ind1:2 }, { ind0:6, ind1:0 } ]);
 										 
-		private var _face:Array = [[6, 7, 1, 0], [5, 4, 2, 3], 
+		private var _face:Vector.<*> = Vector.<*>([[6, 7, 1, 0], [5, 4, 2, 3], 
 								   [3, 1, 7, 5], [4, 6, 0, 2], 
-								   [1, 3, 2, 0], [7, 6, 4, 5]];
+								   [1, 3, 2, 0], [7, 6, 4, 5]]);
 		 
 		public function JBox(skin:ISkin3D, width:Number, depth:Number, height:Number) {
 			
@@ -56,7 +56,7 @@ package jiglib.geometry {
 		
 		private function initPoint():void {
 			var halfSide:JNumber3D = getHalfSideLengths();
-			_points = [];
+			_points = new Vector.<JNumber3D>();
 			_points[0] = new JNumber3D(halfSide.x, -halfSide.y, halfSide.z);
 			_points[1] = new JNumber3D(halfSide.x, halfSide.y, halfSide.z);
 			_points[2] = new JNumber3D(-halfSide.x, -halfSide.y, halfSide.z);
@@ -79,7 +79,7 @@ package jiglib.geometry {
 			return _sideLengths;
 		}
 		
-		public function get edges():Array {
+		public function get edges():Vector.<*> {
 			return _edges;
 		}
 		 
@@ -108,9 +108,9 @@ package jiglib.geometry {
 			return obj;
 		}
 		
-		public function getCornerPoints(state:PhysicsState):Array {
+		public function getCornerPoints(state:PhysicsState):Vector.<JNumber3D> {
 			var vertex:JNumber3D;
-			var arr:Array = [];
+			var arr:Vector.<JNumber3D> = new Vector.<JNumber3D>();
 			var transform:JMatrix3D=JMatrix3D.multiply(JMatrix3D.translationMatrix(state.position.x, state.position.y, state.position.z), state.orientation);
 			for (var i:String in _points) {
 				vertex = new JNumber3D(_points[i].x, _points[i].y, _points[i].z);
@@ -181,11 +181,11 @@ package jiglib.geometry {
 			return true;
 		}
 		
-		public function getSupportVertices(axis:JNumber3D):Array {
-			var vertices:Array = [];
-			var d:Array = new Array(3);
+		public function getSupportVertices(axis:JNumber3D):Vector.<JNumber3D> {
+			var vertices:Vector.<JNumber3D> = new Vector.<JNumber3D>();
+			var d:Vector.<uint> = new Vector.<uint>(3, true);
 			var H:JNumber3D;
-			var temp:Array = currentState.orientation.getCols();
+			var temp:Vector.<JNumber3D> = currentState.orientation.getCols();
 			temp[0].normalize();
 			temp[1].normalize();
 			temp[2].normalize();

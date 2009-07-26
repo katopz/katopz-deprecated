@@ -33,10 +33,10 @@ package jiglib.collision {
 	public class CollisionSystem {
 		
 		private var detectionFunctors:Array;
-		private var collBody:Array;
+		private var collBody:Vector.<RigidBody>;
 		
 		public function CollisionSystem() {
-			collBody = [];
+			collBody = new Vector.<RigidBody>();
 			detectionFunctors = [];
 			detectionFunctors["BOX"] = [];
 			detectionFunctors["BOX"]["BOX"] = new CollDetectBoxBox();
@@ -72,7 +72,7 @@ package jiglib.collision {
 		}
 		
 		public function removeAllCollisionBodys():void {
-			collBody = [];
+			collBody = new Vector.<RigidBody>();
 		}
 		
 		public function detectCollisions(body:RigidBody, collArr:Vector.<CollisionInfo>):void {
