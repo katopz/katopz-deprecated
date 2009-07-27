@@ -5,6 +5,7 @@ package open3d.objects
 	
 	import open3d.materials.Material;
 	import open3d.materials.shaders.IShader;
+	import open3d.view.Layer;
 
 	/**
 	 * Object3D
@@ -31,15 +32,11 @@ package open3d.objects
 
 		// Z-Sort for Mesh
 		public var screenZ:Number = 0;
+		
+		// Layer
+		public var graphicsLayer:Graphics;
+		public var layer:Sprite;
 		private var _layer:Sprite;
-		public function set layer(value:Sprite):void
-		{
-			_layer = value;
-		}
-		public function get layer():Sprite
-		{
-			return _layer;
-		}
 		
 		public function Object3D() : void 
 		{
@@ -67,6 +64,13 @@ package open3d.objects
 			
 			// dispose vout 
 			vout = _vout = new Vector.<Number>(_vin.length, true);
+			
+			// canvas
+			if(layer)
+			{
+				_layer = layer;
+				graphicsLayer = _layer.graphics;
+			}
 		}
 
 		public function project(projectionMatrix3D : Matrix3D, matrix3D : Matrix3D) : void 

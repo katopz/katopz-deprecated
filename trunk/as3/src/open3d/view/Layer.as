@@ -1,4 +1,4 @@
-package open3d.render
+package open3d.view
 {
 	import flash.display.Sprite;
 	import flash.events.Event;

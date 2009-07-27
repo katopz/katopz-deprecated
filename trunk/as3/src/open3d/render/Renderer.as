@@ -139,6 +139,9 @@ package open3d.render
 			if (!object3D)
 				return;
 				
+			// default layer
+			object3D.layer = object3D.layer?object3D.layer:_view;
+			object3D.update();
 			_childs.push(object3D);
 		}
 
@@ -155,42 +158,35 @@ package open3d.render
 			// dispose
 			totalFaces = 0;
 			
-			var _view_graphics:Graphics = _view.graphics;
-			_view_graphics.clear();
+			var _graphics:Graphics = _view.graphics;
 			
 			var child:Object3D;
+			
+			// clear all layer only once cause some child share same layer
 			for each (child in _childs)
-			{
-				if(child.layer)
-					child.layer.graphics.clear();
-			}
+				child.graphicsLayer.clear();
 			
 			// child.project faster than project(child) ~4-7fps
 			for each (child in _childs)
 			{
 				child.project(_projectionMatrix3D, _worldMatrix3D);
 				
-				//select layer
-				if(child.layer)
-				{
-					_view_graphics = child.layer.graphics;
-				}else{
-					_view_graphics = _view.graphics;
-				}
+				// graphics layer
+				_graphics = child.graphicsLayer;
 				
 				// draw TODO : auto select render type
 				if(_type==1)
 				{
 					// DRAW TYPE #1 drawGraphicsData
-					_view_graphics.drawGraphicsData(child.graphicsData);
+					_graphics.drawGraphicsData(child.graphicsData);
 				}else{
 					// DRAW TYPE #2 drawTriangles
 					if(child.material is BitmapMaterial)
 					{
 						var _child_triangles:GraphicsTrianglePath = child.triangles;
-						_view_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);
-	            		_view_graphics.drawTriangles(_child_triangles.vertices, _child_triangles.indices, _child_triangles.uvtData,  _child_triangles.culling);
-	            		_view_graphics.endFill();
+						_graphics.beginBitmapFill(BitmapMaterial(child.material).texture);
+	            		_graphics.drawTriangles(_child_triangles.vertices, _child_triangles.indices, _child_triangles.uvtData,  _child_triangles.culling);
+	            		_graphics.endFill();
 	    			}
 	  			}
             	
@@ -202,7 +198,7 @@ package open3d.render
 					
 					// DRAW TYPE #3 drawPath 
 					if(_isFaceDebug)
-						Mesh(child).debugFace(view.mouseX, view.mouseY, _view_graphics);
+						Mesh(child).debugFace(view.mouseX, view.mouseY, _graphics);
 					
 					// interactive	
 					if(_mouseEnable)
@@ -235,7 +231,7 @@ package open3d.render
 					totalFaces += Mesh(child).numFaces;
 			}
 
-			_view_graphics.drawGraphicsData(_drawGraphicsData);
+			_graphics.drawGraphicsData(_drawGraphicsData);
 			
 			*/
 		}
