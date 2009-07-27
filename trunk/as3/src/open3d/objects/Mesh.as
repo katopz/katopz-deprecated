@@ -1,5 +1,7 @@
 package open3d.objects
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.display.*;
 	import flash.geom.*;
 	
@@ -56,7 +58,7 @@ package open3d.objects
 			_faces = new Vector.<Face>(_indices_length, true);
 			_faceIndexes = [];
 			
-			var i0:Number, i1:Number, i2:Number;
+			var i0:uint, i1:uint, i2:uint;
 			for (var i:int = 0; i < _indices_length; ++i)
 			{
 				// 3 point of face 
@@ -66,16 +68,15 @@ package open3d.objects
 				i2 = _indices[int(ix3 + 2)];
 				
 				// referer
-				var index:Vector3D = new Vector3D(i0, i1, i2);
-				var _face:Face = _faces[i] = new Face(this, index, 3 * i0 + 2, 3 * i1 + 2, 3 * i2 + 2);
+				var index:Vector3D = new Vector3D(i0, i1, i2, 0);
+				var _face:Face = _faces[i] = new Face(this, index, 
+						new Vector3D(3 * i0 + 0, 3 * i0 + 1, 3 * i0 + 2),
+						new Vector3D(3 * i1 + 0, 3 * i1 + 1, 3 * i1 + 2),
+						new Vector3D(3 * i2 + 0, 3 * i2 + 1, 3 * i2 + 2)
+					);
 				
 				// register face index for z-sort
 				_faceIndexes[i] = index;
-				
-				// add normal as vin
-				// TODO : toggle this on/off for speed gain (+ 2 vertices * face num here = lost 6 fps eventually)
-				// or try separate light(like mesh?) as composite and project them separately? should be faster?
-				//_face.calculateNormal(_vin, _triangles.uvtData);
 			}
 			
 			this.material = material;
@@ -88,12 +89,13 @@ package open3d.objects
 		
 		override public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
 		{
-			if(!_vout)return;
+			if(!_ready)return;
+			
 			super.project(projectionMatrix3D, matrix3D);
 			
-			if(!_faceIndexes)return;
+			//if(!_faceIndexes)return;
 			var _faceIndexes_length:int = _faceIndexes.length;
-			if(_faceIndexes_length<=0)return;
+			//if(_faceIndexes_length<=0)return;
 			
 			// z-sort, TODO : only sort when transfrom is dirty
 			if (_isFaceZSort)
