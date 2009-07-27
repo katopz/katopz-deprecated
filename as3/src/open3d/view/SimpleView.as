@@ -30,11 +30,12 @@ package open3d.view
 
 		public function SimpleView()
 		{
-			addEventListener(Event.ADDED_TO_STAGE, onStage);
+			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 
 		protected function onStage(event:Event):void
 		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			init();
 		}
 
