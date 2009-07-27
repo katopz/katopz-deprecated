@@ -1,5 +1,7 @@
 package open3d.materials.shaders 
 {
+	import flash.geom.Utils3D;
+	import flash.display.Bitmap;
 	import open3d.geom.Vertex;
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Light;
@@ -16,139 +18,26 @@ package open3d.materials.shaders
 	/**
 	 * @author kris
 	 */
-	public class PhongColorMaterial extends BitmapMaterial implements IShader 
+
+	 
+	public class PhongColorMaterial extends PhongMaterial
 	{
 
 		
-		private var _light : Light;
-		private var normals : Vector.<Vector3D>;
-		private var vertices : Vector.<Vertex>;
-
-		private var faceNormals : Vector.<Vector3D>;
-
-		public function PhongColorMaterial(color : uint,light : Light) 
-		{
-			
-			
-			_light = light;
+	
 		
-			// TODO: Implement params
-			var bitmapData : BitmapData = getShadingBitmap(color);
-			
-			
-			super(bitmapData);
+
+		public function PhongColorMaterial(light : Light,color:uint=0xFF0000,alpha_ : Number = 1.0,amb : int = 64, dif : int = 192, spc : int = 0, pow : Number = 8, emi : int = 0, doubleSided : Boolean = false) 
+		{
+			var bitmapData : BitmapData = getShadingBitmap(color,alpha_, amb, dif , spc  , pow  , emi , doubleSided );
+			super(light,bitmapData);
 		}
 
-		private var _verticesIn : Vector.<Number>;
-
-		public 	function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>) : void 
-		{
-			if (faceNormals != null) return;
-			
-			_verticesIn =verticesIn;
-			var trianglesLength : int = indices.length / 3;
-			faceNormals = new Vector.<Vector3D>(trianglesLength, true);
-			vertices = new Vector.<Vertex>(_verticesIn.length / 3, true);
-			
-			var vec1 : Vector3D = new Vector3D();
-			var vec2 : Vector3D = new Vector3D();
-			var vec3 : Vector3D = new Vector3D();
-			var ind1 : int;
-			var ind2 : int;
-			var ind3 : int;
-			for (var i : int = 0;i < trianglesLength; i++) 
-			{
-				
-				ind1 = indices[i * 3] * 3	;		
-				vec1.x =_verticesIn[ind1];	
-				vec1.y = _verticesIn[ind1 + 1];
-				vec1.z =_verticesIn[ind1 + 2];
-				
-				ind2 = indices[i * 3 + 1] * 3;
-				vec2.x = _verticesIn[ind2];	
-				vec2.y = _verticesIn[ind2 + 1];
-				vec2.z = _verticesIn[ind2 + 2];
-				
-				
-				ind3 = indices[i * 3 + 2] * 3;
-				vec3.x = _verticesIn[ind3];	
-				vec3.y = _verticesIn[ind3 + 1];
-				vec3.z = _verticesIn[ind3 + 2];
-				
-				
-				var faceNormal : Vector3D = calculateNormal(vec1, vec2, vec3);
-			
-				faceNormals[i] = faceNormal;
-				
-				vertices[ind1/3] = addNormal(vertices[ind1/3], faceNormal);
-				vertices[ind2/3 ] = addNormal(vertices[ind2/3], faceNormal);
-				vertices[ind3/3] = addNormal(vertices[ind3/3], faceNormal);
-			}
-			calculateVertexNormals();
-		}
-
-		private function addNormal(v : Vertex, faceNormal : Vector3D) : Vertex 
-		{
-			if (v == null) v = new Vertex();
-		
-			v.addFaceNormal(faceNormal);
-			return v;
-		}
-
-		private function calculateVertexNormals() : void 
-		{
-			for (var i : int = 0;i < vertices.length; i++) 
-			{	
-				vertices[i].calculateNormal();
-			}
-		}
-
-		public function calculateNormal(vec1 : Vector3D,vec2 : Vector3D,vec3 : Vector3D) : Vector3D 
-		{
-			var normal : Vector3D = new Vector3D();
-			var dif1 : Vector3D = vec2.subtract(vec1);
-			var dif2 : Vector3D = vec3.subtract(vec1);
-			normal = dif1.crossProduct(dif2);
-			normal.normalize();
-			return normal;
-		}
-
-		
-		
-		public function getUVData(m : Matrix3D) : Vector.<Number> 
-		{
-			var uvData : Vector.<Number> = new Vector.<Number>();
-			var projectedNormal : Vector3D ;
-			
-			var texCoord : Point = new Point(); 
-			// projecting vertex normals
-			for (var i : int = 0;i < vertices.length; i++) 
-			{
-				projectedNormal = vertices[i].normal;//Utils3D.projectVector(m, vertices[i].normal);
-				projectedNormal.normalize();
-				calculateTexCoord(texCoord, projectedNormal);
-				uvData.push(texCoord.x, texCoord.y, 1);
-			}
-			
-			return uvData;
-		}
-
-		
-		
-		public function calculateTexCoord(texCoord : Point, normal : Vector3D, doubleSided : Boolean = false) : void 
-		{
-			var v : Vector3D = _light.direction;
-			texCoord.x = v.x * normal.x + v.y * normal.y + v.z * normal.z;
-			if (texCoord.x < 0) texCoord.x = (doubleSided) ? -texCoord.x : 0;
-			v = _light.halfVector;
-			texCoord.y = v.x * normal.x + v.y * normal.y + v.z * normal.z;
-			if (texCoord.y < 0) texCoord.y = (doubleSided) ? -texCoord.y : 0;
-		}
-
+	
 		
 		
 		
-		
+	
 		protected function getShadingBitmap(color : uint, alpha_ : Number = 1.0,amb : int = 64, dif : int = 192, spc : int = 0, pow : Number = 8, emi : int = 0, doubleSided : Boolean = false) : BitmapData 
 		{
 			var colorTable : BitmapData = new BitmapData(256, 256, false);
@@ -195,11 +84,6 @@ package open3d.materials.shaders
 			return colorTable;
 		}
 
-		override public function update() : void 
-		{
-			graphicsData = Vector.<IGraphicsData>([_graphicsBitmapFill, triangles]);
-			graphicsData.fixed = true;
-			super.update();
-		}
+		
 	}
 }
