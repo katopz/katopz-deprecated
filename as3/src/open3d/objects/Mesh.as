@@ -93,7 +93,7 @@ package open3d.objects
 			
 			//if(!_faceIndexes)return;
 			var _faceIndexes_length:int = _faceIndexes.length;
-			//if(_faceIndexes_length<=0)return;
+			if(_faceIndexes_length<=0)return;
 			
 			// z-sort, TODO : only sort when transfrom is dirty
 			if (_isFaceZSort)
