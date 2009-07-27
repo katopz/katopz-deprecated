@@ -10,9 +10,9 @@ package open3d.data
 	 */
 	public class FaceData
 	{
-		public var a:int;
-		public var b:int;
-		public var c:int;
+		public var a:uint;
+		public var b:uint;
+		public var c:uint;
 
 		public var v0:Vector3D;
 		public var v1:Vector3D;
@@ -20,7 +20,7 @@ package open3d.data
 		
 		public var uvMap:Vector.<UV>;
 
-		public function FaceData(a:Number, b:Number, c:Number, v:Vector.<Vector3D>, uvMap:Vector.<UV> = null)
+		public function FaceData(a:uint, b:uint, c:uint, v:Vector.<Vector3D>, uvMap:Vector.<UV> = null)
 		{
 			this.a = a;
 			this.b = b;

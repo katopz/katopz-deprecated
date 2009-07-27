@@ -5,7 +5,6 @@ package open3d.objects
 	
 	import open3d.materials.Material;
 	import open3d.materials.shaders.IShader;
-	import open3d.view.Layer;
 
 	/**
 	 * Object3D
@@ -35,8 +34,20 @@ package open3d.objects
 		
 		// Layer
 		public var graphicsLayer:Graphics;
-		public var layer:Sprite;
+		private var _graphicsLayer:Graphics;
 		private var _layer:Sprite;
+		public function set layer(value:Sprite):void
+		{
+			_layer = value;
+			graphicsLayer = _graphicsLayer = _layer.graphics;
+		}
+		public function get layer():Sprite
+		{
+			return _layer;
+		}
+		
+		// for async mesh
+		protected var _ready:Boolean = false;
 		
 		public function Object3D() : void 
 		{
@@ -62,15 +73,10 @@ package open3d.objects
 			// public use
 			triangles = _triangles;
 			
-			// dispose vout 
+			// dispose vout
 			vout = _vout = new Vector.<Number>(_vin.length, true);
 			
-			// canvas
-			if(layer)
-			{
-				_layer = layer;
-				graphicsLayer = _layer.graphics;
-			}
+			_ready = true;
 		}
 
 		public function project(projectionMatrix3D : Matrix3D, matrix3D : Matrix3D) : void 
@@ -110,6 +116,11 @@ package open3d.objects
 		public function get graphicsData() : Vector.<IGraphicsData> 
 		{
 			return _material.graphicsData;
+		}
+		
+		public function clearGraphics():void
+		{
+			_graphicsLayer.clear();
 		}
 
 		// TODO : more friendly use

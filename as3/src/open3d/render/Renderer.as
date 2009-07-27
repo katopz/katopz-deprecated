@@ -141,7 +141,6 @@ package open3d.render
 				
 			// default layer
 			object3D.layer = object3D.layer?object3D.layer:_view;
-			object3D.update();
 			_childs.push(object3D);
 		}
 
@@ -158,13 +157,12 @@ package open3d.render
 			// dispose
 			totalFaces = 0;
 			
-			var _graphics:Graphics = _view.graphics;
-			
+			var _graphics:Graphics;
 			var child:Object3D;
 			
 			// clear all layer only once cause some child share same layer
 			for each (child in _childs)
-				child.graphicsLayer.clear();
+				child.clearGraphics();
 			
 			// child.project faster than project(child) ~4-7fps
 			for each (child in _childs)
