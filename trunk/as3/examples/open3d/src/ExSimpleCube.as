@@ -2,32 +2,26 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	
-	import open3d.materials.BitmapMaterial;
-	import open3d.objects.SimpleCube;
+
+	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Object3D;
+	import open3d.objects.SimpleCube;
 	import open3d.view.SimpleView;
 
-	[SWF(width=800, height = 600, backgroundColor = 0x666666, frameRate = 30)]
+	[SWF(width=800,height=600,backgroundColor=0x666666,frameRate=30)]
 
 	/**
-	 * ExCube
+	 * ExSimpleCube
 	 * @author katopz
 	 */
 	public class ExSimpleCube extends SimpleView
 	{
-		[Embed(source="assets/earth.jpg")]
-		private var Texture:Class;
-		private var texture:BitmapData = Bitmap(new Texture()).bitmapData;
-
 		private var simpleCube:SimpleCube;
 
 		override protected function create():void
 		{
-			simpleCube = new SimpleCube(100, new BitmapMaterial(texture));
+			simpleCube = new SimpleCube(100, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(simpleCube);
-			// sky box
-			//cube.culling = TriangleCulling.POSITIVE;
 		}
 
 		override protected function draw():void
