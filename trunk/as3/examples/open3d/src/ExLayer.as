@@ -1,7 +1,8 @@
 package
 {
+	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
-	
+
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Object3D;
 	import open3d.objects.Plane;
@@ -49,6 +50,21 @@ package
 			ground.culling = "none";
 			ground.layer = layer0;
 			renderer.addChild(ground);
+
+			// is Mouse work?
+			ground.layer.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
+			ground.layer.addEventListener(MouseEvent.MOUSE_UP, onMouse);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouse);
+		}
+
+		private function onMouse(event:MouseEvent):void
+		{
+			if(event.type == MouseEvent.MOUSE_DOWN)
+			{	
+				ground.layer.alpha = .5;
+			}else{
+				ground.layer.alpha = 1;
+			}
 		}
 
 		override protected function draw():void
