@@ -1,9 +1,5 @@
 package
 {
-	import flash.events.Event;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-
 	import open3d.objects.Collada;
 	import open3d.objects.Object3D;
 	import open3d.view.SimpleView;
@@ -18,19 +14,9 @@ package
 	{
 		private var collada:Collada;
 
-		public function ExCollada()
+		override protected function create():void
 		{
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, onComplete);
-			urlLoader.load(new URLRequest("assets/chameleon.dae"));
-		}
-
-		private function onComplete(event:Event):void
-		{
-			var loader:URLLoader = event.currentTarget as URLLoader;
-			collada = new Collada();
-			collada.parse(new XML(loader.data), 0.01);
-
+			collada = new Collada("assets/chameleon.dae", null, 0.01);
 			renderer.addChild(collada);
 			renderer.world.z = 4000;
 		}

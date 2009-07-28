@@ -1,6 +1,9 @@
 package open3d.objects  
 {
+	import flash.events.Event;
+	
 	import open3d.materials.*;
+	import open3d.utils.LoaderUtil;
 
 	/**
 	 * Collada Parser
@@ -15,8 +18,39 @@ package open3d.objects
 		
 		public var materials : Object = {}
 		private var indicesPos : int = 0
-		private var scale : Number
-
+		private var scale : Number;
+		private var _customMaterial : Material;
+		
+		public function Collada(data:* = null, material:Material = null, scale:Number=1)
+		{
+			super();
+			this.material = _customMaterial = material;
+			this.scale = scale;
+			
+			if (data)
+			{
+				if (data is XML)
+				{
+					parse(data, scale);
+				}
+				else
+				{
+					load(data);
+				}
+			}
+		}
+		
+		public function load(uri:String):Object
+		{
+			return LoaderUtil.load(uri, onLoad);
+		}
+		
+		private function onLoad(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+				parse(XML(event.target.data), scale);
+		}
+		
 		public function parse(xml : XML, scale : Number) : void
 		{
 			default xml namespace = "http://www.collada.org/2005/11/COLLADASchema";
@@ -47,7 +81,7 @@ package open3d.objects
 				parseGeomXMLTriangles(geomXML)
 			}
 			
-			buildFaces(mat);
+			buildFaces(_customMaterial?_customMaterial:mat);
 		}
 			
 		private function parseGeomXMLTriangles(geomXML : XML) : void
