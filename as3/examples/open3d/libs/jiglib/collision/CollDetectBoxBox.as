@@ -62,14 +62,14 @@ package jiglib.collision {
 			return false;
 		}
 		
-		private function addPoint(contactPoint:Vector.<JNumber3D>, pt:JNumber3D, combinationDistanceSq:Number):Boolean {
-			for (var i:String in contactPoint) {
-				if (JNumber3D.sub(contactPoint[i], pt).modulo2 < combinationDistanceSq) {
-					contactPoint[i] = JNumber3D.divide(JNumber3D.add(contactPoint[i], pt), 2);
+		private function addPoint(contactPoints:Vector.<JNumber3D>, pt:JNumber3D, combinationDistanceSq:Number):Boolean {
+			for each(var contactPoint:JNumber3D in contactPoints) {
+				if (JNumber3D.sub(contactPoint, pt).modulo2 < combinationDistanceSq) {
+					contactPoint = JNumber3D.divide(JNumber3D.add(contactPoint, pt), 2);
 					return false;
 				}
 			}
-			contactPoint.push(pt);
+			contactPoints.push(pt);
 			return true;
 		}
 		
@@ -81,9 +81,9 @@ package jiglib.collision {
 			var boxPts:Vector.<JNumber3D> = box1.getCornerPoints(box1State);
 			var boxEdges:Vector.<*> = box1.edges;
 			var outObj:Object;
-			for (var i:String in boxEdges) {
+			for each(var boxEdge:* in boxEdges) {
 				outObj={};
-				seg=new JSegment(boxPts[boxEdges[i].ind0],JNumber3D.sub(boxPts[boxEdges[i].ind1],boxPts[boxEdges[i].ind0]));
+				seg=new JSegment(boxPts[boxEdge.ind0],JNumber3D.sub(boxPts[boxEdge.ind1],boxPts[boxEdge.ind0]));
 				if (box0.segmentIntersect(outObj, seg, box0State)) {
 					if (addPoint(contactPoint, outObj.posOut, combinationDist)) {
 						num += 1;
@@ -156,8 +156,8 @@ package jiglib.collision {
 			var clipper_d:Number = JNumber3D.dot(Clipper[0], ClipperNormal);
 			 
 			var temp:Vector.<JNumber3D> = new Vector.<JNumber3D>();
-			for (var i:String in CB) {
-				getPointFaceContacts(CB[i], ClipperNormal, clipper_d, temp, CA);
+			for each(var cb:JNumber3D in CB) {
+				getPointFaceContacts(cb, ClipperNormal, clipper_d, temp, CA);
 			}
 		}
 		
@@ -257,10 +257,13 @@ package jiglib.collision {
 							
 			var l2:Number;
 			var overlapDepths:Vector.<*> = new Vector.<*>();
-			for (var i:String in axes) {
-				overlapDepths[i] = {};
-				overlapDepths[i].flag = false;
-			    overlapDepths[i].depth = JNumber3D.NUM_HUGE;
+			var i:uint=0;
+			for (i=0;i<axes.length;i++) {
+				overlapDepths[i] = 
+				{
+					flag : false,
+			    	depth : JNumber3D.NUM_HUGE
+			 	}
 				l2 = axes[i].modulo2;
 				if (l2 < JNumber3D.NUM_TINY) {
 					continue;
@@ -275,7 +278,7 @@ package jiglib.collision {
 			var minDepth:Number = JNumber3D.NUM_HUGE;
 			var minAxis:int = -1;
 			
-			for (i in axes) {
+			for (i=0;i<axes.length;i++) {
 				l2 = axes[i].modulo2;
 				if (l2 < JNumber3D.NUM_TINY) {
 					continue;
@@ -304,16 +307,16 @@ package jiglib.collision {
 		
 		private function boxEdgesCollDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>, box0:JBox, box1:JBox, N:JNumber3D, depth:Number):void {
 			var contactPointsFromOld:Boolean = true;
-			var contactPoint:Vector.<JNumber3D> = new Vector.<JNumber3D>();
+			var contactPoints:Vector.<JNumber3D> = new Vector.<JNumber3D>();
 			combinationDist = 0.5 * Math.min(Math.min(box0.sideLengths.x, box0.sideLengths.y, box0.sideLengths.z), Math.min(box1.sideLengths.x, box1.sideLengths.y, box1.sideLengths.z));
 			combinationDist *= combinationDist;
 			
 			if (depth > -JNumber3D.NUM_TINY) {
-				getBoxBoxIntersectionPoints(contactPoint, box0, box1, false);
+				getBoxBoxIntersectionPoints(contactPoints, box0, box1, false);
 			}
-			if (contactPoint.length == 0) {
+			if (contactPoints.length == 0) {
 				contactPointsFromOld = false;
-				getBoxBoxIntersectionPoints(contactPoint, box0, box1, true);
+				getBoxBoxIntersectionPoints(contactPoints, box0, box1, true);
 			}
 			
 			var bodyDelta:JNumber3D = JNumber3D.sub(JNumber3D.sub(box0.currentState.position, box0.oldState.position), JNumber3D.sub(box1.currentState.position, box1.oldState.position));
@@ -321,19 +324,19 @@ package jiglib.collision {
 			var oldDepth:Number = depth + bodyDeltaLen;
 			 
 			var collPts:Vector.<CollPointInfo> = new Vector.<CollPointInfo>();
-			if (contactPoint.length > 0) {
+			if (contactPoints.length > 0) {
 				var cpInfo:CollPointInfo;
-				for (var i:String in contactPoint) {
+				for each(var contactPoint:JNumber3D in contactPoints) {
 					if (contactPointsFromOld) {
 						cpInfo = new CollPointInfo();
-						cpInfo.r0 = JNumber3D.sub(contactPoint[i], box0.oldState.position);
-						cpInfo.r1 = JNumber3D.sub(contactPoint[i], box1.oldState.position);
+						cpInfo.r0 = JNumber3D.sub(contactPoint, box0.oldState.position);
+						cpInfo.r1 = JNumber3D.sub(contactPoint, box1.oldState.position);
 						cpInfo.initialPenetration = oldDepth;
 						collPts.push(cpInfo);
 					} else {
 						cpInfo = new CollPointInfo();
-						cpInfo.r0 = JNumber3D.sub(contactPoint[i], box0.currentState.position);
-						cpInfo.r1 = JNumber3D.sub(contactPoint[i], box1.currentState.position);
+						cpInfo.r0 = JNumber3D.sub(contactPoint, box0.currentState.position);
+						cpInfo.r1 = JNumber3D.sub(contactPoint, box1.currentState.position);
 						cpInfo.initialPenetration = oldDepth;
 						collPts.push(cpInfo);
 					}

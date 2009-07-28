@@ -25,6 +25,8 @@ distribution.
 
 package jiglib.geometry {
 
+	import __AS3__.vec.Vector;
+	
 	import jiglib.math.*;
 	import jiglib.physics.PhysicsState;
 	import jiglib.physics.RigidBody;
@@ -112,8 +114,8 @@ package jiglib.geometry {
 			var vertex:JNumber3D;
 			var arr:Vector.<JNumber3D> = new Vector.<JNumber3D>();
 			var transform:JMatrix3D=JMatrix3D.multiply(JMatrix3D.translationMatrix(state.position.x, state.position.y, state.position.z), state.orientation);
-			for (var i:String in _points) {
-				vertex = new JNumber3D(_points[i].x, _points[i].y, _points[i].z);
+			for each(var _point:JNumber3D in _points) {
+				vertex = new JNumber3D(_point.x, _point.y, _point.z);
 				JMatrix3D.multiplyVector(transform, vertex);
 				arr.push(vertex);
 			}

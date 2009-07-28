@@ -82,11 +82,11 @@ package jiglib.collision {
 			var info:CollDetectInfo;
 			var fu:CollDetectFunctor;
 			 
-			for (var i:String in collBody) { 
-				if (body != collBody[i] && checkCollidables(body, collBody[i]) && detectionFunctors[body.type][collBody[i].type] != undefined) {
+			for each(var _collBody:RigidBody in collBody) { 
+				if (body != _collBody && checkCollidables(body, _collBody) && detectionFunctors[body.type][_collBody.type] != undefined) {
 					info = new CollDetectInfo();
 					info.body0 = body;
-					info.body1 = collBody[i];
+					info.body1 = _collBody;
 					fu = detectionFunctors[info.body0.type][info.body1.type];
 					fu.collDetect(info, collArr);
 				}
@@ -96,20 +96,20 @@ package jiglib.collision {
 		public function detectAllCollisions(bodies:Vector.<RigidBody>, collArr:Vector.<CollisionInfo>):void {
 			var info:CollDetectInfo;
 			var fu:CollDetectFunctor;
-			for (var i:String in bodies) {
-				for (var j:String in collBody) {
-					if (bodies[i] == collBody[j]) {
+			for each(var _body:RigidBody in bodies) {
+				for each(var _collBody:RigidBody in collBody) {
+					if (_body == _collBody) {
 						continue;
 					}
 					
-					if (collBody[j].isActive && bodies[i].id > collBody[j].id) {
+					if (_collBody.isActive && _body.id > _collBody.id) {
 						continue;
 					}
 					
-					if (checkCollidables(bodies[i], collBody[j]) && detectionFunctors[bodies[i].type][collBody[j].type] != undefined) {
+					if (checkCollidables(_body, _collBody) && detectionFunctors[_body.type][_collBody.type] != undefined) {
 						info = new CollDetectInfo();
-						info.body0 = bodies[i];
-						info.body1 = collBody[j];
+						info.body0 = _body;
+						info.body1 = _collBody;
 						fu = detectionFunctors[info.body0.type][info.body1.type];
 						fu.collDetect(info, collArr);
 					}
@@ -123,14 +123,14 @@ package jiglib.collision {
 			out.normalOut = new JNumber3D();
 			
 			var obj:Object = {};
-			for (var i:String in collBody) {
-				if (collBody[i] != ownerBody && segmentBounding(seg, collBody[i])) {
-					if (collBody[i].segmentIntersect(obj, seg, collBody[i].currentState)) {
+			for each(var _collBody:RigidBody in collBody) {
+				if (_collBody != ownerBody && segmentBounding(seg, _collBody)) {
+					if (_collBody.segmentIntersect(obj, seg, _collBody.currentState)) {
 						if (obj.fracOut < out.fracOut) {
 							out.posOut = obj.posOut;
 							out.normalOut = obj.normalOut;
 							out.fracOut = obj.fracOut;
-							out.bodyOut = collBody[i];
+							out.bodyOut = _collBody;
 						}
 					}
 				}
@@ -166,8 +166,8 @@ package jiglib.collision {
 		}
 		 
 		private function findBody(body:RigidBody):Boolean {
-			for (var i:String in collBody) {
-				if (body == collBody[i]) {
+			for each(var _collBody:RigidBody in collBody) {
+				if (body == _collBody) {
 					return true;
 				}
 			}
@@ -179,13 +179,13 @@ package jiglib.collision {
 				return true;
 			}
 			
-			for (var i:String in body0.nonCollidables) {
-				if (body1 == body0.nonCollidables[i]) {
+			for each(var _body0:RigidBody in body0.nonCollidables) {
+				if (body1 == _body0) {
 					return false;
 				}
 			}
-			for (i in body1.nonCollidables) {
-				if (body0 == body1.nonCollidables[i]) {
+			for each(var _body1:RigidBody in body1.nonCollidables) {
+				if (body0 == _body1) {
 					return false;
 				}
 			}

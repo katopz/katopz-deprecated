@@ -140,7 +140,7 @@ package jiglib.vehicles {
 			return _lastOnFloor;
 		}
 		
-		public function addForcesToCar():Boolean {
+		public function addForcesToCar(dt:Number):Boolean {
 			var force:JNumber3D = new JNumber3D();
 			_lastDisplacement = _displacement;
 			_displacement = 0;

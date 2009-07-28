@@ -24,6 +24,8 @@ distribution.
  */
 
 package jiglib.vehicles {
+	import __AS3__.vec.Vector;
+	
 	import jiglib.math.JNumber3D;
 	import jiglib.physics.PhysicsSystem;
 	import jiglib.plugin.ISkin3D;
@@ -93,19 +95,19 @@ package jiglib.vehicles {
 			_destAccelerate = val;
 		}
 		
-		public function setSteer(wheels:Array,val:Number):void {
+		public function setSteer(wheels:Vector.<JWheel>,val:Number):void {
 			_destSteering = val;
 			_steerWheels = [];
-			for (var i:String in wheels) {
-				if (findWheel(wheels[i])) {
-					_steerWheels[wheels[i]] = _wheels[wheels[i]];
+			for each(var wheel:JWheel in wheels) {
+				if (findWheel(wheel)) {
+					_steerWheels[wheel] = _wheels[wheel];
 				}
 			}
 		}
 		
-		private function findWheel(_name:String):Boolean {
-			for (var i:String in _wheels) {
-				if (i == _name) {
+		private function findWheel(wheel:JWheel):Boolean {
+			for each(var _wheel:JWheel in _wheels) {
+				if (wheel == _wheel) {
 					return true;
 				}
 			}
@@ -117,14 +119,15 @@ package jiglib.vehicles {
 		}
 		
 		public function addExternalForces(dt:Number):void {
-			for (var i:String in _wheels) {
-				_wheels[i].addForcesToCar(dt);
+			for each (var wheel:JWheel in wheels) {
+				wheel.addForcesToCar(dt);
 			}
 		}
 		
 		public function postPhysics(dt:Number):void {
-			for (var i:String in _wheels) {
-				_wheels[i].update(dt);
+			var wheel:JWheel;
+			for each (wheel in wheels) {
+				wheel.update(dt);
 			}
 			
 			var deltaAccelerate:Number = dt * _steerRate;
@@ -145,22 +148,22 @@ package jiglib.vehicles {
 			}
 			_steering += dSteering;
 			 
-			for (i in _wheels) {
-				_wheels[i].addTorque(_driveTorque * _accelerate);
-				_wheels[i].setLock(_HBrake > 0.5);
+			for each (wheel in wheels) {
+				wheel.addTorque(_driveTorque * _accelerate);
+				wheel.setLock(_HBrake > 0.5);
 			}
 			
 			var alpha:Number = Math.abs(_maxSteerAngle * _steering);
 			var angleSgn:Number = (_steering > 0) ? 1 : -1;
-			for (i in _steerWheels) {
-				_steerWheels[i].setSteerAngle(angleSgn * alpha);
+			for each (var _steerWheel:JWheel in _steerWheels) {
+				_steerWheel.setSteerAngle(angleSgn * alpha);
 			}
 		}
 		
 		public function getNumWheelsOnFloor():int {
 			var count:int = 0;
-			for (var i:String in _wheels) {
-				if (_wheels[i].getOnFloor()) {
+			for each (var wheel:JWheel in wheels) {
+				if (wheel.getOnFloor()) {
 					count++;
 				}
 			}
