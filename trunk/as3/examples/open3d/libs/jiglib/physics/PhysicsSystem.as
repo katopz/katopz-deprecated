@@ -89,14 +89,14 @@ package jiglib.physics
 
 		private function getAllExternalForces(dt:Number):void
 		{
-			for (var i:String in _bodies)
+			for each(var _body:RigidBody in _bodies)
 			{
-				_bodies[i].addExternalForces(dt);
+				_body.addExternalForces(dt);
 			}
 
-			for (i in _controllers)
+			for each(var _controller:PhysicsController in _controllers)
 			{
-				_controllers[i].updateController(dt);
+				_controller.updateController(dt);
 			}
 		}
 
@@ -237,9 +237,9 @@ package jiglib.physics
 
 		private function findBody(body:RigidBody):Boolean
 		{
-			for (var i:String in _bodies)
+			for each(var _body:RigidBody in _bodies)
 			{
-				if (body == _bodies[i])
+				if (body == _body)
 				{
 					return true;
 				}
@@ -249,9 +249,9 @@ package jiglib.physics
 
 		private function findConstraint(constraint:JConstraint):Boolean
 		{
-			for (var i:String in _constraints)
+			for each (var _constraint:JConstraint in _constraints)
 			{
-				if (constraint == _constraints[i])
+				if (constraint == _constraint)
 				{
 					return true;
 				}
@@ -261,9 +261,9 @@ package jiglib.physics
 
 		private function findController(controller:PhysicsController):Boolean
 		{
-			for (var i:String in _controllers)
+			for each(var _controller:PhysicsController in _controllers)
 			{
-				if (controller == _controllers[i])
+				if (controller == _controller)
 				{
 					return true;
 				}
@@ -483,21 +483,21 @@ package jiglib.physics
 				var bestDistSq:Number = 0.04;
 				var bp:BodyPair = new BodyPair(body0, body1, JNumber3D.ZERO, JNumber3D.ZERO);
 
-				for (var j:String in _cachedContacts)
+				for each(var _cachedContact:Object in _cachedContacts)
 				{
-					if (!(bp.body0 == _cachedContacts[j].Pair.body0 && bp.body1 == _cachedContacts[j].Pair.body1))
+					if (!(bp.body0 == _cachedContact.Pair.body0 && bp.body1 == _cachedContact.Pair.body1))
 					{
 						continue;
 					}
-					var distSq:Number = (_cachedContacts[j].Pair.body0 == body0) ? JNumber3D.sub(_cachedContacts[j].Pair.r, ptInfo.r0).modulo2 : JNumber3D.sub(_cachedContacts[j].Pair.r, ptInfo.r1).modulo2;
+					var distSq:Number = (_cachedContact.Pair.body0 == body0) ? JNumber3D.sub(_cachedContact.Pair.r, ptInfo.r0).modulo2 : JNumber3D.sub(_cachedContact.Pair.r, ptInfo.r1).modulo2;
 
 					if (distSq < bestDistSq)
 					{
 						bestDistSq = distSq;
-						ptInfo.accumulatedNormalImpulse = _cachedContacts[j].Impulse.normalImpulse;
-						ptInfo.accumulatedNormalImpulseAux = _cachedContacts[j].Impulse.normalImpulseAux;
-						ptInfo.accumulatedFrictionImpulse = _cachedContacts[j].Impulse.frictionImpulse;
-						if (_cachedContacts[j].Pair.body0 != body0)
+						ptInfo.accumulatedNormalImpulse = _cachedContact.Impulse.normalImpulse;
+						ptInfo.accumulatedNormalImpulseAux = _cachedContact.Impulse.normalImpulseAux;
+						ptInfo.accumulatedFrictionImpulse = _cachedContact.Impulse.frictionImpulse;
+						if (_cachedContact.Pair.body0 != body0)
 						{
 							ptInfo.accumulatedFrictionImpulse = JNumber3D.multiply(ptInfo.accumulatedFrictionImpulse, -1);
 						}
@@ -741,13 +741,11 @@ package jiglib.physics
 		private function updateContactCache():void
 		{
 			_cachedContacts = new Vector.<Object>();
-			var collInfo:CollisionInfo;
 			var ptInfo:CollPointInfo;
 			var fricImpulse:JNumber3D;
 			var contact:Object;
-			for (var i:String in _collisions)
+			for each(var collInfo:CollisionInfo in _collisions)
 			{
-				collInfo = _collisions[i];
 				for (var j:String in collInfo.pointInfo)
 				{
 					ptInfo = collInfo.pointInfo[j];
@@ -765,26 +763,28 @@ package jiglib.physics
 		private function handleAllConstraints(dt:Number, iter:int, forceInelastic:Boolean):void
 		{
 			var origNumCollisions:int = _collisions.length;
-
-			for (var k:String in _constraints)
+			var collInfo:CollisionInfo;
+			var _constraint:JConstraint;
+			
+			for each(_constraint in _constraints)
 			{
-				_constraints[k].preApply(dt);
+				_constraint.preApply(dt);
 			}
 
 			if (forceInelastic)
 			{
-				for (var i:String in _collisions)
+				for each(collInfo in _collisions)
 				{
-					preProcessContactFn(_collisions[i], dt);
-					_collisions[i].mat.restitution = 0;
-					_collisions[i].satisfied = false;
+					preProcessContactFn(collInfo, dt);
+					collInfo.mat.restitution = 0;
+					collInfo.satisfied = false;
 				}
 			}
 			else
 			{
-				for (i in _collisions)
+				for each(collInfo in _collisions)
 				{
-					preProcessCollisionFn(_collisions[i], dt);
+					preProcessCollisionFn(collInfo, dt);
 				}
 			}
 
@@ -794,27 +794,27 @@ package jiglib.physics
 			for (var step:uint = 0; step < iter; step++)
 			{
 				gotOne = false;
-				for (i in _collisions)
+				for each(collInfo in _collisions)
 				{
-					if (!_collisions[i].satisfied)
+					if (!collInfo.satisfied)
 					{
 						if (forceInelastic)
 						{
-							flag = processContactFn(_collisions[i], dt);
+							flag = processContactFn(collInfo, dt);
 							gotOne = gotOne || flag;
 						}
 						else
 						{
-							flag = processCollisionFn(_collisions[i], dt);
+							flag = processCollisionFn(collInfo, dt);
 							gotOne = gotOne || flag;
 						}
 					}
 				}
-				for (k in _constraints)
+				for each(_constraint in _constraints)
 				{
-					if (!_constraints[k].satisfied)
+					if (!_constraint.satisfied)
 					{
-						flag = _constraints[k].apply(dt);
+						flag = _constraint.apply(dt);
 						gotOne = gotOne || flag;
 					}
 				}
@@ -877,29 +877,29 @@ package jiglib.physics
 
 		private function dampAllActiveBodies():void
 		{
-			for (var i:String in _activeBodies)
+			for each(var _activeBody:RigidBody in _activeBodies)
 			{
-				_activeBodies[i].dampForDeactivation();
+				_activeBody.dampForDeactivation();
 			}
 		}
 
 		private function tryToActivateAllFrozenObjects():void
 		{
-			for (var i:String in _bodies)
+			for each(var _body:RigidBody in _bodies)
 			{
-				if (!_bodies[i].isActive)
+				if (!_body.isActive)
 				{
-					if (_bodies[i].getShouldBeActive())
+					if (_body.getShouldBeActive())
 					{
-						activateObject(_bodies[i]);
+						activateObject(_body);
 					}
 					else
 					{
-						if (_bodies[i].getVelChanged())
+						if (_body.getVelChanged())
 						{
-							_bodies[i].setVelocity(JNumber3D.ZERO);
-							_bodies[i].setAngVel(JNumber3D.ZERO);
-							_bodies[i].clearVelChanged();
+							_body.setVelocity(JNumber3D.ZERO);
+							_body.setAngVel(JNumber3D.ZERO);
+							_body.clearVelChanged();
 						}
 					}
 				}
@@ -909,24 +909,24 @@ package jiglib.physics
 		private function activateAllFrozenObjectsLeftHanging():void
 		{
 			var other_body:RigidBody;
-			for (var i:String in _bodies)
+			for each (var _body:RigidBody in _bodies)
 			{
-				if (_bodies[i].isActive)
+				if (_body.isActive)
 				{
-					_bodies[i].doMovementActivations();
-					if (_bodies[i].collisions.length > 0)
+					_body.doMovementActivations();
+					if (_body.collisions.length > 0)
 					{
-						for (var j:String in _bodies[i].collisions)
+						for (var j:String in _body.collisions)
 						{
-							other_body = _bodies[i].collisions[j].objInfo.body0;
-							if (other_body == _bodies[i])
+							other_body = _body.collisions[j].objInfo.body0;
+							if (other_body == _body)
 							{
-								other_body = _bodies[i].collisions[j].objInfo.body1;
+								other_body = _body.collisions[j].objInfo.body1;
 							}
 
 							if (!other_body.isActive)
 							{
-								_bodies[i].addMovementActivation(_bodies[i].currentState.position, other_body);
+								_body.addMovementActivation(_body.currentState.position, other_body);
 							}
 						}
 					}
@@ -960,9 +960,9 @@ package jiglib.physics
 
 		private function updateAllObject3D():void
 		{
-			for (var i:String in _bodies)
+			for each (var _body:RigidBody in _bodies)
 			{
-				_bodies[i].updateObject3D();
+				_body.updateObject3D();
 			}
 		}
 
