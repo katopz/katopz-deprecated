@@ -28,7 +28,7 @@ package
 			sphere2 = new Sphere(50, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(sphere2);
 
-			renderer.world.rotationX = 30;
+			//renderer.world.rotationX = 30;
 		}
 
 		override protected function draw():void
@@ -40,6 +40,9 @@ package
 			sphere2.z = 200 * Math.cos(step);
 
 			step += 0.1;
+			
+			camera.rotationY = (mouseX - stage.stageWidth / 2) / 10;
+			camera.rotationX = -(mouseY - stage.stageHeight / 2) / 10;
 		}
 	}
 }

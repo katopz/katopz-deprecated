@@ -85,11 +85,11 @@ package open3d.objects
 			update();
 		}
 		
-		override public function project(projectionMatrix3D:Matrix3D, matrix3D:Matrix3D):void
+		override public function project(camera:Camera3D):void
 		{
 			if(!_ready)return;
 			
-			super.project(projectionMatrix3D, matrix3D);
+			super.project(camera);
 			
 			//if(!_faceIndexes)return;
 			var _faceIndexes_length:int = _faceIndexes.length;

@@ -4,9 +4,9 @@ package open3d.render
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
-	import flash.geom.Point;
 	
 	import open3d.materials.BitmapMaterial;
+	import open3d.objects.Camera3D;
 	import open3d.objects.Mesh;
 	import open3d.objects.Object3D;
 
@@ -28,12 +28,16 @@ package open3d.render
 		public var view:Sprite;
 		private var _view:Sprite;
 		
-		public var projection:PerspectiveProjection;
-		private var _projection:PerspectiveProjection;
-		private var _projectionMatrix3D:Matrix3D;
+		private var _camera:Camera3D;
+		public function set camera(value:Camera3D):void
+		{
+			_camera = value;
+		}
 
-		public var world:Object3D;
-		private var _worldMatrix3D:Matrix3D;
+		public function get camera():Camera3D
+		{
+			return _camera;
+		}
 
 		// still need Array for sortOn(faster than Vector sort)
 		public var childs:Array;
@@ -106,32 +110,19 @@ package open3d.render
 			return _type;
 		}
 		
-		public function Renderer(canvas:DisplayObjectContainer)
+		public function Renderer(camera:Camera3D, canvas:DisplayObjectContainer)
 		{
+			this.camera = camera;
+			
 			view = _view = new Sprite();
 			_view.x = canvas.stage.stageWidth / 2;
 			_view.y = canvas.stage.stageHeight / 2;
 			canvas.addChild(_view);
 			
-			projection = _projection = new PerspectiveProjection();
-			_projection.projectionCenter = new Point(canvas.stage.stageWidth / 2, canvas.stage.stageHeight / 2);
-
-			world = new Object3D();
-			_worldMatrix3D = world.transform.matrix3D;
-
 			childs = _childs = [];
 
 			isMeshZSort = true;
 			isFaceZSort = true;
-			
-			// projection dirty
-			update();
-		}
-		
-		public function set fieldOfView(value:Number):void
-		{
-			_projection.fieldOfView = value;
-			update();
 		}
 		
 		public function addChild(object3D:Object3D):void
@@ -167,7 +158,7 @@ package open3d.render
 			// child.project faster than project(child) ~4-7fps
 			for each (child in _childs)
 			{
-				child.project(_projectionMatrix3D, _worldMatrix3D);
+				child.project(camera);
 				
 				// graphics layer
 				_graphics = child.graphicsLayer;
@@ -238,12 +229,6 @@ package open3d.render
 		public function drawGraphicsData(graphicsData:Vector.<IGraphicsData>):void
 		{
 			_view.graphics.drawGraphicsData(graphicsData);
-		}
-		
-		// do this when dirty
-		public function update():void
-		{
-			_projectionMatrix3D = _projection.toMatrix3D();
 		}
    	}
 }

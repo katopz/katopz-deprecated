@@ -9,7 +9,7 @@ package open3d.view
 	 */
 	public class Layer extends Sprite 
 	{
-		public function Layer() : void 
+		public function Layer()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}

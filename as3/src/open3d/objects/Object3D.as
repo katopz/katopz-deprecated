@@ -79,13 +79,17 @@ package open3d.objects
 			_ready = true;
 		}
 
-		public function project(projectionMatrix3D : Matrix3D, matrix3D : Matrix3D) : void 
+		public function project(camera:Camera3D) : void 
 		{
-			// local
+			var projectionMatrix3D : Matrix3D = camera.projection.toMatrix3D();//.projectionMatrix3D;
+			
+			// object3d
 			_transform_matrix3D.transformVectors(_vin, _vout);
 			
-			// global
-			matrix3D.transformVectors(_vout, _vout);
+			// camera3d
+			var cameraMatrix3D:Matrix3D = camera.matrix3D.clone();
+			cameraMatrix3D.invert();
+			cameraMatrix3D.transformVectors(_vout, _vout);
 			
 			// z
 			screenZ = _vout[0];
