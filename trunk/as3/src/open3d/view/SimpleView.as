@@ -11,6 +11,7 @@ package open3d.view
 	import flash.text.TextField;
 	import flash.utils.*;
 	
+	import open3d.objects.Camera3D;
 	import open3d.objects.Mesh;
 	import open3d.render.Renderer;
 	import open3d.utils.ProfilerUtil;
@@ -23,7 +24,9 @@ package open3d.view
 	public class SimpleView extends Sprite
 	{
 		protected var renderer:Renderer;
-
+		
+		public var camera:Camera3D;
+		
 		protected var _isDebug:Boolean;
 		protected var debugText:TextField;
 		protected var stat:DisplayObject;
@@ -44,12 +47,15 @@ package open3d.view
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.quality = StageQuality.MEDIUM;
 
+			camera = new Camera3D();
+			camera.projection.fieldOfView = 53;
+			camera.projection.focalLength = 500;
+			camera.z = -500;
+			
 			var canvas:Sprite = new Sprite();
 			addChild(canvas);
 			
-			renderer = new Renderer(canvas);
-			renderer.fieldOfView = 53;
-			renderer.world.z = 500;
+			renderer = new Renderer(camera, canvas);
 
 			debugText = TextUtil.getTextField();
 			debugText.x = 80;
@@ -147,19 +153,16 @@ package open3d.view
 				// The value must be greater than 0 and less than 180
 				if(event.delta>0)
 				{
-					if(renderer.projection.fieldOfView+event.delta*2<180)renderer.projection.fieldOfView+=event.delta*2;
+					if(camera.projection.fieldOfView+event.delta*2<180)camera.projection.fieldOfView+=event.delta*2;
 				}else{
-					if(renderer.projection.fieldOfView+event.delta*2>0)renderer.projection.fieldOfView+=event.delta*2;
+					if(camera.projection.fieldOfView+event.delta*2>0)camera.projection.fieldOfView+=event.delta*2;
 				}
-				
-				// projection dirty
-				renderer.update();
 			}else{
 				if(event.delta>0)
 				{
-					renderer.world.z+=event.delta*2;
+					camera.projection.focalLength+=event.delta*2;
 				}else{
-					if(renderer.world.z+event.delta*2>0)renderer.world.z+=event.delta*2;
+					if(camera.projection.focalLength+event.delta*2>0)camera.projection.focalLength+=event.delta*2;
 				}
 			}
 		}
