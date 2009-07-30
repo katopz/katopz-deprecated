@@ -19,8 +19,10 @@ package open3d.materials.shaders
 
 		override public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>) : void
 		{
+			if (faceNormals != null) return;
 			super.calculateNormals(verticesIn, indices);
 			calculateVertexNormals();
+			trace ("calk")
 		}
 
 		
