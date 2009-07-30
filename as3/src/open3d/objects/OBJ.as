@@ -1,261 +1,462 @@
-package open3d.objects 
+package open3d.objects
 {
-	import open3d.geom.Face;
+	import flash.events.*;
+	import flash.geom.Vector3D;
+	import flash.net.URLLoader;
+	import flash.utils.Dictionary;
+	
 	import open3d.geom.UV;
+	import open3d.geom.Vertex;
 	import open3d.materials.BitmapFileMaterial;
 	import open3d.materials.Material;
 	import open3d.utils.LoaderUtil;
-	
-	import flash.events.*;
-	import flash.geom.Vector3D;
-	import flash.net.*;
-	import flash.utils.ByteArray;	
 
-	//TODO : clean this!, mtl + group not done yet
-	
 	/**
-	 * File loader for the OBJ file format.<br/>
-	 * <br/>
-	 * note: Multiple objects support and autoload mtls are supported since Away v 2.1.<br/>
-	 * Class tested with the following 3D apps:<br/>
-	 * - Strata CX mac 5.5<br/>
-	 * - Biturn ver 0.87b4 PC<br/>
-	 * - LightWave 3D OBJ Export v2.1 PC<br/>
-	 * - Max2Obj Version 4.0 PC<br/>
-	 * - AC3D 6.2.025 mac<br/>
-	 * - Carrara (file provided)<br/>
-	 * - Hexagon (file provided)<br/>
-	 * - geometry supported tags: f,v,vt, g<br/>
-	 * - geometry unsupported tags:vn,ka, kd r g b, kd, ks r g b,ks,ke r g b,ke,d alpha,d,tr alpha,tr,ns s,ns,illum n,illum,map_Ka,map_Bump<br/>
-	 * - mtl unsupported tags: kd,ka,ks,ns,tr<br/>
-	 * <br/>
-	 * export from apps as polygon group or mesh as .obj file.<br/>
-	 * added support for 3dmax negative vertexes references
+	 * The OBJ class let you parse and load object files (.obj).
+	 *
+	 * @author Knut Urdalen <knut.urdalen@gmail.com>
+	 * @see http://people.scs.fsu.edu/~burkardt/txt/obj_format.txt
 	 * 
+	 * Modify for Native
 	 * @author katopz
 	 */
 	public class OBJ extends Mesh
 	{
-		public var mesh:Mesh;
-		private var mtlPath:String;
-		private var aMeshes:Array = [];
-		private var aSources:Array;
-		private var aMats:Array;
-		private var vertices:Vector.<Vector3D>;
-		private var uvs:Array = [];
-		private var scaling:Number = 1;
-		
-		private var faceDatas:Vector.<Face>;
-		private var container:Object3D;
-		
-		private var i:int = 0;
-		private var n:int = -1;
-		 
-		private function parse(data:String):void
+
+		private var _loaderObj:URLLoader;
+		private var _loaderMtl:URLLoader;
+		private var _obj:String;
+		private var _mtl:String;
+		private var _filename:String;
+		private var _loader:URLLoader;
+		private var _childrenCount:int = 0;
+		private var _materials:Dictionary;
+
+		public function OBJ(obj:String, mtl:* = null, scale:Number = 1)
 		{
-			var lines:Array = data.split('\n');
-			if (lines.length == 1)
-				lines = data.split(String.fromCharCode(13));
-			var trunk:Array;
-			var isNew:Boolean = true;
-			var group:Object3D;
-			
-			faceDatas = new Vector.<Face>();
-			vertices= new Vector.<Vector3D>();
-			vertices[0] = new Vector3D();
-			uvs = [new UV()];
+			super();
 
-			var isNeg:Boolean;
-			var myPattern:RegExp = new RegExp("-", "g");
-			var face0:Array;
-			var face1:Array;
-			var face2:Array;
-			var face3:Array;
+			this._obj = obj;
 
-			for each (var line:String in lines)
+			if (mtl is String)
 			{
-				trunk = line.replace("  ", " ").replace("  ", " ").replace("  ", " ").split(" ");
+				this._mtl = mtl;
+				loadMtl();
+			}
+			else if (mtl is Material)
+			{
+				//this._materials = mtl;
+				material = mtl;
+			}
+			
+			loadObj();
 
-				switch (trunk[0])
+			//this._materials = materials || new MaterialsList();
+		}
+		
+		public function loadMtl():Object
+		{
+			return LoaderUtil.load(this._mtl, onLoadMtl);
+		}
+
+		private function onLoadMtl(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+				parseMtl(String(event.target.data));
+		}
+		
+		public function loadObj():Object
+		{
+			return LoaderUtil.load(this._obj, onLoadObj);
+		}
+
+		private function onLoadObj(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+				parseObj(String(event.target.data));
+		}
+		
+		/**
+		 * Material Library File (.mtl)
+		 *
+		 * Material library files contain one or more material definitions, each
+		 * of which includes the color, texture, and reflection map of individual
+		 * materials. These are applied to the surfaces and vertices of objects.
+		 * Material files are stored in ASCII format and have the .mtl extension.
+		 */
+		private function parseMtl(mtl:String):void
+		{
+			var lines:Array = mtl.split("\n");
+			var parts:Array;
+			var keyword:String;
+			var currentMaterial:Material;
+			var currentName:String;
+			var mtls:Object = {};
+
+			for (var i:int = 0; i < lines.length; ++i)
+			{
+
+				if (lines[i].substring(0, 1) == "#" || lines[i].length == 0)
+				{ // Comment or blank
+					continue; // skip
+				}
+
+				parts = lines[i].split(" ");
+				if (parts.length > 0)
 				{
-					case "g":
-						group = new Object3D();
-						group.name = trunk[1];
+					keyword = parts[0];
+				}
+				
+				if(keyword=="\r")continue;
+				
+				switch (keyword)
+				{
 
-						if (container == null)
-						{
-							container = new Object3D();
-						}
+					case "newmtl":
+					{ // assigns a name to the material and designates the start of a material description
 
-						(container as Object3D).addChild(group);
-						isNew = true;
-
-						break;
-
-					case "usemtl":
-						//aMeshes[aMeshes.length - 1].materialid = trunk[1];
-						break;
-
-					case "v":
-						if (isNew)
-						{
-							//generateNewMesh();
-							isNew = false;
-							if (group != null)
-							{
-								//group.addChild(mesh);
-							}
-						}
-						var _v:Vector3D = new Vector3D(-parseFloat(trunk[1]) * scaling, parseFloat(trunk[2]) * scaling, -parseFloat(trunk[3]) * scaling);
-						vertices.push(_v);
+						currentName = parts[1].split("\r")[0];
+						//currentMaterial = this.materials.addMaterial(new MaterialObject3D(), parts[1]);
 
 						break;
-
-					case "vt":
-						uvs.push(new UV(parseFloat(trunk[1]), 1-parseFloat(trunk[2])));
+					}
+					// Ka r g b
+					case "Ka":
+					{ // defines the ambient color of the material to be (r,g,b). The default is (0.2,0.2,0.2); 
 						break;
+					}
+					// Kd r g b
+					case "Kd":
+					{ // defines the diffuse color of the material to be (r,g,b). The default is (0.8,0.8,0.8);
+						break;
+					}
+					// Ks r g b
+					case "Ks":
+					{ // defines the specular color of the material to be (r,g,b). This color shows up in highlights. The default is (1.0,1.0,1.0);
+						break;
+					}
+					// Ke r g b
+					case "Ke":
+					{
+						break;
+					}
+					// d alpha
+					case "d":
+					{ // defines the transparency of the material to be alpha. The default is 1.0 (not transparent at all) Some formats use Tr instead of d; 
+						break;
+					}
+					// Tr alpha
+					case "Tr":
+					{ // defines the transparency of the material to be alpha. The default is 1.0 (not transparent at all). Some formats use d instead of Tr; 
+						break;
+					}
+					// Ns s
+					case "Ns":
+					{ // defines the shininess of the material to be s. The default is 0.0;
+						break;
+					}
+					// illum n
+					case "illum":
+					{ // denotes the illumination model used by the material. illum = 1 indicates a flat material with no specular highlights, so the value of Ks is not used. illum = 2 denotes the presence of specular highlights, and so a specification for Ks is required.
+						break;
+					}
+					// map_Ka filename
+					case "map_Ka":
+					{ // names a file containing a texture map, which should just be an ASCII dump of RGB values; 
+						break;
+					}
+					// map_Kd filename
+					case "map_Kd":
+					{
 
-					case "f":
-						isNew = true;
+						//var material:MaterialObject3D = this.materials.getMaterialByName(currentName);
+						//this.materials.removeMaterial(currentMaterial);
 
-						if (trunk[1].indexOf("-") == -1)
-						{
+						mtls[currentName] = new BitmapFileMaterial("image/" + parts[1]);
 
-							face0 = trysplit(trunk[1], "/");
-							face1 = trysplit(trunk[2], "/");
-							face2 = trysplit(trunk[3], "/");
+						//mtls.push({currentName:new BitmapFileMaterial(parts[1])});
 
-							if (trunk[4] != null)
-							{
-								face3 = trysplit(trunk[4], "/");
-							}
-							else
-							{
-								face3 = null;
-							}
+						// new MaterialsList({currentName:new BitmapFileMaterial(parts[1])});						
 
-							isNeg = false;
-
-						}
-						else
-						{
-
-							face0 = trysplit(trunk[1].replace(myPattern, ""), "/");
-							face1 = trysplit(trunk[2].replace(myPattern, ""), "/");
-							face2 = trysplit(trunk[3].replace(myPattern, ""), "/");
-
-							if (trunk[4] != null)
-							{
-								face3 = trysplit(trunk[4].replace(myPattern, ""), "/");
-							}
-							else
-							{
-								face3 = null;
-							}
-
-							isNeg = true;
-						}
-
-						try
-						{
-
-							if (face3 != null && face3.length > 0 && !isNaN(parseInt(face3[0])))
-							{
-
-								if (isNeg)
-								{
-									addFace
-									(
-										vertices[vertices.length - parseInt(face1[0])], 
-										vertices[vertices.length - parseInt(face0[0])], 
-										vertices[vertices.length - parseInt(face3[0])],
-										Vector.<UV>([
-											checkUV(1, uvs[uvs.length - parseInt(face1[1])]), 
-											checkUV(2, uvs[uvs.length - parseInt(face0[1])]), 
-											checkUV(3, uvs[uvs.length - parseInt(face3[1])])
-										])
-									);
-
-									addFace
-									(
-										vertices[vertices.length - parseInt(face2[0])], vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face3[0])],
-										Vector.<UV>([
-											checkUV(1, uvs[uvs.length - parseInt(face2[1])]), 
-											checkUV(2, uvs[uvs.length - parseInt(face1[1])]), 
-											checkUV(3, uvs[uvs.length - parseInt(face3[1])])
-										])
-									);
-								}
-								else
-								{
-									addFace
-									(
-										vertices[parseInt(face1[0])], vertices[parseInt(face0[0])], vertices[parseInt(face3[0])],
-										Vector.<UV>([
-											checkUV(1, uvs[parseInt(face1[1])]), 
-											checkUV(2, uvs[parseInt(face0[1])]), 
-											checkUV(3, uvs[parseInt(face3[1])])
-										])
-									);
-
-									addFace
-									(
-										vertices[parseInt(face2[0])], vertices[parseInt(face1[0])], vertices[parseInt(face3[0])],
-										Vector.<UV>([
-											checkUV(1, uvs[parseInt(face2[1])]), 
-											checkUV(2, uvs[parseInt(face1[1])]), 
-											checkUV(3, uvs[parseInt(face3[1])])
-										])
-									);
-								}
-
-							}
-							else
-							{
-
-								if (isNeg)
-								{
-									addFace
-									(
-										vertices[vertices.length - parseInt(face2[0])], vertices[vertices.length - parseInt(face1[0])], vertices[vertices.length - parseInt(face0[0])],
-										Vector.<UV>([
-											checkUV(1, uvs[uvs.length - parseInt(face2[1])]), 
-											checkUV(2, uvs[uvs.length - parseInt(face1[1])]), 
-											checkUV(3, uvs[uvs.length - parseInt(face0[1])])
-										])
-									);
-								}
-								else
-								{
-									addFace
-									(
-										vertices[parseInt(face2[0])], vertices[parseInt(face1[0])], vertices[parseInt(face0[0])],
-										Vector.<UV>([
-											checkUV(1, uvs[parseInt(face2[1])]), 
-											checkUV(2, uvs[parseInt(face1[1])]), 
-											checkUV(3, uvs[parseInt(face0[1])])
-										])
-									);
-								}
-							}
-						}
-						catch (e:Error)
-						{
-							trace("Error while parsing obj file: unvalid face f " + face0 + "," + face1 + "," + face2 + "," + face3);
-						}
+						//currentMaterial.url = parts[1];
 
 						break;
+					}
+					// map_Bump filename
+					case "map_Bump":
+					{
+						break;
+					}
 
 				}
 			}
 
-			vertices = null;
-			uvs = null;
+			//this.materials = new MaterialsList(mtls);
+			_materials = new Dictionary(true);
+			_materials[currentName] = mtls[currentName];
+			trace("currentName:"+currentName)
+			//loadObj();
+		}
+		
+		private var vertices:Array = [];
+		private function parseObj(obj:String):void
+		{
+			var lines:Array = obj.split("\n");
+			var parts:Array;
+			var keyword:String;
+			var verticesList:Array = [];
+			var uvList:Array = [];
+			var normalList:Array = [];
+			var currentObject:Object3D = this;
+			var _currentMaterial:String;
+
+			for (var i:int = 0; i < lines.length; ++i)
+			{
+
+				if (lines[i].substring(0, 1) == "#" || lines[i].length == 0)
+				{ // Comment or blank
+					continue; // skip
+				}
+
+				parts = lines[i].split(" ");
+				if (parts.length > 0)
+				{
+					keyword = parts[0];
+				}
+
+				switch (keyword)
+				{
+
+					// Vertex data
+					case "v":
+					{ // Geometric vertices
+						verticesList.push(new Vertex(parts[1], parts[2], -parts[3]));
+						vertices.push(verticesList[verticesList.length - 1]);
+						break;
+					}
+					case "vt":
+					{ // Texture vertices
+						uvList.push(new UV(parts[1], 1-parts[2]));
+						break;
+					}
+					case "vn":
+					{ // Vertex normal
+						normalList.push(new Vector3D(parts[1], parts[2], parts[3]));
+						break;
+					}
+					case "vp":
+					{ // Parameter space vertices
+						break;
+					}
+
+					// Elements
+					case "p":
+					{ // Point
+						break;
+					}
+					case "l":
+					{ // Line
+						break;
+					}
+					case "f":
+					{ // Face
+
+						if (parts.length != 4)
+						{ // not a triangle
+							continue; // skip
+						}
+
+						var v0:Vertex, v1:Vertex, v2:Vertex;
+						var i0:Array, i1:Array, i2:Array;
+						var uv0:UV, uv1:UV, uv2:UV;
+
+						// split info in each parameter
+						i0 = parts[1].split("/");
+						i1 = parts[2].split("/");
+						i2 = parts[3].split("/");
+
+						v0 = verticesList[i0[0] - 1];
+						v1 = verticesList[i1[0] - 1];
+						v2 = verticesList[i2[0] - 1];
+
+						//trace("v0: " + v0 + ", v1: " + v1 + ", v2: " + v2);
+
+						if (i0[1] != "")
+						{ // texture data may not be present (this happens if normals are exported, but not texture coordinates)
+							uv0 = uvList[i0[1] - 1];
+							uv1 = uvList[i1[1] - 1];
+							uv2 = uvList[i2[1] - 1];
+						}
+						else
+						{
+							uv0 = new UV(0, 0);
+							uv1 = new UV(0, 1);
+							uv2 = new UV(1, 0);
+						}
+
+						if (i0[2] != "")
+						{ // add normals
+							v0.normal = normalList[i0[2] - 1];
+							v1.normal = normalList[i1[2] - 1];
+							v2.normal = normalList[i2[2] - 1];
+						}
+
+						//currentObject.geometry.faces.push(new Triangle3D(this, [v0, v1, v2], _materials.getMaterialByName(_currentMaterial), [uv0, uv1, uv2]));
+						addFace(v0, v1, v2, Vector.<UV>([uv0, uv1, uv2]));
+						
+						break;
+					}
+					case "curv":
+					{ // Curve
+						break;
+					}
+					case "curv2":
+					{ // 2D curve
+						break;
+					}
+					case "surf":
+					{ // Surface
+						break;
+					}
+
+					// Free-form curve/surface attributes
+					case "deg":
+					{ // Degree
+						break;
+					}
+					case "bmat":
+					{ // Basis matrix
+						break;
+					}
+					case "step":
+					{ // Step size
+						break;
+					}
+					case "cstype":
+					{ // Curve or surface type
+						break;
+					}
+
+
+					// Free-form curve/surface body statements
+					case "parm":
+					{ // Parameter values
+						break;
+					}
+					case "trim":
+					{ // Outer trimming loop
+						break;
+					}
+					case "hole":
+					{ // Inner trimming loop
+						break;
+					}
+					case "scrv":
+					{ // Special curve
+						break;
+					}
+					case "sp":
+					{ // Special point
+						break;
+					}
+					case "end":
+					{ // End statement
+						break;
+					}
+
+					// Connectivity between free-form surfaces
+					case "con":
+					{ // Connect
+						break;
+					}
+
+					// Grouping
+					case "g":
+					{ // Group name
+
+						//TODO//currentObject = this.addChild(new TriangleMesh3D(null, null, null, parts[1]), parts[1]);
+
+						break;
+					}
+					case "s":
+					{ // Smoothing group
+						break;
+					}
+					case "mg":
+					{ // Merging group
+						break;
+					}
+					case "o":
+					{ // Object name
+						//currentObject = this.addChild(new TriangleMesh3D(null, null, null, parts[1]), parts[1]);				
+						break;
+					}
+
+					// Display/render attributes
+					case "bevel":
+					{ // Bevel interpolation
+						break;
+					}
+					case "c_interp":
+					{ // Color interpolation
+						break;
+					}
+					case "d_interp":
+					{ // Dissolve interpolation
+						break;
+					}
+					case "lod":
+					{ // Level of detail
+						break;
+					}
+					case "usemtl":
+					{ // Material name
+
+						currentObject.material = this._materials[parts[1]];
+
+						//var material:MaterialObject3D = MaterialObject3D.DEFAULT;
+						//material.name = parts[1];
+						//this._materials.addMaterial(material, parts[1]);				
+
+						break;
+					}
+					case "mtllib":
+					{ // Material library
+
+						var filename:String = parts[1];
+
+						break;
+					}
+					case "shadow_obj":
+					{ // Shadow casting
+						break;
+					}
+					case "trace_obj":
+					{ // Ray tracing
+						break;
+					}
+					case "ctech":
+					{ // Curve approximation technique
+						break;
+					}
+					case "stech":
+					{ // Surface approximation technique
+						break;
+					}
+					default:
+					{ // unknown keyword
+						break;
+					}
+				}
+			}
 			
 			buildFaces(material);
 		}
-
-		private function addFace(v0:Vector3D,v1:Vector3D,v2:Vector3D, uvs:Vector.<UV>):void
+		
+		private var i:int = 0;
+		private var n:int = -1;
+		
+		private function addFace(v0:Vertex,v1:Vertex,v2:Vertex, uvs:Vector.<UV>):void
 		{
 			_vin[i++] = v0.x;
 			_vin[i++] = v0.y;
@@ -277,217 +478,7 @@ package open3d.objects
 
 			_triangles.indices.push(n, n - 1, n - 2);
 		}
-		
-		private function checkUV(id:int, uv:UV = null):UV
-		{
-			if (uv == null)
-			{
-				switch (id)
-				{
-					case 1:
-						return new UV(0, 1);
-						break;
-					case 2:
-						return new UV(.5, 0);
-						break;
-					case 3:
-						return new UV(1, 1);
-						break;
-				}
-
-			}
-
-			return uv;
-		}
-
-		private static function trysplit(source:String, by:String):Array
-		{
-			if (source == null)
-				return null;
-			if (source.indexOf(by) == -1)
-				return [source];
-
-			return source.split(by);
-		}
-		
-		/*
-		private function checkMtl(data:String):void
-		{
-			var index:int = data.indexOf("mtllib");
-			if (index != -1)
-			{
-				aSources = [];
-				loadMtl(parseUrl(index, data));
-			}
-		}
-		*/
-		
-		private function errorMtl(event:Event):void
-		{
-			trace("Obj MTL LOAD ERROR: unable to load .mtl file at " + mtlPath);
-		}
-
-		private function mtlProgress(event:Event):void
-		{
-			//NOT BUILDED IN YET
-			//trace( (event.target.bytesLoaded / event.target.bytesTotal) *100);
-		}
-
-		private function loadMtl(url:String):void
-		{
-			var loader:URLLoader = new URLLoader();
-			loader.addEventListener(Event.COMPLETE, parseMtl);
-			loader.addEventListener(IOErrorEvent.IO_ERROR, errorMtl);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorMtl);
-			loader.addEventListener(ProgressEvent.PROGRESS, mtlProgress);
-			loader.load(new URLRequest(mtlPath + url));
-		}
-
-		private function parseUrl(index:Number, data:String):String
-		{
-			return data.substring(index + 7, data.indexOf(".mtl") + 4);
-		}
-
-		private function parseMtl(event:Event):void
-		{
-			var lines:Array = event.target["data"].split('\n');
-			if (lines.length == 1)
-				lines = event.target["data"].split(String.fromCharCode(13));
-			var trunk:Array;
-			var i:int;
-			var j:int;
-			var mat:BitmapFileMaterial;
-			aMats = [];
-
-			for each (var line:String in lines)
-			{
-				trunk = line.split(" ");
-				switch (trunk[0])
-				{
-					case "newmtl":
-						aSources.push({material: null, materialid: trunk[1]});
-						break;
-					case "map_Kd":
-						mat = checkDoubleMaterials(mtlPath + trunk[1]);
-						aSources[aSources.length - 1].material = mat;
-						//aSources[aSources.length-1].material = new BitmapFileMaterial(baseUrl+trunk[1]);
-						break;
-				}
-			}
-
-			for (j = 0; j < aMeshes.length; ++j)
-			{
-				for (i = 0; i < aSources.length; ++i)
-				{
-					if (aMeshes[j].materialid == aSources[i].materialid)
-					{
-						mat = aSources[i].material;
-						aMeshes[j].mesh.material = mat;
-						/*for each(_face in aMeshes[j].mesh.faces)
-						 _face.material = mat;*/
-					}
-				}
-			}
-
-			aSources = null;
-			aMats = null;
-		}
-
-		private function checkDoubleMaterials(url:String):BitmapFileMaterial
-		{
-			var mat:BitmapFileMaterial;
-			for (var i:int = 0; i < aMats.length; ++i)
-			{
-				if (aMats[i].url == url)
-				{
-					mat = aMats[i].material;
-					aMats.push({url: url, material: mat});
-					return mat;
-				}
-			}
-
-			mat = new BitmapFileMaterial(url.replace(String.fromCharCode(13), ""));
-			aMats.push({url: url, material: mat});
-			return mat;
-		}
-		
-		/*
-		private function generateNewMesh():void
-		{
-			mesh = new Mesh(ini);
-			mesh.name = "obj_" + aMeshes.length;
-			mesh.type = "Obj";
-			mesh.url = "External";
-
-			if (aMeshes.length == 1 && container == null)
-				container = new Object3D(aMeshes[0].mesh);
-
-			aMeshes.push({materialid: "", mesh: mesh});
-
-			if (aMeshes.length > 1 || container != null)
-				(container as Object3D).addChild(mesh);
-		}
-		*/
-
-		/**
-		 * Creates a new <code>Obj</code> object. Not intended for direct use, use the static <code>parse</code> or <code>load</code> methods.
-		 *
-		 * @param	data				The binary data of a loaded file.
-		 * @param	urlbase				The url of the .obj file, required to compose the url mtl adres and be able access the bitmap sources relative to mtl location.
-		 * @param	init	[optional]	An initialisation object for specifying default instance properties.
-		 *
-		 * @see away3d.loaders.Obj#parse()
-		 * @see away3d.loaders.Obj#load()
-		 */
-
-		public function OBJ(data:* = null, material:Material = null, scale:int=1)
-		{
-			super();
-			
-			this.material = material;
-			
-			if (data)
-			{
-				if (data is ByteArray)
-				{
-					parse(data);
-				}
-				else
-				{
-					load(data);
-				}
-			}
-			
-			scaling = scale;
-			
-			//parseObj(dataString);
-			//checkMtl(dataString);
-		}
-
-		/**
-		 * Loads and parses a obj file into a 3d mesh object.
-		 *
-		 * @param	url					The url location of the file to load.
-		 * @param	init	[optional]	An initialisation object for specifying default instance properties.
-		 * @return						A 3d loader object that can be used as a placeholder in a scene while the file is loading.
-		 */
-		public function load(uri:String, mtlPath:String = null):Object
-		{
-			/*
-			TODO : mtl
-			//mtlPath as model folder
-			var _pathArray:Array = url.split("/");
-			_pathArray.pop();
-			this.mtlPath = (_pathArray.length > 0) ? _pathArray.join("/") + "/" : _pathArray.join("/");
-			*/
-			
-			return LoaderUtil.load(uri, onLoad);
-		}
-
-		private function onLoad(event:Event):void
-		{
-			if(event.type == Event.COMPLETE)
-				parse(String(event.target.data));
-		}
 	}
 }
+
+
