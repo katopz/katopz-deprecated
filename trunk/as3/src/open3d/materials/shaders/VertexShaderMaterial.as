@@ -37,6 +37,10 @@ package open3d.materials.shaders
 
 		override public function getUVData(m : Matrix3D) : Vector.<Number>
 		{
+			
+			var projectMatrix:Matrix3D = m.clone();
+			projectMatrix.position =new Vector3D(0,0,0);
+			
 			var uvData : Vector.<Number> = new Vector.<Number>();
 			var projectedNormal : Vector3D ;
 			
@@ -46,7 +50,7 @@ package open3d.materials.shaders
 			for (var i : int = 0;i < vertices.length; i++) 
 			{
 				
-				projectedNormal = vertices[i].normal//getProjectedNormal(m);
+				projectedNormal = vertices[i].getProjectedNormal(projectMatrix);
 
 				
 				calculateTexCoord(texCoord, projectedNormal, false);
