@@ -29,7 +29,7 @@ package open3d.materials.shaders
 		
 		public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>) : void
 		{
-			if (faceNormals != null) return;
+			
 			
 			_verticesIn =verticesIn;
 			var trianglesLength : int = indices.length / 3;

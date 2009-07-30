@@ -19,10 +19,10 @@ package open3d.materials.shaders
 
 		override public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>) : void
 		{
-			if (faceNormals != null) return;
+		
 			super.calculateNormals(verticesIn, indices);
 			calculateVertexNormals();
-			trace ("calk")
+			
 		}
 
 		
@@ -46,7 +46,7 @@ package open3d.materials.shaders
 			for (var i : int = 0;i < vertices.length; i++) 
 			{
 				
-				projectedNormal = vertices[i].normal;//getProjectedNormal(m);
+				projectedNormal = vertices[i].normal//getProjectedNormal(m);
 
 				
 				calculateTexCoord(texCoord, projectedNormal, false);
