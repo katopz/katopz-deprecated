@@ -1,6 +1,6 @@
 package open3d.materials.shaders 
 {
-	import flash.errors.IllegalOperationError;
+	
 	import open3d.geom.Vertex;
 	import flash.geom.Vector3D;
 	import open3d.objects.Light;
