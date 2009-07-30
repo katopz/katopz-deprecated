@@ -1,8 +1,8 @@
-package open3d.objects 
+package open3d.objects
 {
 	import flash.display.*;
 	import flash.geom.*;
-	
+
 	import open3d.materials.Material;
 	import open3d.materials.shaders.IShader;
 
@@ -10,46 +10,48 @@ package open3d.objects
 	 * Object3D
 	 * @author katopz
 	 */
-	public class Object3D extends Sprite 
+	public class Object3D extends Sprite
 	{
-		public var triangles : GraphicsTrianglePath;
-		protected var _triangles : GraphicsTrianglePath;
+		public var triangles:GraphicsTrianglePath;
+		protected var _triangles:GraphicsTrianglePath;
 
 		// public var faster than get/set view
-		public var vin : Vector.<Number>;
-		protected var _vin : Vector.<Number>;
+		public var vin:Vector.<Number>;
+		protected var _vin:Vector.<Number>;
 
-		public var vout : Vector.<Number>;
-		protected var _vout : Vector.<Number>;
+		public var vout:Vector.<Number>;
+		protected var _vout:Vector.<Number>;
 
-		protected var _material : Material;
+		protected var _material:Material;
 
 		// internal
-		private var _transform_matrix3D : Matrix3D;
-		private var _vertices : Vector.<Number>;
-		private var _uvtData : Vector.<Number>;
+		private var _transform_matrix3D:Matrix3D;
+		private var _vertices:Vector.<Number>;
+		private var _uvtData:Vector.<Number>;
 
 		// Z-Sort for Mesh
 		public var screenZ:Number = 0;
-		
+
 		// Layer
 		public var graphicsLayer:Graphics;
 		private var _graphicsLayer:Graphics;
 		private var _layer:Sprite;
+
 		public function set layer(value:Sprite):void
 		{
 			_layer = value;
 			graphicsLayer = _graphicsLayer = _layer.graphics;
 		}
+
 		public function get layer():Sprite
 		{
 			return _layer;
 		}
-		
+
 		// for async mesh
 		protected var _ready:Boolean = false;
-		
-		public function Object3D() : void 
+
+		public function Object3D():void
 		{
 			vin = _vin = new Vector.<Number>();
 			_transform_matrix3D = transform.matrix3D = new Matrix3D();
@@ -59,92 +61,96 @@ package open3d.objects
 		/**
 		 * must update once before project loop
 		 */
-		public function update() : void 
+		public function update():void
 		{
 			// speed up
 			_vin.fixed = true;
 			_triangles.uvtData.fixed = true;
 			_triangles.indices.fixed = true;
-			
+
 			// private use
 			_vertices = _triangles.vertices;
 			_uvtData = _triangles.uvtData;
-			
+
 			// public use
 			triangles = _triangles;
-			
+
 			// dispose vout
 			vout = _vout = new Vector.<Number>(_vin.length, true);
-			
+
+			// no faces?, calculate screenZ from Object XYZ 
+			if (_vin.length == 0)
+				screenZ = x + y + z;
+
 			_ready = true;
 		}
 
-		public function project(camera:Camera3D) : void 
+		public function project(camera:Camera3D):void
 		{
-			var projectionMatrix3D : Matrix3D = camera.projection.toMatrix3D();//.projectionMatrix3D;
-			
+			// can be optimize later
+			var projectionMatrix3D:Matrix3D = camera.projection.toMatrix3D();
+
 			// object3d
 			_transform_matrix3D.transformVectors(_vin, _vout);
-			
+
 			// camera3d
 			var cameraMatrix3D:Matrix3D = camera.matrix3D.clone();
 			cameraMatrix3D.invert();
 			cameraMatrix3D.transformVectors(_vout, _vout);
-			
-			// z
-			screenZ = _vout[0];
-			
-			// project
-			if (material is IShader) 
+
+			// shader (calculateNormals can be move to update method?)
+			if (material is IShader)
 			{
-				var shader : IShader = material as IShader;
-				shader.calculateNormals(_vin , _triangles.indices);
-			
+				var shader:IShader = material as IShader;
+				shader.calculateNormals(_vin, _triangles.indices);
+
 				_triangles.uvtData = shader.getUVData(projectionMatrix3D);
 			}
+
+			// project
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
 		}
 
-		public function set material(value : Material) : void 
+		public function set material(value:Material):void
 		{
 			_material = value ? value : new Material();
 			_material.triangles = _triangles;
 			_material.update();
 		}
 
-		public function get material() : Material 
+		public function get material():Material
 		{
 			return _material;
 		}
 
-		public function get graphicsData() : Vector.<IGraphicsData> 
+		public function get graphicsData():Vector.<IGraphicsData>
 		{
 			return _material.graphicsData;
 		}
-		
+
 		public function clearGraphics():void
 		{
 			_graphicsLayer.clear();
 		}
 
 		// TODO : more friendly use
-		public function getVertices(index : int) : Vector3D 
+		public function getVertices(index:int):Vector3D
 		{
 			return new Vector3D(_vin[3 * index + 0], _vin[3 * index + 1], _vin[3 * index + 2]);
 		}
 
 		// TODO : more friendly use
-		public function setVertices(index : int, axis : String, value : Number) : void 
+		public function setVertices(index:int, axis:String, value:Number):void
 		{
-			if (axis == "x") 
+			if (axis == "x")
 			{
 				_vin[3 * index + 0] = value;
 			}
-			else if (axis == "y") 
+			else if (axis == "y")
 			{
 				_vin[3 * index + 1] = value;
 			}
-			else if (axis == "z") 
+			else if (axis == "z")
 			{
 				_vin[3 * index + 2] = value;
 			}
