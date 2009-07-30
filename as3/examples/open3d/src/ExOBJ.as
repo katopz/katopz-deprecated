@@ -15,7 +15,9 @@ package
 		 
 		override protected function create():void
 		{
-			obj = new OBJ("assets/turtle.obj", new BitmapFileMaterial("assets/turtle.jpg"));
+			//obj = new OBJ("assets/turtle.obj", new BitmapFileMaterial("assets/turtle.jpg"));
+			obj = new OBJ("assets/cm9_b.obj", new BitmapFileMaterial("assets/rex.jpg"));
+			//obj = new OBJ("assets/Trex1.obj", "assets/Trex1.mtl");
 			renderer.addChild(obj);
 		}
 
