@@ -1,6 +1,6 @@
 package open3d.objects
 {
-	import __AS3__.vec.Vector;
+	
 	
 	import flash.display.BitmapData;
 	import flash.geom.Matrix3D;

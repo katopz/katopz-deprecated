@@ -77,7 +77,12 @@ package open3d.objects
 
 			// dispose vout
 			vout = _vout = new Vector.<Number>(_vin.length, true);
-
+			// calculate normals for the shaders
+			if (material is IShader)
+			{
+				var shader:IShader = material as IShader;
+				shader.calculateNormals(_vin, _triangles.indices);
+			}
 			// no faces?, calculate screenZ from Object XYZ 
 			if (_vin.length == 0)
 				screenZ = x + y + z;
@@ -98,12 +103,10 @@ package open3d.objects
 			cameraMatrix3D.invert();
 			cameraMatrix3D.transformVectors(_vout, _vout);
 
-			// shader (calculateNormals can be move to update method?)
+			// project the normals 
 			if (material is IShader)
 			{
 				var shader:IShader = material as IShader;
-				shader.calculateNormals(_vin, _triangles.indices);
-
 				_triangles.uvtData = shader.getUVData(projectionMatrix3D);
 			}
 
