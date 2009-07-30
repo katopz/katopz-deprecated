@@ -1,5 +1,7 @@
 package open3d.geom
 {
+	import flash.geom.Matrix3D;
+	import flash.geom.Utils3D;
 	import flash.geom.Vector3D;
 
 	/**
@@ -9,7 +11,7 @@ package open3d.geom
 	{
 		private var faceNormals:Vector.<Vector3D> = new Vector.<Vector3D>();
 		public var normal:Vector3D = new Vector3D();
-
+		public var projnormal:Vector3D = new Vector3D();
 		public function Vertex(x:Number = 0, y:Number = 0, z:Number = 0)
 		{
 			super(x, y, z);
@@ -37,6 +39,13 @@ package open3d.geom
 			normal.z /= l;
 
 			return normal;
+		}
+		public function getProjectedNormal(matrix3D:Matrix3D):Vector3D
+		{ 
+			
+			projnormal =matrix3D.transformVector(normal);
+			projnormal.normalize()
+		  	return projnormal;
 		}
 	}
 }

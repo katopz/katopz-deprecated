@@ -7,37 +7,42 @@ package open3d.objects {
 	 * @author kris
 	 */
 	public class Light extends Object3D {
-		private var _direction : Vector3D = new Vector3D();
-		private var _halfVector : Vector3D = new Vector3D();
+		public var direction : Vector3D = new Vector3D();
+		public var halfVector : Vector3D = new Vector3D();
 
-		public function get direction() : Vector3D { 
-			return _direction; 
+		
+
+		
+
+		function Light(showLight:Boolean =false) 
+		{
+			// TODO, make visible light
+			updatePosition();
 		}
-
-		public function get halfVector() : Vector3D { 
-			return _halfVector; 
+		override public function set x(value:Number):void
+		{
+			super.x = value;
+			updatePosition();
 		}
-
-		public var xPos : Number
-		public var yPos : Number
-		public var zPos : Number
-
-		function Light(x : Number = 1, y : Number = 1, z : Number = 1) {
-			this.xPos = x;
-			this.yPos= y;
-			this.zPos = z;
-			setPosition(x, y, z); 
+		override public function set y(value:Number):void
+		{
+			super.y = value;
+			updatePosition();
 		}
-
-		public function setPosition(x : Number, y : Number, z : Number) : void {
-			_direction.x = -x;
-			_direction.y = -y;
-			_direction.z = -z; 
-			_direction.normalize();
-			_halfVector.x = _direction.x;
-			_halfVector.y = _direction.y;
-			_halfVector.z = _direction.z + 1; 
-			_halfVector.normalize();
+		override public function set z(value:Number):void
+		{
+			super.z = value;
+			updatePosition();
+		}
+		public function updatePosition() : void {
+			direction.x = this.x * -1;
+			direction.y = this.y * -1;
+			direction.z = this.z * -1; 
+			direction.normalize();
+			halfVector.x = direction.x;
+			halfVector.y = direction.y;
+			halfVector.z = direction.z + 1; 
+			halfVector.normalize();
 		}
 	}
 }
