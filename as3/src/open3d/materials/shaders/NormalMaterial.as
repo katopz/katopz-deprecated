@@ -25,8 +25,8 @@ package open3d.materials.shaders
 			
 		override protected function calculateTexCoord(texCoord : Point, normal : Vector3D,doubleSided : Boolean = false ) : void 
 		{
-			texCoord.x =0.5+ (normal.y/2);
-			texCoord.y =0.5+ (normal.z/2);
+			texCoord.x =0.5+ (normal.x/2);
+			texCoord.y =0.5+ (-normal.y/2);
 			
 		}
 		protected function getShadingBitmap() : BitmapData 

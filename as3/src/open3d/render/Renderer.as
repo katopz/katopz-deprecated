@@ -170,6 +170,7 @@ package open3d.render
 					_graphics.drawGraphicsData(child.graphicsData);
 				}else{
 					// DRAW TYPE #2 drawTriangles
+					
 					if(child.material is BitmapMaterial)
 					{
 						var _child_triangles:GraphicsTrianglePath = child.triangles;

@@ -10,14 +10,18 @@ package open3d.objects {
 		public var direction : Vector3D = new Vector3D();
 		public var halfVector : Vector3D = new Vector3D();
 
-		
-
-		
-
 		function Light(showLight:Boolean =false) 
 		{
-			// TODO, make visible light
+			if (showLight)
+			{
+				this.graphics.beginFill(0x00FF00);
+				this.graphics.drawCircle(0, 0, 50);
+			}
 			updatePosition();
+			super();
+		}
+		override public function project(camera:Camera3D):void
+		{
 		}
 		override public function set x(value:Number):void
 		{
