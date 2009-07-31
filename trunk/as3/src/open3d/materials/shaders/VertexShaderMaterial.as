@@ -46,7 +46,7 @@ package open3d.materials.shaders
 			
 			var texCoord : Point = new Point(); 
 			// projecting vertex normals
-
+			// TODO: optimize: keep normals in a Vector and use Matrix.transformVectors
 			for (var i : int = 0;i < vertices.length; i++) 
 			{
 				
@@ -64,14 +64,8 @@ package open3d.materials.shaders
 		
 		protected function calculateTexCoord(texCoord : Point, normal : Vector3D,doubleSided : Boolean = false ) : void 
 		{
-			
-			
-		/*	var v : Vector3D = _light.direction;
-			texCoord.x = v.x * normal.x + v.y * normal.y + v.z * normal.z;
-			if (texCoord.x < 0) texCoord.x = (doubleSided) ? -texCoord.x : 0;
-			v = _light.halfVector;
-			texCoord.y = v.x * normal.x + v.y * normal.y + v.z * normal.z;
-			if (texCoord.y < 0) texCoord.y = (doubleSided) ? -texCoord.y : 0;*/
+			// override
+	
 		}
 	}
 }
