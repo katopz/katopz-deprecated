@@ -30,7 +30,10 @@ package open3d.geom
 		public var v0:Vector3D;
 		public var v1:Vector3D;
 		public var v2:Vector3D;
-
+		
+		// The length, magnitude, of the current Vector3D object from the origin (0,0,0) to the object's x, y, and z coordinates.
+		public var length:Number;
+		
 		public function Face(mesh:Mesh, indice:Vector3D, v0:Vector3D, v1:Vector3D, v2:Vector3D)
 		{
 			this.indice = indice;
@@ -40,20 +43,22 @@ package open3d.geom
 			this.i1 = indice.y;
 			this.i2 = indice.z;
 
-			this.j0 = v0.z;
-			this.j1 = v1.z;
-			this.j2 = v2.z;
+			this.j0 = 3 * i0 + 2;
+			this.j1 = 3 * i1 + 2;
+			this.j2 = 3 * i2 + 2;
 
 			this.v0 = v0;
 			this.v1 = v1;
 			this.v2 = v2;
+			
+			length = (v0.length + v1.length + v2.length)/3;
 		}
 
 		public function calculateScreenZ(vout:Vector.<Number>):void
 		{
 			indice.w = vout[j0] + vout[j1] + vout[j2];
 		}
-
+		
 		// get path data from projected vertices
 		public function getPathData(projectedVerts:Vector.<Number>):Vector.<Number>
 		{

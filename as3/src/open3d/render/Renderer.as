@@ -160,6 +160,8 @@ package open3d.render
 			{
 				child.project(camera);
 				
+				if(child.culled) continue;
+				
 				// graphics layer
 				_graphics = child.graphicsLayer;
 				

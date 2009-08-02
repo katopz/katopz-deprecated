@@ -2,9 +2,10 @@ package open3d.objects
 {
 	import flash.display.*;
 	import flash.geom.*;
-
+	
 	import open3d.materials.Material;
 	import open3d.materials.shaders.IShader;
+	import open3d.render.FrustumR;
 
 	/**
 	 * Object3D
@@ -30,7 +31,12 @@ package open3d.objects
 		private var _uvtData:Vector.<Number>;
 
 		// Z-Sort for Mesh
-		public var screenZ:Number = 0;
+		public var screenZ:int = 0;
+		
+		// frustum culling
+		public var isObjectCulling:Boolean = false;
+		public var culled:Boolean = false;
+		public var radius:Number = 0;
 
 		// Layer
 		public var graphicsLayer:Graphics;
@@ -63,6 +69,8 @@ package open3d.objects
 		 */
 		public function update():void
 		{
+			var _vin_length:int = _vin.length;
+			
 			// speed up
 			_vin.fixed = true;
 			_triangles.uvtData.fixed = true;
@@ -76,17 +84,19 @@ package open3d.objects
 			triangles = _triangles;
 
 			// dispose vout
-			vout = _vout = new Vector.<Number>(_vin.length, true);
+			vout = _vout = new Vector.<Number>(_vin_length, true);
+			
 			// calculate normals for the shaders
 			if (material is IShader)
 			{
 				var shader:IShader = material as IShader;
 				shader.calculateNormals(_vin, _triangles.indices);
 			}
+			
 			// no faces?, calculate screenZ from Object XYZ 
-			if (_vin.length == 0)
+			if (_vin_length == 0)
 				screenZ = x + y + z;
-
+			
 			_ready = true;
 		}
 
@@ -114,8 +124,28 @@ package open3d.objects
 
 			// project
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
+			
+			// culling
+			//   cc      near      far
+			//          .
+			//      .  45 )   
+			//   o<-----+-|---------|
+			//      .
+			//          .
+			// -500      100       2000
+			
+			if(isObjectCulling)
+			{
+				frustumR.setCamInternals(45, camera.ratio, 500+100, 2000);
+				var cameraPosition:Vector3D = new Vector3D(camera.x, camera.y,camera.z); 
+				frustumR.setCamDef(cameraPosition, Vector3D.Z_AXIS, Vector3D.Y_AXIS);
+				var result:int = frustumR.sphereInFrustum(new Vector3D(x, y, z), radius);
+				culled = (result==0);
+			}
 		}
-
+		
+		public var frustumR:FrustumR = new FrustumR();
+		
 		public function set material(value:Material):void
 		{
 			_material = value ? value : new Material();
