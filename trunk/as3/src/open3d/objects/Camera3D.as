@@ -12,11 +12,14 @@ package open3d.objects
 	{
 		public var projection:PerspectiveProjection;
 		public var matrix3D:Matrix3D;
+		public var ratio:Number;
 		
-		public function Camera3D()
+		public function Camera3D(w:Number, h:Number)
 		{
 			projection = new PerspectiveProjection();
 			matrix3D = transform.matrix3D = new Matrix3D();
+			
+			ratio = w/h;
 		}
 		
 		/*

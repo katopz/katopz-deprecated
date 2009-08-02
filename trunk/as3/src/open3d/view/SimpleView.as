@@ -47,7 +47,7 @@ package open3d.view
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.quality = StageQuality.MEDIUM;
 
-			camera = new Camera3D();
+			camera = new Camera3D(stage.stageWidth, stage.stageHeight);
 			camera.projection.fieldOfView = 53;
 			camera.projection.focalLength = 500;
 			camera.z = -500;
