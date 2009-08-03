@@ -4,10 +4,12 @@ package open3d.render
 	import flash.geom.Vector3D;
 
 	/**
+	 * FrustumCuller via Sphere
 	 * http://www.lighthouse3d.com/opengl/viewfrustum/index.php?rimp2
 	 * @author katopz
+	 * TODO : cleaning
 	 */
-	public class FrustumR
+	public class FrustumCuller
 	{
 		public var totalFaces:int = 0;
 		
@@ -15,19 +17,20 @@ package open3d.render
 		public static var INTERSECT:uint = 1;
 		public static var INSIDE:uint = 2;
 		
-		public var cc:Vector3D; // camera position
+		// camera position
+		public var cc:Vector3D;
 		
 		// the camera referential
 		public var vX:Vector3D = Vector3D.X_AXIS;
 		public var vY:Vector3D = Vector3D.Y_AXIS;
 		public var vZ:Vector3D = new Vector3D(0,0,-1);
 		
-		public var nearD:Number, farD:Number, width:Number, height:Number;
+		public var angle:Number,nearD:Number, farD:Number, width:Number, height:Number;
 		
 		// NEW: these are the variables required to test spheres
 		public var sphereFactorX:Number, sphereFactorY:Number;
 		
-		private const ANG2RAD:Number = 3.14159265358979323846/180.0;
+		//private const ANG2RAD:Number = 3.14159265358979323846/180.0;
 		
 		private var ratio:Number;
 		private var tang:Number;
@@ -35,11 +38,10 @@ package open3d.render
 		public function setCamInternals(angle:Number, ratio:Number, nearD:Number, farD:Number):void
 		{
 			// store the information
+			this.angle = angle;//angle*ANG2RAD;
 			this.ratio = ratio;
 			this.nearD = nearD;
 			this.farD = farD;
-			
-			angle = angle*ANG2RAD;
 			
 			// compute width and height of the near and far plane sections
 			tang = Math.tan(angle);
@@ -131,7 +133,7 @@ package open3d.render
 			return result;
 		}
 		
-		public function FrustumR():void
+		public function FrustumCuller():void
 		{
 			
 		}

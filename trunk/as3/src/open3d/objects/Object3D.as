@@ -5,7 +5,7 @@ package open3d.objects
 	
 	import open3d.materials.Material;
 	import open3d.materials.shaders.IShader;
-	import open3d.render.FrustumR;
+	import open3d.render.FrustumCuller;
 
 	/**
 	 * Object3D
@@ -34,7 +34,8 @@ package open3d.objects
 		public var screenZ:int = 0;
 		
 		// frustum culling
-		public var isObjectCulling:Boolean = false;
+		public var frustumCuller:FrustumCuller;
+		public var isFrustumCulling:Boolean = false;
 		public var culled:Boolean = false;
 		public var radius:Number = 0;
 
@@ -62,6 +63,8 @@ package open3d.objects
 			vin = _vin = new Vector.<Number>();
 			_transform_matrix3D = transform.matrix3D = new Matrix3D();
 			_material = new Material();
+			
+			frustumCuller = new FrustumCuller();
 		}
 
 		/**
@@ -125,7 +128,7 @@ package open3d.objects
 			// project
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
 			
-			// culling
+			// frustum sphere culling
 			//   cc      near      far
 			//          .
 			//      .  45 )   
@@ -133,18 +136,16 @@ package open3d.objects
 			//      .
 			//          .
 			// -500      100       2000
-			
-			if(isObjectCulling)
+			// TODO : optimize
+			if(isFrustumCulling)
 			{
-				frustumR.setCamInternals(45, camera.ratio, 500+100, 2000);
-				var cameraPosition:Vector3D = new Vector3D(camera.x, camera.y,camera.z); 
-				frustumR.setCamDef(cameraPosition, Vector3D.Z_AXIS, Vector3D.Y_AXIS);
-				var result:int = frustumR.sphereInFrustum(new Vector3D(x, y, z), radius);
+				var cameraVector:Vector3D = new Vector3D(camera.x, camera.y,camera.z);
+				frustumCuller.setCamInternals(camera.theta, camera.ratio, cameraVector.length - radius, camera.projection.focalLength*4);
+				frustumCuller.setCamDef(cameraVector, Vector3D.Z_AXIS, Vector3D.Y_AXIS);
+				var result:int = frustumCuller.sphereInFrustum(new Vector3D(x, y, z), radius);
 				culled = (result==0);
 			}
 		}
-		
-		public var frustumR:FrustumR = new FrustumR();
 		
 		public function set material(value:Material):void
 		{
