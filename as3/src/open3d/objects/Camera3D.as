@@ -3,6 +3,7 @@ package open3d.objects
 	import flash.display.Shape;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
+	import flash.geom.Vector3D;
 
 	/**
 	 * Camera3D
@@ -34,7 +35,8 @@ package open3d.objects
 		public function update():void
 		{
 			ratio = w/h;
-			angle = Math.atan2(((w>h)?w:h)/2, projection.focalLength);
+			var cameraPosition:Vector3D = new Vector3D(x, y,z);
+			angle = Math.atan2(((w>h)?w:h)/2, Math.abs(cameraPosition.length));
 		}
 		
 		/*

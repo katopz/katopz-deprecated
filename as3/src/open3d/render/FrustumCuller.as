@@ -11,29 +11,34 @@ package open3d.render
 	 */
 	public class FrustumCuller
 	{
-		public var totalFaces:int = 0;
-		
-		public static var OUTSIDE:uint = 0;
-		public static var INTERSECT:uint = 1;
-		public static var INSIDE:uint = 2;
+		private static var OUTSIDE:uint = 0;
+		private static var INTERSECT:uint = 1;
+		private static var INSIDE:uint = 2;
 		
 		// camera position
-		public var cc:Vector3D;
+		private var cameraPosition:Vector3D;
 		
 		// the camera referential
-		public var vX:Vector3D = Vector3D.X_AXIS;
-		public var vY:Vector3D = Vector3D.Y_AXIS;
-		public var vZ:Vector3D = new Vector3D(0,0,-1);
+		private var vX:Vector3D = Vector3D.X_AXIS;
+		private var vY:Vector3D = Vector3D.Y_AXIS;
+		private var vZ:Vector3D = new Vector3D(0,0,-1);
 		
-		public var angle:Number,nearD:Number, farD:Number, width:Number, height:Number;
+		private var angle:Number,nearD:Number, farD:Number, width:Number, height:Number;
 		
 		// NEW: these are the variables required to test spheres
-		public var sphereFactorX:Number, sphereFactorY:Number;
+		private var sphereFactorX:Number, sphereFactorY:Number;
 		
 		//private const ANG2RAD:Number = 3.14159265358979323846/180.0;
 		
 		private var ratio:Number;
-		private var tang:Number;
+		private var tanAngle:Number;
+		
+		public function FrustumCuller():void
+		{
+			// should be init here?
+			// setCamInternals
+			// setCamDef
+		}
 		
 		public function setCamInternals(angle:Number, ratio:Number, nearD:Number, farD:Number):void
 		{
@@ -44,17 +49,17 @@ package open3d.render
 			this.farD = farD;
 			
 			// compute width and height of the near and far plane sections
-			tang = Math.tan(angle);
+			tanAngle = Math.tan(angle);
 			sphereFactorY = 1.0/Math.cos(angle);
 			
 			// compute half of the the horizontal field of view and sphereFactorX 
-			var angleX:Number = Math.atan(tang*ratio);
+			var angleX:Number = Math.atan(tanAngle*ratio);
 			sphereFactorX = 1.0/Math.cos(angleX); 
 		}
 		
 		public function setCamDef(p:Vector3D, l:Vector3D, u:Vector3D):void
 		{
-			cc = p.clone();
+			cameraPosition = p.clone();
 			
 			// compute the Z axis of the camera referential
 			// this axis points in the same direction from 
@@ -75,7 +80,7 @@ package open3d.render
 			var pcz:Number,pcx:Number,pcy:Number,aux:Number;
 		
 			// compute vector from camera position to p
-			var v:Vector3D = p.subtract(cc);
+			var v:Vector3D = p.subtract(cameraPosition);
 		
 			// compute and test the Z coordinate
 			pcz = v.dotProduct(vZ);
@@ -84,7 +89,7 @@ package open3d.render
 		
 			// compute and test the Y coordinate
 			pcy = v.dotProduct(vY);
-			aux = pcz * tang;
+			aux = pcz * tanAngle;
 			if (pcy > aux || pcy < -aux)
 				return OUTSIDE;
 				
@@ -104,7 +109,7 @@ package open3d.render
 			var az:Number, ax:Number, ay:Number;
 			var result:int = INSIDE;
 
-			var v:Vector3D = p.subtract(cc);
+			var v:Vector3D = p.subtract(cameraPosition);
 			
 			az = v.dotProduct(vZ);
 			
@@ -116,7 +121,7 @@ package open3d.render
 			
 			ay = v.dotProduct(vY);
 			d = sphereFactorY * radius;
-			az *= tang;
+			az *= tanAngle;
 			if (ay > az+d || ay < -az-d)
 				return OUTSIDE;
 			if (ay > az-d || ay < -az+d)
@@ -131,11 +136,6 @@ package open3d.render
 				result = INTERSECT;
 		
 			return result;
-		}
-		
-		public function FrustumCuller():void
-		{
-			
 		}
    	}
 }
