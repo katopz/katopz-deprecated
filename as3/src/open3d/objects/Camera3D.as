@@ -16,7 +16,7 @@ package open3d.objects
 		// culling
 		public var w:Number, h:Number;
 		public var ratio:Number;
-		public var theta:Number;
+		public var angle:Number;
 		
 		public function Camera3D(w:Number, h:Number)
 		{
@@ -34,7 +34,7 @@ package open3d.objects
 		public function update():void
 		{
 			ratio = w/h;
-			theta = Math.atan2(((w>h)?w:h)/2, projection.focalLength);
+			angle = Math.atan2(((w>h)?w:h)/2, projection.focalLength);
 		}
 		
 		/*

@@ -140,7 +140,7 @@ package open3d.objects
 			if(isFrustumCulling)
 			{
 				var cameraVector:Vector3D = new Vector3D(camera.x, camera.y,camera.z);
-				frustumCuller.setCamInternals(camera.theta, camera.ratio, cameraVector.length - radius, camera.projection.focalLength*4);
+				frustumCuller.setCamInternals(camera.angle, camera.ratio, cameraVector.length - radius, camera.projection.focalLength*4);
 				frustumCuller.setCamDef(cameraVector, Vector3D.Z_AXIS, Vector3D.Y_AXIS);
 				var result:int = frustumCuller.sphereInFrustum(new Vector3D(x, y, z), radius);
 				culled = (result==0);
