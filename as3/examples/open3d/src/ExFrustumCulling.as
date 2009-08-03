@@ -32,9 +32,9 @@ package
 			sphere.z = 500;
 			sphere2.z = 500;
 			
-			// TODO : make defaukt as true
-			sphere.isObjectCulling = true;
-			sphere2.isObjectCulling = true;
+			// TODO : make default as true
+			sphere.isFrustumCulling = true;
+			sphere2.isFrustumCulling = true;
 		}
 
 		override protected function draw():void

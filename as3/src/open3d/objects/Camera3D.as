@@ -12,14 +12,29 @@ package open3d.objects
 	{
 		public var projection:PerspectiveProjection;
 		public var matrix3D:Matrix3D;
+		
+		// culling
+		public var w:Number, h:Number;
 		public var ratio:Number;
+		public var theta:Number;
 		
 		public function Camera3D(w:Number, h:Number)
 		{
+			this.w = w;
+			this.h = h;
+			
 			projection = new PerspectiveProjection();
 			matrix3D = transform.matrix3D = new Matrix3D();
 			
+			update();
+		}
+		
+		// dirty : w, h, fieldOfView, focalLength
+		// TODO : better replace with get/set?
+		public function update():void
+		{
 			ratio = w/h;
+			theta = Math.atan2(((w>h)?w:h)/2, projection.focalLength);
 		}
 		
 		/*
