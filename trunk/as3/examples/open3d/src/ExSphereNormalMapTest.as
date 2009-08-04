@@ -49,17 +49,17 @@ package
 			
 			sphere2 = new Sphere(50, segment, segment, new PBBitmapShader(light,dfBm.bitmapData.clone(),normBm.bitmapData.clone()));
 			renderer.addChild(sphere2);
-
+		
 			//renderer.world.rotationX = 30;
 		}
 
 		override protected function draw():void
 		{
-			this.addChild(mat1.drawSprite)
+		
 			//this.addChild(NormalMapBuilder.instance);
 			
-			//sphere.rotationY += 2;
-			//sphere2.rotationY -= 2;
+			sphere.rotationY += 2;
+			sphere2.rotationY -= 2;
 			light.x =  200 * Math.sin(step/5);
 			light.y =  200 * Math.cos(step/5);
 			sphere2.x = 200 * Math.sin(step);
