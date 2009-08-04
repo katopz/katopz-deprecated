@@ -27,7 +27,7 @@ package open3d.materials.shaders
 			super(bitmapData);
 		}
 		
-		public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>) : void
+		public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>,uvtData:Vector.<Number> =null,vertexNormals:Vector.<Number> =null) : void
 		{
 			
 			
