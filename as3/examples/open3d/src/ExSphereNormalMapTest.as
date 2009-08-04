@@ -30,7 +30,8 @@ package
 		private var sphere2:Sphere;
 
 		private var step:Number = 0;
-
+		private var light:Light
+		private var mat1:PBBitmapShader
 		override protected function create():void
 		{
 			// prep bitmapdata
@@ -38,14 +39,15 @@ package
 			var normBm:Bitmap =new NormalMap() as Bitmap;
 			// Single Core = 35, Quad Core = 56
 			var segment:uint = 56;
-			var light:Light = new Light();
+			light = new Light();
 			light.x = 20;
 			light.y=20;
-			sphere = new Sphere(100, segment, segment, new PBBitmapShader(dfBm.bitmapData));
+			mat1= new PBBitmapShader(light,dfBm.bitmapData);
+			sphere = new Sphere(100, segment, segment,mat1);
 			renderer.addChild(sphere);
 			
 			
-			sphere2 = new Sphere(50, segment, segment, new PBBitmapShader(dfBm.bitmapData,normBm.bitmapData));
+			sphere2 = new Sphere(50, segment, segment, new PBBitmapShader(light,dfBm.bitmapData.clone(),normBm.bitmapData.clone()));
 			renderer.addChild(sphere2);
 
 			//renderer.world.rotationX = 30;
@@ -53,11 +55,13 @@ package
 
 		override protected function draw():void
 		{
-			this.addChild(NormalMapBuilder.instance)
+			this.addChild(mat1.drawSprite)
+			//this.addChild(NormalMapBuilder.instance);
 			
 			//sphere.rotationY += 2;
 			//sphere2.rotationY -= 2;
-
+			light.x =  200 * Math.sin(step/5);
+			light.y =  200 * Math.cos(step/5);
 			sphere2.x = 200 * Math.sin(step);
 			sphere2.z = 200 * Math.cos(step);
 
