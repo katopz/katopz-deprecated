@@ -32,12 +32,12 @@ package open3d.materials.shaders
 		protected var _verticesIn : Vector.<Number>;
 		protected var faceNormals : Vector.<Vector3D>;
 		
-		public static var instance:NormalMapBuilder;
+		
 		
 		public function NormalMapBuilder()
 		{
 			
-			instance =this;
+			
 			
 			
 		}
@@ -56,10 +56,11 @@ package open3d.materials.shaders
 			var uvZ : Point;
 			var uvtXY : Vector.<Number> =new Vector.<Number>();
 			var uvtZ : Vector.<Number> =new Vector.<Number>();
+			var startIndex:int;
 			var directionVector : Vector3D;
 			for (var i : int = 0;i < vertexNormals.length/3; i++)
 			{
-				var startIndex:int = i*3;
+				startIndex = i*3;
 				directionVector =new Vector3D(vertexNormals[ startIndex],vertexNormals[ startIndex+1],vertexNormals[ startIndex+2]);
 				uvXY = new Point();
 				calculateTexCoordXY(uvXY, directionVector);
@@ -84,7 +85,7 @@ package open3d.materials.shaders
 			var mapVector:Vector.<Number> =new Vector.<Number>();
 			var uvtXYTri : Vector.<Number> =new Vector.<Number>();
 			var uvtZTri : Vector.<Number> =new Vector.<Number>();
-			var startIndex:int;
+			
 			var ind:Vector.<int> =new Vector.<int>();
 			ind.push(0,1,2);
 		
