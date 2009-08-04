@@ -93,7 +93,8 @@ package open3d.objects
 			if (material is IShader)
 			{
 				var shader:IShader = material as IShader;
-				shader.calculateNormals(_vin, _triangles.indices);
+				//TODO if the the model has vertex normals DAE, collada), use them
+ 				shader.calculateNormals(_vin, _triangles.indices,_uvtData);
 			}
 			
 			// no faces?, calculate screenZ from Object XYZ 

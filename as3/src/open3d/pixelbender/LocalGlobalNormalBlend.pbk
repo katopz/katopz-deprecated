@@ -1,0 +1,35 @@
+<languageVersion : 1.0;>
+
+kernel NewFilter
+<   namespace : "Open3D";
+    vendor : "kris@neuroproductions.be";
+    version : 1;
+    description : "Blendmode for adding global normal maps to local normal maps";
+>
+{
+
+   
+    input image4 layer1;
+    input image4 layer2;
+    output pixel4 result;
+
+
+    
+    
+    void
+    evaluatePixel()
+    {
+       
+        pixel4 a = sampleNearest(layer1, outCoord());
+        pixel4 b = sampleNearest(layer2, outCoord());
+        
+         ///dont know if this is correct, seem to work
+        a.r +=(b.r-0.5)*0.5;
+        a.g +=(b.g-0.5)*0.5;
+        a.b +=(b.b-0.5)*0.5;
+        
+      
+       
+        result =a ;
+    }
+}

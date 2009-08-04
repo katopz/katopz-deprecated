@@ -17,9 +17,9 @@ package open3d.materials.shaders
 			super(light, bitmapData);
 		}
 
-		override public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>) : void
+		override public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>,uvtData:Vector.<Number> =null,vertexNormals:Vector.<Number> =null) : void
 		{
-		
+			// TODO if vertex normals, use them
 			super.calculateNormals(verticesIn, indices);
 			calculateVertexNormals();
 			
