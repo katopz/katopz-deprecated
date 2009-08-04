@@ -43,8 +43,8 @@ package open3d.materials.shaders
 			_normalmapBitmapData = normalmapBitmapData;
 			shader = new Shader(new NormalShader() as ByteArray);
 			
-			difuseBitmap = new Bitmap(difuseBitmapData);
-			normalSprite.addChild(difuseBitmap);
+			difuseBitmap = new Bitmap(difuseBitmapData.clone());
+			difuseSprite.addChild(difuseBitmap);
 			super(difuseBitmapData);
 		}
 
@@ -75,7 +75,7 @@ package open3d.materials.shaders
 			normalBitmap = new Bitmap(normalWorldMap);
 			drawSprite.addChild(difuseSprite);
 			normalSprite.addChild(normalBitmap);
-			//drawSprite.addChild(normalSprite);
+			drawSprite.addChild(normalSprite);
 			normalSprite.blendShader = shader;
 			
 		
@@ -91,10 +91,11 @@ package open3d.materials.shaders
 			shader.data.x.value=[vec3.x];
 			shader.data.y.value=[vec3.y];
 			shader.data.z.value=[vec3.z];
-			drawSprite.addChild(difuseSprite);
-			normalSprite.addChild(normalBitmap);
-			drawSprite.addChild(normalSprite);
+			shader.data.mult.value=[0.8];
+			shader.data.offz.value=[-0.2];
+			
 			normalSprite.blendShader = shader;
+			
 			texture.draw(drawSprite);
 			return _uvtData;
 		}
