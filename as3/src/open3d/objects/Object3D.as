@@ -54,7 +54,12 @@ package open3d.objects
 		{
 			return _layer;
 		}
-
+		
+		public function get position():Vector3D
+		{
+			return _transform_matrix3D.position;
+		}
+		
 		// for async mesh
 		protected var _ready:Boolean = false;
 
@@ -130,24 +135,16 @@ package open3d.objects
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
 			
 			// frustum sphere culling
-			//   cc      near      far
-			//          .
-			//      .  45 )   
-			//   o<-----+-|---------|
-			//      .
-			//          .
-			// -500      100       2000
-			// TODO : optimize
 			if(isFrustumCulling)
 			{
 				var cameraPosition:Vector3D = new Vector3D(camera.x, camera.y,camera.z);
-				frustumCuller.setCamInternals(camera.angle, camera.ratio, cameraPosition.length - radius, camera.projection.focalLength*4);
+				frustumCuller.setCamInternals(camera.angle, camera.ratio, radius, camera.projection.focalLength*4);
 				frustumCuller.setCamDef(cameraPosition, Vector3D.Z_AXIS, Vector3D.Y_AXIS);
 				var result:int = frustumCuller.sphereInFrustum(new Vector3D(x, y, z), radius);
 				culled = (result==0);
 			}
 		}
-		
+
 		public function set material(value:Material):void
 		{
 			_material = value ? value : new Material();
