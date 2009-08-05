@@ -237,6 +237,7 @@ package com.sleepydesign.site.view.components
 		
 		override public function update(data:Object=null):void
 		{
+			if(data.xml==data.xml)
 			//parse?
 			if(data.xml)
 			{
@@ -295,7 +296,10 @@ package com.sleepydesign.site.view.components
 								if(data.source is MovieClip) content = data.source;
 							}
 							// bypass load = publish
-							onGetContent();
+							if(dirty)
+							{
+								onGetContent();
+							}
 						break;
 						// external source : swf, jpg, png
 						case "swf":
@@ -369,7 +373,11 @@ package com.sleepydesign.site.view.components
 		protected function onContentReady(event:SDEvent=null):void	
 		{
 			trace(" ! onContentReady");
-			if(content)content.removeEventListener(SDEvent.READY, onContentReady);
+			if(event && event.target)
+				event.target.removeEventListener(SDEvent.READY, onContentReady);
+			
+			if(event)
+				applyConfig();
 		}
 		
 		protected function applyConfig():void
@@ -462,7 +470,7 @@ package com.sleepydesign.site.view.components
 				case "button" :
 					if(!elements.findBy(idString))
 					{
-						var button:SimpleButton = SimpleButton(clip.getChildByName(sourceString));
+						var button:* = clip.getChildByName(sourceString) as SimpleButton;
 						
 						// TODO : deeper
 						if(!button && sourceString.indexOf(".")>-1)
@@ -474,6 +482,11 @@ package com.sleepydesign.site.view.components
 							button = SimpleButton(clip.getChildByName(sourceStrings[1]));
 							//trace("button:"+button);
 							//trace("-------------------------------");
+						}
+						
+						if(!button)
+						{
+							button = MovieClip(clip.getChildByName(sourceString));
 						}
 						
 						if(button)
@@ -676,7 +689,12 @@ package com.sleepydesign.site.view.components
 		protected function onClick(event:MouseEvent):void
 		{
 			trace(" ! onClick");
-			var linkXML:XML = XML(links.find(event.target)) 
+			var linkXML:XML = XML(links.find(event.target))
+			
+			// 2nd try
+			if(StringUtil.isNull(linkXML.@link))
+				 linkXML = XML(links.find(event.currentTarget))
+				 
 			// link to other node
 			if(!StringUtil.isNull(linkXML.@link))
 			{
@@ -740,7 +758,6 @@ package com.sleepydesign.site.view.components
 			}else{
 				SystemUtil.alert("Bad input(s) : "+badList.join(", "));
 			}
-			
 		}
 		
 		// Form.onInvalid

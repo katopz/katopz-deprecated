@@ -1,7 +1,6 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.text.SDTextField;
-	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
 	import flash.display.DisplayObject;
@@ -265,69 +264,7 @@ package com.sleepydesign.components
 
 		private function linkHandler(e:TextEvent):void
 		{
-			var src:Array = e.text.split(":")
-			var protocal:String = src[0];
-			var functionString:String = e.text.substring(1 + e.text.indexOf(":"));
-			var functionName:String = functionString.split("(")[0];
-			var argumentString:String = functionString.substring(1 + functionString.indexOf("("), functionString.lastIndexOf(")"))
-			var argumentArray:Array = argumentString.split(",");
-			var argument:*;
-
-			//TODO arguments
-			var arg:String = argumentArray[0];
-			if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length-1))
-			{
-				//string
-				argument = arg.substring(1, arg.length - 1);
-			}
-			else if ((arg.indexOf('"') == 0) && (arg.lastIndexOf('"') == arg.length-1))
-			{
-				//string
-				argument = arg.substring(1, arg.length - 1);
-			}
-			else
-			{
-				//number
-				argument = int(arg);
-			}
-
-			switch (protocal)
-			{
-				case "as":
-					if (argumentString.length > 0)
-					{
-						//custom::[functionName](argument);
-						caller[functionName].apply(caller, [argument]);
-					}
-					else
-					{
-						//custom::[functionName]();
-						caller[functionName].apply(caller);
-					}
-					break;
-
-				case "js":
-					var isExternal:Boolean = false; 
-					if (argumentString.length > 0)
-					{
-						isExternal = SystemUtil.callJS(functionName, argument);
-					}
-					else
-					{
-						isExternal = SystemUtil.callJS(functionName);
-					}
-					/*
-					if(!isExternal)
-					{
-						URLUtil.getURL(String(e.text));
-					}
-					*/
-					break;
-				case "http":
-					URLUtil.getURL(String(e.text));
-					break;
-			}
+			URLUtil.link(e.text, caller);
 		}
-
 	}
 }

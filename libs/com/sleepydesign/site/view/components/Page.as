@@ -2,9 +2,9 @@ package com.sleepydesign.site.view.components
 {
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDGroup;
+	import com.sleepydesign.core.SDLayer;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.model.vo.ContentVO;
-	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.URLUtil;
 	import com.sleepydesign.utils.XMLUtil;
@@ -13,6 +13,7 @@ package com.sleepydesign.site.view.components
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.utils.*;
 	
@@ -364,10 +365,12 @@ package com.sleepydesign.site.view.components
 			sourceString = !StringUtil.isNull(itemXML.@src)?String(itemXML.@src):sourceString;
 
 			//trace("\n /-------------------------------------");
-			trace(" ! Page.itemXML : " + itemXML.@id);//.toXMLString());
+			trace(" ! itemXML : " + itemXML.@id);//.toXMLString());
 			//trace(" -------------------------------------/\n");
 			
 			// parse all item(s)
+			var i:uint;
+			var xmlList:XMLList;
 			switch(itemType)
 			{
 				case "menu" :
@@ -405,8 +408,8 @@ package com.sleepydesign.site.view.components
 					{
 						//for each(var contentXML:XML in data.xml)
 						// tricky : reprase parent for inner flash content
-						var xmlList:XMLList = _data.xml.children();
-						for (var i:uint = 0; i < xmlList.length(); i++ ) 
+						xmlList = _data.xml.children();
+						for (i = 0; i < xmlList.length(); i++ ) 
 						{
 							var contentXML:XML = xmlList[i];
 							try{
@@ -429,6 +432,17 @@ package com.sleepydesign.site.view.components
 					//innerContent = new Page(itemXML.@id, XML(itemXML.(@id==itemXML.@id)));
 					//addContainer(innerContent);
 				break;
+				/*
+				case "layer" :
+					var layer:SDLayer = new SDLayer(idString);
+					
+					// wait for content ready
+					content.addEventListener(SDEvent.READY, layer.onChildReady);
+					
+					// store content and xml to apply later when content ready 
+					layer.addContent(content, itemXML);
+				break;
+				*/
 				case "content" :
 				
 					// must defined before send to Content, cause Content never known parent while init
@@ -448,32 +462,24 @@ package com.sleepydesign.site.view.components
 					trace(" ! Clip\t: "+sourceString+":"+clip);
 					
 					//innerContent = Content(contents.findBy(String(itemXML.@id)));
-					 
+					var _itemXML_src:*;
 					if(clip)
 					{
-						// internal
-						if(contents && contents.findBy(idString))
-						{
-							// exist?
-							innerContent = contents.findBy(idString);
-							innerContent.update(new ContentVO(innerContent.id, clip, itemXML));
-						}else{
-							// new
-							innerContent = new Content(itemXML.@id, clip, itemXML);// XML(itemXML.(@id==itemXML.@id)));
-							addContainer(innerContent);
-						}
+						_itemXML_src = clip;
 					}else{
-						// external
-						if(contents && contents.findBy(idString))
-						{
-							// exist?
-							innerContent = contents.findBy(idString);
-							innerContent.update(new ContentVO(itemXML.@id, itemXML.@src, itemXML));
-						}else{
-							// new
-							innerContent = new Content(itemXML.@id, itemXML.@src, itemXML);// XML(itemXML.(@id==itemXML.@id)));
-							addContainer(innerContent);
-						}
+						_itemXML_src = itemXML.@src;
+					}
+					
+					// internal
+					if(contents && contents.findBy(idString))
+					{
+						// exist?
+						innerContent = contents.findBy(idString);
+						innerContent.update(new ContentVO(innerContent.id, _itemXML_src, itemXML));
+					}else{
+						// new
+						innerContent = new Content(itemXML.@id, _itemXML_src, itemXML);// XML(itemXML.(@id==itemXML.@id)));
+						addContainer(innerContent);
 					}
 					
 					//trace("+++++++++++++++++"+itemXML.@id, data.xml.@focus)

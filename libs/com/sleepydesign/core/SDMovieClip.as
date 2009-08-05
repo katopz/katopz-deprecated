@@ -47,6 +47,7 @@ package com.sleepydesign.core
 			
 			trace(" ! SDMovieClip\t: "+id, clip, clip.visible);
 			
+			/*
 			// if not export for SDMovieClip then use cloak mode
 			if(source && source.parent && !stage)
 			{
@@ -54,6 +55,7 @@ package com.sleepydesign.core
 			}else{
 				//addChild(source);
 			}
+			*/
 			
 			clip.alpha = 1;
 			this.alpha = 0;
@@ -65,6 +67,11 @@ package com.sleepydesign.core
 			
 			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 			
+			// they got label let's see what they got
+			if(clip.currentLabels.length>0)
+				clip.addEventListener(Event.ENTER_FRAME, onFrameIsEnter);
+			
+			/*
 			// Dependency call
 			if(stage)
 			{
@@ -74,6 +81,7 @@ package com.sleepydesign.core
 				//show time?
 				show();
 			}
+			*/
 		}
 		
         // ______________________________ Initialize ______________________________
@@ -86,6 +94,17 @@ package com.sleepydesign.core
 		protected function onStage(event:Event=null):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+		}	
+		
+		protected function onFrameIsEnter(event:Event):void
+		{
+			if(!clip.currentLabel)return;
+			switch(clip.currentLabel.toLowerCase())
+			{
+				case "ready" :
+					dispatchEvent(new SDEvent(SDEvent.READY));
+				break;
+			}
 		}	
 		
 		protected function ready():void

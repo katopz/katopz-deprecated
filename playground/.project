@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>pg</name>
+	<name>PlayGround</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,14 +16,14 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] libs</name>
-			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
-		</link>
-		<link>
 			<name>[source path] pv3d</name>
 			<type>2</type>
 			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d</location>
+		</link>
+		<link>
+			<name>[source path] libs</name>
+			<type>2</type>
+			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
 		</link>
 	</linkedResources>
 </projectDescription>
