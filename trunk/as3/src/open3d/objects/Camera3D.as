@@ -35,8 +35,29 @@ package open3d.objects
 		public function update():void
 		{
 			ratio = w/h;
-			var cameraPosition:Vector3D = new Vector3D(x, y,z);
-			angle = Math.atan2(((w>h)?w:h)/2, Math.abs(cameraPosition.length));
+			angle = Math.atan2(w/2, Math.abs(matrix3D.position.length));
+		}
+		
+		// TODO : must use world matrix invert instead like OpenGL
+		// not work when transfrom cam yet...fix later
+		public function lookAt( target:Object3D ):void
+		{
+        	// compute the forward vector
+        	var forward:Vector3D = target.position.subtract(matrix3D.position);
+            forward.normalize();
+            
+            var up:Vector3D = new Vector3D(0, 1, 0);
+            var left:Vector3D = new Vector3D(1, 0, 0);
+            
+            // compute the left vector
+    		left = up.crossProduct(forward);
+    		left.normalize();
+    		
+    		// re-calculate the orthonormal up vector
+    		up = forward.crossProduct(left);
+    		up.normalize();
+    		
+            matrix3D.pointAt(target.position, matrix3D.position, up);
 		}
 		
 		/*
