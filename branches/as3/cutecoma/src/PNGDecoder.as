@@ -115,7 +115,7 @@ package
 
 		private function getChunks():Array
 		{
-			var chunks:Array = new Array();
+			var chunks:Array = [];
 			var length:int = 0;
 			var type:String = "";
 

@@ -7,12 +7,12 @@ kernel ZSort
 	description: "Sort z vertices";
 >
 {
-	input image4 source;
-	output pixel4 target;
+	input image3 source;
+	output pixel3 target;
 
 	void evaluatePixel()
 	{
-		pixel4 px = sample(source, outCoord());
-		target = pixel4(px[0], px[1], px[2], px[0] + px[1] + px[2]);
+		pixel3 px = sample(source, outCoord());
+		target = pixel3(sin(px[0]), sin(px[1]), sin(px[2]));
 	}
 }

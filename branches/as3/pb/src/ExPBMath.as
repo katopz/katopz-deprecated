@@ -1,11 +1,13 @@
 package
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.display.Shader;
 	import flash.display.ShaderJob;
 	import flash.display.Sprite;
-	import flash.utils.getTimer;
+	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.utils.*;
+	
+	import open3d.utils.TextUtil;
 
 	[SWF(backgroundColor="#666666",frameRate="30",width="640",height="480")]
 
@@ -24,10 +26,21 @@ package
 		[Embed(source="../pbj/ZSort.pbj",mimeType="application/octet-stream")]
 		private var ZSort:Class;
 		
-		private var total:int = 100;
-
+		private var total:int = 10000;
+		
+		private var debugText:TextField;
 		public function ExPBMath()
 		{
+			debugText = TextUtil.getTextField("init...\n");
+			debugText.multiline = true;
+			addChild(debugText);
+			stage.addEventListener(MouseEvent.CLICK, onClick);			
+		}
+		
+		private function onClick(e:*):void
+		{
+			debugText.text = "";
+			
 			var nVec:Vector.<Number> = new Vector.<Number>();
 			var nVec2:Vector.<Number> = new Vector.<Number>();
 			for (var i:int = 0; i < total; i++)
@@ -61,7 +74,7 @@ package
 			
 			// --------------------------------------- PBSqrt ---------------------------------------
 			
-			/*
+			
 			shader = new Shader(new PBSqrt());
 			shader.data.source.width = w;
 			shader.data.source.height = h;
@@ -73,7 +86,7 @@ package
 			var timer:Number = getTimer();
 			job.start(true);
 			timer = getTimer() - timer;
-			trace("PBSqrt : "+timer);
+			debugText.appendText("PBSqrt : "+timer+"\n");
 			
 			// normal loop
 			timer = getTimer();
@@ -82,11 +95,12 @@ package
 				nVec2[i] = Math.sqrt(nVec2[i]);
 			}
 			timer = getTimer() - timer;
-			trace("Math.sqrt : "+timer);
-			*/
+			debugText.appendText("Math.sqrt : "+timer+"\n");
+			
 			
 			// --------------------------------------- PBAdd ---------------------------------------
 			
+			/*
 			nVec = new Vector.<Number>();
 			for (i = 0; i < w * h * 3; i++)
 			{
@@ -101,33 +115,58 @@ package
 			job = new ShaderJob(shader, nVec, w, h);
 			job.start(true);
 			
-			trace(nVec);
+			debugText.appendText(String(nVec+"\n"));
+			*/
 			
 			// --------------------------------------- ZSort ---------------------------------------
 			
+			debugText.appendText("----------\n");
+			
 			nVec = new Vector.<Number>();
-			for (i = 0; i < 8; i++)
+			for (i = 0; i < 3*30000; i++)
 			{
 				nVec.push(i);
 			}
-						
-			count = nVec.length / 4;
+			
+			count = nVec.length / 3;
 			w = Math.ceil(Math.sqrt(count));
 			h = Math.ceil(count / w);
-			
-			for (i = 0; i < w * h * 4; i++)
+			h=1
+			for (i = nVec.length; i < w * 1 * 3; i++)
 			{
-				nVec.push(i);
+				//nVec.push(0);
 			}
 			
+			//debugText.appendText(w+","+h+","+nVec.length+"\n");
+			
+			//nVec.push(0);
 			shader = new Shader(new ZSort());
 			shader.data.source.width = w;
-			shader.data.source.height = h;
+			shader.data.source.height = 1;
 			shader.data.source.input = nVec;
 			
-			job = new ShaderJob(shader, nVec, w, h);
+			timer = getTimer();
+			job = new ShaderJob(shader, nVec, w, 1);
 			job.start(true);
+			timer = getTimer() - timer;
+			debugText.appendText("timer:"+timer+"\n");
+			trace(nVec);
 			
+			debugText.appendText("----------\n");
+			
+			for (i = 0; i < nVec.length; ++i)
+			{
+				nVec[i] = i;
+			}
+			
+			timer = getTimer();
+			var length:int = nVec.length;
+			for (i = 0; i < length; ++i)
+			{
+				nVec[i] = Math.sin(nVec[i]);
+			}
+			timer = getTimer() - timer;
+			debugText.appendText("timer:"+timer+"\n");
 			trace(nVec);
 		}
 	}
