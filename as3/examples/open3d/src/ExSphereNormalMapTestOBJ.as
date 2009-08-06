@@ -1,6 +1,5 @@
 package
 {
-	import open3d.objects.Sphere;
 	import flash.filters.ShaderFilter;
 	import flash.utils.ByteArray;
 	import flash.display.Shader;
@@ -20,7 +19,7 @@ package
 	 * ExSphereNormalMapTest
 	 * @author kris@neuroproductions.be
 	 */
-	public class ExSphereNormalMapTest extends SimpleView
+	public class ExSphereNormalMapTestOBJ extends SimpleView
 	{
 	
 		
@@ -28,15 +27,15 @@ package
 		private var BackgroundMap : Class;
 		
 		
-		[Embed(source="assets/earth.jpg")]
+		[Embed(source="assets/flesh_diffuse.jpg")]
 		private var DiffMap : Class;
 
-		[Embed(source="assets/normalmap.jpg")]
+		[Embed(source="assets/flesh_normals.jpg")]
 		private var NormalMap : Class;
 
 		
-		private var sphere:Sphere;
-		private var sphere2:Sphere;
+		private var objTrans : OBJ;
+		private var objShaded : OBJ;
 
 		private var step : Number = 0;
 		private var light : Light;
@@ -51,8 +50,7 @@ package
 			
 			var back: Bitmap = new BackgroundMap() as Bitmap;
 			
-			// Single Core = 35, Quad Core = 56
-			var segment:uint = 40;
+		
 			
 			
 			light = new Light();
@@ -61,33 +59,31 @@ package
 		
 			light.x = 20;
 			light.y = 20;
+			var layer:Sprite =new Sprite();
+			this.addChildAt(layer,1);
 			
-			
-		
-			sphere = new Sphere(100, segment, segment,  new PBTransparentShader(light, back.bitmapData.clone()));
-			renderer.addChild(sphere);
-
-			sphere2 = new Sphere(50, segment, segment, new PBBitmapShader(light, dfBm.bitmapData.clone(), normBm.bitmapData.clone()));
-			renderer.addChild(sphere2);
+			objTrans = new OBJ("assets/flesh_creature.obj", new PBTransparentShader(light, back.bitmapData.clone(), normBm.bitmapData.clone()), 8);
+			objTrans.rotationX = -90;
+			objTrans .x = 200;
+			objTrans.layer =layer;
+			objShaded = new OBJ("assets/flesh_creature.obj", new PBBitmapShader(light, dfBm.bitmapData.clone(), normBm.bitmapData.clone()), 8);
+			objShaded.rotationX = -90;
+			objShaded .x = -200;
+			renderer.addChild(objTrans);
+			renderer.addChild(objShaded);
 		}
 
 		override protected function draw() : void
 		{
 		
 			
-			sphere.rotationY += 2;
-			sphere2.rotationY -= 2;
-
-			light.x = 200 * Math.sin(step);
-			light.y = 200 * Math.cos(step);
-			
-			sphere2.x = 200 * Math.sin(step);
-			sphere2.z =200 * Math.cos(step);
+			objShaded.rotationY += 2;
+			objTrans.rotationY -= 2;
+		
+			light.x =  200 * Math.cos(step);
+			light.z=  200 * Math.sin(step);
 
 			step += 0.1;
-			
-			camera.rotationY = (mouseX - stage.stageWidth / 2) / 10;
-			camera.rotationX = -(mouseY - stage.stageHeight / 2) / 10;
 			
 			
 		}
