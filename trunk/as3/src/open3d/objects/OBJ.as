@@ -31,13 +31,15 @@ package open3d.objects
 		private var _loader:URLLoader;
 		private var _childrenCount:int = 0;
 		private var _materials:Dictionary;
-
+		
+		private var _scale:Number;
 		public function OBJ(obj:String, mtl:* = null, scale:Number = 1)
 		{
 			super();
-
+			_vertexNormals = new Vector.<Number>()
 			this._obj = obj;
-
+			// added scale
+			this._scale =scale;
 			if (mtl is String)
 			{
 				this._mtl = mtl;
@@ -201,6 +203,12 @@ package open3d.objects
 		private var vertices:Array = [];
 		private function parseObj(obj:String):void
 		{
+			// remove extra spaces from 3D max OBJ	
+			var myPattern:RegExp = /v  /g; 
+			var myPattern2:RegExp =/ \n/g;
+			obj =obj.replace(myPattern,"v ");
+			obj = obj.replace(myPattern2,"\n");
+			
 			var lines:Array = obj.split("\n");
 			var parts:Array;
 			var keyword:String;
@@ -230,7 +238,7 @@ package open3d.objects
 					// Vertex data
 					case "v":
 					{ // Geometric vertices
-						verticesList.push(new Vertex(parts[1], parts[2], -parts[3]));
+						verticesList.push(new Vertex(parts[1]*_scale, parts[2]*_scale, -parts[3]*_scale));
 						vertices.push(verticesList[verticesList.length - 1]);
 						break;
 					}
@@ -242,6 +250,7 @@ package open3d.objects
 					case "vn":
 					{ // Vertex normal
 						normalList.push(new Vector3D(parts[1], parts[2], parts[3]));
+						
 						break;
 					}
 					case "vp":
@@ -261,9 +270,10 @@ package open3d.objects
 					case "f":
 					{ // Face
 
+					
 						if (parts.length != 4)
 						{ // not a triangle
-							continue; // skip
+						//	continue; // skip
 						}
 
 						var v0:Vertex, v1:Vertex, v2:Vertex;
@@ -294,12 +304,13 @@ package open3d.objects
 							uv2 = new UV(1, 0);
 						}
 
-						if (i0[2] != "")
-						{ // add normals
+						//if (i0[2] != "")
+						//{ // add normals
+						
 							v0.normal = normalList[i0[2] - 1];
 							v1.normal = normalList[i1[2] - 1];
 							v2.normal = normalList[i2[2] - 1];
-						}
+//						}
 
 						//currentObject.geometry.faces.push(new Triangle3D(this, [v0, v1, v2], _materials.getMaterialByName(_currentMaterial), [uv0, uv1, uv2]));
 						addFace(v0, v1, v2, Vector.<UV>([uv0, uv1, uv2]));
@@ -461,14 +472,17 @@ package open3d.objects
 			_vin[i++] = v0.x;
 			_vin[i++] = v0.y;
 			_vin[i++] = v0.z;
+
 			
 			_vin[i++] = v1.x;
 			_vin[i++] = v1.y;
 			_vin[i++] = v1.z;
-
+			
 			_vin[i++] = v2.x;
 			_vin[i++] = v2.y;
 			_vin[i++] = v2.z;
+			
+			_vertexNormals.push(v0.normal.x,v0.normal.y,v0.normal.z,v1.normal.x,v1.normal.y,v1.normal.z,v2.normal.x,v2.normal.y,v2.normal.z) 
 			
 			_triangles.uvtData.push(uvs[0].u, uvs[0].v, 1);
 			_triangles.uvtData.push(uvs[1].u, uvs[1].v, 1);

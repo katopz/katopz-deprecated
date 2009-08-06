@@ -1,4 +1,5 @@
 package open3d.objects {
+	import open3d.materials.ColorMaterial;
 	import open3d.objects.Object3D;
 
 	import flash.geom.Vector3D;
@@ -6,23 +7,17 @@ package open3d.objects {
 	/**
 	 * @author kris
 	 */
-	public class Light extends Object3D {
+	public class Light extends Sphere {
 		public var direction : Vector3D = new Vector3D();
 		public var halfVector : Vector3D = new Vector3D();
 
-		function Light(showLight:Boolean =false) 
+		function Light() 
 		{
-			if (showLight)
-			{
-				this.graphics.beginFill(0x00FF00);
-				this.graphics.drawCircle(0, 0, 50);
-			}
+		
 			updatePosition();
-			super();
+			super(10,5,5,new ColorMaterial(0xFFFFFF));
 		}
-		override public function project(camera:Camera3D):void
-		{
-		}
+		
 		override public function set x(value:Number):void
 		{
 			super.x = value;

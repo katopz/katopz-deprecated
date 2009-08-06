@@ -149,14 +149,14 @@ package open3d.materials.shaders
 		public function calculateTexCoordXY(texCoord : Point, normal : Vector3D) : void 
 		{
         
-			texCoord.x = 0.5 + (normal.x / 2);
-			texCoord.y = 0.5 + (-normal.y / 2);
+			texCoord.x = (normal.x+1) / 2;
+			texCoord.y =1-( (normal.y+1) / 2);
 		}
 
 		public function calculateTexCoordZ(texCoord : Point, normal : Vector3D) : void 
 		{
-			texCoord.x = 0.5 + (normal.z / 2) * -1;
-			texCoord.y = texCoord.x;
+			texCoord.x =1-( (normal.z +1) /2);
+			texCoord.y = (normal.y+1) / 2;
 		}
 
 		// normal calculation
@@ -280,7 +280,7 @@ package open3d.materials.shaders
 			
 			//blue
 			var fillType : String = GradientType.LINEAR;
-			var colors : Array = [0xFFFFFF, 0x000000];
+			var colors : Array = [0x000000, 0xFFFFFF ];
 			var alphas : Array = [1, 1];
 			var ratios : Array = [0x00, 0xFF];
 			var matrix : Matrix = new Matrix();
