@@ -4,15 +4,15 @@ package
 	import flash.utils.getTimer;
 	
 	import jiglib.physics.RigidBody;
-	import jiglib.plugin.*;
+	import jiglib.plugin.away3dn.Away3DNMesh;
 	import jiglib.plugin.away3dn.Away3DNPhysics;
 	
 	import open3d.materials.LineMaterial;
-	import open3d.objects.Object3D;
 	import open3d.view.SimpleView;
 
 	[SWF(width=800,height=600,backgroundColor=0x666666,frameRate=30)]
 	/**
+	 * ExFallingBalls
 	 * @author bartekd
 	 * @author katopz
 	 */
@@ -33,7 +33,10 @@ package
 				cube.material.restitution = .1;
 				cubes[i] = cube;
 			}
-
+			
+			camera.y = 500;
+			camera.z = 2000;
+			
 			refresh();
 
 			stage.addEventListener(MouseEvent.CLICK, refresh);
@@ -46,8 +49,9 @@ package
 				cube.x = Math.random() * 900 - Math.random() * 900;
 				cube.y = 200 + Math.random() * 3000;
 				cube.z = Math.random() * 900 - Math.random() * 900;
-				//cube.rotationY = 360 * Math.random();
-				//cube.rotationZ = 360 * Math.random();
+				cube.rotationX = 360 * Math.random();
+				cube.rotationY = 360 * Math.random();
+				cube.rotationZ = 360 * Math.random();
 				cube.setActive();
 			}
 			maxtime = 0;
@@ -59,14 +63,7 @@ package
 			var time:int = getTimer();
 			physics.step();
 
-			var world:Object3D = renderer.world;
-			world.rotationY = 180;// + (mouseX - stage.stageWidth / 2) / 5;
-			world.rotationZ = 180;// + (mouseY - stage.stageHeight / 2) / 10;
-			//world.rotationY++;
-
-			world.y = 500;
-			world.z = 2000;
-			world.rotationX = 10;
+			camera.lookAt(Away3DNMesh(RigidBody(cubes[0]).skin).mesh);
 			
 			time = getTimer()-time;
 			if(maxtime<time)maxtime=time;
