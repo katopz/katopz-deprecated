@@ -75,6 +75,8 @@ package com.sleepydesign.events
 		
 		// _____________________ View _____________________
 		
+		// on stage
+		public static const ON_STAGE:String = "SDstage";
 		// view create
 		public static const CREATE:String = "SDcreate";
 		// view draw

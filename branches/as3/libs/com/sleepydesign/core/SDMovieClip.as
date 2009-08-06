@@ -32,20 +32,28 @@ package com.sleepydesign.core
 		
 		public var clip	:MovieClip;
 		 
-		public function SDMovieClip(id:String=null, source:MovieClip=null, xml:XML=null):void
+		public function SDMovieClip()//id:String=null, source:MovieClip=null, xml:XML=null):void
 		{
 			super();
-			
+			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
+			//init();
+		}
+		
+        // ______________________________ Initialize ______________________________
+        
+		public function init(raw:Object=null):void
+		{			
+			if(!raw)return;
 			// collector
-			this.id = id?id:name;
+			raw.id = this.id = raw.id?raw.id:name;
 			
 			//var element:DisplayObject = SDContainer.getCollector().findBy(id);
 			//trace("\n\n\nelement:"+element["id"]);
 			
 			// internal or exported for
-			clip = source?source:this;
+			clip = raw.source?raw.source:this;
 			
-			trace(" ! SDMovieClip\t: "+id, clip, clip.visible);
+			trace(" ! SDMovieClip\t: "+this.id, clip, clip.visible);
 			
 			/*
 			// if not export for SDMovieClip then use cloak mode
@@ -57,15 +65,17 @@ package com.sleepydesign.core
 			}
 			*/
 			
+			/*
 			clip.alpha = 1;
 			this.alpha = 0;
 			
 			this.visible = clip.visible;
 			clip.visible = true;
+			*/
 			
-			init({id:id, source:source, xml:xml});
+			//init({id:id, source:clip, xml:xml});
 			
-			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
+			//addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 			
 			// they got label let's see what they got
 			if(clip.currentLabels.length>0)
@@ -84,16 +94,11 @@ package com.sleepydesign.core
 			*/
 		}
 		
-        // ______________________________ Initialize ______________________________
-        
-		public function init(raw:Object=null):void
-		{
-			// build base elements
-		}
-		
 		protected function onStage(event:Event=null):void
 		{
+			if(!clip)clip=this;
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			root.dispatchEvent(new SDEvent(SDEvent.ON_STAGE));
 		}	
 		
 		protected function onFrameIsEnter(event:Event):void
