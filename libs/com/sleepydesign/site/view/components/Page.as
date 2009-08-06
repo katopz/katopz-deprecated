@@ -2,7 +2,7 @@ package com.sleepydesign.site.view.components
 {
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDGroup;
-	import com.sleepydesign.core.SDLayer;
+	import com.sleepydesign.core.SDMovieClip;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.model.vo.ContentVO;
 	import com.sleepydesign.utils.StringUtil;
@@ -13,7 +13,6 @@ package com.sleepydesign.site.view.components
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
-	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.utils.*;
 	
@@ -457,6 +456,12 @@ package com.sleepydesign.site.view.components
 					if(DisplayObjectContainer(content) && !clip)
 					{
 						clip = DisplayObjectContainer(content).getChildByName(sourceString)
+					}
+					
+					// case#3 SDMovieClip.clip
+					if(DisplayObjectContainer(content) && !clip)
+					{
+						clip = SDMovieClip(content).clip.getChildByName(sourceString)
 					}
 					
 					trace(" ! Clip\t: "+sourceString+":"+clip);

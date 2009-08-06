@@ -24,8 +24,6 @@ package com.sleepydesign.site.view.components
 	import flash.text.TextField;
 	import flash.utils.*;
 	
-	import gs.TweenMax;
-	
 	/* ---------------------------------------------------------------
 	
 	[Content] ( id, source, xml ) : act like file please :P
@@ -235,9 +233,12 @@ package com.sleepydesign.site.view.components
 		// Global 	:	Site[config.xml] -> update
 		// Internal :	Self[config.xml] -> update
 		
+		private var _data_xml:XML;
 		override public function update(data:Object=null):void
 		{
-			if(data.xml==data.xml)
+			// no need to update old xml data
+			//if(data.xml==_data_xml)return;
+			
 			//parse?
 			if(data.xml)
 			{
@@ -247,6 +248,9 @@ package com.sleepydesign.site.view.components
 					var xml:XML = XMLUtil.getXMLById(data.xml, data.id);
 					if(!StringUtil.isNull(xml))data.xml = xml;
 				}
+				
+				// mem last xml 
+				_data_xml = data.xml;
 				
 				type = !StringUtil.isNull(data.xml.@type)?String(data.xml.@type):null;
 				
@@ -369,6 +373,18 @@ package com.sleepydesign.site.view.components
 			}
   		}
   		
+  		// element(s) on stage state from SDMovieClip need parse config to element(s) 
+  		protected function onContentOnStage(event:SDEvent):void	
+  		{
+			trace(" ! onContentOnStage");
+			//if(event && event.target)
+			//	event.target.removeEventListener(SDEvent.ON_STAGE, onContentOnStage);
+			
+			// ready from event, not manual call
+			if(event)
+				applyConfig();
+  		}
+  		
   		// element(s) on ready state from SDMovieClip need parse config to element(s) 
 		protected function onContentReady(event:SDEvent=null):void	
 		{
@@ -376,7 +392,8 @@ package com.sleepydesign.site.view.components
 			if(event && event.target)
 				event.target.removeEventListener(SDEvent.READY, onContentReady);
 			
-			if(event)
+			// ready from event, not manual call
+			if(event && _data && _data.xml!=_data_xml)
 				applyConfig();
 		}
 		
@@ -601,20 +618,26 @@ package com.sleepydesign.site.view.components
 			else if(content is MovieClip )//&& MovieClip(content).currentLabels.length>0)
 			{		
 				// bad boy cloak it!
-				content = new SDMovieClip(id+"_MovieClip", MovieClip(content));
+				var _content_MovieClip:SDMovieClip = new SDMovieClip();//id+"_MovieClip", MovieClip(content));
+				_content_MovieClip.init({id:id+"_MovieClip", source:content});
 				
 				// add base content
-				addContent(content);
-				
+				//addContent(content);
+
+				// child ON_STAGE
+				content.addEventListener(SDEvent.ON_STAGE, onContentOnStage, false, 0, true);
+
 				// got "ready" label
-				if(SDMovieClip(content).clip.currentLabels.length>0)
+				if(_content_MovieClip.clip.currentLabels.length>0)
 				{
-					trace(" ! Labels\t: "+SDMovieClip(content).clip.currentLabels.length)
+					trace(" ! Labels\t: "+_content_MovieClip.clip.currentLabels.length)
 					// tell me again whenever you ready
-					content.addEventListener(SDEvent.READY, onContentReady, false, 0, true);
+					_content_MovieClip.addEventListener(SDEvent.READY, onContentReady, false, 0, true);
 				}else {
 					onContentReady();
 				}
+				
+				content = _content_MovieClip
 			}
 			
 			trace(" * Create\t: " + content);
@@ -623,7 +646,7 @@ package com.sleepydesign.site.view.components
 			
 			// TODO : transition = script, label, classic
 			// ------------------------- TODO : inner transition -------------------------
-			
+			/*
 			// hide
 			if(destroyable && dirty)
 			{
@@ -651,7 +674,7 @@ package com.sleepydesign.site.view.components
 					TweenMax.to(content, .5, {autoAlpha:_config.alpha});
 				}
 			}
-			
+			*/
 			dispatchEvent(new SDEvent(SDEvent.CREATE, {content:content}));
 		}
 		
