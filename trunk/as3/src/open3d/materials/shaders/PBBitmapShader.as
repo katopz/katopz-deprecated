@@ -1,5 +1,6 @@
 package open3d.materials.shaders 
 {
+	import flash.filters.ShaderFilter;
 	import flash.geom.Vector3D;
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Light;
@@ -56,7 +57,7 @@ package open3d.materials.shaders
 			
 			var normalMapBuilder : NormalMapBuilder = new NormalMapBuilder();
 			
-			var targetMap : BitmapData = _normalmapBitmapData ? _normalmapBitmapData : _texture;
+			var targetMap : BitmapData =  _texture;
 			// build a world map
 			var normalWorldMap : BitmapData = normalMapBuilder.getWorldNormalMap(targetMap, verticesIn, indices, uvtData, vertexNormals);
 			// blend the local and world normals
@@ -79,7 +80,7 @@ package open3d.materials.shaders
 			drawSprite.addChild(difuseSprite);
 			normalSprite.addChild(normalBitmap);
 			drawSprite.addChild(normalSprite);
-			normalSprite.blendShader = shader;
+			
 			
 		
 		
@@ -89,21 +90,21 @@ package open3d.materials.shaders
 		public function getUVData(m : Matrix3D) : Vector.<Number> 
 		{
 			
-			
+			shader = new Shader(new NormalShader() as ByteArray);
 			var v:Vector.<Vector3D> =m.decompose();
 			var matrixRot:Vector3D = v[1];
 	
 		
-			shader.data.x.value=[matrixRot.x];
+			shader.data.x.value=[-matrixRot.x];
 			shader.data.y.value=[-matrixRot.y];
-			shader.data.z.value=[matrixRot.z];
-			shader.data.xl.value=[0.5];
-			shader.data.yl.value=[0.0];
-			shader.data.zl.value=[-0.5];
+			shader.data.z.value=[-matrixRot.z];
+			shader.data.xl.value=[_light.direction.x];
+			shader.data.yl.value=[_light.direction.y];
+			shader.data.zl.value=[-_light.direction.z];
 			
 		
 			
-			normalSprite.blendShader = shader;
+			normalSprite.filters=[new ShaderFilter( shader)];
 			
 			texture.draw(drawSprite);
 			return _uvtData;

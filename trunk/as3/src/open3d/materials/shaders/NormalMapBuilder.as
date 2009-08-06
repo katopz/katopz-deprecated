@@ -280,7 +280,7 @@ package open3d.materials.shaders
 			
 			//blue
 			var fillType : String = GradientType.LINEAR;
-			var colors : Array = [0x000000, 0xFFFFFF ];
+			var colors : Array = [ 0xFFFFFF,0x000000 ];
 			var alphas : Array = [1, 1];
 			var ratios : Array = [0x00, 0xFF];
 			var matrix : Matrix = new Matrix();
