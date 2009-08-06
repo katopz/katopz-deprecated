@@ -23,6 +23,9 @@ package open3d.objects
 		public var vout:Vector.<Number>;
 		protected var _vout:Vector.<Number>;
 
+		// use them if object has normals (OBJ, collada)
+		protected var _vertexNormals:Vector.<Number>;
+
 		protected var _material:Material;
 
 		// internal
@@ -65,6 +68,7 @@ package open3d.objects
 
 		public function Object3D():void
 		{
+		
 			vin = _vin = new Vector.<Number>();
 			_transform_matrix3D = transform.matrix3D = new Matrix3D();
 			_material = new Material();
@@ -98,8 +102,8 @@ package open3d.objects
 			if (material is IShader)
 			{
 				var shader:IShader = material as IShader;
-				//TODO if the the model has vertex normals DAE, collada), use them
- 				shader.calculateNormals(_vin, _triangles.indices,_uvtData);
+				
+ 				shader.calculateNormals(_vin, _triangles.indices,_uvtData,_vertexNormals);
 			}
 			
 			// no faces?, calculate screenZ from Object XYZ 

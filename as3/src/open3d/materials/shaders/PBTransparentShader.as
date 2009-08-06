@@ -1,5 +1,6 @@
 package open3d.materials.shaders 
 {
+	import flash.filters.ShaderFilter;
 	import flash.geom.Vector3D;
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Light;
@@ -14,16 +15,17 @@ package open3d.materials.shaders
 	/**
 	 * @author kris@neuroproductions
 	 */
-	public class PBBitmapShader extends BitmapMaterial implements IShader
+	public class PBTransparentShader extends BitmapMaterial implements IShader
 	{
 
 		[Embed("../../pixelbender/LocalGlobalNormalBlend.pbj", mimeType="application/octet-stream")]
 		private var BlendShader : Class;
 
-		[Embed("../../pixelbender/NormalMapAbstractShader.pbj", mimeType="application/octet-stream")]
-		private var NormalShader : Class;
+		/*[Embed("../../pixelbender/NormalMapAbstractShader.pbj", mimeType="application/octet-stream")]
+		private var NormalShader : Class;*/
 
-		
+		[Embed("../../pixelbender/NormalMapTransparent.pbj", mimeType="application/octet-stream")]
+		private var NormalShader : Class;
 
 
 		protected var _uvtData : Vector.<Number>;
@@ -39,13 +41,13 @@ package open3d.materials.shaders
 		protected var normalSprite:Sprite =new Sprite();
 		protected var difuseSprite:Sprite =new Sprite();
 		
-		public function PBBitmapShader(light : Light,difuseBitmapData : BitmapData = null,normalmapBitmapData : BitmapData = null) 
+		public function PBTransparentShader(light : Light,difuseBitmapData : BitmapData = null,normalmapBitmapData : BitmapData = null) 
 		{
 			_light = light;
 			_difuseBitmapData = difuseBitmapData;
 			_normalmapBitmapData = normalmapBitmapData;
 			shader = new Shader(new NormalShader() as ByteArray);
-			
+			shader.data.layer2.input =_difuseBitmapData.clone();
 			difuseBitmap = new Bitmap(difuseBitmapData.clone());
 			difuseSprite.addChild(difuseBitmap);
 			super(difuseBitmapData);
@@ -76,10 +78,7 @@ package open3d.materials.shaders
 			//texture = normalWorldMap;
 
 			normalBitmap = new Bitmap(normalWorldMap);
-			drawSprite.addChild(difuseSprite);
-			normalSprite.addChild(normalBitmap);
-			drawSprite.addChild(normalSprite);
-			normalSprite.blendShader = shader;
+		
 			
 		
 		
@@ -95,17 +94,20 @@ package open3d.materials.shaders
 	
 		
 			shader.data.x.value=[matrixRot.x];
-			shader.data.y.value=[-matrixRot.y];
+			shader.data.y.value=[matrixRot.y];
 			shader.data.z.value=[matrixRot.z];
-			shader.data.xl.value=[0.5];
-			shader.data.yl.value=[0.0];
-			shader.data.zl.value=[-0.5];
+			
+			
+			//shader.data.layer2.input =_difuseBitmapData.clone();
+			/*shader.data.xl.value=[0];
+			shader.data.yl.value=[0];
+			shader.data.zl.value=[1];*/
 			
 		
 			
-			normalSprite.blendShader = shader;
-			
-			texture.draw(drawSprite);
+			normalBitmap.filters =[new ShaderFilter(shader) ]
+		
+			texture.draw(normalBitmap);
 			return _uvtData;
 		}
 	}
