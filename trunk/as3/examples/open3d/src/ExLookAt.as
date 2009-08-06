@@ -3,6 +3,7 @@ package
 	import flash.events.MouseEvent;
 	
 	import open3d.materials.BitmapFileMaterial;
+	import open3d.objects.Object3D;
 	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
 
@@ -25,10 +26,12 @@ package
 		{
 			var segment:uint = 10;
 
-			sphere0 = new Sphere(50, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
+			sphere0 = new Sphere(100, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
+			sphere0.name = "sphere0";
 			renderer.addChild(sphere0);
 			
 			sphere1 = new Sphere(50, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
+			sphere1.name = "sphere1";
 			renderer.addChild(sphere1);
 			
 			//sphere1.isFrustumCulling = true;
@@ -43,24 +46,27 @@ package
 			isLookAt = !isLookAt;
 		}
 		
+		private var target:Object3D;
+		
 		override protected function draw():void
 		{
 			//sphere0.rotationY += 2;
 			//sphere1.rotationY -= 2;
 
 			sphere1.x = 200 * Math.sin(step);
-			sphere1.y = 200 * Math.cos(step);
+			//camera.y = 200 * Math.cos(step);
 
 			step += 0.1;
 			
 			if(isLookAt)
 			{
-				camera.lookAt(sphere1);
+				target = sphere1;
 			}else{
-				camera.lookAt(sphere0);
+				target = sphere0;
 			}
+			camera.lookAt(target);
 			
-			debugText.appendText(" click to toggle lookAt");
+			debugText.appendText(" click to toggle lookAt : "+target.name);
 		}
 	}
 }
