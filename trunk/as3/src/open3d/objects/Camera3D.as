@@ -38,6 +38,11 @@ package open3d.objects
 			angle = Math.atan2(w/2, Math.abs(matrix3D.position.length));
 		}
 		
+		public var m11 : Number = 0, m12 : Number = 0, m13 : Number = 0, m14 : Number = 0;
+		public var m21 : Number = 0, m22 : Number = 0, m23 : Number = 0, m24 : Number = 0;
+		public var m31 : Number = 0, m32 : Number = 0, m33 : Number = 0, m34 : Number = 0;
+		public var m41 : Number = 0, m42 : Number = 0, m43 : Number = 0, m44 : Number = 0;
+		
 		// TODO : must use world matrix invert instead like OpenGL
 		// not work when transfrom cam yet...fix later
 		public function lookAt( target:Object3D ):void
@@ -46,18 +51,44 @@ package open3d.objects
         	var forward:Vector3D = target.position.subtract(matrix3D.position);
             forward.normalize();
             
+            // compute the up vector
             var up:Vector3D = new Vector3D(0, 1, 0);
-            var left:Vector3D = new Vector3D(1, 0, 0);
             
             // compute the left vector
-    		left = up.crossProduct(forward);
+    		var left:Vector3D = up.crossProduct(forward);
     		left.normalize();
     		
     		// re-calculate the orthonormal up vector
     		up = forward.crossProduct(left);
     		up.normalize();
     		
-            matrix3D.pointAt(target.position, matrix3D.position, up);
+    		/*
+			m14 = m24 = m34 = 0;
+			m44 = 1;
+			
+			m11 = left.x;
+			m12 = left.y;
+			m13 = left.z;
+			m14 = -left.dotProduct(matrix3D.position);
+			
+			m21 = up.x;
+			m22 = up.y;
+			m23 = up.z;
+			m24 = -up.dotProduct(matrix3D.position);
+			
+			m31 = forward.x;
+			m32 = forward.y;
+			m33 = forward.z;
+			m34 = -forward.dotProduct(matrix3D.position);
+			
+			matrix3D = new Matrix3D(Vector.<Number>([
+								m11, m21, m31, m41,
+								m12, m22, m32, m42,
+								m13, m23, m33, m43,
+								m14, 0, -500, m44]))
+			*/
+			
+			matrix3D.pointAt(target.position, matrix3D.position, up);
 		}
 		
 		/*
