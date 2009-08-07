@@ -62,7 +62,7 @@ package
 			var layer:Sprite =new Sprite();
 			this.addChildAt(layer,1);
 			
-			objTrans = new OBJ("assets/flesh_creature.obj", new PBTransparentShader(light, back.bitmapData.clone(), normBm.bitmapData.clone()), 8);
+			objTrans = new OBJ("assets/flesh_creature.obj", new PBTransparentShader(light, back.bitmapData.clone()), 8);
 			objTrans.rotationX = -90;
 			objTrans .x = 200;
 			objTrans.layer =layer;
@@ -71,6 +71,7 @@ package
 			objShaded .x = -200;
 			renderer.addChild(objTrans);
 			renderer.addChild(objShaded);
+			renderer.addChild(light);
 		}
 
 		override protected function draw() : void
