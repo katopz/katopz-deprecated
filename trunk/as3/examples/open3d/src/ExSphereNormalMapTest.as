@@ -38,7 +38,7 @@ package
 
 		private var step : Number = 0;
 		private var light : Light;
-		private var mat1 : PBBitmapShader;
+		
 
 		
 		override protected function create() : void
@@ -47,9 +47,9 @@ package
 			var dfBm : Bitmap = new DiffMap() as Bitmap;
 			var normBm : Bitmap = new NormalMap() as Bitmap;
 			
-			var back: Bitmap = new BackgroundMap() as Bitmap;
 			
-			// Single Core = 35, Quad Core = 56
+			
+			// Single Core = ?, Quad Core = ?
 			var segment:uint = 40;
 			
 			
@@ -60,14 +60,15 @@ package
 			light.x = 0;
 			light.y =0;
 			
-			
+			var mat2:PBBitmapShader = new PBBitmapShader(light, dfBm.bitmapData.clone(),normBm.bitmapData.clone());
+ 			
 		
-			/*sphere = new Sphere(100, segment, segment,  new PBTransparentShader(light, back.bitmapData.clone()));
-			renderer.addChild(sphere);*/
+			sphere = new Sphere(100, segment, segment, mat2);
+			renderer.addChild(sphere);
  			var mat:PBBitmapShader = new PBBitmapShader(light, dfBm.bitmapData.clone(),normBm.bitmapData.clone());
- 			mat.drawSprite.x = 400;
- 			this.addChild(mat.drawSprite);
-			sphere2 = new Sphere(150, segment, segment, mat);
+ 			//mat.drawSprite.x = 400;
+ 			//this.addChild(mat.drawSprite);
+			sphere2 = new Sphere(50, segment, segment, mat);
 			renderer.addChild(sphere2);
 			renderer.addChild(light);
 		}
@@ -76,19 +77,19 @@ package
 		{
 		
 			
-			sphere2.rotationX += 2;
-			sphere2.rotationY += 0;
-			sphere2.rotationZ += 0;
-			light.x = Math.cos(step) * Math.cos(step/2) * 300
-			light.y = -Math.sin(step/2) * 300
-			light.z =Math.sin(step) * Math.cos(step) * 300
-			//sphere2.x = 200 * Math.sin(step);
-			//sphere2.z =200 * Math.cos(step);
-
-			step += 0.01;
+			sphere2.rotationX += 0;
+			sphere2.rotationY -=5;
+			sphere.rotationY += 5;
+			light.x = Math.cos(step*5)* 150;
+			light.y = Math.sin(step*5) *150;
 			
-			//camera.rotationY = (mouseX - stage.stageWidth / 2) / 10;
-			//camera.rotationX = -(mouseY - stage.stageHeight / 2) / 10;
+			sphere2.x = 230 * Math.sin(step);
+			sphere2.z =230 * Math.cos(step);
+
+			step += 0.03;
+			
+			camera.rotationY = (mouseX - stage.stageWidth / 2) / 50;
+			camera.rotationX = -(mouseY - stage.stageHeight / 2) / 50;
 			
 			
 		}
