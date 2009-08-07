@@ -131,7 +131,7 @@ package open3d.objects
 			{
 				var shader:IShader = material as IShader;			
 				var projectMatrix:Matrix3D = _transform_matrix3D.clone();
-				 projectMatrix.position =new Vector3D(0,0,0);
+				
 				_triangles.uvtData = shader.getUVData(projectMatrix);
 			}
 
