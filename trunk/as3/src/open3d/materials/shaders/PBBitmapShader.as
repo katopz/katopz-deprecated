@@ -93,14 +93,36 @@ package open3d.materials.shaders
 			
 			var v:Vector.<Vector3D> =m.decompose();
 			var matrixRot:Vector3D = v[1];
-	
-		
+			
+			var lightNormalX:Number;
+			var lightNormalY:Number;
+			var lightNormalZ:Number;
+			
+			
+			// direction light:
+			//	lightNormalX =_light.direction.x;
+			//	lightNormalY =_light.direction.y;
+			//	lightNormalZ =-_light.direction.z;
+			
+			// point light
+			
+			var lightVec:Vector3D =new Vector3D(_light.x,_light.y,_light.z) ;	
+			
+			
+			lightVec =lightVec.subtract(v[0]);
+			lightVec.normalize();
+			
+			
+			lightNormalX =-lightVec.x;
+			lightNormalY =-lightVec.y;
+			lightNormalZ =lightVec.z;
+			
 			shader.data.x.value=[matrixRot.x];
 			shader.data.y.value=[matrixRot.y];
 			shader.data.z.value=[matrixRot.z];
-			shader.data.xl.value=[_light.direction.x];
-			shader.data.yl.value=[_light.direction.y];
-			shader.data.zl.value=[-_light.direction.z];
+			shader.data.xl.value=[lightNormalX];
+			shader.data.yl.value=[lightNormalY];
+			shader.data.zl.value=[lightNormalZ];
 			shader.data.inputi.input = _difuseBitmapData;
 			_filter.shader = shader;
 			
