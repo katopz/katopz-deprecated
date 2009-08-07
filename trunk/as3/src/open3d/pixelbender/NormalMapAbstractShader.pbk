@@ -45,6 +45,7 @@ parameter float yl <
    >;
    //input image4 layer1;
     input image4 src;
+     input image3 inputi;
     output pixel4 dest;
 
 
@@ -54,9 +55,10 @@ parameter float yl <
     evaluatePixel()
     {
        
-       // pixel4 ld = sampleNearest(layer1, outCoord());
+      
         pixel4 ln = sampleNearest(src, outCoord());
-        pixel4 temp = ln; 
+        pixel3 ld = sampleNearest(inputi, outCoord());
+       pixel4 temp = ln; 
         
         
         //create a vector from the rgb values
@@ -71,11 +73,7 @@ parameter float yl <
         float3x3 Zrot =float3x3(cos(z),sin(z),0.0,-sin(z),cos(z),0.0,0.0,0.0,1.0);
         
         
-     /*  float3x3 Xrot =float3x3(1.0,0.0,0.0,0.0,cos(x),-sin(x),0,sin(x),cos(x));
-        float3x3 Yrot =float3x3(cos(y),0.0,sin(y),0.0,1.0,0.0,-sin(y),0.0,cos(y));
-        float3x3 Zrot =float3x3(cos(z),-sin(z),0.0,sin(z),cos(z),0.0,0.0,0.0,1.0);*/
-        
-        
+  
         float3 normal = vec*Xrot*Yrot*Zrot;
         
       
@@ -88,12 +86,16 @@ parameter float yl <
         //do stuff
         // calculate light value
        float pVal = normal.x *xl+normal.y*yl +normal.z *zl;
-        temp.r = pVal;
+        temp.r = pVal ;
         temp.g = pVal;
         temp.b = pVal;
         
+     pixel4 temp2;
+      temp2.rgb = ld.rgb;
+        temp2.a =1.0;
+         temp2+=0.3;
         //blend with layer 1
-      // temp = (temp+ld);
+       temp = temp*temp2;
 
         dest = temp ;
        

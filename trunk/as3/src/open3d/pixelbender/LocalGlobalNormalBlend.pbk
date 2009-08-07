@@ -23,13 +23,17 @@ kernel NewFilter
         pixel4 a = sampleNearest(layer1, outCoord());
         pixel4 b = sampleNearest(layer2, outCoord());
         
-         ///dont know if this is correct, seem to work
-        a.r +=(b.r-0.5)*0.5;
-        a.g +=(b.g-0.5)*0.5;
-        a.b +=(b.b-0.5)*0.5;
         
-      
+        float3 vec1 =float3((a.r-0.5)*2.0,(a.g-0.5)*2.0,(a.b-0.5)*2.0);
+        float3 vec2 =float3((b.r-0.5)*2.0,(b.g-0.5)*2.0,(b.b-0.5)*2.0);
+        float3 sum = vec1+(vec2*0.2);
        
-        result =a ;
+       //normalize
+       sum = sum /length(sum);
+       
+       a.r = (sum.x+1.0)/2.0;
+       a.g = (sum.y+1.0)/2.0;
+       a.b = (sum.z+1.0)/2.0;   
+       result =a ;
     }
 }

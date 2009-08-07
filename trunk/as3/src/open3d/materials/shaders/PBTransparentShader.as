@@ -40,17 +40,19 @@ package open3d.materials.shaders
 		protected var normalBitmap : Bitmap;
 		protected var normalSprite:Sprite =new Sprite();
 		protected var difuseSprite:Sprite =new Sprite();
-		
+		protected var _filter:ShaderFilter;
 		public function PBTransparentShader(light : Light,difuseBitmapData : BitmapData = null,normalmapBitmapData : BitmapData = null) 
 		{
 			_light = light;
-			_difuseBitmapData = difuseBitmapData;
+			var difbmd:BitmapData =new BitmapData( difuseBitmapData.width, difuseBitmapData.height,false);
+			difbmd.draw(difuseBitmapData );
+			_difuseBitmapData = difbmd;
 			_normalmapBitmapData = normalmapBitmapData;
 			shader = new Shader(new NormalShader() as ByteArray);
-			shader.data.layer2.input =_difuseBitmapData.clone();
+			_filter =new ShaderFilter(shader);
 			difuseBitmap = new Bitmap(difuseBitmapData.clone());
 			difuseSprite.addChild(difuseBitmap);
-			super(difuseBitmapData);
+			super(difuseBitmapData.clone());
 		}
 
 		public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>,uvtData : Vector.<Number> = null,vertexNormals : Vector.<Number> = null) : void
@@ -79,7 +81,7 @@ package open3d.materials.shaders
 
 			normalBitmap = new Bitmap(normalWorldMap);
 		
-			
+		
 		
 		
 			this._uvtData = uvtData;
@@ -98,14 +100,14 @@ package open3d.materials.shaders
 			shader.data.z.value=[matrixRot.z];
 			
 			
-			//shader.data.layer2.input =_difuseBitmapData.clone();
-			/*shader.data.xl.value=[0];
-			shader.data.yl.value=[0];
-			shader.data.zl.value=[1];*/
 			
-		
+			shader.data.xOffzet.value=[0];
+			shader.data.yOffzet.value=[0];
+			shader.data.val.value=[-100];
+			shader.data.inputi.input =_difuseBitmapData;
+			_filter.shader =shader;
 			
-			normalBitmap.filters =[new ShaderFilter(shader) ]
+			normalBitmap.filters =[_filter ];
 		
 			texture.draw(normalBitmap);
 			return _uvtData;

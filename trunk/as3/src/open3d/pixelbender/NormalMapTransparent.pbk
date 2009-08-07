@@ -25,21 +25,21 @@ parameter float y <
        defaultValue:float(0);
        description:"rotation around Z axis";
    >;
-  parameter float xl <
-       minValue:float(-1);
-       maxValue:float(1);
+  parameter float xOffzet <
+       minValue:float(-100);
+       maxValue:float(100);
        defaultValue:float(0.0);
-       description:"light direction normal X";
+       description:"x";
    >;
-parameter float yl <
-       minValue:float(-1);
-       maxValue:float(1);
+parameter float yOffzet <
+       minValue:float(-100);
+       maxValue:float(100);
        defaultValue:float(0.0);
-       description:"light direction normal y";
+       description:"y";
    >;
-  parameter float zl <
-       minValue:float(-1);
-       maxValue:float(1);
+  parameter float val <
+       minValue:float(-300);
+       maxValue:float(300);
        defaultValue:float(1);
        description:"light direction normal z";
    >;
@@ -54,7 +54,7 @@ parameter float yl <
     evaluatePixel()
     {
        
-       // pixel3 ld = sampleNearest(layer2, outCoord());
+       pixel3 ld = sampleNearest(layer2, outCoord());
         pixel4 ln = sampleNearest(layer1, outCoord());
         pixel4 temp = ln; 
         
@@ -67,13 +67,10 @@ parameter float yl <
        
         //create matrixes to rotate around xy and z axis
         float3x3 Xrot =float3x3(1.0,0.0,0.0,0.0,cos(x),sin(x),0,-sin(x),cos(x));
-        float3x3 Yrot =float3x3(cos(y),0.0,-sin(y),0.0,1.0,0.0,-sin(y),0.0,cos(y));
+        float3x3 Yrot =float3x3(cos(y),0.0,-sin(y),0.0,1.0,0.0,sin(y),0.0,cos(y));
         float3x3 Zrot =float3x3(cos(z),sin(z),0.0,-sin(z),cos(z),0.0,0.0,0.0,1.0);
         
         
-     /*  float3x3 Xrot =float3x3(1.0,0.0,0.0,0.0,cos(x),-sin(x),0,sin(x),cos(x));
-        float3x3 Yrot =float3x3(cos(y),0.0,sin(y),0.0,1.0,0.0,-sin(y),0.0,cos(y));
-        float3x3 Zrot =float3x3(cos(z),-sin(z),0.0,sin(z),cos(z),0.0,0.0,0.0,1.0);*/
         
         
         float3 normal = vec*Xrot*Yrot*Zrot;
@@ -90,8 +87,8 @@ parameter float yl <
         */
         
        float2 test;
-        test.x = ( temp.r-0.5)  *100.0;
-       test.y =( temp.g-0.5) *100.0;
+        test.x = ( temp.r-0.5)*temp.b  *val +xOffzet;
+       test.y =( temp.g-0.5)*temp.b  *val +yOffzet;
           temp.xyz = sampleNearest(layer2,outCoord()+ test);
          
         result = temp ;
