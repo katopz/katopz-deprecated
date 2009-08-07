@@ -1,15 +1,13 @@
 package
 {
-	import open3d.objects.Sphere;
-	import flash.filters.ShaderFilter;
-	import flash.utils.ByteArray;
-	import flash.display.Shader;
-	import flash.display.BlendMode;
 	import flash.display.Sprite;
+
+	import open3d.objects.Sphere;
+
 	import open3d.materials.shaders.PBBitmapShader;
 	import open3d.materials.shaders.PBTransparentShader;
 	import open3d.objects.Light;
-	import open3d.objects.OBJ;
+	
 	import open3d.view.SimpleView;
 
 	import flash.display.Bitmap;
@@ -59,35 +57,38 @@ package
 			
 		
 		
-			light.x = 20;
-			light.y = 20;
+			light.x = 0;
+			light.y =0;
 			
 			
 		
-			sphere = new Sphere(100, segment, segment,  new PBTransparentShader(light, back.bitmapData.clone()));
-			renderer.addChild(sphere);
-
-			sphere2 = new Sphere(50, segment, segment, new PBBitmapShader(light, dfBm.bitmapData.clone(), normBm.bitmapData.clone()));
+			/*sphere = new Sphere(100, segment, segment,  new PBTransparentShader(light, back.bitmapData.clone()));
+			renderer.addChild(sphere);*/
+ 			var mat:PBBitmapShader = new PBBitmapShader(light, dfBm.bitmapData.clone(),normBm.bitmapData.clone());
+ 			mat.drawSprite.x = 400;
+ 			this.addChild(mat.drawSprite);
+			sphere2 = new Sphere(150, segment, segment, mat);
 			renderer.addChild(sphere2);
+			renderer.addChild(light);
 		}
 
 		override protected function draw() : void
 		{
 		
 			
-			sphere.rotationY += 2;
-			sphere2.rotationY -= 2;
+			sphere2.rotationX += 2;
+			sphere2.rotationY += 0;
+			sphere2.rotationZ += 0;
+			light.x = Math.cos(step) * Math.cos(step/2) * 300
+			light.y = -Math.sin(step/2) * 300
+			light.z =Math.sin(step) * Math.cos(step) * 300
+			//sphere2.x = 200 * Math.sin(step);
+			//sphere2.z =200 * Math.cos(step);
 
-			light.x = 200 * Math.sin(step);
-			light.y = 200 * Math.cos(step);
+			step += 0.01;
 			
-			sphere2.x = 200 * Math.sin(step);
-			sphere2.z =200 * Math.cos(step);
-
-			step += 0.1;
-			
-			camera.rotationY = (mouseX - stage.stageWidth / 2) / 10;
-			camera.rotationX = -(mouseY - stage.stageHeight / 2) / 10;
+			//camera.rotationY = (mouseX - stage.stageWidth / 2) / 10;
+			//camera.rotationX = -(mouseY - stage.stageHeight / 2) / 10;
 			
 			
 		}
