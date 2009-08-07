@@ -511,6 +511,9 @@ package com.sleepydesign.site.view.components
 							button.removeEventListener(MouseEvent.CLICK, onClick);
 							button.addEventListener(MouseEvent.CLICK, onClick);
 							
+							button.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
+							button.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+							
 							if(!links)links = new SDGroup();
 							links.insert(itemXML, button);
 							return button;
@@ -709,6 +712,23 @@ package com.sleepydesign.site.view.components
 		*/
 		
 		// DIRTY
+		protected function onRollOver(event:MouseEvent):void
+		{
+			trace(" ! onRollOver");
+			var linkXML:XML = XML(links.find(event.target));
+			
+			// 2nd try
+			if(StringUtil.isNull(linkXML.@link))
+				 linkXML = XML(links.find(event.currentTarget))
+				 
+			if(!StringUtil.isNull(linkXML.@onRollOver))
+			{
+				trace(" ! onRollOver\t: " + linkXML.@onRollOver);
+				//URLUtil.getURL(linkXML.@href, linkXML.@target);
+				Navigation.getURL(linkXML.@id, linkXML.@onRollOver, "_self");
+			}
+		}
+		
 		protected function onClick(event:MouseEvent):void
 		{
 			trace(" ! onClick");

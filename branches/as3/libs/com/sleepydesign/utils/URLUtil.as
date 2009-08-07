@@ -110,7 +110,7 @@ package com.sleepydesign.utils
 		{
 			var result:String = "";
 
-			if (unescape(value).indexOf("http://") == 0 || SystemUtil.isBrowser())
+			if (unescape(value).indexOf("http://") == 0)
 			{
 				var myDate:Date = new Date();
 				if (value.indexOf("?") == -1)
