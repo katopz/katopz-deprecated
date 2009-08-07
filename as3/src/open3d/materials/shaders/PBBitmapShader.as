@@ -39,17 +39,17 @@ package open3d.materials.shaders
 		protected var normalBitmap : Bitmap;
 		protected var normalSprite:Sprite =new Sprite();
 		protected var difuseSprite:Sprite =new Sprite();
-		
+		protected var _filter:ShaderFilter;
 		public function PBBitmapShader(light : Light,difuseBitmapData : BitmapData = null,normalmapBitmapData : BitmapData = null) 
 		{
 			_light = light;
 			_difuseBitmapData = difuseBitmapData;
 			_normalmapBitmapData = normalmapBitmapData;
 			shader = new Shader(new NormalShader() as ByteArray);
-			
+			_filter =new ShaderFilter(shader);
 			difuseBitmap = new Bitmap(difuseBitmapData.clone());
 			difuseSprite.addChild(difuseBitmap);
-			super(difuseBitmapData);
+			super(difuseBitmapData.clone());
 		}
 
 		public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>,uvtData : Vector.<Number> = null,vertexNormals : Vector.<Number> = null) : void
@@ -82,7 +82,7 @@ package open3d.materials.shaders
 			drawSprite.addChild(normalSprite);
 			
 			
-		
+	
 		
 			this._uvtData = uvtData;
 		}
@@ -90,23 +90,23 @@ package open3d.materials.shaders
 		public function getUVData(m : Matrix3D) : Vector.<Number> 
 		{
 			
-			shader = new Shader(new NormalShader() as ByteArray);
+			
 			var v:Vector.<Vector3D> =m.decompose();
 			var matrixRot:Vector3D = v[1];
 	
 		
-			shader.data.x.value=[-matrixRot.x];
-			shader.data.y.value=[-matrixRot.y];
-			shader.data.z.value=[-matrixRot.z];
+			shader.data.x.value=[matrixRot.x];
+			shader.data.y.value=[matrixRot.y];
+			shader.data.z.value=[matrixRot.z];
 			shader.data.xl.value=[_light.direction.x];
 			shader.data.yl.value=[_light.direction.y];
 			shader.data.zl.value=[-_light.direction.z];
+			shader.data.inputi.input = _difuseBitmapData;
+			_filter.shader = shader;
 			
-		
+			normalSprite.filters=[_filter];
 			
-			normalSprite.filters=[new ShaderFilter( shader)];
-			
-			texture.draw(drawSprite);
+			texture.draw(normalSprite);
 			return _uvtData;
 		}
 	}
