@@ -48,7 +48,7 @@ package open3d.view
 			stage.quality = StageQuality.MEDIUM;
 			
 			// TODO : replace with get/set
-			camera = new Camera3D(stage.stageWidth, stage.stageHeight);
+			camera = new Camera3D(new Sprite(), stage.stageWidth, stage.stageHeight);
 			camera.projection.fieldOfView = 53;
 			camera.projection.focalLength = 500;
 			camera.z = -500;
@@ -56,10 +56,10 @@ package open3d.view
 			// camera dirty
 			camera.update();
 			
-			var canvas:Sprite = new Sprite();
-			addChild(canvas);
+			var viewPort:Sprite = new Sprite();
+			addChild(viewPort);
 			
-			renderer = new Renderer(camera, canvas);
+			renderer = new Renderer(camera, viewPort);
 
 			debugText = TextUtil.getTextField();
 			debugText.x = 80;

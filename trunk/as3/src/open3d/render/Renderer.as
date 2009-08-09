@@ -3,7 +3,6 @@ package open3d.render
 	import flash.display.*;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix3D;
-	import flash.geom.PerspectiveProjection;
 	
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Camera3D;
@@ -24,9 +23,11 @@ package open3d.render
 	{
 		public var totalFaces:int = 0;
 
-		// public var faster than get/set view
+		// public var faster than get/set viewPort
+		public var viewPort:Sprite;
+		private var _viewPort:Sprite;
+		
 		public var view:Sprite;
-		private var _view:Sprite;
 		
 		private var _camera:Camera3D;
 		public function set camera(value:Camera3D):void
@@ -38,7 +39,6 @@ package open3d.render
 		{
 			return _camera;
 		}
-
 		// still need Array for sortOn(faster than Vector sort)
 		public var childs:Array;
 		private var _childs:Array;
@@ -110,14 +110,14 @@ package open3d.render
 			return _type;
 		}
 		
-		public function Renderer(camera:Camera3D, canvas:DisplayObjectContainer)
+		public function Renderer(camera:Camera3D, viewPort:Sprite)
 		{
 			this.camera = camera;
+			this.view = camera.view;
 			
-			view = _view = new Sprite();
-			_view.x = canvas.stage.stageWidth / 2;
-			_view.y = canvas.stage.stageHeight / 2;
-			canvas.addChild(_view);
+			this.viewPort =_viewPort = viewPort;
+			_viewPort.x = _viewPort.stage.stageWidth / 2;
+			_viewPort.y = _viewPort.stage.stageHeight / 2;
 			
 			childs = _childs = [];
 
@@ -131,7 +131,7 @@ package open3d.render
 				return;
 				
 			// default layer
-			object3D.layer = object3D.layer?object3D.layer:_view;
+			object3D.layer = object3D.layer?object3D.layer:_viewPort;
 			_childs.push(object3D);
 		}
 
@@ -158,7 +158,7 @@ package open3d.render
 			// child.project faster than project(child) ~4-7fps
 			for each (child in _childs)
 			{
-				child.project(camera);
+				child.project(_camera);
 				
 				if(child.culled) continue;
 				
@@ -190,12 +190,12 @@ package open3d.render
 					
 					// DRAW TYPE #3 drawPath 
 					if(_isFaceDebug)
-						Mesh(child).debugFace(view.mouseX, view.mouseY, _graphics);
+						Mesh(child).debugFace(viewPort.mouseX, viewPort.mouseY, _graphics);
 					
 					// interactive	
 					if(_mouseEnable)
 					{
-						if(Mesh(child).hitTestPoint(view.mouseX, view.mouseY))
+						if(Mesh(child).hitTestPoint(viewPort.mouseX, viewPort.mouseY))
 							child.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE));
 					}
 				}
@@ -231,7 +231,7 @@ package open3d.render
 		// can be draw from external
 		public function drawGraphicsData(graphicsData:Vector.<IGraphicsData>):void
 		{
-			_view.graphics.drawGraphicsData(graphicsData);
+			_viewPort.graphics.drawGraphicsData(graphicsData);
 		}
    	}
 }
