@@ -21,9 +21,9 @@ package open3d.render
 		// the camera referential
 		private var vX:Vector3D = Vector3D.X_AXIS;
 		private var vY:Vector3D = Vector3D.Y_AXIS;
-		private var vZ:Vector3D = new Vector3D(0,0,-1);
+		private var vZ:Vector3D = Vector3D.Z_AXIS;
 		
-		private var angle:Number,nearD:Number, farD:Number, width:Number, height:Number;
+		private var angle:Number,nearD:Number, farD:Number;
 		
 		// NEW: these are the variables required to test spheres
 		private var sphereFactorX:Number, sphereFactorY:Number;
@@ -57,30 +57,30 @@ package open3d.render
 			sphereFactorX = 1.0/Math.cos(angleX); 
 		}
 		
-		public function setCamDef(p:Vector3D, l:Vector3D, u:Vector3D):void
+		public function setCamDef(position:Vector3D, left:Vector3D, up:Vector3D):void
 		{
-			cameraPosition = p.clone();
+			cameraPosition = position.clone();
 			
 			// compute the Z axis of the camera referential
 			// this axis points in the same direction from 
 			// the looking direction
-			vZ = l.subtract(p);
+			vZ = left.subtract(position);
 			vZ.normalize();
 		
 			// X axis of camera with given "up" vector and Z axis
-			vX = vZ.crossProduct(u);
+			vX = vZ.crossProduct(up);
 			vX.normalize();
 		
 			// the real "up" vector is the dot product of X and Z
 			vY = vX.crossProduct(vZ);
 		}
 		
-		public function pointInFrustum(p:Vector3D):int
+		public function pointInFrustum(position:Vector3D):int
 		{
-			var pcz:Number,pcx:Number,pcy:Number,aux:Number;
+			var pcz:Number, pcx:Number, pcy:Number, aux:Number;
 		
 			// compute vector from camera position to p
-			var v:Vector3D = p.subtract(cameraPosition);
+			var v:Vector3D = position.subtract(cameraPosition);
 		
 			// compute and test the Z coordinate
 			pcz = v.dotProduct(vZ);
@@ -102,14 +102,13 @@ package open3d.render
 			return INSIDE;
 		}
 		
-		// NEW: function to test spheres
-		public function sphereInFrustum(p:Vector3D, radius:Number):int
+		// function to test spheres
+		public function sphereInFrustum(position:Vector3D, radius:Number):int
 		{
-			var d:Number;
-			var az:Number, ax:Number, ay:Number;
+			var d:Number, az:Number, ax:Number, ay:Number;
 			var result:int = INSIDE;
 
-			var v:Vector3D = p.subtract(cameraPosition);
+			var v:Vector3D = position.subtract(cameraPosition);
 			
 			az = v.dotProduct(vZ);
 			
@@ -117,23 +116,27 @@ package open3d.render
 				return OUTSIDE;
 			
 			if (az > farD - radius || az < nearD+radius)
-				result = INTERSECT;
+				return INTERSECT;
 			
 			ay = v.dotProduct(vY);
 			d = sphereFactorY * radius;
 			az *= tanAngle;
+			
 			if (ay > az+d || ay < -az-d)
 				return OUTSIDE;
+			
 			if (ay > az-d || ay < -az+d)
-				result = INTERSECT;
+				return INTERSECT;
 			
 			ax = v.dotProduct(vX);
 			az *= ratio;
 			d = sphereFactorX * radius;
+			
 			if (ax > az+d || ax < -az-d)
 				return OUTSIDE;
+			
 			if (ax > az-d || ax < -az+d)
-				result = INTERSECT;
+				return INTERSECT;
 		
 			return result;
 		}

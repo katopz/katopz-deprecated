@@ -68,7 +68,6 @@ package open3d.objects
 
 		public function Object3D():void
 		{
-		
 			vin = _vin = new Vector.<Number>();
 			_transform_matrix3D = transform.matrix3D = new Matrix3D();
 			_material = new Material();
@@ -100,11 +99,7 @@ package open3d.objects
 			
 			// calculate normals for the shaders
 			if (material is IShader)
-			{
-				var shader:IShader = material as IShader;
-				
- 				shader.calculateNormals(_vin, _triangles.indices,_uvtData,_vertexNormals);
-			}
+ 				IShader(material).calculateNormals(_vin, _triangles.indices, _uvtData, _vertexNormals);
 			
 			// no faces?, calculate screenZ from Object XYZ 
 			if (_vin_length == 0)
@@ -115,37 +110,29 @@ package open3d.objects
 
 		public function project(camera:Camera3D):void
 		{
-			// can be optimize later
+			// projection matrix
 			var projectionMatrix3D:Matrix3D = camera.projection.toMatrix3D();
 
-			// object3d
+			// model matrix
 			_transform_matrix3D.transformVectors(_vin, _vout);
 
-			// camera3d
-			var cameraMatrix3D:Matrix3D = camera.matrix3D.clone();
-			cameraMatrix3D.invert();
-			cameraMatrix3D.transformVectors(_vout, _vout);
+			// view matrix
+			camera.viewMatrix3D.transformVectors(_vout, _vout);
 
-			// project the normals 
+			// project the normals
 			if (material is IShader)
-			{
-				var shader:IShader = material as IShader;			
-				var projectMatrix:Matrix3D = _transform_matrix3D.clone();
-				
-				_triangles.uvtData = shader.getUVData(projectMatrix);
-			}
+				_triangles.uvtData = IShader(material).getUVData(_transform_matrix3D.clone());
 
 			// project
 			Utils3D.projectVectors(projectionMatrix3D, _vout, _vertices, _uvtData);
 			
 			// frustum sphere culling
+			// TODO : apply camera transfrom, move to camera frustum
 			if(isFrustumCulling)
 			{
-				var cameraPosition:Vector3D = new Vector3D(camera.x, camera.y,camera.z);
-				frustumCuller.setCamInternals(camera.angle, camera.ratio, radius, camera.projection.focalLength*4);
-				frustumCuller.setCamDef(cameraPosition, Vector3D.Z_AXIS, Vector3D.Y_AXIS);
-				var result:int = frustumCuller.sphereInFrustum(new Vector3D(x, y, z), radius);
-				culled = (result==0);
+				frustumCuller.setCamInternals(camera.angle, camera.ratio, radius*2, camera.projection.focalLength*4);
+				frustumCuller.setCamDef(camera.matrix3D.position, camera.left, camera.up);
+				culled = (frustumCuller.sphereInFrustum(_transform_matrix3D.position, radius)==0);
 			}
 		}
 
