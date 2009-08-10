@@ -26,7 +26,7 @@ package
 			renderer.addChild(sphere);
 			sphere.y = -100;
 
-			renderer.world.rotationX = -30;
+			renderer.view.rotationX = -30;
 
 			renderer.isMeshZSort = false;
 			renderer.isFaceDebug = true;

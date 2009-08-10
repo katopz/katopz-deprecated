@@ -1,7 +1,8 @@
 package
 {
+	import flash.display.Sprite;
+	
 	import open3d.materials.BitmapFileMaterial;
-	import open3d.objects.Object3D;
 	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
 
@@ -33,15 +34,15 @@ package
 						sphere.z = gap * radius * k + gap * radius / 2;
 					}
 
-			renderer.world.rotationX = 30;
+			renderer.view.rotationX = 30;
 		}
 
 		override protected function draw():void
 		{
-			var world:Object3D = renderer.world;
-			world.rotationX = (mouseX - stage.stageWidth / 2) / 5;
-			world.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
-			world.rotationY++;
+			var view:Sprite = renderer.view;
+			view.rotationX = (mouseX - stage.stageWidth / 2) / 5;
+			view.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
+			view.rotationY++;
 
 			debugText.appendText(", ZSort : " + renderer.isMeshZSort + ", Right click for more option");
 		}

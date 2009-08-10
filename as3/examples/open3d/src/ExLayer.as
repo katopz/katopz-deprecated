@@ -1,10 +1,10 @@
 package
 {
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
-
+	
 	import open3d.materials.BitmapFileMaterial;
-	import open3d.objects.Object3D;
 	import open3d.objects.Plane;
 	import open3d.objects.Sphere;
 	import open3d.view.Layer;
@@ -43,7 +43,7 @@ package
 				renderer.addChild(sphere);
 			}
 
-			renderer.world.z = 1000;
+			renderer.view.z = 1000;
 
 			// ground always
 			ground = new Plane(256 * 4, 128 * 4, new BitmapFileMaterial("assets/sea01.jpg"), 1, 1);
@@ -69,10 +69,10 @@ package
 
 		override protected function draw():void
 		{
-			var world:Object3D = renderer.world;
-			world.rotationX = (mouseX - stage.stageWidth / 2) / 5;
-			world.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
-			world.rotationY++;
+			var view:Sprite = renderer.view;
+			view.rotationX = (mouseX - stage.stageWidth / 2) / 5;
+			view.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
+			view.rotationY++;
 		}
 	}
 }

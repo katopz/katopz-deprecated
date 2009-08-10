@@ -1,5 +1,6 @@
 package
 {
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -14,7 +15,6 @@ package
 	import jiglib.plugin.away3dn.Away3DNPhysics;
 	
 	import open3d.materials.LineMaterial;
-	import open3d.objects.Object3D;
 	import open3d.view.SimpleView;
 
 	[SWF(width=800,height=600,backgroundColor=0x666666,frameRate=30)]
@@ -147,7 +147,7 @@ package
 
 		private function handleMouseMove(event:MouseEvent):void
 		{
-			trace("handleMouseMove:"+event.target, renderer.view.mouseX);
+			trace("handleMouseMove:"+event.target, renderer.viewPort.mouseX);
 			if(isDown)
 			{
 				var ball:RigidBody = ballBody[event.target];
@@ -260,14 +260,14 @@ package
 			
 			physics.step();
 
-			var world:Object3D = renderer.world;
-			world.rotationY = 180;// + (mouseX - stage.stageWidth / 2) / 5;
-			world.rotationZ = 180;// + (mouseY - stage.stageHeight / 2) / 10;
+			var view:Sprite = renderer.view;
+			view.rotationY = 180;// + (mouseX - stage.stageWidth / 2) / 5;
+			view.rotationZ = 180;// + (mouseY - stage.stageHeight / 2) / 10;
 			//world.rotationY++;
 
-			world.y = 500;
-			world.z = 2000;
-			world.rotationX = 10;
+			view.y = 500;
+			view.z = 2000;
+			view.rotationX = 10;
 		}
 	}
 }
