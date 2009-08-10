@@ -24,8 +24,6 @@ distribution.
  */
 
 package jiglib.geometry {
-
-	import __AS3__.vec.Vector;
 	
 	import jiglib.math.*;
 	import jiglib.physics.PhysicsState;

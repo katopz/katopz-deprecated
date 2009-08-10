@@ -29,9 +29,6 @@ package
 			sphere2 = new Sphere(50, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
 			renderer.addChild(sphere2);
 			
-			sphere.z = 500;
-			sphere2.z = 500;
-			
 			// TODO : make default as true
 			sphere.isFrustumCulling = true;
 			sphere2.isFrustumCulling = true;

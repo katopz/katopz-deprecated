@@ -55,12 +55,12 @@ package
 
 		override protected function draw():void
 		{
-			var world:Object3D = renderer.world;
-			world.x = -(mouseX - stage.stageWidth / 2) / 10;
-			world.y = -(mouseY - stage.stageHeight / 2) / 10;
+			var view:Sprite = renderer.view;
+			view.x = -(mouseX - stage.stageWidth / 2) / 10;
+			view.y = -(mouseY - stage.stageHeight / 2) / 10;
 
-			if (renderer.view.height)
-				world.z += ((renderer.view.height + renderer.numChildren * 100) - world.z) / 25;
+			if (renderer.viewPort.height)
+				view.z += ((renderer.viewPort.height + renderer.numChildren * 100) - view.z) / 25;
 
 			var childs:Array = renderer.childs;
 			for each (var mesh:Mesh in childs)

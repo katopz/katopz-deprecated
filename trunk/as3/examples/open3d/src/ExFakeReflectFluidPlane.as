@@ -61,8 +61,8 @@ package
 
 			renderer.isMeshZSort = false;
 
-			renderer.world.y = -100;
-			renderer.world.z = 600;
+			renderer.view.y = -100;
+			renderer.view.z = 600;
 
 			isDebug = false;
 		}
@@ -84,7 +84,7 @@ package
 
 			renderer.removeChild(plane);
 
-			renderer.world.rotationX = 90 + 45;
+			renderer.view.rotationX = 90 + 45;
 
 			shuttle.scaleX = -shuttle.scaleX;
 
@@ -102,7 +102,7 @@ package
 
 			shuttle.scaleX = -shuttle.scaleX;
 
-			renderer.world.rotationX = 0;
+			renderer.view.rotationX = 0;
 
 			renderer.addChild(plane);
 			renderer.childs.reverse();

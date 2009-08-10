@@ -112,7 +112,7 @@ package
 			addChild(bg);
 
 			// add on top
-			addChild(renderer.view);
+			addChild(renderer.viewPort);
 
 			var textField:TextField = new TextField();
 			textField.textColor = 0xffffff;
@@ -176,7 +176,7 @@ package
 						sphere.z = gap * radius * k + gap * radius / 2;
 					}
 
-			renderer.world.rotationX = 30;
+			renderer.view.rotationX = 30;
 
 			//stage.addEventListener(MouseEvent.MOUSE_MOVE, toggleZSort);
 		}
@@ -278,10 +278,10 @@ package
 			   step+=0.001;
 			   }
 			 */
-			var world:Object3D = renderer.world;
-			world.rotationX = (mouseX - stage.stageWidth / 2) / 5;
-			world.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
-			world.rotationY++;
+			var view:Sprite = renderer.view;
+			view.rotationX = (mouseX - stage.stageWidth / 2) / 5;
+			view.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
+			view.rotationY++;
 
 			//debugText.appendText(", Move mouse left/right to toggle ZSort : " + renderer.isMeshZSort);
 		}

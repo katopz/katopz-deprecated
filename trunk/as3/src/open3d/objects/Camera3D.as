@@ -27,9 +27,10 @@ package open3d.objects
 		
 		public var view:Sprite;
 		
-		public function Camera3D(view:Sprite, w:Number, h:Number)
+		public function Camera3D(w:Number, h:Number)
 		{
-			this.view = view;
+			this.view = new Sprite();
+			
 			this.w = w;
 			this.h = h;
 			
@@ -49,10 +50,13 @@ package open3d.objects
 		{
 			ratio = w/h;
 			angle = Math.atan2(w, Math.abs(matrix3D.position.z));
+			
+			var _matrix3D:Matrix3D = matrix3D.clone();
+			_matrix3D.invert();
+			view.transform.matrix3D = _matrix3D;
 		}
 		
-		// TODO : must use world matrix invert instead like OpenGL
-		// not work when transfrom cam yet...fix later
+		// TODO : not work when transfrom cam yet...add later
 		public function lookAt( target:Object3D ):void
 		{
         	// compute the forward vector
@@ -77,10 +81,13 @@ package open3d.objects
 		
 		public function get viewMatrix3D():Matrix3D
 		{
-			var _matrix3D:Matrix3D = matrix3D.clone();
-			_matrix3D.invert();
-			view.transform.matrix3D = _matrix3D;
-			return _matrix3D;
+			return view.transform.matrix3D;
+		}
+		
+		override public function set z(value:Number):void
+		{
+			super.z = value;
+			update();
 		}
 		
 		/*

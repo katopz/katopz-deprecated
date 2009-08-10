@@ -24,7 +24,7 @@ distribution.
  */
 
 package jiglib.vehicles {
-	import __AS3__.vec.Vector;
+	
 	
 	import jiglib.math.JNumber3D;
 	import jiglib.physics.PhysicsSystem;

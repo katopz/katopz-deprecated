@@ -136,8 +136,8 @@ package
 		{
 			setMouseStuff()
 			
-			renderer.world.rotationX = rotX;
-			renderer.world.rotationY = rotY;
+			renderer.view.rotationX = rotX;
+			renderer.view.rotationY = rotY;
 			
 			var m:Matrix3D =  new Matrix3D();
 
@@ -147,7 +147,7 @@ package
 			m.prependRotation(rotY, Vector3D.X_AXIS, pp)
 			m.prependRotation(rotX, Vector3D.Y_AXIS, pp)
 			
-			//var m:Matrix3D = renderer.world.transform.matrix3D;
+			//var m:Matrix3D = renderer.view.transform.matrix3D;
 
 			var mLight:Matrix3D = new Matrix3D()
 			mLight.interpolateTo(m, 100)

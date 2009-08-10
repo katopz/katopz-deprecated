@@ -1,10 +1,8 @@
 package
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-
+	import flash.display.Sprite;
+	
 	import open3d.materials.BitmapFileMaterial;
-	import open3d.objects.Object3D;
 	import open3d.objects.SimpleCube;
 	import open3d.view.SimpleView;
 
@@ -26,10 +24,10 @@ package
 
 		override protected function draw():void
 		{
-			var world:Object3D = renderer.world;
-			world.rotationX = (mouseX - stage.stageWidth / 2) / 5;
-			world.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
-			world.rotationY++;
+			var view:Sprite = renderer.view;
+			view.rotationX = (mouseX - stage.stageWidth / 2) / 5;
+			view.rotationZ = (mouseY - stage.stageHeight / 2) / 5;
+			view.rotationY++;
 		}
 	}
 }

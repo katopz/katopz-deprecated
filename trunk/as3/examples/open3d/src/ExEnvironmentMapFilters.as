@@ -81,7 +81,7 @@ package
 
 		private function initView():void
 		{
-			removeChild(renderer.view);
+			removeChild(renderer.viewPort);
 
 			// init background
 			var bg:Bitmap = new Bitmap(new ReflBack().bitmapData);
@@ -90,7 +90,7 @@ package
 			addChild(bg);
 
 			// add on top
-			addChild(renderer.view);
+			addChild(renderer.viewPort);
 
 			var textField:TextField = new TextField();
 			textField.textColor = 0xffffff;
@@ -204,8 +204,8 @@ package
 				_surface.rotationY += (_startX - mouseX) * .01;
 				_surface.rotationX += (_startY - mouseY) * .01;
 
-				renderer.world.rotationX = _surface.rotationX;
-				renderer.world.rotationY = _surface.rotationY;
+				renderer.view.rotationX = _surface.rotationX;
+				renderer.view.rotationY = _surface.rotationY;
 
 				_filter.update(_surface);
 				_surface.filters = [_filter];
