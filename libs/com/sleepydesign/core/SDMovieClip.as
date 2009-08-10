@@ -98,7 +98,7 @@ package com.sleepydesign.core
 		{
 			if(!clip)clip=this;
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			root.dispatchEvent(new SDEvent(SDEvent.ON_STAGE));
+			root.dispatchEvent(new SDEvent(SDEvent.ON_STAGE, {clip:this}));
 		}	
 		
 		protected function onFrameIsEnter(event:Event):void
