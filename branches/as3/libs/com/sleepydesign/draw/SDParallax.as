@@ -13,6 +13,7 @@ package com.sleepydesign.draw
 	public class SDParallax extends SDContainer
 	{
 		private var instance:DisplayObjectContainer;
+		private var factorX:Number = 1;
 		
 		public function SDParallax(id:String=null, raw:Object=null)
 		{
@@ -23,12 +24,26 @@ package com.sleepydesign.draw
         
 		override public function init(raw:Object=null):void
 		{
+			elements = new SDGroup(id+"_elements");
 			instance = DisplayObjectContainer(raw.instance);
-        	var innerChild:DisplayObjectContainer = instance;
-        	var _numChildren:uint = innerChild.numChildren;
+			x = raw.x?raw.x:0;
+        	y = raw.y?raw.y:0;
+        	factorX = raw.factorX?raw.factorX:1;
         	
-        	x = raw.x;
-        	y = raw.y; 
+			/*
+			var innerChild:DisplayObjectContainer;
+			var _numChildren:uint = 0;
+			
+			if(!raw)return;
+			if(raw.instance)
+			{
+				instance = DisplayObjectContainer(raw.instance);
+        		innerChild = instance;
+        		_numChildren = innerChild.numChildren;
+   			}
+   			
+        	x = raw.x?raw.x:0;
+        	y = raw.y?raw.y:0; 
         	
         	elements = new SDGroup(id+"_elements");
         	
@@ -38,32 +53,41 @@ package com.sleepydesign.draw
             	
             	// only named one
             	if(_displayObject is MovieClip)
-            	{
-	            	var _name:String = _displayObject.name;
-	            	var z:uint = 10-uint(_name.split("_")[1]);
-	            	
-	            	var itemParallax:ItemParallax = new ItemParallax(_displayObject);
-	            	
-	            	itemParallax.z = z*25;
-	            	
-	            	trace(" ! ItemParallax : "+ _name, itemParallax.z);
-	            	
-	            	// reg
-	            	elements.insert(itemParallax);
-            	}
+	            	addItem(_displayObject);
             }
+            */
             
             // mouse
             instance.addEventListener(MouseEvent.MOUSE_MOVE, onMouseIsMove);
 		}
 		
+		public function addItem(displayObject:DisplayObject, depth:Number=0):void
+		{
+        	var _name:String = displayObject.name;
+        	var z:Number = depth;//?depth:10-uint(_name.split("_")[1]);
+        	
+        	var itemParallax:ItemParallax = new ItemParallax(displayObject);
+        	
+        	itemParallax.z = z*10;
+        	
+        	trace(" ! ItemParallax : "+ _name, itemParallax.z);
+        	
+        	// reg
+        	elements.insert(itemParallax);
+		}
+		
 		private function onMouseIsMove(event:MouseEvent):void
 		{
 			var _x:Number = -(event.stageX - x);
+			var _y:Number = -(event.stageY - y);
+			
 			for each(var itemParallax:ItemParallax in elements.childs)
 			{
 				var newX:Number = itemParallax._x+_x/itemParallax.z;//+ (_x - itemParallax._x)/itemParallax.z;
-				TweenMax.to(itemParallax, 0.5, {x:newX});
+				var newY:Number = itemParallax._y+_y/itemParallax.z;
+				
+				//newX = newX*2;
+				TweenMax.to(itemParallax, 0.5, {x:newX, y:newY});
 			}
 		}
 	}
@@ -75,7 +99,8 @@ package com.sleepydesign.draw
 	internal class ItemParallax
 	{
 		public var _x:Number = 0;
-		public var y:Number = 0;
+		public var _y:Number = 0;
+		
 		public var z:Number = 0;
 		
 		private var instance:DisplayObject;
@@ -85,7 +110,7 @@ package com.sleepydesign.draw
 			instance = source;
 			
 			_x = instance.x;
-			y = instance.y;
+			_y = instance.y;
 		}
 		
 		public function get x():Number
@@ -96,5 +121,15 @@ package com.sleepydesign.draw
 		public function set x(value:Number):void
 		{
 			instance.x = value;
+		}
+		
+		public function get y():Number
+		{
+			return instance.y;
+		}
+		
+		public function set y(value:Number):void
+		{
+			instance.y = value;
 		}
 	}
