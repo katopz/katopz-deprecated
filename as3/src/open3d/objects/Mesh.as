@@ -106,7 +106,7 @@ package open3d.objects
 			
 			super.project(camera);
 			
-			//if(!_faceIndexes)return;
+			if(!_faceIndexes)return;
 			var _faceIndexes_length:int = _faceIndexes.length;
 			if(_faceIndexes_length<=0)return;
 			
