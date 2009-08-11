@@ -17,8 +17,7 @@ package
 
 		override protected function create():void
 		{
-			//mqo = new MQO("assets/Messerschmitt_Bf_109.mqo", new BitmapFileMaterial("assets/Messerschmitt_Bf_109.jpg"));
-			mqo = new MQO("assets/kokeko.mqo");
+			mqo = new MQO("assets/gunner.mqo", new BitmapFileMaterial("assets/gunner.png"));
 			renderer.addChild(mqo);
 		}
 
