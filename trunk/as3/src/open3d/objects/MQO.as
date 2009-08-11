@@ -195,7 +195,7 @@ package open3d.objects
 					}
 				}
 
-				this.material = materials[name] = _material;
+				materials[name] = _material;
 
 			}
 
@@ -338,9 +338,9 @@ package open3d.objects
 
 				if (uv.length != 0)
 				{
-					uvC = new UV(parseFloat(uv[0]), 1 - parseFloat(uv[1]));
-					uvB = new UV(parseFloat(uv[2]), 1 - parseFloat(uv[3]));
-					uvA = new UV(parseFloat(uv[4]), 1 - parseFloat(uv[5]));
+					uvC = new UV(parseFloat(uv[0]),  parseFloat(uv[1]));
+					uvB = new UV(parseFloat(uv[2]),  parseFloat(uv[3]));
+					uvA = new UV(parseFloat(uv[4]),  parseFloat(uv[5]));
 					addFace(a, b, c, uvA, uvB, uvC);
 				}
 				else
