@@ -68,7 +68,7 @@ package com.sleepydesign.draw
         	
         	var itemParallax:ItemParallax = new ItemParallax(displayObject);
         	
-        	itemParallax.z = z*10;
+        	itemParallax.z = z;
         	
         	trace(" ! ItemParallax : "+ _name, itemParallax.z);
         	
@@ -78,6 +78,7 @@ package com.sleepydesign.draw
 		
 		private function onMouseIsMove(event:MouseEvent):void
 		{
+			/*	
 			var _x:Number = -(event.stageX - x);
 			var _y:Number = -(event.stageY - y);
 			
@@ -86,8 +87,29 @@ package com.sleepydesign.draw
 				var newX:Number = itemParallax._x+_x/itemParallax.z;//+ (_x - itemParallax._x)/itemParallax.z;
 				var newY:Number = itemParallax._y+_y/itemParallax.z;
 				
+				newX = (event.stageX-newX)/2;
+				newY = (event.stageY-newY)/2;
+				
 				//newX = newX*2;
 				TweenMax.to(itemParallax, 0.5, {x:newX, y:newY});
+			}
+			*/
+			var _x:Number = -(event.stageX - x);
+			var _y:Number = -(event.stageY - y);
+			for each(var itemParallax:ItemParallax in elements.childs)
+			{
+				//if(Math.abs(itemParallax._x - event.stageX)>100 || Math.abs(itemParallax._y - event.stageY)>100)
+				{
+					var newX:Number = itemParallax._x + (itemParallax._x - event.stageX)/10
+					var newY:Number = itemParallax._y + (itemParallax._y - event.stageY)/10
+				}
+				
+				if(Math.abs(itemParallax._x - event.stageX)<250 && Math.abs(itemParallax._y - event.stageY)<200)
+				{
+					TweenMax.to(itemParallax, 1, {x:newX, y:newY});
+				}else{
+					TweenMax.to(itemParallax, 1, {x:itemParallax._x, y:itemParallax._y});
+				}
 			}
 		}
 	}
