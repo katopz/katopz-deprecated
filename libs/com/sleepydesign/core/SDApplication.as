@@ -1,5 +1,6 @@
 package com.sleepydesign.core
 {
+	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
 	import flash.display.Stage;
@@ -67,7 +68,7 @@ package com.sleepydesign.core
 				configURI = flashVars["config"]?flashVars["config"]:configURI;
 			}
 			
-			configURI = URLUtil.killCache(configURI);
+			configURI = URLUtil.killCache(configURI, SystemUtil.isHTTP(this));
 			
 			instance = this;
 			

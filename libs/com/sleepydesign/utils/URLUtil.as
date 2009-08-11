@@ -106,11 +106,11 @@ package com.sleepydesign.utils
 			return results[results.length - 1];
 		}
 
-		public static function killCache(value:String):String
+		public static function killCache(value:String, isNeed:Boolean = false):String
 		{
 			var result:String = "";
 
-			if (unescape(value).indexOf("http://") == 0)
+			if (unescape(value).indexOf("http://") == 0 || isNeed)
 			{
 				var myDate:Date = new Date();
 				if (value.indexOf("?") == -1)
