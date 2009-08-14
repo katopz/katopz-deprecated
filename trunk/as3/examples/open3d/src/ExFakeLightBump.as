@@ -32,10 +32,10 @@ package
 		{
 			var segment:uint = 38;
 			sphere = new Sphere(100, segment, segment, new BitmapMaterial(tmp2));
-			renderer.addChild(sphere);
+			renderer.view.addChild(sphere);
 
 			lightSphere = new Sphere(10, 4, 4, new ColorMaterial(0x00FFFF));
-			renderer.addChild(lightSphere);
+			renderer.view.addChild(lightSphere);
 		}
 
 		override protected function draw():void

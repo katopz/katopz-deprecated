@@ -29,7 +29,7 @@ package
 		private function onClick(event:MouseEvent = null):void
 		{
 			var sphere:Sphere = new Sphere(100, 20, 20, new BitmapFileMaterial("assets/earth.jpg"));
-			renderer.addChild(sphere);
+			renderer.view.addChild(sphere);
 
 			var _numChildren:int = renderer.numChildren;
 

@@ -64,13 +64,13 @@ package
  			
 		
 			sphere = new Sphere(100, segment, segment, mat2);
-			renderer.addChild(sphere);
+			renderer.view.addChild(sphere);
  			var mat:PBBitmapShader = new PBBitmapShader(light, dfBm.bitmapData.clone(),normBm.bitmapData.clone());
  			//mat.drawSprite.x = 400;
  			//this.addChild(mat.drawSprite);
 			sphere2 = new Sphere(50, segment, segment, mat);
-			renderer.addChild(sphere2);
-			renderer.addChild(light);
+			renderer.view.addChild(sphere2);
+			renderer.view.addChild(light);
 		}
 
 		override protected function draw() : void

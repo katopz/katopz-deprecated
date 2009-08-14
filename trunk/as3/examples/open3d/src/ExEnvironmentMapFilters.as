@@ -125,7 +125,7 @@ package
 			var planeMaterial:BitmapMaterial = new BitmapMaterial(bitmapData);
 
 			plane = new Plane(_surface.width, _surface.height, planeMaterial, 10, 10);
-			renderer.addChild(plane);
+			renderer.view.addChild(plane);
 			plane.rotationX = -45;
 		}
 

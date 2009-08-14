@@ -28,7 +28,7 @@ package
 					{
 						var bitmapFileMaterial:BitmapFileMaterial = new BitmapFileMaterial("assets/earth.jpg");
 						sphere = new Sphere(radius, segment, segment, bitmapFileMaterial);
-						renderer.addChild(sphere);
+						renderer.view.addChild(sphere);
 						sphere.x = gap * radius * i + gap * radius / 2;
 						sphere.y = gap * radius * j + gap * radius / 2;
 						sphere.z = gap * radius * k + gap * radius / 2;

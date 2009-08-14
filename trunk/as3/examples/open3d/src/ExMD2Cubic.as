@@ -25,7 +25,7 @@ package
 					for (var k:int = -amount / 2; k < amount / 2; ++k)
 					{
 						var md2:MD2 = new MD2("assets/pg.md2", new BitmapFileMaterial("assets/pg.png"));
-						renderer.addChild(md2);
+						renderer.view.addChild(md2);
 						md2.x = gap * radius * i;
 						md2.y = gap * radius * j;
 						md2.z = gap * radius * k;

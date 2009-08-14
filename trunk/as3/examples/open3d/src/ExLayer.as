@@ -40,7 +40,7 @@ package
 				sphere.z = int(i % 3) * (128 + 10);
 				sphere.layer = layer1;
 
-				renderer.addChild(sphere);
+				renderer.view.addChild(sphere);
 			}
 
 			renderer.view.z = 1000;
@@ -49,7 +49,7 @@ package
 			ground = new Plane(256 * 4, 128 * 4, new BitmapFileMaterial("assets/sea01.jpg"), 1, 1);
 			ground.culling = "none";
 			ground.layer = layer0;
-			renderer.addChild(ground);
+			renderer.view.addChild(ground);
 
 			// is Mouse work?
 			ground.layer.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);

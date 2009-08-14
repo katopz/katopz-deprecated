@@ -19,7 +19,7 @@ package
 		override protected function create():void
 		{
 			simpleCube = new SimpleCube(100, new BitmapFileMaterial("assets/earth.jpg"));
-			renderer.addChild(simpleCube);
+			renderer.view.addChild(simpleCube);
 		}
 
 		override protected function draw():void

@@ -79,7 +79,7 @@ package jiglib.collision {
 			var box0State:PhysicsState = (newState)?box0.currentState:box0.oldState;
 			var box1State:PhysicsState = (newState)?box1.currentState:box1.oldState;
 			var boxPts:Vector.<JNumber3D> = box1.getCornerPoints(box1State);
-			var boxEdges:Vector.<*> = box1.edges;
+			var boxEdges:Vector.<Object> = box1.edges;
 			var outObj:Object;
 			for each(var boxEdge:* in boxEdges) {
 				outObj={};
@@ -256,7 +256,7 @@ package jiglib.collision {
 							  JNumber3D.cross(dirs1Arr[2], dirs0Arr[2])]);
 							
 			var l2:Number;
-			var overlapDepths:Vector.<*> = new Vector.<*>();
+			var overlapDepths:Vector.<Object> = new Vector.<Object>();
 			var i:uint=0;
 			for (i=0;i<axes.length;i++) {
 				overlapDepths[i] = 

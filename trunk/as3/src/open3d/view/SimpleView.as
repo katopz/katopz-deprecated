@@ -53,6 +53,9 @@ package open3d.view
 			camera.projection.focalLength = 500;
 			camera.z = -500;
 			
+			// matrix3D tricker
+			//addChild(camera.view);
+			
 			// camera dirty
 			camera.update();
 			

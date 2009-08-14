@@ -2,7 +2,6 @@ package open3d.render
 {
 	import flash.display.*;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix3D;
 	
 	import open3d.materials.BitmapMaterial;
 	import open3d.objects.Camera3D;
@@ -27,7 +26,7 @@ package open3d.render
 		public var viewPort:Sprite;
 		private var _viewPort:Sprite;
 		
-		public var view:Sprite;
+		public var view:Object3D;
 		
 		private var _camera:Camera3D;
 		public function set camera(value:Camera3D):void
@@ -39,15 +38,21 @@ package open3d.render
 		{
 			return _camera;
 		}
+		
 		// still need Array for sortOn(faster than Vector sort)
 		public var childs:Array;
 		private var _childs:Array;
 
 		public function get numChildren():int
 		{
-			return _childs.length;
+			if(_childs)
+			{
+				return _childs.length;
+			}else{
+				return 0;
+			}
 		}
-
+		
 		private var _isFaceDebug:Boolean;
 
 		public function set isFaceDebug(value:Boolean):void
@@ -113,18 +118,21 @@ package open3d.render
 		public function Renderer(camera:Camera3D, viewPort:Sprite)
 		{
 			this.camera = camera;
-			this.view = camera.view;
 			
 			this.viewPort =_viewPort = viewPort;
 			_viewPort.x = _viewPort.stage.stageWidth / 2;
 			_viewPort.y = _viewPort.stage.stageHeight / 2;
 			
-			childs = _childs = [];
+			this.view = camera.view;
+			view.renderer = this;
+			view.layer = _viewPort;
+			
+			childs = _childs = view.childs;
 
 			isMeshZSort = true;
 			isFaceZSort = true;
 		}
-		
+		/*
 		public function addChild(object3D:Object3D):void
 		{
 			if (!object3D)
@@ -132,9 +140,9 @@ package open3d.render
 				
 			// default layer
 			object3D.layer = object3D.layer?object3D.layer:_viewPort;
-			_childs.push(object3D);
+			view.addChild(object3D);
 		}
-
+		
 		public function removeChild(object3D:Object3D):void
 		{
 			if (!object3D)
@@ -142,9 +150,12 @@ package open3d.render
 				
 			_childs.splice(_childs.indexOf(object3D), 1);
 		}
-		
+		*/
 		public function render():void
 		{
+			// void
+			if(!_childs)return;
+			
 			// dispose
 			totalFaces = 0;
 			
@@ -172,7 +183,6 @@ package open3d.render
 					_graphics.drawGraphicsData(child.graphicsData);
 				}else{
 					// DRAW TYPE #2 drawTriangles
-					
 					if(child.material is BitmapMaterial)
 					{
 						var _child_triangles:GraphicsTrianglePath = child.triangles;

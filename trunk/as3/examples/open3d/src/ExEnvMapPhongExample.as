@@ -149,7 +149,7 @@ package
 			   var planeMaterial:BitmapMaterial = new BitmapMaterial(bitmapData);
 
 			   plane = new Plane(_surface.width, _surface.height, planeMaterial, 10, 10);
-			   renderer.addChild(plane);
+			   renderer.view.addChild(plane);
 			   plane.rotationX = -45;
 			 */
 
@@ -170,7 +170,7 @@ package
 					{
 						// TODO : share material
 						sphere = new Sphere(radius, segment, segment, new BitmapMaterial(bitmapData));
-						renderer.addChild(sphere);
+						renderer.view.addChild(sphere);
 						sphere.x = gap * radius * i + gap * radius / 2;
 						sphere.y = gap * radius * j + gap * radius / 2;
 						sphere.z = gap * radius * k + gap * radius / 2;

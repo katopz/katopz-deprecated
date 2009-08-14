@@ -18,7 +18,7 @@ package
 		override protected function create():void
 		{
 			cat = new MD2("assets/pg.md2", new BitmapFileMaterial("assets/pg.png"));
-			renderer.addChild(cat);
+			renderer.view.addChild(cat);
 		}
 
 		override protected function draw():void

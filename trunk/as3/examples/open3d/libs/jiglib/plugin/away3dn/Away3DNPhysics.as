@@ -37,7 +37,7 @@ package jiglib.plugin.away3dn
 		public function createSphere(material:Material, radius:Number = 100, segmentsW:int = 8, segmentsH:int = 6):RigidBody
 		{
 			var sphere:Sphere = new Sphere(radius, segmentsW, segmentsH, material);
-			renderer.addChild(sphere);
+			renderer.view.addChild(sphere);
 			var jsphere:JSphere = new JSphere(new Away3DNMesh(sphere), radius);
 			addBody(jsphere);
 			return jsphere;
@@ -46,7 +46,7 @@ package jiglib.plugin.away3dn
 		public function createCube(material:Material, width:Number = 100, depth:Number = 100, height:Number = 100):RigidBody
 		{
 			var cube:SimpleCube = new SimpleCube(width, material);
-			renderer.addChild(cube);
+			renderer.view.addChild(cube);
 			var jbox:JBox = new JBox(new Away3DNMesh(cube), width, depth, height);
 			addBody(jbox);
 			return jbox;
@@ -55,7 +55,7 @@ package jiglib.plugin.away3dn
 		public function createGround(material:Material, size:Number, level:Number):RigidBody
 		{
 			var ground:Plane = new Plane(size, size, material);
-			renderer.addChild(ground);
+			renderer.view.addChild(ground);
 			var jGround:JPlane = new JPlane(new Away3DNMesh(ground));
 			jGround.movable = false;
 			jGround.setOrientation(JMatrix3D.rotationX(Math.PI / 2));

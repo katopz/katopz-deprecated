@@ -25,9 +25,9 @@ package
 			// Z
 			var lineZ:Line3D = new Line3D(Vector.<Vector3D>([new Vector3D(0, 0, size)]), 0x0000FF);
 			
-			renderer.addChild(lineX);
-			renderer.addChild(lineY);
-			renderer.addChild(lineZ);
+			renderer.view.addChild(lineX);
+			renderer.view.addChild(lineY);
+			renderer.view.addChild(lineZ);
 
 			//isDebug = false;
 		}

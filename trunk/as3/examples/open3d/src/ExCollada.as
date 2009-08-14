@@ -18,7 +18,7 @@ package
 		override protected function create():void
 		{
 			collada = new Collada("assets/chameleon.dae", null, 0.01);
-			renderer.addChild(collada);
+			renderer.view.addChild(collada);
 			renderer.view.z = 4000;
 		}
 
