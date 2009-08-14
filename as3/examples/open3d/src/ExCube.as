@@ -27,7 +27,7 @@ package
 				new BitmapFileMaterial("assets/space3.jpg"),
 				new BitmapFileMaterial("assets/space2.jpg")
 				]));
-			renderer.addChild(cube);
+			renderer.view.addChild(cube);
 		}
 
 		override protected function draw():void

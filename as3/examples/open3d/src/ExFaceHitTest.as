@@ -21,7 +21,7 @@ package
 		override protected function create():void
 		{
 			plane = new Plane(256, 128, new BitmapFileMaterial("assets/sea01.jpg"), 10, 10);
-			renderer.addChild(plane);
+			renderer.view.addChild(plane);
 			plane.scaleX = plane.scaleY = plane.scaleZ = 2;
 			plane.y = 100;
 			plane.rotationX = -45;
@@ -29,7 +29,7 @@ package
 			plane.culling = "none";
 
 			sphere = new Sphere(100, 10, 10, new BitmapFileMaterial("assets/earth.jpg"));
-			renderer.addChild(sphere);
+			renderer.view.addChild(sphere);
 
 			renderer.isMeshZSort = false;
 			renderer.isFaceDebug = true;

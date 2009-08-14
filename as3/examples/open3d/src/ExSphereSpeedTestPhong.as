@@ -40,7 +40,7 @@ package
 			
 			var sphere:Sphere = new Sphere(100,20,20, new PhongColorMaterial(0xFF0000, light));
 			
-			renderer.addChild(sphere);
+			renderer.view.addChild(sphere);
 
 			var _numChildren:int = renderer.numChildren;
 

@@ -69,9 +69,9 @@ package
 			objShaded = new OBJ("assets/flesh_creature.obj", new PBBitmapShader(light, dfBm.bitmapData.clone(), normBm.bitmapData.clone()), 8);
 			objShaded.rotationX = -90;
 			objShaded .x = -200;
-			renderer.addChild(objTrans);
-			renderer.addChild(objShaded);
-			renderer.addChild(light);
+			renderer.view.addChild(objTrans);
+			renderer.view.addChild(objShaded);
+			renderer.view.addChild(light);
 		}
 
 		override protected function draw() : void

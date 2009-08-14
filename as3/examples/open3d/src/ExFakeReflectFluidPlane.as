@@ -43,7 +43,7 @@ package
 			shuttle.scaleX = shuttle.scaleY = shuttle.scaleZ = 2;
 			shuttle.rotationX = -90;
 			shuttle.rotationZ = 180;
-			renderer.addChild(shuttle);
+			renderer.view.addChild(shuttle);
 
 			bmp = new BitmapData(800, 600);
 			gd = createGradient(800, 600);
@@ -57,7 +57,7 @@ package
 			plane.rotationX = -45;
 			plane.y = 300;
 
-			renderer.addChild(plane);
+			renderer.view.addChild(plane);
 
 			renderer.isMeshZSort = false;
 
@@ -104,7 +104,7 @@ package
 
 			renderer.view.rotationX = 0;
 
-			renderer.addChild(plane);
+			renderer.view.addChild(plane);
 			renderer.childs.reverse();
 
 			stat.visible = true;

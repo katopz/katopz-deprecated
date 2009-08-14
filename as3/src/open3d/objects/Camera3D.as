@@ -1,7 +1,6 @@
 package open3d.objects
 {
 	import flash.display.Shape;
-	import flash.display.Sprite;
 	import flash.geom.Matrix3D;
 	import flash.geom.PerspectiveProjection;
 	import flash.geom.Vector3D;
@@ -13,7 +12,7 @@ package open3d.objects
 	public class Camera3D extends Shape
 	{
 		public var projection:PerspectiveProjection;
-		public var matrix3D:Matrix3D;
+		//public var matrix3D:Matrix3D;
 
 		// vector
 		public var forward:Vector3D;
@@ -25,18 +24,17 @@ package open3d.objects
 		public var ratio:Number;
 		public var angle:Number;
 		
-		public var view:Sprite;
+		public var view:Object3D;
 		
 		public function Camera3D(w:Number, h:Number)
 		{
-			this.view = new Sprite();
+			this.view = new Object3D();
 			
 			this.w = w;
 			this.h = h;
 			
 			projection = new PerspectiveProjection();
-			view.transform.matrix3D = new Matrix3D();
-			matrix3D = transform.matrix3D = new Matrix3D();
+			transform.matrix3D = new Matrix3D();
 			
 			up = Vector3D.Y_AXIS;
 			left = Vector3D.X_AXIS;
@@ -49,18 +47,22 @@ package open3d.objects
 		public function update():void
 		{
 			ratio = w/h;
-			angle = Math.atan2(w, Math.abs(matrix3D.position.z));
+			angle = Math.atan2(w, Math.abs(transform.matrix3D.position.z));
 			
-			var _matrix3D:Matrix3D = matrix3D.clone();
+			var _matrix3D:Matrix3D = transform.matrix3D.clone();
 			_matrix3D.invert();
-			view.transform.matrix3D = _matrix3D;
+			//view.transform.matrix3D = _matrix3D;
+			view.setMatrix3D(_matrix3D);
 		}
 		
 		// TODO : not work when transfrom cam yet...add later
 		public function lookAt( target:Object3D ):void
 		{
+    		var position:Vector3D = target.position.clone();
+    		position.negate();
+        	
         	// compute the forward vector
-        	forward = target.position.subtract(matrix3D.position);
+        	forward = position.subtract(transform.matrix3D.position);
             forward.normalize();
             
             // compute the up vector
@@ -74,8 +76,8 @@ package open3d.objects
     		up = forward.crossProduct(left);
     		up.normalize();
     		
-			matrix3D.pointAt(target.position, matrix3D.position, up);
-			
+    		// TODO : fix this ;p
+			transform.matrix3D.pointAt(position, transform.matrix3D.position, up);
 			update();
 		}
 		

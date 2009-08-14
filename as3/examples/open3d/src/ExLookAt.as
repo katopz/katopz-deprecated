@@ -28,11 +28,11 @@ package
 
 			sphere0 = new Sphere(100, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
 			sphere0.name = "sphere0";
-			renderer.addChild(sphere0);
+			renderer.view.addChild(sphere0);
 			
 			sphere1 = new Sphere(50, segment, segment, new BitmapFileMaterial("assets/earth.jpg"));
 			sphere1.name = "sphere1";
-			renderer.addChild(sphere1);
+			renderer.view.addChild(sphere1);
 			
 			//sphere1.isFrustumCulling = true;
 			
@@ -60,9 +60,9 @@ package
 			
 			if(isLookAt)
 			{
-				target = sphere1;
-			}else{
 				target = sphere0;
+			}else{
+				target = sphere1;
 			}
 			camera.lookAt(target);
 			

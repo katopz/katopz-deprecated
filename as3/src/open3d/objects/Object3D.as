@@ -6,6 +6,7 @@ package open3d.objects
 	import open3d.materials.Material;
 	import open3d.materials.shaders.IShader;
 	import open3d.render.FrustumCuller;
+	import open3d.render.Renderer;
 
 	/**
 	 * Object3D
@@ -13,6 +14,9 @@ package open3d.objects
 	 */
 	public class Object3D extends Sprite
 	{
+		// call back
+		public var renderer:Renderer;
+		
 		public var triangles:GraphicsTrianglePath;
 		protected var _triangles:GraphicsTrianglePath;
 
@@ -42,6 +46,9 @@ package open3d.objects
 		public var culled:Boolean = false;
 		public var radius:Number = 0;
 
+		public var childs:Array;
+		private var _childs:Array;
+		
 		// Layer
 		public var graphicsLayer:Graphics;
 		private var _graphicsLayer:Graphics;
@@ -60,21 +67,72 @@ package open3d.objects
 		
 		public function get position():Vector3D
 		{
-			return _transform_matrix3D.position;
+			if(parent is Object3D)
+			{
+				return Object3D(parent).position.add(transform.matrix3D.position);
+			}else{
+				return transform.matrix3D.position;
+			}
 		}
-		
+
 		// for async mesh
 		protected var _ready:Boolean = false;
 
 		public function Object3D():void
 		{
 			vin = _vin = new Vector.<Number>();
-			_transform_matrix3D = transform.matrix3D = new Matrix3D();
+			setMatrix3D(new Matrix3D());
 			_material = new Material();
 			
+			childs = _childs = [];
+			
+			// TODO : move frustumCuller to camera
 			frustumCuller = new FrustumCuller();
 		}
-
+		
+		public function setMatrix3D(matrix3D:Matrix3D):void
+		{
+			_transform_matrix3D = transform.matrix3D = matrix3D;
+		}
+		
+		override public function addChild(child:DisplayObject):DisplayObject
+		{
+			super.addChild(child);
+			
+			var _child:Object3D;
+			
+			if (child is Object3D)
+			{
+				_child = Object3D(child);
+				
+				// default layer = parent layer
+				if(layer)
+					_child.layer = layer;
+					
+				_childs.push(_child);
+				
+				// link to renderer
+				if(parent is Object3D && Object3D(parent).renderer)
+				{
+					renderer = Object3D(parent).renderer;
+					renderer.view.childs.push(_child);
+					for each (var _innerChild:Object3D in _child.childs)
+					{
+						renderer.view.childs.push(_innerChild);
+					}
+				} 
+			}
+			return child;
+		}
+		
+		override public function removeChild(child:DisplayObject):DisplayObject
+		{
+			if (!child)return null;
+			_childs.splice(_childs.indexOf(child), 1);
+			
+			return child;
+		}
+		
 		/**
 		 * must update once before project loop
 		 */
@@ -107,7 +165,17 @@ package open3d.objects
 			
 			_ready = true;
 		}
-
+		
+		// Hierarchic
+		public function updateTransform(object3D:Object3D):void
+		{
+			if(object3D && object3D.parent && object3D.parent is Object3D)
+			{
+				object3D.parent.transform.matrix3D.transformVectors(_vout, _vout);
+				updateTransform(Object3D(object3D.parent));
+			}
+		}
+		
 		public function project(camera:Camera3D):void
 		{
 			// projection matrix
@@ -115,10 +183,11 @@ package open3d.objects
 
 			// model matrix
 			_transform_matrix3D.transformVectors(_vin, _vout);
-
+			
 			// view matrix
-			camera.viewMatrix3D.transformVectors(_vout, _vout);
-
+			if(parent)
+				updateTransform(this);
+				
 			// project the normals
 			if (material is IShader)
 				_triangles.uvtData = IShader(material).getUVData(_transform_matrix3D.clone());
@@ -131,7 +200,7 @@ package open3d.objects
 			if(isFrustumCulling)
 			{
 				frustumCuller.setCamInternals(camera.angle, camera.ratio, radius*2, camera.projection.focalLength*4);
-				frustumCuller.setCamDef(camera.matrix3D.position, camera.left, camera.up);
+				frustumCuller.setCamDef(camera.transform.matrix3D.position, camera.left, camera.up);
 				culled = (frustumCuller.sphereInFrustum(_transform_matrix3D.position, radius)==0);
 			}
 		}

@@ -19,7 +19,7 @@ package
 		{
 			plane = new Plane(256, 128, new BitmapFileMaterial("assets/earth.jpg"), 10, 10);
 			plane.scaleX = plane.scaleY = plane.scaleZ = 2;
-			renderer.addChild(plane);
+			renderer.view.addChild(plane);
 			plane.rotationX = -45;
 		}
 

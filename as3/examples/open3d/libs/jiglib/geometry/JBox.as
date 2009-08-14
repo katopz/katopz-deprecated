@@ -1,45 +1,23 @@
-/*
-Copyright (c) 2007 Danny Chapman 
-http://www.rowlhouse.co.uk
-
-This software is provided 'as-is', without any express or implied
-warranty. In no event will the authors be held liable for any damages
-arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
-1. The origin of this software must not be misrepresented; you must not
-claim that you wrote the original software. If you use this software
-in a product, an acknowledgment in the product documentation would be
-appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be
-misrepresented as being the original software.
-3. This notice may not be removed or altered from any source
-distribution.
- */
-
-/**
- * @author Muzer(muzerly@gmail.com)
- * @link http://code.google.com/p/jiglibflash
- */
-
-package jiglib.geometry {
-	
+package jiglib.geometry 
+{
 	import jiglib.math.*;
 	import jiglib.physics.PhysicsState;
 	import jiglib.physics.RigidBody;
 	import jiglib.plugin.ISkin3D;
 	
+	/**
+	 * @author Muzer(muzerly@gmail.com)
+	 * @link http://code.google.com/p/jiglibflash
+	 */
 	public class JBox extends RigidBody {
-		
 		private var _sideLengths:JNumber3D;
 		private var _points:Vector.<JNumber3D>;
-		private var _edges:Vector.<*> = Vector.<*>([ { ind0:0, ind1:1 }, { ind0:3, ind1:1 }, { ind0:2, ind1:3 },
+		private var _edges:Vector.<Object> = Vector.<Object>([ { ind0:0, ind1:1 }, { ind0:3, ind1:1 }, { ind0:2, ind1:3 },
 			                         { ind0:2, ind1:0 }, { ind0:4, ind1:5 }, { ind0:5, ind1:7 },
 							         { ind0:6, ind1:7 }, { ind0:4, ind1:6 }, { ind0:7, ind1:1 },
 							         { ind0:5, ind1:3 }, { ind0:4, ind1:2 }, { ind0:6, ind1:0 } ]);
 										 
-		private var _face:Vector.<*> = Vector.<*>([[6, 7, 1, 0], [5, 4, 2, 3], 
+		private var _face:Vector.<Object> = Vector.<Object>([[6, 7, 1, 0], [5, 4, 2, 3], 
 								   [3, 1, 7, 5], [4, 6, 0, 2], 
 								   [1, 3, 2, 0], [7, 6, 4, 5]]);
 		 
@@ -79,7 +57,7 @@ package jiglib.geometry {
 			return _sideLengths;
 		}
 		
-		public function get edges():Vector.<*> {
+		public function get edges():Vector.<Object> {
 			return _edges;
 		}
 		 

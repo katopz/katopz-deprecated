@@ -26,7 +26,7 @@ package
 			addChild(earthBitmap);
 
 			plane = new Plane(256, 128, new BitmapFileMaterial("assets/earth.jpg"), 2, 2);
-			renderer.addChild(plane);
+			renderer.view.addChild(plane);
 			plane.culling = "none";
 		}
 

@@ -18,7 +18,7 @@ package
 		override protected function create():void
 		{
 			mqo = new MQO("assets/gunner.mqo", new BitmapFileMaterial("assets/gunner.png"));
-			renderer.addChild(mqo);
+			renderer.view.addChild(mqo);
 		}
 
 		override protected function draw():void

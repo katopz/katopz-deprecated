@@ -25,11 +25,11 @@ package
 		{
 			// Embed image
 			shuttle = new ASE("assets/shuttle.ase", new BitmapFileMaterial("assets/shuttle.jpg"));
-			renderer.addChild(shuttle);
+			renderer.view.addChild(shuttle);
 
 			// File image
 			barge = new ASE("assets/barge.ase", new BitmapFileMaterial("assets/barge.jpg"));
-			renderer.addChild(barge);
+			renderer.view.addChild(barge);
 		}
 
 		override protected function draw():void
