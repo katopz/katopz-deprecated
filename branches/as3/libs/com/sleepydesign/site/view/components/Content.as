@@ -418,6 +418,7 @@ package com.sleepydesign.site.view.components
 		// element magic
 		protected function parseItem(itemXML:XML):DisplayObject
 		{
+			try{
 			var clip:DisplayObjectContainer;
 			if(_config.source is DisplayObjectContainer)
 			{
@@ -532,6 +533,7 @@ package com.sleepydesign.site.view.components
 					}
 				break;
 			}
+			}catch(e:*){};
 			return null;
 		}
 		

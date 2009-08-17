@@ -63,6 +63,7 @@ package com.sleepydesign.draw
 		
 		public function addItem(displayObject:DisplayObject, depth:Number=0):void
 		{
+        	try{
         	var _name:String = displayObject.name;
         	var z:Number = depth;//?depth:10-uint(_name.split("_")[1]);
         	
@@ -74,6 +75,7 @@ package com.sleepydesign.draw
         	
         	// reg
         	elements.insert(itemParallax);
+        	}catch(e:*){};
 		}
 		
 		private function onMouseIsMove(event:MouseEvent):void
