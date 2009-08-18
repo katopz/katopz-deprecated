@@ -20,11 +20,11 @@ package
 		{
 		    //var model:ByteArray = new Model();
 		    var dae:DAE = new DAE();
-		    dae.load("../bin-debug/assets/man1/model.swf");
+		    
 		      
 			var engine3d:Engine3D = new Engine3D(this);
 			engine3d.addChild(dae);
-			  
+			dae.load("assets/man1/model.swf");
 			var _sp:Sphere = new Sphere(new WireframeMaterial());
 			engine3d.addChild(_sp);
 			
@@ -38,6 +38,8 @@ package
 			engine3d.camera.lookAt(_sp);
 			 
 			engine3d.start();
+			
+			alpha = .1
 		}
 	}
 }
