@@ -1,7 +1,7 @@
 ﻿package examples
 {
 	
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.playground.core.Engine3D;
 	
