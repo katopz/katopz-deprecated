@@ -67,6 +67,7 @@ package com.sleepydesign.game.core
 					model.instance = md2;
 					
 					break;
+				case "swf":
 				case "dae":
 					var dae:DAE = new DAE(true, "", true);
 					dae.addEventListener(FileLoadEvent.LOAD_COMPLETE, onModelComplete);
@@ -86,7 +87,8 @@ package com.sleepydesign.game.core
 					
 					//charactor.model = charactor.instance.addChild(dae);
 					break;
-				case "swf":
+				/*
+				case "swf2":
 					var sdLoader:SDLoader = new SDLoader();
 					sdLoader.addEventListener(SDEvent.COMPLETE, onSWFComplete);
 					
@@ -111,6 +113,7 @@ package com.sleepydesign.game.core
 					
 					model.instance = daeSWF;
 				break;
+				*/
 			}
 			
 			model.type = data.type;
@@ -118,6 +121,7 @@ package com.sleepydesign.game.core
 			return model;
 		}
 		
+		/*
 		private function onSWFComplete(event:SDEvent):void
 		{
 			// finish load model? let's chk in list
@@ -140,6 +144,7 @@ package com.sleepydesign.game.core
 			
 			characterData.model.instance.load(_ByteArray);
 		}
+		*/
 		
 		private function onModelComplete(event:FileLoadEvent):void
 		{
