@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="asdoc" default="main">
+	<property file="./build.properties" />
+	<target name="main" depends="clean,compile" description="full build of asdocs"/>
+	<target name="clean">
+		<delete dir="./bin/asdoc" failOnError="false" includeEmptyDirs="true"/>
+		<mkdir dir="./bin/asdoc"/>
+	</target>
+	<target name="compile" depends="clean">
+		<exec executable="${asdoc.exe}" failonerror="true">
+			<arg line='-doc-sources ${sourcePath}'/>
+			<arg line='-main-title "${title}"' />
+			<arg line='-window-title "${title}"' />
+			<arg line='-output ${outputfolder}' />
+		</exec>
+	</target>
+</project>

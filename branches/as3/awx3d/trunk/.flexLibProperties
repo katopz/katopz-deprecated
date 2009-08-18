@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="com.derschmale.wick3d.core.geometry.bounds.BoundingSphere"/>
+<classEntry path="com.derschmale.wick3d.display3D.primitives.SphereUV"/>
+<classEntry path="com.derschmale.wick3d.display3D.BoundingVolume"/>
+<classEntry path="com.derschmale.wick3d.core.io.MD2.vo.FrameMD2"/>
+<classEntry path="com.derschmale.wick3d.core.imagemaps.UVCoords"/>
+<classEntry path="com.derschmale.wick3d.core.clipping.PlaneClipper"/>
+<classEntry path="com.derschmale.wick3d.materials.TextureMaterial"/>
+<classEntry path="com.derschmale.wick3d.core.culling.SimpleNearCuller"/>
+<classEntry path="com.derschmale.wick3d.core.data.GeometryData"/>
+<classEntry path="com.derschmale.wick3d.core.geometry.bounds.AbstractBoundingVolume"/>
+<classEntry path="com.derschmale.wick3d.core.frustum.ViewFrustum"/>
+<classEntry path="com.derschmale.wick3d.core.math.Matrix3D"/>
+<classEntry path="com.derschmale.wick3d.core.pipeline.IRenderPipeline"/>
+<classEntry path="com.derschmale.wick3d.core.pipeline.RenderNotifier"/>
+<classEntry path="com.derschmale.wick3d.shaders.AbstractShader"/>
+<classEntry path="com.derschmale.wick3d.core.geometry.bounds.BoundingVolumeGenerator"/>
+<classEntry path="com.derschmale.wick3d.debug.StatsDisplay"/>
+<classEntry path="com.derschmale.wick3d.display3D.primitives.Cube3D"/>
+<classEntry path="com.derschmale.wick3d.core.objects.HierarchicObject3D"/>
+<classEntry path="com.derschmale.wick3d.shaders.FlatZShader"/>
+<classEntry path="com.derschmale.wick3d.core.culling.BackFaceCuller"/>
+<classEntry path="com.derschmale.wick3d.core.math.Transformation3D"/>
+<classEntry path="com.derschmale.wick3d.lights.AbstractLight"/>
+<classEntry path="com.derschmale.wick3d.core.geometry.bounds.IBoundingVolume"/>
+<classEntry path="com.derschmale.wick3d.core.pipeline.BSPRenderPipeline"/>
+<classEntry path="com.derschmale.wick3d.lights.ILight"/>
+<classEntry path="com.derschmale.wick3d.projections.IProjection"/>
+<classEntry path="com.derschmale.wick3d.display3D.primitives.Torus"/>
+<classEntry path="com.derschmale.wick3d.core.bsp.BspNode"/>
+<classEntry path="com.derschmale.wick3d.core.clipping.SimpleNearClipper"/>
+<classEntry path="com.derschmale.wick3d.materials.AbstractMaterial"/>
+<classEntry path="com.derschmale.wick3d.core.geometry.Triangle3D"/>
+<classEntry path="com.derschmale.wick3d.core.io.MD2.vo.VertexMD2"/>
+<classEntry path="com.derschmale.wick3d.materials.ColourMaterial"/>
+<classEntry path="com.derschmale.wick3d.core.culling.IFaceCuller"/>
+<classEntry path="com.derschmale.wick3d.materials.IMaterial"/>
+<classEntry path="com.derschmale.events.ImageLoaderEvent"/>
+<classEntry path="com.derschmale.wick3d.debug.GeneralStatData"/>
+<classEntry path="com.derschmale.wick3d.display3D.primitives.SkyDome"/>
+<classEntry path="com.derschmale.wick3d.materials.DisplayObjectMaterial"/>
+<classEntry path="com.derschmale.wick3d.materials.WireframeMaterial"/>
+<classEntry path="com.derschmale.wick3d.core.objects.Model3D"/>
+<classEntry path="com.derschmale.wick3d.display3D.Collada"/>
+<classEntry path="com.derschmale.wick3d.core.io.MD2.MD2Parser"/>
+<classEntry path="com.derschmale.wick3d.display3D.World3D"/>
+<classEntry path="com.derschmale.wick3d.core.clipping.FrustumClipper"/>
+<classEntry path="com.derschmale.wick3d.core.interaction.Mouse3DController"/>
+<classEntry path="com.derschmale.display.io.PCXLoader"/>
+<classEntry path="com.derschmale.wick3d.display3D.primitives.Cylinder"/>
+<classEntry path="com.derschmale.wick3d.core.math.Vector3D"/>
+<classEntry path="com.derschmale.wick3d.lights.PointLight"/>
+<classEntry path="com.derschmale.wick3d.core.geometry.Vertex3D"/>
+<classEntry path="com.derschmale.wick3d.projections.PerspectiveProjection"/>
+<classEntry path="com.derschmale.wick3d.core.pipeline.RenderPipeline"/>
+<classEntry path="com.derschmale.wick3d.events.Mouse3DEvent"/>
+<classEntry path="com.derschmale.wick3d.cameras.Camera3D"/>
+<classEntry path="com.derschmale.wick3d.core.clipping.ITriangleClipper"/>
+<classEntry path="com.derschmale.wick3d.display3D.MD2Model"/>
+<classEntry path="com.derschmale.wick3d.view.Viewport"/>
+<classEntry path="com.derschmale.wick3d.core.geometry.Plane"/>
+<classEntry path="com.derschmale.wick3d.display3D.primitives.Plane3D"/>
+<classEntry path="com.derschmale.wick3d.core.bsp.BspTree"/>
+<classEntry path="com.derschmale.wick3d.shaders.IShader"/>
+<classEntry path="com.derschmale.wick3d.core.io.collada.ColladaModel"/>
+<classEntry path="com.derschmale.wick3d.core.objects.SpatialObject3D"/>
+<classEntry path="com.derschmale.wick3d.events.RenderEvent"/>
+<classEntry path="com.derschmale.wick3d.core.culling.FrustumCuller"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests/>
+</flexLibProperties>
