@@ -1,14 +1,13 @@
 ﻿package
 {
-	import __AS3__.vec.Vector;
-	
+	import com.sleepydesign.application.core.SDApplication;
+	import com.sleepydesign.application.data.SDApplicationData;
 	import com.sleepydesign.components.SDChatBox;
 	import com.sleepydesign.components.SDConnector;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDMacPreloader;
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.components.SDTreeNode;
-	import com.sleepydesign.core.SDApplication;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.game.core.Characters;
@@ -33,13 +32,11 @@
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
-	
-	import gs.TweenMax;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate = "30", width = "800", height = "480")]
 	public class main extends SDApplication
 	{
-		private var fake:Vector.<int>;
+		//private var fake:Vector.<int>;
 
 		private var engine3D:Engine3D;
 		private var game:Game;
@@ -58,12 +55,11 @@
 
 		public function main()
 		{
-			super("PlayGround", {loader: new SDMacPreloader(), loaderAlign: "c"});
+			super("PlayGround", new SDApplicationData(new SDMacPreloader()));
 
-			ProfilerUtil.addStat(this);
+			ProfilerUtil.addStat(SDApplication.system);
 
-			fake = new Vector.<int>();
-			
+			//fake = new Vector.<int>();
 		}
 
 		// ______________________________ Initialize ______________________________
