@@ -1,7 +1,5 @@
 package {
-	import com.sleepydesign.components.SDButton;
-	import com.sleepydesign.components.SDTree;
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.site.ApplicationFacade;
 
 	/**
