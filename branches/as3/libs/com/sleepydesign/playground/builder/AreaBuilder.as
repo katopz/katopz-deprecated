@@ -1,6 +1,6 @@
 ﻿package com.sleepydesign.playground.builder
 {
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.draw.SDSquare;
 	import com.sleepydesign.events.SDEvent;
@@ -19,6 +19,7 @@
 	
 	import org.papervision3d.core.math.Matrix3D;
 	import org.papervision3d.core.math.Number3D;
+	
 	public class AreaBuilder extends SDContainer
 	{		
 		public var log			:SDTextField;
@@ -90,7 +91,7 @@
 			
 			var rotationAxis:Number3D = Number3D.cross(vector, FORWARD);
 			rotationAxis.normalize();
-			 
+			
 			var rotationMatrix:Matrix3D = Matrix3D.rotationMatrix(-rotationAxis.x*Math.abs(target.z)/target.z, -rotationAxis.y, rotationAxis.z*Math.abs(target.y)/target.y, event.data.distance/(600*Math.pow(target.scale, 5)));
 			  
 			target.transform.calculateMultiply3x3(rotationMatrix, target.transform);

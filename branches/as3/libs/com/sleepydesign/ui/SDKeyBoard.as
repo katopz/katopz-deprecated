@@ -1,7 +1,6 @@
 package com.sleepydesign.ui
 {
-
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDObject;
 	import com.sleepydesign.events.SDKeyboardEvent;
 	

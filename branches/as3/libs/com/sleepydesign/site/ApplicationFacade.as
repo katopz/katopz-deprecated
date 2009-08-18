@@ -11,7 +11,7 @@
  */
 package com.sleepydesign.site
 {
-    import com.sleepydesign.core.SDApplication;
+    import com.sleepydesign.application.core.SDApplication;
     import com.sleepydesign.site.controller.AddressChangeCommand;
     import com.sleepydesign.site.controller.StartupCommand;
     
@@ -68,7 +68,5 @@ package com.sleepydesign.site
         	 */
         	sendNotification( STARTUP, container );
         }
-        
-        
     }
 }

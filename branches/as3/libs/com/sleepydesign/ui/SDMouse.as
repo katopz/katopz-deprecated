@@ -1,6 +1,6 @@
 package com.sleepydesign.ui
 {
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDObject;
 	import com.sleepydesign.events.SDMouseEvent;
 	
@@ -8,7 +8,6 @@ package com.sleepydesign.ui
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	
 	public class SDMouse extends SDObject
 	{
 		private var target				:InteractiveObject;

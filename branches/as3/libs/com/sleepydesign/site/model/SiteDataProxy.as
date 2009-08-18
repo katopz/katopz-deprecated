@@ -9,7 +9,7 @@
  */
 package com.sleepydesign.site.model
 {
-    import com.sleepydesign.core.SDApplication;
+    import com.sleepydesign.application.core.SDApplication;
     import com.sleepydesign.core.SDLoader;
     import com.sleepydesign.events.SDEvent;
     import com.sleepydesign.site.ApplicationFacade;

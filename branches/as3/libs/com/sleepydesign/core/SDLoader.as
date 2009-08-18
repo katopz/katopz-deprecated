@@ -3,6 +3,7 @@ package com.sleepydesign.core
 	import br.com.stimuli.loading.BulkLoader;
 	import br.com.stimuli.loading.BulkProgressEvent;
 	
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.utils.ObjectUtil;
@@ -121,9 +122,11 @@ package com.sleepydesign.core
 			//parent.addChild(instance);
 		}
 		
-		public function add(uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):void
+		public function add(uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):EventDispatcher
 		{
-			if(!uri)return;
+			if(!uri)return null;
+			
+			var _loadItem:EventDispatcher;
 			
 			// local test?
 			if(!SystemUtil.isHTTP(SDApplication.getInstance()))
@@ -159,7 +162,7 @@ package com.sleepydesign.core
 	            trace(" * Request\t: "+ method +","+ dataFormat);
 	            
 	            lastRequest = request;
-	            engine.add(request,{type:dataFormat});
+	            _loadItem = engine.add(request,{type:dataFormat});
             }
             else
             {
@@ -168,24 +171,28 @@ package com.sleepydesign.core
             	
             	if(dataFormat)
             	{
-            		engine.add(uri,{type:dataFormat});
+            		_loadItem = engine.add(uri,{type:dataFormat});
             	}else{
-            		engine.add(uri);
+            		_loadItem = engine.add(uri);
             	}
             }
+            
+            return _loadItem["loader"];
 		}
 		
-		public function load(uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):void
+		public function load(uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):EventDispatcher
 		{
 			//uri = (uri is XMLList)?String(uri):uri;
-			add(uri, data, method, dataFormat);
+			var _itemLoader:EventDispatcher = add(uri, data, method, dataFormat);
 			start();
+			return _itemLoader;
 		}
 		
-		public function loadBinary(uri:String, data:*=null, method:String=URLRequestMethod.POST):void
+		public function loadBinary(uri:String, data:*=null, method:String=URLRequestMethod.POST):EventDispatcher
 		{
-			add(uri, data, method, URLLoaderDataFormat.BINARY);
+			var _itemLoader:EventDispatcher = add(uri, data, method, URLLoaderDataFormat.BINARY);
 			start();
+			return _itemLoader;
 		}
 		
 		public function loadTo(container:DisplayObjectContainer, uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):void
@@ -212,11 +219,11 @@ package com.sleepydesign.core
 		{
 			trace(" * Start\t: "+engine._itemsTotal);
 			percent = 0;
-			//BUG//if(!engine.hasEventListener(BulkProgressEvent.PROGRESS))
-		    	engine.addEventListener(BulkProgressEvent.PROGRESS, onProgress, false, 0, true) ;
+			//BUG//if(!engine.hasEventListener("progress"))
+		    	engine.addEventListener("progress", onProgress, false, 0, true) ;
 		    
-		    //BUG//if(!engine.hasEventListener(BulkProgressEvent.COMPLETE))
-		    	engine.addEventListener(BulkProgressEvent.COMPLETE, onComplete);
+		    //BUG//if(!engine.hasEventListener("complete"))
+		    	engine.addEventListener("complete", onComplete);
 			
 			engine.start();
 		}
@@ -230,8 +237,8 @@ package com.sleepydesign.core
 		
 		public function unregister():void
 		{
-			//engine.removeEventListener(BulkProgressEvent.PROGRESS, onProgress);
-		    //engine.removeEventListener(BulkProgressEvent.COMPLETE, onComplete);
+			//engine.removeEventListener("progress", onProgress);
+		    //engine.removeEventListener("complete", onComplete);
 		    //remove(uri);
 		}
 		
@@ -262,8 +269,8 @@ package com.sleepydesign.core
 			trace(" ^ onComplete\t: "+BulkLoader(event.target).itemsLoaded+"/"+BulkLoader(event.target).itemsTotal);
 			if(engine.itemsLoaded==engine.itemsTotal)
 			{
-				engine.removeEventListener(BulkProgressEvent.PROGRESS, onProgress);
-				engine.removeEventListener(BulkProgressEvent.COMPLETE, onComplete);
+				engine.removeEventListener("progress", onProgress);
+				engine.removeEventListener("complete", onComplete);
 			}
 			
 			//loadTo

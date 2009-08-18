@@ -1,12 +1,10 @@
 package com.sleepydesign.ui
 {
 
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	
 	import flash.display.Stage;
 	import flash.events.EventDispatcher;
-	import flash.events.MouseEvent;
-	import flash.geom.Point;
 
 	public class InputController extends EventDispatcher
 	{

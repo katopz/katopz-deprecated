@@ -1,6 +1,6 @@
 package com.sleepydesign.core
 {
-	import com.sleepydesign.components.SDInputText;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.SystemUtil;
