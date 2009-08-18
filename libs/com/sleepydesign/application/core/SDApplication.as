@@ -1,5 +1,9 @@
-package com.sleepydesign.core
+package com.sleepydesign.application.core
 {
+	import com.sleepydesign.application.data.SDApplicationData;
+	import com.sleepydesign.core.SDContainer;
+	import com.sleepydesign.core.SDLoader;
+	import com.sleepydesign.core.SDSprite;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
@@ -50,48 +54,50 @@ package com.sleepydesign.core
             SDApplication.currentStage = currentStage;
         }        
         
-        public function SDApplication(id:String="application", raw:Object=null)
+        public function SDApplication(id:String="application", data:SDApplicationData=null)
 		{
-			// Flash10
-			// stage.colorCorrection = "off";
-			if(stage)
+			super(id, data);
+			
+			if(!instance)
 			{
-				stage.scaleMode = StageScaleMode.NO_SCALE;
-				currentStage = stage;
+				if(stage)
+				{
+					stage.scaleMode = StageScaleMode.NO_SCALE;
+					currentStage = stage;
+				}
+				
+				//scrollRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);		
+	
+				if (loaderInfo && loaderInfo.parameters)
+				{
+					flashVars = loaderInfo.parameters;
+					configURI = flashVars["config"]?flashVars["config"]:configURI;
+				}
+				
+				configURI = URLUtil.killCache(configURI, SystemUtil.isHTTP(this));
+				
+				instance = this;
+				
+				if(data && data.instance)
+					instance = data.instance;
+				
+				if(!currentStage && data && data.stage)
+					currentStage = data.stage;
+				
+				//content layer
+				content = new SDSprite();
+				this.addChild(content);
+				
+				//system layer
+				system = new SDSystem("system", {container:this, stage:currentStage});
+				
+				//loader layer
+				loader = data?new SDLoader(data.loader):new SDLoader();
+				
+				//system.parse({instance:this});
 			}
-			
-			//scrollRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);		
-
-			if (loaderInfo && loaderInfo.parameters)
-			{
-				flashVars = loaderInfo.parameters;
-				configURI = flashVars["config"]?flashVars["config"]:configURI;
-			}
-			
-			configURI = URLUtil.killCache(configURI, SystemUtil.isHTTP(this));
-			
-			instance = this;
-			
-			if(!instance && raw && raw.instance)
-				instance = raw.instance;
-			
-			if(!currentStage && raw && raw.stage)
-				currentStage = raw.stage;
-			
-			//content layer
-			content = new SDSprite();
-			this.addChild(content);
-			
-			//system layer
-			system = new SDSystem("system", {container:(raw && raw.container)?raw.container:this, stage:currentStage});
-			
-			//loader layer
-			loader = raw?new SDLoader(raw.loader, raw.loaderAlign):new SDLoader();
-			
-			//system.parse({instance:this});
-			
-			super(id, raw);
 		}
+		
 		/*
 		public static function getContainerById(id:String):SDContainer
 		{

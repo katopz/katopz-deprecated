@@ -1,13 +1,8 @@
-package com.sleepydesign.core
+package com.sleepydesign.application.core
 {
-	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.utils.URLUtil;
+	import com.sleepydesign.core.SDContainer;
 	
-	import flash.events.Event;
-	import flash.net.FileFilter;
 	import flash.net.FileReference;
-	import flash.utils.ByteArray;
-	import flash.utils.IExternalizable;
 
 	/**
 	 * _____________________________________________________

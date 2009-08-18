@@ -1,13 +1,12 @@
 package com.sleepydesign.game.core
 {
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.game.data.PlayerData;
 	import com.sleepydesign.game.player.Player;
 	import com.sleepydesign.ui.InputController;
 	
 	import flash.events.Event;
-	import flash.filters.BlurFilter;
 	
 	public class Game extends SDContainer
 	{

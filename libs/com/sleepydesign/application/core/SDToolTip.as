@@ -1,4 +1,4 @@
-package com.sleepydesign.components
+package com.sleepydesign.application.core
 {
 	import flash.geom.Point;
 	import mx.transitions.Tween;

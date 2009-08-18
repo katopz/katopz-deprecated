@@ -129,7 +129,8 @@
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 			*/
 			
-			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
+			if(!hasEventListener(Event.ADDED_TO_STAGE))
+				addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 		
         // ______________________________ Initialize ______________________________

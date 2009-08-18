@@ -1,6 +1,6 @@
 ﻿package com.sleepydesign.game.core
 {
-	import com.sleepydesign.core.SDApplication;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.events.SDEvent;

@@ -11,8 +11,8 @@
  */
 package com.sleepydesign.site.view.components
 {
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.SDTreeNode;
-	import com.sleepydesign.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.ApplicationFacade;

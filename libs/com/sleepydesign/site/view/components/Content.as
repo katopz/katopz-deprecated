@@ -1,7 +1,7 @@
 package com.sleepydesign.site.view.components
 {
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.IDestroyable;
-	import com.sleepydesign.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDForm;
 	import com.sleepydesign.core.SDGroup;
@@ -627,7 +627,7 @@ package com.sleepydesign.site.view.components
 				_content_MovieClip.init({id:id+"_MovieClip", source:content});
 				
 				// add base content
-				//addContent(content);
+				addContent(_content_MovieClip);
 
 				// child ON_STAGE
 				content.addEventListener(SDEvent.ON_STAGE, onContentOnStage, false, 0, true);

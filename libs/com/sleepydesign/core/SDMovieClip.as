@@ -55,6 +55,8 @@ package com.sleepydesign.core
 			
 			trace(" ! SDMovieClip\t: "+this.id, clip, clip.visible);
 			
+			addChild(clip);
+			
 			/*
 			// if not export for SDMovieClip then use cloak mode
 			if(source && source.parent && !stage)
