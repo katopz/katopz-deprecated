@@ -4,27 +4,10 @@ kernel NewFilter
 <   namespace : "Open3D";
     vendor : "kris@neuroproductions.be";
     version : 1;
-    description : "Basic shader +- interface for other shaders";
+    description : "maps bitmap to normals";
 >
 {
-  parameter float x <
-       minValue:float(-6.28318531);
-       maxValue:float(6.28318531);
-       defaultValue:float(0.0);
-       description:"rotation around X axis";
-   >;
-parameter float y <
-       minValue:float(-6.28318531);
-       maxValue:float(6.28318531);
-       defaultValue:float(0.0);
-       description:"rotation around Y axis";
-   >;
-  parameter float z <
-       minValue:float(-6.28318531);
-       maxValue:float(6.28318531);
-       defaultValue:float(0);
-       description:"rotation around Z axis";
-   >;
+
   parameter float xOffzet <
        minValue:float(-100);
        maxValue:float(100);
@@ -41,10 +24,10 @@ parameter float yOffzet <
        minValue:float(-300);
        maxValue:float(300);
        defaultValue:float(1);
-       description:"light direction normal z";
+       description:"value";
    >;
-    input image4 layer1;
-    input image3 layer2;
+    input image4 src;
+    input image3 inputi;
     output pixel4 result;
 
 
@@ -54,43 +37,20 @@ parameter float yOffzet <
     evaluatePixel()
     {
        
-       pixel3 ld = sampleNearest(layer2, outCoord());
-        pixel4 ln = sampleNearest(layer1, outCoord());
+     
+        pixel4 ln = sampleNearest(src, outCoord());
         pixel4 temp = ln; 
         
         
-        //create a vector from the rgb values
-        float a = (ln.r*2.0)-1.0;
-        float b = (ln.g*2.0)-1.0;
-        float c =(ln.b*2.0)-1.0;
-        float3 vec  =float3(a,b,c);
-       
-        //create matrixes to rotate around xy and z axis
-        float3x3 Xrot =float3x3(1.0,0.0,0.0,0.0,cos(x),sin(x),0,-sin(x),cos(x));
-        float3x3 Yrot =float3x3(cos(y),0.0,-sin(y),0.0,1.0,0.0,sin(y),0.0,cos(y));
-        float3x3 Zrot =float3x3(cos(z),sin(z),0.0,-sin(z),cos(z),0.0,0.0,0.0,1.0);
-        
-        
-        
-        
-        float3 normal = vec*Xrot*Yrot*Zrot;
-        
       
-        // convert the transformed vector back to rgb (use if needed)
-        temp.r =(normal.x+1.0)/2.0;
-        temp.g =( normal.y+1.0)/2.0;
-        temp.b =(normal.z+1.0)/2.0;
-        
-        /*
-        //do stuff
-
-        */
         
        float2 test;
-        test.x = ( temp.r-0.5)*temp.b  *val +xOffzet;
-       test.y =( temp.g-0.5)*temp.b  *val +yOffzet;
-          temp.xyz = sampleNearest(layer2,outCoord()+ test);
-         
+       test.x = ( temp.r-0.5)*temp.b *val ;
+       test.y =( temp.g-0.5) *temp.b *val ;
+          temp.xyz = sampleNearest(inputi,outCoord()+ test);
+       
+       
+       
         result = temp ;
        
        
