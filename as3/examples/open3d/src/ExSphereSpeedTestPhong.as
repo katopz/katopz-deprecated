@@ -1,14 +1,11 @@
 package
 {
-	import open3d.objects.Plane;
-	import open3d.objects.SimpleCube;
+	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+
 	import open3d.materials.shaders.PhongColorMaterial;
 	import open3d.objects.Light;
-	import flash.events.MouseEvent;
-	
-	import open3d.materials.BitmapFileMaterial;
 	import open3d.objects.Mesh;
-	import open3d.objects.Object3D;
 	import open3d.objects.Sphere;
 	import open3d.view.SimpleView;
 
@@ -21,25 +18,26 @@ package
 	 */
 	public class ExSphereSpeedTestPhong extends SimpleView
 	{
-		private var light:Light ;
-		
+		private var light:Light;
+
 		override protected function create():void
 		{
-			light =new Light();
-			light.setPosition(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5)
+			light = new Light();
+			light.setPosition(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+			
 			// fake click
 			onClick();
-		
+
 			// your turn
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
 
 		private function onClick(event:MouseEvent = null):void
 		{
-			light.setPosition(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5);
-			
-			var sphere:Sphere = new Sphere(100,20,20, new PhongColorMaterial(0xFF0000, light));
-			
+			light.setPosition(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+
+			var sphere:Sphere = new Sphere(100, 20, 20, new PhongColorMaterial(light, 0xFF0000));
+
 			renderer.view.addChild(sphere);
 
 			var _numChildren:int = renderer.numChildren;

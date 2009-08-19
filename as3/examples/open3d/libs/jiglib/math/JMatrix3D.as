@@ -214,11 +214,15 @@ package jiglib.math {
 
 		// _________________________________________________________________________________ IDENTITY
 
-		public static function get IDENTITY():JMatrix3D {
+		public static function get IDENTITY():JMatrix3D 
+		{
+			return new JMatrix3D();
+			/*
 			return new JMatrix3D([1, 0, 0, 0,
 				0, 1, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1]);
+				*/
 		}
 
 		
