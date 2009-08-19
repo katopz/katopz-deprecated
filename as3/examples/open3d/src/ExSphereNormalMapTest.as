@@ -12,7 +12,7 @@ package
 
 	import flash.display.Bitmap;
 
-	[SWF(width=800, height = 600, backgroundColor = 0x666666, frameRate = 30)]
+	[SWF(width=800, height = 600, backgroundColor = 0x000000, frameRate = 30)]
 
 	/**
 	 * ExSphereNormalMapTest
@@ -22,16 +22,21 @@ package
 	{
 	
 		
-		[Embed(source="assets/top.jpg")]
+		[Embed(source="assets/stars.jpg")]
 		private var BackgroundMap : Class;
 		
 		
-		[Embed(source="assets/earth.jpg")]
+		[Embed(source="assets/Earth2.jpg")]
 		private var DiffMap : Class;
 
 		[Embed(source="assets/normalmap.jpg")]
 		private var NormalMap : Class;
 
+[Embed(source="assets/moon.jpg")]
+		private var DiffMap2 : Class;
+
+		[Embed(source="assets/MoonNormal.jpg")]
+		private var NormalMap2 : Class;
 		
 		private var sphere:Sphere;
 		private var sphere2:Sphere;
@@ -39,7 +44,7 @@ package
 		private var step : Number = 0;
 		private var light : Light;
 		
-
+private var dfBack : Bitmap
 		
 		override protected function create() : void
 		{
@@ -47,10 +52,14 @@ package
 			var dfBm : Bitmap = new DiffMap() as Bitmap;
 			var normBm : Bitmap = new NormalMap() as Bitmap;
 			
+			var dfBm2 : Bitmap = new DiffMap2() as Bitmap;
+			var normBm2 : Bitmap = new NormalMap2() as Bitmap;
 			
-			
+			dfBack = new BackgroundMap() as Bitmap;
+			dfBack.alpha =0.5
+			this.addChildAt(dfBack,0)
 			// Single Core = ?, Quad Core = ?
-			var segment:uint = 40;
+			var segment:uint = 41;
 			
 			
 			light = new Light();
@@ -65,7 +74,7 @@ package
 		
 			sphere = new Sphere(100, segment, segment, mat2);
 			renderer.view.addChild(sphere);
- 			var mat:PBBitmapShader = new PBBitmapShader(light, dfBm.bitmapData.clone(),normBm.bitmapData.clone());
+ 			var mat:PBBitmapShader = new PBBitmapShader(light, dfBm2.bitmapData.clone(),normBm2.bitmapData.clone());
  			//mat.drawSprite.x = 400;
  			//this.addChild(mat.drawSprite);
 			sphere2 = new Sphere(50, segment, segment, mat);
@@ -76,7 +85,8 @@ package
 		override protected function draw() : void
 		{
 		
-			
+			dfBack.x =(-dfBack.width/2 + stage.stageWidth / 2)
+			dfBack.y =(-dfBack.height/2 + stage.stageHeight / 2)
 			sphere2.rotationX += 0;
 			sphere2.rotationY -=5;
 			sphere.rotationY += 5;
@@ -88,8 +98,8 @@ package
 
 			step += 0.03;
 			
-			camera.rotationY = (mouseX - stage.stageWidth / 2) / 50;
-			camera.rotationX = -(mouseY - stage.stageHeight / 2) / 50;
+			camera.rotationY = (mouseX - stage.stageWidth / 2) / 100;
+			camera.rotationX = -(mouseY - stage.stageHeight / 2) / 100;
 			
 			
 		}
