@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 package com.derschmale.wick3d.core.io.MD2
 {
-	import com.derschmale.wick3d.core.geometry.Vertex3D;
 	import com.derschmale.wick3d.core.imagemaps.UVCoords;
 	import com.derschmale.wick3d.core.io.MD2.vo.FrameMD2;
 	import com.derschmale.wick3d.core.io.MD2.vo.VertexMD2;
@@ -81,7 +80,7 @@ package com.derschmale.wick3d.core.io.MD2
 		/**
 		 * Texture coordinates
 		 */
-		private var _uvCoords : Array;
+		private var _uvCoords : Vector.<UVCoords>;
 		
 		/**
 		 * Triangle data
@@ -120,7 +119,7 @@ package com.derschmale.wick3d.core.io.MD2
 		/**
 		 * An Array containing the UV texture coordinates for the vertices in this model.
 		 */
-		public function get uvCoords() : Array
+		public function get uvCoords() : Vector.<UVCoords>
 		{
 			return _uvCoords;
 		}
@@ -260,7 +259,7 @@ package com.derschmale.wick3d.core.io.MD2
 		{
 			var uv : UVCoords;
 			
-			_uvCoords = [];
+			_uvCoords = new Vector.<UVCoords>();
 			_byteArray.position = _offsetUV;
 			
 			for (var i : int = 0; i < _numUV; i++) {

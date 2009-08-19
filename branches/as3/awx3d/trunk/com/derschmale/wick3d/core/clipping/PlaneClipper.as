@@ -45,7 +45,7 @@ package com.derschmale.wick3d.core.clipping
 	public class PlaneClipper
 	{
 		private var _vertices : Vector.<Vertex3D> = new Vector.<Vertex3D>();
-		private var _uv : Array = [];
+		private var _uv : Vector.<UVCoords> = new Vector.<UVCoords>();
 		private var _lastIntersectionRatio : Number;
 		private var _dots : Dictionary = new Dictionary();
 		
@@ -109,7 +109,7 @@ package com.derschmale.wick3d.core.clipping
 				triangle.isCulled = true;
 				
 				_vertices = new Vector.<Vertex3D>(); // = [];
-				_uv = []; // = [];
+				_uv = new Vector.<UVCoords>();; // = [];
 				
 				if (v1Dot >= plane.d) {
 					_vertices.push(v1);
@@ -150,7 +150,7 @@ package com.derschmale.wick3d.core.clipping
 				triangle.isCulled = true;
 				
 				_vertices = new Vector.<Vertex3D>();
-				_uv = [];
+				_uv = new Vector.<UVCoords>();;
 				
 				if (sign*v1.z > sign*z) {
 					_vertices.push(v1);

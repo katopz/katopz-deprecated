@@ -41,7 +41,7 @@ package com.derschmale.wick3d.core.clipping
 		private var _lastIntersectionRatio : Number;
 		
 		private var _vertices : Vector.<Vertex3D>;
-		private var _uv : Array;
+		private var _uv : Vector.<UVCoords>;
 		private var _triangles : Vector.<Triangle3D>;
 		
 		/**
@@ -77,7 +77,7 @@ package com.derschmale.wick3d.core.clipping
 		 * 
 		 * @see com.derschmale.wick3d.core.geometry.Triangle3D
 		 */
-		public function clipTriangle(triangle:Triangle3D):Array
+		public function clipTriangle(triangle:Triangle3D):Vector.<Triangle3D>
 		{
 			var newVertex : Vertex3D;
 			var newUV : UVCoords;
@@ -100,7 +100,7 @@ package com.derschmale.wick3d.core.clipping
 				return null;
 			
 			_vertices = [];
-			_uv = [];
+			_uv = new Vector.<UVCoords>();;
 			
 			uv1 = triangle.uv1;
 			uv2 = triangle.uv2;

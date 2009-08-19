@@ -30,6 +30,7 @@ package com.derschmale.wick3d.core.geometry
 	
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	import flash.display.IGraphicsData;
 	
 	/**
 	 * The Triangle3D class represents a 3D polygon with 3 vertices. When facing the camera, the vertices should be determined in counterclockwise order.
@@ -249,7 +250,7 @@ package com.derschmale.wick3d.core.geometry
 		{
 			var localVertPos : Vector.<Vertex3D> = new Vector.<Vertex3D>(), localVertNeg : Vector.<Vertex3D> = new Vector.<Vertex3D>();
 			var viewVertPos : Vector.<Vertex3D> = new Vector.<Vertex3D>(), viewVertNeg : Vector.<Vertex3D> = new Vector.<Vertex3D>();
-			var uvPos : Array = [], uvNeg : Array = [];
+			var uvPos : Vector.<UVCoords> = new Vector.<UVCoords>(), uvNeg : Vector.<UVCoords> = new Vector.<UVCoords>();
 			var triangles : Vector.<Vector.<Triangle3D>> = new Vector.<Vector.<Triangle3D>>();
 			var t : Number;
 			var viewV : Vertex3D;
@@ -375,7 +376,7 @@ package com.derschmale.wick3d.core.geometry
 		}
 		
 		// t = returned by splitLine
-		private function splitUV(uv1 : UVCoords, uv2 : UVCoords, t : Number, targetPos : Array, targetNeg : Array) : void
+		private function splitUV(uv1 : UVCoords, uv2 : UVCoords, t : Number, targetPos : Vector.<UVCoords>, targetNeg : Vector.<UVCoords>) : void
 		{
 			var uv : UVCoords = new UVCoords(uv1.u+t*(uv2.u-uv1.u), uv1.v+t*(uv2.v-uv1.v));
 			targetPos.push(uv);
@@ -390,7 +391,7 @@ package com.derschmale.wick3d.core.geometry
 			targetVertex.z = vert1.z+t*(vert2.z-vert1.z);
 		}
 		
-		private function createTriangles(parent : Model3D, localVertices : Vector.<Vertex3D>, viewVertices : Vector.<Vertex3D>, uv : Array) : Vector.<Triangle3D>
+		private function createTriangles(parent : Model3D, localVertices : Vector.<Vertex3D>, viewVertices : Vector.<Vertex3D>, uv : Vector.<UVCoords>) : Vector.<Triangle3D>
 		{
 			var all : Vector.<Triangle3D> = new Vector.<Triangle3D>();
 			var triangle : Triangle3D = new Triangle3D(viewVertices[0] as Vertex3D, viewVertices[1] as Vertex3D, viewVertices[2] as Vertex3D);

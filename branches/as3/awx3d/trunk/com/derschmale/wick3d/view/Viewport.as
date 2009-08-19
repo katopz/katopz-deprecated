@@ -140,13 +140,13 @@ package com.derschmale.wick3d.view
 		 * 
 		 * @see com.derschmale.wick3d.core.geometry.Triangle3D
 		 */
-		public function getTrianglesUnderPoint(x : Number, y : Number, onlyInteractive : Boolean = false) : Array
+		public function getTrianglesUnderPoint(x : Number, y : Number, onlyInteractive : Boolean = false) : Vector.<Triangle3D>
 		{
 			var data : RenderPipelineData = RenderPipeline.getDataForViewport(this);
 			var triangles : Vector.<Triangle3D> = data.triangles;
 			var i : int = triangles.length;
 			var triangle : Triangle3D;
-			var validTriangles : Array = [];
+			var validTriangles : Vector.<Triangle3D> = new Vector.<Triangle3D>();
 			
 			while ((i>0) && (triangle = triangles[--i] as Triangle3D)) {
 				if ((!onlyInteractive || triangle.material.interactive) && triangle.containsPoint2D(x, y))

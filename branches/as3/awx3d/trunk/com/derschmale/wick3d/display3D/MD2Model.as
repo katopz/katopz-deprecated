@@ -30,6 +30,7 @@ package com.derschmale.wick3d.display3D
 	import com.derschmale.wick3d.core.data.GeometryData;
 	import com.derschmale.wick3d.core.geometry.Triangle3D;
 	import com.derschmale.wick3d.core.geometry.Vertex3D;
+	import com.derschmale.wick3d.core.imagemaps.UVCoords;
 	import com.derschmale.wick3d.core.io.MD2.MD2Parser;
 	import com.derschmale.wick3d.core.io.MD2.vo.FrameMD2;
 	import com.derschmale.wick3d.core.io.MD2.vo.VertexMD2;
@@ -52,7 +53,7 @@ package com.derschmale.wick3d.display3D
 	{
 		private var _parser : MD2Parser
 		private var _meshes : Array;
-		private var _frameVertices : Array;
+		private var _frameVertices : Vector.<Vector.<Vertex3D>>;
 		private var _filename : String;
 	
 		private var _currentFrame : int = 0;
@@ -241,12 +242,12 @@ package com.derschmale.wick3d.display3D
 			var frame : FrameMD2;
 			
 			_frameLookUp = [];
-			_frameVertices = [];
+			_frameVertices = new Vector.<Vector.<Vertex3D>>();
 			_endFrame = _parser.numFrames-1;
 			for (var f : uint = 0; f < _parser.numFrames; f++) {
 				frame = frames[f];
 				_frameLookUp[frame.name] = f;
-				_frameVertices[f] = [];
+				_frameVertices[f] = Vector.<Vertex3D>([]);
 				
 				for (var i : uint = 0; i < _parser.numVertices; i++) {
 					vertexMD2 = frame.getTransformedVertex(i);
@@ -266,7 +267,7 @@ package com.derschmale.wick3d.display3D
 			var vertexIndices : Array = _parser.triangleVertexIndices;
 			var uvIndices : Array = _parser.triangleUVIndices;
 			var triangle : Triangle3D;
-			var uvCoords : Array = _parser.uvCoords;
+			var uvCoords : Vector.<UVCoords> = _parser.uvCoords;
 			
 			for (var i : int = 0; i < _parser.numTriangles; i++) {
 				triangle = new Triangle3D(_trVertices[vertexIndices[i][2]], _trVertices[vertexIndices[i][1]], _trVertices[vertexIndices[i][0]]);

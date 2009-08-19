@@ -25,9 +25,10 @@ THE SOFTWARE.
 package com.derschmale.wick3d.materials
 {
 	import com.derschmale.wick3d.core.geometry.Triangle3D;
-	import com.derschmale.wick3d.core.imagemaps.UVCoords;
 	
 	import flash.display.Graphics;
+	import flash.display.GraphicsBitmapFill;
+	import flash.display.IGraphicsData;
 	import flash.geom.Point;
 	
 	/**
@@ -37,6 +38,9 @@ package com.derschmale.wick3d.materials
 	 */
 	public class AbstractMaterial implements IMaterial
 	{
+		public var graphicsData:Vector.<IGraphicsData>;
+		public var graphicsBitmapFill:GraphicsBitmapFill;
+		
 		/**
 		 * The transparency of this material. A value between 0 and 1.
 		 */

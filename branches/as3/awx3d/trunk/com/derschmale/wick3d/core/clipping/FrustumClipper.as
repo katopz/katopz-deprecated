@@ -44,7 +44,7 @@ package com.derschmale.wick3d.core.clipping
 		private var _lastIntersectionRatio : Number;
 		
 		private var _vertices : Vector.<Vertex3D>;
-		private var _uv : Array;
+		private var _uv : Vector.<UVCoords>;
 		
 		private var _planeClipper : PlaneClipper = new PlaneClipper();
 		
@@ -85,7 +85,7 @@ package com.derschmale.wick3d.core.clipping
 		 * @see com.derschmale.wick3d.core.geometry.Triangle3D
 		 * @return A new set of triangles after clipping.
 		 */
-		public function clipTriangle(triangle:Triangle3D):Array
+		public function clipTriangle(triangle:Triangle3D):Vector.<Triangle3D>
 		{
 			var triangles : Vector.<Triangle3D>;
 			

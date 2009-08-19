@@ -1,10 +1,11 @@
 package {
 	import com.derschmale.wick3d.cameras.Camera3D;
 	import com.derschmale.wick3d.core.bsp.BspTree;
+	import com.derschmale.wick3d.core.pipeline.NativeRenderPipeline;
 	import com.derschmale.wick3d.core.pipeline.RenderPipeline;
 	import com.derschmale.wick3d.debug.StatsDisplay;
 	import com.derschmale.wick3d.display3D.World3D;
-	import com.derschmale.wick3d.display3D.primitives.SphereUV;
+	import com.derschmale.wick3d.display3D.primitives.Cube3D;
 	import com.derschmale.wick3d.materials.TextureMaterial;
 	import com.derschmale.wick3d.view.Viewport;
 	
@@ -13,7 +14,6 @@ package {
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.display.StageAlign;
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
@@ -39,7 +39,7 @@ package {
 		
 		public function Wick3D()
 		{		
-			stage.align = StageAlign.TOP_LEFT;
+			//stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.quality = StageQuality.MEDIUM;
 			
@@ -78,11 +78,14 @@ package {
 			// a normal camera
 			_camera = new Camera3D();
 			_camera.x = 0;
-			_camera.y = 100;
-			_camera.z = -200;
+			_camera.y = 0;
+			_camera.z = -500;
 			
 			_renderTarget = new Viewport(true);		// the target to render to
 			addChild(_renderTarget);				// add it to the stage
+			
+			//_renderTarget.x = 320;
+			//_renderTarget.y = 240;
 			
 			createObjects();
 			
@@ -90,7 +93,7 @@ package {
 			_camera.target = _world;
 			
 		// create a render pipeline especially for bsp trees
-			_renderer = new RenderPipeline
+			_renderer = new NativeRenderPipeline( new BspTree(_world) );
 			
 		// create the stat display
 			//_stats = new StatsDisplay(0xFFFFFF);
@@ -105,7 +108,7 @@ package {
 		{
 			// create the material
 			_material1 = new TextureMaterial(new _texture().bitmapData);
-			/*
+			
 			var cube : Cube3D;
 			for (var i : int = 0; i < 7; i++) {
 				cube = new Cube3D(_material1, Math.random()*75+25, 1, 1, 1);
@@ -116,18 +119,19 @@ package {
 				cube.rotationY = (Math.random()-.5)*Math.PI;
 				cube.rotationZ = (Math.random()-.5)*Math.PI;
 				_world.addChild(cube);
-			}*/
-			// open3d = 50;
-			// hi score single/quad core = 42;
-			var sphere:SphereUV = new SphereUV(_material1,100,34,34);
-			_world.addChild(sphere);
+			}
+			// 1 elements Single Core = 42, Quad Core = 83
+			// hi score single/quad core = 34/41;
+			
+			//var sphere:SphereUV = new SphereUV(_material1,100,10,10);
+			//_world.addChild(sphere);
 		}
 
 		private function handleEnterFrame(event : Event) : void
 		{
 			// make the camera orbit the center of the world 
-			_camera.x = Math.sin(_angle)*200;
-			_camera.z = -Math.cos(_angle)*200;
+			_camera.x = Math.sin(_angle)*500;
+			_camera.z = -Math.cos(_angle)*500;
 			_angle += 0.01;
 			
 			// render the 3D world using the camera and the target viewport
