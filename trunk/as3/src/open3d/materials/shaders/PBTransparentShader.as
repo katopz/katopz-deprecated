@@ -1,5 +1,6 @@
 package open3d.materials.shaders 
 {
+	import open3d.view.Layer;
 	import flash.filters.ShaderFilter;
 	import flash.geom.Vector3D;
 	import open3d.materials.BitmapMaterial;
@@ -24,7 +25,7 @@ package open3d.materials.shaders
 		/*[Embed("../../pixelbender/NormalMapAbstractShader.pbj", mimeType="application/octet-stream")]
 		private var NormalShader : Class;*/
 
-		[Embed("../../pixelbender/NormalMapTransparent.pbj", mimeType="application/octet-stream")]
+		[Embed("../../pixelbender/NormalMapSHader.pbj", mimeType="application/octet-stream")]
 		private var NormalShader : Class;
 
 
@@ -38,7 +39,7 @@ package open3d.materials.shaders
 	public var drawSprite : Sprite = new Sprite();
 		protected var difuseBitmap : Bitmap;
 		protected var normalBitmap : Bitmap;
-		protected var normalSprite:Sprite =new Sprite();
+		public var normalSprite:Sprite =new Sprite();
 		protected var difuseSprite:Sprite =new Sprite();
 		protected var _filter:ShaderFilter;
 		public function PBTransparentShader(light : Light,difuseBitmapData : BitmapData = null,normalmapBitmapData : BitmapData = null) 
@@ -52,7 +53,7 @@ package open3d.materials.shaders
 			_filter =new ShaderFilter(shader);
 			difuseBitmap = new Bitmap(difuseBitmapData.clone());
 			difuseSprite.addChild(difuseBitmap);
-			super(difuseBitmapData.clone());
+			super(new BitmapData(normalmapBitmapData.width,normalmapBitmapData.width,false,0));
 		}
 
 		public function calculateNormals(verticesIn : Vector.<Number>,indices : Vector.<int>,uvtData : Vector.<Number> = null,vertexNormals : Vector.<Number> = null) : void
@@ -81,7 +82,7 @@ package open3d.materials.shaders
 
 			normalBitmap = new Bitmap(normalWorldMap);
 		
-		
+			normalSprite.addChild(normalBitmap);
 		
 		
 			this._uvtData = uvtData;
@@ -100,16 +101,16 @@ package open3d.materials.shaders
 			shader.data.z.value=[matrixRot.z];
 			
 			
-			
-			shader.data.xOffzet.value=[0];
-			shader.data.yOffzet.value=[0];
+			/*
+			//shader.data.xOffzet.value=[0];
+			//shader.data.yOffzet.value=[0];
 			shader.data.val.value=[-100];
 			shader.data.inputi.input =_difuseBitmapData;
 			_filter.shader =shader;
-			
-			normalBitmap.filters =[_filter ];
+			*/
+			normalSprite.filters =[_filter ];
 		
-			texture.draw(normalBitmap);
+			texture.draw(normalSprite);
 			return _uvtData;
 		}
 	}
