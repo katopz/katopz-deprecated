@@ -36,6 +36,6 @@ package com.derschmale.wick3d.core.clipping
 	 */
 	public interface ITriangleClipper
 	{
-		function clipTriangle(triangle : Triangle3D) : Array;
+		function clipTriangle(triangle : Triangle3D) : Vector.<Triangle3D>;
 	}
 }

@@ -66,7 +66,7 @@ package com.derschmale.wick3d.core.geometry
 		/**
 		 * An array of Triangle3D containing this vertex.
 		 */
-		public var parents : Array;
+		public var parents : Vector.<Triangle3D>;
 		
 		/**
 		 * Creates a Vertex3D object.

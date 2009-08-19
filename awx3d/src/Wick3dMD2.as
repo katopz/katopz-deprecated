@@ -1,6 +1,4 @@
 package {
-	import caurina.transitions.Tweener;
-	
 	import com.derschmale.display.io.PCXLoader;
 	import com.derschmale.wick3d.cameras.Camera3D;
 	import com.derschmale.wick3d.core.pipeline.RenderPipeline;
@@ -159,7 +157,7 @@ package {
 		
 		private function handleMouseWheel(event : MouseEvent) : void
 		{
-			Tweener.addTween(_camera, {fieldOfView: _camera.fieldOfView+event.delta*0.05, time: 0.25, transition: "easeOutQuad"});
+			_camera.fieldOfView = _camera.fieldOfView+event.delta*0.05;
 		}
 		
 		private function handleEnterFrame(event : Event) : void

@@ -162,8 +162,8 @@ package com.derschmale.wick3d.core.interaction
 		
 		private function getTopMouseEnabled(displayObject : DisplayObjectContainer, coords : Point) : DisplayObject
 		{
-			var allUnder : Array = displayObject.getObjectsUnderPoint(coords);
-			var parents : Array = getParentList(allUnder[allUnder.length-1]);
+			var allUnder : Vector.<DisplayObject> = Vector.<DisplayObject>(displayObject.getObjectsUnderPoint(coords));
+			var parents : Vector.<DisplayObject> = getParentList(allUnder[allUnder.length-1]);
 			var current : DisplayObjectContainer;
 			var lastValid : InteractiveObject;
 			
@@ -182,9 +182,9 @@ package com.derschmale.wick3d.core.interaction
 			return lastValid;
 		}
 		
-		private function getParentList(displayObject : DisplayObject) : Array 
+		private function getParentList(displayObject : DisplayObject) : Vector.<DisplayObject> 
 		{
-			var parents : Array = [];
+			var parents : Vector.<DisplayObject> = new Vector.<DisplayObject>();
 			var current : DisplayObject = displayObject;
 			
 			while (current) {

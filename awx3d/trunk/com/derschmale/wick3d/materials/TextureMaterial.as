@@ -29,11 +29,14 @@ package com.derschmale.wick3d.materials
 	import com.derschmale.wick3d.core.imagemaps.UVCoords;
 	
 	import flash.display.BitmapData;
-	import flash.display.BlendMode;
 	import flash.display.Graphics;
+	import flash.display.GraphicsBitmapFill;
+	import flash.display.GraphicsSolidFill;
+	import flash.display.GraphicsStroke;
+	import flash.display.GraphicsTrianglePath;
+	import flash.display.IGraphicsData;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	
 	/**
 	 * The TextureMaterial class is a material that maps an image to a triangle, adding detail to the surface.
@@ -81,6 +84,8 @@ package com.derschmale.wick3d.materials
 			super();
 			_bitmapData = bitmapData;
 			_smooth = smooth;
+			
+			//graphicsBitmapFill = new GraphicsBitmapFill(_bitmapData, null, false, true);
 		}
 		
 		/**

@@ -62,7 +62,7 @@ package com.derschmale.wick3d.core.pipeline
 		private var _nearClipper : PlaneClipper;
 		private var _nearCuller : SimpleNearCuller;
 		private var _backFaceCuller : BackFaceCuller;
-		private var _frustumCuller : FrustumCuller;
+		protected var _frustumCuller : FrustumCuller;
 		private var _nearPlane : Plane = new Plane(new Vector3D(0, 0, 1), 1);
 		 
 		private var _clipCoord : Point = new Point();
@@ -71,9 +71,9 @@ package com.derschmale.wick3d.core.pipeline
 		
 		private var _matchNearPlaneToFocalLength : Boolean = true;
 		
-		private var _notifier : RenderNotifier;
+		protected var _notifier : RenderNotifier;
 		
-		private static var _renderDataLookup : Dictionary = new Dictionary();
+		protected static var _renderDataLookup : Dictionary = new Dictionary();
 		
 		/**
 		 * Creates a RenderPipeline instance.
@@ -237,6 +237,22 @@ package com.derschmale.wick3d.core.pipeline
 			vertex.isProjected = true;
 		}
 		
+		private function ZSort(a:Triangle3D, b:Triangle3D) : int
+		{
+		    if (a.zIndex < b.zIndex)
+		    {
+		        return -1;
+		    }
+		    else if (a.zIndex > b.zIndex)
+		    {
+		        return 1;
+		    }
+		    else
+		    {
+		        return 0;
+		    }
+		}
+		
 		/*
 		 * TO DO: do ViewPort clipping
 		 */
@@ -246,7 +262,7 @@ package com.derschmale.wick3d.core.pipeline
 			var i : int = _data.triangles.length;
 			var graphics : Graphics = target.graphics;
 			
-			//TODO//Vector.<Triangle3D>(_data.triangles).sortOn("zIndex", Array.NUMERIC);
+			Vector.<Triangle3D>(_data.triangles).sort(ZSort);
 			
 			target.clear();
 			

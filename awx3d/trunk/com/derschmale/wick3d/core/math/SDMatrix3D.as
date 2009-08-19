@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 package com.derschmale.wick3d.core.math
 {
+	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
 		
 	/**
@@ -51,6 +52,14 @@ package com.derschmale.wick3d.core.math
 			}
 		}
 		
+		public function toNative():Matrix3D
+		{
+			return new Matrix3D(Vector.<Number>([	m11, m12, m13, m14,
+													m21, m22, m23, m24,
+													m31, m32, m33, m34,
+													m41, m42, m43, m44	]));
+		}
+		
 		/**
 		 * A Number that determines whether a matrix is invertible.
 		 * 
@@ -62,14 +71,14 @@ package com.derschmale.wick3d.core.math
 		
 		
 		/**
-		 * An Array of 16 Numbers, where every four elements can be a row or a column of a 4x4 matrix.
+		 * An Vector.<Number> of 16 Numbers, where every four elements can be a row or a column of a 4x4 matrix.
 		 */
-		public function rawData() : Array
+		public function rawData() : Vector.<Number> 
 		{
-			return new Array(	m11, m12, m13, m14,
-								m21, m22, m23, m24,
-								m31, m32, m33, m34,
-								m41, m42, m43, m44);
+			return new Vector.<Number>([	m11, m12, m13, m14,
+											m21, m22, m23, m24,
+											m31, m32, m33, m34,
+											m41, m42, m43, m44]);
 		}
 		
 		/**
