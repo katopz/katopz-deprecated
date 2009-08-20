@@ -12,6 +12,7 @@ package com.sleepydesign.core
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.events.ErrorEvent;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
 	import flash.net.URLLoaderDataFormat;
@@ -223,9 +224,18 @@ package com.sleepydesign.core
 		    	engine.addEventListener("progress", onProgress, false, 0, true) ;
 		    
 		    //BUG//if(!engine.hasEventListener("complete"))
-		    	engine.addEventListener("complete", onComplete);
+		    	engine.addEventListener("complete", onComplete, false, 0, true) ;
+		    	
+		    	engine.addEventListener(ErrorEvent.ERROR, onError, false, 0, true) ;
 			
 			engine.start();
+		}
+		
+		public function onError(event:ErrorEvent):void
+		{
+			trace("onError : "+event);
+			if(BulkLoader(event.target).itemsLoaded + 1 >= BulkLoader(event.target).itemsTotal)
+				onComplete();
 		}
 		
 		public function remove(uri:*):void
@@ -263,10 +273,10 @@ package com.sleepydesign.core
 			dispatchEvent(new SDEvent(SDEvent.PROGRESS, {loader:event.target, event:event, percent:percent}));
 		}
 		
-		private function onComplete(event:ProgressEvent):void
+		private function onComplete(event:ProgressEvent=null):void
 		{
 			//trace(event)
-			trace(" ^ onComplete\t: "+BulkLoader(event.target).itemsLoaded+"/"+BulkLoader(event.target).itemsTotal);
+			//trace(" ^ onComplete\t: "+BulkLoader(event.target).itemsLoaded+"/"+BulkLoader(event.target).itemsTotal);
 			if(engine.itemsLoaded==engine.itemsTotal)
 			{
 				engine.removeEventListener("progress", onProgress);
@@ -297,7 +307,7 @@ package com.sleepydesign.core
 				}
 			}
 			*/
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event.target}));
+			dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event?event.target:engine}));
 			//unregister();
 			
 			//instance.visible = false;
