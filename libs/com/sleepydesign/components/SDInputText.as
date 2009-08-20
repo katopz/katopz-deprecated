@@ -19,7 +19,7 @@ package com.sleepydesign.components
 		private var _back:Sprite;
 		private var _password:Boolean 		= false;
 		private var _text:String 			= "";
-		private var _tf:SDTextField;
+		private var _tf:TextField;
 		
 		private var type:String 			= "";
 		

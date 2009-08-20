@@ -47,6 +47,8 @@ package com.sleepydesign.site.model
 			XML.ignoreWhitespace = true;
 			XML.ignoreComments = true;
 			
+			if(xml.length()<=0)return;
+			
 			data = parse(xml);
 			
 			// default focus from SWFAddress

@@ -12,7 +12,10 @@ package com.sleepydesign.text
 		public function SDTextField(text:String = null, textFormat:TextFormat = null, css:String=null)
 		{
 			super();
-
+			
+			// Flash CS4 assets
+			if(name) return;
+			
 			selectable = false;
 			mouseEnabled = false;
 			mouseWheelEnabled = false;
