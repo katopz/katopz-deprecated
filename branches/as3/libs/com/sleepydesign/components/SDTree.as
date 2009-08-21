@@ -242,6 +242,7 @@ ___________________________________________________________
         
         public function getNodeById(node:SDTreeNode, id:String) : SDTreeNode
         {	
+			if(!node)return null;
 			if(!node.childs)return null;
 			var index:int = node.childs.length;
 			var foundNode:SDTreeNode;
