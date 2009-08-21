@@ -241,7 +241,8 @@
 		// ______________________________ Update ____________________________
 		
 		// update dynamic content
-		public function update(_data:Object=null):void
+		/*
+		public function update():void
 		{
 			// data is update somewhere
 			if(_data && this._data != _data)
@@ -250,7 +251,7 @@
 				dispatchEvent(new SDEvent(SDEvent.UPDATE));
 			}
 		}
-		
+		*/
 		// ______________________________ Render ____________________________
 		
 		// suppose to call after update data

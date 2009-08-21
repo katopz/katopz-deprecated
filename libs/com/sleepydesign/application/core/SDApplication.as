@@ -89,7 +89,7 @@ package com.sleepydesign.application.core
 				this.addChild(content);
 				
 				//system layer
-				system = new SDSystem("system", {container:this, stage:currentStage});
+				system = new SDSystem();//"system", {container:this, stage:currentStage});
 				
 				//loader layer
 				loader = data?new SDLoader(data.loader):new SDLoader();

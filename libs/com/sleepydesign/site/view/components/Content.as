@@ -1,4 +1,4 @@
-package com.sleepydesign.site.view.components
+﻿package com.sleepydesign.site.view.components
 {
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.IDestroyable;
@@ -234,7 +234,7 @@ package com.sleepydesign.site.view.components
 		// Internal :	Self[config.xml] -> update
 		
 		private var _data_xml:XML;
-		override public function update(data:Object=null):void
+		public function update(data:Object=null):void
 		{
 			// no need to update old xml data
 			//if(data.xml==_data_xml)return;
@@ -263,7 +263,8 @@ package com.sleepydesign.site.view.components
 			trace(" ! Data\t\t: " + data);
 			
 			// ContentVO?
-			super.update(data);
+			//super.update(data);
+			_data = data;
 			
 			/*
 			// destroy load Queue
@@ -512,8 +513,8 @@ package com.sleepydesign.site.view.components
 							button.removeEventListener(MouseEvent.CLICK, onClick);
 							button.addEventListener(MouseEvent.CLICK, onClick);
 							
-							button.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
-							button.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+							button.removeEventListener(MouseEvent.ROLL_OVER, onMouseRollOver);
+							button.addEventListener(MouseEvent.ROLL_OVER, onMouseRollOver);
 							
 							if(!links)links = new SDGroup();
 							links.insert(itemXML, button);
@@ -714,9 +715,8 @@ package com.sleepydesign.site.view.components
 		*/
 		
 		// DIRTY
-		protected function onRollOver(event:MouseEvent):void
+		protected function onMouseRollOver(event:MouseEvent):void
 		{
-			trace(" ! onRollOver");
 			var linkXML:XML = XML(links.find(event.target));
 			
 			// 2nd try
@@ -725,7 +725,6 @@ package com.sleepydesign.site.view.components
 				 
 			if(!StringUtil.isNull(linkXML.@onRollOver))
 			{
-				trace(" ! onRollOver\t: " + linkXML.@onRollOver);
 				//URLUtil.getURL(linkXML.@href, linkXML.@target);
 				Navigation.getURL(linkXML.@id, linkXML.@onRollOver, "_self");
 			}

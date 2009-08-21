@@ -1,11 +1,13 @@
-package com.sleepydesign.site.view.components
+﻿package com.sleepydesign.site.view.components
 {
+	import com.sleepydesign.application.core.SDSystem;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.model.vo.ContentVO;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
 	
 	import flash.events.Event;
+	import flash.system.System;
 	import flash.utils.*;
 
 	/* ---------------------------------------------------------------
@@ -76,7 +78,10 @@ package com.sleepydesign.site.view.components
 			update(new ContentVO(xml.@id, event.target.content, xml));
 			
 			if(!StringUtil.isNull(xml.@session))
-				trace("session:"+xml.@session);
+			{
+				trace(" ! Session : "+xml.@session);
+				SDSystem.data.session = String(xml.@session);
+			}
 			
 			/*
 			switch(event)

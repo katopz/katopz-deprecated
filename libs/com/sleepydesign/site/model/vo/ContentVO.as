@@ -60,6 +60,12 @@ package com.sleepydesign.site.model.vo
 		{
 			return _source;
 		}
+		
+		public function set source(value:*):*
+		{
+			_source = value;
+		}
+		
 		/*
 		// Elements
 		public function get xml():XML
