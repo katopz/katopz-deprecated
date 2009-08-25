@@ -58,7 +58,6 @@
 			super("PlayGround", new SDApplicationData(new SDMacPreloader()));
 
 			ProfilerUtil.addStat(SDApplication.system);
-
 			//fake = new Vector.<int>();
 		}
 
