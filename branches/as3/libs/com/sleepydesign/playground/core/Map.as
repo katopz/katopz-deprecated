@@ -249,7 +249,7 @@ package com.sleepydesign.playground.core
 		
 		// ______________________________ Update ____________________________
 		
-		override public function update(data:Object=null):void
+		public function update(data:Object=null):void
 		{
 			Map.factorX = data.width;
 			Map.factorZ = data.height;

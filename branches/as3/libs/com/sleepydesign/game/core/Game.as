@@ -124,7 +124,7 @@ package com.sleepydesign.game.core
 			SDApplication.getInstance().update({command:command, args:args});
 		}
 		
-		override public function update(data:Object=null):void
+		public function update(data:Object=null):void
 		{
 			// void null
 			if(!data)return;

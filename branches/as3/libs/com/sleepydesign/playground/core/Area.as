@@ -52,7 +52,7 @@
 		
 		// ______________________________ Update ____________________________
 		
-		override public function update(data:Object=null):void
+		public function update(data:Object=null):void
 		{
 			id  = data.id;
 			background.update(data);
