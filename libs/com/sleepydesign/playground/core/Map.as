@@ -255,7 +255,7 @@ package com.sleepydesign.playground.core
 			Map.factorZ = data.height;
 			_config = load(data.src);
 			
-			this.data = new MapData(_config.nodes, _config.col, _config.scaleX, _config.scaleZ);
+			this.data = new MapData(_config.id, _config.nodes, _config.col, _config.scaleX, _config.scaleZ);
 			
 			routes.push(_config.id);
 			

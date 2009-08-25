@@ -35,7 +35,7 @@
 		
 		private function onMouseIsDown(event:MouseEvent):void
 		{
-			if(!(event.target is Stage))return;
+			//if(!(event.target is Stage))return;
 			var camera:Camera3D = engine3D.camera;
 			var ray:Number3D = Number3D.add(camera.unproject(engine3D.viewport.containerSprite.mouseX, engine3D.viewport.containerSprite.mouseY), camera.position);
 			

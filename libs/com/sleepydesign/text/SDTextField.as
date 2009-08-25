@@ -14,7 +14,7 @@ package com.sleepydesign.text
 			super();
 			
 			// Flash CS4 assets
-			if(name) return;
+			if(name.indexOf("instance")!=0) return;
 			
 			selectable = false;
 			mouseEnabled = false;
