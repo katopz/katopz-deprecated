@@ -1,4 +1,4 @@
-package com.sleepydesign.utils
+package away3dlite.loaders.utils
 {
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -8,14 +8,16 @@ package com.sleepydesign.utils
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLRequest;	
+	import flash.net.URLRequest;
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;	
 	
 	public class LoaderUtil
 	{
 		public static function load(uri:String, eventHandler:Function = null, type:String = "auto"):Object
 		{
 			if(type=="auto")
-			switch(URLUtil.getType(uri))
+			switch(getType(uri))
 			{
 				case "jpg":
 				case "png":
@@ -60,7 +62,7 @@ package com.sleepydesign.utils
 				
 				try
 				{
-					loader.load(new URLRequest(uri));
+					loader.load(new URLRequest(uri), new LoaderContext(false, ApplicationDomain.currentDomain));
 				}
 				catch (e:Error)
 				{
@@ -70,7 +72,7 @@ package com.sleepydesign.utils
 			}else{
 				//The URLLoader class downloads data from a URL as text, binary data, or URL-encoded variables. 
 				var urlLoader:URLLoader = new URLLoader();
-				urlLoader.type = type;
+				urlLoader.dataFormat = type;
 				
 			    urlLoader.addEventListener(ProgressEvent.PROGRESS, eventHandler, false, 0, true);
 	            urlLoader.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
@@ -100,6 +102,18 @@ package com.sleepydesign.utils
 				}
 				return urlLoader;
 			}
+		}
+		
+		public static function getType(value:String):String
+		{
+			//file.something.type?q#a
+			value = value.split("#")[0];
+			//file.something.type?q
+			value = value.split("?")[0];
+			//file.something.type
+			var results:Array = value.split(".");
+			//type
+			return results[results.length - 1];
 		}
 	}
 }

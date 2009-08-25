@@ -98,6 +98,11 @@ package com.sleepydesign.application.core
 			}
 		}
 		
+		public function update(data:Object=null):void
+		{
+			
+		}
+		
 		/*
 		public static function getContainerById(id:String):SDContainer
 		{
