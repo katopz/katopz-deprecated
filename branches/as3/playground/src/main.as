@@ -119,7 +119,7 @@
 			game = new Game();
 
 			area = new Area(_config);
-			addChild(area);
+			content.addChild(area);
 
 			area.map.x = stage.stageWidth - area.map.width;
 			//area.map.visible = false;
@@ -127,7 +127,7 @@
 			// ___________________________________________________________ 3D Layer
 
 			// 3D engine
-			engine3D = new Engine3D(this, _config.scene);
+			engine3D = new Engine3D(content, _config.scene);
 			//engine3D.axis = true;
 			//engine3D.grid = true;
 			//engine3D.compass = true;
@@ -292,7 +292,7 @@
 					if (!areaBuilder)
 					{
 						areaBuilder = new AreaBuilder(engine3D, area);
-						addChild(areaBuilder);
+						content.addChild(areaBuilder);
 					}
 					else
 					{
