@@ -86,10 +86,11 @@ package com.sleepydesign.application.core
 				
 				//content layer
 				content = new SDSprite();
-				this.addChild(content);
+				addChild(content);
 				
 				//system layer
 				system = new SDSystem();//"system", {container:this, stage:currentStage});
+				addChild(system);
 				
 				//loader layer
 				loader = data?new SDLoader(data.loader):new SDLoader();
