@@ -99,7 +99,7 @@ package com.sleepydesign.application.core
 			}
 		}
 		
-		public function update(data:Object=null):void
+		public function applyCommand(data:Object=null):void
 		{
 			
 		}

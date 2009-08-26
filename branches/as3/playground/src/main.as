@@ -352,7 +352,7 @@
 
 		// ______________________________ Update ____________________________
 
-		override public function update(data:Object = null):void
+		override public function applyCommand(data:Object = null):void
 		{
 			var _player:Player = Player(data.args[1]);
 

@@ -121,7 +121,7 @@ package com.sleepydesign.game.core
 		public static function applyCommand(command:String, args:Array):void
 		{
 			//getInstance().engine.update({command:command});
-			SDApplication.getInstance().update({command:command, args:args});
+			SDApplication.getInstance().applyCommand({command:command, args:args});
 		}
 		
 		public function update(data:Object=null):void
