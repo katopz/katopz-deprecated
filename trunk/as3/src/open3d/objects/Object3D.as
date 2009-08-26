@@ -106,7 +106,7 @@ package open3d.objects
 				_child = Object3D(child);
 				
 				// default layer = parent layer
-				if(layer)
+				if(layer && !_child.layer)
 					_child.layer = layer;
 					
 				_childs.push(_child);
