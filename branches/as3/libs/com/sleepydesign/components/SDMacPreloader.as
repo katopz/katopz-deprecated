@@ -12,12 +12,14 @@
 		private var timer:Timer;
 		private var slices:int;
 		private var radius:int;
+		private var colorValue:Number;
 		
-		public function SDMacPreloader(slices:int = 12, radius:int = 6)
+		public function SDMacPreloader(colorValue:Number = 0x666666, slices:int = 12, radius:int = 6)
 		{
 			super();
 			this.slices = slices;
 			this.radius = radius;
+			this.colorValue = colorValue;
 			draw();
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -59,7 +61,7 @@
 		private function getSlice():Shape
 		{
 			var slice:Shape = new Shape();
-			slice.graphics.beginFill(0x666666);
+			slice.graphics.beginFill(colorValue);
 			slice.graphics.drawRoundRect(-1, 0, 2, 6, 12, 12);
 			slice.graphics.endFill();
 			return slice;

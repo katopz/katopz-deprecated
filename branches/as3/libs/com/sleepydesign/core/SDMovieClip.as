@@ -34,28 +34,31 @@ package com.sleepydesign.core
 		 
 		public function SDMovieClip()//id:String=null, source:MovieClip=null, xml:XML=null):void
 		{
-			super();
+			init();
 			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
-			//init();
 		}
 		
         // ______________________________ Initialize ______________________________
         
 		public function init(raw:Object=null):void
 		{			
-			if(!raw)return;
-			// collector
-			raw.id = this.id = raw.id?raw.id:name;
-			
-			//var element:DisplayObject = SDContainer.getCollector().findBy(id);
-			//trace("\n\n\nelement:"+element["id"]);
-			
-			// internal or exported for
-			clip = raw.source?raw.source:this;
-			
-			trace(" ! SDMovieClip\t: "+this.id, clip, clip.visible);
-			
-			addChild(clip);
+			if(raw)
+			{
+				// collector
+				raw.id = this.id = raw.id?raw.id:name;
+				
+				//var element:DisplayObject = SDContainer.getCollector().findBy(id);
+				//trace("\n\n\nelement:"+element["id"]);
+				
+				// internal or exported for
+				clip = raw.source?raw.source:this;
+				
+				trace(" ! SDMovieClip\t: "+this.id, clip, clip.visible);
+				
+				addChild(clip);
+			}else{
+				clip = this;
+			}
 			
 			/*
 			// if not export for SDMovieClip then use cloak mode
@@ -80,7 +83,7 @@ package com.sleepydesign.core
 			//addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 			
 			// they got label let's see what they got
-			if(clip.currentLabels.length>0)
+			if(clip.currentLabels.length>0 || clip.totalFrames>1)
 				clip.addEventListener(Event.ENTER_FRAME, onFrameIsEnter);
 			
 			/*
@@ -98,19 +101,23 @@ package com.sleepydesign.core
 		
 		protected function onStage(event:Event=null):void
 		{
-			if(!clip)clip=this;
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			//if(!clip)clip=this;
+			clip.removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			root.dispatchEvent(new SDEvent(SDEvent.ON_STAGE, {clip:this}));
 		}	
 		
 		protected function onFrameIsEnter(event:Event):void
 		{
-			if(!clip.currentLabel)return;
-			switch(clip.currentLabel.toLowerCase())
+			if(clip.currentLabel)
 			{
-				case "ready" :
-					dispatchEvent(new SDEvent(SDEvent.READY));
-				break;
+				switch(clip.currentLabel.toLowerCase())
+				{
+					case "ready" :
+						dispatchEvent(new SDEvent(SDEvent.READY));
+					break;
+				}
+			}else if(clip.currentFrame==clip.totalFrames){
+				//dispatchEvent(new SDEvent(SDEvent.READY));
 			}
 		}	
 		
