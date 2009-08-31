@@ -1,4 +1,4 @@
-package open3d.materials.shaders 
+package away3dlite.materials.shaders 
 {
 	import flash.geom.Utils3D;
 	import flash.display.Bitmap;
