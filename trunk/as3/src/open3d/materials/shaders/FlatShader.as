@@ -1,4 +1,4 @@
-package open3d.materials.shaders 
+package away3dlite.materials.shaders
 {
 	import flash.geom.Vector3D;
 	import flash.geom.Point;
@@ -8,7 +8,7 @@ package open3d.materials.shaders
 	import flash.geom.Rectangle;
 	import open3d.objects.Light;
 	
-	import open3d.materials.shaders.IShader;
+	import away3dlite.materials.shaders.IShader;
 
 	import flash.display.BitmapData;
 	
