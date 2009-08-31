@@ -1,7 +1,5 @@
-package away3dlite.materials.shaders
+package open3d.materials.shaders
 {
-	import away3dlite.core.base.Vertex;
-	
 	import flash.display.BitmapData;
 	import flash.display.BitmapDataChannel;
 	import flash.display.GradientType;
@@ -14,12 +12,13 @@ package away3dlite.materials.shaders
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	
+	import open3d.geom.Vertex;
 
 	/**
 	 * @author kris@neuroproductions.be
 	 * builds a world normal map of a mesh with uvt mapping
 	 */
-
 
 	public class NormalMapBuilder extends Sprite
 	{

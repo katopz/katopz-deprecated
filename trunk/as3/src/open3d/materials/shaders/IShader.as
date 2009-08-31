@@ -1,4 +1,4 @@
-package away3dlite.materials.shaders {
+package open3d.materials.shaders {
 
 	import flash.geom.Matrix3D;
 	/**

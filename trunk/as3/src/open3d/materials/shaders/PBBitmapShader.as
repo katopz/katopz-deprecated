@@ -1,8 +1,5 @@
-package away3dlite.materials.shaders
+package open3d.materials.shaders
 {
-	import away3dlite.lights.Light;
-	import away3dlite.materials.BitmapMaterial;
-	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Shader;
@@ -11,6 +8,9 @@ package away3dlite.materials.shaders
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
+	
+	import open3d.materials.BitmapMaterial;
+	import open3d.objects.Light;
 
 	/**
 	 * @author kris@neuroproductions
@@ -18,10 +18,10 @@ package away3dlite.materials.shaders
 	public class PBBitmapShader extends BitmapMaterial implements IShader
 	{
 
-		[Embed("../../pbks/LocalGlobalNormalBlend.pbj",mimeType="application/octet-stream")]
+		[Embed("../../pixelbender/LocalGlobalNormalBlend.pbj",mimeType="application/octet-stream")]
 		private var BlendShader:Class;
 
-		[Embed("../../pbks/NormalMapAbstractShader.pbj",mimeType="application/octet-stream")]
+		[Embed("../../pixelbender/NormalMapAbstractShader.pbj",mimeType="application/octet-stream")]
 		private var NormalShader:Class;
 		protected var _uvtData:Vector.<Number>;
 		protected var _difuseBitmapData:BitmapData;
@@ -53,7 +53,7 @@ package away3dlite.materials.shaders
 
 			var normalMapBuilder:NormalMapBuilder = new NormalMapBuilder();
 
-			var targetMap:BitmapData = bitmap;
+			var targetMap:BitmapData = _texture;
 			// build a world map
 			var normalWorldMap:BitmapData = normalMapBuilder.getWorldNormalMap(targetMap, verticesIn, indices, uvtData, vertexNormals);
 			// blend the local and world normals
@@ -124,7 +124,7 @@ package away3dlite.materials.shaders
 
 			normalSprite.filters = [_filter];
 
-			bitmap.draw(normalSprite);
+			texture.draw(normalSprite);
 			return _uvtData;
 		}
 	}
