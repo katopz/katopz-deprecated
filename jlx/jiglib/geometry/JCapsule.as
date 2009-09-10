@@ -25,11 +25,12 @@ distribution.
 
 package jiglib.geometry{
 
+	import flash.geom.Vector3D;
+	
 	import jiglib.math.*;
-	import jiglib.plugin.ISkin3D;
-	import jiglib.geometry.JSegment;
-	import jiglib.physics.RigidBody;
 	import jiglib.physics.PhysicsState;
+	import jiglib.physics.RigidBody;
+	import jiglib.plugin.ISkin3D;
 	
 	public class JCapsule extends RigidBody {
 		
@@ -65,46 +66,46 @@ package jiglib.geometry{
 			return _length;
 		}
 		 
-		public function getBottomPos(state:PhysicsState):JNumber3D {
-			var temp:JNumber3D = state.orientation.getCols()[1];
+		public function getBottomPos(state:PhysicsState):Vector3D {
+			var temp:Vector3D = state.orientation.getCols()[1];
 			temp.normalize();
-			return JNumber3D.add(state.position, JNumber3D.multiply(temp, -_length / 2));
+			return state.position.add(JNumber3D.getScaleVector(temp, -_length / 2));
 		}
-		 
-		public function getEndPos(state:PhysicsState):JNumber3D {
-			var temp:JNumber3D = state.orientation.getCols()[1];
+		
+		public function getEndPos(state:PhysicsState):Vector3D {
+			var temp:Vector3D = state.orientation.getCols()[1];
 			temp.normalize();
-			return JNumber3D.add(state.position, JNumber3D.multiply(temp, _length / 2));
+			return state.position.add(JNumber3D.getScaleVector(temp, _length / 2));
 		}
 		 
 		override public function segmentIntersect(out:Object, seg:JSegment, state:PhysicsState):Boolean {
 			out.fracOut = 0;
-			out.posOut = new JNumber3D();
-			out.normalOut = new JNumber3D();
+			out.posOut = new Vector3D();
+			out.normalOut = new Vector3D();
 			
-			var Ks:JNumber3D = seg.delta;
-			var kss:Number = JNumber3D.dot(Ks, Ks);
+			var Ks:Vector3D = seg.delta;
+			var kss:Number = Ks.dotProduct(Ks);
 			var radiusSq:Number = _radius * _radius;
 			
 			var cylinderAxis:JSegment = new JSegment(getBottomPos(state), state.orientation.getCols()[1]);
-			var Ke:JNumber3D = cylinderAxis.delta;
-			var Kg:JNumber3D = JNumber3D.sub(cylinderAxis.origin, seg.origin);
-			var kee:Number = JNumber3D.dot(Ke, Ke);
+			var Ke:Vector3D = cylinderAxis.delta;
+			var Kg:Vector3D = cylinderAxis.origin.subtract(seg.origin);
+			var kee:Number = Ke.dotProduct(Ke);
 			if (Math.abs(kee) < JNumber3D.NUM_TINY) {
 				return false;
 			}
 			
-			var kes:Number = JNumber3D.dot(Ke, Ks);
-			var kgs:Number = JNumber3D.dot(Kg, Ks);
-			var keg:Number = JNumber3D.dot(Ke, Kg);
-			var kgg:Number = JNumber3D.dot(Kg, Kg);
+			var kes:Number = Ke.dotProduct(Ks);
+			var kgs:Number = Kg.dotProduct(Ks);
+			var keg:Number = Ke.dotProduct(Kg);
+			var kgg:Number = Kg.dotProduct(Kg);
 			
-			var distSq:Number = JNumber3D.sub(Kg, JNumber3D.divide(JNumber3D.multiply(Ke, keg), kee)).modulo2;
+			var distSq:Number = Kg.subtract(JNumber3D.getDivideVector(JNumber3D.getScaleVector(Ke, keg), kee)).lengthSquared;
 			if (distSq < radiusSq) {
 				out.fracOut = 0;
 				out.posOut = seg.origin.clone();
-				out.normalOut = JNumber3D.sub(out.posOut, getBottomPos(state));
-				out.normalOut = JNumber3D.sub(out.normalOut, JNumber3D.multiply(state.orientation.getCols()[1], JNumber3D.dot(out.normalOut, state.orientation.getCols()[1])));
+				out.normalOut = out.posOut.subtract(getBottomPos(state));
+				out.normalOut = out.normalOut.subtract(JNumber3D.getScaleVector(state.orientation.getCols()[1], out.normalOut.dotProduct(state.orientation.getCols()[1])));
 				out.normalOut.normalize();
 				return true;
 			}
@@ -125,8 +126,8 @@ package jiglib.geometry{
 			}
 			out.fracOut = t;
 			out.posOut = seg.getPoint(t);
-			out.normalOut = JNumber3D.sub(out.posOut, getBottomPos(state));
-			out.normalOut = JNumber3D.sub(out.normalOut, JNumber3D.multiply(state.orientation.getCols()[1], JNumber3D.dot(out.normalOut, state.orientation.getCols()[1])));
+			out.normalOut = out.posOut.subtract(getBottomPos(state));
+			out.normalOut = out.normalOut.subtract(JNumber3D.getScaleVector(state.orientation.getCols()[1], out.normalOut.dotProduct(state.orientation.getCols()[1])));
 			out.normalOut.normalize();
 			return true;
 		}
