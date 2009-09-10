@@ -25,11 +25,13 @@ distribution.
 
 package jiglib.collision {
 	
+	import flash.geom.Vector3D;
+	
 	import jiglib.cof.JConfig;
 	import jiglib.geometry.*;
 	import jiglib.math.*;
-	import jiglib.physics.RigidBody;
 	import jiglib.physics.MaterialProperties;
+	import jiglib.physics.RigidBody;
 
 	public class CollDetectSphereBox extends CollDetectFunctor {
 		
@@ -39,7 +41,7 @@ package jiglib.collision {
 			type1 = "BOX";
 		}
 		
-		override public function collDetect(info:CollDetectInfo, collArr:Array):void {
+		override public function collDetect(info:CollDetectInfo, collArr:Vector.<CollisionInfo>):void {
 			var tempBody:RigidBody;
 			if(info.body0.type=="BOX") {
 				tempBody=info.body0;
@@ -53,11 +55,11 @@ package jiglib.collision {
 			if (!sphere.hitTestObject3D(box)) {
 				return;
 			}
-			var spherePos:JNumber3D = sphere.oldState.position;
-			var boxPos:JNumber3D = box.oldState.position;
+			//var spherePos:Vector3D = sphere.oldState.position;
+			//var boxPos:Vector3D = box.oldState.position;
 			
-			var oldBoxPoint:Object=new Object();
-			var newBoxPoint:Object=new Object();
+			var oldBoxPoint:Object={};
+			var newBoxPoint:Object={};
 			
 			var oldDist:Number = box.getDistanceToPoint(box.oldState, oldBoxPoint, sphere.oldState.position);
 			var newDist:Number = box.getDistanceToPoint(box.currentState, newBoxPoint, sphere.currentState.position);
@@ -65,24 +67,24 @@ package jiglib.collision {
 			var oldDepth:Number = sphere.radius - oldDist;
 			var newDepth:Number = sphere.radius - newDist;
 			if (Math.max(oldDepth, newDepth) > -JConfig.collToll) {
-				var dir:JNumber3D;
-				var collPts:Array = [];
+				var dir:Vector3D;
+				var collPts:Vector.<CollPointInfo> = new Vector.<CollPointInfo>();
 				if (oldDist < -JNumber3D.NUM_TINY) {
-					dir = JNumber3D.sub(JNumber3D.sub(oldBoxPoint.pos, sphere.oldState.position), oldBoxPoint.pos);
+					dir = oldBoxPoint.pos.subtract(sphere.oldState.position).subtract(oldBoxPoint.pos);
 					dir.normalize();
 				}
 				else if (oldDist > JNumber3D.NUM_TINY) {
-					dir = JNumber3D.sub(sphere.oldState.position, oldBoxPoint.pos);
+					dir = sphere.oldState.position.subtract(oldBoxPoint.pos);
 					dir.normalize();
 				}
 				else {
-					dir = JNumber3D.sub(sphere.oldState.position, box.oldState.position);
+					dir = sphere.oldState.position.subtract(box.oldState.position);
 					dir.normalize();
 				}
 				
 				var cpInfo:CollPointInfo = new CollPointInfo();
-				cpInfo.r0 = JNumber3D.sub(oldBoxPoint.pos, sphere.oldState.position);
-				cpInfo.r1 = JNumber3D.sub(oldBoxPoint.pos, box.oldState.position);
+				cpInfo.r0 = oldBoxPoint.pos.subtract(sphere.oldState.position);
+				cpInfo.r1 = oldBoxPoint.pos.subtract(box.oldState.position);
 				cpInfo.initialPenetration = oldDepth;
 				collPts.push(cpInfo);
 				

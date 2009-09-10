@@ -3,8 +3,6 @@
 	
 	import jiglib.physics.PhysicsSystem;
 	import jiglib.physics.RigidBody;
-	import jiglib.physics.constraint.JConstraint;
-	import jiglib.physics.constraint.JConstraintPoint;	
 
 	/**
 	 * @author bartekd

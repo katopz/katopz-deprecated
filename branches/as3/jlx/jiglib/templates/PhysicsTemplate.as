@@ -1,7 +1,6 @@
 package jiglib.templates
 {
 	import away3dlite.core.render.*;
-	import away3dlite.materials.ColorMaterial;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Cube6;
 	import away3dlite.templates.FastTemplate;
@@ -32,35 +31,28 @@ package jiglib.templates
 			ground.friction = 0.2;
 			ground.restitution = 0.8;
 			
-			build();
-		}
-
-		override public function set debug(val:Boolean):void
-		{
-			super.debug = val;
-			
-			/*
 			// debug cube, to be remove
 			var length:int = 300;
-			var oCube:Cube6 = new Cube6(10, 10, 10);
-			oCube.material = new ColorMaterial(0xFFFFFF);
+			var oCube:Cube6 = new Cube6(new WireframeMaterial(0xFFFFFF), 10, 10, 10);
 			scene.addChild(oCube);
 
-			var xCube:Cube6 = new Cube6(10, 10, 10);
-			oCube.material = new ColorMaterial(0xFF0000);
+			var xCube:Cube6 = new Cube6(new WireframeMaterial(0xFF0000), 10, 10, 10);
 			xCube.x = length;
 			scene.addChild(xCube);
 
-			var yCube:Cube6 = new Cube6(10, 10, 10);
-			yCube.material = new ColorMaterial(0x00FF00);
+			var yCube:Cube6 = new Cube6(new WireframeMaterial(0x00FF00), 10, 10, 10);
 			yCube.y = length;
 			scene.addChild(yCube);
 
-			var zCube:Cube6 = new Cube6(10, 10, 10);
-			zCube.material = new ColorMaterial(0x0000FF)
+			var zCube:Cube6 = new Cube6(new WireframeMaterial(0x0000FF), 10, 10, 10);
 			zCube.z = length;
 			scene.addChild(zCube);
-			*/
+			
+			var _zCube:Cube6 = new Cube6(new WireframeMaterial(0x000033), 10, 10, 10);
+			_zCube.z = -length;
+			scene.addChild(_zCube);
+			
+			build();
 		}
 		
 		protected function build():void

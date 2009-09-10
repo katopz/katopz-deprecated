@@ -252,8 +252,8 @@ package jiglib.math {
 			return n;
 		}
 
-		static public function get UP():JNumber3D {
-			return new JNumber3D(0, 1, 0);
+		static public function get UP():Vector3D {
+			return new Vector3D(0, 1, 0);
 		}
 
 		static public function get RIGHT():JNumber3D {
@@ -274,12 +274,12 @@ package jiglib.math {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public static function toJNumber3D(v:Vector3D):JNumber3D
+		public static function getJNumber3D(v:Vector3D):JNumber3D
 		{
 			return new JNumber3D(v.x, v.y, v.z);
 		}
 		
-		public static function toVector3D(v:JNumber3D):Vector3D
+		public static function getVector3D(v:JNumber3D):Vector3D
 		{
 			return new Vector3D(v.x, v.y, v.z);
 		}
@@ -310,9 +310,17 @@ package jiglib.math {
 
 		public static function __getNormal(v0:Vector3D, v1:Vector3D, v2:Vector3D):Vector3D
 		{
+			/*
+			var E:JNumber3D = v1.clone();
+			E = JNumber3D.sub(E, v0);
+			var F:JNumber3D = v2.clone();
+			F = JNumber3D.sub(F, v1);
+			var N:JNumber3D = JNumber3D.cross(F, E);
+			N.normalize();
+			*/
 			var E:Vector3D = v1.clone();
 			var F:Vector3D = v2.clone();
-			var N:Vector3D = F.subtract(v1).crossProduct(E.subtract(v0));
+			var N:Vector3D = E.subtract(v1).crossProduct(F.subtract(v0));
 			N.normalize();
 
 			return N;

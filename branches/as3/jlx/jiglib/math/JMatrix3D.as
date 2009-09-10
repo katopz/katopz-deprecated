@@ -513,7 +513,7 @@ package jiglib.math {
 
 		// _________________________________________________________________________________ VECTOR
 
-		public static function multiplyVector( m:JMatrix3D, v:JNumber3D ):void {
+		public static function multiplyVector( m:JMatrix3D, v:* ):void {
 			var vx:Number = v.x;
 			var vy:Number = v.y;
 			var vz:Number = v.z;
@@ -905,9 +905,9 @@ package jiglib.math {
 		 */
 		public function getCols():Array {
 			var cols:Array = new Array();
-			cols[0] = new JNumber3D(n11, n21, n31);
-			cols[1] = new JNumber3D(n12, n22, n32);
-			cols[2] = new JNumber3D(n13, n23, n33);
+			cols[0] = new Vector3D(n11, n21, n31);
+			cols[1] = new Vector3D(n12, n22, n32);
+			cols[2] = new Vector3D(n13, n23, n33);
 			return cols;
 		}
 
@@ -972,7 +972,7 @@ package jiglib.math {
 		public static function getJMatrix3D(m:Matrix3D):JMatrix3D
 		{
 			var _rawData:Vector.<Number> = m.rawData;
-			return new JMatrix3D(Vector.<Number>([_rawData[0], _rawData[4], _rawData[8], _rawData[12], _rawData[1], _rawData[5], _rawData[9], _rawData[13], _rawData[2], _rawData[6], _rawData[10], _rawData[14], _rawData[3], _rawData[7], _rawData[11], _rawData[15]]));
+			return new JMatrix3D([_rawData[0], _rawData[4], _rawData[8], _rawData[12], _rawData[1], _rawData[5], _rawData[9], _rawData[13], _rawData[2], _rawData[6], _rawData[10], _rawData[14], _rawData[3], _rawData[7], _rawData[11], _rawData[15]]);
 		}
 		
 		public static function getTranslationMatrix(x:Number, y:Number, z:Number):Matrix3D
@@ -1071,7 +1071,7 @@ package jiglib.math {
 			return cols;
 		}
 
-		public static function __multiplyVector(matrix3d:Matrix3D, v:Vector3D):void
+		public static function getMultiplyVector(matrix3d:Matrix3D, v:Vector3D):void
 		{
 			var vx:Number = v.x;
 			var vy:Number = v.y;
