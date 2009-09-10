@@ -962,7 +962,20 @@ package jiglib.math {
 			return tr;
 		}
 		
-public static function getTranslationMatrix(x:Number, y:Number, z:Number):Matrix3D
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public static function getMatrix3D(m:JMatrix3D):Matrix3D
+		{
+			return new Matrix3D(Vector.<Number>([m.n11, m.n21, m.n31, m.n41, m.n12, m.n22, m.n32, m.n42, m.n13, m.n23, m.n33, m.n43, m.n14, m.n24, m.n34, m.n44]));
+		}
+
+		public static function getJMatrix3D(m:Matrix3D):JMatrix3D
+		{
+			var _rawData:Vector.<Number> = m.rawData;
+			return new JMatrix3D(Vector.<Number>([_rawData[0], _rawData[4], _rawData[8], _rawData[12], _rawData[1], _rawData[5], _rawData[9], _rawData[13], _rawData[2], _rawData[6], _rawData[10], _rawData[14], _rawData[3], _rawData[7], _rawData[11], _rawData[15]]));
+		}
+		
+		public static function getTranslationMatrix(x:Number, y:Number, z:Number):Matrix3D
 		{
 			var matrix3d:Matrix3D = new Matrix3D();
 			matrix3d.appendTranslation(x, y, z);
