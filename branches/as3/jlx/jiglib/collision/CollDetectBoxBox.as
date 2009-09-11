@@ -163,9 +163,6 @@ package jiglib.collision
 		{
 			var AD:Vector3D = PA1.subtract(PA0);
 			var BD:Vector3D = PB1.subtract(PB0);
-			//var N:JNumber3D = JNumber3D.cross(BD, AD);
-			//var M:JNumber3D = JNumber3D.cross(BD, N);
-			//var md:Number = JNumber3D.dot(M, PB0);
 			var N:Vector3D = AD.crossProduct(BD);
 			var M:Vector3D = N.crossProduct(BD);
 			var md:Number = M.dotProduct(PB0);
@@ -213,10 +210,6 @@ package jiglib.collision
 			var len:int = axClipperVertices.length;
 			for (var ip1:int = 0; ip1 < len; i = ip1, ip1++)
 			{
-				//D = JNumber3D.sub(axClipperVertices[ip1], axClipperVertices[i]);
-				//N = JNumber3D.cross(ClipperNormal, D);
-				//var dis:Number = JNumber3D.dot(axClipperVertices[i], N);
-
 				D = axClipperVertices[ip1].subtract(axClipperVertices[i]);
 				N = D.crossProduct(ClipperNormal);
 				var dis:Number = axClipperVertices[i].dotProduct(N);
@@ -297,8 +290,8 @@ package jiglib.collision
 				return;
 			}
 
-			var dirs0Arr:Vector.<Vector3D> = Vector.<Vector3D>(box0.currentState.orientation.getCols());
-			var dirs1Arr:Vector.<Vector3D> = Vector.<Vector3D>(box1.currentState.orientation.getCols());
+			var dirs0Arr:Vector.<Vector3D> = box0.currentState.getOrientationCols();
+			var dirs1Arr:Vector.<Vector3D> = box1.currentState.getOrientationCols();
 
 			var axes:Vector.<Vector3D> = Vector.<Vector3D>([dirs0Arr[0], dirs0Arr[1], dirs0Arr[2],
 				dirs1Arr[0], dirs1Arr[1], dirs1Arr[2],

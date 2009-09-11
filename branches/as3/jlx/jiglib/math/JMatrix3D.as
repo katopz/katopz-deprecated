@@ -513,7 +513,17 @@ package jiglib.math {
 
 		// _________________________________________________________________________________ VECTOR
 
-		public static function multiplyVector( m:JMatrix3D, v:* ):void {
+		public static function multiplyVector( m:*, v:* ):void 
+		{
+			if(m is JMatrix3D)
+			{
+				oldMultiplyVector(m,v)
+			}else{
+				__multiplyVector(m,v)
+			}
+		}
+		
+		public static function oldMultiplyVector( m:JMatrix3D, v:* ):void {
 			var vx:Number = v.x;
 			var vy:Number = v.y;
 			var vz:Number = v.z;
@@ -1071,7 +1081,7 @@ package jiglib.math {
 			return cols;
 		}
 
-		public static function getMultiplyVector(matrix3d:Matrix3D, v:Vector3D):void
+		public static function __multiplyVector(matrix3d:Matrix3D, v:Vector3D):void
 		{
 			var vx:Number = v.x;
 			var vy:Number = v.y;

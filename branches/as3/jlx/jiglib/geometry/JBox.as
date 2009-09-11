@@ -119,7 +119,7 @@ package jiglib.geometry
 		public function getSqDistanceToPoint(state:PhysicsState, closestBoxPoint:Object, point:Vector3D):Number
 		{
 			closestBoxPoint.pos = point.subtract(state.position);
-			JMatrix3D.getMultiplyVector(JMatrix3D.getTransposeMatrix(state.__orientation), closestBoxPoint.pos);
+			JMatrix3D.multiplyVector(JMatrix3D.getTransposeMatrix(state.__orientation), closestBoxPoint.pos);
 
 			var delta:Number = 0;
 			var sqDistance:Number = 0;
