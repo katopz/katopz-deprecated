@@ -58,7 +58,8 @@ package jiglib.plugin.away3dlite
 		public function createGround(material:Material, size:Number, level:Number):RigidBody
 		{
 			var ground:Plane = new Plane(material, size, size, 1, 1);
-			ground.yUp = true;
+			ground.rotationX = 90;
+			ground.transform.matrix3D.transformVectors(ground.vertices, ground.vertices);
 			scene.addChild(ground);
 			
 			var jGround:JPlane = new JPlane(new Away3DLiteMesh(ground));
