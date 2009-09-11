@@ -220,26 +220,26 @@ package jiglib.physics
 			matrix3d.appendRotation(_rotationZ, Vector3D.Z_AXIS);
 			return matrix3d;
 		}
-/*
+
 		public function setOrientation(_orient:Matrix3D):void
 		{
 			var orient:JMatrix3D = JMatrix3D.getJMatrix3D(_orient);
 			
 			_currState.orientation.copy(orient);
 			_invOrientation = JMatrix3D.getTransposeMatrix(_currState.__orientation);
-			_worldInertia = JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, _bodyInertia),  JMatrix3D.getJMatrix3D(_invOrientation));
-			_worldInvInertia = JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, _bodyInvInertia), JMatrix3D.getJMatrix3D(_invOrientation));
+			_worldInertia = JMatrix3D.getMatrix3D(JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, JMatrix3D.getJMatrix3D(_bodyInertia)),  JMatrix3D.getJMatrix3D(_invOrientation)));
+			_worldInvInertia = JMatrix3D.getMatrix3D(JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, JMatrix3D.getJMatrix3D(_bodyInvInertia)), JMatrix3D.getJMatrix3D(_invOrientation)));
 			updateState();
 		}
-*/
 
+/*
 		public function setOrientation(orient:Matrix3D):void
 		{
 			_currState.orientation = JMatrix3D.getJMatrix3D(orient.clone());
 			updateInertia();
 			updateState();
 		}
-		
+*/		
 		public function get x():Number
 		{
 			return _currState.position.x;
@@ -616,7 +616,7 @@ package jiglib.physics
 			_worldInertia = JMatrix3D.getMatrix3D(JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, JMatrix3D.getJMatrix3D(_bodyInertia)), JMatrix3D.getJMatrix3D(_invOrientation)));
 			_worldInvInertia = JMatrix3D.getMatrix3D(JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, JMatrix3D.getJMatrix3D(_bodyInvInertia)), JMatrix3D.getJMatrix3D(_invOrientation)));
 		}
-
+/*
 		public function updateInertia():void
 		{
 			_invOrientation = JMatrix3D.getTransposeMatrix(_currState.__orientation);
@@ -627,13 +627,13 @@ package jiglib.physics
 				JMatrix3D.getAppendMatrix3D(_currState.__orientation, (_bodyInertia))
 			));
 
-			_worldInvInertia = (JMatrix3D.getAppendMatrix3D
+			_worldInvInertia = JMatrix3D.getJMatrix3D(JMatrix3D.getAppendMatrix3D
 			(
 				_invOrientation,
 				JMatrix3D.getAppendMatrix3D(_currState.__orientation, _bodyInvInertia)
 			));
 		}
-		
+*/
 		public var isActive:Boolean;
 
 		public function get movable():Boolean
@@ -900,7 +900,7 @@ package jiglib.physics
 		{
 			return _worldInvInertia;
 		}
-
+			
 		public function get nonCollidables():Vector.<RigidBody>
 		{
 			return _nonCollidables;
