@@ -120,7 +120,6 @@ package jiglib.physics.constraint
 			JMatrix3D.multiplyVector(_body0.worldInvInertia, tempVec1);
 			var tempVec2:Vector3D = r1.crossProduct(N);
 			JMatrix3D.multiplyVector(_body1.worldInvInertia, tempVec2);
-			//var denominator:Number = _body0.invMass + _body1.invMass + JNumber3D.dot(N, JNumber3D.cross(r0, tempVec1)) + JNumber3D.dot(N, JNumber3D.cross(r1, tempVec2));
 			var denominator:Number = _body0.invMass + _body1.invMass + N.dotProduct(tempVec1.crossProduct(r0)) + N.dotProduct(tempVec2.crossProduct(r1));
 			if (denominator < JNumber3D.NUM_TINY)
 			{

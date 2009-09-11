@@ -64,7 +64,6 @@ package jiglib.physics.constraint {
 			JMatrix3D.multiplyVector(_body.currentState.orientation, worldPos);
 			worldPos = worldPos.add( _body.currentState.position);
 			var R:Vector3D = worldPos.subtract(_body.currentState.position);
-			//var currentVel:JNumber3D = JNumber3D.add(_body.currentState.linVelocity, JNumber3D.cross(R, _body.currentState.rotVelocity));
 			var currentVel:Vector3D = _body.currentState.linVelocity.add(_body.currentState.rotVelocity.crossProduct(R));
 			
 			var desiredVel:Vector3D;
