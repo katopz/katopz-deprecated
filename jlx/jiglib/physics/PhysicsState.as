@@ -21,5 +21,10 @@ package jiglib.physics
 		{ 
 			orientation = JMatrix3D.getJMatrix3D(m);
 		}
+		
+		public function getOrientationCols():Vector.<Vector3D>
+		{
+			return JMatrix3D.getCols(__orientation);
+		}
 	}
 }

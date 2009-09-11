@@ -582,8 +582,15 @@ package jiglib.physics
 			setInertia(getInertiaProperties(m));
 		}
 
-		public function setInertia(i:JMatrix3D):void
+		public function setInertia(i:*):void
 		{
+			if(i is JMatrix3D)
+			{
+				
+			}else{
+				i = JMatrix3D.getJMatrix3D(i);
+			}
+			
 			_bodyInertia = JMatrix3D.clone(i);
 			_bodyInvInertia = JMatrix3D.getJMatrix3D(JMatrix3D.getInverseMatrix(JMatrix3D.getMatrix3D(i)));
 
@@ -732,9 +739,9 @@ package jiglib.physics
 			return false;
 		}
 
-		public function getInertiaProperties(m:Number):JMatrix3D
+		public function getInertiaProperties(m:Number):Matrix3D
 		{
-			return new JMatrix3D();
+			return new Matrix3D();
 			m;
 		}
 
