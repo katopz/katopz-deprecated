@@ -1001,6 +1001,7 @@ package jiglib.math {
 		
 		public static function getRotationMatrix(x:Number, y:Number, z:Number, rad:Number, pivotPoint:Vector3D=null):Matrix3D
 		{
+			/*
 			var nCos:Number = Math.cos(rad);
 			var nSin:Number = Math.sin(rad);
 			var scos:Number = 1 - nCos;
@@ -1029,7 +1030,10 @@ package jiglib.math {
 			rawData[15] = 1;
 			
 			var matrix3d:Matrix3D = new Matrix3D(rawData);
-			return matrix3d;
+			*/
+			var matrix3D:Matrix3D = new Matrix3D();
+			matrix3D.appendRotation(rad, new Vector3D(x,y,z),pivotPoint);
+			return matrix3D;
 		}
 		
 		public static function getInverseMatrix(m:Matrix3D):Matrix3D
