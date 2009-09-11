@@ -1062,10 +1062,10 @@ package jiglib.math {
 			return matrix3D;
 		}
 		
-		public static function getRotationMatrixAxis(rad:Number, rotateAxis:Vector3D = Vector3D.X_AXIS):Matrix3D
+		public static function getRotationMatrixAxis(degree:Number, rotateAxis:Vector3D = null):Matrix3D
 		{
     		var matrix3d:Matrix3D = new Matrix3D();
-    		matrix3d.appendRotation(rad, rotateAxis);
+    		matrix3d.appendRotation(degree, rotateAxis?rotateAxis:Vector3D.X_AXIS);
     		return matrix3d;
 		}
 		

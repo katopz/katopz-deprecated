@@ -187,21 +187,21 @@ package jiglib.physics
 		public function pitch(rot:Number):void
 		{
 			//var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
-			setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationX(rot)));
+			//setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationX(rot)));
 		}
 
 		public function yaw(rot:Number):void
 		{
 			//var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
-			setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationY(rot)));
+			//setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationY(rot)));
 		}
 
 		public function roll(rot:Number):void
 		{
 			//var rad:Number = (_useDegrees) ? degreesToRadians(rot) : rot;
-			setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationZ(rot)));
+			//setOrientation(JMatrix3D.multiply(currentState.orientation, JMatrix3D.rotationZ(rot)));
 		}
-
+/*
 		private function createRotationMatrix():JMatrix3D
 		{
 			var rx:JMatrix3D = JMatrix3D.rotationX(_rotationX);
@@ -211,16 +211,35 @@ package jiglib.physics
 			um = JMatrix3D.multiply(um, rz);
 			return um;
 		}
-
-		public function setOrientation(orient:JMatrix3D):void
+*/
+		private function createRotationMatrix():Matrix3D
 		{
+			var matrix3d:Matrix3D = new Matrix3D();
+			matrix3d.appendRotation(_rotationX, Vector3D.X_AXIS);
+			matrix3d.appendRotation(_rotationY, Vector3D.Y_AXIS);
+			matrix3d.appendRotation(_rotationZ, Vector3D.Z_AXIS);
+			return matrix3d;
+		}
+/*
+		public function setOrientation(_orient:Matrix3D):void
+		{
+			var orient:JMatrix3D = JMatrix3D.getJMatrix3D(_orient);
+			
 			_currState.orientation.copy(orient);
 			_invOrientation = JMatrix3D.getTransposeMatrix(_currState.__orientation);
 			_worldInertia = JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, _bodyInertia),  JMatrix3D.getJMatrix3D(_invOrientation));
 			_worldInvInertia = JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, _bodyInvInertia), JMatrix3D.getJMatrix3D(_invOrientation));
 			updateState();
 		}
+*/
 
+		public function setOrientation(orient:Matrix3D):void
+		{
+			_currState.orientation = JMatrix3D.getJMatrix3D(orient.clone());
+			updateInertia();
+			updateState();
+		}
+		
 		public function get x():Number
 		{
 			return _currState.position.x;
@@ -598,6 +617,23 @@ package jiglib.physics
 			_worldInvInertia = JMatrix3D.multiply(JMatrix3D.multiply(_currState.orientation, _bodyInvInertia), JMatrix3D.getJMatrix3D(_invOrientation));
 		}
 
+		public function updateInertia():void
+		{
+			_invOrientation = JMatrix3D.getTransposeMatrix(_currState.__orientation);
+			
+			_worldInertia = JMatrix3D.getJMatrix3D(JMatrix3D.getAppendMatrix3D
+			(
+				_invOrientation,
+				JMatrix3D.getAppendMatrix3D(_currState.__orientation, JMatrix3D.getMatrix3D(_bodyInertia))
+			));
+
+			_worldInvInertia = JMatrix3D.getJMatrix3D(JMatrix3D.getAppendMatrix3D
+			(
+				_invOrientation,
+				JMatrix3D.getAppendMatrix3D(_currState.__orientation, JMatrix3D.getMatrix3D(_bodyInvInertia))
+			));
+		}
+		
 		public var isActive:Boolean;
 
 		public function get movable():Boolean
