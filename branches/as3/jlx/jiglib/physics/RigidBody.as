@@ -74,6 +74,7 @@ package jiglib.physics
 		private var _storedPositionForActivation:Vector3D;
 		private var _lastPositionForDeactivation:Vector3D;
 		private var _lastOrientationForDeactivation:JMatrix3D;
+		private var WTF:JMatrix3D;
 
 		private var _material:MaterialProperties;
 
@@ -123,7 +124,12 @@ package jiglib.physics
 			_storedPositionForActivation = new Vector3D();
 			_bodiesToBeActivatedOnMovement = new Vector.<RigidBody>();
 			_lastPositionForDeactivation = _currState.position.clone();
-			_lastOrientationForDeactivation = JMatrix3D.clone(_currState.orientation);
+			//NEXT STEP : create clone 4x3
+			//WTF = JMatrix3D.clone(_currState.orientation);
+			//_lastOrientationForDeactivation = JMatrix3D.getMatrix3D(WTF);
+			//_lastOrientationForDeactivation = _currState.__orientation.clone();
+			
+			_lastOrientationForDeactivation = _currState.orientation.clone();
 
 			_type = "Object3D";
 			_boundingSphere = 0;
@@ -608,12 +614,17 @@ package jiglib.physics
 			}
 
 			var ot:Number = JConfig.orientThreshold;
-			var deltaMat:JMatrix3D = JMatrix3D.getJMatrix3D(JMatrix3D.getPrependMatrix(JMatrix3D.getMatrix3D(_currState.orientation), JMatrix3D.getMatrix3D(_lastOrientationForDeactivation)));
-			var deltaMatCols:* = deltaMat.getCols();
+			var deltaMat:Matrix3D = (JMatrix3D.getPrependMatrix(JMatrix3D.getMatrix3D(_currState.orientation), JMatrix3D.getMatrix3D(_lastOrientationForDeactivation)));
+			var deltaMatCols:* = JMatrix3D.getCols(deltaMat);
 			if (deltaMatCols[0].length > ot || deltaMatCols[1].length > ot || deltaMatCols[2].length > ot)
 			{
-
-				_lastOrientationForDeactivation.copy(_currState.orientation);
+				//WTF = JMatrix3D.clone(_currState.orientation);
+				//_lastOrientationForDeactivation = JMatrix3D.getMatrix3D(WTF);
+				
+				//_lastOrientationForDeactivation = _currState.__orientation.clone();
+				
+				_lastOrientationForDeactivation = _currState.orientation.clone();
+				
 				_inactiveTime = 0;
 				return;
 			}
@@ -625,7 +636,14 @@ package jiglib.physics
 			if (_inactiveTime > JConfig.deactivationTime)
 			{
 				_lastPositionForDeactivation = _currState.position.clone();
-				_lastOrientationForDeactivation.copy(_currState.orientation);
+				
+				//WTF = JMatrix3D.clone(_currState.orientation);
+				//_lastOrientationForDeactivation = JMatrix3D.getMatrix3D(WTF);
+				
+				//_lastOrientationForDeactivation = _currState.__orientation.clone();
+				
+				_lastOrientationForDeactivation = _currState.orientation.clone();
+				
 				setInactive();
 			}
 		}
@@ -637,17 +655,18 @@ package jiglib.physics
 			setInertia(getInertiaProperties(m));
 		}
 
-		public function setInertia(i:*):void
+		public function setInertia(i:Matrix3D):void
 		{
+			/*
 			if(i is JMatrix3D)
 			{
 				
 			}else{
 				i = JMatrix3D.getJMatrix3D(i);
-			}
+			}*/
 			
-			_bodyInertia = JMatrix3D.getMatrix3D(JMatrix3D.clone(i));
-			_bodyInvInertia = (JMatrix3D.getInverseMatrix(JMatrix3D.getMatrix3D(i)));
+			_bodyInertia = i.clone();//JMatrix3D.getMatrix3D(clone(i));
+			_bodyInvInertia = (JMatrix3D.getInverseMatrix(i));
 
 			/*
 			_worldInertia = JMatrix3D.getMatrix3D(

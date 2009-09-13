@@ -416,8 +416,12 @@ package jiglib.math {
 
 		
 		public function calculateInverse( m:JMatrix3D ):void {
-			var d:Number = m.det;
-
+			var d:Number = -getMatrix3D(m).determinant;
+			//trace(d)
+			//d = m.det;
+			//trace(d)
+			
+			
 			if( Math.abs(d) > 0.001 ) {
 				d = 1 / d;
 	
@@ -458,16 +462,16 @@ package jiglib.math {
 		
 			return inv;
 		}
-
+/*
 		public function get det():Number {
 			return	(this.n11 * this.n22 - this.n21 * this.n12) * this.n33 - (this.n11 * this.n32 - this.n31 * this.n12) * this.n23 + (this.n21 * this.n32 - this.n31 * this.n22) * this.n13;
 		}
 
-		
+	
 		public function get trace():Number {
 			return this.n11 + this.n22 + this.n33 + 1;
 		}
-
+*/
 		// _________________________________________________________________________________ COPY
 
 		public function copy( m:JMatrix3D ):JMatrix3D {
@@ -486,10 +490,15 @@ package jiglib.math {
 			this.n33 = m.n33;	
 			this.n34 = m.n34;
 
+			this.n41 = m.n41;	
+			this.n42 = m.n42;
+			this.n43 = m.n43;	
+			this.n44 = m.n44;
+
 			return this;
 		}
 
-		
+/*		
 		public function copy3x3( m:JMatrix3D ):JMatrix3D {
 			this.n11 = m.n11;   
 			this.n12 = m.n12;   
@@ -503,14 +512,68 @@ package jiglib.math {
 
 			return this;
 		}
-
+*/
 		
-		public static function clone( m:JMatrix3D ):JMatrix3D {
+		public function clone(  ):JMatrix3D {
+			var m:JMatrix3D = this;
 			return new JMatrix3D([m.n11, m.n12, m.n13, m.n14,
 				m.n21, m.n22, m.n23, m.n24,
 				m.n31, m.n32, m.n33, m.n34]);
+				//BUG Matrix 3x4 -> Matrix 4x4
+				//m.n41, m.n42, m.n43, m.n44]);
 		}
+		/*
+		public static function clone( m:JMatrix3D ):JMatrix3D {
+			return new JMatrix3D([m.n11, m.n12, m.n13, m.n14,
+				m.n21, m.n22, m.n23, m.n24,
+				m.n31, m.n32, m.n33, m.n34,
+				m.n41, m.n42, m.n43, m.n44]);
+		}
+		*/
+		
+/*
+//http://wonderfl.net/code/21bf750bbc3b4c157416cec2a03868ce43ab3abe
+public static function invert(entity:Matrix3D):Boolean {
+		var e:Vector.<Number>=Vector.<Number>(entity.rawData);
+		var a:Vector.<Number>=new Vector.<Number>(16,true);
+		
+		a[0]=sarrus([e[5],e[9],e[13],e[6],e[10],e[14],e[7],e[11],e[15]]);
+		a[1]=- sarrus([e[4],e[8],e[12],e[6],e[10],e[14],e[7],e[11],e[15]]);
+		a[2]=sarrus([e[4],e[8],e[12],e[5],e[9],e[13],e[7],e[11],e[15]]);
+		a[3]=- sarrus([e[4],e[8],e[12],e[5],e[9],e[13],e[6],e[10],e[14]]);
 
+		a[4]=- sarrus([e[1],e[9],e[13],e[2],e[10],e[14],e[3],e[11],e[15]]);
+		a[5]=sarrus([e[0],e[8],e[12],e[2],e[10],e[14],e[3],e[11],e[15]]);
+		a[6]=- sarrus([e[0],e[8],e[12],e[1],e[9],e[13],e[3],e[11],e[15]]);
+		a[7]=sarrus([e[0],e[8],e[12],e[1],e[9],e[13],e[2],e[10],e[14]]);
+
+		a[8]=sarrus([e[1],e[5],e[13],e[2],e[6],e[14],e[3],e[7],e[15]]);
+		a[9]=- sarrus([e[0],e[4],e[12],e[2],e[6],e[14],e[3],e[7],e[15]]);
+		a[10]=sarrus([e[0],e[4],e[12],e[1],e[5],e[13],e[3],e[7],e[15]]);
+		a[11]=- sarrus([e[0],e[4],e[12],e[1],e[5],e[13],e[2],e[6],e[14]]);
+
+		a[12]=- sarrus([e[1],e[5],e[9],e[2],e[6],e[10],e[3],e[7],e[11]]);
+		a[13]=sarrus([e[0],e[4],e[8],e[2],e[6],e[10],e[3],e[7],e[11]]);
+		a[14]=- sarrus([e[0],e[4],e[8],e[1],e[5],e[9],e[3],e[7],e[11]]);
+		a[15]=sarrus([e[0],e[4],e[8],e[1],e[5],e[9],e[2],e[6],e[10]]);
+
+		var d:Number=e[0]*a[0]+e[1]*a[1]+e[2]*a[2]+e[3]*a[3];
+		if (d!=0) {
+			entity.rawData = Vector.<Number>([
+				a[0]/d,a[4]/d,a[8]/d,a[12]/d,
+				a[1]/d,a[5]/d,a[9]/d,a[13]/d,
+				a[2]/d,a[6]/d,a[10]/d,a[14]/d,
+				a[3]/d,a[7]/d,a[11]/d,a[15]/d]);
+		}
+		return d != 0;
+
+		function sarrus(c:Array):Number {
+			return c[0]*(c[4]*c[8]-c[5]*c[7])+
+			c[1]*(c[5]*c[6]-c[3]*c[8])+
+			c[2]*(c[3]*c[7]-c[4]*c[6]);
+		}
+	}
+*/
 		// _________________________________________________________________________________ VECTOR
 
 		public static function multiplyVector( m:*, v:* ):void 
@@ -913,6 +976,7 @@ package jiglib.math {
 		/*
 		 * modify by Muzer
 		 */
+		/*
 		public function getCols():Array {
 			var cols:Array = new Array();
 			cols[0] = new Vector3D(n11, n21, n31);
@@ -920,6 +984,7 @@ package jiglib.math {
 			cols[2] = new Vector3D(n13, n23, n33);
 			return cols;
 		}
+		*/
 
 		public function calculateSub( a:JMatrix3D, b:JMatrix3D ):void {
 			this.n11 = a.n11 - b.n11;
@@ -1038,8 +1103,12 @@ package jiglib.math {
 		
 		public static function getInverseMatrix(m:Matrix3D):Matrix3D
 		{
-			var matrix3d:Matrix3D = m.clone();
-			matrix3d.invert();
+			//var matrix3d:Matrix3D = m.clone();
+			//matrix3d.invert();
+			//return matrix3d;
+			
+			var jmatrix3d:JMatrix3D = inverse(getJMatrix3D(m));
+			var matrix3d:Matrix3D = getMatrix3D(jmatrix3d);
 			return matrix3d;
 		}
 
