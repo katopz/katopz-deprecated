@@ -5,12 +5,14 @@ package
 	import away3dlite.primitives.*;
 	import away3dlite.templates.*;
 	
-	import flash.display.BlendMode;
-	import flash.display.Graphics;
-	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.text.AntiAliasType;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
 
-	[SWF(backgroundColor="#000000",frameRate="30",quality="MEDIUM",width="800",height="600")]
+	[SWF(backgroundColor="#DDDDDD",frameRate="30",quality="MEDIUM",width="800",height="600")]
 	/**
 	 * @author katopz
 	 */
@@ -18,11 +20,13 @@ package
 	{
 		private var particles:Vector.<Particle>;
 		private var particle:Particle;
-		private var radius:uint = 200;
+		private var radius:uint = 300;
 		
 		override protected function onInit():void
 		{
-			var max:uint = 10;
+			view.mouseEnabled = false;
+			
+			var max:uint = 1;
 			var i:int = max;
 			
 			particles = new Vector.<Particle>(i, true);
@@ -32,18 +36,35 @@ package
 			
 			while(i--)
 			{
+				/*
 				var particleMaterial:Sprite = new Sprite();
 				var _graphics:Graphics = particleMaterial.graphics;
-				_graphics.lineStyle(2,0xFFFFFF,.75);
 				_graphics.beginFill(0xFF0000, 1);
-				_graphics.drawCircle(0, 0, 20);
+				_graphics.drawCircle(0, 0, 10);
 				_graphics.endFill();
+				*/
+				
+				var particleMaterial:TextField = new TextField();
+				particleMaterial.embedFonts = false;
+				particleMaterial.antiAliasType = AntiAliasType.ADVANCED;
+				particleMaterial.type = TextFieldType.INPUT;
+				particleMaterial.background = true;
+				particleMaterial.backgroundColor = 0xFFFFFF*Math.random();
+				//particleMaterial.mouseEnabled = false;
+				particleMaterial.mouseWheelEnabled = false;
+				particleMaterial.tabEnabled = false;
+				particleMaterial.autoSize = TextFieldAutoSize.CENTER;
+				particleMaterial.text = "Click and Type!";
+				
+				particleMaterial.setTextFormat(new TextFormat("Tahoma",9 , 0xFFFFFF-particleMaterial.backgroundColor));
+				
+				//particleMaterial.filters = [new GlowFilter(0xFF0000,1,2,2,1)];
 				
 				//particleMaterial.alpha = 0;
 				
 				//particleMaterial.blendMode = BlendMode.ADD;
 				
-				particleMaterial.addEventListener(MouseEvent.MOUSE_OVER, onOver);
+				//particleMaterial.addEventListener(MouseEvent.MOUSE_OVER, onOver);
 				
 				particle = new Particle(particleMaterial);
 				scene.addChild(particle);
@@ -64,16 +85,19 @@ package
 		
 		private function onOver(event:MouseEvent):void
 		{
-			Sprite(event.target).visible = false;
+			//Sprite(event.target).visible = false;
+			//TextField(event.target)
 		}
 		
 		override protected function onPreRender():void
 		{
-			scene.rotationY++;
+			scene.rotationY+=.5;
 			
 			var particle:Particle = particles[0];
 			do{
 		   		//particle.clip.alpha = (radius-particle.position.length)/100//int(particle.screenZ/1000 - .55);
+		   		var textField:TextField = TextField(particle.clip).text; 
+		   		textField = String(int(particle.screenZ));
 		   		particle = particle.nextParticle;
 			}while(particle);
 			
