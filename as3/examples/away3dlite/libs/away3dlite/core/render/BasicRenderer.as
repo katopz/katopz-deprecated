@@ -31,6 +31,11 @@ package away3dlite.core.render
 		
 		private var _material_graphicsData:Vector.<IGraphicsData>;
 		
+		/**
+		 * Determines whether 3d objects are sorted in the view. Defaults to false.
+		 */
+		public var sortObjects:Boolean = false;
+		
 		// Layer
 		private var _layers:Dictionary = new Dictionary();
 		private var _graphicsDatas:Dictionary = new Dictionary();
@@ -45,6 +50,35 @@ package away3dlite.core.render
 				var children:Array = (object as ObjectContainer3D).children;
 				var child:Object3D;
 				
+				if (sortObjects)
+				{
+					// z sort
+					children.sortOn("screenZ", 18);
+					
+					// depth sort
+					for each (child in children)
+						object.setChildIndex(child, children.indexOf(child));
+					
+					//for each (var object2D:Object2D in children)
+					//	object.setChildIndex(displayObject, object.getChildIndex());
+					
+					/*
+					sprites = [];
+					for each(var obj:DisplayObject3D in children)
+						if(obj is Sprite3D)
+							sprites.push(obj);
+					sprites.sort(zSort);
+		 
+					for each(var s3d:Sprite3D in sprites) {
+						if(spriteContainer.contains(s3d.sprite))
+							spriteContainer.setChildIndex(s3d.sprite, 0);
+						else
+							spriteContainer.addChildAt(s3d.sprite, 0);
+					}
+					*/
+					
+				}
+				
 				for each (child in children)
 				{
 					if(child.layer)
@@ -54,7 +88,6 @@ package away3dlite.core.render
 					}
 					collectFaces(child);
 				}
-				
 			} else if (object is Mesh) {
 				
 				var mesh:Mesh = object as Mesh;
@@ -72,10 +105,11 @@ package away3dlite.core.render
 				
 				_view._totalFaces += mesh._faces.length;
 				
-			}else if (object is Particle) {
+			}/*else if (object is Object2D) {
 				
-				/*
+				
 				var _mesh:Mesh = object as Mesh;
+				
 				var _mesh_material:Material = _mesh.material;
 				var _mesh_material_graphicsData:Vector.<IGraphicsData> = _mesh_material.graphicsData;
 				
@@ -87,8 +121,8 @@ package away3dlite.core.render
 				}else{
 					_view_graphics_drawGraphicsData(_mesh_material_graphicsData);
 				}
-				*/
-			}
+				
+			}*/
 			
 			_mouseEnabled = _mouseEnabledArray.pop();
 			
