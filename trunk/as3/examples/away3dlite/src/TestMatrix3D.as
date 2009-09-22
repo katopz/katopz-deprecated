@@ -12,7 +12,7 @@ package
 	public class TestMatrix3D extends Sprite
 	{
 		private var debugText:TextField;
-		private var total:int = 10;
+		private var total:int = 100;
 		
 		public function TestMatrix3D()
 		{
@@ -39,7 +39,7 @@ package
 			}
 			
 			var m1:Matrix3D = new Matrix3D(r1);
-			var m2:Matrix3D = new Matrix3D(r1);
+			var m2:Matrix3D = new Matrix3D(r2);
 			
 			debugText.appendText("\n");
 			debugText.appendText(String(m1.rawData));
@@ -68,6 +68,19 @@ package
 			debugText.appendText(String(getTimer()-time));
 			
 			debugText.appendText("\n");
+			
+			time = getTimer();
+			for(i=0;i<total;i++)
+			{
+				result = compareVector(m1, m2);
+			}
+			debugText.appendText("compareVector:"+String(result)+ ":");
+			debugText.appendText(String(getTimer()-time));
+		}
+		
+		private function compareVector(m1:Matrix3D, m2:Matrix3D):Boolean
+		{
+			return !(m1.rawData > m2.rawData || m1.rawData < m2.rawData);
 		}
 		
 		private function compareRawData(m1:Matrix3D, m2:Matrix3D):Boolean
