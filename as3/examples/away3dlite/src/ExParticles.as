@@ -125,7 +125,7 @@ package
 			   		var textField:TextField = TextField(particle.displayObject);
 			   		//textField.alpha = 1-Math.abs(particle.position.length)/radius;
 			   		if(textField!=focusTextField)
-			   			textField.text = String(particle.screenZ);//String(particle.position.x+","+particle.position.y+","+particle.position.z);
+			   			textField.text = String(int(particle.screenZ));//String(particle.position.x+","+particle.position.y+","+particle.position.z);
 		   		}
 		   		particle = particle.nextParticle;
 			}while(particle);
