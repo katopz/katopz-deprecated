@@ -20,11 +20,11 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends BasicTemplate
+	public class ExSprite2D extends BasicTemplate
 	{
 		private var particles:Vector.<Sprite2D>;
 		private var particle:Sprite2D;
-		private var radius:uint = 300;
+		private var radius:uint = 200;
 		private var focusTextField:TextField;
 		
 		override protected function onInit():void
@@ -44,7 +44,7 @@ package
 			
 			while(i--)
 			{
-				if(false && i<10)
+				if(i<max/2)
 				{
 					// Sprite
 					var sprite:Sprite = new Sprite();
@@ -64,10 +64,10 @@ package
 					textField.backgroundColor = 0xFFFFFF*Math.random();
 					textField.mouseWheelEnabled = false;
 					textField.tabEnabled = false;
-					textField.autoSize = TextFieldAutoSize.CENTER;
+					textField.autoSize = TextFieldAutoSize.LEFT;
 					textField.setTextFormat(new TextFormat("Tahoma",9));
 					textField.textColor = 0xFFFFFF-textField.backgroundColor;
-					textField.text = "...";
+					//textField.text = "...";
 					textField.filters = [new GlowFilter(0x000000,0,0,0,0,0)];
 					
 					particle = new Sprite2D(textField);
@@ -89,8 +89,8 @@ package
 				particles[i] = particle;
 			}
 			
-			var sphere:Sphere = new Sphere();
-			scene.addChild(sphere);
+			//var sphere:Sphere = new Sphere();
+			//scene.addChild(sphere);
 		}
 		
 		private function onMouse(event:MouseEvent):void
@@ -110,13 +110,17 @@ package
 		private var step:Number=0;
 		override protected function onPreRender():void
 		{
+			scene.rotationX++;
 			scene.rotationY++;
+			//scene.rotationZ++;
+			
 			/*
 			camera.x = 1000*Math.cos(step);
-			camera.z = -1000*Math.sin(step);
+			camera.z = 1000*Math.sin(step);
 			camera.lookAt(new Vector3D(0,0,0));
 			*/
-			step+=.1;
+			
+			step+=.05;
 			
 			var particle:Sprite2D = particles[0];
 			do{
