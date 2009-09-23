@@ -51,36 +51,13 @@ package away3dlite.core.render
 				var child:Object3D;
 				
 				if (sortObjects)
-				{
-					// z sort
 					children.sortOn("screenZ", 18);
-					
-					// depth sort
-					for each (child in children)
-						object.setChildIndex(child, children.indexOf(child));
-					
-					//for each (var object2D:Object2D in children)
-					//	object.setChildIndex(displayObject, object.getChildIndex());
-					
-					/*
-					sprites = [];
-					for each(var obj:DisplayObject3D in children)
-						if(obj is Sprite3D)
-							sprites.push(obj);
-					sprites.sort(zSort);
-		 
-					for each(var s3d:Sprite3D in sprites) {
-						if(spriteContainer.contains(s3d.sprite))
-							spriteContainer.setChildIndex(s3d.sprite, 0);
-						else
-							spriteContainer.addChildAt(s3d.sprite, 0);
-					}
-					*/
-					
-				}
 				
 				for each (child in children)
 				{
+					if (sortObjects)
+						object.setChildIndex(child, children.indexOf(child));
+					
 					if(child.layer)
 					{
 						child.layer.graphics.clear();
@@ -105,7 +82,7 @@ package away3dlite.core.render
 				
 				_view._totalFaces += mesh._faces.length;
 				
-			}/*else if (object is Object2D) {
+			}/*else if (object is Particle) {
 				
 				
 				var _mesh:Mesh = object as Mesh;
