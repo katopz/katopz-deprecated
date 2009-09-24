@@ -32,7 +32,11 @@ package away3dlite.core.render
 				if (sortObjects)
 					children.sortOn("screenZ", 18);
 				
-				for each (child in children) {
+				for each (child in children) 
+				{
+					if (sortObjects)
+						object.setChildIndex(child, children.indexOf(child));
+					
 					if(child.layer)
 						child.layer.graphics.clear();
 					
