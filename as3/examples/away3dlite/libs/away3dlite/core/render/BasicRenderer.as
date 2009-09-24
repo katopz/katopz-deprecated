@@ -34,7 +34,7 @@ package away3dlite.core.render
 		/**
 		 * Determines whether 3d objects are sorted in the view. Defaults to false.
 		 */
-		public var sortObjects:Boolean = false;
+		public var sortObjects:Boolean = true;
 		
 		// Layer
 		private var _layers:Dictionary = new Dictionary();
@@ -63,6 +63,7 @@ package away3dlite.core.render
 						child.layer.graphics.clear();
 						_layers[child] = child.layer;
 					}
+					
 					collectFaces(child);
 				}
 			} else if (object is Mesh) {
