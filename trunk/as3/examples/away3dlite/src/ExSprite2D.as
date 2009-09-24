@@ -32,8 +32,6 @@ package
 		{
 			view.mouseEnabled = false;
 			
-			//maximum = 160
-			//test = 200 @ 26fps
 			var max:uint = 200;
 			var i:int = max;
 			
@@ -68,7 +66,7 @@ package
 					textField.setTextFormat(new TextFormat("Tahoma",9));
 					textField.textColor = 0xFFFFFF-textField.backgroundColor;
 					//textField.text = "...";
-					textField.filters = [new GlowFilter(0x000000,0,0,0,0,0)];
+					//textField.filters = [new GlowFilter(0x000000,0,0,0,0,0)];
 					
 					particle = new Sprite2D(textField);
 				}
@@ -112,13 +110,14 @@ package
 		
 		override protected function onPreRender():void
 		{
-			scene.rotationX+=.5;
+			//scene.rotationX+=.5;
 			scene.rotationY+=.5;
-			scene.rotationZ+=.5;
+			//scene.rotationZ+=.5;
 			
 			/*
 			camera.x = 1000*Math.cos(step);
-			camera.y = 1000*Math.sin(step);
+			camera.y = 10*(300-mouseY);
+			camera.z = 1000*Math.sin(step);
 			camera.lookAt(new Vector3D(0,0,0));
 			*/
 			
