@@ -24,7 +24,7 @@ package
 	{
 		private var particles:Vector.<Sprite2D>;
 		private var particle:Sprite2D;
-		private var radius:uint = 200;
+		private var radius:uint = 300;
 		private var focusTextField:TextField;
 		private var step:Number=0;
 		
@@ -73,9 +73,13 @@ package
 				
 				particle.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
 				scene.addChild(particle);
-				
+				/*
+				particle.x = radius*Math.random()-radius*Math.random(); 
+				particle.y = radius*Math.random()-radius*Math.random(); 
+				particle.z = radius*Math.random()-radius*Math.random(); 
+				*/
 				particle.x = radius*Math.cos(step);//radius*Math.random()-radius*Math.random(); 
-				particle.y = -max + step*20;//radius*Math.random()-radius*Math.random(); 
+				particle.y = -max+step*20;//radius*Math.random()-radius*Math.random(); 
 				particle.z = radius*Math.sin(step);//radius*Math.random()-radius*Math.random(); 
 				
 				step+=.1;
@@ -110,16 +114,15 @@ package
 		
 		override protected function onPreRender():void
 		{
-			//scene.rotationX+=.5;
-			scene.rotationY+=.5;
-			//scene.rotationZ+=.5;
+			scene.rotationX+=.5;
+			scene.rotationY+=2;
+			scene.rotationZ+=.5;
 			
-			/*
 			camera.x = 1000*Math.cos(step);
-			camera.y = 10*(300-mouseY);
+			//camera.y = 10*(300-mouseY);
 			camera.z = 1000*Math.sin(step);
 			camera.lookAt(new Vector3D(0,0,0));
-			*/
+			
 			
 			step+=.05;
 			
