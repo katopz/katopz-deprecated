@@ -5,11 +5,11 @@ package
 	import away3dlite.primitives.*;
 	import away3dlite.templates.*;
 	
+	import flash.display.Bitmap;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
-	import flash.geom.Vector3D;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -34,7 +34,7 @@ package
 			
 			//maximum = 160
 			//test = 200 @ 26fps
-			var max:uint = 100;
+			var max:uint = 20;
 			var i:int = max;
 			
 			particles = new Vector.<Sprite2D>(i, true);
@@ -44,7 +44,7 @@ package
 			
 			while(i--)
 			{
-				if(i<max/2)
+				if(true)
 				{
 					// Sprite
 					var sprite:Sprite = new Sprite();
@@ -76,9 +76,9 @@ package
 				particle.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
 				scene.addChild(particle);
 				
-				particle.x = radius*Math.random()-radius*Math.random(); 
-				particle.y = radius*Math.random()-radius*Math.random(); 
-				particle.z = radius*Math.random()-radius*Math.random(); 
+				particle.x = radius*Math.cos(30*i/100);//radius*Math.random()-radius*Math.random(); 
+				particle.y = 0;//radius*Math.random()-radius*Math.random(); 
+				particle.z = radius*Math.sin(30*i/100);//radius*Math.random()-radius*Math.random(); 
 				
 				if(i<max-1)
 				{
@@ -110,7 +110,7 @@ package
 		private var step:Number=0;
 		override protected function onPreRender():void
 		{
-			scene.rotationX++;
+			//scene.rotationX++;
 			scene.rotationY++;
 			//scene.rotationZ++;
 			
@@ -119,7 +119,7 @@ package
 			camera.z = 1000*Math.sin(step);
 			camera.lookAt(new Vector3D(0,0,0));
 			*/
-			
+			camera.z = 1000;
 			step+=.05;
 			
 			var particle:Sprite2D = particles[0];
