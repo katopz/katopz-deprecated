@@ -161,6 +161,11 @@ package away3dlite.core.base
 			return transform.matrix3D.position;
 		}
 		
+		public function set position(value:Vector3D):void
+		{
+			transform.matrix3D.position = value;
+		}
+		
 		/**
 		 * Creates a new <code>Object3D</code> object.
 		 */

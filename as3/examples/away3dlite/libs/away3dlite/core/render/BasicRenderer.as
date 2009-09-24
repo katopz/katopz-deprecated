@@ -82,25 +82,7 @@ package away3dlite.core.render
 					collectScreenVertices(mesh);
 				
 				_view._totalFaces += mesh._faces.length;
-				
-			}/*else if (object is Particle) {
-				
-				
-				var _mesh:Mesh = object as Mesh;
-				
-				var _mesh_material:Material = _mesh.material;
-				var _mesh_material_graphicsData:Vector.<IGraphicsData> = _mesh_material.graphicsData;
-				
-				_mesh_material_graphicsData[_mesh_material.trianglesIndex] = _mesh._triangles;
-				
-				if(object.layer)
-				{
-					object.layer.graphics.drawGraphicsData(_mesh_material_graphicsData);
-				}else{
-					_view_graphics_drawGraphicsData(_mesh_material_graphicsData);
-				}
-				
-			}*/
+			}
 			
 			_mouseEnabled = _mouseEnabledArray.pop();
 			

@@ -15,44 +15,37 @@ package away3dlite.containers
 	{
 		// target
 		public var displayObject:DisplayObject;
-		private var displayObjectMatrix3D:Matrix3D;
+		private var displayObjectPosition:Vector3D;
 		
 		// link list
 		public var nextParticle:Sprite2D;
-		
-		// temp
-		private var _position:Vector3D;
-		private var _temp:Shape = new Shape();
 		
 		/** @private */
 		arcane override function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
 			// temp position
-			_position = new Vector3D(x, y, z);
+			var _position:Vector3D = position.clone();
 			
-			// temp rotation
+			// invert rotation
+			var _temp:Shape = new Shape();
 			_temp.rotationX = parent.rotationX;
 			_temp.rotationY = parent.rotationY;
 			_temp.rotationZ = parent.rotationZ;
+			_temp.transform.matrix3D.invert();
 			
 			// billboard rotation
 			transform.matrix3D = _temp.transform.matrix3D.clone();
-			transform.matrix3D.invert();
 		
 			// billboard position
-			x = _position.x;
-			y = _position.y;
-			z = _position.z;
+			position = _position.clone();
 			
 			// camera position
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
-			_position = Utils3D.projectVector(_viewMatrix3D, displayObjectMatrix3D.position);
+			_position = Utils3D.projectVector(_viewMatrix3D, displayObjectPosition);
 			_position.decrementBy(_sceneMatrix3D.position);
 			
-			displayObject.x = _position.x;
-			displayObject.y = _position.y;
-			displayObject.z = _position.z;
+			displayObject.transform.matrix3D.position = _position.clone();
 		}
 		
 		public function Sprite2D(displayObject:DisplayObject)
@@ -63,7 +56,7 @@ package away3dlite.containers
 			{
 				this.displayObject = addChild(displayObject);
 				displayObject.transform.matrix3D = new Matrix3D();
-				displayObjectMatrix3D = displayObject.transform.matrix3D.clone();
+				displayObjectPosition = displayObject.transform.matrix3D.position;
 			}
 		}
 	}
