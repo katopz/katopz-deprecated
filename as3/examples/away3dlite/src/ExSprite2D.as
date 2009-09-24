@@ -118,11 +118,12 @@ package
 			scene.rotationY+=2;
 			scene.rotationZ+=.5;
 			
+			/*
 			camera.x = 1000*Math.cos(step);
 			//camera.y = 10*(300-mouseY);
 			camera.z = 1000*Math.sin(step);
 			camera.lookAt(new Vector3D(0,0,0));
-			
+			*/
 			
 			step+=.05;
 			
