@@ -43,12 +43,11 @@ package away3dlite.containers
 			// camera position
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
-			/* TODO : scale
+			//TODO : scale
 			_position = Utils3D.projectVector(_viewMatrix3D, displayObjectPosition);
 			_position.decrementBy(_sceneMatrix3D.position);
 			
 			displayObject.transform.matrix3D.position = _position.clone();
-			*/
 		}
 		
 		public function Sprite2D(displayObject:DisplayObject)
