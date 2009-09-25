@@ -23,7 +23,7 @@ package
 	 */
 	public final class Flash10Particles extends Sprite 
 	{
-		private const MAX_PARTICLES: int = 500;//0x400;
+		private const MAX_PARTICLES: int = 600;//0x400;
 		//private const _screen: BitmapData = new BitmapData( 800, 600, false, 0x000000 );
 		private const _buffer: Vector.<uint> = new Vector.<uint>( 800 * 600, true );
 		private const _matrix: Matrix3D = new Matrix3D();
