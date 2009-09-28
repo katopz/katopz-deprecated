@@ -82,6 +82,13 @@ package away3dlite.core.render
 					collectScreenVertices(mesh);
 				
 				_view._totalFaces += mesh._faces.length;
+			}else if (object is Particles) {
+				
+				var _particles_lists:Array = (object as Particles).lists;
+				for each (var _particle:Particle in _particles_lists)
+					_particle.drawGraphic(_view_graphics);
+				
+				_view_graphics.endFill();
 			}
 			
 			_mouseEnabled = _mouseEnabledArray.pop();
