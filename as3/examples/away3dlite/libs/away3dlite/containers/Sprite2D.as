@@ -13,6 +13,9 @@ package away3dlite.containers
 
 	public class Sprite2D extends Object3D
 	{
+		// temp
+		private var _temp:Shape = new Shape();
+		
 		// target
 		public var displayObject:DisplayObject;
 		private var displayObjectPosition:Vector3D;
@@ -27,8 +30,6 @@ package away3dlite.containers
 			var _position:Vector3D = transform.matrix3D.position.clone();
 			
 			// invert rotation
-			var _temp:Shape = new Shape();
-			
 			_temp.rotationX = parent.rotationX;
 			_temp.rotationY = parent.rotationY;
 			_temp.rotationZ = parent.rotationZ;

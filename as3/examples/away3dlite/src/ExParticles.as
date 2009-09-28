@@ -1,134 +1,114 @@
 package
 {
-	import away3dlite.containers.Sprite2D;
+	import away3dlite.containers.Particles;
+	import away3dlite.core.base.Particle;
 	import away3dlite.materials.*;
 	import away3dlite.primitives.*;
 	import away3dlite.templates.*;
 	
-	import flash.display.Graphics;
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import flash.filters.GlowFilter;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.Matrix;
 	import flash.geom.Vector3D;
-	import flash.text.AntiAliasType;
-	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFieldType;
-	import flash.text.TextFormat;
 
 	[SWF(backgroundColor="#DDDDDD",frameRate="30",quality="MEDIUM",width="800",height="600")]
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends BasicTemplate
+	public class ExParticles extends FastTemplate
 	{
-		private var particles:Vector.<Sprite2D>;
-		private var particle:Sprite2D;
-		private var radius:uint = 300;
-		private var focusTextField:TextField;
-		
+		private var particles:Particles;
+		private var materials:Vector.<BitmapData>;
+
+		private const radius:uint = 300;
+		private const max:int = 3000;
+		private const size:uint = 10;
+
+		private const numFrames:uint = 30;
+
 		override protected function onInit():void
 		{
+			//camera.y = -1000;
+			camera.lookAt(new Vector3D());
+
+			// speed up
 			view.mouseEnabled = false;
-			renderer.sortObjects = true;
-			
-			//maximum = 160
-			//test = 200 @ 26fps
-			var max:uint = 100;
-			var i:int = max;
-			
-			particles = new Vector.<Sprite2D>(i, true);
-			
-			var particle:Sprite2D;
-			var nextParticle:Sprite2D;
-			
-			while(i--)
+
+			// create materials
+			materials = createMaterial();
+
+			// create particles
+			particles = new Particles(view);
+
+			var segment:Number = 40 * 2 * Math.PI / max;
+
+			var i:Number = 0;
+			for (var j:int = 0; j < max; j++)
 			{
-				if(false && i<10)
-				{
-					// Sprite
-					var sprite:Sprite = new Sprite();
-					var _graphics:Graphics = sprite.graphics;
-					_graphics.beginFill(0xFFFFFF*Math.random(), 1);
-					_graphics.drawCircle(0, 0, 10);
-					_graphics.endFill();
-					
-					particle = new Sprite2D(sprite);
-				}else{
-					// TextField
-					var textField:TextField = new TextField();
-					textField.embedFonts = false;
-					textField.antiAliasType = AntiAliasType.ADVANCED;
-					textField.type = TextFieldType.INPUT;
-					textField.background = true;
-					textField.backgroundColor = 0xFFFFFF*Math.random();
-					textField.mouseWheelEnabled = false;
-					textField.tabEnabled = false;
-					textField.autoSize = TextFieldAutoSize.CENTER;
-					textField.setTextFormat(new TextFormat("Tahoma",9));
-					textField.textColor = 0xFFFFFF-textField.backgroundColor;
-					textField.text = "...";
-					textField.filters = [new GlowFilter(0x000000,0,0,0,0,0)];
-					
-					particle = new Sprite2D(textField);
-				}
-				
-				particle.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
-				scene.addChild(particle);
-				
-				particle.x = radius*Math.random()-radius*Math.random(); 
-				particle.y = radius*Math.random()-radius*Math.random(); 
-				particle.z = radius*Math.random()-radius*Math.random(); 
-				
-				if(i<max-1)
-				{
-					particle.nextParticle = nextParticle;
-				}
-				nextParticle = particle;
-				
-				particles[i] = particle;
+				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1 / 10) * (-max / 2) + i, radius * Math.sin(segment * j), materials[0]));
+				i += 1 / 10;
 			}
-			
-			var sphere:Sphere = new Sphere();
-			scene.addChild(sphere);
+
+			scene.addChild(particles);
 		}
-		
-		private function onMouse(event:MouseEvent):void
+
+		private function createMaterial():Vector.<BitmapData>
 		{
-			if(event.target is TextField)
+			var _materials:Vector.<BitmapData> = new Vector.<BitmapData>(30, true);
+
+			for (var i:int = 0; i < numFrames; i++)
 			{
-				focusTextField = TextField(event.target);
-			}else if(event.target is Sprite){
-				if(event.target.filters.length>0)
-				{
-					event.target.filters = null;
-				}else{
-					event.target.filters = [new GlowFilter(0xFF0000,1,4,4,1,1)];
-				}
+				var shape:Shape = new Shape();
+				drawDot(shape.graphics, size / 2, size / 2, size / 2, 0xFFFFFF - 0x00FF00 * Math.sin(Math.PI * i / 30), 0x000000);
+
+				var bitmapData:BitmapData = new BitmapData(size, size, true, 0x00000000);
+				bitmapData.draw(shape);
+
+				_materials[i] = bitmapData;
 			}
+
+			return _materials;
 		}
-		private var step:Number=0;
-		override protected function onPreRender():void
+
+		private function drawDot(_graphics:Graphics, x:Number, y:Number, size:Number, colorLight:uint, colorDark:uint):void
 		{
+			var colors:Array = [colorLight, colorDark];
+			var alphas:Array = [1.0, 1.0];
+			var ratios:Array = [0, 255];
+			var matrix:Matrix = new Matrix();
+			matrix.createGradientBox(size * 2, size * 2, 0, x - size, y - size);
+
+			_graphics.lineStyle();
+			_graphics.beginGradientFill(GradientType.RADIAL, colors, alphas, ratios, matrix);
+			_graphics.drawCircle(x, y, size);
+			_graphics.endFill();
+		}
+
+		override protected function onPostRender():void
+		{
+			title = "Max : " + max + ", ";
+
 			scene.rotationY++;
-			/*
-			camera.x = 1000*Math.cos(step);
-			camera.z = -1000*Math.sin(step);
-			camera.lookAt(new Vector3D(0,0,0));
-			*/
-			step+=.1;
-			
-			var particle:Sprite2D = particles[0];
-			do{
-		   		if(particle.displayObject is TextField)
-		   		{
-			   		var textField:TextField = TextField(particle.displayObject);
-			   		//textField.alpha = 1-Math.abs(particle.position.length)/radius;
-			   		if(textField!=focusTextField)
-			   			textField.text = String(int(particle.screenZ));//String(particle.position.x+","+particle.position.y+","+particle.position.z);
-		   		}
-		   		particle = particle.nextParticle;
-			}while(particle);
+
+			// TODO : move to internal render
+			var matrix:Matrix = new Matrix();
+			var view_graphics:Graphics = view.graphics;
+			view_graphics.clear();
+			var _particles_lists:Vector.<Particle> = particles.lists;
+			for each (var _particle:Particle in _particles_lists)
+			{
+				matrix.identity();
+				
+				var scale:Number;
+				scale = matrix.a = matrix.d = _particle.scale;
+				//trace(scale)
+				matrix.tx = _particle.screenX;
+				matrix.ty = _particle.screenY;
+
+				view_graphics.beginBitmapFill(_particle.bitmapData, matrix, true);
+				view_graphics.drawRect(_particle.screenX, _particle.screenY, _particle.width*scale, _particle.height*scale);
+			}
+			view_graphics.endFill();
 		}
 	}
 }
