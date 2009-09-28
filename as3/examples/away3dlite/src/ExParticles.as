@@ -15,7 +15,7 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends FastTemplate
+	public class ExParticles extends BasicTemplate
 	{
 		private var particles:Particles;
 		private var materials:Vector.<BitmapData>;
@@ -45,11 +45,13 @@ package
 			var i:Number = 0;
 			for (var j:int = 0; j < max; j++)
 			{
-				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1/8) * (-max / 2) + i, radius * Math.sin(segment * j), materials[0]));
+				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1/8) * (-max / 2) + i, radius * Math.sin(segment * j), materials));
 				i += (1/8);
 			}
 
 			scene.addChild(particles);
+			
+			scene.addChild(new Sphere);
 		}
 
 		private function createMaterial():Vector.<BitmapData>
@@ -88,27 +90,7 @@ package
 		{
 			title = "Max : " + max + ", ";
 
-			scene.rotationY++;
-
-			// TODO : move to internal render
-			var matrix:Matrix = new Matrix();
-			var view_graphics:Graphics = view.graphics;
-			view_graphics.clear();
-			var _particles_lists:Vector.<Particle> = particles.lists;
-			for each (var _particle:Particle in _particles_lists)
-			{
-				matrix.identity();
-				
-				var scale:Number;
-				scale = matrix.a = matrix.d = _particle.scale;
-				//trace(scale)
-				matrix.tx = _particle.x;
-				matrix.ty = _particle.y;
-
-				view_graphics.beginBitmapFill(_particle.bitmapData, matrix, true);
-				view_graphics.drawRect(_particle.x, _particle.y, _particle.width*scale, _particle.height*scale);
-			}
-			view_graphics.endFill();
+			scene.rotationY+=.5;
 		}
 	}
 }

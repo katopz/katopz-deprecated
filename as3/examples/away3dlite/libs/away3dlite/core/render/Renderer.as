@@ -5,6 +5,8 @@ package away3dlite.core.render
 	import away3dlite.core.base.*;
 	import away3dlite.core.clip.*;
 	
+	import flash.display.Graphics;
+	
 	use namespace arcane;
 	
 	/**
@@ -16,6 +18,7 @@ package away3dlite.core.render
 		arcane function setView(view:View3D):void
 		{
 			_view = view;
+			_view_graphics = _view.graphics;
 			_view_graphics_drawGraphicsData = _view.graphics.drawGraphicsData;
 		}
 		
@@ -62,6 +65,9 @@ package away3dlite.core.render
         protected var _mouseEnabledArray:Vector.<Boolean> = new Vector.<Boolean>();
         /** @private */
     	
+		/** @private */
+		protected var _view_graphics:Graphics;
+		
 		/** @private */
 		protected var _view_graphics_drawGraphicsData:Function;
 		
