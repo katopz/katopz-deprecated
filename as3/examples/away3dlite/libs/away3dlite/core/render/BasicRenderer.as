@@ -42,9 +42,6 @@ package away3dlite.core.render
 		private var _layers:Dictionary = new Dictionary(true);
 		private var _graphicsDatas:Dictionary = new Dictionary(true);
 		
-		// Particles
-		private var _particles:Array;
-		
 		private function collectFaces(object:Object3D):void
 		{
 			_mouseEnabledArray.push(_mouseEnabled);
@@ -95,28 +92,6 @@ package away3dlite.core.render
 			
 			++_view._totalObjects;
 			++_view._renderedObjects;
-		}
-		
-		private function drawParticles(screenZ:Number=NaN):void
-		{
-			if(_particles.length==0)return;
-			
-			_view_graphics.lineStyle();	
-
-			var _particle:Particle = _particles.shift();
-			if(!screenZ)
-			{
-				// just draw
-				for each (_particle in _particles)
-					_particle.drawBitmapdata(_view_graphics);
-			}else{
-				// draw anything that behind mesh screenZ
-				while(_particle && _particle.w > screenZ)
-				{
-					_particle.drawBitmapdata(_view_graphics);
-					_particle = _particles.shift();
-				}
-			}
 		}
 		
 		/** @private */
@@ -250,8 +225,6 @@ package away3dlite.core.render
 			
 			_faces.fixed = false;
 			_faces.length = 0;
-			
-			_particles = [];
 			
 			collectFaces(_scene);
 			

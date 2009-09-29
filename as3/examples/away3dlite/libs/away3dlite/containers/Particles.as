@@ -5,6 +5,8 @@ package away3dlite.containers
 	import away3dlite.core.base.Particle;
 	
 	import flash.geom.Matrix3D;
+	import flash.geom.Utils3D;
+	import flash.geom.Vector3D;
 
 	use namespace arcane;
 
@@ -15,25 +17,20 @@ package away3dlite.containers
 		private var _focus:Number;
 		
 		//linklist
-		public var firstParticle:Particle;
-		public var lastParticle:Particle;
+		//public var firstParticle:Particle;
+		//public var lastParticle:Particle;
 		
 		public var lists:Array;
 		
 		/** @private */
 		arcane override function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
-			if(!firstParticle)return;
-			
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
-			
-			var particle:Particle = firstParticle;
-			do{
+			for each (var particle:Particle in lists)
 				particle.render(_sceneMatrix3D, _screenZ, _zoom , _focus);
-			}while(particle = particle.next)
-			
+				
 			// sort
-			lists.sortOn("z", 18);
+			//lists.sortOn("z", 18);
 		}
 
 		public function addParticle(particle:Particle):Particle
@@ -45,6 +42,7 @@ package away3dlite.containers
 			lists.push(particle);
 			
 			//link list
+			/*
 			if(!firstParticle)
 				firstParticle = particle;
 			
@@ -52,6 +50,7 @@ package away3dlite.containers
 				lastParticle.next = particle;
 			
 			lastParticle = particle;
+			*/
 			
 			return particle;
 		}
