@@ -103,7 +103,7 @@ package away3dlite.core.render
 			
 			_view_graphics.lineStyle();	
 
-			var _particle:Particle = _particles.pop();
+			var _particle:Particle = _particles.shift();
 			if(!screenZ)
 			{
 				// just draw
@@ -111,10 +111,10 @@ package away3dlite.core.render
 					_particle.drawBitmapdata(_view_graphics);
 			}else{
 				// draw anything that behind mesh screenZ
-				while(_particle && _particle.w+100 >= screenZ)
+				while(_particle && _particle.w > screenZ)
 				{
 					_particle.drawBitmapdata(_view_graphics);
-					_particle = _particles.pop();
+					_particle = _particles.shift();
 				}
 			}
 		}
@@ -256,7 +256,7 @@ package away3dlite.core.render
 			collectFaces(_scene);
 			
 			// sort merged particles
-			_particles.sortOn("z", 16);
+			_particles.sortOn("z", 18);
 			
 			_faces.fixed = true;
 			
