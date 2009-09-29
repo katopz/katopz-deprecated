@@ -19,7 +19,7 @@ package away3dlite.containers
 		public var lastParticle:Particle;
 		
 		public var lists:Array;
-
+		
 		/** @private */
 		arcane override function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
@@ -28,9 +28,9 @@ package away3dlite.containers
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
 			var particle:Particle = firstParticle;
-			do
-				particle.render(parentSceneMatrix3D, _screenZ, _zoom , _focus);
-			while(particle = particle.next)
+			do{
+				particle.render(_sceneMatrix3D, _screenZ, _zoom , _focus);
+			}while(particle = particle.next)
 			
 			// sort
 			lists.sortOn("z", 18);

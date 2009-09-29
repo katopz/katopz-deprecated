@@ -21,10 +21,12 @@ package
 		private var materials:Vector.<BitmapData>;
 
 		private const radius:uint = 200;
-		private const max:int = 1100;
+		private const max:int = 500;
 		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
+		
+		private var step:Number=0;
 
 		override protected function onInit():void
 		{
@@ -51,7 +53,20 @@ package
 
 			scene.addChild(particles);
 			
-			scene.addChild(new Sphere);
+			// center
+			scene.addChild(new Sphere(null,50));
+			
+			// orbit
+			/*
+			for (j = 0; j < 10; j++)
+			{
+				var sphere:Sphere = new Sphere(null,25);
+				scene.addChild(sphere)
+				sphere.x = (radius+100)*Math.cos(i);
+				sphere.z = (radius+100)*Math.sin(i);
+				i+=2*Math.PI/10;
+			}
+			*/
 		}
 
 		private function createMaterial():Vector.<BitmapData>
@@ -85,12 +100,21 @@ package
 			_graphics.drawCircle(x, y, size);
 			_graphics.endFill();
 		}
-
+		
 		override protected function onPostRender():void
 		{
-			title = "Max : " + max + ", ";
-
-			scene.rotationY+=.5;
+			title = "Particles : " + max + ", ";
+			
+			//scene.rotationX+=.25;
+			scene.rotationY+=.25;
+			//scene.rotationZ+=.25;
+			
+			/* TODO
+			camera.x = 1000*Math.cos(step);
+			//camera.y = 10*(300-mouseY);
+			camera.z = 1000*Math.sin(step);
+			camera.lookAt(new Vector3D(0,0,0));
+			*/
 		}
 	}
 }

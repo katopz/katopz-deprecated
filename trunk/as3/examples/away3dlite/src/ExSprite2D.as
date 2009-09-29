@@ -118,7 +118,7 @@ package
 			scene.rotationY+=2;
 			scene.rotationZ+=.5;
 			
-			/*
+			/* TODO
 			camera.x = 1000*Math.cos(step);
 			//camera.y = 10*(300-mouseY);
 			camera.z = 1000*Math.sin(step);
