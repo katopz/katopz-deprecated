@@ -1,5 +1,7 @@
 package away3dlite.core.render
 {
+	import __AS3__.vec.Vector;
+	
 	import away3dlite.arcane;
 	import away3dlite.containers.*;
 	import away3dlite.core.base.*;
@@ -37,8 +39,11 @@ package away3dlite.core.render
 		public var sortObjects:Boolean = true;
 		
 		// Layer
-		private var _layers:Dictionary = new Dictionary();
-		private var _graphicsDatas:Dictionary = new Dictionary();
+		private var _layers:Dictionary = new Dictionary(true);
+		private var _graphicsDatas:Dictionary = new Dictionary(true);
+		
+		// Particles
+		private var _particles:Array;
 		
 		private function collectFaces(object:Object3D):void
 		{
@@ -83,18 +88,35 @@ package away3dlite.core.render
 				
 				_view._totalFaces += mesh._faces.length;
 			}else if (object is Particles) {
-				
-				var _particles_lists:Array = (object as Particles).lists;
-				for each (var _particle:Particle in _particles_lists)
-					_particle.drawGraphic(_view_graphics);
-				
-				_view_graphics.endFill();
+				_particles = _particles.concat((object as Particles).lists);
 			}
 			
 			_mouseEnabled = _mouseEnabledArray.pop();
 			
 			++_view._totalObjects;
 			++_view._renderedObjects;
+		}
+		
+		private function drawParticles(screenZ:Number=NaN):void
+		{
+			if(_particles.length==0)return;
+			
+			_view_graphics.lineStyle();	
+
+			var _particle:Particle = _particles.pop();
+			if(!screenZ)
+			{
+				// just draw
+				for each (_particle in _particles)
+					_particle.drawBitmapdata(_view_graphics);
+			}else{
+				// draw anything that behind mesh screenZ
+				while(_particle && _particle.w+100 >= screenZ)
+				{
+					_particle.drawBitmapdata(_view_graphics);
+					_particle = _particles.pop();
+				}
+			}
 		}
 		
 		/** @private */
@@ -117,7 +139,8 @@ package away3dlite.core.render
 						if (_material) 
 						{
 							_material_graphicsData[_material.trianglesIndex] = _triangles;
-							_view_graphics_drawGraphicsData(_material_graphicsData);
+							
+							drawParticles(_mesh.screenZ);
 							
 							if(_mesh.layer)
 							{
@@ -228,7 +251,12 @@ package away3dlite.core.render
 			_faces.fixed = false;
 			_faces.length = 0;
 			
+			_particles = [];
+			
 			collectFaces(_scene);
+			
+			// sort merged particles
+			_particles.sortOn("z", 16);
 			
 			_faces.fixed = true;
 			
@@ -247,6 +275,8 @@ package away3dlite.core.render
 			
 			if (_material) 
 			{
+				drawParticles(_mesh.screenZ);
+				
 				_material_graphicsData = _material.graphicsData;
 				_material_graphicsData[_material.trianglesIndex] = _triangles;
 				
@@ -263,6 +293,8 @@ package away3dlite.core.render
 					_view_graphics_drawGraphicsData(_material_graphicsData);
 			}
 			
+			drawParticles();
+			_view_graphics.endFill();
 		}
 	}
 }
