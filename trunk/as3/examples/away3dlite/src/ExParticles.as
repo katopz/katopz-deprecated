@@ -11,7 +11,7 @@ package
 	import flash.geom.Matrix;
 	import flash.geom.Vector3D;
 
-	[SWF(backgroundColor="#DDDDDD",frameRate="30",quality="MEDIUM",width="800",height="600")]
+	[SWF(backgroundColor="#000000",frameRate="30",quality="MEDIUM",width="800",height="600")]
 	/**
 	 * @author katopz
 	 */
@@ -21,7 +21,7 @@ package
 		private var materials:Vector.<BitmapData>;
 
 		private const radius:uint = 200;
-		private const max:int = 500;
+		private const max:int = 2000;
 		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
@@ -54,19 +54,17 @@ package
 			scene.addChild(particles);
 			
 			// center
-			scene.addChild(new Sphere(null,50));
+			scene.addChild(new Sphere(null,100,6,6));
 			
 			// orbit
-			/*
 			for (j = 0; j < 10; j++)
 			{
-				var sphere:Sphere = new Sphere(null,25);
-				scene.addChild(sphere)
+				var sphere:Sphere = new Sphere(null,25,6,6);
+				scene.addChild(sphere);
 				sphere.x = (radius+100)*Math.cos(i);
 				sphere.z = (radius+100)*Math.sin(i);
 				i+=2*Math.PI/10;
 			}
-			*/
 		}
 
 		private function createMaterial():Vector.<BitmapData>
@@ -76,7 +74,7 @@ package
 			for (var i:int = 0; i < numFrames; i++)
 			{
 				var shape:Shape = new Shape();
-				drawDot(shape.graphics, size / 2, size / 2, size / 2, 0xFFFFFF - 0x00FF00 * Math.sin(Math.PI * i / 30), 0x000000);
+				drawDot(shape.graphics, size / 2, size / 2, size / 2, 0xFFFFFF - 0xFFFFFF * Math.sin(Math.PI * i / 30), 0xFFFFFF);
 
 				var bitmapData:BitmapData = new BitmapData(size, size, true, 0x00000000);
 				bitmapData.draw(shape);
@@ -89,9 +87,9 @@ package
 
 		private function drawDot(_graphics:Graphics, x:Number, y:Number, size:Number, colorLight:uint, colorDark:uint):void
 		{
-			var colors:Array = [colorLight, colorDark];
-			var alphas:Array = [1.0, 1.0];
-			var ratios:Array = [0, 255];
+			var colors:Array = [colorLight, colorDark, colorLight];
+			var alphas:Array = [1.0, 1.0, 1.0];
+			var ratios:Array = [0, 200, 255];
 			var matrix:Matrix = new Matrix();
 			matrix.createGradientBox(size * 2, size * 2, 0, x - size, y - size);
 
@@ -105,9 +103,9 @@ package
 		{
 			title = "Particles : " + max + ", ";
 			
-			//scene.rotationX+=.25;
-			scene.rotationY+=.25;
-			//scene.rotationZ+=.25;
+			scene.rotationX+=.5;
+			scene.rotationY=(300-mouseY);
+			scene.rotationZ+=.5;
 			
 			/* TODO
 			camera.x = 1000*Math.cos(step);

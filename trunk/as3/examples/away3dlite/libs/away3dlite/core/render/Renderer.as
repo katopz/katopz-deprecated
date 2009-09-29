@@ -64,13 +64,11 @@ package away3dlite.core.render
         /** @private */
         protected var _mouseEnabledArray:Vector.<Boolean> = new Vector.<Boolean>();
         /** @private */
-    	
+		protected var _particles:Array;
 		/** @private */
 		protected var _view_graphics:Graphics;
-		
 		/** @private */
 		protected var _view_graphics_drawGraphicsData:Function;
-		
 		/** @private */
 		protected function sortFaces():void
 		{
@@ -177,6 +175,31 @@ package away3dlite.core.render
         	}
 		}
 		
+		/** @private */
+		protected function drawParticles(screenZ:Number=NaN):void
+		{
+			if(_particles.length==0)return;
+			
+			_view_graphics.lineStyle();	
+
+			var _particle:Particle = _particles[0];
+			if(!screenZ)
+			{
+				// just draw
+				for each (_particle in _particles)
+					_particle.drawBitmapdata(_view_graphics);
+			}else{
+				// draw anything that behind mesh screenZ
+				while(_particle && _particle.w > screenZ)
+				{
+					_particle.drawBitmapdata(_view_graphics);
+					_particle = _particles.shift();
+				}
+				if(_particle && _particle.w < screenZ)
+					_particles.unshift(_particle);
+			}
+		}
+		
 		/**
 		 * Creates a new <code>Renderer</code> object.
 		 */
@@ -214,6 +237,8 @@ package away3dlite.core.render
 			_pointFace = null;
 			
 			_screenVertexArrays.length = 0;
+			
+			_particles = [];
 		}
 	}
 }

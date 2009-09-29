@@ -20,6 +20,20 @@ package away3dlite.core.render
 		private var _x:Number;
 		private var _y:Number;
 		
+		private function collectParticles(object:Object3D):void
+		{
+			if (object is ObjectContainer3D) {
+				var children:Array = (object as ObjectContainer3D).children;
+				var child:Object3D;
+				
+				for each (child in children) 
+					collectParticles(child);
+					
+			}else if (object is Particles) {
+				_particles = _particles.concat((object as Particles).lists);
+			}
+		}
+		
 		private function collectFaces(object:Object3D):void
 		{
 			_mouseEnabledArray.push(_mouseEnabled);
@@ -64,6 +78,8 @@ package away3dlite.core.render
 				
 				if (mesh.sortFaces)
 					sortFaces();
+				
+				drawParticles(object.screenZ);
 				
 				if(object.layer)
 				{
@@ -159,7 +175,15 @@ package away3dlite.core.render
 		{
 			super.render();
 			
+			collectParticles(_scene);
+			
+			// sort merged particles
+			_particles.sortOn("z", 18);
+				
 			collectFaces(_scene);
+			
+			// draw front
+			drawParticles();
 		}
 	}
 }
