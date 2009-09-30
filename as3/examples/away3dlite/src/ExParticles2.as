@@ -15,13 +15,13 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends BasicTemplate
+	public class ExParticles2 extends BasicTemplate
 	{
 		private var particles:Particles;
 		private var materials:Vector.<BitmapData>;
 
 		private const radius:uint = 200;
-		private const max:int = 100;
+		private const max:int = 1000;
 		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
@@ -30,7 +30,7 @@ package
 
 		override protected function onInit():void
 		{
-			//camera.y = -1000;
+			//camera.y = -500;
 			camera.lookAt(new Vector3D());
 
 			// speed up
@@ -54,8 +54,8 @@ package
 			scene.addChild(particles);
 			
 			// center
-			scene.addChild(new Sphere(null,10,6,6));
-			/*
+			scene.addChild(new Sphere(null,100,6,6));
+			
 			// orbit
 			for (j = 0; j < 10; j++)
 			{
@@ -65,17 +65,17 @@ package
 				sphere.z = (radius+100)*Math.sin(i);
 				i+=2*Math.PI/10;
 			}
-			*/
+			
 		}
 
 		private function createMaterial():Vector.<BitmapData>
 		{
-			var _materials:Vector.<BitmapData> = new Vector.<BitmapData>(30, true);
+			var _materials:Vector.<BitmapData> = new Vector.<BitmapData>(numFrames, true);
 
 			for (var i:int = 0; i < numFrames; i++)
 			{
 				var shape:Shape = new Shape();
-				drawDot(shape.graphics, size / 2, size / 2, size / 2, 0xFFFFFF - 0xFFFFFF * Math.sin(Math.PI * i / 30), 0xFFFFFF);
+				drawDot(shape.graphics, size / 2, size / 2, size / 2, 0xFFFFFF - 0xFFFFFF * Math.sin(Math.PI * i / numFrames), 0xFFFFFF);
 
 				var bitmapData:BitmapData = new BitmapData(size, size, true, 0x00000000);
 				bitmapData.draw(shape);
@@ -104,16 +104,18 @@ package
 		{
 			title = "Particles : " + max + ", ";
 			
-			scene.rotationX+=.5;
-			scene.rotationY=(300-mouseY);
-			scene.rotationZ+=.5;
+			//scene.rotationX+=1;
+			scene.rotationY++;//=(400-mouseX);
+			//scene.rotationZ+=1;
 			
-			/* TODO
-			camera.x = 1000*Math.cos(step);
+			
+			 //TODO
+			//camera.x = 1000*Math.cos(step);
 			//camera.y = 10*(300-mouseY);
-			camera.z = 1000*Math.sin(step);
-			camera.lookAt(new Vector3D(0,0,0));
-			*/
+			//camera.z = 1000*Math.sin(step);
+			//camera.lookAt(new Vector3D(0,0,0));
+			
+			step+=.1;
 		}
 	}
 }
