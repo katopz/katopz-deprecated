@@ -227,7 +227,7 @@ package away3dlite.core.render
 			collectFaces(_scene);
 			
 			// sort merged particles
-			_particles.sortOn("z", 18);
+			_particles.sortOn("w", 18);
 			
 			_faces.fixed = true;
 			

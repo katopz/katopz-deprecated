@@ -3,7 +3,6 @@ package away3dlite.core.base
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.Matrix;
-	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Utils3D;
 	import flash.geom.Vector3D;
@@ -31,8 +30,14 @@ package away3dlite.core.base
 		// by pass
 		private var Utils3D_projectVector:Function = Utils3D.projectVector;
 
-		public function Particle(x:Number, y:Number, z:Number, bitmapDatas:Vector.<BitmapData>)
+		public var index:int;
+
+		public function Particle(i:int, x:Number, y:Number, z:Number, bitmapDatas:Vector.<BitmapData>)
 		{
+			super(x,y,z);
+			
+			index = i;
+			
 			_bitmapDatas = bitmapDatas;
 			_bitmaplength = _bitmapDatas.length;
 			_bitmapData = _bitmapDatas[_bitmapIndex];
@@ -41,15 +46,15 @@ package away3dlite.core.base
 			_matrix = new Matrix();
 			_center = new Point(_bitmapData.width*_scale/2, _bitmapData.height*_scale/2);
 		}
-
-		public function render(viewMatrix3D:Matrix3D, screenZ:Number, zoom:Number, focus:Number):void
+		
+		public function render(_position:Vector3D, _screenZ:Number, zoom:Number, focus:Number):void
 		{
-			var _position:Vector3D = Utils3D_projectVector(viewMatrix3D, _original);
+			//var _position:Vector3D = Utils3D_projectVector(viewMatrix3D, _original);
 			
 			x = _position.x;
 			y = _position.y;
 			z = _position.z;
-			w = screenZ + z;
+			w = _screenZ;
 
 			_bitmapIndex = (_bitmapIndex + 1 == _bitmaplength) ? 0 : int(++_bitmapIndex);
 			_bitmapData = _bitmapDatas[_bitmapIndex];

@@ -20,15 +20,44 @@ package away3dlite.containers
 		//public var firstParticle:Particle;
 		//public var lastParticle:Particle;
 		
+		/** @private */
+		arcane var _vertices:Vector.<Number>;
+		/** @private */
+		arcane var _uvtData:Vector.<Number>;
+		
+		public var vertices:Vector.<Number>;
+		
+		private var _screenVertices:Vector.<Number>;
+		
 		public var lists:Array;
 		
 		/** @private */
 		arcane override function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
+			/*
+			Utils3D.projectVectors(_viewMatrix3D, _vertices, _screenVertices, _uvtData);
+			
 			for each (var particle:Particle in lists)
-				particle.render(_sceneMatrix3D, _screenZ, _zoom , _focus);
-				
+			{
+				var _position:Vector3D = Utils3D.projectVector(_sceneMatrix3D, particle.original);
+				particle.render(_position, int((_uvtData[particle.index])*1000000), _zoom , _focus);
+			}
+			*/
+			
+			Utils3D.projectVectors(_viewMatrix3D, _vertices, _screenVertices, _uvtData);
+			
+			var i:int = 0;
+			for each (var particle:Particle in lists)
+			{
+				var _position:Vector3D = Utils3D.projectVector(_sceneMatrix3D, particle.original);
+				particle.render
+				(
+					new Vector3D(_screenVertices[int(i++)], _screenVertices[int(i++)], _position.z),
+					_screenZ, _zoom, _focus
+				);
+			}
+			// + int((_uvtData[particle.index])*1000000)
 			// sort
 			//lists.sortOn("z", 18);
 		}
@@ -52,6 +81,15 @@ package away3dlite.containers
 			lastParticle = particle;
 			*/
 			
+			// add position for project
+			_vertices.fixed = false;
+			_vertices.push(particle.x, particle.y, particle.z);
+			_vertices.fixed = true;
+			
+			_uvtData.fixed = false;
+			_uvtData.push(1, 1, 1);
+			_uvtData.fixed = true;
+			
 			return particle;
 		}
 		
@@ -63,6 +101,11 @@ package away3dlite.containers
 			_view = view;
 			_zoom = view.camera.zoom;
 			_focus = view.camera.focus;
+			
+			_vertices = vertices = new Vector.<Number>();
+			_uvtData = new Vector.<Number>();
+			
+			_screenVertices = new Vector.<Number>();
 		}
 	}
 }
