@@ -65,7 +65,6 @@ package
 				sphere.z = (radius+100)*Math.sin(i);
 				i+=2*Math.PI/10;
 			}
-			
 		}
 
 		private function createMaterial():Vector.<BitmapData>
@@ -104,9 +103,9 @@ package
 		{
 			title = "Particles : " + max + ", ";
 			
-			//scene.rotationX+=1;
+			scene.rotationX+=1;
 			scene.rotationY++;//=(400-mouseX);
-			//scene.rotationZ+=1;
+			scene.rotationZ+=1;
 			
 			
 			 //TODO

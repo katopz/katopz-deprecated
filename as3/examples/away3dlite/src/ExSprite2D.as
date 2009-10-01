@@ -20,11 +20,11 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExSprite2D extends FastTemplate
+	public class ExSprite2D extends BasicTemplate
 	{
-		private var particles:Vector.<Sprite2D>;
-		private var particle:Sprite2D;
-		private var radius:uint = 300;
+		private var sprites:Vector.<Sprite2D>;
+		private var sprite:Sprite2D;
+		private var radius:uint = 200;
 		private var focusTextField:TextField;
 		private var step:Number=0;
 		
@@ -32,12 +32,12 @@ package
 		{
 			view.mouseEnabled = false;
 			
-			var max:uint = 200;
+			var max:uint = 100;
 			var i:int = max;
 			
-			particles = new Vector.<Sprite2D>(i, true);
+			sprites = new Vector.<Sprite2D>(i, true);
 			
-			var particle:Sprite2D;
+			var sprite:Sprite2D;
 			var nextParticle:Sprite2D;
 			
 			while(i--)
@@ -45,13 +45,13 @@ package
 				if(i<max/2)
 				{
 					// Sprite
-					var sprite:Sprite = new Sprite();
-					var _graphics:Graphics = sprite.graphics;
+					var canvas:Sprite = new Sprite();
+					var _graphics:Graphics = canvas.graphics;
 					_graphics.beginFill(0xFFFFFF*Math.random(), 1);
 					_graphics.drawCircle(0, 0, 10);
 					_graphics.endFill();
 					
-					particle = new Sprite2D(sprite);
+					sprite = new Sprite2D(canvas);
 				}else{
 					// TextField
 					var textField:TextField = new TextField();
@@ -68,33 +68,32 @@ package
 					//textField.text = "...";
 					//textField.filters = [new GlowFilter(0x000000,0,0,0,0,0)];
 					
-					particle = new Sprite2D(textField);
+					sprite = new Sprite2D(textField);
 				}
 				
-				particle.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
-				scene.addChild(particle);
+				sprite.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
+				
+				scene.addChild(sprite);
+				
 				/*
-				particle.x = radius*Math.random()-radius*Math.random(); 
-				particle.y = radius*Math.random()-radius*Math.random(); 
-				particle.z = radius*Math.random()-radius*Math.random(); 
+				sprite.x = radius*Math.random()-radius*Math.random(); 
+				sprite.y = radius*Math.random()-radius*Math.random(); 
+				sprite.z = radius*Math.random()-radius*Math.random(); 
 				*/
-				particle.x = radius*Math.cos(step);//radius*Math.random()-radius*Math.random(); 
-				particle.y = -max+step*20;//radius*Math.random()-radius*Math.random(); 
-				particle.z = radius*Math.sin(step);//radius*Math.random()-radius*Math.random(); 
+				sprite.x = radius*Math.cos(step);//radius*Math.random()-radius*Math.random(); 
+				sprite.y = -max+step*20;//radius*Math.random()-radius*Math.random(); 
+				sprite.z = radius*Math.sin(step);//radius*Math.random()-radius*Math.random(); 
 				
 				step+=.1;
 				
-				if(i<max-1)
-				{
-					particle.nextParticle = nextParticle;
-				}
-				nextParticle = particle;
-				
-				particles[i] = particle;
+				sprites[i] = sprite;
 			}
 			
-			//var sphere:Sphere = new Sphere();
-			//scene.addChild(sphere);
+			camera.y = -1000;
+			camera.lookAt(new Vector3D(0,0,0));
+			
+			var sphere:Sphere = new Sphere(null,100,6,6);
+			scene.addChild(sphere);
 		}
 		
 		private function onMouse(event:MouseEvent):void
@@ -114,9 +113,9 @@ package
 		
 		override protected function onPreRender():void
 		{
-			scene.rotationX+=.5;
-			scene.rotationY+=2;
-			scene.rotationZ+=.5;
+			//scene.rotationX+=.25;
+			//scene.rotationY+=.5;
+			scene.rotationZ+=.25;
 			
 			/* TODO
 			camera.x = 1000*Math.cos(step);
@@ -127,17 +126,16 @@ package
 			
 			step+=.05;
 			
-			var particle:Sprite2D = particles[0];
-			do{
-		   		if(particle.displayObject is TextField)
+			for each(var sprite:Sprite2D in sprites)
+			{
+		   		if(sprite.displayObject is TextField)
 		   		{
-			   		var textField:TextField = TextField(particle.displayObject);
-			   		//textField.alpha = 1-Math.abs(particle.position.length)/radius;
+			   		var textField:TextField = TextField(sprite.displayObject);
+			   		//textField.alpha = 1-Math.abs(sprite.position.length)/radius;
 			   		if(textField!=focusTextField)
-			   			textField.text = String(int(particle.screenZ));//String(particle.position.x+","+particle.position.y+","+particle.position.z);
+			   			textField.text = String(int(sprite.screenZ));//String(sprite.position.x+","+sprite.position.y+","+sprite.position.z);
 		   		}
-		   		particle = particle.nextParticle;
-			}while(particle);
+			}
 		}
 	}
 }
