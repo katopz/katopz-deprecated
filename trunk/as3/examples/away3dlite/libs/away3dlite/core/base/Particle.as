@@ -23,7 +23,8 @@ package away3dlite.core.base
 		private var _bitmapIndex:int = 0;
 		private var _bitmaplength:int = 0;
 
-		private var _scale:Number = 1.0;
+		public var _scale:Number = 1.0;
+		public var screenZ:Number;
 
 		//public var next:Particle;
 		
@@ -54,7 +55,7 @@ package away3dlite.core.base
 			x = _position.x;
 			y = _position.y;
 			z = _position.z;
-			w = z+_screenZ;
+			screenZ = _screenZ;
 
 			_bitmapIndex = (_bitmapIndex + 1 == _bitmaplength) ? 0 : int(++_bitmapIndex);
 			_bitmapData = _bitmapDatas[_bitmapIndex];
@@ -62,7 +63,7 @@ package away3dlite.core.base
 			_center.x = _bitmapData.width*_scale*.5;
 			_center.y = _bitmapData.height*_scale*.5;
 			
-			_matrix.a = _matrix.d = _scale = zoom / (1 + w / focus);
+			_matrix.a = _matrix.d = _scale = zoom / (1 + _screenZ/ focus);
 			_matrix.tx = x - _center.x;
 			_matrix.ty = y - _center.y;
 		}

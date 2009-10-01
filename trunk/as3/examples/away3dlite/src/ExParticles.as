@@ -15,13 +15,13 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends BasicTemplate
+	public class ExParticles extends FastTemplate
 	{
 		private var particles:Particles;
 		private var materials:Vector.<BitmapData>;
 
-		private const radius:uint = 200;
-		private const max:int = 100;
+		private const radius:uint = 400;
+		private const max:int = 300;
 		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
@@ -30,7 +30,7 @@ package
 
 		override protected function onInit():void
 		{
-			//camera.y = -1000;
+			camera.y = -500;
 			camera.lookAt(new Vector3D());
 
 			// speed up
@@ -47,15 +47,15 @@ package
 			var i:Number = 0;
 			for (var j:int = 0; j < max; j++)
 			{
-				particles.addParticle(new Particle(j, radius * Math.cos(segment * j), (1/8) * (-max / 2) + i, radius * Math.sin(segment * j), materials));
-				i += (1/8);
+				particles.addParticle(new Particle(max-j-1, radius * Math.cos(segment * j), (100/max) * (-max / 2) + i, radius * Math.sin(segment * j), materials));
+				i += (100/max);
 			}
 
 			scene.addChild(particles);
 			
 			// center
-			scene.addChild(new Sphere(null,10,6,6));
-			/*
+			scene.addChild(new Sphere(null,100,6,6));
+			
 			// orbit
 			for (j = 0; j < 10; j++)
 			{
@@ -65,7 +65,7 @@ package
 				sphere.z = (radius+100)*Math.sin(i);
 				i+=2*Math.PI/10;
 			}
-			*/
+			
 		}
 
 		private function createMaterial():Vector.<BitmapData>
@@ -104,9 +104,9 @@ package
 		{
 			title = "Particles : " + max + ", ";
 			
-			scene.rotationX+=.5;
-			scene.rotationY=(300-mouseY);
-			scene.rotationZ+=.5;
+			//scene.rotationX+=.5;
+			scene.rotationY++;//(300-mouseY);
+			//scene.rotationZ+=.5;
 			
 			/* TODO
 			camera.x = 1000*Math.cos(step);

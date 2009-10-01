@@ -190,12 +190,12 @@ package away3dlite.core.render
 					_particle.drawBitmapdata(_view_graphics);
 			}else{
 				// draw anything that behind mesh screenZ
-				while(_particle && _particle.w > screenZ)
+				while(_particle && _particle.screenZ > screenZ)
 				{
 					_particle.drawBitmapdata(_view_graphics);
 					_particle = _particles.shift();
 				}
-				if(_particle && _particle.w < screenZ)
+				if(_particle && _particle.screenZ < screenZ)
 					_particles.unshift(_particle);
 			}
 		}
