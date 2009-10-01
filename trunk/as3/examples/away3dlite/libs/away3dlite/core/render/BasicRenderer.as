@@ -37,7 +37,6 @@ package away3dlite.core.render
 		public var sortObjects:Boolean = true;
 		
 		// Layer
-		private var _layers:Dictionary = new Dictionary(true);
 		private var _graphicsDatas:Dictionary = new Dictionary(true);
 		
 		private function collectFaces(object:Object3D):void
@@ -59,29 +58,22 @@ package away3dlite.core.render
 						object.setChildIndex(child, children.indexOf(child));
 					
 					if(child.layer)
-					{
 						child.layer.graphics.clear();
-						_layers[child] = child.layer;
-					}
 					
 					collectFaces(child);
 				}
+				
 			} else if (object is Mesh) {
 				
 				var mesh:Mesh = object as Mesh;
 				
-				if(mesh.layer)
-				{
-					mesh.layer.graphics.clear();
-					_layers[mesh] = mesh.layer;
-				}
-						
 				_clipping.collectFaces(mesh, _faces);
 				
 				if (_view.mouseEnabled && _mouseEnabled)
 					collectScreenVertices(mesh);
 				
 				_view._totalFaces += mesh._faces.length;
+				
 			}else if (object is Particles) {
 				_particles = _particles.concat((object as Particles).lists);
 			}
@@ -251,15 +243,14 @@ package away3dlite.core.render
 				_material_graphicsData = _material.graphicsData;
 				_material_graphicsData[_material.trianglesIndex] = _triangles;
 				
-				for each (var layer:Sprite in _layers)
+				// draw to layer or canvas
+				if(_graphicsDatas[_material_graphicsData])
 				{
-					if(_graphicsDatas[_material_graphicsData])
-					{
-						_graphicsDatas[_material_graphicsData].graphics.drawGraphicsData(_material_graphicsData);
-						_material_graphicsData = null;
-					}
+					_graphicsDatas[_material_graphicsData].graphics.drawGraphicsData(_material_graphicsData);
+					_material_graphicsData = null;
 				}
 				
+				// draw to view
 				if(_material_graphicsData)
 					_view_graphics_drawGraphicsData(_material_graphicsData);
 			}

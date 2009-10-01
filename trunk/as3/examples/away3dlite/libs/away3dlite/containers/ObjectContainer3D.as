@@ -1,11 +1,11 @@
 package away3dlite.containers
 {
-	import away3dlite.arcane;
 	import away3dlite.animators.bones.*;
+	import away3dlite.arcane;
 	import away3dlite.core.base.*;
 	
-	import flash.geom.*;
 	import flash.display.*;
+	import flash.geom.*;
 	
 	use namespace arcane;
     
@@ -32,10 +32,11 @@ package away3dlite.containers
 		{
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
-			var child:Object3D;
+			var child:DisplayObject;
 			
 			for each (child in _children)
-				child.project(projectionMatrix3D, _sceneMatrix3D);
+				if(child is Object3D)
+					Object3D(child).project(projectionMatrix3D, _sceneMatrix3D);
 		}
 		
 		private var _index:int;
@@ -71,9 +72,10 @@ package away3dlite.containers
 		{
 			child = super.addChild(child);
 			
-			_children[_children.length] = child as Object3D;
+			_children[_children.length] = child;
 			
-			(child as Object3D).updateScene(_scene);
+			if(child is Object3D)
+				(child as Object3D).updateScene(_scene);
 			
 			if (_scene)
 				_scene._dirtyFaces = true;

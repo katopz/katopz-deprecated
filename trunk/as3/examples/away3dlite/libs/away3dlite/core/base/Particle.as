@@ -54,7 +54,7 @@ package away3dlite.core.base
 			x = _position.x;
 			y = _position.y;
 			z = _position.z;
-			w = _screenZ;
+			w = z+_screenZ;
 
 			_bitmapIndex = (_bitmapIndex + 1 == _bitmaplength) ? 0 : int(++_bitmapIndex);
 			_bitmapData = _bitmapDatas[_bitmapIndex];

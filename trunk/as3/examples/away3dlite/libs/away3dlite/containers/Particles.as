@@ -40,8 +40,8 @@ package away3dlite.containers
 			
 			for each (var particle:Particle in lists)
 			{
-				var _position:Vector3D = Utils3D.projectVector(_sceneMatrix3D, particle.original);
-				particle.render(_position, int((_uvtData[particle.index])*1000000), _zoom , _focus);
+				var _position:Vector3D = Utils3D.projectVector(_viewMatrix3D, particle.original);
+				particle.render(_position, int((_uvtData[particle.index*3+2])*1000000), _zoom , _focus);
 			}
 			*/
 			
@@ -50,14 +50,14 @@ package away3dlite.containers
 			var i:int = 0;
 			for each (var particle:Particle in lists)
 			{
-				var _position:Vector3D = Utils3D.projectVector(_sceneMatrix3D, particle.original);
+				//var _position:Vector3D = Utils3D.projectVector(_viewMatrix3D, particle.original);
 				particle.render
 				(
-					new Vector3D(_screenVertices[int(i++)], _screenVertices[int(i++)], _position.z),
-					_screenZ, _zoom, _focus
+					new Vector3D(_screenVertices[int(i++)], _screenVertices[int(i++)], particle.z),
+					int((_uvtData[particle.index*3+2])*1000000), _zoom, _focus
 				);
 			}
-			// + int((_uvtData[particle.index])*1000000)
+			
 			// sort
 			//lists.sortOn("z", 18);
 		}
@@ -87,7 +87,7 @@ package away3dlite.containers
 			_vertices.fixed = true;
 			
 			_uvtData.fixed = false;
-			_uvtData.push(1, 1, 1);
+			_uvtData.push(0, 0, 0);
 			_uvtData.fixed = true;
 			
 			return particle;
