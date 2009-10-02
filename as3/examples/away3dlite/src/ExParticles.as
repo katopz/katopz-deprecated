@@ -15,10 +15,10 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends FastTemplate
+	public class ExParticles extends BasicTemplate
 	{
 		private var particles:Particles;
-		private var materials:Vector.<BitmapData>;
+		private var materials:ParticleMaterial;
 
 		private const radius:uint = 200;
 		private const max:int = 450;
@@ -30,8 +30,7 @@ package
 
 		override protected function onInit():void
 		{
-			//camera.y = -500;
-			camera.lookAt(new Vector3D());
+			title = "Away3DLite | Particles : " + max + " | Click to toggle Particles Layer + BlendMode.INVERT | ";
 
 			// speed up
 			view.mouseEnabled = false;
@@ -65,11 +64,27 @@ package
 				sphere.z = (radius+50)*Math.sin(i);
 				i+=2*Math.PI/6;
 			}
+			
+			// layer test
+			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
-
-		private function createMaterial():Vector.<BitmapData>
+		
+		private function onClick(event:MouseEvent):void
 		{
-			var _materials:Vector.<BitmapData> = new Vector.<BitmapData>(30, true);
+			if(!particles.layer)
+			{
+				particles.layer = new Sprite();
+				particles.layer.blendMode = BlendMode.INVERT;
+				view.addChild(particles.layer);
+			}else{
+				view.removeChild(particles.layer);
+				particles.layer = null;
+			}
+		}
+		 
+		private function createMaterial():ParticleMaterial
+		{
+			var _materials:ParticleMaterial = new ParticleMaterial(true);
 
 			for (var i:int = 0; i < numFrames; i++)
 			{
@@ -79,7 +94,7 @@ package
 				var bitmapData:BitmapData = new BitmapData(size, size, true, 0x00000000);
 				bitmapData.draw(shape);
 
-				_materials[i] = bitmapData;
+				_materials.addFrame(bitmapData);
 			}
 
 			return _materials;
@@ -101,13 +116,10 @@ package
 		
 		override protected function onPostRender():void
 		{
-			title = "Away3DLite | Particles : " + max + ", ";
-			
 			scene.rotationX+=.5;
 			scene.rotationY+=.5;//(300-mouseY);
 			scene.rotationZ+=.5;
 			
-			 //TODO
 			camera.x = 1000*Math.cos(step);
 			//camera.y = 10*(300-mouseY);
 			camera.z = 1000*Math.sin(step);
