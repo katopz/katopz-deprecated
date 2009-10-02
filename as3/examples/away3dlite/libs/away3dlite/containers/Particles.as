@@ -1,6 +1,7 @@
 package away3dlite.containers
 {
 	import away3dlite.arcane;
+	import away3dlite.cameras.Camera3D;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.base.Particle;
 	
@@ -13,12 +14,10 @@ package away3dlite.containers
 	public class Particles extends Object3D
 	{
 		private var _view:View3D;
-		private var _zoom:Number;
-		private var _focus:Number;
 		
 		//linklist
-		//public var firstParticle:Particle;
-		//public var lastParticle:Particle;
+		public var firstParticle:Particle;
+		public var lastParticle:Particle;
 		
 		/** @private */
 		arcane var _vertices:Vector.<Number>;
@@ -36,31 +35,18 @@ package away3dlite.containers
 		{
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
-			Utils3D.projectVectors(_viewMatrix3D, _vertices, _screenVertices, _uvtData);
-			
-			for each (var particle:Particle in lists)
+			var _position:Vector3D;
+			var Utils3D_projectVector:Function = Utils3D.projectVector;
+			var particle:Particle = firstParticle;
+			var _zoom:Number = _view.camera.zoom;
+			var _focus:Number = _view.camera.focus;
+			var _transform_matrix3D:Matrix3D = transform.matrix3D;
+			do
 			{
-				var _position:Vector3D = Utils3D.projectVector(_viewMatrix3D, particle.original);
-				_position = Utils3D.projectVector(_viewMatrix3D, _position);
-				particle.render(_position, int((_uvtData[particle.index*3+2])*1000000), _zoom , _focus);
-			}
-			
-			/*
-			Utils3D.projectVectors(_viewMatrix3D, _vertices, _screenVertices, _uvtData);
-			
-			var i:int = 0;
-			for each (var particle:Particle in lists)
-			{
-				particle.render
-				(
-					new Vector3D(_screenVertices[int(i++)], _screenVertices[int(i++)], particle.z),
-					int((_uvtData[particle.index*3+2])*1000000), _zoom, _focus
-				);
-			}
-			*/
-			
-			// sort
-			//lists.sortOn("z", 18);
+				_position = Utils3D_projectVector(_transform_matrix3D, particle);
+				_position = Utils3D_projectVector(_viewMatrix3D, _position);
+				particle.render(_position, _zoom , _focus);
+			}while(particle = particle.next)
 		}
 
 		public function addParticle(particle:Particle):Particle
@@ -72,7 +58,6 @@ package away3dlite.containers
 			lists.push(particle);
 			
 			//link list
-			/*
 			if(!firstParticle)
 				firstParticle = particle;
 			
@@ -80,17 +65,7 @@ package away3dlite.containers
 				lastParticle.next = particle;
 			
 			lastParticle = particle;
-			*/
-			
-			// add position for project
-			_vertices.fixed = false;
-			_vertices.push(particle.x, particle.y, particle.z);
-			_vertices.fixed = true;
-			
-			_uvtData.fixed = false;
-			_uvtData.push(0, 0, 0);
-			_uvtData.fixed = true;
-			
+
 			return particle;
 		}
 		
@@ -98,15 +73,8 @@ package away3dlite.containers
 		{
 			super();
 			
-			// TODO: update when dirty
+			// TODO: update when dirty?
 			_view = view;
-			_zoom = view.camera.zoom;
-			_focus = view.camera.focus;
-			
-			_vertices = vertices = new Vector.<Number>();
-			_uvtData = new Vector.<Number>();
-			
-			_screenVertices = new Vector.<Number>();
 		}
 	}
 }
