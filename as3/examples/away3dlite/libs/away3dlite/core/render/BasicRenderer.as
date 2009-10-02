@@ -75,7 +75,13 @@ package away3dlite.core.render
 				_view._totalFaces += mesh._faces.length;
 				
 			}else if (object is Particles) {
-				_particles = _particles.concat((object as Particles).lists);
+				var particles:Particles = object as Particles;
+				
+				if(particles.layer)
+					particles.layer.graphics.clear();
+				
+				if(particles.lists.length>0)
+					_particles = _particles.concat(particles.lists);
 			}
 			
 			_mouseEnabled = _mouseEnabledArray.pop();
@@ -243,7 +249,7 @@ package away3dlite.core.render
 				_material_graphicsData = _material.graphicsData;
 				_material_graphicsData[_material.trianglesIndex] = _triangles;
 				
-				// draw to layer or canvas
+				// draw to layer
 				if(_graphicsDatas[_material_graphicsData])
 				{
 					_graphicsDatas[_material_graphicsData].graphics.drawGraphicsData(_material_graphicsData);

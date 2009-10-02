@@ -1,7 +1,6 @@
 package away3dlite.containers
 {
 	import away3dlite.arcane;
-	import away3dlite.cameras.Camera3D;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.base.Particle;
 	
@@ -10,23 +9,16 @@ package away3dlite.containers
 	import flash.geom.Vector3D;
 
 	use namespace arcane;
-
+	
+	/**
+	 * Particles
+	 * @author katopz
+	 */
 	public class Particles extends Object3D
 	{
-		private var _view:View3D;
-		
-		//linklist
-		public var firstParticle:Particle;
-		public var lastParticle:Particle;
-		
-		/** @private */
-		arcane var _vertices:Vector.<Number>;
-		/** @private */
-		arcane var _uvtData:Vector.<Number>;
-		
-		public var vertices:Vector.<Number>;
-		
-		private var _screenVertices:Vector.<Number>;
+		// linklist
+		private var firstParticle:Particle;
+		private var lastParticle:Particle;
 		
 		public var lists:Array;
 		
@@ -35,17 +27,16 @@ package away3dlite.containers
 		{
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
-			var _position:Vector3D;
+			// bypass
 			var Utils3D_projectVector:Function = Utils3D.projectVector;
-			var particle:Particle = firstParticle;
-			var _zoom:Number = _view.camera.zoom;
-			var _focus:Number = _view.camera.focus;
 			var _transform_matrix3D:Matrix3D = transform.matrix3D;
-			do
-			{
+			var _position:Vector3D;
+			
+			var particle:Particle = firstParticle;
+			
+			do{
 				_position = Utils3D_projectVector(_transform_matrix3D, particle);
-				_position = Utils3D_projectVector(_viewMatrix3D, _position);
-				particle.render(_position, _zoom , _focus);
+				particle.position = Utils3D_projectVector(_viewMatrix3D, _position);
 			}while(particle = particle.next)
 		}
 
@@ -69,12 +60,9 @@ package away3dlite.containers
 			return particle;
 		}
 		
-		public function Particles(view:View3D)
+		public function Particles()
 		{
-			super();
 			
-			// TODO: update when dirty?
-			_view = view;
 		}
 	}
 }
