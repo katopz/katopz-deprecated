@@ -15,13 +15,13 @@ package
 	/**
 	 * @author katopz
 	 */
-	public class ExParticles extends BasicTemplate
+	public class ExParticles extends FastTemplate
 	{
 		private var particles:Particles;
 		private var materials:Vector.<BitmapData>;
 
-		private const radius:uint = 300;
-		private const max:int = 2500;
+		private const radius:uint = 200;
+		private const max:int = 450;
 		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
@@ -40,15 +40,15 @@ package
 			materials = createMaterial();
 
 			// create particles
-			particles = new Particles(view);
+			particles = new Particles();
 
-			var segment:Number = 21 * 2 * Math.PI / max;
+			var segment:Number = 4*2 * Math.PI / max;
 
 			var i:Number = 0;
 			for (var j:int = 0; j < max; j++)
 			{
-				particles.addParticle(new Particle(max-j-1, radius * Math.cos(segment * j), (1/6) * (-max / 2) + i, radius * Math.sin(segment * j), materials));
-				i += (1/6);
+				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1/4)*(-max / 2) + i, radius * Math.sin(segment * j), materials));
+				i += (1/4);
 			}
 
 			scene.addChild(particles);
@@ -61,8 +61,8 @@ package
 			{
 				var sphere:Sphere = new Sphere(null,25,6,6);
 				scene.addChild(sphere);
-				sphere.x = (radius+100)*Math.cos(i);
-				sphere.z = (radius+100)*Math.sin(i);
+				sphere.x = (radius+50)*Math.cos(i);
+				sphere.z = (radius+50)*Math.sin(i);
 				i+=2*Math.PI/6;
 			}
 		}
@@ -109,7 +109,7 @@ package
 			
 			 //TODO
 			camera.x = 1000*Math.cos(step);
-			camera.y = 10*(300-mouseY);
+			//camera.y = 10*(300-mouseY);
 			camera.z = 1000*Math.sin(step);
 			camera.lookAt(new Vector3D(0,0,0));
 			

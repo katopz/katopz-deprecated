@@ -17,8 +17,8 @@ package away3dlite.containers
 	public class Particles extends Object3D
 	{
 		// linklist
-		private var firstParticle:Particle;
-		private var lastParticle:Particle;
+		private var _firstParticle:Particle;
+		private var _lastParticle:Particle;
 		
 		public var lists:Array;
 		
@@ -32,7 +32,7 @@ package away3dlite.containers
 			var _transform_matrix3D:Matrix3D = transform.matrix3D;
 			var _position:Vector3D;
 			
-			var particle:Particle = firstParticle;
+			var particle:Particle = _firstParticle;
 			
 			do{
 				_position = Utils3D_projectVector(_transform_matrix3D, particle);
@@ -49,13 +49,13 @@ package away3dlite.containers
 			lists.push(particle);
 			
 			//link list
-			if(!firstParticle)
-				firstParticle = particle;
+			if(!_firstParticle)
+				_firstParticle = particle;
 			
-			if(lastParticle)
-				lastParticle.next = particle;
+			if(_lastParticle)
+				_lastParticle.next = particle;
 			
-			lastParticle = particle;
+			_lastParticle = particle;
 
 			return particle;
 		}
