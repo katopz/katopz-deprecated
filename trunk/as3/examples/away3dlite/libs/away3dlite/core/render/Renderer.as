@@ -20,6 +20,8 @@ package away3dlite.core.render
 			_view = view;
 			_view_graphics = _view.graphics;
 			_view_graphics_drawGraphicsData = _view.graphics.drawGraphicsData;
+			_zoom = _view.camera.zoom;
+			_focus = _view.camera.focus;
 		}
 		
 		private var ql:Vector.<int> = new Vector.<int>(256, true);
@@ -69,6 +71,10 @@ package away3dlite.core.render
 		protected var _view_graphics:Graphics;
 		/** @private */
 		protected var _view_graphics_drawGraphicsData:Function;
+		/** @private */
+		private var _zoom:Number;
+		/** @private */
+		private var _focus:Number;
 		/** @private */
 		protected function sortFaces():void
 		{
@@ -180,19 +186,23 @@ package away3dlite.core.render
 		{
 			if(_particles.length==0)return;
 			
-			_view_graphics.lineStyle();	
-
+			var _target_graphics:Graphics = _particles.layer?_particles.layer:_view_graphics;
+			
+			// clear
+			_target_graphics.lineStyle();
+			
 			var _particle:Particle = _particles[0];
+			
 			if(!screenZ)
 			{
 				// just draw
 				for each (_particle in _particles)
-					_particle.drawBitmapdata(_view_graphics);
+					_particle.drawBitmapdata(_target_graphics, _zoom / (1 + _particle.screenZ/ _focus));
 			}else{
 				// draw anything that behind mesh screenZ
 				while(_particle && _particle.screenZ > screenZ)
 				{
-					_particle.drawBitmapdata(_view_graphics);
+					_particle.drawBitmapdata(_target_graphics, _zoom / (1 + _particle.screenZ/ _focus));
 					_particle = _particles.shift();
 				}
 				if(_particle && _particle.screenZ < screenZ)
