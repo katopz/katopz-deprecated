@@ -77,9 +77,6 @@ package away3dlite.core.render
 			}else if (object is Particles) {
 				var particles:Particles = object as Particles;
 				
-				if(particles.layer)
-					particles.layer.graphics.clear();
-				
 				if(particles.lists.length>0)
 					_particles = _particles.concat(particles.lists);
 			}

@@ -186,7 +186,7 @@ package away3dlite.core.render
 		{
 			if(_particles.length==0)return;
 			
-			var _target_graphics:Graphics = _particles.layer?_particles.layer:_view_graphics;
+			var _target_graphics:Graphics = _particles[0].layer?_particles[0].layer.graphics:_view_graphics;
 			
 			// clear
 			_target_graphics.lineStyle();

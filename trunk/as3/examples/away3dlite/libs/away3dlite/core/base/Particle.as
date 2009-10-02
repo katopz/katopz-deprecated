@@ -1,7 +1,11 @@
 package away3dlite.core.base
 {
+	import away3dlite.containers.Particles;
+	import away3dlite.materials.ParticleMaterial;
+	
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
+	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
@@ -12,6 +16,8 @@ package away3dlite.core.base
 	 */
 	public final class Particle extends Vector3D
 	{
+		public var group:Particles;
+		
 		public var animated:Boolean = false;
 		public var repeat:Boolean = false;
 		public var smooth:Boolean = false;
@@ -20,8 +26,11 @@ package away3dlite.core.base
 		
 		// projected position
 		private var _position:Vector3D;
+		
 		private var _matrix:Matrix;
 		private var _center:Point;
+		
+		// TODO : particle material
 		private var _bitmapDatas:Vector.<BitmapData>;
 		private var _bitmapData:BitmapData;
 		private var _bitmapData_width:Number;
@@ -37,17 +46,17 @@ package away3dlite.core.base
 		dofLevel = x>6 ? 6 : x;
 		*/
 		
-		public function Particle(x:Number, y:Number, z:Number, bitmapDatas:Vector.<BitmapData>)
+		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial)
 		{
 			super(x,y,z);
 			
-			_bitmapDatas = bitmapDatas;
+			_bitmapDatas = material.frames;
 			_bitmapLength = _bitmapDatas.length;
 			
 			if(_bitmapLength>0)
-				animated = true;
+				animated = true && material.animated;
 			
-			updateBitmap();
+			animate();
 			
 			_matrix = new Matrix();
 			_center = new Point(_bitmapData.width*_scale/2, _bitmapData.height*_scale/2);
@@ -69,11 +78,12 @@ package away3dlite.core.base
 			_position = position.clone();
 		}
 		
-		private function updateBitmap():void
+		private function animate():void
 		{
 			// animate
-			_bitmapIndex = (_bitmapIndex + 1 == _bitmapLength) ? 0 : int(++_bitmapIndex);
-			_bitmapData = _bitmapDatas[_bitmapIndex];
+			if(++_bitmapIndex>=_bitmapLength)
+				_bitmapIndex = 0;
+			_bitmapData = _bitmapDatas[int(_bitmapIndex)];
 			
 			// update
 			_bitmapData_width = _bitmapData.width;
@@ -83,7 +93,7 @@ package away3dlite.core.base
 		public function drawBitmapdata(graphics:Graphics, scale:Number):void
 		{
 			if(animated)
-				updateBitmap();
+				animate();
 				
 			_matrix.a = _matrix.d = _scale = scale;
 			_matrix.tx = position.x - _center.x;
@@ -91,6 +101,11 @@ package away3dlite.core.base
 			
 			graphics.beginBitmapFill(_bitmapData, _matrix, repeat, smooth);
 			graphics.drawRect(_matrix.tx, _matrix.ty, _center.x*2, _center.y*2);
+		}
+		
+		public function get layer():Sprite
+		{
+			return group.layer;
 		}
 	}
 }

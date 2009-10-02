@@ -20,6 +20,7 @@ package away3dlite.containers
 		private var _firstParticle:Particle;
 		private var _lastParticle:Particle;
 		
+		// still need array for sortOn
 		public var lists:Array;
 		
 		/** @private */
@@ -27,13 +28,11 @@ package away3dlite.containers
 		{
 			super.project(projectionMatrix3D, parentSceneMatrix3D);
 			
-			// bypass
+			// by pass
 			var Utils3D_projectVector:Function = Utils3D.projectVector;
 			var _transform_matrix3D:Matrix3D = transform.matrix3D;
 			var _position:Vector3D;
-			
 			var particle:Particle = _firstParticle;
-			
 			do{
 				_position = Utils3D_projectVector(_transform_matrix3D, particle);
 				particle.position = Utils3D_projectVector(_viewMatrix3D, _position);
@@ -56,6 +55,8 @@ package away3dlite.containers
 				_lastParticle.next = particle;
 			
 			_lastParticle = particle;
+			
+			particle.group = this;
 
 			return particle;
 		}
