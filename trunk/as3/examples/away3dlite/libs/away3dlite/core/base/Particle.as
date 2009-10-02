@@ -12,27 +12,23 @@ package away3dlite.core.base
 	 */
 	public final class Particle extends Vector3D
 	{
+		public var animated:Boolean = false;
 		public var repeat:Boolean = false;
 		public var smooth:Boolean = false;
+		public var screenZ:Number;
+		public var next:Particle;
 		
 		// projected position
 		private var _position:Vector3D;
-		
 		private var _matrix:Matrix;
 		private var _center:Point;
-
 		private var _bitmapDatas:Vector.<BitmapData>;
 		private var _bitmapData:BitmapData;
 		private var _bitmapData_width:Number;
 		private var _bitmapData_height:Number;
-		
 		private var _bitmapIndex:int = 0;
-		private var _bitmaplength:int = 0;
-
-		public var _scale:Number = 1.0;
-		public var screenZ:Number;
-
-		public var next:Particle;
+		private var _bitmapLength:int = 0;
+		private var _scale:Number = 1.0;
 		
 		/*
 		TODO : dof
@@ -46,7 +42,10 @@ package away3dlite.core.base
 			super(x,y,z);
 			
 			_bitmapDatas = bitmapDatas;
-			_bitmaplength = _bitmapDatas.length;
+			_bitmapLength = _bitmapDatas.length;
+			
+			if(_bitmapLength>0)
+				animated = true;
 			
 			updateBitmap();
 			
@@ -73,7 +72,7 @@ package away3dlite.core.base
 		private function updateBitmap():void
 		{
 			// animate
-			_bitmapIndex = (_bitmapIndex + 1 == _bitmaplength) ? 0 : int(++_bitmapIndex);
+			_bitmapIndex = (_bitmapIndex + 1 == _bitmapLength) ? 0 : int(++_bitmapIndex);
 			_bitmapData = _bitmapDatas[_bitmapIndex];
 			
 			// update
@@ -83,8 +82,9 @@ package away3dlite.core.base
 		
 		public function drawBitmapdata(graphics:Graphics, scale:Number):void
 		{
-			updateBitmap();
-			
+			if(animated)
+				updateBitmap();
+				
 			_matrix.a = _matrix.d = _scale = scale;
 			_matrix.tx = position.x - _center.x;
 			_matrix.ty = position.y - _center.y;

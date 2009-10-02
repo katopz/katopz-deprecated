@@ -191,7 +191,7 @@ package away3dlite.core.render
 			// clear
 			_target_graphics.lineStyle();
 			
-			var _particle:Particle = _particles[0];
+			var _particle:Particle;
 			
 			if(!screenZ)
 			{
@@ -199,14 +199,13 @@ package away3dlite.core.render
 				for each (_particle in _particles)
 					_particle.drawBitmapdata(_target_graphics, _zoom / (1 + _particle.screenZ/ _focus));
 			}else{
-				// draw anything that behind mesh screenZ
-				while(_particle && _particle.screenZ > screenZ)
-				{
+				// draw anything that behind screenZ
+				var _particleIndex:int = 0;
+				while((_particle = _particles[_particleIndex++]) && _particle.screenZ > screenZ)
 					_particle.drawBitmapdata(_target_graphics, _zoom / (1 + _particle.screenZ/ _focus));
-					_particle = _particles.shift();
-				}
-				if(_particle && _particle.screenZ < screenZ)
-					_particles.unshift(_particle);
+				
+				if(_particleIndex>=2)
+					_particles = _particles.slice(_particleIndex-1,_particles.length); 
 			}
 		}
 		
