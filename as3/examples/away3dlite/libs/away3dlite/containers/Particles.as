@@ -4,6 +4,7 @@ package away3dlite.containers
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.base.Particle;
 	
+	import flash.display.Sprite;
 	import flash.geom.Matrix3D;
 	import flash.geom.Utils3D;
 	import flash.geom.Vector3D;
@@ -56,9 +57,17 @@ package away3dlite.containers
 			
 			_lastParticle = particle;
 			
-			particle.group = this;
-
 			return particle;
+		}
+		
+		override public function set layer(value:Sprite):void
+		{
+			super.layer = value;
+			
+			var particle:Particle = _firstParticle;
+			do{
+				particle.layer = _layer;
+			}while(particle = particle.next)
 		}
 		
 		public function Particles()
