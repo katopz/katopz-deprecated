@@ -187,33 +187,21 @@ package away3dlite.core.render
 		{
 			if(_particles.length==0)return;
 			
-			var _target_graphics:Graphics = _particles[0].layer?_particles[0].layer.graphics:_view_graphics;
 			var _particle:Particle;
-			
-			_target_graphics.lineStyle();
 			
 			if(!screenZ)
 			{
 				// just draw
 				for each (_particle in _particles)
-					_particle.drawBitmapdata(_target_graphics, _zoom / (1 + _particle.screenZ/ _focus));
+					_particle.drawBitmapdata(_view, _zoom, _focus);
 			}else{
 				// draw particle that behind screenZ
 				var _particleIndex:int = 0;
 				while((_particle = _particles[_particleIndex++]) && _particle.screenZ > screenZ)
-				{
-					var _particle_layer:Sprite = _particle.layer;
-					if(_particle_layer && _target_graphics!=_particle_layer.graphics)
-					{
-						_target_graphics = _particle_layer?_particle_layer.graphics:_view_graphics;
-						_target_graphics.lineStyle();
-					}
-					
-					_particle.drawBitmapdata(_target_graphics, _zoom / (1 + _particle.screenZ/ _focus));
-				}
+					_particle.drawBitmapdata(_view, _zoom, _focus);
 				
 				if(_particleIndex>=2)
-					_particles = _particles.slice(_particleIndex-1,_particles.length); 
+					_particles = _particles.slice(_particleIndex-1, _particles.length); 
 			}
 		}
 		

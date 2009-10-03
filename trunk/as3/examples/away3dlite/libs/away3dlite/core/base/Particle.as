@@ -1,6 +1,5 @@
 package away3dlite.core.base
 {
-	import away3dlite.containers.Particles;
 	import away3dlite.materials.ParticleMaterial;
 	
 	import flash.display.BitmapData;
@@ -16,7 +15,7 @@ package away3dlite.core.base
 	 */
 	public final class Particle extends Vector3D
 	{
-		public var group:Particles;
+		public var layer:Sprite;
 		
 		public var animated:Boolean = false;
 		public var repeat:Boolean = false;
@@ -90,22 +89,26 @@ package away3dlite.core.base
 			_bitmapData_height = _bitmapData.height;
 		}
 		
-		public function drawBitmapdata(graphics:Graphics, scale:Number):void
+		public function drawBitmapdata(_target:Sprite, _zoom:Number, _focus:Number):void
 		{
+			if(_target!=layer)
+			{
+				if(layer )
+					_target = layer;
+				_target.graphics.lineStyle();
+			}
+			
 			if(animated)
 				animate();
 				
-			_matrix.a = _matrix.d = _scale = scale;
+			_matrix.a = _matrix.d = _scale = _zoom / (1 + screenZ/ _focus);
 			_matrix.tx = position.x - _center.x;
 			_matrix.ty = position.y - _center.y;
 			
-			graphics.beginBitmapFill(_bitmapData, _matrix, repeat, smooth);
-			graphics.drawRect(_matrix.tx, _matrix.ty, _center.x*2, _center.y*2);
-		}
-		
-		public function get layer():Sprite
-		{
-			return group.layer;
+			var _graphics:Graphics = _target.graphics; 
+			
+			_graphics.beginBitmapFill(_bitmapData, _matrix, repeat, smooth);
+			_graphics.drawRect(_matrix.tx, _matrix.ty, _center.x*2, _center.y*2);
 		}
 	}
 }

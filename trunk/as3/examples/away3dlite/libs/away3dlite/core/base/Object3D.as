@@ -94,7 +94,15 @@ package away3dlite.core.base
 		/**
 		 * An optional layer sprite used to draw into inseatd of the default view.
 		 */
-		public var layer:Sprite;
+		public var _layer:Sprite;
+		public function get layer():Sprite
+		{
+			return _layer;
+		}
+		public function set layer(value:Sprite):void
+		{
+			_layer = value;
+		}
 		
 		/**
 		 * Used in loaders to store all parsed materials contained in the model.

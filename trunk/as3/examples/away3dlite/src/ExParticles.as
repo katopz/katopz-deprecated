@@ -21,7 +21,7 @@ package
 		private var materials:ParticleMaterial;
 
 		private const radius:uint = 200;
-		private const max:int = 450;
+		private const max:int = 500;
 		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
@@ -74,7 +74,7 @@ package
 			if(!particles.layer)
 			{
 				particles.layer = new Sprite();
-				particles.layer.blendMode = BlendMode.INVERT;
+				//particles.layer.blendMode = BlendMode.INVERT;
 				view.addChild(particles.layer);
 			}else{
 				view.removeChild(particles.layer);
@@ -116,14 +116,14 @@ package
 		
 		override protected function onPostRender():void
 		{
-			scene.rotationX+=.5;
+			//scene.rotationX+=.5;
 			scene.rotationY+=.5;//(300-mouseY);
-			scene.rotationZ+=.5;
+			//scene.rotationZ+=.5;
 			
-			camera.x = 1000*Math.cos(step);
+			//camera.x = 1000*Math.cos(step);
 			//camera.y = 10*(300-mouseY);
-			camera.z = 1000*Math.sin(step);
-			camera.lookAt(new Vector3D(0,0,0));
+			//camera.z = 1000*Math.sin(step);
+			//camera.lookAt(new Vector3D(0,0,0));
 			
 			step+=.01
 		}
