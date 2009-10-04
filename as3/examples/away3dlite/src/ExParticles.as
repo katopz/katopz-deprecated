@@ -9,7 +9,6 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Matrix;
-	import flash.geom.Vector3D;
 
 	[SWF(backgroundColor="#000000",frameRate="30",quality="MEDIUM",width="800",height="600")]
 	/**
@@ -74,7 +73,7 @@ package
 			if(!particles.layer)
 			{
 				particles.layer = new Sprite();
-				//particles.layer.blendMode = BlendMode.INVERT;
+				particles.layer.blendMode = BlendMode.INVERT;
 				view.addChild(particles.layer);
 			}else{
 				view.removeChild(particles.layer);

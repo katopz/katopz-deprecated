@@ -27,10 +27,18 @@ package away3dlite.core.render
 				var child:Object3D;
 				
 				for each (child in children) 
+				{
+					if(child.layer)
+						child.layer.graphics.clear();
+					
 					collectParticles(child);
+				}
 					
 			}else if (object is Particles) {
-				_particles = _particles.concat((object as Particles).lists);
+				var _particles_lists:Array = (object as Particles).lists;
+				
+				if(_particles_lists.length>0)
+					_particles = _particles.concat(_particles_lists);
 			}
 		}
 		
@@ -50,9 +58,6 @@ package away3dlite.core.render
 				{
 					if (sortObjects)
 						object.setChildIndex(child, children.indexOf(child));
-					
-					if(child.layer)
-						child.layer.graphics.clear();
 					
 					collectFaces(child);
 				}
