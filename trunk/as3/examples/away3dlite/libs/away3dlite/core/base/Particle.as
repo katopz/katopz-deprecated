@@ -93,7 +93,7 @@ package away3dlite.core.base
 		{
 			if(_target!=layer)
 			{
-				if(layer )
+				if(layer)
 					_target = layer;
 				_target.graphics.lineStyle();
 			}

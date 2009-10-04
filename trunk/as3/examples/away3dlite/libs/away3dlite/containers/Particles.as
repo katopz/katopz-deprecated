@@ -24,6 +24,9 @@ package away3dlite.containers
 		// still need array for sortOn
 		public var lists:Array;
 		
+		// by pass
+		private var _layer:Sprite;
+		
 		/** @private */
 		arcane override function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
@@ -37,7 +40,13 @@ package away3dlite.containers
 			do{
 				_position = Utils3D_projectVector(_transform_matrix3D, particle);
 				particle.position = Utils3D_projectVector(_viewMatrix3D, _position);
-			}while(particle = particle.next)
+				
+				// layer dirty
+				if(_layer!=layer)
+					particle.layer = layer;
+			}while(particle = particle.next);
+			
+			_layer = layer;
 		}
 
 		public function addParticle(particle:Particle):Particle
@@ -60,15 +69,17 @@ package away3dlite.containers
 			return particle;
 		}
 		
-		override public function set layer(value:Sprite):void
+		/*
+		public function setLayer(value:Sprite):void
 		{
-			super.layer = value;
+			_layer = super.layer = value;
 			
 			var particle:Particle = _firstParticle;
 			do{
-				particle.layer = _layer;
+				particle.layer = value;
 			}while(particle = particle.next)
 		}
+		*/
 		
 		public function Particles()
 		{

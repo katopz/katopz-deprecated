@@ -75,10 +75,10 @@ package away3dlite.core.render
 				_view._totalFaces += mesh._faces.length;
 				
 			}else if (object is Particles) {
-				var particles:Particles = object as Particles;
+				var _particles_lists:Array = (object as Particles).lists;
 				
-				if(particles.lists.length>0)
-					_particles = _particles.concat(particles.lists);
+				if(_particles_lists.length>0)
+					_particles = _particles.concat(_particles_lists);
 			}
 			
 			_mouseEnabled = _mouseEnabledArray.pop();
@@ -259,7 +259,7 @@ package away3dlite.core.render
 			}
 			
 			drawParticles();
-			_view_graphics.endFill();
+			//_view_graphics.endFill();
 		}
 	}
 }
