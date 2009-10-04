@@ -69,18 +69,6 @@ package away3dlite.containers
 			return particle;
 		}
 		
-		/*
-		public function setLayer(value:Sprite):void
-		{
-			_layer = super.layer = value;
-			
-			var particle:Particle = _firstParticle;
-			do{
-				particle.layer = value;
-			}while(particle = particle.next)
-		}
-		*/
-		
 		public function Particles()
 		{
 			
