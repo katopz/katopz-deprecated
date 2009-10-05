@@ -89,7 +89,8 @@ package away3dlite.core.base
 			_bitmapData_height = _bitmapData.height;
 		}
 
-		// TODO : copyPixels + bmp layer via core render
+		// TODO : copyPixels + bmp layer via core render for DOF
+		// TODO : collect command and render with drawPath
 		public function drawBitmapdata(_target:Sprite, _zoom:Number, _focus:Number):void
 		{
 			// draw to view or layer
