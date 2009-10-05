@@ -17,6 +17,8 @@ package away3dlite.containers
 	 */
 	public class Particles extends Object3D
 	{
+		public var _animated:Boolean;
+		
 		// linklist
 		private var _firstParticle:Particle;
 		private var _lastParticle:Particle;
@@ -69,9 +71,18 @@ package away3dlite.containers
 			return particle;
 		}
 		
-		public function Particles()
+		public function set animated(value:Boolean):void
 		{
-			
+			_animated = value;
+			var particle:Particle = _firstParticle;
+			do{
+				particle.animated = _animated;
+			}while(particle = particle.next);
+		}
+		
+		public function Particles(animated:Boolean = false)
+		{
+			_animated = animated;
 		}
 	}
 }
