@@ -78,9 +78,13 @@ package away3dlite.materials
 				var j:int=0;
 				for (var i:int = 0; i < maxScale*quality; i++)
 				{
-					_matrix.a = _matrix.d = _scale = (i/quality>0)?(i/quality):0.1;
+					_scale = i/quality;
+					_matrix.a = _matrix.d = _scale = (_scale<=0)?(i+1)/quality:_scale;
 					
-					_bitmapData = new BitmapData(bitmapData.width * _scale, bitmapData.height * _scale, true, 0x000000)
+					var _w:int = int(bitmapData.width * _scale);
+					var _h:int = int(bitmapData.height * _scale);
+					 
+					_bitmapData = new BitmapData((_w<1)?1:_w, (_h<1)?1:_h, true, 0x000000);
 					_bitmapData.draw(bitmapData, _matrix, null, null, new Rectangle(0, 0, _bitmapData.width, _bitmapData.height), smooth);
 					
 					scales.push(_bitmapData);

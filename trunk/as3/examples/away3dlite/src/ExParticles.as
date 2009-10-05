@@ -22,8 +22,8 @@ package
 		private var materials:ParticleMaterial;
 
 		private const radius:uint = 200;
-		private const max:int = 500;
-		private const size:uint = 16;
+		private const max:int = 1000;
+		private const size:uint = 10;
 
 		private const numFrames:uint = 30;
 
@@ -48,8 +48,8 @@ package
 			var i:Number = 0;
 			for (var j:int = 0; j < max; j++)
 			{
-				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1 / 1.25) * (-max / 2) + i, radius * Math.sin(segment * j), materials));
-				i += 1 / 1.25;
+				particles.addParticle(new Particle(radius * Math.cos(segment * j), 0.5 * (-max / 2) + i, radius * Math.sin(segment * j), materials));
+				i += 0.5;
 			}
 
 			scene.addChild(particles);
@@ -73,7 +73,7 @@ package
 
 		private function createMaterial():ParticleMaterial
 		{
-			var _materials:ParticleMaterial = new ParticleMaterial(true);
+			var _materials:ParticleMaterial = new ParticleMaterial(true, true);
 
 			for (var i:int = 0; i < numFrames; i++)
 			{

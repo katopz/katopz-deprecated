@@ -116,13 +116,17 @@ package away3dlite.core.base
 			else
 			{
 				// OB
-				var _bufferScale:Number = _scale <= 0 ? 0.1 : _scale;
-				_bufferScale = _bufferScale > material.maxScale ? material.maxScale : _bufferScale;
+				var _bufferScale:Number = _scale > material.maxScale ? material.maxScale : _scale;
 				
-				// call buffer
-				var index:int = int(_bufferScale * material.quality) - 1 + _bitmapIndex * material.maxScale * material.quality;
-				_bitmapData = material.scales[index];
-				_matrix = material.matrixs[index];
+				// move to bitmap sector
+				var index:Number = Math.floor(_bitmapIndex*material.maxScale* material.quality);
+				// move to scale sector
+				index += _bufferScale*material.quality;
+				
+				index = Math.round(index-1);
+				
+				_bitmapData = material.scales[int(index)];
+				_matrix = material.matrixs[int(index)];
 
 				// update
 				_bitmapData_width = _bitmapData.width;
