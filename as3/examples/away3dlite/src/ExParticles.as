@@ -9,9 +9,11 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Matrix;
+	import flash.geom.Vector3D;
 
 	[SWF(backgroundColor="#000000",frameRate="30",quality="MEDIUM",width="800",height="600")]
 	/**
+	 * Particles Example
 	 * @author katopz
 	 */
 	public class ExParticles extends BasicTemplate
@@ -21,12 +23,13 @@ package
 
 		private const radius:uint = 200;
 		private const max:int = 500;
-		private const size:uint = 10;
+		private const size:uint = 16;
 
 		private const numFrames:uint = 30;
-		
-		private var step:Number=0;
 
+		private var step:Number = 0;
+		private var segment:Number;
+		 
 		override protected function onInit():void
 		{
 			title = "Away3DLite | Particles : " + max + " | Click to toggle Particles Layer + BlendMode.INVERT | ";
@@ -38,49 +41,36 @@ package
 			materials = createMaterial();
 
 			// create particles
-			particles = new Particles();
+			particles = new Particles(true);
 
-			var segment:Number = 4*2 * Math.PI / max;
+			segment = size + 2 * Math.PI / (size * 1.25);
 
 			var i:Number = 0;
 			for (var j:int = 0; j < max; j++)
 			{
-				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1/4)*(-max / 2) + i, radius * Math.sin(segment * j), materials));
-				i += (1/4);
+				particles.addParticle(new Particle(radius * Math.cos(segment * j), (1 / 1.25) * (-max / 2) + i, radius * Math.sin(segment * j), materials));
+				i += 1 / 1.25;
 			}
 
 			scene.addChild(particles);
-			
+
 			// center
-			scene.addChild(new Sphere(null,100,6,6));
-			
+			scene.addChild(new Sphere(null, 100, 6, 6));
+
 			// orbit
 			for (j = 0; j < 6; j++)
 			{
-				var sphere:Sphere = new Sphere(null,25,6,6);
+				var sphere:Sphere = new Sphere(null, 25, 6, 6);
 				scene.addChild(sphere);
-				sphere.x = (radius+50)*Math.cos(i);
-				sphere.z = (radius+50)*Math.sin(i);
-				i+=2*Math.PI/6;
+				sphere.x = (radius + 50) * Math.cos(i);
+				sphere.z = (radius + 50) * Math.sin(i);
+				i += 2 * Math.PI / 6;
 			}
-			
+
 			// layer test
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
-		
-		private function onClick(event:MouseEvent):void
-		{
-			if(!particles.layer)
-			{
-				particles.layer = new Sprite();
-				particles.layer.blendMode = BlendMode.INVERT;
-				view.addChild(particles.layer);
-			}else{
-				view.removeChild(particles.layer);
-				particles.layer = null;
-			}
-		}
-		 
+
 		private function createMaterial():ParticleMaterial
 		{
 			var _materials:ParticleMaterial = new ParticleMaterial(true);
@@ -112,19 +102,34 @@ package
 			_graphics.drawCircle(x, y, size);
 			_graphics.endFill();
 		}
+
+		private function onClick(event:MouseEvent):void
+		{
+			if (!particles.layer)
+			{
+				particles.layer = new Sprite();
+				particles.layer.blendMode = BlendMode.INVERT;
+				view.addChild(particles.layer);
+			}
+			else
+			{
+				view.removeChild(particles.layer);
+				particles.layer = null;
+			}
+		}
 		
 		override protected function onPostRender():void
 		{
-			//scene.rotationX+=.5;
-			scene.rotationY+=.5;//(300-mouseY);
-			//scene.rotationZ+=.5;
+			scene.rotationX += .5;
+			scene.rotationY += .5;
+			scene.rotationZ += .5;
+
+			camera.x = 1000 * Math.cos(step);
+			camera.y = 10 * (300 - mouseY);
+			camera.z = 1000 * Math.sin(step);
+			camera.lookAt(new Vector3D(0, 0, 0));
 			
-			//camera.x = 1000*Math.cos(step);
-			//camera.y = 10*(300-mouseY);
-			//camera.z = 1000*Math.sin(step);
-			//camera.lookAt(new Vector3D(0,0,0));
-			
-			step+=.01
+			step += .01
 		}
 	}
 }

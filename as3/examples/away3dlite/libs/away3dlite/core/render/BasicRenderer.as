@@ -230,14 +230,14 @@ package away3dlite.core.render
 			
 			_scene._dirtyFaces = false;
 			
-			if (!_faces.length)
-				return;
-			
-			_sort.fixed = false;
-			_sort.length = _faces.length;
-			_sort.fixed = true;
-			
-			sortFaces();
+			if (_faces.length)
+			{
+				_sort.fixed = false;
+				_sort.length = _faces.length;
+				_sort.fixed = true;
+				
+				sortFaces();
+			}
 			
 			if (_material) 
 			{

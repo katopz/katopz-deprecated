@@ -10,29 +10,44 @@ package away3dlite.materials
 	 */
 	public class ParticleMaterial
 	{
+		private var _currentFrame:int = 0;
+		private var _totalFrames:int = 0;
+		
 		public var frames:Vector.<BitmapData>;
 		public var animated:Boolean;
 		
-		//public var scales:Vector.<BitmapData>;
-		//public var matrixs:Vector.<Matrix>;
-		//public var buffered:Boolean;
-		//public var maxScale:int;
-		//public var quality:int;
+		public var scales:Vector.<BitmapData>;
+		public var matrixs:Vector.<Matrix>;
+		public var buffered:Boolean;
+		public var maxScale:int;
+		public var quality:int;
 
 		/**
 		 * Creates a new <code>ParticleMaterial</code> object.
 		 */
-		public function ParticleMaterial(animated:Boolean = false)//, buffered:Boolean = false)
+		public function ParticleMaterial(animated:Boolean = false, buffered:Boolean = false)
 		{
 			this.animated = animated;
-			//this.buffered = buffered;
+			this.buffered = buffered;
 		}
-
-		public function addFrame(bitmapData:BitmapData):void//, maxScale:int = 2, quality:int = 10, smooth:Boolean = false):void
+		
+		/*
+		public function nextFrame():BitmapData
 		{
-			//this.maxScale = maxScale = (maxScale < 1)?1:maxScale;
-			//this.quality = quality = (quality < 1)?1:quality;
+			var _bitmapData:BitmapData;
+			if (++_currentFrame >= _totalFrames)
+				_currentFrame = 0;
+			_bitmapData = frames[int(_currentFrame)];
 			
+			return _bitmapData;
+		}
+		*/
+		
+		// TODO add MovieClip
+		public function addFrame(bitmapData:BitmapData, maxScale:int = 2, quality:int = 10, smooth:Boolean = false):void
+		{
+			this.maxScale = maxScale = (maxScale < 1)?1:maxScale;
+			this.quality = quality = (quality < 1)?1:quality;
 			
 			if (!frames)
 				frames = new Vector.<BitmapData>();
@@ -40,15 +55,19 @@ package away3dlite.materials
 			frames.fixed = false;
 			frames.push(bitmapData);
 			frames.fixed = true;
-
+			
+			_totalFrames = frames.length;
+			
 			// scale buffer
-			/*
 			if (buffered)
 			{
-				if (!scales)
+				if(!scales)
 				{
-					scales = new Vector.<BitmapData>(maxScale*quality, true);
-					matrixs = new Vector.<Matrix>(maxScale*quality, true);
+					scales = new Vector.<BitmapData>();
+					matrixs = new Vector.<Matrix>();
+				}else{
+					scales.fixed = false;
+					matrixs.fixed = false;
 				}
 
 				//bufferring
@@ -63,12 +82,16 @@ package away3dlite.materials
 					
 					_bitmapData = new BitmapData(bitmapData.width * _scale, bitmapData.height * _scale, true, 0x000000)
 					_bitmapData.draw(bitmapData, _matrix, null, null, new Rectangle(0, 0, _bitmapData.width, _bitmapData.height), smooth);
-					scales[j] = _bitmapData;
-					matrixs[j] = _matrix.clone();
+					
+					scales.push(_bitmapData);
+					matrixs.push(_matrix.clone());
+					
 					j++;
 				}
+				
+				scales.fixed = true;
+				matrixs.fixed = true;
 			}
-			*/
 		}
 	}
 }
