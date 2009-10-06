@@ -29,7 +29,7 @@ package away3dlite.core.base
 		private var _matrix:Matrix;
 		private var _center:Point;
 
-		private var _bitmapDatas:Vector.<BitmapData>;
+		public var _bitmapDatas:Vector.<BitmapData>;
 		private var _bitmapData:BitmapData;
 		private var _bitmapData_width:Number;
 		private var _bitmapData_height:Number;
