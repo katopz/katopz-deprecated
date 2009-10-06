@@ -31,11 +31,6 @@ package away3dlite.core.render
 		
 		private var _material_graphicsData:Vector.<IGraphicsData>;
 		
-		/**
-		 * Determines whether 3d objects are sorted in the view. Defaults to false.
-		 */
-		public var sortObjects:Boolean = true;
-		
 		// Layer
 		private var _graphicsDatas:Dictionary = new Dictionary(true);
 		
@@ -45,18 +40,11 @@ package away3dlite.core.render
 			_mouseEnabled = object._mouseEnabled = (_mouseEnabled && object.mouseEnabled);
 			
 			if (object is ObjectContainer3D) {
-				
 				var children:Array = (object as ObjectContainer3D).children;
 				var child:Object3D;
 				
-				if (sortObjects)
-					children.sortOn("screenZ", 18);
-				
 				for each (child in children)
 				{
-					if (sortObjects)
-						object.setChildIndex(child, children.indexOf(child));
-					
 					if(child.layer)
 						child.layer.graphics.clear();
 					
@@ -64,9 +52,7 @@ package away3dlite.core.render
 				}
 				
 			} else if (object is Mesh) {
-				
 				var mesh:Mesh = object as Mesh;
-				
 				_clipping.collectFaces(mesh, _faces);
 				
 				if (_view.mouseEnabled && _mouseEnabled)
