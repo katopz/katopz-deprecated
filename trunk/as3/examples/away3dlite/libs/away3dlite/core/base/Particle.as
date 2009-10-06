@@ -1,5 +1,6 @@
 package away3dlite.core.base
 {
+	import away3dlite.materials.ParticleDofMaterial;
 	import away3dlite.materials.ParticleMaterial;
 	
 	import flash.display.BitmapData;
@@ -15,43 +16,68 @@ package away3dlite.core.base
 	 */
 	public final class Particle extends Vector3D
 	{
-		public var animated:Boolean = false;
-		public var smooth:Boolean = false;
+		public var animated				: Boolean = false;
+		public var smooth				: Boolean = false;
+		private var _dof				: Boolean = false;
 
-		public var screenZ:Number;
-		public var next:Particle;
+		public var screenZ				: Number;
+		public var next					: Particle;
 
-		public var layer:Sprite;
+		public var layer				: Sprite;
 
 		// projected position
-		private var _position:Vector3D;
+		private var _position			: Vector3D;
 
-		private var _matrix:Matrix;
-		private var _center:Point;
+		private var _matrix				: Matrix;
+		private var _center				: Point;
 
-		public var _bitmapDatas:Vector.<BitmapData>;
-		private var _bitmapData:BitmapData;
-		private var _bitmapData_width:Number;
-		private var _bitmapData_height:Number;
+		private var _bitmapDatas		: Vector.<BitmapData>;
+		private var _bitmapDatasDof		: Vector.<Vector.<BitmapData>>;
+		private var _bitmapData			: BitmapData;
+		private var _bitmapData_width	: Number;
+		private var _bitmapData_height	: Number;
 		
-		private var _bitmapIndex:int = 0;
-		private var _bitmapLength:int = 0;
+		private var _bitmapIndex		: int = 0;
+		private var _bitmapLength		: int = 0;
 		
-		private var _scale:Number = 1;
+		private var _scale				: Number = 1;
 
-		public var material:ParticleMaterial;
+		public var material				: ParticleMaterial;
+		public var materialDof			: ParticleDofMaterial;
+		private var startCameraZ		: Number;
 
-		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial, smooth:Boolean = false)
+		// TODO: split material and materialdof
+		// Doflevel at function animated - startCameraZ a other way?
+		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial = null, materialDof:ParticleDofMaterial = null, smooth:Boolean = false, startCameraZ: Number = -1000)
 		{
 			super(x, y, z);
-
-			this.material = material;
 			this.smooth = smooth;
+			
+			this.startCameraZ = startCameraZ; // todo
+			
+			if (materialDof) {
+				trace("material is dof");
+				this.materialDof = materialDof;
+				_bitmapDatasDof = materialDof.framesDof;
+				_dof = true;
+			}
+			else {
+				this.material = material;
+				_bitmapDatas = material.frames;
+			}
 
-			_bitmapDatas = material.frames;
-			_bitmapLength = _bitmapDatas.length;
+
+			if (_dof) {
+				_bitmapData = _bitmapDatasDof[0][0];
+				_bitmapLength = _bitmapDatasDof.length;
+				trace("lenght frames / doflevel:", _bitmapLength, materialDof.dofLevel);
+			}
+			else {
+				_bitmapData = _bitmapDatas[0];
+				_bitmapLength = _bitmapDatas.length;
+			}
+
 			_bitmapIndex = 0;
-			_bitmapData = _bitmapDatas[0];
 			_bitmapData_width = _bitmapData.width;
 			_bitmapData_height = _bitmapData.height;
 
@@ -81,7 +107,20 @@ package away3dlite.core.base
 			if (++_bitmapIndex >= _bitmapLength)
 				_bitmapIndex = 0;
 
-			_bitmapData = _bitmapDatas[int(_bitmapIndex)];
+			if (_dof) {
+
+				// TODO:
+				// need to improve this and do different sorts of dof effects like front to back etc.
+				// problem: camera.z is changing from positive to negative
+				var x:int = int( (screenZ + startCameraZ) / materialDof.dofRange);
+				x = (x ^ (x >> 31)) - (x >> 31); // faster math.abs
+				var dofLevelZ:int = x>materialDof.dofLevel-1 ? materialDof.dofLevel-1 : x;
+				//trace("doflevel / screenZ / startCameraZ / dofrange: ", dofLevelZ, screenZ, startCameraZ, materialDof.dofRange); 
+				_bitmapData = _bitmapDatasDof[int(_bitmapIndex)][dofLevelZ];
+			}
+			else {
+				_bitmapData = _bitmapDatas[int(_bitmapIndex)];
+			}
 
 			// update
 			_bitmapData_width = _bitmapData.width;
@@ -105,8 +144,12 @@ package away3dlite.core.base
 				animate();
 
 			_scale = _zoom / (1 + screenZ / _focus);
-
-			if (!material.buffered)
+			if (_dof) {
+				_matrix.a = _matrix.d = _scale;
+				_matrix.tx = position.x - _center.x;
+				_matrix.ty = position.y - _center.y;
+			}
+			else if (!material.buffered)
 			{
 				// align center
 				_matrix.a = _matrix.d = _scale;
