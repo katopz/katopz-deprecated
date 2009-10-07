@@ -21,9 +21,9 @@ package
 		private var particles:Particles;
 		private var materials:ParticleMaterial;
 
-		private const radius:uint = 200;
-		private const max:int = 1000;
-		private const size:uint = 10;
+		private const radius:uint = 500;
+		private const max:int = 200;
+		private const size:uint = 32;
 
 		private const numFrames:uint = 30;
 
@@ -43,7 +43,7 @@ package
 			// create particles
 			particles = new Particles(true);
 
-			segment = size + 2 * Math.PI / (size * 1.25);
+			segment = size + 2 * Math.PI / (size * 20);
 
 			var i:Number = 0;
 			for (var j:int = 0; j < max; j++)
@@ -56,7 +56,7 @@ package
 
 			// center
 			scene.addChild(new Sphere(null, 100, 6, 6));
-
+/*
 			// orbit
 			for (j = 0; j < 6; j++)
 			{
@@ -66,14 +66,14 @@ package
 				sphere.z = (radius + 50) * Math.sin(i);
 				i += 2 * Math.PI / 6;
 			}
-
+*/
 			// layer test
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
 
 		private function createMaterial():ParticleMaterial
 		{
-			var _materials:ParticleMaterial = new ParticleMaterial();
+			var _materials:ParticleMaterial = new ParticleMaterial(true);
 
 			for (var i:int = 0; i < numFrames; i++)
 			{

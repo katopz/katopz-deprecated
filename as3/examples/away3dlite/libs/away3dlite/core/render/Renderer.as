@@ -76,6 +76,12 @@ package away3dlite.core.render
 		private var _zoom:Number;
 		/** @private */
 		private var _focus:Number;
+		
+		/**
+		 * Determines whether 3d objects are sorted in the view. Defaults to false.
+		 */
+		public var sortObjects:Boolean = false;
+		
 		/** @private */
 		protected function sortFaces():void
 		{
@@ -186,6 +192,8 @@ package away3dlite.core.render
 		protected function drawParticles(screenZ:Number=NaN):void
 		{
 			if(_particles.length==0)return;
+			
+			_view_graphics.lineStyle();
 			
 			var _particle:Particle;
 			

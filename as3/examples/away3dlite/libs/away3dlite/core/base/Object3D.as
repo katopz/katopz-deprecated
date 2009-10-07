@@ -95,7 +95,10 @@ package away3dlite.core.base
 		 * An optional layer sprite used to draw into inseatd of the default view.
 		 */
 		public var layer:Sprite;
-		
+		/**
+		 * An optional canvas sprite used to draw into inseatd of the default view.
+		 */
+		public var canvas:Sprite;
 		/**
 		 * Used in loaders to store all parsed materials contained in the model.
 		 */
@@ -160,19 +163,6 @@ package away3dlite.core.base
 		{
 			return transform.matrix3D.position;
 		}
-		
-		/**
-		 * Set the local position of the 3d object.
-		 */
-		public function set position(value:Vector3D):void
-		{
-			transform.matrix3D.position = value;
-		}
-		
-		/**
-		 * Returns a next 3d object in link list for sorting.
-		 */
-		public var next:Object3D;
 		
 		/**
 		 * Creates a new <code>Object3D</code> object.
