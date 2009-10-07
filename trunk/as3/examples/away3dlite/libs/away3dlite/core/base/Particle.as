@@ -44,16 +44,14 @@ package away3dlite.core.base
 
 		public var material				: ParticleMaterial;
 		public var materialDof			: ParticleDofMaterial;
-		private var startCameraZ		: Number;
 
 		// TODO: split material and materialdof
 		// Doflevel at function animated - startCameraZ a other way?
-		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial = null, materialDof:ParticleDofMaterial = null, smooth:Boolean = false, startCameraZ: Number = -1000)
+		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial = null, materialDof:ParticleDofMaterial = null, smooth:Boolean = false)
 		{
 			super(x, y, z);
 			this.smooth = smooth;
 			
-			this.startCameraZ = startCameraZ; // todo
 			
 			if (materialDof) {
 				trace("material is dof");
@@ -112,7 +110,7 @@ package away3dlite.core.base
 				// TODO:
 				// need to improve this and do different sorts of dof effects like front to back etc.
 				// problem: camera.z is changing from positive to negative
-				var x:int = int( (screenZ + startCameraZ) / materialDof.dofRange);
+				var x:int = int( screenZ / materialDof.dofRange);
 				x = (x ^ (x >> 31)) - (x >> 31); // faster math.abs
 				var dofLevelZ:int = x>materialDof.dofLevel-1 ? materialDof.dofLevel-1 : x;
 				//trace("doflevel / screenZ / startCameraZ / dofrange: ", dofLevelZ, screenZ, startCameraZ, materialDof.dofRange); 
