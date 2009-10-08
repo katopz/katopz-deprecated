@@ -22,10 +22,10 @@ package
 		private var materials:ParticleDofMaterial;
 
 		private const radius:uint = 500;
-		private const max:int = 300;
-		private const size:uint = 30;
+		private const max:int = 200;
+		private const size:uint = 10;
 
-		private const numFrames:uint = 10;
+		private const numFrames:uint = 1;
 
 		private var step:Number = 0;
 		private var segment:Number;
@@ -73,7 +73,7 @@ package
 
 		private function createMaterial():ParticleDofMaterial
 		{
-			var _materials:ParticleDofMaterial = new ParticleDofMaterial(10,8,1,1000);
+			var _materials:ParticleDofMaterial = new ParticleDofMaterial(5,2,1,1000,3000);
 
 			for (var i:int = 0; i < numFrames; i++)
 			{
