@@ -109,12 +109,15 @@ package away3dlite.core.base
 
 				// TODO:
 				// need to improve this and do different sorts of dof effects like front to back etc.
-				// problem: camera.z is changing from positive to negative
-				var x:int = int( screenZ / materialDof.dofRange);
-				x = (x ^ (x >> 31)) - (x >> 31); // faster math.abs
-				var dofLevelZ:int = x>materialDof.dofLevel-1 ? materialDof.dofLevel-1 : x;
-				//trace("doflevel / screenZ / startCameraZ / dofrange: ", dofLevelZ, screenZ, startCameraZ, materialDof.dofRange); 
-				_bitmapData = _bitmapDatasDof[int(_bitmapIndex)][dofLevelZ];
+				var dofLevelParticle:int = int( (screenZ - materialDof.dofNearScreenZ )/ materialDof.dofRangePerLevel);
+				trace(x);
+				dofLevelParticle = (dofLevelParticle ^ (dofLevelParticle >> 31)) - (dofLevelParticle >> 31); // faster math.abs
+				if (dofLevelParticle > materialDof.dofLevel-1) {
+					dofLevelParticle = materialDof.dofLevel-1
+				}
+				//var dofLevelParticle:int = x>materialDof.dofLevel ? materialDof.dofLevel : x;
+				trace("dofLevelParticle / screenZ / dofRangePerLevel: ", dofLevelParticle, screenZ, materialDof.dofRangePerLevel); 
+				_bitmapData = _bitmapDatasDof[int(_bitmapIndex)][dofLevelParticle];
 			}
 			else {
 				_bitmapData = _bitmapDatas[int(_bitmapIndex)];
