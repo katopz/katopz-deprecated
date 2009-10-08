@@ -54,7 +54,7 @@ package away3dlite.core.base
 			
 			
 			if (materialDof) {
-				trace("material is dof");
+				//trace("material is dof");
 				this.materialDof = materialDof;
 				_bitmapDatasDof = materialDof.framesDof;
 				_dof = true;
@@ -68,7 +68,7 @@ package away3dlite.core.base
 			if (_dof) {
 				_bitmapData = _bitmapDatasDof[0][0];
 				_bitmapLength = _bitmapDatasDof.length;
-				trace("lenght frames / doflevel:", _bitmapLength, materialDof.dofLevel);
+				//trace("lenght frames / doflevel:", _bitmapLength, materialDof.dofLevel);
 			}
 			else {
 				_bitmapData = _bitmapDatas[0];
@@ -108,15 +108,14 @@ package away3dlite.core.base
 			if (_dof) {
 
 				// TODO:
-				// need to improve this and do different sorts of dof effects like front to back etc.
+				// different way of sorting now its front to back
 				var dofLevelParticle:int = int( (screenZ - materialDof.dofNearScreenZ )/ materialDof.dofRangePerLevel);
-				trace(x);
 				dofLevelParticle = (dofLevelParticle ^ (dofLevelParticle >> 31)) - (dofLevelParticle >> 31); // faster math.abs
 				if (dofLevelParticle > materialDof.dofLevel-1) {
 					dofLevelParticle = materialDof.dofLevel-1
 				}
 				//var dofLevelParticle:int = x>materialDof.dofLevel ? materialDof.dofLevel : x;
-				trace("dofLevelParticle / screenZ / dofRangePerLevel: ", dofLevelParticle, screenZ, materialDof.dofRangePerLevel); 
+				//trace("dofLevelParticle / screenZ / dofRangePerLevel: ", dofLevelParticle, screenZ, materialDof.dofRangePerLevel); 
 				_bitmapData = _bitmapDatasDof[int(_bitmapIndex)][dofLevelParticle];
 			}
 			else {
