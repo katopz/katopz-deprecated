@@ -1,8 +1,9 @@
 package away3dlite.core.base
 {
-	import flash.geom.Vector3D;
 	import away3dlite.arcane;
 	import away3dlite.materials.*;
+	
+	import flash.geom.Vector3D;
 	
 	use namespace arcane;
 	
@@ -122,6 +123,8 @@ package away3dlite.core.base
 		 */
 		public var t2:int;
 		
+		public var length:Number;
+		
 		/*
 		public var normalX:Number;
 		
@@ -168,6 +171,8 @@ package away3dlite.core.base
 			u2 = 3*i2;
 			v2 = 3*i2 + 1;
 			t2 = 3*i2 + 2;
+			
+			length = new Vector3D(vertices[i0], vertices[i1],  vertices[i2]).length;
 			
 			/*
 			var d1x:Number = vertices[u1] - vertices[u0];
