@@ -15,6 +15,8 @@ package away3dlite.cameras
 	 */
 	public class Camera3D extends Object3D
 	{
+		public var dirty:Boolean = true;
+		
 		/** @private */
 		arcane var _view:View3D;
 		/** @private */
@@ -31,6 +33,8 @@ package away3dlite.cameras
 			_projectionMatrix3D.prependTranslation(0, 0, -_focus);
 			_projectionMatrix3D.invert();
 			_projectionMatrix3D.append(_projection.toMatrix3D());
+			
+			dirty = true;
 		}
 		
 		private var _focus:Number = 100;
@@ -79,6 +83,21 @@ package away3dlite.cameras
 		public function get projectionMatrix3D():Matrix3D
 		{
 			return _projectionMatrix3D;
+		}
+		
+		public function get fieldOfView():Number
+		{
+			return _projection.fieldOfView;
+		}
+		
+		public function get ratio():Number
+		{
+			return stage.stageWidth/stage.stageHeight;
+		}
+		
+		public function get angle():Number
+		{
+			return Math.atan2(stage.stageWidth, Math.abs(z));
 		}
 		
 		/**

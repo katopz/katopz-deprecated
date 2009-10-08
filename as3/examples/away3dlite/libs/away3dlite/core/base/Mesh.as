@@ -60,7 +60,10 @@ package away3dlite.core.base
 			var i:int = _faces.length = _faceMaterials.length = _indices.length/3;
 			
 			while (i--)
-				_faces[i] = new Face(this, i);
+			{
+				var _face:Face = _faces[i] = new Face(this, i);
+				maxRadius = (maxRadius>_face.length)?maxRadius:_face.length;
+			}
 			
 			// speed up
 			_vertices.fixed = true;

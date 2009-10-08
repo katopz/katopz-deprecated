@@ -125,6 +125,13 @@ package away3dlite.core.base
 		public var url:String;
 		
 		/**
+		 * Returns the maxinum length of 3d object to local center aka radius
+		 */
+		public var maxRadius:Number = 0;
+		
+		public var culled:Boolean = false;
+		
+		/**
 		 * Returns the scene to which the 3d object belongs
 		 */
 		public function get scene():Scene3D

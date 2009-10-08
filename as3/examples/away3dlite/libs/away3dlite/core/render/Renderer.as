@@ -4,9 +4,9 @@ package away3dlite.core.render
 	import away3dlite.containers.*;
 	import away3dlite.core.base.*;
 	import away3dlite.core.clip.*;
+	import away3dlite.core.culler.FrustumCuller;
 	
 	import flash.display.Graphics;
-	import flash.display.Sprite;
 	
 	use namespace arcane;
 	
@@ -23,6 +23,8 @@ package away3dlite.core.render
 			_view_graphics_drawGraphicsData = _view.graphics.drawGraphicsData;
 			_zoom = _view.camera.zoom;
 			_focus = _view.camera.focus;
+			
+			_culler = new FrustumCuller(_view.camera);
 		}
 		
 		private var ql:Vector.<int> = new Vector.<int>(256, true);
@@ -76,11 +78,17 @@ package away3dlite.core.render
 		private var _zoom:Number;
 		/** @private */
 		private var _focus:Number;
+		/** @private */
+		protected var _culler:FrustumCuller;
+		
+		public var numCulled:int;
 		
 		/**
 		 * Determines whether 3d objects are sorted in the view. Defaults to false.
 		 */
 		public var sortObjects:Boolean = false;
+		
+		public var cullObjects:Boolean = false;
 		
 		/** @private */
 		protected function sortFaces():void
@@ -252,6 +260,11 @@ package away3dlite.core.render
 			_screenVertexArrays.length = 0;
 			
 			_particles = [];
+			
+			numCulled = 0;
+			
+			if(_view.camera.dirty)
+				_culler.update();
 		}
 	}
 }

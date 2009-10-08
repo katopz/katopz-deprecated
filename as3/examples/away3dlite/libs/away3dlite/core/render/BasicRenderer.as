@@ -36,6 +36,13 @@ package away3dlite.core.render
 		
 		private function collectFaces(object:Object3D):void
 		{
+			if(cullObjects && object.culled)
+			{	
+				++numCulled;
+				object.culled = false;
+				return;
+			}
+			
 			_mouseEnabledArray.push(_mouseEnabled);
 			_mouseEnabled = object._mouseEnabled = (_mouseEnabled && object.mouseEnabled);
 			
@@ -48,6 +55,9 @@ package away3dlite.core.render
 				
 				for each (child in children)
 				{
+					if(cullObjects)
+						_culler.cull(child);
+						
 					if(child.canvas)
 					{
 						var _child_canvas:Sprite = child.canvas;
@@ -132,6 +142,7 @@ package away3dlite.core.render
 						_material_graphicsData = _material.graphicsData;
 						_screenVertices = _mesh._screenVertices;
 						_uvtData = _mesh._uvtData;
+						//FP BUG : https://bugs.adobe.com/jira/browse/FP-2898
 						_faceStore.length = 0;
 						_faceStore.length = _mesh._vertices.length/3;
 					} else if (_mesh != _face.mesh) {
@@ -263,6 +274,8 @@ package away3dlite.core.render
 			
 			// draw remain particles
 			drawParticles();
+			
+			_view.camera.dirty = false;
 		}
 	}
 }
