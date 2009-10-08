@@ -59,7 +59,7 @@ package away3dlite.materials
 				_bitmapData.applyFilter(_bitmapData,_bitmapData.rect,new Point(0,0), new BlurFilter(s,s,_dofBlurQuality));
 
 				// for testing
-				_bitmapData.colorTransform(_bitmapData.rect,new ColorTransform(1,1,1,1-((i+1)*0.2)));
+//				_bitmapData.colorTransform(_bitmapData.rect,new ColorTransform(1,1,1,1-((i+1)*0.2)));
 
 				frameDof.push(_bitmapData);
 			}
