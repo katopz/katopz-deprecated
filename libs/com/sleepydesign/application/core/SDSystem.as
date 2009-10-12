@@ -45,13 +45,13 @@ package com.sleepydesign.application.core
 		}
 
 		// ______________________________ Initialize ______________________________
-
-		override public function init(raw:Object = null):void
+/*
+		override protected function init(raw:Object = null):void
 		{
 			if (!raw || !raw.container || !raw.stage)
 				return;
 			raw.stage.addChild(this);
-		}
+		}*/
 		
 		// ______________________________ Update ____________________________
 		

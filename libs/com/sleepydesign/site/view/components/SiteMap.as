@@ -39,14 +39,9 @@ ___________________________________________________________
 	{
 		public function SiteMap(xml:XML = null)
 		{
-			super(xml);
+			super(xml, true, true, true);
 		}
-		
-		override public function init(raw:Object=null):void
-		{
-			super.init({needLabel:true, isRadio:true, isOpen:true});
-		}
-		
+			
 		override public function setFocusById(id:String) : SDTreeNode
 		{
 			return super.setFocusById("$"+id);

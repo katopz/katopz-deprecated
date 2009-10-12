@@ -16,7 +16,7 @@ package com.sleepydesign.site.view.components
 	import flash.events.MouseEvent;
 	import flash.utils.*;
 	
-	import gs.TweenMax;
+	import com.greensock.TweenMax;
 	
 	/* ---------------------------------------------------------------
 	
@@ -171,7 +171,7 @@ package com.sleepydesign.site.view.components
 			}
 			*/
 			
-			trace("\n * Page.update\t: "+type+"\n");
+			//trace("\n * Page.update\t: "+type+"\n");
 			
 			switch(type)
 			{
@@ -203,11 +203,11 @@ package com.sleepydesign.site.view.components
 					xml = XMLUtil.getXMLById(data.xml, focusID);
 					
 					// try find by @id
-					var _source: DisplayObjectContainer = SDContainer.getCollector().findBy(focusID);
+					var _source: DisplayObjectContainer = SDMovieClip.getCollector().findBy(focusID);
 					
 					// try find by @src
 					if(!_source)
-						_source = SDContainer.getCollector().findBy(String(XML(data.xml).@src));
+						_source = SDMovieClip.getCollector().findBy(String(XML(data.xml).@src));
 					
 					if(_source)
 						Content(currentContent).update(new ContentVO(focusID, _source, xml));
@@ -231,7 +231,7 @@ package com.sleepydesign.site.view.components
 					// got queues from SWFAddress
 					if(queuePaths && queuePaths.length>0)
 					{
-		         		trace("queuePaths:"+queuePaths);
+		         		//trace("queuePaths:"+queuePaths);
 		         		
 		         		xml = XMLUtil.getXMLById(XML(data.xml), queuePaths[0]);
 		        		contentVO = new ContentVO(xml.@id, null, xml);

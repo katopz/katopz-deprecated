@@ -6,7 +6,7 @@ package com.sleepydesign.components
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
 
-	import gs.TweenMax;
+	import com.greensock.TweenMax;
 
 	public class SDButton extends SDComponent
 	{

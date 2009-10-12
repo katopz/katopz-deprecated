@@ -45,6 +45,7 @@ package com.sleepydesign.site.model
     public class SWFAddressProxy extends Proxy implements IProxy
     {
         public static const NAME:String = 'SWFAddressProxy';
+		public static var isInit:Boolean = false; 
 		
         public function SWFAddressProxy( )
         {
@@ -56,7 +57,7 @@ package com.sleepydesign.site.model
 		{
 			if(uri.length<1)return;
 			trace(" * SWFAddressProxy.requestURI : "+uri);
-			if (ExternalInterface.available) 
+			if (ExternalInterface.available && SWFAddressProxy.isInit) 
 			{
 				SWFAddress.setValue(uri);
 			} else {
@@ -74,6 +75,8 @@ package com.sleepydesign.site.model
 		private function onAddressInit(e:SWFAddressEvent):void
 		{
 			trace(" ^ onAddressInit\t: "+e.value);
+			
+			isInit = true;
 			
 			SWFAddress.removeEventListener(SWFAddressEvent.INIT, onAddressInit);
 			
@@ -102,9 +105,9 @@ package com.sleepydesign.site.model
 			if(Navigation.currrentPath && currrentPath.length>0 && Navigation.currrentPath!=currrentPath)
 			{
 				trace(" * SWFAddressProxy.setTargetURI\t: "+currrentPath);
+				sendNotification( ApplicationFacade.SECTION_CHANGED, currrentPath );
 				trace(" ! currrentPath\t: " +Navigation.currrentPath + " -> "+currrentPath);
 				Navigation.currrentPath = currrentPath;
-				sendNotification( ApplicationFacade.SECTION_CHANGED, Navigation.currrentPath );
 			}
 		}
      }

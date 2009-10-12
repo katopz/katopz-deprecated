@@ -1,12 +1,12 @@
 package com.sleepydesign.application.core
 {
-	import com.sleepydesign.application.data.SDApplicationData;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDSprite;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
+	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	
@@ -44,19 +44,9 @@ package com.sleepydesign.application.core
         
         public static var currentStage : Stage;
         
-        public static function getStage() : Stage
-        {
-            return currentStage;
-        }
-        
-        public static function setStage(currentStage:Stage):void 
-        {
-            SDApplication.currentStage = currentStage;
-        }        
-        
-        public function SDApplication(id:String="application", data:SDApplicationData=null)
+        public function SDApplication(id:String="application", loaderObject:DisplayObject=null, configURI:String="config.xml")
 		{
-			super(id, data);
+			super(id);
 			
 			if(!instance)
 			{
@@ -78,11 +68,14 @@ package com.sleepydesign.application.core
 				
 				instance = this;
 				
+				/*
 				if(data && data.instance)
 					instance = data.instance;
 				
+				
 				if(!currentStage && data && data.stage)
 					currentStage = data.stage;
+				*/
 				
 				//content layer
 				content = new SDSprite();
@@ -93,7 +86,7 @@ package com.sleepydesign.application.core
 				addChild(system);
 				
 				//loader layer
-				loader = data?new SDLoader(data.loader):new SDLoader();
+				loader = loaderObject?new SDLoader(loaderObject):new SDLoader();
 				
 				//system.parse({instance:this});
 			}

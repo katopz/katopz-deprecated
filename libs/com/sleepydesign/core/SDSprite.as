@@ -11,7 +11,7 @@ package com.sleepydesign.core
 	import flash.display.Sprite;
 	import flash.events.IEventDispatcher;
 
-	import gs.TweenMax;
+	import com.greensock.TweenMax;
 
 	/**
 	 * SleepyDesign Sprite

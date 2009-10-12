@@ -12,7 +12,7 @@
 	import com.sleepydesign.game.events.PlayerEvent;
 	import com.sleepydesign.playground.core.Map;
 	
-	import gs.TweenMax;
+	import com.greensock.TweenMax;
 	import gs.easing.Linear;
 	
 	import org.papervision3d.core.geom.Particles;

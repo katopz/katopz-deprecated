@@ -8,7 +8,7 @@
     import flash.media.SoundChannel;
     import flash.media.SoundTransform;
     
-    import gs.TweenMax;
+    import com.greensock.TweenMax;
 	
 	public class SDSound 
 	{

@@ -43,12 +43,21 @@ ___________________________________________________________
 		public static var nodeWidth:int = SDStyle.SIZE+SDStyle.SIZE*.5;
 		public static var nodeHeight:int = SDStyle.SIZE+SDStyle.SIZE*.5;
 		
-		public function SDTree(xml:XML = null)
+		private var _needLabel:Boolean = false;
+		private var _isRadio:Boolean = false;
+		private var _isOpen:Boolean = false;
+		
+		public function SDTree(xml:XML = null, isOpen:Boolean = false, needLabel:Boolean = false, isRadio:Boolean = false)
 		{
 			_xml = xml;
+			_needLabel = needLabel;
+			_isRadio = isRadio;
+			_isOpen = isOpen;
+			
 			super();
 		}
 		
+		/*
 		override public function init(raw:Object=null):void
 		{
 			if(!_config)
@@ -56,11 +65,13 @@ ___________________________________________________________
 			super.init(raw);
 		}
 		
+		
 		override public function parse(raw:Object=null):void
 		{
 			// default
 			_config = raw;
 		}
+		*/
 		
 		override public function create(config:Object=null):void
 		{
@@ -72,11 +83,11 @@ ___________________________________________________________
 			if(_root)
 			{
 				//close by default
-				if(config && config.isOpen)
+				if(config && _isOpen)
 				{
-					_root.selected = config.isOpen;//?config.isOpen:false;
+					_root.selected = _isOpen;//?config.isOpen:false;
 				}else{
-					_root.selected = false;
+					_root.selected = false || _isOpen;
 				}
 				setNode(_root, _root.selected);
 			}
@@ -91,7 +102,7 @@ ___________________________________________________________
 			
 			var _id:String;
 			
-			if(!_config.needLabel)
+			if(!_needLabel)
 			{
 				if(node)
 				{
@@ -166,7 +177,7 @@ ___________________________________________________________
 			node.isOpen = isOpen;
 			for each (var child:SDTreeNode in node.childs)
 			{
-				if(_config.isRadio)
+				if(_isRadio)
 				{
 					// single instance
 					if(!child.parentNode||!child.parentNode.selectedNode)
@@ -204,7 +215,7 @@ ___________________________________________________________
 
 		public function setFocus(node:SDTreeNode) : SDTreeNode
 		{
-			if(_config.isRadio)
+			if(_isRadio)
 			{
 				// clear old
 				if(currentNode)

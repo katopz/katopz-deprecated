@@ -6,7 +6,7 @@ package com.sleepydesign.effect
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
-	import gs.TweenMax;
+	import com.greensock.TweenMax;
 
 	public class SDParallax
 	{

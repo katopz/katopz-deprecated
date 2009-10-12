@@ -20,7 +20,7 @@ package com.sleepydesign.core
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	
-	import gs.TweenMax;
+	import com.greensock.TweenMax;
 	
     /**
 	 * SleepyDesign Loader

@@ -16,6 +16,7 @@ package com.sleepydesign.site.view.components
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.ApplicationFacade;
+	import com.sleepydesign.site.model.SWFAddressProxy;
 	import com.sleepydesign.site.model.vo.SiteVO;
 	import com.sleepydesign.utils.URLUtil;
 	
@@ -37,10 +38,10 @@ package com.sleepydesign.site.view.components
             if ( instance == null ) instance = new Navigation();
             return instance as Navigation;
         }
-		public function Navigation(id:String="navigation", raw:Object=null)
+		public function Navigation(id:String="navigation")
 		{
 			instance = this;
-			super(id, raw);
+			super(id);
 		}
 		
 		// ______________________________ Initialize ______________________________
@@ -115,7 +116,7 @@ package com.sleepydesign.site.view.components
 			tree.x = 10
 			tree.y = 10
 			tree.addEventListener(SDEvent.CHANGE_FOCUS, onSiteMap);
-			tree.visible = false;
+			//tree.visible = false;
 			addChild(tree);
 		}
 		
@@ -146,7 +147,7 @@ package com.sleepydesign.site.view.components
 		 */
 		public function setSectionByPath( path:String ):void
 		{	
-			if(tree.currentNode && tree.currentNode.path==path)return;
+			if(tree.currentNode && tree.currentNode.path.split("$").join("")==path)return;
 			if(currrentPath== path)return;
 			
 			//trace("\n / [Navigation] --------------------------------------");
@@ -158,6 +159,9 @@ package com.sleepydesign.site.view.components
 			//trace(" ! focusPath : "+ApplicationFacade.focusPath);
 			
 			//trace(" ! currentSection : "+ApplicationFacade.currentSection);
+			
+			currrentPath = path;
+			
 			//trace(" ! currrentPath : "+currrentPath);
 			
 			var id:String = path.split("/").pop();
