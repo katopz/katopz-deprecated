@@ -18,12 +18,12 @@ package com.sleepydesign.components
 		
 		public function SDComponent():void
 		{
-			super();
+			//
 		}
 		
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
-			create(raw);
+			create();
 			draw();
 		}
 		

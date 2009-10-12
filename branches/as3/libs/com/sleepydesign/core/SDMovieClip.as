@@ -11,13 +11,20 @@ package com.sleepydesign.core
     import flash.events.Event;
     import flash.events.IEventDispatcher;
     
-    import gs.TweenMax;
+    import com.greensock.TweenMax;
     
     /**
 	 * SleepyDesign MovieClip : destroyable, lazyplay, cloak
 	 */
 	dynamic public class SDMovieClip extends MovieClip implements IEventDispatcher, IDestroyable
 	{
+		private static var collector:SDGroup;
+        public static function getCollector() : SDGroup 
+        {
+            if ( collector == null ) collector = new SDGroup("DisplayObjectCollector");
+            return collector as SDGroup;
+        }
+		
 		private var _id	:String;
 		public function get id():String
 		{
@@ -26,8 +33,9 @@ package com.sleepydesign.core
 		
 		public function set id(id:String):void
 		{
+			getCollector().remove(this);
 			_id = id;
-			SDContainer.getCollector().insert(this);
+			SDMovieClip.getCollector().insert(this);
 		}
 		
 		public var clip	:MovieClip;

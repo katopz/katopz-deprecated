@@ -94,7 +94,8 @@ package com.sleepydesign.site.view.components
 		{
 			if(!data)return;
 			
-			Navigation.queuePaths = ApplicationFacade.focusPath.split("/");
+			//Navigation.queuePaths = ApplicationFacade.focusPath.split("/");
+			Navigation.queuePaths = data.path.split("/");
 			trace(" ! Queue\t: "+Navigation.queuePaths);
 			
 			//super.update(data);
