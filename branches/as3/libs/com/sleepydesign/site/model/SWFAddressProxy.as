@@ -80,16 +80,30 @@ package com.sleepydesign.site.model
 			
 			SWFAddress.removeEventListener(SWFAddressEvent.INIT, onAddressInit);
 			
+			trace(" ! currrentPath\t: " +Navigation.currrentPath);
+			trace(" ! focusPath\t: " +ApplicationFacade.focusPath);
+			
 			// "/" -> mean no focus then better luck in 1st child in xml
 			var defaultPath:String = SWFAddressUtil.segmentURI(e.value).join("/");
 			Navigation.defaultPath = (defaultPath.length>0)?defaultPath:null;
+			
+			trace(" ! defaultPath\t: " +Navigation.defaultPath);
+			
+			if(ApplicationFacade.focusPath!=Navigation.defaultPath)
+			{
+				if(!Navigation.defaultPath)
+					requestURI(ApplicationFacade.focusPath);
+			}
+			
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, onAddressChange);
 		}
 		
 		private function onAddressChange(e:SWFAddressEvent):void
 		{
 			trace(" ^ onAddressChange\t: "+e.value);
+			
 			setTargetURI( SWFAddressUtil.segmentURI(e.value) );
+			
 			/*
 			var arr:Array = e.value.split("/");
 			arr.shift();
@@ -102,12 +116,12 @@ package com.sleepydesign.site.model
 		{
 			// DIRTY
 			var currrentPath:String = uriSegments.join("/");
+			trace(" ! currrentPath\t: " +Navigation.currrentPath + " -> "+(currrentPath?currrentPath:""));
 			if(Navigation.currrentPath && currrentPath.length>0 && Navigation.currrentPath!=currrentPath)
 			{
+				//Navigation.currrentPath = currrentPath;
 				trace(" * SWFAddressProxy.setTargetURI\t: "+currrentPath);
 				sendNotification( ApplicationFacade.SECTION_CHANGED, currrentPath );
-				trace(" ! currrentPath\t: " +Navigation.currrentPath + " -> "+currrentPath);
-				Navigation.currrentPath = currrentPath;
 			}
 		}
      }

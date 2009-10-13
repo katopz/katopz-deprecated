@@ -95,6 +95,8 @@ package com.sleepydesign.site.view
  			//trace(" ! "+ApplicationFacade.currentSection,"==", paths[paths.length-1])
  			//if ( ApplicationFacade.currentSection != paths[paths.length-1])
  			//trace(ApplicationFacade.focusPath)
+ 			
+ 			trace(" * navTo : " + ApplicationFacade.focusPath + " -> " + path);
  			if ( ApplicationFacade.focusPath!= path) 
  			{
  				ApplicationFacade.focusPath = path;
