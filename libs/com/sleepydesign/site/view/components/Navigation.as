@@ -147,27 +147,23 @@ package com.sleepydesign.site.view.components
 		 */
 		public function setSectionByPath( path:String ):void
 		{	
-			if(tree.currentNode && tree.currentNode.path.split("$").join("")==path)return;
-			if(currrentPath== path)return;
+			trace(" * setSectionByPath : "+path);
+			/*
+			// tree need update
+			if(tree.currentNode && tree.currentNode.path.split("$").join("")!=path)
+			{
+				trace("\n / [Navigation] --------------------------------------");
+				trace(" * tree.currentNode.path : "+tree.currentNode.path.split("$").join(""));
+				trace(" -------------------------------------- [Navigation] /\n");
+			}*/
 			
-			//trace("\n / [Navigation] --------------------------------------");
-			
-			//trace(" * setSectionByPath : "+path);
-			
-			ApplicationFacade.focusPath = path;
-			
-			//trace(" ! focusPath : "+ApplicationFacade.focusPath);
-			
-			//trace(" ! currentSection : "+ApplicationFacade.currentSection);
-			
-			currrentPath = path;
-			
-			//trace(" ! currrentPath : "+currrentPath);
-			
+			// set
 			var id:String = path.split("/").pop();
 			setSectionById(id);
 			
-			//trace(" -------------------------------------- [Navigation] /\n");
+			// update
+			currrentPath = path;
+			ApplicationFacade.focusPath = path;
 		}
 		
 		public function setSectionById(id:String):void
