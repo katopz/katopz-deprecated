@@ -13,35 +13,35 @@ package com.sleepydesign.components
 		private var _back:Shape;
 		private var _face:Shape;
 		private var _label:SDLabel;
-		private var _labelText:String="";
-		private var _over:Boolean=false;
-		private var _down:Boolean=false;
-		private var _selected:Boolean=false;
-		private var _toggle:Boolean=false;
+		private var _labelText:String = "";
+		private var _over:Boolean = false;
+		private var _down:Boolean = false;
+		private var _selected:Boolean = false;
+		private var _toggle:Boolean = false;
 
-		public function SDButton(label:String="")
+		public function SDButton(label:String = "")
 		{
-			_labelText=label;
+			_labelText = label;
 			super();
 		}
 
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
 			super.init();
-			buttonMode=true;
-			useHandCursor=true;
+			buttonMode = true;
+			useHandCursor = true;
 			setSize(64, 18);
 		}
 
-		override public function create(config:Object=null):void
+		override public function create(config:Object = null):void
 		{
-			_back=new Shape();
+			_back = new Shape();
 			addChild(_back);
 
-			_label=new SDLabel(_labelText);
-			_label.autoSize="center";
-
+			_label = new SDLabel(_labelText);
 			addChild(_label);
+			
+			_label.autoSize = "center";
 
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 			addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
@@ -55,26 +55,26 @@ package com.sleepydesign.components
 			_back.graphics.drawRoundRect(0, 0, _width, _height, SDStyle.SIZE * .75, SDStyle.SIZE * .75);
 			_back.graphics.endFill();
 
-			_label.autoSize="center";
-			_label.text=_labelText;
+			_label.autoSize = "center";
+			_label.text = _labelText;
 			if (_label.width > _width - 4)
 			{
-				_label.autoSize="none";
-				_label.width=_width - 4;
+				_label.autoSize = "none";
+				_label.width = _width - 4;
 			}
 			else
 			{
-				_label.autoSize="center";
+				_label.autoSize = "center";
 			}
 			_label.draw();
-			_label.x=_width / 2 - _label.width / 2
+			_label.x = _width / 2 - _label.width / 2
 
 			super.draw();
 		}
 
 		protected function onMouseOver(event:MouseEvent):void
 		{
-			_over=true;
+			_over = true;
 			TweenMax.to(_back, .25, SDStyle.BUTTON_OVER_TWEEN);
 			addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 		}
@@ -82,7 +82,7 @@ package com.sleepydesign.components
 		protected function onMouseOut(event:MouseEvent):void
 		{
 			removeEventListener(MouseEvent.ROLL_OUT, onMouseOut);
-			_over=false;
+			_over = false;
 			if (!_down)
 			{
 				TweenMax.to(_back, .25, SDStyle.BUTTON_UP_TWEEN);
@@ -95,7 +95,7 @@ package com.sleepydesign.components
 
 		protected function onMouseDown(event:MouseEvent):void
 		{
-			_down=true;
+			_down = true;
 			TweenMax.to(_back, .1, SDStyle.BUTTON_DOWN_TWEEN);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 		}
@@ -105,9 +105,9 @@ package com.sleepydesign.components
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			if (_toggle && _over)
 			{
-				_selected=!_selected;
+				_selected = !_selected;
 			}
-			_down=_selected;
+			_down = _selected;
 			if (_over)
 			{
 				TweenMax.to(_back, .1, SDStyle.BUTTON_OVER_TWEEN);
@@ -122,7 +122,7 @@ package com.sleepydesign.components
 
 		public function set label(str:String):void
 		{
-			_labelText=str;
+			_labelText = str;
 			draw();
 		}
 
@@ -136,8 +136,8 @@ package com.sleepydesign.components
 			if (!_toggle)
 				return;
 
-			_selected=value;
-			_down=_selected;
+			_selected = value;
+			_down = _selected;
 		}
 
 		public function get selected():Boolean
@@ -147,7 +147,7 @@ package com.sleepydesign.components
 
 		public function set toggle(value:Boolean):void
 		{
-			_toggle=value;
+			_toggle = value;
 		}
 
 		public function get toggle():Boolean

@@ -95,9 +95,6 @@ package com.asual.swfaddress{
         private static var _initializer:Boolean = _initialize();
         
         private static function _check(event:TimerEvent):void {
-        	trace("///////////////////////////////////////");
-        	trace(_getValue());
-        	trace("///////////////////////////////////////");
             if ((typeof SWFAddress['onInit'] == 'function' || _dispatcher.hasEventListener(SWFAddressEvent.INIT)) && !_init) {
                 SWFAddress._setValueInit(_getValue());
                 SWFAddress._init = true;

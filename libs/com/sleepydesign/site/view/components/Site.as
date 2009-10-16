@@ -79,8 +79,6 @@ package com.sleepydesign.site.view.components
 		{
 			super.create(config);
 			
-			// config pass by SiteDataProxy
-			
 			if(config.foreground)
 				foreground.update(config.foreground);
 			
@@ -94,11 +92,8 @@ package com.sleepydesign.site.view.components
 		{
 			if(!data)return;
 			
-			//Navigation.queuePaths = ApplicationFacade.focusPath.split("/");
 			Navigation.queuePaths = data.path.split("/");
-			trace(" ! Queue\t: "+Navigation.queuePaths);
 			
-			//super.update(data);
 			Page(content).update(PageVO(data));
 		}
 		
@@ -106,7 +101,6 @@ package com.sleepydesign.site.view.components
 		
 		public static function getPathById(id:String):String
 		{
-			//XMLUtil.getPathById(getInstance().config.xml, id);
 			return getInstance().navigation.getPathById(id);
 		}
 	}

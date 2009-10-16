@@ -1,13 +1,12 @@
 package com.sleepydesign.draw
 {
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	
     /**
 	 * SleepyDesign Square
 	 * @author katopz
 	 */
-	public class SDSquare extends Shape
+	public class SDSquare extends Sprite
 	{
 		private var _width:Number;
 		private var _height:Number;
@@ -17,7 +16,7 @@ package com.sleepydesign.draw
 		private var _lineColor:uint;
 		private var _align:String;
 		
-		public function SDSquare(width:Number=10, height:Number=10, color:uint=0x000000,alpha:Number=1, thickness:Number=0, lineColor:uint=0x000000, align:String = "TL")
+		public function SDSquare(width:Number=10, height:Number=10, color:uint=0x000000,alpha:Number=1, thickness:Number=0, lineColor:uint=0x000000, align:String = "tl")
 		{
 			_width = width;
 			_height = height;
@@ -40,9 +39,9 @@ package com.sleepydesign.draw
 				graphics.lineStyle(_thickness, _lineColor);
 			}
 			
-			switch(_align.toUpperCase()) 
+			switch(_align.toLowerCase()) 
 			{
-				case "TL":
+				case "tl":
 					graphics.drawRect(0, 0, _width, _height);
 				break;
 				default :

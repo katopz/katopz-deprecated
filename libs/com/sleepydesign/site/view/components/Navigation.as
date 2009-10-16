@@ -147,6 +147,8 @@ package com.sleepydesign.site.view.components
 		 */
 		public function setSectionByPath( path:String ):void
 		{	
+			if(ApplicationFacade.focusPath == path && currrentPath == path)return;
+			
 			trace(" * setSectionByPath : "+path);
 			/*
 			// tree need update
