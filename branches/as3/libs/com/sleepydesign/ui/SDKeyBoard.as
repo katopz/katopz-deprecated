@@ -1,6 +1,5 @@
 package com.sleepydesign.ui
 {
-	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDObject;
 	import com.sleepydesign.events.SDKeyboardEvent;
 	
@@ -31,12 +30,7 @@ package com.sleepydesign.ui
 		
 		public function SDKeyBoard(target:InteractiveObject)
 		{
-			init({target:target});
-		}
-		
-		override public function init(raw:Object=null):void
-		{
-			target = raw.target?raw.target:SDApplication.getStage();
+			this.target = target;
 			create();
 		}
 		
@@ -96,7 +90,8 @@ package com.sleepydesign.ui
 			isALT = event.altKey;
 			isSHIFT = event.shiftKey;
 			isSPACE = (event.keyCode == Keyboard.SPACE);
-			//trace("event.shiftKey:"+event.shiftKey)
+			
+			trace("event.ctrlKey:"+event.ctrlKey)
 			
 			switch(event.type) 
 			{

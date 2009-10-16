@@ -3,19 +3,13 @@ package com.sleepydesign.utils
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.ContextMenuEvent;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.external.ExternalInterface;
-	import flash.net.FileFilter;
-	import flash.net.FileReference;
 	import flash.net.LocalConnection;
 	import flash.system.Capabilities;
 	import flash.system.System;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
-	import flash.utils.ByteArray;
-	import flash.utils.Dictionary;
-	import flash.utils.IExternalizable;
 	
     public class SystemUtil extends EventDispatcher
     {
@@ -52,21 +46,11 @@ package com.sleepydesign.utils
 			//Number((System.totalMemory / 1048576).toFixed(3));
 			return Number((System.totalMemory*.0000009765625).toFixed(3));
 		}
-        
-		public static function addContext2(container:DisplayObjectContainer, label:String, eventHandler:Function):void
-		{
-			var _contextMenu:ContextMenu = container.contextMenu = new ContextMenu();
-			_contextMenu.hideBuiltInItems();
-			
-			var item:ContextMenuItem = new ContextMenuItem(label);
-            _contextMenu.customItems.push(item);
-            item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, eventHandler);
-		}
-		
+        	
 		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function):void
 		{
 			var _contextMenu:ContextMenu = container.contextMenu = new ContextMenu();
-			//_contextMenu.hideBuiltInItems();
+			_contextMenu.hideBuiltInItems();
 			
 			var item:ContextMenuItem = new ContextMenuItem(label);
             _contextMenu.customItems.push(item);
@@ -138,57 +122,7 @@ package com.sleepydesign.utils
         
 		// ______________________________ File ______________________________
 
-		public static function save(data:*, defaultFileName:String = "undefined"):void
-		{
-			//var type:String = URLUtil.getType(defaultFileName);
-
-			// TODO : save image
-
-			//save AMF like Object
-			var rawBytes:ByteArray = new ByteArray();
-			if(data is IExternalizable)
-			{
-				IExternalizable(data).writeExternal(rawBytes);
-			}else{
-				rawBytes = data;
-			}
-
-			//rawBytes.writeBytes(data.);
-
-			var fileReference:FileReference = new FileReference();
-			fileReference["save"](rawBytes, defaultFileName);
-		}
-
-		public static function open(fileTypes:Array = null, openHandler:Function=null, selectHandler:Function=null):FileReference
-		{
-			fileTypes = fileTypes ? fileTypes : ["*.jpg", "*.jpeg", "*.gif", "*.png"];
-			SystemUtil.functions["selectHandler"] = selectHandler;
-			SystemUtil.functions["openHandler"] = openHandler;
-			
-			var file:FileReference = new FileReference();
-			//typeFilter = [new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg;*.jpeg;*.gif;*.png")];
-
-			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
-			file.addEventListener(Event.SELECT, function selectHandler(event:Event):void
-			{
-				file = FileReference(event.target);
-				trace(" ^ selectHandler : " + file.name);
-				openFileName = file.name;
-				if(SystemUtil.functions["openHandler"])
-				{
-					file.addEventListener(Event.COMPLETE, openHandler);
-				}
-				file["load"]();
-			});
-			file.browse(typeFilter);
-			
-			return file;
-		}
-		
-		public static var functions:Dictionary = new Dictionary(true); 
-		
-		public static var openFileName:String; 
-		public static var file:FileReference;
+		//:Dictionary = new Dictionary(true); 
 		
 		/*
 		private static function selectHandler(event:Event):void

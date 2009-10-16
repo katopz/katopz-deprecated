@@ -93,8 +93,8 @@ package com.sleepydesign.ui
 					}
 					*/	
 				break;
-				dispatchEvent(event.clone());
 			}
+			dispatchEvent(event.clone());
 		}
 		
 		private function onMouseWheel( event:MouseEvent ):void

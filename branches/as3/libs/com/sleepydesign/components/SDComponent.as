@@ -23,6 +23,7 @@ package com.sleepydesign.components
 		
 		override protected function init():void
 		{
+			super.init();
 			create();
 			draw();
 		}
