@@ -36,6 +36,7 @@ package com.sleepydesign.site.model
 	import com.sleepydesign.site.ApplicationFacade;
 	import com.sleepydesign.site.view.components.Navigation;
 	import com.sleepydesign.utils.SWFAddressUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.external.ExternalInterface;
 	
@@ -61,7 +62,6 @@ package com.sleepydesign.site.model
 			{
 				SWFAddress.setValue(uri);
 			} else {
-				trace(" ! No ExternalInterface");
 				setTargetURI( SWFAddressUtil.segmentURI("/"+uri) );
 				//setTargetURI( uri );
 			}
@@ -114,12 +114,16 @@ package com.sleepydesign.site.model
 		//private function setTargetURI(currentSection:String):void
 		private function setTargetURI(uriSegments:Array):void
 		{
-			// DIRTY
 			var currrentPath:String = uriSegments.join("/");
 			trace(" ! currrentPath\t: " +Navigation.currrentPath + " -> "+(currrentPath?currrentPath:""));
 			if(Navigation.currrentPath && currrentPath.length>0 && Navigation.currrentPath!=currrentPath)
 			{
-				//Navigation.currrentPath = currrentPath;
+				if(!SystemUtil.isBrowser())
+				{
+					trace(" * Stand Alone Player");
+					Navigation.currrentPath = currrentPath;
+				}
+				
 				trace(" * SWFAddressProxy.setTargetURI\t: "+currrentPath);
 				sendNotification( ApplicationFacade.SECTION_CHANGED, currrentPath );
 			}

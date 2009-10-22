@@ -14,15 +14,15 @@
 		
 		public function BackGround(raw:Object)
 		{
-			super("background", raw);
+			super("background");
 			mouseEnabled = false;
 			mouseChildren = false;
 		}
 		
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
 			loader = SDApplication.getLoader();
-			update(raw);
+			//update(raw);
 		}
 		
 		/*

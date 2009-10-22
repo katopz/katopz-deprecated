@@ -1,8 +1,8 @@
 package com.sleepydesign.game.core
 {
-    import com.sleepydesign.core.SDObject3D;
+    import com.sleepydesign.core.IObject3D;
    
-	public class SDModel extends SDObject3D
+	public class SDModel implements IObject3D
 	{
 		public var type:String;
 		public var instance:*;//IAnimatable
@@ -17,6 +17,11 @@ package com.sleepydesign.game.core
 			try{
 				instance.play(action)
 			}catch(e:*){};
+		}
+		
+		public function toString(): String
+		{
+			return String(this);
 		}
 	}
 }

@@ -1,9 +1,7 @@
 ﻿package com.sleepydesign.playground.builder
 {
-	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.draw.SDSquare;
-	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDKeyboardEvent;
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.game.core.Game;
@@ -12,9 +10,8 @@
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
-	import com.sleepydesign.utils.SystemUtil;
+	import com.sleepydesign.utils.FileUtil;
 	
-	import flash.display.Loader;
 	import flash.events.MouseEvent;
 	
 	import org.papervision3d.core.math.Matrix3D;
@@ -52,10 +49,11 @@
 		
 		public function setupBackground():void
 		{
-			SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-			SystemUtil.open();
+			//SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
+			FileUtil.openImageTo(area.background);
 		}
 		
+		/*
 		private function onOpenBackgroundComplete(event:SDEvent):void
 		{
 			trace(" onOpenBackgroundComplete");
@@ -65,13 +63,14 @@
 			area.background.destroy();
 			
 			// logical
-			area.data.background = SystemUtil.openFileName;
+			//area.data.background = SystemUtil.openFileName;
 			
 			// physical
 			var loader:Loader = new Loader();
 			loader.loadBytes(event.data);
 			area.background.addChild(loader);
 		}
+		*/
 		
 		private function onKeyIsPress(event:SDKeyboardEvent):void
 		{
@@ -93,7 +92,7 @@
 			rotationAxis.normalize();
 			
 			var rotationMatrix:Matrix3D = Matrix3D.rotationMatrix(-rotationAxis.x*Math.abs(target.z)/target.z, -rotationAxis.y, rotationAxis.z*Math.abs(target.y)/target.y, event.data.distance/(600*Math.pow(target.scale, 5)));
-			  
+			
 			target.transform.calculateMultiply3x3(rotationMatrix, target.transform);
 			
 			//this line used to apply transform to actual rotation values, so that if you change scale, the changes are persisted

@@ -23,12 +23,14 @@
 			mouseEnabled = false;
 			mouseChildren = false;
 			
-			super("Area", config);
+			super("Area");
+			
+			parse(config);
 		}
 		
         // ______________________________ Initialize ______________________________
         
-		override public function init(raw:Object=null):void
+		override public function parse(raw:Object=null):void
 		{
 			id  = raw.id;
 			data = AreaData(raw);

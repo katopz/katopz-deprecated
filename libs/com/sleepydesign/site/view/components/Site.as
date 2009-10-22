@@ -1,7 +1,8 @@
 package com.sleepydesign.site.view.components
 {
-	import com.sleepydesign.site.ApplicationFacade;
 	import com.sleepydesign.site.model.vo.PageVO;
+	
+	import flash.display.Sprite;
 	
 	/* ---------------------------------------------------------------
 	
@@ -28,6 +29,8 @@ package com.sleepydesign.site.view.components
 		
 		public var background:Page;
 		
+		public var data:*;
+		
 		// Site Singleton
 		private static var instance : Site;
         public static function getInstance() : Site 
@@ -47,9 +50,12 @@ package com.sleepydesign.site.view.components
 			instance = this;
 			super("site");
 			
+			//data = new Sprite();
+			
 			// ___________________________ background layer ___________________________
 			
 			background = new Page("background");
+			background.mouseEnabled = false;
 			this.addChild(background);
 			
 			// ___________________________ body layer ___________________________
@@ -61,6 +67,7 @@ package com.sleepydesign.site.view.components
 			// ___________________________ foreground layer ___________________________
 			
 			foreground = new Page("foreground");
+			foreground.mouseEnabled = false;
 			this.addChild(foreground);
 			
 			// navigation

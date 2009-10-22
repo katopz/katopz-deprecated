@@ -42,9 +42,9 @@ package com.sleepydesign.components
 			super();
 		}
 		
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
-			super.init(raw);
+			super.init();
 			mouseEnabled = true;
 			mouseChildren = true;
 		}

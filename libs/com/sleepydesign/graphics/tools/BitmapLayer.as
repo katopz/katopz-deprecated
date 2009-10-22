@@ -4,6 +4,10 @@ package com.sleepydesign.graphics.tools
 	import flash.display.Sprite;
 	import flash.events.Event;
 
+	/**
+	 * Bitmap Layer to place raw bitmap, use for Bitmap editor
+	 * @author katopz
+	 */	
 	public class BitmapLayer extends Sprite
 	{
 		private var _canvasLayer:Sprite;
@@ -38,7 +42,7 @@ package com.sleepydesign.graphics.tools
 			
 			graphics.clear();
 			graphics.beginFill(0xFFFFFF, 0);
-			graphics.drawRect(0, 0, 400, 300);
+			graphics.drawRect(0, 0, canvasLayer.width, canvasLayer.height);
 			graphics.endFill();
 		}
 	}

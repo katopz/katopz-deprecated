@@ -1,4 +1,4 @@
-﻿﻿package com.sleepydesign.game.player
+﻿package com.sleepydesign.game.player
 {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
@@ -7,18 +7,14 @@
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.core.Character;
 	import com.sleepydesign.game.core.Clip3D;
-	import com.sleepydesign.game.core.Game;
+	import com.sleepydesign.game.core.AbstractGame;
 	import com.sleepydesign.game.core.Position;
 	import com.sleepydesign.game.data.PlayerData;
 	import com.sleepydesign.game.events.PlayerEvent;
 	import com.sleepydesign.playground.core.Map;
-	
-	import org.papervision3d.core.geom.Particles;
-	import org.papervision3d.core.geom.renderables.Particle;
-	import org.papervision3d.materials.special.SDParticleMaterial;
 	//import org.papervision3d.objects.SDObject3D;
 
-	public class Player extends SDObject
+	public class Player2D extends SDObject
 	{
 		public var id			: String;
 		public var instance		: *;
@@ -92,7 +88,7 @@
 		
 		//____________________________________________________________ Contructor
 		
-		public function Player(playerData:PlayerData)//id:String=null, source:*=null, playerVO:PlayerVO)
+		public function Player2D(playerData:PlayerData)//id:String=null, source:*=null, playerVO:PlayerVO)
 		{
 			this.id = playerData.id?playerData.id:String(new Date().valueOf());
 			super();
@@ -138,8 +134,8 @@
 			map = Map.getInstance();
 			map.addElement(this);
 			
-			if(balloonClip)
-				balloonClip.y = char.height;
+			if(balloon)
+				balloon.y = char.height;
 			
 			// hide 1st
 			instance.visible = false;
@@ -151,8 +147,8 @@
 		private function onCharacterComplete(event:SDEvent):void
 		{
 			// i'm taller?
-			if(balloonClip)
-				balloonClip.y = char.height;
+			if(balloon)
+				balloon.y = char.height;
 
 			trace("onCharacterComplete");
 		}
@@ -172,39 +168,19 @@
 			if(!balloon)
 			{
 				balloon = new SDBalloon(msg?msg:"");
-				balloon.addEventListener(SDEvent.DRAW, onBalloonChange);
-			
-				var spm:SDParticleMaterial = new SDParticleMaterial(balloon,"bc");
-				var particles3D:Particles = new Particles();
+				instance.addChild(balloon);
 				
-				balloonClip = new Particle(spm, 1, 0, 200, 0);
-				
-				particles3D.addParticle(balloonClip);
-				//particles3D.useOwnContainer = true;
-				//particles3D.filters = [ new GlowFilter( 0x999999, 1, 4, 4, 1, 1) ];
-				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onBalloonClick);
-				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_OVER, onBalloonClick);
-				
-				instance.addChild(particles3D);
 				act(PlayerEvent.TALK);
 			}
 			else if(msg && balloon.text != msg)
 			{
-				balloonClip.visible = true;
 				balloon.text = msg;
 				act(PlayerEvent.TALK);
 			}else{
-				balloonClip.visible = false;
+				balloon.visible = false;
 			}
 			
 			this.msg = msg;
-		}
-		
-		private var balloonClip:Particle
-		private function onBalloonChange( event:SDEvent ):void
-		{
-			balloonClip.visible = balloon.visible;
-			balloonClip.material.updateBitmap();
 		}
 		
 		// TODO : getset
@@ -341,7 +317,7 @@
 				commandData.args.push(this);
 				
 				// apply
-				Game.applyCommand(commandData.command, commandData.args);
+				AbstractGame.applyCommand(commandData.command, commandData.args);
 			}
 		}
 		

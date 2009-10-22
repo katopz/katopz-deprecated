@@ -147,7 +147,6 @@
 		public function getData(dataURI:String):void
 		{
 			this.dataURI = dataURI;
-			// external config -> * update -> * parse -> * create
 			loader.load(dataURI);
 			loader.removeEventListener(SDEvent.COMPLETE, onGetData);
 			loader.addEventListener(SDEvent.COMPLETE, onGetData, false, 0, true);
@@ -156,26 +155,9 @@
 		public function getConfig(configURI:String):void
 		{
 			this.configURI = configURI;
-			// external config -> * update -> * parse -> * create
 			loader.load(configURI);
 			loader.removeEventListener(SDEvent.COMPLETE, onGetConfig);
 			loader.addEventListener(SDEvent.COMPLETE, onGetConfig, false, 0, true);
-			
-			/*
-			// TODO : internal/external
-			switch(URLUtil.getType(configURI))
-			{
-				case "xml":
-					// external config -> * update -> * parse -> * create
-					loader.load(configURI);
-					loader.addEventListener(SDEvent.COMPLETE, onGetConfig, false, 0, true);
-				break;
-				default :
-					// internal config -------------> * parse -> * create
-					//parse(new PageVO(configURI.@id, configURI.@src, new XML(configURI)));
-				break;
-			}
-			*/
 		}
 		
 		// external config -> * update
@@ -510,8 +492,8 @@
 						
 						if(button)
 						{
-							button.removeEventListener(MouseEvent.CLICK, onClick);
-							button.addEventListener(MouseEvent.CLICK, onClick);
+							button.removeEventListener(MouseEvent.CLICK, onButtonClick);
+							button.addEventListener(MouseEvent.CLICK, onButtonClick);
 							
 							button.removeEventListener(MouseEvent.ROLL_OVER, onMouseRollOver);
 							button.addEventListener(MouseEvent.ROLL_OVER, onMouseRollOver);
@@ -730,9 +712,9 @@
 			}
 		}
 		
-		protected function onClick(event:MouseEvent):void
+		protected function onButtonClick(event:MouseEvent):void
 		{
-			trace(" ! onClick");
+			trace(" ! onButtonClick");
 			var linkXML:XML = XML(links.find(event.target))
 			
 			// 2nd try

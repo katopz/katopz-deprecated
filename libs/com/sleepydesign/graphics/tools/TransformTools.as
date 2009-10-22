@@ -4,6 +4,7 @@ package com.sleepydesign.graphics.tools
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 
 	public class TransformTools extends Tools
 	{
@@ -49,6 +50,8 @@ package com.sleepydesign.graphics.tools
 		override protected function onMouseIsDown(event:MouseEvent):void
 		{
 			super.onMouseIsDown(event);
+
+			var _gPoint:Point = bitmapLayer.localToGlobal(new Point(bitmapLayer.x, bitmapLayer.y));
 			
 			if(event.target is SizeHandle)
 			{
@@ -56,9 +59,9 @@ package com.sleepydesign.graphics.tools
 				SizeHandle(event.target).startDrag(false, canvasRectangle);
 				addEventListener(Event.ENTER_FRAME, draw);
 			}
-			else if(event.target==_bitmap.parent)
+			else if(_bitmap && event.target==_bitmap.parent)
 			{
-				if(_bitmap.hitTestPoint(event.localX, event.localY))
+				if(_bitmap.hitTestPoint(_gPoint.x+event.localX, _gPoint.y+event.localY))
 				{
 					currentHandle = cHandle;
 					cHandle.startDrag(false, canvasRectangle);

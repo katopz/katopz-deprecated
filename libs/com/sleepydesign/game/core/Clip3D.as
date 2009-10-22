@@ -1,15 +1,21 @@
 package com.sleepydesign.game.core
 {
-	import com.sleepydesign.core.SDObject3D;
+	import com.sleepydesign.core.IObject3D;
 	
-	public class Clip3D extends SDObject3D// implements IAnimatable
+	public class Clip3D implements IObject3D
 	{
-		public var instance:SDObject3D;
+		public var instance:*;
 		
 		public function Clip3D()
 		{
 			//
 		}
+		
+		public function toString(): String
+		{
+			return String(this);
+		}
+		
 		/*
 		public function play(clip:String):void
 		{

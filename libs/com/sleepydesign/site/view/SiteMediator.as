@@ -25,6 +25,7 @@ package com.sleepydesign.site.view
         // Cannonical name of the Mediator
         public static const NAME:String = "SiteMediator";
         private var _siteDataProxy:SiteDataProxy;
+        private var currrentPath:String;
 
         public function SiteMediator( viewComponent:Object ) 
         {
@@ -70,6 +71,11 @@ package com.sleepydesign.site.view
         private function update( path:String ):void
         {
         	path = path?path:"";
+        	
+        	// prevent dup request internal/external path
+        	if(currrentPath==path)return;
+        	currrentPath=path;
+        	
         	//var id:String = path.split("/").shift();
         	trace(" ^ "+this+".update\t: "+path);
         	var paths:Array = path.split("/");

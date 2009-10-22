@@ -42,6 +42,14 @@ package com.sleepydesign.utils
 			return imageloader;
 		}
 		
+		public static function loadBytes(byteArray:ByteArray, eventHandler:Function = null):Loader
+		{
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
+			loader.loadBytes(byteArray);
+			return loader;
+		}
+		
 		public static function loadAsset(uri:String, eventHandler:Function = null):Loader
 		{
 			return load(uri, eventHandler, "asset") as Loader;

@@ -1,21 +1,12 @@
 package com.sleepydesign.game.core
 {
 	import com.sleepydesign.core.SDGroup;
-	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDObject;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.game.data.CharacterData;
-	import com.sleepydesign.text.SDTextField;
-	import com.sleepydesign.utils.URLUtil;
+	import com.sleepydesign.game.events.PlayerEvent;
 	
-	import flash.display.Sprite;
-	import flash.utils.ByteArray;
-	
-	import org.papervision3d.core.geom.Particles;
-	import org.papervision3d.core.geom.renderables.Particle;
-	import org.papervision3d.events.FileLoadEvent;
 	import org.papervision3d.materials.BitmapFileMaterial;
-	import org.papervision3d.materials.special.SDParticleMaterial;
 	import org.papervision3d.objects.parsers.DAE;
 	import org.papervision3d.objects.parsers.MD2;
 
@@ -70,8 +61,8 @@ package com.sleepydesign.game.core
 				case "swf":
 				case "dae":
 					var dae:DAE = new DAE(true, "", true);
-					dae.addEventListener(FileLoadEvent.LOAD_COMPLETE, onModelComplete);
-					dae.addEventListener(FileLoadEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
+					dae.addEventListener(PlayerEvent.LOAD_COMPLETE, onModelComplete);
+					dae.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 					dae.load(data.source);
 					//trace(" Load : " + data.source);
 					dae.scale = data.scale;
@@ -146,13 +137,13 @@ package com.sleepydesign.game.core
 		}
 		*/
 		
-		private function onModelComplete(event:FileLoadEvent):void
+		private function onModelComplete(event:PlayerEvent):void
 		{
 			trace("onModelComplete");
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
 		}
 		
-		private function onAnimationComplete(event:FileLoadEvent):void
+		private function onAnimationComplete(event:PlayerEvent):void
 		{
 			trace("onAnimationComplete#1");
 			dispatchEvent(event.clone());
