@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.93
- * DATE: 9/9/2009
+ * VERSION: 1.0
+ * DATE: 10/18/2009
  * AS3 (AS2 is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenNano.com
  **/

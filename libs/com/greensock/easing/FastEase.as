@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.5
- * DATE: 9/8/2009
+ * VERSION: 1.0
+ * DATE: 10/18/2009
  * AS3
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/

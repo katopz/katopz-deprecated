@@ -1,12 +1,13 @@
 /**
- * VERSION: 2.01
- * DATE: 10/2/2009
+ * VERSION: 2.1
+ * DATE: 10/17/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
-	import flash.display.*;
 	import com.greensock.*;
+	
+	import flash.display.*;
 /**
  * Toggles the visibility at the end of a tween. For example, if you want to set <code>visible</code> to false
  * at the end of the tween, do:<br /><br /><code>
@@ -40,7 +41,7 @@ package com.greensock.plugins {
 		/** @private **/
 		protected var _visible:Boolean;
 		/** @private **/
-		protected var _hideAtStart:Boolean;
+		protected var _initVal:Boolean;
 		
 		/** @private **/
 		public function VisiblePlugin() {
@@ -51,33 +52,19 @@ package com.greensock.plugins {
 		
 		/** @private **/
 		override public function onInitTween(target:Object, value:*, tween:TweenLite):Boolean {
-			init(target, Boolean(value), tween);
+			_target = target;
+			_tween = tween;
+			_initVal = _target.visible;
+			_visible = Boolean(value);
 			return true;
 		}
 		
 		/** @private **/
-		protected function init(target:Object, visible:Boolean, tween:TweenLite):void {
-			_target = target;
-			_tween = tween;
-			_visible = visible;
-			if (_tween.vars.runBackwards != true) {
-				this.onComplete = onCompleteTween;
-			} else if (_tween.vars.immediateRender == true && !_visible) {
-				_hideAtStart = true;
-			}
-		}
-		
-		/** @private **/
-		public function onCompleteTween():void {
-			_target.visible = _visible;
-		}
-		
-		/** @private **/
 		override public function set changeFactor(n:Number):void {
-			if (_hideAtStart && _tween.cachedTime == 0) {
-				_target.visible = false;
-			} else if (!_visible) { //in case a completed tween is re-rendered at an earlier time.
-				_target.visible = true;
+			if (n == 1 && _tween.cachedDuration == _tween.cachedTime) { //a changeFactor of 1 doesn't necessarily mean the tween is done - if the ease is Elastic.easeOut or Back.easeOut for example, they could hit 1 mid-tween.
+				_target.visible = _visible;
+			} else {
+				_target.visible = _initVal; //in case a completed tween is re-rendered at an earlier time.
 			}
 		}
 

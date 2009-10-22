@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.88
- * DATE: 7/18/2009
+ * VERSION: 1.0
+ * DATE: 10/18/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/

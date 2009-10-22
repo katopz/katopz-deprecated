@@ -69,10 +69,11 @@ package com.greensock.plugins {
 		/** @private If the API/Framework for plugins changes in the future, this number helps determine compatibility **/
 		public static const API:Number = 1.0; 
 		
-		/** Name of the special property that the plugin should intercept/handle **/
+		/** @private Name of the special property that the plugin should intercept/handle **/
 		public var propName:String;
 		
 		/**
+		 * @private 
 		 * Array containing the names of the properties that should be overwritten in OverwriteManager's 
 		 * AUTO mode. Typically the only value in this Array is the propName, but there are cases when it may 
 		 * be different. For example, a bezier tween's propName is "bezier" but it can manage many different properties 
@@ -80,22 +81,22 @@ package com.greensock.plugins {
 		 */
 		public var overwriteProps:Array;
 		
-		/** If the values should be rounded to the nearest integer, set this to true. **/
+		/** @private If the values should be rounded to the nearest integer, set this to true. **/
 		public var round:Boolean;
 		
-		/** Priority level in the render queue **/
+		/** @private Priority level in the render queue **/
 		public var priority:int = 0;
 		
 		/** @private if the plugin actively changes properties of the target when it gets disabled (like the MotionBlurPlugin swaps out a temporary BitmapData for the target), activeDisplay should be true. Otherwise it should be false (it is much more common for it to be false). This is important because if it gets overwritten by another tween, that tween may init() with stale values - if activeDisable is true, it will force the new tween to re-init() when this plugin is overwritten (if ever). **/
 		public var activeDisable:Boolean;
 		
-		/** Called when the tween is complete. **/
+		/** @private Called when the tween is complete. **/
 		public var onComplete:Function;
 		
-		/** Called when the tween gets re-enabled after having been initted. Like if it finishes and then gets restarted later. **/
+		/** @private Called when the tween gets re-enabled after having been initted. Like if it finishes and then gets restarted later. **/
 		public var onEnable:Function;
 		
-		/** Called either when the plugin gets overwritten or when its parent tween gets killed/disabled. **/
+		/** @private Called either when the plugin gets overwritten or when its parent tween gets killed/disabled. **/
 		public var onDisable:Function;
 		
 		/** @private **/
@@ -109,6 +110,7 @@ package com.greensock.plugins {
 		}
 		
 		/**
+		 * @private 
 		 * Gets called when any tween of the special property begins. Store any initial values
 		 * and/or variables that will be used in the "changeFactor" setter when this method runs. 
 		 * 
@@ -123,6 +125,7 @@ package com.greensock.plugins {
 		}
 		
 		/**
+		 * @private 
 		 * Offers a simple way to add tweening values to the plugin. You don't need to use this,
 		 * but it is convenient because the tweens get updated in the updateTweens() method which also 
 		 * handles rounding. killProps() nicely integrates with most tweens added via addTween() as well,
@@ -144,6 +147,7 @@ package com.greensock.plugins {
 		}
 		
 		/**
+		 * @private 
 		 * Updates all the tweens in the _tweens Array. 
 		 *  
 		 * @param changeFactor Multiplier describing the amount of change that should be applied. It will be zero at the beginning of the tween and 1 at the end, but inbetween it could be any value based on the ease applied (for example, an Elastic tween would cause the value to shoot past 1 and back again before the end of the tween) 
@@ -151,12 +155,11 @@ package com.greensock.plugins {
 		protected function updateTweens(changeFactor:Number):void {
 			var i:int = _tweens.length, pt:PropTween;
 			if (this.round) {
-				var val:Number, neg:int;
+				var val:Number;
 				while (i--) {
 					pt = _tweens[i];
 					val = pt.start + (pt.change * changeFactor);
-					neg = (val < 0) ? -1 : 1;
-					pt.target[pt.property] = ((val % 1) * neg > 0.5) ? int(val) + neg : int(val); //twice as fast as Math.round()
+					pt.target[pt.property] = (val > 0) ? int(val + 0.5) : int(val - 0.5); //4 times as fast as Math.round()
 				}
 				
 			} else {
@@ -168,6 +171,7 @@ package com.greensock.plugins {
 		}
 		
 		/**
+		 * @private 
 		 * In most cases, your custom updating code should go here. The changeFactor value describes the amount 
 		 * of change based on how far along the tween is and the ease applied. It will be zero at the beginning
 		 * of the tween and 1 at the end, but inbetween it could be any value based on the ease applied (for example, 
@@ -186,6 +190,7 @@ package com.greensock.plugins {
 		}
 		
 		/**
+		 * @private 
 		 * Gets called on plugins that have multiple overwritable properties by OverwriteManager when 
 		 * in AUTO mode. Basically, it instructs the plugin to overwrite certain properties. For example,
 		 * if a bezier tween is affecting x, y, and width, and then a new tween is created while the 
@@ -255,6 +260,7 @@ package com.greensock.plugins {
 		}
 		
 		/**
+		 * @private 
 		 * Handles integrating the plugin into the GreenSock tweening platform. 
 		 * 
 		 * @param plugin An Array of Plugin classes (that all extend TweenPlugin) to be activated. For example, TweenPlugin.activate([FrameLabelPlugin, ShortRotationPlugin, TintPlugin]);

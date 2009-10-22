@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.099996
- * DATE: 10/7/2009
+ * VERSION: 11.1
+ * DATE: 10/18/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com 
  **/
@@ -14,7 +14,7 @@ package com.greensock {
 	import flash.utils.*;
 /**
  * 	TweenMax extends the extremely lightweight, fast TweenLite engine, adding many useful features
- * 	like timeScale, event listeners, setDestination(), yoyo, repeat, repeatDelay, rounding, and more. It also 
+ * 	like timeScale, event dispatching, setDestination(), yoyo, repeat, repeatDelay, rounding, and more. It also 
  * 	activates many extra plugins by default, making it extremely full-featured. Since TweenMax extends 
  * 	TweenLite, it can do ANYTHING TweenLite can do plus much more. The syntax is identical. With plenty 
  *  of other tweening engines to choose from, here's why you might want to consider TweenMax: 
@@ -61,10 +61,10 @@ package com.greensock {
  * 	<li><b> ease : Function</b>				Use any standard easing equation to control the rate of change. For example, 
  * 											Elastic.easeOut. The Default is Regular.easeOut.</li>
  * 	
- * 	<li><b> easeParams : Array</b>			An Array of extra parameters to feed the easing equation. This can be useful when 
- * 											using an ease like Elastic and want to control extra parameters like the amplitude 
- * 											and period.	Most easing equations, however, don't require extra parameters so you 
- * 											won't need to pass in any easeParams.</li>
+ * 	<li><b> easeParams : Array</b>			An Array of extra parameters to feed the easing equation (beyond the standard first 4). 
+ * 											This can be useful when using an ease like Elastic and want to control extra parameters 
+ * 											like the amplitude and period.	Most easing equations, however, don't require extra parameters 
+ * 											so you won't need to pass in any easeParams.</li>
  * 	
  * 	<li><b> onStart : Function</b>			A function that should be called when the tween begins.</li>
  * 	
@@ -102,7 +102,7 @@ package com.greensock {
  * 											playing backwards. It simply affects the orientation of the tween, so if reversed is set to 
  * 											true initially, it will appear not to play because it is already at the beginning. To cause it to
  * 											play backwards from the end, set reversed to true and then set the <code>currentProgress</code> 
- * 											property to 1 immediately after creating the tween. </li>
+ * 											property to 1 immediately after creating the tween (or set the currentTime to the duration). </li>
  * 	
  * 	<li><b> overwrite : int</b>			Controls how (and if) other tweens of the same target are overwritten by this tween. There are
  * 										several modes to choose from, and TweenMax automatically calls <code>OverwriteManager.init()</code> if you haven't
@@ -282,7 +282,7 @@ package com.greensock {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.099996;
+		public static const version:Number = 11.1;
 		
 		TweenPlugin.activate([
 			
@@ -291,10 +291,10 @@ package com.greensock {
 			
 			AutoAlphaPlugin,			//tweens alpha and then toggles "visible" to false if/when alpha is zero
 			//EndArrayPlugin,				//tweens numbers in an Array
-			//FramePlugin,				//tweens MovieClip frames
+			FramePlugin,				//tweens MovieClip frames
 			//RemoveTintPlugin,			//allows you to remove a tint
 			//TintPlugin,					//tweens tints
-			//VisiblePlugin,				//tweens a target's "visible" property
+			VisiblePlugin,				//tweens a target's "visible" property
 			VolumePlugin,				//tweens the volume of a MovieClip or SoundChannel or anything with a "soundTransform" property
 			
 			//BevelFilterPlugin,			//tweens BevelFilters
@@ -319,6 +319,8 @@ package com.greensock {
 				
 			//DynamicPropsPlugin,			//tweens to dynamic end values. You associate the property with a particular function that returns the target end value **Club GreenSock membership benefit**
 			//MotionBlurPlugin,			//applies a directional blur to a DisplayObject based on the velocity and angle of movement. **Club GreenSock membership benefit**
+			//Physics2DPlugin,			//allows you to apply basic physics in 2D space, like velocity, angle, gravity, friction, acceleration, and accelerationAngle. **Club GreenSock membership benefit**
+			//PhysicsPropsPlugin,			//allows you to apply basic physics to any property using forces like velocity, acceleration, and/or friction. **Club GreenSock membership benefit**
 			//TransformAroundCenterPlugin,//tweens the scale and/or rotation of DisplayObjects using the DisplayObject's center as the registration point **Club GreenSock membership benefit**
 			//TransformAroundPointPlugin,	//tweens the scale and/or rotation of DisplayObjects around a particular point (like a custom registration point) **Club GreenSock membership benefit**
 			
@@ -371,7 +373,7 @@ package com.greensock {
 		 */
 		public function TweenMax(target:Object, duration:Number, vars:Object) {
 			super(target, duration, vars);
-			if (TweenLite.version < 11.099996) {
+			if (TweenLite.version < 11.1) {
 				throw new Error("TweenMax error! Please update your TweenLite class or try deleting your ASO files. TweenMax requires a more recent version. Download updates at http://www.TweenMax.com.");
 			}
 			this.yoyo = Boolean(this.vars.yoyo);
@@ -1271,6 +1273,26 @@ package com.greensock {
 			this.cachedStartTime = tlTime - ((tlTime - this.cachedStartTime) * this.cachedTimeScale / n);
 			this.cachedTimeScale = n;
 			setDirtyCache(false);
+		}
+		
+		/** Number of times that the tween should repeat; -1 repeats indefinitely. **/
+		public function get repeat():int {
+			return _repeat;
+		}
+		
+		public function set repeat(n:int):void {
+			_repeat = n;
+			setDirtyCache(true);
+		}
+		
+		/** Amount of time in seconds (or frames for frames-based tweens) between repeats **/
+		public function get repeatDelay():Number {
+			return _repeatDelay;
+		}
+		
+		public function set repeatDelay(n:Number):void {
+			_repeatDelay = n;
+			setDirtyCache(true);
 		}
 		
 		/** Multiplier describing the speed of the root timelines where 1 is normal speed, 0.5 is half-speed, 2 is double speed, etc. The lowest globalTimeScale possible is 0.0001. **/

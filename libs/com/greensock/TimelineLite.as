@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.993
- * DATE: 10/7/2009
+ * VERSION: 1.0
+ * DATE: 10/18/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/timelinelite/
  **/
@@ -14,29 +14,28 @@ package com.greensock {
  *  like a virtual MovieClip timeline or a container where you place tweens (or other timelines) over the 
  *  course of time. You can:
  * 	<ul>
- * 		<li> build sequences easily by adding tweens with the append(), prepend(), insert(), and insertMultiple() methods.
- * 			Tweens can overlap as much as you want and you have complete control over where they get placed on the timeline
- * 			with insert() and insertMultiple().</li>
+ * 		<li> build sequences easily by adding tweens with the append(), prepend(), insert(), appendMultiple(), prependMultiple(),
+ * 			and insertMultiple() methods. Tweens can overlap as much as you want and you have complete control over where 
+ * 			they get placed on the timeline.</li>
  * 
  * 		<li> add labels, play(), stop(), gotoAndPlay(), gotoAndStop(), restart(), and even reverse() smoothly anytime. </li>
  * 		
- * 		<li> nest timelines within timelines as deeply as you want. When you pause or change the 
- * 		  timeScale of a parent timeline, it affects all of its descendents.</li>
+ * 		<li> nest timelines within timelines as deeply as you want.</li>
  * 		
  * 		<li> set the progress of the timeline using its <code>currentProgress</code> property. For example, to skip to
  * 		  the halfway point, set <code>myTimeline.currentProgress = 0.5</code>. </li>
  * 		  
- * 		<li> tween the <code>currentTime</code> or <code>currentProgress</code> property to fastforward/rewind the timeline. You could 
- * 		  even attach a slider to one of these properties to give the user the ability to drag 
- * 		  forwards/backwards through the whole timeline.</li>
+ * 		<li> tween the <code>currentTime</code> or <code>currentProgress</code> property to fastforward/rewind 
+ * 			the timeline. You could even attach a slider to one of these properties to give the user the ability 
+ * 			to drag forwards/backwards through the timeline.</li>
  * 		
  * 		<li> speed up or slow down the entire timeline with its timeScale property. You can even tween
- * 		  this property to gradually speed up or slow down the timeline.</li>
+ * 		  this property to gradually speed up or slow down.</li>
  * 		  
  * 		<li> add onComplete, onStart, onUpdate, and/or onReverseComplete callbacks using the constructor's "vars" object.</li>
  * 		  
- * 		<li> use the insertMultiple() method to create complex sequences including various alignment
- * 		  modes and staggering capabilities.</li>
+ * 		<li> use the insertMultiple() or appendMultiple() methods to create complex sequences including 
+ * 			various alignment modes and staggering capabilities.</li>
  * 		  
  * 		<li> base the timing on frames instead of seconds if you prefer. Please note, however, that
  * 		  the timeline's timing mode dictates its childrens' timing mode as well. </li>
@@ -44,17 +43,19 @@ package com.greensock {
  * 		<li> kill the tweens of a particular object with killTweensOf() or get the tweens of an object
  * 		  with getTweensOf() or get all the tweens/timelines in the timeline with getChildren()</li>
  * 		  
- * 		<li> If you need even more features like AS3 event listeners, repeat, repeatDelay, yoyo, currentLabel, getLabelAfter(), getLabelBefore(), 
- * 		  addCallback(), removeCallback(), getActive() and more, check out TimelineMax which extends TimelineLite.</li>
+ * 		<li> If you need even more features like AS3 event listeners, repeat, repeatDelay, yoyo, currentLabel, 
+ * 			getLabelAfter(), getLabelBefore(), addCallback(), removeCallback(), getActive() and more, check out 
+ * 			TimelineMax which extends TimelineLite.</li>
  * 	</ul>
  * 	
  * <b>EXAMPLE:</b><br /><br /><code>
  * 	
  * 		import com.greensock.TweenLite;<br />
+ * 		import com.greensock.TweenMax;<br />
  * 		import com.greensock.TimelineLite;<br /><br />
  * 		
- * 		//create the timeline<br />
- * 		var myTimeline:TimelineLite = new TimelineLite();<br /><br />
+ * 		//create the timeline and add an onComplete callback that will call myFunction() when the timeline completes<br />
+ * 		var myTimeline:TimelineLite = new TimelineLite({onComplete:myFunction});<br /><br />
  * 		
  * 		//add a tween<br />
  * 		myTimeline.append(new TweenLite(mc, 1, {x:200, y:100}));<br /><br />
@@ -62,20 +63,20 @@ package com.greensock {
  * 		//add another tween at the end of the timeline (makes sequencing easy)<br />
  * 		myTimeline.append(new TweenLite(mc, 0.5, {alpha:0}));<br /><br />
  * 		
- * 		//reverse it anytime...<br />
+ * 		//reverse anytime<br />
  * 		myTimeline.reverse();<br /><br />
  * 		
- * 		//Add a "spin" label 3-seconds into the timeline.<br />
+ * 		//Add a "spin" label 3-seconds into the timeline<br />
  * 		myTimeline.addLabel("spin", 3);<br /><br />
  * 		
  * 		//insert a rotation tween at the "spin" label (you could also define the insert point as the time instead of a label)<br />
  * 		myTimeline.insert(new TweenLite(mc, 2, {rotation:"360"}), "spin"); <br /><br />
  * 		
- * 		//go to the "spin" label and play the timeline from there...<br />
+ * 		//go to the "spin" label and play the timeline from there<br />
  * 		myTimeline.gotoAndPlay("spin");<br /><br />
  * 		
  * 		//add a tween to the beginning of the timeline, pushing all the other existing tweens back in time<br />
- * 		myTimeline.prepend(new TweenLite(mc, 1, {tint:0xFF0000}));<br /><br />
+ * 		myTimeline.prepend(new TweenMax(mc, 1, {tint:0xFF0000}));<br /><br />
  * 		
  * 		//nest another TimelineLite inside your timeline...<br />
  * 		var nestedTimeline:TimelineLite = new TimelineLite();<br />
@@ -83,20 +84,20 @@ package com.greensock {
  * 		myTimeline.append(nestedTimeline);<br /><br /></code>
  * 		
  * 		
- * 	insertMultiple() provides some very powerful sequencing tools, allowing you to add an Array of 
+ * 	insertMultiple() and appendMultiple() provide some very powerful sequencing tools, allowing you to add an Array of 
  * 	tweens or timelines and optionally align them with SEQUENCE or START modes, and even stagger them if you want. 
  *  For example, to insert 3 tweens into the timeline, aligning their start times but staggering them by 0.2 seconds, <br /><br /><code>
  * 	
  * 		myTimeline.insertMultiple([new TweenLite(mc, 1, {y:"100"}),
- * 								   new TweenLite(mc2, 1, {y:"100"}),
- * 								   new TweenLite(mc3, 1, {y:"100"})], 
+ * 								   new TweenLite(mc2, 1, {x:20}),
+ * 								   new TweenLite(mc3, 1, {alpha:0.5})], 
  * 								   0, 
  * 								   TweenAlign.START, 
  * 								   0.2);</code><br /><br />
  * 								   
  * 	You can use the constructor's "vars" object to do virtually all the setup too, like this sequence:<br /><br /><code>
  * 	
- * 		var myTimeline:TimelineLite = new TimelineLite({tweens:[new TweenLite(mc1, 1, {y:"100"}), TweenMax.to(mc2, 1, {tint:0xFF0000}), new TweenLite(mc3, 1, {y:50})], align:TweenAlign.SEQUENCE, onComplete:myFunction});</code><br /><br />
+ * 		var myTimeline:TimelineLite = new TimelineLite({tweens:[new TweenLite(mc1, 1, {y:"100"}), TweenMax.to(mc2, 1, {tint:0xFF0000})], align:TweenAlign.SEQUENCE, onComplete:myFunction});</code><br /><br />
  * 	
  * 	If that confuses you, don't worry. Just use the append(), insert(), and prepend() methods to build your
  * 	sequence. But power users will likely appreciate the quick, compact way they can set up sequences now. <br /><br />
@@ -116,7 +117,7 @@ package com.greensock {
  **/
 	public class TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static const version:Number = 0.993;
+		public static const version:Number = 1.0;
 		/** @private **/
 		private static var _overwriteMode:int = (OverwriteManager.enabled) ? OverwriteManager.mode : OverwriteManager.init(2); //Ensures that TweenLite instances don't overwrite each other before being put into the timeline/sequence.
 		/** @private **/
@@ -330,13 +331,16 @@ package com.greensock {
 		}
 		
 		/**
-		 * Inserts a TweenLite, TweenMax, TimelineLite, or TimelineMax instance at the END of the timeline. 
+		 * Inserts a TweenLite, TweenMax, TimelineLite, or TimelineMax instance at the <strong>end</strong> of the timeline,
+		 * optionally offsetting its insertion point by a certain amount (to make it overlap with the end of 
+		 * the timeline or leave a gap before its insertion point). 
 		 * This makes it easy to build sequences by continuing to append() tweens or timelines.
 		 * 
-		 * @param tween TweenLite, TweenMax, TimelineLite, or TimelineMax instance to append
+		 * @param tween TweenLite, TweenMax, TimelineLite, or TimelineMax instance to append.
+		 * @param offset Amount of seconds (or frames for frames-based timelines) to offset the insertion point of the tween from the end of the timeline. For example, to append a tween 3 seconds after the end of the timeline (leaving a 3-second gap), set the offset to 3. Or to have the tween appended so that it overlaps with the last 2 seconds of the timeline, set the offset to -2. The default is 0 so that the insertion point is exactly at the end of the timeline.
 		 */
-		public function append(tween:TweenCore):void {
-			insert(tween, this.duration);
+		public function append(tween:TweenCore, offset:Number=0):void {
+			insert(tween, this.duration + offset);
 		}
 		
 		/**
@@ -383,16 +387,17 @@ package com.greensock {
 		}
 		
 		/**
-		 * Appends multiple tweens/timelines at the end of the timeline at once, optionally aligning them (as a sequence for example)
-		 * and/or staggering the timing. This is one of the most powerful methods in TimelineLite because it accommodates
-		 * advanced timing effects and builds complex sequences with relatively little code.<br /><br />
+		 * Appends multiple tweens/timelines at the end of the timeline at once, optionally offsetting the insertion point by a certain amount, 
+		 * aligning them (as a sequence for example), and/or staggering their relative timing. This is one of the most powerful methods in 
+		 * TimelineLite because it accommodates advanced timing effects and builds complex sequences with relatively little code.<br /><br />
 		 *  
 		 * @param tweens an Array containing any or all of the following: TweenLite, TweenMax, TimelineLite, and/or TimelineMax instances  
+		 * @param offset Amount of seconds (or frames for frames-based timelines) to offset the insertion point of the tweens from the end of the timeline. For example, to start appending the tweens 3 seconds after the end of the timeline (leaving a 3-second gap), set the offset to 3. Or to have the tweens appended so that the insertion point overlaps with the last 2 seconds of the timeline, set the offset to -2. The default is 0 so that the insertion point is exactly at the end of the timeline. 
 		 * @param align determines how the tweens will be aligned in relation to each other before getting appended. Options are: TweenAlign.SEQUENCE (aligns the tweens one-after-the-other in a sequence), TweenAlign.START (aligns the start times of all of the tweens (ignores delays)), and TweenAlign.NORMAL (aligns the start times of all the tweens (honors delays)). The default is NORMAL.
 		 * @param stagger staggers the tweens by a set amount of time (in seconds) (or in frames for frames-based timelines). For example, if the stagger value is 0.5 and the "align" property is set to TweenAlign.START, the second tween will start 0.5 seconds after the first one starts, then 0.5 seconds later the third one will start, etc. If the align property is TweenAlign.SEQUENCE, there would be 0.5 seconds added between each tween. Default is 0.
 		 */
-		public function appendMultiple(tweens:Array, align:String="normal", stagger:Number=0):void {
-			insertMultiple(tweens, this.duration, align, stagger);
+		public function appendMultiple(tweens:Array, offset:Number=0, align:String="normal", stagger:Number=0):void {
+			insertMultiple(tweens, this.duration + offset, align, stagger);
 		}
 		
 		/**
