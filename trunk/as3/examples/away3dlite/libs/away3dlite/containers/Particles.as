@@ -1,6 +1,7 @@
 package away3dlite.containers
 {
 	import away3dlite.arcane;
+	import away3dlite.cameras.Camera3D;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.base.Particle;
 	
@@ -30,9 +31,9 @@ package away3dlite.containers
 		private var _layer:Sprite;
 		
 		/** @private */
-		arcane override function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
+		arcane override function project(camera:Camera3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
-			super.project(projectionMatrix3D, parentSceneMatrix3D);
+			super.project(camera, parentSceneMatrix3D);
 			
 			// by pass
 			var Utils3D_projectVector:Function = Utils3D.projectVector;
