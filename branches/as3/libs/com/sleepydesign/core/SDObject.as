@@ -19,7 +19,7 @@ package com.sleepydesign.core
 		
         // ______________________________ Initialize ______________________________
         
-		public function init(raw:Object=null):void
+		protected function init():void
 		{
 			// any required
 		}

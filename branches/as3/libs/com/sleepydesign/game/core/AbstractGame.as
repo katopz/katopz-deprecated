@@ -3,17 +3,17 @@ package com.sleepydesign.game.core
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.game.data.PlayerData;
-	import com.sleepydesign.game.player.Player;
+	import com.sleepydesign.game.player.Player2D;
 	import com.sleepydesign.ui.InputController;
 	
 	import flash.events.Event;
 	
-	public class Game extends SDContainer
+	public class AbstractGame extends SDContainer
 	{
 		public var engine					: AbstractEngine;
 		public static var inputController	: InputController;
 		
-		public var player					: Player;
+		public var player					: Player2D;
 		
         public static function getController() : InputController 
         {
@@ -21,14 +21,14 @@ package com.sleepydesign.game.core
             return inputController as InputController;
         }
         
-		public static var instance : Game;
-        public static function getInstance() : Game
+		public static var instance : AbstractGame;
+        public static function getInstance() : AbstractGame
         {
-            if ( instance == null ) instance = new Game();//null, factorX, factorZ);
-            return instance as Game;
+            if ( instance == null ) instance = new AbstractGame();//null, factorX, factorZ);
+            return instance as AbstractGame;
         }
         
-		public function Game()
+		public function AbstractGame()
 		{
 			instance = this;
 			super();
@@ -57,7 +57,9 @@ package com.sleepydesign.game.core
 				inputController = null;
 			}
 			
-			removePlayer();
+			try{
+				removePlayer();
+			}catch(e:*){};
 			
 			if(engine)
 			{
@@ -66,7 +68,7 @@ package com.sleepydesign.game.core
 			}
 		}
 		
-		public function addPlayer(_player:Player):void
+		public function addPlayer(_player:Player2D):void
 		{
 			// remove if any
 			//removePlayer(player);
@@ -78,7 +80,7 @@ package com.sleepydesign.game.core
 			engine.addChild(_player.instance);
 		}
 		
-		public function removePlayer(_player:Player=null):void
+		public function removePlayer(_player:Player2D=null):void
 		{
 			// exist?
 			if(_player)
@@ -97,23 +99,23 @@ package com.sleepydesign.game.core
 			else
 			{
 				// remove all player
-				for each(var __player:Player in elements.childs)
+				for each(var __player:Player2D in elements.childs)
 					removePlayer(__player);
 			}
 		}
 		
 		public function removeOtherPlayer():void
 		{
-			for each(var _player:Player in elements.childs)
+			for each(var _player:Player2D in elements.childs)
 			{
 				if(_player!=player)
 					removePlayer(_player);
 			}
 		}
 		
-		public function getPlayerByID(id:String):Player
+		public function getPlayerByID(id:String):Player2D
 		{
-			return Player(getElementById(id));
+			return Player2D(getElementById(id));
 		}
 		
 		// ______________________________ Update ____________________________
@@ -147,7 +149,7 @@ package com.sleepydesign.game.core
 			var playerData:PlayerData = new PlayerData();
 			playerData.parse(data);
 			
-			var _player:Player = getPlayerByID(playerData.id);
+			var _player:Player2D = getPlayerByID(playerData.id);
 			
 			if(_player != player)
 			{
@@ -155,7 +157,7 @@ package com.sleepydesign.game.core
 				if(!_player)
 				{
 					// new guy! not in list
-					_player = new Player(playerData);
+					_player = new Player2D(playerData);
 					addPlayer(_player);
 				}
 				

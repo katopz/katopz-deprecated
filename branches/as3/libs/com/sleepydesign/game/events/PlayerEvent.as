@@ -29,6 +29,9 @@ package com.sleepydesign.game.events
 		
 		public static const ACT_COMPLETE	: String = "actComplete";
 		
+		public static const ANIMATIONS_COMPLETE	: String = "animationsComplete";
+		public static const LOAD_COMPLETE 		: String = "loadComplete";
+		
 		public static const RALLY			: String = "rally";
 		
 		public function PlayerEvent(type:String, data:Object=null, bubbles:Boolean=false, cancelable:Boolean=false)

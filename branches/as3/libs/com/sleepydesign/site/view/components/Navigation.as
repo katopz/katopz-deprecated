@@ -170,6 +170,8 @@ package com.sleepydesign.site.view.components
 		
 		public function setSectionById(id:String):void
 		{	
+			if(!tree)return;
+			
 			trace(" * tree.setSectionById\t: " + id);
 			var node:SDTreeNode = tree.setFocusById(id);
 			

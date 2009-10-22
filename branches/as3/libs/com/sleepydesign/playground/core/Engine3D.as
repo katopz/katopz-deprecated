@@ -9,7 +9,7 @@ package com.sleepydesign.playground.core
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.ui.SDMouse;
 	
-	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	
 	import org.papervision3d.cameras.Camera3D;
@@ -149,15 +149,15 @@ package com.sleepydesign.playground.core
 			_config = value;
 		}
 		
-		public function Engine3D(container:DisplayObjectContainer, engine3DData:Object=null):void
+		public function Engine3D(container:Sprite, engine3DData:Object=null):void
 		{
 			this.container = container;
-			init(engine3DData);
+			_data = engine3DData;
 		}
 		
         // ______________________________ Initialize ______________________________
         
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
 			//container.stage.quality = "medium";
 			
@@ -167,7 +167,7 @@ package com.sleepydesign.playground.core
 			
 			//ObjectUtil.merge(raw, defaultRaw);
 			
-			parse(raw?raw:new SceneData(new CameraData()));
+			parse(_data?_data:new SceneData(new CameraData()));
 		}
 		
 		// ______________________________ Parse ______________________________

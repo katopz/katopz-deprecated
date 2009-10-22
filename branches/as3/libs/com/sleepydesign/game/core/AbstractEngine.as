@@ -1,14 +1,14 @@
 ﻿package com.sleepydesign.game.core
 {
-	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDObject;
 	
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.events.Event;
 
 	public class AbstractEngine extends SDObject
 	{
-		protected var container : DisplayObjectContainer;
+		protected var container : Sprite;
 		
 		public function AbstractEngine():void
 		{
@@ -17,7 +17,7 @@
 				
         public function start() : void
 		{
-			if(!container)container = new SDContainer();
+			if(!container)container = new Sprite();
 			container.addEventListener(Event.ENTER_FRAME, run);
 		}
 		

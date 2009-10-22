@@ -11,8 +11,8 @@
  */
 package com.sleepydesign.site
 {
-    import com.sleepydesign.application.core.SDApplication;
     import com.sleepydesign.site.controller.AddressChangeCommand;
+    import com.sleepydesign.site.controller.DataChangeCommand;
     import com.sleepydesign.site.controller.StartupCommand;
     
     import org.puremvc.as3.interfaces.IFacade;
@@ -24,6 +24,8 @@ package com.sleepydesign.site
         public static const STARTUP:String  		= "startup";
         public static const INITIALIZE_SITE:String  = "initializeSite";
         public static const SECTION_CHANGED:String  = "sectionChanged";
+        
+        public static const DATA_CHANGED:String  = "dataChanged";
         
         //public static var defaultPath:String;
          
@@ -57,6 +59,7 @@ package com.sleepydesign.site
             * registering AddressChangeCommand
             */
             registerCommand(SECTION_CHANGED, AddressChangeCommand);
+            registerCommand(DATA_CHANGED, DataChangeCommand);
         }
         
         public function startup( container:Object ):void

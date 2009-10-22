@@ -77,6 +77,7 @@ package com.sleepydesign.site.view
         	var site:Site = new Site();
         	facade.registerMediator( new SiteMediator( site ) );
         	facade.registerMediator( new NavigationMediator( site.navigation ) );
+        	facade.registerMediator( new PageMediator( site.data ) );
         	container.addChild( site );
         	
         	/**
@@ -85,6 +86,9 @@ package com.sleepydesign.site.view
 			 */
 			var navMediator:NavigationMediator = facade.retrieveMediator( NavigationMediator.NAME ) as NavigationMediator;
 			sendNotification( ApplicationFacade.SECTION_CHANGED, ApplicationFacade.focusPath );
+			
+			//var pageMediator:NavigationMediator = facade.retrieveMediator( PageMediator.NAME ) as PageMediator;
+			//sendNotification( ApplicationFacade.DATA_CHANGED, "test" );
         }
 
 		/**

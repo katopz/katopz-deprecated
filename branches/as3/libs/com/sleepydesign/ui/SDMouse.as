@@ -18,12 +18,11 @@ package com.sleepydesign.ui
 		
 		public function SDMouse(target:InteractiveObject)
 		{
-			init({target:target});
+			this.target = target?target:SDApplication.currentStage;
 		}
 		
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
-			target = raw.target?raw.target:SDApplication.getStage();
 			create();
 		}
 		

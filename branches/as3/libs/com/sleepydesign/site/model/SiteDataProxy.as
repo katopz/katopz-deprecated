@@ -23,8 +23,6 @@ package com.sleepydesign.site.model
     public class SiteDataProxy extends Proxy implements IProxy
     {
         public static const NAME:String = "SpriteDataProxy";
-       // public var navIDs:Array;
-		//public var defaultPath:String;
 		
         public function SiteDataProxy( )
         {

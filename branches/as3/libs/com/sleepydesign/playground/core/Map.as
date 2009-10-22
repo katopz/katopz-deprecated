@@ -42,12 +42,12 @@ package com.sleepydesign.playground.core
 		public function Map(config:*=null)//source:*=null, factorX:Number=1, factorZ:Number=1)
 		{
 			instance = this;
-			super(config.id, config);
+			super(config.id);
 		}
 		
         // ______________________________ Initialize ______________________________
         
-		override public function init(raw:Object=null):void
+		override public function parse(raw:Object=null):void
 		{
 			if(!raw)return;
 			

@@ -54,12 +54,21 @@
 			_id = id;
 		}
 		
+		public static var instance : SDContainer;
+        public static function getInstance() : SDContainer
+        {
+            if ( instance == null ) instance = new SDContainer();
+            return instance as SDContainer;
+        }
+        
 		/**
 		 * SleepyDesign Container
 		 */		
 		public function SDContainer(id:String=null)
 		{
 			super();
+			
+			instance = this;
 			
 			this.id = id?id:name;
 

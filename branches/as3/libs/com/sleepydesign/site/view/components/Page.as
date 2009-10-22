@@ -1,5 +1,6 @@
 package com.sleepydesign.site.view.components
 {
+	import com.greensock.TweenMax;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.core.SDMovieClip;
@@ -13,10 +14,9 @@ package com.sleepydesign.site.view.components
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.utils.*;
-	
-	import com.greensock.TweenMax;
 	
 	/* ---------------------------------------------------------------
 	
@@ -68,7 +68,13 @@ package com.sleepydesign.site.view.components
 			trace(" ! id :"+ContentVO(_data).id);
 			return Site.getPathById(ContentVO(_data).id);
 		}
-		
+        
+        private static var _dispatcher:EventDispatcher = new EventDispatcher();
+        public static function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, 
+            useWeakReference:Boolean = false):void {
+            _dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
+        }
+        
 		//public function Page(id:String=null, source:*=null, xml:XML=null)
 		public function Page(id:String=null, source:*=null, xml:XML=null)
 		{

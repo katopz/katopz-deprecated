@@ -11,12 +11,12 @@
  */
 package com.sleepydesign.site.controller
 {
+    import com.sleepydesign.site.model.PageDataProxy;
     import com.sleepydesign.site.model.SWFAddressProxy;
     import com.sleepydesign.site.model.SiteDataProxy;
     import com.sleepydesign.site.view.ApplicationMediator;
     
     import flash.display.Sprite;
-    import flash.display.Stage;
     
     import org.puremvc.as3.interfaces.ICommand;
     import org.puremvc.as3.interfaces.INotification;
@@ -43,6 +43,11 @@ package com.sleepydesign.site.controller
 			 * Initializes a SWFAddressProxy instance
 			 */
 			facade.registerProxy( new SWFAddressProxy() );
+			
+			/**
+			 * Initializes a PageDataProxy instance
+			 */
+			facade.registerProxy( new PageDataProxy() );
         }
     }
 }

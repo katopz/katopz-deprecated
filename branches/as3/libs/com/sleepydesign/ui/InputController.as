@@ -16,7 +16,7 @@ package com.sleepydesign.ui
 		public function InputController( isMouse:Boolean = true, isKey:Boolean = false) 
 		{
 			// Application
-			currentStage = SDApplication.getStage();
+			currentStage = SDApplication.currentStage;
 			
 			if(!currentStage)return;
 			
