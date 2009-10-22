@@ -6,7 +6,7 @@ package away3dlite.core.render
 	import away3dlite.core.clip.*;
 	import away3dlite.core.culler.FrustumCuller;
 	
-	import flash.display.Graphics;
+	import flash.display.*;
 	
 	use namespace arcane;
 	
@@ -69,26 +69,40 @@ package away3dlite.core.render
         /** @private */
         protected var _mouseEnabledArray:Vector.<Boolean> = new Vector.<Boolean>();
         /** @private */
-		protected var _particles:Array;
+    	protected var _ind:Vector.<int>;
+    	/** @private */
+		protected var _vert:Vector.<Number>;
+		/** @private */
+		protected var _uvt:Vector.<Number>;
+		/** @private */
+		protected var _triangles:GraphicsTrianglePath = new GraphicsTrianglePath();
 		/** @private */
 		protected var _view_graphics:Graphics;
 		/** @private */
 		protected var _view_graphics_drawGraphicsData:Function;
 		/** @private */
+		protected var _culler:FrustumCuller;
+		/** @private */
 		private var _zoom:Number;
 		/** @private */
 		private var _focus:Number;
-		/** @private */
-		protected var _culler:FrustumCuller;
-		
-		public var numCulled:int;
+        /** @private */
+		protected var _particles:Array;
 		
 		/**
 		 * Determines whether 3d objects are sorted in the view. Defaults to false.
 		 */
-		public var sortObjects:Boolean = false;
+		public var sortObjects:Boolean = true;
 		
+		/**
+		 * Determines whether 3d objects are culled in the view. Defaults to false.
+		 */
 		public var cullObjects:Boolean = false;
+		
+		/**
+		 * The number represent how many object that has been culled
+		 */		
+		public var numCulled:int = 0;
 		
 		/** @private */
 		protected function sortFaces():void
@@ -123,17 +137,25 @@ package away3dlite.core.render
 		/** @private */
 		protected function collectPointFace(x:Number, y:Number):void
 		{
-			var mouseCount:int;
-        	var mouseCountX:int;
-        	var mouseCountY:int;
+			var pointCount:int;
+			var pointTotal:int;
+        	var pointCountX:int;
+        	var pointCountY:int;
         	var i:int = _faces.length;
 			while (i--) {
 				if (_screenZ < _sort[i] && (_face = _faces[i]).mesh._mouseEnabled) {
 					_screenPointVertices = _screenPointVertexArrays[_face.mesh._vertexId];
-	    			mouseCount = _screenPointVertices[_face.i0] + _screenPointVertices[_face.i1] + _screenPointVertices[_face.i2];
-	    			mouseCountX = (mouseCount >> 2 & 3);
-	    			mouseCountY = (mouseCount & 3);
-	    			if (mouseCountX && mouseCountX < 3 && mouseCountY && mouseCountY < 3) {
+					
+					if (_face.i3) {
+        				pointTotal = 4;
+	    				pointCount = _screenPointVertices[_face.i0] + _screenPointVertices[_face.i1] + _screenPointVertices[_face.i2] + _screenPointVertices[_face.i3];
+					} else {
+        				pointTotal = 3;
+	    				pointCount = _screenPointVertices[_face.i0] + _screenPointVertices[_face.i1] + _screenPointVertices[_face.i2];
+					}
+	    			pointCountX = (pointCount >> 4);
+	    			pointCountY = (pointCount & 15);
+	    			if (pointCountX && pointCountX < pointTotal && pointCountY && pointCountY < pointTotal) {
 	    				
 	    				//flagged for edge detection
 	    				var vertices:Vector.<Number> = _face.mesh._screenVertices;
@@ -143,18 +165,30 @@ package away3dlite.core.render
 						var v1y:Number = vertices[_face.y1];
 						var v2x:Number = vertices[_face.x2];
 						var v2y:Number = vertices[_face.y2];
+						
 						if ((v0x*(y - v1y) + v1x*(v0y - y) + x*(v1y - v0y)) < -0.001)
-			                continue;
-			
-			            if ((v0x*(v2y - y) + x*(v0y - v2y) + v2x*(y - v0y)) < -0.001)
 			                continue;
 			
 			            if ((x*(v2y - v1y) + v1x*(y - v2y) + v2x*(v1y - y)) < -0.001)
 			                continue;
 			            
+			            if (_face.i3) {
+			            	var v3x:Number = vertices[_face.x3];
+							var v3y:Number = vertices[_face.y3];
+							
+			            	if ((v3x*(v2y - y) + x*(v3y - v2y) + v2x*(y - v3y)) < -0.001)
+			            		continue;
+			            	
+			            	if ((v0x*(v3y - y) + x*(v0y - v3y) + v3x*(y - v0y)) < -0.001)
+			            		continue;
+			            	
+			            } else if ((v0x*(v2y - y) + x*(v0y - v2y) + v2x*(y - v0y)) < -0.001) {
+			                continue;
+			            }
+			            
 	    				_screenZ = _sort[i];
 						_pointFace = _face;
-	    			}
+					}
 				}
 			}
 		}
@@ -177,23 +211,41 @@ package away3dlite.core.render
         	
         	while (i--) {
 				_screenVertices = _screenVertexArrays[i];
-				_screenPointVertices = _screenPointVertexArrays[i] = _screenPointVertexArrays[i] || new Vector.<int>();
-				
-				_screenPointVertices.fixed = false;
-				_screenPointVertices.length = 0;
-        		_index = _screenPointVertices.length = _screenVertices.length/2;
-	        	_screenPointVertices.fixed = true;
+				_screenPointVertices = _screenPointVertexArrays[i] = new Vector.<int>(_index = _screenVertices.length/2, true);
         		
 	        	while (_index--) {
 	        		_indexY = (_indexX = _index*2) + 1;
 	        		
 	        		if (_screenVertices[_indexX] < x)
-	        			_screenPointVertices[_index] += 4;
+	        			_screenPointVertices[_index] += 0x10;
 	        		
 	        		if (_screenVertices[_indexY] < y)
-	        			_screenPointVertices[_index] += 1;
+	        			_screenPointVertices[_index] += 0x1;
 	        	}
         	}
+		}
+		
+		/**
+		 * Creates a new <code>Renderer</code> object.
+		 */
+		function Renderer()
+		{
+			_ind = _triangles.indices = new Vector.<int>();
+			_vert = _triangles.vertices = new Vector.<Number>();
+			_uvt = _triangles.uvtData = new Vector.<Number>();
+		}
+		
+		/**
+		 * Returns the face object directly under the given point.
+		 * 
+		 * @param x		The x coordinate of the point.
+		 * @param y		The y coordinate of the point.
+		 */
+		public function getFaceUnderPoint(x:Number, y:Number):Face
+		{
+			x;
+			y;
+			return null;
 		}
 		
 		/** @private */
@@ -222,26 +274,6 @@ package away3dlite.core.render
 		}
 		
 		/**
-		 * Creates a new <code>Renderer</code> object.
-		 */
-		function Renderer()
-		{
-		}
-		
-		/**
-		 * Returns the face object directly under the given point.
-		 * 
-		 * @param x		The x coordinate of the point.
-		 * @param y		The y coordinate of the point.
-		 */
-		public function getFaceUnderPoint(x:Number, y:Number):Face
-		{
-			x;
-			y;
-			return null;
-		}
-		
-		/**
 		 * Renders the contents of the scene to the view.
 		 * 
 		 * @see awa3dlite.containers.Scene3D
@@ -259,12 +291,16 @@ package away3dlite.core.render
 			
 			_screenVertexArrays.length = 0;
 			
+			// particles
 			_particles = [];
 			
+			// culling
 			numCulled = 0;
-			
 			if(_view.camera.dirty)
+			{
 				_culler.update();
+				_view.camera.dirty = false;
+			}
 		}
 	}
 }

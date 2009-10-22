@@ -1,6 +1,7 @@
 package away3dlite.core.base
 {
 	import away3dlite.arcane;
+	import away3dlite.cameras.*;
 	import away3dlite.containers.*;
 	import away3dlite.loaders.utils.*;
 	
@@ -68,9 +69,9 @@ package away3dlite.core.base
 		/** @private */
 		arcane var _scene:Scene3D;
 		/** @private */
-		arcane var _viewMatrix3D:Matrix3D;
+		arcane var _viewMatrix3D:Matrix3D = new Matrix3D();
 		/** @private */
-		arcane var _sceneMatrix3D:Matrix3D;
+		arcane var _sceneMatrix3D:Matrix3D = new Matrix3D();
 		/** @private */
 		arcane var _mouseEnabled:Boolean;
 		/** @private */
@@ -78,27 +79,55 @@ package away3dlite.core.base
 		{
 		}
         /** @private */
-        arcane function project(projectionMatrix3D:Matrix3D, parentSceneMatrix3D:Matrix3D = null):void
+        arcane function project(camera:Camera3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
-			_sceneMatrix3D = transform.matrix3D.clone();
+			_sceneMatrix3D.rawData = transform.matrix3D.rawData;
 			
 			if (parentSceneMatrix3D)
 				_sceneMatrix3D.append(parentSceneMatrix3D);
 				
-			_viewMatrix3D = _sceneMatrix3D.clone();
-			_viewMatrix3D.append(projectionMatrix3D);
+			_viewMatrix3D.rawData = _sceneMatrix3D.rawData;
+			_viewMatrix3D.append(camera.screenMatrix3D);
 			
 			_screenZ = _viewMatrix3D.position.z;
 		}
+		
+		protected function copyMatrix3D(m1:Matrix3D, m2:Matrix3D):void
+		{
+			var rawData:Vector.<Number> = m1.rawData.concat();
+			m2.rawData = rawData;
+		}
+		
+		/**
+		 * Returns the maxinum length of 3d object to local center aka radius
+		 */
+		public var maxRadius:Number = 0;
+		
+		/**
+		 * Global position in space, use for Frustum object culler 
+		 */		
+		public var projectPosition:Vector3D;
+		
+		/**
+		 * Cull status, use for Frustum object culler 
+		 */	
+		public var culled:Boolean = false;
+		
+		/**
+		 * Dirty status, use old matrix3D if not
+		 */	
+		public var dirty:Boolean = false;
 		
 		/**
 		 * An optional layer sprite used to draw into inseatd of the default view.
 		 */
 		public var layer:Sprite;
+		
 		/**
 		 * An optional canvas sprite used to draw into inseatd of the default view.
 		 */
 		public var canvas:Sprite;
+		
 		/**
 		 * Used in loaders to store all parsed materials contained in the model.
 		 */
@@ -123,13 +152,6 @@ package away3dlite.core.base
 		 * Returns the source url of the 3d object, or the name of the family of generative geometry objects if not loaded from an external source.
 		 */
 		public var url:String;
-		
-		/**
-		 * Returns the maxinum length of 3d object to local center aka radius
-		 */
-		public var maxRadius:Number = 0;
-		
-		public var culled:Boolean = false;
 		
 		/**
 		 * Returns the scene to which the 3d object belongs

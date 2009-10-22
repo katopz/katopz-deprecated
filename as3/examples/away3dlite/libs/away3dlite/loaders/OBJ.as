@@ -248,6 +248,36 @@ package away3dlite.loaders
 			buildFaces();
         }
         
+		/*
+		arcane override function buildFaces():void
+		{
+			_faceMaterials.fixed = false;
+			_faces.length = _sort.length = 0;
+			var i:int = _faces.length = _faceMaterials.length = _indices.length/3;
+			
+			while (i--)
+			{
+				var _face:Face = _faces[i] = new Face(this, i);
+				maxRadius = (maxRadius>_face.length)?maxRadius:_face.length;
+			}
+			
+			// speed up
+			_vertices.fixed = true;
+			_uvtData.fixed = true;
+			_indices.fixed = true;
+			_faceMaterials.fixed = true;
+			
+			// calculate normals for the shaders
+			//if (_material is IShader)
+ 			//	IShader(_material).calculateNormals(_vertices, _indices, _uvtData, _vertexNormals);
+ 			
+ 			if (_scene)
+ 				_scene._dirtyFaces = true;
+ 			
+ 			updateSortType();
+		}
+		*/
+		
     	private var obj:String;
         public var mesh:Mesh;
 		private var mtlPath:String;
@@ -267,6 +297,8 @@ package away3dlite.loaders
 			n += 3;
 
 			_indices.push(n, n - 1, n - 2);
+			
+			_faceLengths.push(3);
 		}
 
 		private function checkUV(id:int, uv:UV = null):Vector3D

@@ -1,6 +1,5 @@
 package away3dlite.core.base
 {
-	import away3dlite.materials.ParticleDofMaterial;
 	import away3dlite.materials.ParticleMaterial;
 	
 	import flash.display.BitmapData;
@@ -16,66 +15,43 @@ package away3dlite.core.base
 	 */
 	public final class Particle extends Vector3D
 	{
-		public var animated				: Boolean = false;
-		public var smooth				: Boolean = false;
-		private var _dof				: Boolean = false;
+		public var animated:Boolean = false;
+		public var smooth:Boolean = false;
 
-		public var screenZ				: Number;
-		public var next					: Particle;
+		public var screenZ:Number;
+		public var next:Particle;
 
-		public var layer				: Sprite;
+		public var layer:Sprite;
 
 		// projected position
-		private var _position			: Vector3D;
+		private var _position:Vector3D;
 
-		private var _matrix				: Matrix;
-		private var _center				: Point;
+		private var _matrix:Matrix;
+		private var _center:Point;
 
-		private var _bitmapDatas		: Vector.<BitmapData>;
-		private var _bitmapDatasDof		: Vector.<Vector.<BitmapData>>;
-		private var _bitmapData			: BitmapData;
-		private var _bitmapData_width	: Number;
-		private var _bitmapData_height	: Number;
+		private var _bitmapDatas:Vector.<BitmapData>;
+		private var _bitmapData:BitmapData;
+		private var _bitmapData_width:Number;
+		private var _bitmapData_height:Number;
 		
-		private var _bitmapIndex		: int = 0;
-		private var _bitmapLength		: int = 0;
+		private var _bitmapIndex:int = 0;
+		private var _bitmapLength:int = 0;
 		
-		private var _scale				: Number = 1;
+		private var _scale:Number = 1;
 
-		public var material				: ParticleMaterial;
-		public var materialDof			: ParticleDofMaterial;
+		public var material:ParticleMaterial;
 
-		// TODO: split material and materialdof
-		// Doflevel at function animated - startCameraZ a other way?
-		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial = null, materialDof:ParticleDofMaterial = null, smooth:Boolean = false)
+		public function Particle(x:Number, y:Number, z:Number, material:ParticleMaterial, smooth:Boolean = false)
 		{
 			super(x, y, z);
+
+			this.material = material;
 			this.smooth = smooth;
-			
-			
-			if (materialDof) {
-				//trace("material is dof");
-				this.materialDof = materialDof;
-				_bitmapDatasDof = materialDof.framesDof;
-				_dof = true;
-			}
-			else {
-				this.material = material;
-				_bitmapDatas = material.frames;
-			}
 
-
-			if (_dof) {
-				_bitmapData = _bitmapDatasDof[0][0];
-				_bitmapLength = _bitmapDatasDof.length;
-				//trace("lenght frames / doflevel:", _bitmapLength, materialDof.dofLevel);
-			}
-			else {
-				_bitmapData = _bitmapDatas[0];
-				_bitmapLength = _bitmapDatas.length;
-			}
-
+			_bitmapDatas = material.frames;
+			_bitmapLength = _bitmapDatas.length;
 			_bitmapIndex = 0;
+			_bitmapData = material.bitmapData;
 			_bitmapData_width = _bitmapData.width;
 			_bitmapData_height = _bitmapData.height;
 
@@ -99,57 +75,33 @@ package away3dlite.core.base
 			_position = position.clone();
 		}
 
-		private function animate():void
-		{
-			// animate
-			if (++_bitmapIndex >= _bitmapLength)
-				_bitmapIndex = 0;
-
-			if (_dof) {
-
-				// TODO:
-				// different way of sorting now its front to back
-				var dofLevelParticle:int = int( (screenZ - materialDof.dofNearScreenZ )/ materialDof.dofRangePerLevel);
-				dofLevelParticle = (dofLevelParticle ^ (dofLevelParticle >> 31)) - (dofLevelParticle >> 31); // faster math.abs
-				if (dofLevelParticle > materialDof.dofLevel-1) {
-					dofLevelParticle = materialDof.dofLevel-1
-				}
-				//var dofLevelParticle:int = x>materialDof.dofLevel ? materialDof.dofLevel : x;
-				//trace("dofLevelParticle / screenZ / dofRangePerLevel: ", dofLevelParticle, screenZ, materialDof.dofRangePerLevel); 
-				_bitmapData = _bitmapDatasDof[int(_bitmapIndex)][dofLevelParticle];
-			}
-			else {
-				_bitmapData = _bitmapDatas[int(_bitmapIndex)];
-			}
-
-			// update
-			_bitmapData_width = _bitmapData.width;
-			_bitmapData_height = _bitmapData.height;
-		}
-
 		// TODO : copyPixels + bmp layer via core render for DOF
 		// TODO : collect command and render with drawPath
-		public function drawBitmapdata(_target:Sprite, _zoom:Number, _focus:Number):void
+		public function drawBitmapdata(target:Sprite, zoom:Number, focus:Number):void
 		{
 			// draw to view or layer
-			if (layer && _target != layer)
-				_target = layer;
+			if (layer && target != layer)
+				target = layer;
 
-			// clear line
-			var _graphics:Graphics = _target.graphics;
-			_graphics.lineStyle();
+			var _graphics:Graphics = target.graphics;
 
 			// animated?
 			if (animated)
-				animate();
-
-			_scale = _zoom / (1 + screenZ / _focus);
-			if (_dof) {
-				_matrix.a = _matrix.d = _scale;
-				_matrix.tx = position.x - _center.x;
-				_matrix.ty = position.y - _center.y;
+			{
+				if (++_bitmapIndex >= _bitmapLength)
+					_bitmapIndex = 0;
+				_bitmapData = _bitmapDatas[int(_bitmapIndex)];
 			}
-			else if (!material.buffered)
+			else if(material.dirty)
+			{
+				_bitmapIndex = 0;
+				_bitmapData = material.bitmapData;
+				material.dirty = false;
+			}
+
+			_scale = zoom / (1 + screenZ / focus);
+
+			if (!material.cacheScaleBitmap)
 			{
 				// align center
 				_matrix.a = _matrix.d = _scale;
@@ -160,7 +112,6 @@ package away3dlite.core.base
 			{
 				// OB
 				var _bufferScale:Number = _scale > material.maxScale ? material.maxScale : _scale;
-				
 				// move to bitmap sector
 				var index:Number = Math.floor(_bitmapIndex*material.maxScale* material.quality);
 				// move to scale sector

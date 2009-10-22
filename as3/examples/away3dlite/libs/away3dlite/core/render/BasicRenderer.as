@@ -6,6 +6,8 @@ package away3dlite.core.render
 	import away3dlite.materials.*;
 	
 	import flash.display.*;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	use namespace arcane;
@@ -20,11 +22,7 @@ package away3dlite.core.render
 		private var _mesh:Mesh;
 		private var _screenVertices:Vector.<Number>;
 		private var _uvtData:Vector.<Number>;
-		private var _ind:Vector.<int>;
-		private var _vert:Vector.<Number>;
-		private var _uvt:Vector.<Number>;
 		private var _material:Material;
-		private var _triangles:GraphicsTrianglePath = new GraphicsTrianglePath();
 		private var _i:int;
 		private var _j:int;
 		private var _k:int;
@@ -36,22 +34,12 @@ package away3dlite.core.render
 		
 		private function collectFaces(object:Object3D):void
 		{
-			if(cullObjects && object.culled)
-			{	
-				++numCulled;
-				object.culled = false;
-				return;
-			}
-			
 			_mouseEnabledArray.push(_mouseEnabled);
 			_mouseEnabled = object._mouseEnabled = (_mouseEnabled && object.mouseEnabled);
 			
 			if (object is ObjectContainer3D) {
 				var children:Array = (object as ObjectContainer3D).children;
 				var child:Object3D;
-				
-				if(sortObjects)
-					children.sortOn("screenZ", 18);
 				
 				for each (child in children)
 				{
@@ -70,8 +58,15 @@ package away3dlite.core.render
 					
 					collectFaces(child);
 				}
-				
-			} else if (object is Mesh) {
+			}
+			
+			if(cullObjects && object.culled)
+			{
+				numCulled++;
+				return;
+			}
+			
+			if (object is Mesh) {
 				var mesh:Mesh = object as Mesh;
 				_clipping.collectFaces(mesh, _faces);
 				
@@ -79,8 +74,9 @@ package away3dlite.core.render
 					collectScreenVertices(mesh);
 				
 				_view._totalFaces += mesh._faces.length;
-				
-			}else if (object is Particles) {
+			}
+			else if (object is Particles) 
+			{
 				var _particles_lists:Array = (object as Particles).lists;
 				
 				if(_particles_lists.length>0)
@@ -116,23 +112,27 @@ package away3dlite.core.render
 							
 							drawParticles(_mesh.screenZ);
 							
-							if(_mesh.layer)
+							if(!_mesh.culled)
 							{
-								_mesh.layer.graphics.drawGraphicsData(_material_graphicsData);
-								_graphicsDatas[_material_graphicsData] = _mesh.layer;
-							}
-							else if(_mesh.canvas)
-							{
-								_mesh.canvas.graphics.drawGraphicsData(_material_graphicsData);
-								_graphicsDatas[_material_graphicsData] = _mesh.canvas;
-							}else{
-								_view_graphics_drawGraphicsData(_material_graphicsData);
+								if(_mesh.layer)
+								{
+									_mesh.layer.graphics.drawGraphicsData(_material_graphicsData);
+									_graphicsDatas[_material_graphicsData] = _mesh.layer;
+								}
+								else if(_mesh.canvas)
+								{
+									_mesh.canvas.graphics.drawGraphicsData(_material_graphicsData);
+									_graphicsDatas[_material_graphicsData] = _mesh.canvas;
+								}else{
+									_view_graphics_drawGraphicsData(_material_graphicsData);
+								}
 							}
 						}
 						
-						_ind.length = 0;
-						_vert.length = 0;
-						_uvt.length = 0;
+						//clear vectors by overwriting with a new instance (length = 0 leaves garbage)
+						_ind = _triangles.indices = new Vector.<int>();
+						_vert = _triangles.vertices = new Vector.<Number>();
+						_uvt = _triangles.uvtData = new Vector.<Number>();
 						_i = -1;
 						_j = -1;
 						_k = -1;
@@ -142,15 +142,12 @@ package away3dlite.core.render
 						_material_graphicsData = _material.graphicsData;
 						_screenVertices = _mesh._screenVertices;
 						_uvtData = _mesh._uvtData;
-						//FP BUG : https://bugs.adobe.com/jira/browse/FP-2898
-						_faceStore.length = 0;
-						_faceStore.length = _mesh._vertices.length/3;
+						_faceStore = new Vector.<int>(_mesh._vertices.length/3, true);
 					} else if (_mesh != _face.mesh) {
 						_mesh = _face.mesh;
 						_screenVertices = _mesh._screenVertices;
 						_uvtData = _mesh._uvtData;
-						_faceStore.length = 0;
-						_faceStore.length = _mesh._vertices.length/3;
+						_faceStore = new Vector.<int>(_mesh._vertices.length/3, true);
 					}
 					
 					if (_faceStore[_face.i0]) {
@@ -189,6 +186,23 @@ package away3dlite.core.render
 						_uvt[++_k] = _uvtData[_face.t2];
 					}
 					
+					if (_face.i3) {
+						_ind[++_i] = _faceStore[_face.i0] - 1;
+						_ind[++_i] = _faceStore[_face.i2] - 1;
+						
+						if (_faceStore[_face.i3]) {
+							_ind[++_i] = _faceStore[_face.i3] - 1;
+						} else {
+							_vert[++_j] = _screenVertices[_face.x3];
+							_faceStore[_face.i3] = (_ind[++_i] = _j*.5) + 1;
+							_vert[++_j] = _screenVertices[_face.y3];
+							
+							_uvt[++_k] = _uvtData[_face.u3];
+							_uvt[++_k] = _uvtData[_face.v3];
+							_uvt[++_k] = _uvtData[_face.t3];
+						}
+					}
+					
 					j = np1[j];
                 }
 			}
@@ -199,9 +213,7 @@ package away3dlite.core.render
 		 */
 		public function BasicRenderer()
 		{
-			_ind = _triangles.indices = new Vector.<int>();
-			_vert = _triangles.vertices = new Vector.<Number>();
-			_uvt = _triangles.uvtData = new Vector.<Number>();
+			super();
 		}
 		
 		/**
@@ -228,8 +240,7 @@ package away3dlite.core.render
 		{
 			super.render();
 			
-			_faces.fixed = false;
-			_faces.length = 0;
+			_faces = new Vector.<Face>();
 			
 			collectFaces(_scene);
 			
@@ -255,27 +266,37 @@ package away3dlite.core.render
 			{
 				drawParticles(_mesh.screenZ);
 				
-				_material_graphicsData = _material.graphicsData;
-				_material_graphicsData[_material.trianglesIndex] = _triangles;
-				
-				if(_mesh.layer)
+				if(!_mesh.culled)
 				{
-					_mesh.layer.graphics.drawGraphicsData(_material_graphicsData);
-					_graphicsDatas[_material_graphicsData] = _mesh.layer;
-				}
-				else if(_mesh.canvas)
-				{
-					_mesh.canvas.graphics.drawGraphicsData(_material_graphicsData);
-					_graphicsDatas[_material_graphicsData] = _mesh.canvas;
-				}else{				
-					_view_graphics_drawGraphicsData(_material_graphicsData);
+					_material_graphicsData = _material.graphicsData;
+					_material_graphicsData[_material.trianglesIndex] = _triangles;
+					
+					if(_mesh.layer)
+					{
+						_mesh.layer.graphics.drawGraphicsData(_material_graphicsData);
+						_graphicsDatas[_material_graphicsData] = _mesh.layer;
+					}
+					else if(_mesh.canvas)
+					{
+						_mesh.canvas.graphics.drawGraphicsData(_material_graphicsData);
+						_graphicsDatas[_material_graphicsData] = _mesh.canvas;
+					}else{
+						_view_graphics_drawGraphicsData(_material_graphicsData);
+					}
 				}
 			}
 			
 			// draw remain particles
 			drawParticles();
 			
-			_view.camera.dirty = false;
+			// clear
+			//_view.bitmapData.fillRect(rect, 0x00FFFFFF);
+			
+			//draw
+			//_view.bitmapData.draw(_view, matrix);
 		}
+		
+		private const matrix:Matrix = new Matrix(1,0,0,1,400,300);
+		private const rect:Rectangle = new Rectangle(0, 0, 800, 600);
 	}
 }
