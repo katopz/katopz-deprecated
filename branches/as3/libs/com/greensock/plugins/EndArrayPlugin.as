@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.52
- * DATE: 10/2/2009
+ * VERSION: 1.6
+ * DATE: 10/19/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -66,12 +66,11 @@ package com.greensock.plugins {
 		override public function set changeFactor(n:Number):void {
 			var i:int = _info.length, ti:ArrayTweenInfo;
 			if (this.round) {
-				var val:Number, neg:int;
+				var val:Number;
 				while (i--) {
 					ti = _info[i];
 					val = ti.start + (ti.change * n);
-					neg = (val < 0) ? -1 : 1;
-					_a[ti.index] = ((val % 1) * neg > 0.5) ? int(val) + neg : int(val); //twice as fast as Math.round()
+					_a[ti.index] = (val > 0) ? int(val + 0.5) : int(val - 0.5); //4 times as fast as Math.round()
 				}
 			} else {
 				while (i--) {

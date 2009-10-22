@@ -1,12 +1,13 @@
 /**
- * VERSION: 2.21
- * DATE: 10/2/2009
+ * VERSION: 2.3
+ * DATE: 10/17/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
-	import flash.display.*;
 	import com.greensock.*;
+	
+	import flash.display.*;
 /**
  * Tweening "autoAlpha" is exactly the same as tweening an object's "alpha" except that it ensures 
  * that the object's "visible" property is true until autoAlpha reaches zero at which point it will 
@@ -27,10 +28,12 @@ package com.greensock.plugins {
  * 
  * @author Jack Doyle, jack@greensock.com
  */
-	public class AutoAlphaPlugin extends VisiblePlugin {
+	public class AutoAlphaPlugin extends TweenPlugin {
 		/** @private **/
 		public static const API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		
+		/** @private **/
+		protected var _target:Object;
 		/** @private **/
 		protected var _ignoreVisible:Boolean;
 		
@@ -43,7 +46,7 @@ package com.greensock.plugins {
 		
 		/** @private **/
 		override public function onInitTween(target:Object, value:*, tween:TweenLite):Boolean {
-			init(target, Boolean(value != 0), tween);
+			_target = target;
 			addTween(target, "alpha", target.alpha, value, "alpha");
 			return true;
 		}

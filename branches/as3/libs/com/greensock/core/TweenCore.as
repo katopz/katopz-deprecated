@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.993
- * DATE: 10/7/2009
+ * VERSION: 1.0
+ * DATE: 10/18/2009
  * ACTIONSCRIPT VERSION: 3.0 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -17,7 +17,7 @@ package com.greensock.core {
  */
 	public class TweenCore {
 		/** @private **/
-		public static const version:Number = 0.993;
+		public static const version:Number = 1.0;
 		
 		/** @private **/
 		protected static var _classInitted:Boolean;

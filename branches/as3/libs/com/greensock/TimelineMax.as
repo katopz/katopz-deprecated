@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.97
- * DATE: 10/1/2009
+ * VERSION: 1.0
+ * DATE: 10/18/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/timelinemax/
  **/
@@ -19,19 +19,18 @@ package com.greensock {
  *  you place tweens (or other timelines) over the course of time. You can:
  * 	
  * <ul>
- * 		<li> build sequences easily by adding tweens with the append(), prepend(), insert(), and insertMultiple() methods.
- * 			Tweens can overlap as much as you want and you have complete control over where they get placed on the timeline
- * 			with insert() and insertMultiple().</li>
+ * 		<li> build sequences easily by adding tweens with the append(), prepend(), insert(), appendMultiple(), 
+ * 			prependMultiple(), and insertMultiple() methods. Tweens can overlap as much as you want and you have 
+ * 			complete control over where they get placed on the timeline.</li>
  * 
  * 		<li> add labels, play(), stop(), gotoAndPlay(), gotoAndStop(), restart(), tweenTo() and even reverse()! </li>
  * 		
- * 		<li> nest timelines within timelines as deeply as you want. When you pause or change the 
- * 		  timeScale of a parent timeline, it affects all of its descendents.</li>
+ * 		<li> nest timelines within timelines as deeply as you want.</li>
  * 		
  * 		<li> set the progress of the timeline using its <code>currentProgress</code> property. For example, to skip to
  * 		  the halfway point, set <code>myTimeline.currentProgress = 0.5</code>.</li>
  * 		  
- * 		<li> tween the <code>currentTime</code>, <code>totalTime</code>, or <code>currentProgress</code> 
+ * 		<li> tween the <code>currentTime</code>, <code>totalTime</code>, <code>currentProgress</code>, or <code>totalProgress</code> 
  * 		 property to fastforward/rewind the timeline. You could 
  * 		  even attach a slider to one of these properties to give the user the ability to drag 
  * 		  forwards/backwards through the whole timeline.</li>
@@ -43,7 +42,8 @@ package com.greensock {
  * 		  this property to gradually speed up or slow down the timeline.</li>
  * 		  
  * 		<li> use the insertMultiple(), appendMultiple(), or prependMultiple() methods to create 
- * 			complex sequences including various alignment modes and staggering capabilities.  </li>
+ * 			complex sequences including various alignment modes and staggering capabilities.  
+ * 			Works great in conjunction with TweenMax.allTo() too. </li>
  * 		  
  * 		<li> base the timing on frames instead of seconds if you prefer. Please note, however, that
  * 		  the timeline's timing mode dictates its childrens' timing mode as well. </li>
@@ -69,10 +69,11 @@ package com.greensock {
  * <b>EXAMPLE:</b><br /><br /><code>
  * 		
  * 		import com.greensock.TweenLite;<br />
+ * 		import com.greensock.TweenMax;<br />
  * 		import com.greensock.TimelineMax;<br /><br />
  * 		
- * 		//create the timeline<br />
- * 		var myTimeline:TimelineMax = new TimelineMax();<br /><br />
+ * 		//create the timeline and add an onComplete call to myFunction when the timeline completes<br />
+ * 		var myTimeline:TimelineMax = new TimelineMax({onComplete:myFunction});<br /><br />
  * 		
  * 		//add a tween<br />
  * 		myTimeline.append(new TweenLite(mc, 1, {x:200, y:100}));<br /><br />
@@ -80,14 +81,14 @@ package com.greensock {
  * 		//add another tween at the end of the timeline (makes sequencing easy)<br />
  * 		myTimeline.append(new TweenLite(mc, 0.5, {alpha:0}));<br /><br />
  * 		
- * 		//repeat the whole timeline twice.<br />
+ * 		//repeat the entire timeline twice<br />
  * 		myTimeline.repeat = 2;<br /><br />
  * 		
  * 		//delay the repeat by 0.5 seconds each time.<br />
  * 		myTimeline.repeatDelay = 0.5;<br /><br />
  * 		
- * 		//stop/pause the timeline.<br />
- * 		myTimeline.stop();<br /><br />
+ * 		//pause the timeline (stop() works too)<br />
+ * 		myTimeline.pause();<br /><br />
  * 		
  * 		//reverse it anytime...<br />
  * 		myTimeline.reverse();<br /><br />
@@ -101,11 +102,11 @@ package com.greensock {
  * 		//go to the "spin" label and play the timeline from there...<br />
  * 		myTimeline.gotoAndPlay("spin");<br /><br />
  * 
- * 		//call myFunction when the "virtual playhead" travels past the 1.5-second point.
- * 		myTimeline.addCallback(myFunction, 1.5);
+ * 		//call myCallbackwhen the "virtual playhead" travels past the 1.5-second point.
+ * 		myTimeline.addCallback(myCallback, 1.5);
  * 		
  * 		//add a tween to the beginning of the timeline, pushing all the other existing tweens back in time<br />
- * 		myTimeline.prepend(new TweenLite(mc, 1, {tint:0xFF0000}));<br /><br />
+ * 		myTimeline.prepend(new TweenMax(mc, 1, {tint:0xFF0000}));<br /><br />
  * 		
  * 		//nest another TimelineMax inside your timeline...<br />
  * 		var nestedTimeline:TimelineMax = new TimelineMax();<br />
@@ -113,13 +114,14 @@ package com.greensock {
  * 		myTimeline.append(nestedTimeline);<br /><br /></code>
  * 		
  * 		
- * 	<code>insertMultiple()</code> provides some very powerful sequencing tools as well, allowing you to add an Array of 
- * 	tweens/timelines and optionally align them with <code>SEQUENCE</code> or <code>START</code> modes, and even stagger them if you want. 
- *  For example, to insert 3 tweens into the timeline, aligning their start times but staggering them by 0.2 seconds, <br /><br /><code>
+ * 	<code>insertMultiple()</code> and <code>appendMultiple()</code> provide some very powerful sequencing tools as well, 
+ *  allowing you to add an Array of tweens/timelines and optionally align them with <code>SEQUENCE</code> or <code>START</code> 
+ *  modes, and even stagger them if you want. For example, to insert 3 tweens into the timeline, aligning their start times but 
+ *  staggering them by 0.2 seconds, <br /><br /><code>
  * 	
  * 		myTimeline.insertMultiple([new TweenLite(mc, 1, {y:"100"}),
- * 								   new TweenLite(mc2, 1, {y:"120"}),
- * 								   new TweenLite(mc3, 1, {y:"140"})], 
+ * 								   new TweenLite(mc2, 1, {x:120}),
+ * 								   new TweenLite(mc3, 1, {alpha:0.5})], 
  * 								   0, 
  * 								   TweenAlign.START, 
  * 								   0.2);</code><br /><br />
@@ -137,7 +139,7 @@ package com.greensock {
  * 	<li> TimelineMax automatically inits the OverwriteManager class to prevent unexpected overwriting behavior in sequences.
  * 	  The default mode is <code>AUTO</code>, but you can set it to whatever you want with <code>OverwriteManager.init()</code>
  * 	 (see <a href="http://blog.greensock.com/overwritemanager/">http://blog.greensock.com/overwritemanager/</a>)</li>
- * 	<li> TimelineMax adds about 4.7k to your SWF (not including OverwriteManager).</li>
+ * 	<li> TimelineMax adds about 4.8k to your SWF (not including OverwriteManager).</li>
  * </ul>
  * 
  * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
@@ -146,7 +148,7 @@ package com.greensock {
  **/
 	public class TimelineMax extends TimelineLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 0.97;
+		public static const version:Number = 1.0;
 		
 		/** @private **/
 		protected var _repeat:int;
@@ -746,7 +748,7 @@ package com.greensock {
 			}
 		}
 		
-		/** Number of times that the timeline should repeat. -1 repeats indefinitely. **/
+		/** Number of times that the timeline should repeat; -1 repeats indefinitely. **/
 		public function get repeat():int {
 			return _repeat;
 		}

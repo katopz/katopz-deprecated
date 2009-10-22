@@ -1,6 +1,6 @@
 /**
- * VERSION: 2.11
- * DATE: 7/15/2009
+ * VERSION: 2.2
+ * DATE: 10/19/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -178,7 +178,7 @@ package com.greensock.plugins {
 		
 		/** @private **/
 		override public function set changeFactor(n:Number):void {
-			var i:int, p:String, b:Object, t:Number, segments:uint, val:Number, neg:int;
+			var i:int, p:String, b:Object, t:Number, segments:uint, val:Number;
 			if (n == 1) { //to make sure the end values are EXACTLY what they need to be.
 				for (p in _beziers) {
 					i = _beziers[p].length - 1;
@@ -198,8 +198,7 @@ package com.greensock.plugins {
 					b = _beziers[p][i];
 					if (this.round) {
 						val = b[0] + t * (2 * (1 - t) * (b[1] - b[0]) + t * (b[2] - b[0]));
-						neg = (val < 0) ? -1 : 1;
-						_target[p] = ((val % 1) * neg > 0.5) ? int(val) + neg : int(val); //twice as fast as Math.round()
+						_target[p] = (val > 0) ? int(val + 0.5) : int(val - 0.5); //4 times as fast as Math.round()
 					} else {
 						_target[p] = b[0] + t * (2 * (1 - t) * (b[1] - b[0]) + t * (b[2] - b[0]));
 					}

@@ -1,6 +1,6 @@
 /**
- * VERSION: 2.01
- * DATE: 10/2/2009
+ * VERSION: 2.02
+ * DATE: 10/17/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -20,7 +20,7 @@ package com.greensock.plugins {
  */
 	public class FilterPlugin extends TweenPlugin {
 		/** @private **/
-		public static const VERSION:Number = 2.01;
+		public static const VERSION:Number = 2.02;
 		/** @private **/
 		public static const API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		
@@ -114,8 +114,7 @@ package com.greensock.plugins {
 			}
 			
 			if (!(filters[_index] is _type)) { //a filter may have been added or removed since the tween began, changing the index.
-				i = filters.length;
-				_index = i - 1; //default (in case it was removed)
+				i = _index = filters.length; //default (in case it was removed)
 				while (i--) {
 					if (filters[i] is _type) {
 						_index = i;
