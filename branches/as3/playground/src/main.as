@@ -1,7 +1,6 @@
 ﻿package
 {
 	import com.sleepydesign.application.core.SDApplication;
-	import com.sleepydesign.application.data.SDApplicationData;
 	import com.sleepydesign.components.SDChatBox;
 	import com.sleepydesign.components.SDConnector;
 	import com.sleepydesign.components.SDDialog;
@@ -25,8 +24,8 @@
 	import com.sleepydesign.playground.data.CameraData;
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.playground.debugger.PlayerDebugger;
+	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.ProfilerUtil;
-	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
@@ -55,10 +54,11 @@
 
 		public function main()
 		{
-			super("PlayGround", new SDApplicationData(new SDMacPreloader()));
+			super("PlayGround", new SDMacPreloader());
 
 			ProfilerUtil.addStat(SDApplication.system);
 			//fake = new Vector.<int>();
+			alpha = .1;
 		}
 
 		// ______________________________ Initialize ______________________________
@@ -73,7 +73,7 @@
 
 		private var configs:Dictionary;
 
-		override public function init(raw:Object = null):void
+		override protected function init():void
 		{
 			// TODO load from external and put to group
 			configs = new Dictionary();
@@ -96,6 +96,8 @@
 				</question>, false, this);
 			
 			system.addChild(areaDialog);
+			
+			init();
 		}
 		
 		public function onUserSelectArea(id:int):void
@@ -326,11 +328,12 @@
 					var _config:AreaData = new AreaData().parse(area.data);
 					_config.scene = new SceneData(new CameraData().parse(engine3D.camera));
 
-					SystemUtil.save(_config, "l0r0.ara");
+					//SystemUtil.save(_config, "l0r0.ara");
+					FileUtil.save(_config, "l0r0.ara");
 					break;
 				case "Open":
 					system.addEventListener(SDEvent.COMPLETE, onOpenAreaComplete);
-					SystemUtil.open();
+					FileUtil.open(["*.ara"]);
 					break;
 			}
 		}
