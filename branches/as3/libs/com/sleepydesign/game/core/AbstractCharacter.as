@@ -7,7 +7,7 @@
 		//public var data			: PlayerData;
 		
 		public var id			: String;
-		public var instance		: *;
+		public var _instance		: *;
 		public var model		: SDModel;
 		
 		public var height		: Number = 0;
@@ -33,7 +33,7 @@
 		public function AbstractCharacter(id:String=null)//, instance:DisplayObject3D=null)
 		{
 			this.id = id?id:String(new Date().valueOf());
-			this.instance = instance?instance: new Object();
+			_instance = _instance?_instance: new Object();
 			
 			super();
 		}

@@ -137,14 +137,16 @@ package com.sleepydesign.game.core
 		}
 		*/
 		
-		private function onModelComplete(event:PlayerEvent):void
+		private function onModelComplete(event:*):void
 		{
 			trace("onModelComplete");
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
 		}
 		
-		private function onAnimationComplete(event:PlayerEvent):void
+		private function onAnimationComplete(event:*):void
 		{
+			//trace("onAnimationComplete#1");
+			//dispatchEvent(new PlayerEvent(PlayerEvent.ANIMATIONS_COMPLETE, event.file));
 			trace("onAnimationComplete#1");
 			dispatchEvent(event.clone());
 		}

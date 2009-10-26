@@ -17,14 +17,16 @@
 			super("background");
 			mouseEnabled = false;
 			mouseChildren = false;
+			
+			loader = SDApplication.getLoader();
 		}
-		
+		/*
 		override protected function init():void
 		{
-			loader = SDApplication.getLoader();
+			
 			//update(raw);
 		}
-		
+		*/
 		/*
 		override public function create(config:Object=null):void
 		{

@@ -153,6 +153,7 @@ package com.sleepydesign.playground.core
 		{
 			this.container = container;
 			_data = engine3DData;
+			init();
 		}
 		
         // ______________________________ Initialize ______________________________

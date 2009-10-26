@@ -43,6 +43,8 @@ package com.sleepydesign.playground.core
 		{
 			instance = this;
 			super(config.id);
+			
+			parse(config);
 		}
 		
         // ______________________________ Initialize ______________________________
