@@ -24,33 +24,25 @@ package com.sleepydesign.components
 		public function SDBalloon( text:String="" )
 		{
 			_htmlText = text;
-			super();
-		}
-		
-		override protected function init():void
-		{
-			super.init();
+			
 			mouseEnabled = false;
 			mouseChildren = false;
+			
+			create();
 		}
 		
 		override public function create(config:Object=null):void
 		{
 			//default
-			if(!this._config)
-				this._config = 
-				{
-					color		:0xFFFFFF,
-					multiline	:true
-				}
+			_config = config?config:{color:0xFFFFFF, multiline:true};
 			
 			super.create(_config);
 			
 			_back = new Shape();
 			addChild(_back);
 
-			_tf = new SDTextField(_text, this._config.textFormat);
-			_tf.multiline = this._config.multiline;
+			_tf = new SDTextField(_text, _config.textFormat);
+			_tf.multiline = _config.multiline;
     		_tf.selectable = false;
     		_tf.mouseEnabled = false;
     		

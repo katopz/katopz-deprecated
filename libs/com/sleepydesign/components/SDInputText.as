@@ -92,6 +92,8 @@ package com.sleepydesign.components
 		
 		override public function draw():void
 		{
+			if(!_tf)return;
+			
 			_tf.displayAsPassword = _password;
 			_tf.text = _text;
 			

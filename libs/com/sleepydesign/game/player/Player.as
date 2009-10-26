@@ -16,6 +16,7 @@
 	import org.papervision3d.core.geom.Particles;
 	import org.papervision3d.core.geom.renderables.Particle;
 	import org.papervision3d.materials.special.SDParticleMaterial;
+	import org.papervision3d.objects.DisplayObject3D;
 	//import org.papervision3d.objects.SDObject3D;
 
 	public class Player extends SDObject
@@ -128,8 +129,8 @@
 			//instance.transform = Matrix3D.fromPosition(data.pos);
 			instance.copyPosition(data.pos);
 			
-			dolly = {};
-			decoy = {};
+			dolly = new DisplayObject3D();
+			decoy = new DisplayObject3D();
 			
 			dolly.copyPosition(data.pos);
 			decoy.copyPosition(data.des);
@@ -157,7 +158,7 @@
 			trace("onCharacterComplete");
 		}
 		
-		private function onAnimationComplete(event:PlayerEvent):void
+		private function onAnimationComplete(event:*):void
 		{
 			trace("onAnimationComplete#3");
 			//balloonClip.y = 70;

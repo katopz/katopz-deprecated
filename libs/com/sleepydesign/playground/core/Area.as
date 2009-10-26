@@ -50,6 +50,8 @@
 				factorZ : config.height
 			});
 			addChild(map);
+			
+			update(config);
 		}
 		
 		// ______________________________ Update ____________________________
@@ -59,7 +61,9 @@
 			id  = data.id;
 			background.update(data);
 			map.update(data);
-			ground.update(data);
+			
+			if(ground)
+				ground.update(data);
 		}
 		
 		// ______________________________ Destroy ______________________________
