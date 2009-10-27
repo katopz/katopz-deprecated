@@ -1,5 +1,9 @@
 package com.sleepydesign.utils
 {
+	import com.sleepydesign.components.SDMacPreloader;
+	
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
@@ -9,7 +13,6 @@ package com.sleepydesign.utils
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestHeader;
 	import flash.net.URLRequestMethod;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
@@ -26,6 +29,26 @@ package com.sleepydesign.utils
 	 */	
 	public class LoaderUtil
 	{
+		public static var loaderClip:DisplayObject;
+		
+		public static function showLoader(parent:DisplayObjectContainer, show:Boolean=true):void
+		{
+			if(show)
+			{
+				if(!loaderClip)
+					loaderClip = new SDMacPreloader();
+				
+				if(!loaderClip.parent && parent)
+					parent.addChild(loaderClip);
+				
+				loaderClip.visible = true;
+				loaderClip.x = parent.stage.stageWidth/2;
+				loaderClip.y = parent.stage.stageHeight/2;
+			}else{
+				loaderClip.visible = false;
+			}
+		}
+		
 		public static function saveBinary(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
 		{
 			var imageloader:URLLoader = new URLLoader();

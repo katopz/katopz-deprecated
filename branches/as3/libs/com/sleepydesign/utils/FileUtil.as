@@ -51,7 +51,8 @@ package com.sleepydesign.utils
 				else
 				{
 					// other event
-					trace(" ^ openImage : "+event);
+					trace(" ^ event : "+event);
+					eventHandler(event);
 				}
 			});
 		}
@@ -62,16 +63,14 @@ package com.sleepydesign.utils
 
 			var file:FileReference = new FileReference();
 			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
+			file.addEventListener(Event.CANCEL, eventHandler);
 			file.addEventListener(Event.SELECT, function(event:Event):void
 			{
 				trace(" ^ Select : " + file.name + " | " + file.size);
 				file = FileReference(event.target);
 
 				if (eventHandler is Function)
-				{
 					file.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
-					file.addEventListener(Event.CANCEL, eventHandler, false, 0, true);
-				}
 
 				try
 				{
@@ -88,7 +87,6 @@ package com.sleepydesign.utils
 					{
 						trace(" * Uploading : " + file.size);
 						file.addEventListener(Event.CANCEL, eventHandler, false, 0, true);
-						file.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
 						file.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler, false, 0, true);
 						file.addEventListener(IOErrorEvent.IO_ERROR, eventHandler, false, 0, true);
 						file.addEventListener(Event.OPEN, eventHandler, false, 0, true);

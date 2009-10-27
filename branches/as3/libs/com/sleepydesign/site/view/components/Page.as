@@ -58,6 +58,12 @@ package com.sleepydesign.site.view.components
 		public var contents:SDGroup;
 		private var container:SDContainer;// = new SDContainer("container");
 		
+		// return current data as raw
+		public function get currentData():*
+		{
+			return _data;
+		}
+		
 		//linklist : TODO page/content interface
 		private var currentContent:*;
 		
@@ -158,7 +164,7 @@ package com.sleepydesign.site.view.components
 			
 			var focusID:String = !StringUtil.isNull(data.xml.@focus)?String(data.xml.@focus):null;
 			type = !StringUtil.isNull(data.xml.@type)?String(data.xml.@type):null;
-			
+
 			/*
 			// dependency self update
 			if(stage)
@@ -253,14 +259,17 @@ package com.sleepydesign.site.view.components
 						
 						// look like new child in town let's clear old sake
 						if(currentContent && currentContent != childContent)
-						{
 							removeContainer(currentContent);
-						}
 						
 						currentContent = childContent;
 						
 						childContent.update(contentVO);
 						addContainer(childContent);
+						
+						//visibility
+						//if(!StringUtil.isNull(xml.@visible))
+						//	visible = !(String(xml.@visible)=="false");
+						
 					}else{
 						// old content
 						//if(currentContent)
@@ -268,6 +277,13 @@ package com.sleepydesign.site.view.components
 						removeContainer();
 					}
 					
+					/*
+					// hide modal
+					if(type == "modal")
+					{
+						childContent.visible = false;
+					}
+					*/
 					trace(" -------------------------------------- [Page.update:"+currentSection+"] /\n");
 				break;
 			}
@@ -430,7 +446,7 @@ package com.sleepydesign.site.view.components
 					}
 				break;
 				case "page" :
-					
+				
 					// ONLY TYPE="ANY" CAN LOAD EVERY PAGE WITHOUT CARING ABOUT FOCUS
 					// WILL USE VISIBLE INSTEAD HERE
 					
@@ -543,7 +559,7 @@ package com.sleepydesign.site.view.components
 			
 			return innerContent;
 		}
-		
+				
 		// DIRTY : menu for Page is acting diff from Content
 		/*
 			Page : change/add new Page/Content
@@ -551,6 +567,7 @@ package com.sleepydesign.site.view.components
 		*/
 		
 		protected var menus:Dictionary
+		
 		protected function onMenuClick(event:MouseEvent):void
 		{
 			if(!menus)return;
