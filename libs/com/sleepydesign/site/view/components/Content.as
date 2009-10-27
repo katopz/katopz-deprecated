@@ -376,7 +376,7 @@
 				event.target.removeEventListener(SDEvent.READY, onContentReady);
 			
 			// ready from event, not manual call
-			if(event && _data && _data.xml!=_data_xml)
+			if(event && _data)// && _data.xml!=_data_xml)
 				applyConfig();
 		}
 		
@@ -598,10 +598,6 @@
 			else if(content is Bitmap)
 			{
 				// smooth?
-			}
-			else if(content is IDestroyable )
-			{
-				// good boy
 			}
 			else if(content is MovieClip )//&& MovieClip(content).currentLabels.length>0)
 			{		
