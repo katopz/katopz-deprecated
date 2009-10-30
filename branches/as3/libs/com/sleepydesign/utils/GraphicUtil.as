@@ -30,11 +30,13 @@ package com.sleepydesign.utils
 			return bitmap;
 		}
 
-		public static function getBitmapData(asset:DisplayObject, isTranslate:Boolean = true):BitmapData
+		public static function getBitmapData(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle=null):BitmapData
 		{
 			if (asset.width + asset.height > 0)
 			{
-				var rectangle:Rectangle = asset.getBounds(asset);
+				if(!rectangle)
+					rectangle = asset.getBounds(asset);
+				
 				var bitmapData:BitmapData;
 
 				var matrix:Matrix = new Matrix();

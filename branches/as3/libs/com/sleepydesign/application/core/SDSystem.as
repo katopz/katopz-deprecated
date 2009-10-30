@@ -16,31 +16,34 @@ package com.sleepydesign.application.core
 	 */
 	public class SDSystem extends SDContainer
 	{
-		public var file:FileReference;
+		//public var file:FileReference;
 		
 		public static var instance : SDSystem;
         public static function getInstance() : SDSystem 
         {
-            if ( instance == null ) instance = new SDSystem();
+            if ( !instance ) instance = new SDSystem();
             return instance as SDSystem;
         }
         
-		public static var _data:SDSystemData;
-		
+		public static var data:SDSystemData;
+		/*
 		public static function get data():SDSystemData
 		{
-			if(!_data) _data = new SDSystemData(); 
-			return _data as SDSystemData;
+			//if(!_data) _data = new SDSystemData(); 
+			return _data;// as SDSystemData;
 		}
 
 		public static function set data(value:SDSystemData):void
 		{
-			getInstance().update(data);
+			//getInstance().update(data);
+			_data = value;
 		}
-		
+		*/
 		public function SDSystem()
 		{
-			instance = this;
+			if(!instance)
+				instance = this;
+			
 			super("SDSystem");
 		}
 
@@ -57,6 +60,7 @@ package com.sleepydesign.application.core
 		
 		public function update(data:SDSystemData):void
 		{
+			_data = data;
 			SDSystem.data = data;
 			dispatchEvent(new SDEvent(SDEvent.UPDATE, data));
 		}

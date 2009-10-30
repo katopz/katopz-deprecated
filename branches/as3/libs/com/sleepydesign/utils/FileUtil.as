@@ -17,7 +17,7 @@ package com.sleepydesign.utils
 	public class FileUtil
 	{
 		// config here
-		public static var UPLOAD_URL:String = "http://127.0.0.1/serverside/upload.php";
+		public static var UPLOAD_URL:String = "http://127.0.0.1/localside/upload.php";
 		public static var UPLOAD_LIMIT:Number = 200000;
 
 		public static function openImageTo(container:DisplayObjectContainer):FileReference

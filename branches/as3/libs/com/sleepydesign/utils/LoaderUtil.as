@@ -49,14 +49,24 @@ package com.sleepydesign.utils
 			}
 		}
 		
-		public static function saveBinary(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
+		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
+		{
+			return saveBinary(data, uri, eventHandler, "image/jpeg");
+		}
+		
+		public static function savePNG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
+		{
+			return saveBinary(data, uri, eventHandler, "image/png");
+		}
+		
+		public static function saveBinary(data:ByteArray, uri:String, eventHandler:Function = null, contentType:String = "image/png"):URLLoader
 		{
 			var imageloader:URLLoader = new URLLoader();
 			imageloader.dataFormat = URLLoaderDataFormat.BINARY;
 			imageloader.addEventListener(Event.COMPLETE, eventHandler);
 			
 			var request:URLRequest = new URLRequest(uri);
-			request.contentType = "image/png";
+			request.contentType = contentType;
 			request.method = URLRequestMethod.POST;
 			request.data = data;
 			

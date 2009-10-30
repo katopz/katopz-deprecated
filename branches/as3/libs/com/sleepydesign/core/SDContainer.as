@@ -68,7 +68,8 @@
 		{
 			super();
 			
-			instance = this;
+			if ( instance == null )
+				instance = this;
 			
 			this.id = id?id:name;
 
