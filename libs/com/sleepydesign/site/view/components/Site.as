@@ -71,7 +71,7 @@ package com.sleepydesign.site.view.components
 			this.addChild(foreground);
 			
 			// navigation
-			navigation = new Navigation("navigation");
+			navigation = Navigation.getInstance();
 			this.addChild(navigation);
 		}
 		

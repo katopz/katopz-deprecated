@@ -48,7 +48,7 @@ package com.sleepydesign.site.view.components
 	 * [Page]
 	 * 	+ source::xml : <page src="anysource">
 	 * 						<content id="contentID" src="source" type="castType"/>
-	 * 						<form id="formID" action="serverside/something.php" method="POST"/>
+	 * 						<form id="formID" action="localside/something.php" method="POST"/>
 	 * 					</page>
 	 *  + contents : content
 	 * 

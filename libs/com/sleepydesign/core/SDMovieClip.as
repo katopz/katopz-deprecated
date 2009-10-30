@@ -1,5 +1,6 @@
 package com.sleepydesign.core
 {
+    import com.greensock.TweenMax;
     import com.sleepydesign.events.SDEvent;
     import com.sleepydesign.utils.DisplayObjectUtil;
     import com.sleepydesign.utils.ObjectUtil;
@@ -10,8 +11,6 @@ package com.sleepydesign.core
     import flash.display.MovieClip;
     import flash.events.Event;
     import flash.events.IEventDispatcher;
-    
-    import com.greensock.TweenMax;
     
     /**
 	 * SleepyDesign MovieClip : destroyable, lazyplay, cloak
@@ -179,6 +178,11 @@ package com.sleepydesign.core
         	this.stop();
         	clip.stop();
         	
+			//trace(" * removeChild	: "+DisplayObjectUtil.toString(child));
+
+			// Tween?
+			TweenMax.killTweensOf(child);
+			
         	// got some child to kill
         	if(child is DisplayObjectContainer)
         	{

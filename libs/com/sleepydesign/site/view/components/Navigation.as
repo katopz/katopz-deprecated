@@ -40,7 +40,9 @@ package com.sleepydesign.site.view.components
         }
 		public function Navigation(id:String="navigation")
 		{
-			instance = this;
+			if ( instance == null )
+				instance = this;
+			
 			super(id);
 		}
 		
@@ -116,7 +118,7 @@ package com.sleepydesign.site.view.components
 			tree.x = 10
 			tree.y = 10
 			tree.addEventListener(SDEvent.CHANGE_FOCUS, onSiteMap);
-			//tree.visible = false;
+			tree.visible = false;
 			addChild(tree);
 		}
 		

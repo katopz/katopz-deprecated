@@ -47,14 +47,16 @@ package com.sleepydesign.utils
 			return Number((System.totalMemory*.0000009765625).toFixed(3));
 		}
         	
-		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function):void
+		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function=null):void
 		{
 			var _contextMenu:ContextMenu = container.contextMenu = new ContextMenu();
 			_contextMenu.hideBuiltInItems();
 			
 			var item:ContextMenuItem = new ContextMenuItem(label);
             _contextMenu.customItems.push(item);
-            item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, eventHandler);
+            
+            if(eventHandler is Function)
+            	item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, eventHandler);
 		}
 		
         // StandAlone or Browser

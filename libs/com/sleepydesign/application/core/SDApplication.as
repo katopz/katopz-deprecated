@@ -3,6 +3,7 @@ package com.sleepydesign.application.core
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDSprite;
+	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
@@ -22,6 +23,8 @@ package com.sleepydesign.application.core
 	public class SDApplication extends SDContainer
 	{
  		public static var flashVars:Object;
+		
+		public static var VERSION:String = "0";
 		
 		public static var system:SDSystem;
 		public static var content:SDSprite;
@@ -63,6 +66,8 @@ package com.sleepydesign.application.core
 					flashVars = loaderInfo.parameters;
 					configURI = flashVars["config"]?flashVars["config"]:configURI;
 				}
+				
+				ObjectUtil.print(flashVars);
 				
 				configURI = URLUtil.killCache(configURI, SystemUtil.isHTTP(this));
 				

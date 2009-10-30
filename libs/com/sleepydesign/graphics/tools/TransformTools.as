@@ -56,7 +56,7 @@ package com.sleepydesign.graphics.tools
 			if(event.target is SizeHandle)
 			{
 				currentHandle = SizeHandle(event.target);
-				SizeHandle(event.target).startDrag(false, canvasRectangle);
+				SizeHandle(event.target).startDrag(false);
 				addEventListener(Event.ENTER_FRAME, draw);
 			}
 			else if(_bitmap && event.target==_bitmap.parent)
@@ -64,7 +64,7 @@ package com.sleepydesign.graphics.tools
 				if(_bitmap.hitTestPoint(_gPoint.x+event.localX, _gPoint.y+event.localY))
 				{
 					currentHandle = cHandle;
-					cHandle.startDrag(false, canvasRectangle);
+					cHandle.startDrag(false);
 					addEventListener(Event.ENTER_FRAME, draw);
 				}
 			}

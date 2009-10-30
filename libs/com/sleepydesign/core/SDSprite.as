@@ -1,8 +1,10 @@
 package com.sleepydesign.core
 {
 	//import com.sleepydesign.utils.DisplayObjectUtil;
+	import com.greensock.TweenMax;
+	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.SystemUtil;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -10,8 +12,6 @@ package com.sleepydesign.core
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.IEventDispatcher;
-
-	import com.greensock.TweenMax;
 
 	/**
 	 * SleepyDesign Sprite
