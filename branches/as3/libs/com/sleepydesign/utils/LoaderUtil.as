@@ -83,6 +83,17 @@ package com.sleepydesign.utils
 			return loader;
 		}
 		
+		public static function loadXML(uri:String, eventHandler:Function = null):URLLoader
+		{
+			return load(uri, function(event:Event):void
+			{
+				if(event.type=="complete")
+					event.target["data"] = new XML(event.target["data"]);
+				
+				eventHandler(event);
+			} , "xml") as URLLoader;
+		}
+		
 		public static function loadAsset(uri:String, eventHandler:Function = null):Loader
 		{
 			return load(uri, eventHandler, "asset") as Loader;
