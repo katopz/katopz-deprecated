@@ -1,8 +1,5 @@
 package com.sleepydesign.core
 {
-	import br.com.stimuli.loading.BulkLoader;
-	import br.com.stimuli.loading.BulkProgressEvent;
-	
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.text.SDTextField;
@@ -31,7 +28,6 @@ package com.sleepydesign.core
 		private var _percent			:Number;
 		private var containers			:SDGroup;
 		
-		public static var engine		:BulkLoader;
 		public var instance				:DisplayObject;
 		
 		public static var lastRequest	:*;
@@ -48,9 +44,6 @@ package com.sleepydesign.core
 			}else{
 				create(displayObject, align);
 			}
-			
-			if(!engine)
-				engine = new BulkLoader("global");
 		}	
 		
 		private function get percent():Number
@@ -123,6 +116,7 @@ package com.sleepydesign.core
 			//parent.addChild(instance);
 		}
 		
+		/*
 		public function add(uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):EventDispatcher
 		{
 			if(!uri)return null;
@@ -180,20 +174,27 @@ package com.sleepydesign.core
             
             return _loadItem["loader"];
 		}
+		*/
 		
 		public function load(uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):EventDispatcher
 		{
+			/*
 			//uri = (uri is XMLList)?String(uri):uri;
 			var _itemLoader:EventDispatcher = add(uri, data, method, dataFormat);
 			start();
 			return _itemLoader;
+			*/
+			return null;
 		}
 		
 		public function loadBinary(uri:String, data:*=null, method:String=URLRequestMethod.POST):EventDispatcher
 		{
+			/*
 			var _itemLoader:EventDispatcher = add(uri, data, method, URLLoaderDataFormat.BINARY);
 			start();
 			return _itemLoader;
+			*/
+			return null;
 		}
 		
 		public function loadTo(container:DisplayObjectContainer, uri:String, data:*=null, method:String=URLRequestMethod.POST, dataFormat:String = null):void
@@ -218,8 +219,10 @@ package com.sleepydesign.core
 		*/
 		public function start():void
 		{
-			trace(" * Start\t: "+engine._itemsTotal);
+			trace(" * Start");
 			percent = 0;
+			
+			/*
 			//BUG//if(!engine.hasEventListener("progress"))
 		    	engine.addEventListener("progress", onProgress, false, 0, true) ;
 		    
@@ -229,21 +232,24 @@ package com.sleepydesign.core
 		    	engine.addEventListener(ErrorEvent.ERROR, onError, false, 0, true) ;
 			
 			engine.start();
+			*/
 		}
 		
 		public function onError(event:ErrorEvent):void
 		{
 			trace("onError : "+event);
-			if(BulkLoader(event.target).itemsLoaded + 1 >= BulkLoader(event.target).itemsTotal)
-				onComplete();
+			//if(BulkLoader(event.target).itemsLoaded + 1 >= BulkLoader(event.target).itemsTotal)
+			//	onComplete();
 		}
 		
+		/*
 		public function remove(uri:*):void
 		{
 			// trace(" - UnQueue	: "+uri);
 			uri = (uri is XMLList)?String(uri):uri;
 			engine.remove(uri);
 		}
+		*/
 		
 		public function unregister():void
 		{
@@ -252,6 +258,7 @@ package com.sleepydesign.core
 		    //remove(uri);
 		}
 		
+		/*
 		private function onProgress(event:BulkProgressEvent):void
 		{
 			if(!instance)return;
@@ -272,11 +279,13 @@ package com.sleepydesign.core
 			
 			dispatchEvent(new SDEvent(SDEvent.PROGRESS, {loader:event.target, event:event, percent:percent}));
 		}
+		*/
 		
 		private function onComplete(event:ProgressEvent=null):void
 		{
 			//trace(event)
 			//trace(" ^ onComplete\t: "+BulkLoader(event.target).itemsLoaded+"/"+BulkLoader(event.target).itemsTotal);
+			/*
 			if(engine.itemsLoaded==engine.itemsTotal)
 			{
 				engine.removeEventListener("progress", onProgress);
@@ -296,6 +305,7 @@ package com.sleepydesign.core
 					containers.remove(uri);
 				}
 			}
+			*/
 			/*
 			//loadAs
 			for each(var _class:Class in containers.childs)
@@ -307,15 +317,17 @@ package com.sleepydesign.core
 				}
 			}
 			*/
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event?event.target:engine}));
+			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event?event.target:engine}));
 			//unregister();
 			
 			//instance.visible = false;
-			TweenMax.to(instance, 0.5, {autoAlpha:0});
+			//TweenMax.to(instance, 0.5, {autoAlpha:0});
 		}
 		
+		/*
 		public function getContent(uri:String, clearMemory : Boolean = true):*
 		{
+
 			// local test?
 			if(!SystemUtil.isHTTP(SDApplication.getInstance()))
 			{
@@ -323,13 +335,17 @@ package com.sleepydesign.core
 			}
 			//trace(" * getContent : "+uri);
 			return engine.getContent(uri, clearMemory);
+77
 		}
+		*/
 		
+		/*
 		public static function getLastContent(clearMemory : Boolean = true):*
 		{
 			return engine.getContent(lastRequest, clearMemory);
 		}
-		
+		*/
+		/*
 		public function isContent(uri:String):*
 		{
 			if(!uri) return null;
@@ -342,5 +358,6 @@ package com.sleepydesign.core
 			//trace(" ! isContent : "+uri);
 			return engine.getContent(uri, false);
 		}
+		*/
 	}
 }

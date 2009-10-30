@@ -286,8 +286,9 @@ package com.sleepydesign.core
 		
 		public function getContent(uri:String):*
 		{
-			return loader.getContent(uri);
+			//return loader.getContent(uri);
 		}
+		
 		
 		private function onGetFormData(event:SDEvent=null):void
 		{
@@ -307,7 +308,7 @@ package com.sleepydesign.core
 					}
 				break;
 				case SDEvent.ERROR:
-					SystemUtil.alert(SDLoader(event.target).getContent(action));
+					//SystemUtil.alert(SDLoader(event.target).getContent(action));
 				break;
 			}
 			//dispatchEvent(event.clone());

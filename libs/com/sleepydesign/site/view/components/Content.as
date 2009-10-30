@@ -1,7 +1,6 @@
 ﻿package com.sleepydesign.site.view.components
 {
 	import com.sleepydesign.application.core.SDApplication;
-	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDForm;
 	import com.sleepydesign.core.SDGroup;
@@ -9,6 +8,7 @@
 	import com.sleepydesign.core.SDMovieClip;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.model.vo.ContentVO;
+	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
@@ -155,21 +155,28 @@
 		public function getConfig(configURI:String):void
 		{
 			this.configURI = configURI;
+			/*
 			loader.load(configURI);
 			loader.removeEventListener(SDEvent.COMPLETE, onGetConfig);
 			loader.addEventListener(SDEvent.COMPLETE, onGetConfig, false, 0, true);
+			*/
+			LoaderUtil.loadXML(configURI, onGetConfigHandler);
 		}
 		
 		// external config -> * update
-		protected function onGetConfig(event:SDEvent):void
+		protected function onGetConfigHandler(event:Event):void
 		{
 			trace(" ^ onGetConfig\t : "+event);
-			if(!loader.isContent(configURI))return;
 			
-			loader.removeEventListener(SDEvent.COMPLETE, onGetConfig);
-			var xml:XML = new XML(loader.getContent(configURI));
+			if(event.type!="complete")return;
+			
+			//if(!loader.isContent(configURI))return;
+			
+			//loader.removeEventListener(SDEvent.COMPLETE, onGetConfig);
+			var xml:XML = event.target["data"];//new XML(loader.getContent(configURI));
 			//trace(xml.toXMLString())
 			update(new ContentVO(xml.@id, content, xml));
+			
 		}
 		
 		// form data
@@ -181,7 +188,8 @@
 		
 		protected function onGetData(event:SDEvent):void
 		{
-			if(!loader.isContent(dataURI))return;
+			
+if(event.type!="complete")return;
 			
 			trace(" ^ onGetData\t:"+event);
 			
@@ -191,7 +199,9 @@
 				//do not remove just yet!! i still need it in case form is Flash MovieClip
 				//event.target.removeEventListener(SDEvent.COMPLETE, onGetData);
 				//loader.removeEventListener(SDEvent.COMPLETE, onGetData);
-				var xml:XML = new XML(loader.getContent(dataURI));
+				
+//todo//var xml:XML = new XML(loader.getContent(dataURI));
+var xml:XML = event.target["data"];
 				//trace(xml.toXMLString())
 				
 				//trace(xml.@id +"=="+ id)
@@ -307,11 +317,14 @@
 								// mem new source
 								_source = sourceString;
 								
+								/*
 								loader.add(data.source);
 								
 								// load
 								loader.addEventListener(SDEvent.COMPLETE, onGetContent, false, 0, true);
 								loader.start();
+								*/
+								LoaderUtil.loadAsset(data.source, onGetContent);
 							}
 						break;
 						// unsupported type : htm ,html, php, asp, ....
@@ -322,14 +335,17 @@
 				}
 			}else{
 				// direct load
-				loader.addEventListener(SDEvent.COMPLETE, onGetContent, false, 0, true);
-				loader.load(data.source);
+				LoaderUtil.loadAsset(data.source, onGetContent);
+				//loader.addEventListener(SDEvent.COMPLETE, onGetContent, false, 0, true);
+				//loader.load(data.source);
 			}
 			trace(" -------------------------------------- [Content.update:"+id+"] /\n");
 		}
 		
 		protected function onGetContent(event:Event=null):void
 		{
+			if(event && event.type!="complete")return;
+			
 			// direct load
 			if(!_data || !_data.xml)
 			{
@@ -564,6 +580,9 @@
 				content.removeEventListener(SDEvent.READY, onContentReady);
 			
 			// external : this content is belong to me?
+//todo//
+/*			
+			
 			if(loader.isContent(config.source))
 			{
 				// only one single source allow in content layer
@@ -587,6 +606,7 @@
 				
 				trace(" ! External\t: "+ content);
 			}
+*/			
 			
 			// ================================ Phase 2 : Config ================================
 			

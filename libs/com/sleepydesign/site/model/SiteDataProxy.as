@@ -11,11 +11,13 @@ package com.sleepydesign.site.model
 {
     import com.sleepydesign.application.core.SDApplication;
     import com.sleepydesign.core.SDLoader;
-    import com.sleepydesign.events.SDEvent;
     import com.sleepydesign.site.ApplicationFacade;
     import com.sleepydesign.site.model.vo.ContentVO;
     import com.sleepydesign.site.model.vo.SiteVO;
     import com.sleepydesign.site.view.components.Navigation;
+    import com.sleepydesign.utils.LoaderUtil;
+    
+    import flash.events.Event;
     
     import org.puremvc.as3.interfaces.IProxy;
     import org.puremvc.as3.patterns.proxy.Proxy;
@@ -33,15 +35,19 @@ package com.sleepydesign.site.model
         	 */
             super( NAME, {} );
             
-            SDApplication.loader.addEventListener( SDEvent.COMPLETE, onDataLoaded, false, 0, true);
-            SDApplication.loader.load(SDApplication.getInstance().configURI);
+            //SDApplication.loader.addEventListener( SDEvent.COMPLETE, onDataLoaded, false, 0, true);
+            //SDApplication.loader.load(SDApplication.getInstance().configURI);
+            
+            LoaderUtil.loadXML(SDApplication.getInstance().configURI, onDataHandler);
         }
 		
-		private function onDataLoaded( event:SDEvent ):void
+		private function onDataHandler( event:Event ):void
 		{
-			SDApplication.loader.removeEventListener( SDEvent.COMPLETE, onDataLoaded );
+			if(event.type!="complete")return;
+			
+			//SDApplication.loader.removeEventListener( SDEvent.COMPLETE, onDataLoaded );
 			 
-			var xml:XML = new XML( SDLoader(event.target).getContent(SDApplication.getInstance().configURI) );
+			var xml:XML = event.target["data"];//new XML(event.target["data"]);// SDLoader(event.target).getContent(SDApplication.getInstance().configURI) );
 			XML.ignoreWhitespace = true;
 			XML.ignoreComments = true;
 			
@@ -74,13 +80,13 @@ package com.sleepydesign.site.model
 		private function parse( xml:XML ):Object
 		{
 			//var contents:SDGroup = new SDGroup("site");
-			var data:SiteVO = new SiteVO(xml);
+			var siteVO:SiteVO = new SiteVO(xml);
 			//trace(data.contents)
 			//var content:XMLList = xml.content;
 			//navIDs = [];
 			
 			
-			var xmlList:XMLList = data.xml.children();
+			var xmlList:XMLList = xml.children();
 			for ( var i:uint=0; i< xmlList.length(); i++ ) 
 			{
 				var contentXML:XML = xmlList[i];
@@ -90,11 +96,11 @@ package com.sleepydesign.site.model
 				{
 					// top layer
 					case "foreground":
-						data.foreground = new ContentVO(contentXML.@id, null, contentXML);
+						siteVO.foreground = new ContentVO(contentXML.@id, null, contentXML);
 					break;
 					// bottom layer
 					case "background":
-						data.background = new ContentVO(contentXML.@id, null, contentXML);
+						siteVO.background = new ContentVO(contentXML.@id, null, contentXML);
 					break;
 					// content(s) layer
 					default:
@@ -102,13 +108,13 @@ package com.sleepydesign.site.model
 						//navIDs.push(id);
 						
 						//default 1st child page
-						if(!data.focus)data.focus = contentXML.@id;
+						if(!siteVO.focus)siteVO.focus = contentXML.@id;
 						
 						//data.contents.insert(new ContentVO(contentXML.@id, contentXML ));
 					break;
 				}
 			}
-			return data;
+			return siteVO;
 		}
     }
 }
