@@ -342,15 +342,22 @@ var xml:XML = event.target["data"];
 			trace(" -------------------------------------- [Content.update:"+id+"] /\n");
 		}
 		
+		protected var _content:*;
+		
 		protected function onGetContent(event:Event=null):void
 		{
 			if(event && event.type!="complete")return;
+			
+			_content = event.target["content"];
+			
+			trace("\n_content:"+_content+"\n");
 			
 			// direct load
 			if(!_data || !_data.xml)
 			{
 				//by pass
 				trace(" ! No XML config");
+				
 				create(_data);
 				dispatchEvent(new SDEvent(SDEvent.COMPLETE, {content:content}));
 				return;
@@ -417,7 +424,7 @@ var xml:XML = event.target["data"];
 		// element magic
 		protected function parseItem(itemXML:XML):DisplayObject
 		{
-			try{
+			//try{
 			var clip:DisplayObjectContainer;
 			if(_config.source is DisplayObjectContainer)
 			{
@@ -532,7 +539,7 @@ var xml:XML = event.target["data"];
 					}
 				break;
 			}
-			}catch(e:*){};
+			//}catch(e:*){};
 			return null;
 		}
 		
@@ -580,10 +587,9 @@ var xml:XML = event.target["data"];
 				content.removeEventListener(SDEvent.READY, onContentReady);
 			
 			// external : this content is belong to me?
-//todo//
-/*			
+		
 			
-			if(loader.isContent(config.source))
+			if(_content)
 			{
 				// only one single source allow in content layer
 				// can be destroy or dirty
@@ -592,7 +598,7 @@ var xml:XML = event.target["data"];
 					kill(content);
 				}
 				
-				content = loader.getContent(_config.source);
+				content = _content//loader.getContent(_config.source);
 				
 				// DIRTY
 				if(content is Bitmap)
@@ -602,11 +608,11 @@ var xml:XML = event.target["data"];
 				addContent(content);
 				
 				// remove listener after thing created
-				loader.removeEventListener(SDEvent.COMPLETE, onGetContent);
+				//loader.removeEventListener(SDEvent.COMPLETE, onGetContent);
 				
 				trace(" ! External\t: "+ content);
 			}
-*/			
+
 			
 			// ================================ Phase 2 : Config ================================
 			
