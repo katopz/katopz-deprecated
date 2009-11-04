@@ -83,6 +83,12 @@ package com.sleepydesign.utils
 			return loader;
 		}
 		
+		/**
+		 * Load as XML
+		 * @param uri
+		 * @param eventHandler
+		 * @return URLLoader
+		 */		
 		public static function loadXML(uri:String, eventHandler:Function = null):URLLoader
 		{
 			return load(uri, function(event:Event):void
@@ -94,16 +100,35 @@ package com.sleepydesign.utils
 			} , "xml") as URLLoader;
 		}
 		
+		/**
+		 * Load as Image type
+		 * @param uri
+		 * @param eventHandler
+		 * @return Loader
+		 */
 		public static function loadAsset(uri:String, eventHandler:Function = null):Loader
 		{
 			return load(uri, eventHandler, "asset") as Loader;
 		}
 		
+		/**
+		 * Load as Binary type
+		 * @param uri
+		 * @param eventHandler
+		 * @return URLLoader
+		 */		
 		public static function loadBinary(uri:String, eventHandler:Function = null):URLLoader
 		{
 			return load(uri, eventHandler, URLLoaderDataFormat.BINARY) as URLLoader;
 		}
 		
+		/**
+		 * Just load
+		 * @param uri
+		 * @param eventHandler
+		 * @param type
+		 * @return Loader, URLLoader
+		 */		
 		public static function load(uri:String, eventHandler:Function = null, type:String = "auto"):Object
 		{
 			// select type
@@ -183,7 +208,12 @@ package com.sleepydesign.utils
 			return null;
 		}
 		
-		public static function getType(value:String):String
+		/**
+		 * Get type of file URI
+		 * @param value
+		 * @return type of file URI
+		 */		
+		private static function getType(value:String):String
 		{
 			//file.something.type?q#a
 			value = value.split("#")[0];
