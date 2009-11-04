@@ -49,8 +49,11 @@ package com.sleepydesign.utils
         	
 		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function=null):void
 		{
+			var _oldItems:Array = container.contextMenu?container.contextMenu.customItems.concat():[];
 			var _contextMenu:ContextMenu = container.contextMenu = new ContextMenu();
 			_contextMenu.hideBuiltInItems();
+			
+			_contextMenu.customItems = _contextMenu.customItems.concat(_oldItems);
 			
 			var item:ContextMenuItem = new ContextMenuItem(label);
             _contextMenu.customItems.push(item);
