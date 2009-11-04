@@ -1,5 +1,11 @@
 package
 {
+	import away3dlite.materials.ColorMaterial;
+	import away3dlite.materials.WireColorMaterial;
+	import away3dlite.primitives.Plane;
+	import away3dlite.primitives.Sphere;
+	import away3dlite.templates.BasicTemplate;
+	
 	import com.logosware.event.QRdecoderEvent;
 	import com.logosware.event.QRreaderEvent;
 	import com.logosware.utils.QRcode.GetQRimage;
@@ -18,6 +24,7 @@ package
 	import flash.filters.DropShadowFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Vector3D;
 	import flash.net.FileReference;
 	import flash.text.TextField;
 	
@@ -45,9 +52,8 @@ package
 	 * 
 	 */
 	[SWF(backgroundColor="0x333333", frameRate="30", width="800", height="240")]
-	public class main extends Sprite
+	public class main extends BasicTemplate
 	{
-		private var base:Sprite;
 		private var paper:Sprite;
 		private var tool:Sprite;
 		
@@ -55,22 +61,27 @@ package
 		
 		public function main()
 		{
+			// sys
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			base = new Sprite();
-			addChild(base);
-			
+			// layer
 			paper = new Sprite();
 			addChild(paper);
-			
 			tool = new Sprite();
 			addChild(tool);
 			
+			// init
+			init();
+			
 			// add test image in the background
-			paper.graphics.beginBitmapFill(Bitmap(new ImageData).bitmapData);
-			paper.graphics.drawRect(0, 0, 320, 240);
-			paper.graphics.endFill();
-
+			setBitmap(Bitmap(new ImageData));
+			
+			// browse
+			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
+		}
+		
+		private function init():void
+		{
 			// set up FLARToolKit
 			canvas = new BitmapData(320, 240, false, 0);
 			size = 100;
@@ -84,7 +95,7 @@ package
 			detector.setContinueMode(false);
 
 			// set up sandy
-			scene = new Scene3D("scene", Sprite(addChild(new Sprite)), new FLARCamera3D(param, 0.001), new Group("root"));
+			sandyScene = new Scene3D("scene", Sprite(addChild(new Sprite)), new FLARCamera3D(param, 0.001), new Group("root"));
 			stuff = new Vector.<FLARBaseNode>;
 			for (var i:int = 0; i < 4; i++)
 			{
@@ -93,7 +104,7 @@ package
 				LineAttributes(p.appearance.frontMaterial.attributes.attributes[0]).color = (i < 3) ? 0xFF00 : 0xFFFF00;
 				p.rotateX = 180;
 				stuff[i].addChild(p);
-				scene.root.addChild(stuff[i]);
+				sandyScene.root.addChild(stuff[i]);
 			}
 
 			// set up QRCodeReader
@@ -103,10 +114,10 @@ package
 			addChild(hbmp);
 			qrImage = new GetQRimage(hbmp);
 			qrImage.addEventListener(QRreaderEvent.QR_IMAGE_READ_COMPLETE, onQRCodeRead);
-			qrDecoder = new QRdecode;
+			qrDecoder = new QRdecode();
 			qrDecoder.addEventListener(QRdecoderEvent.QR_DECODE_COMPLETE, onQRDecoded);
 
-			qrInfo = new TextField;
+			qrInfo = new TextField();
 			qrInfo.filters = [new DropShadowFilter(0, 0, 0, 1, 3, 3, 10)];
 			qrInfo.x = 320;
 			qrInfo.textColor = 0xFF00;
@@ -118,14 +129,10 @@ package
 			rbmp.x = 560;
 			addChild(rbmp);
 
-			// show time
-			process();
-
-			// browse
-			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
+			//addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			//addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			
-			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			addEventListener(Event.ENTER_FRAME, onRun);
 		}
 		
 		private function onMouseDown(e:MouseEvent):void
@@ -141,6 +148,7 @@ package
 		private function onRun(event:Event):void
 		{
 			//paper.rotationX = mouseX;
+			sandyScene.render();
 		}
 		
 		private function onImageReady(event:Event):void
@@ -148,7 +156,15 @@ package
 			if(_bitmap)
 				paper.removeChild(_bitmap);
 			
-			_bitmap = Bitmap(event.target.content);
+			setBitmap(event.target.content);
+		}
+		
+		private function setBitmap(bitmap:Bitmap):void
+		{
+			if(_bitmap)
+				paper.removeChild(_bitmap);
+			
+			_bitmap = bitmap;
 			
 			//3.2cm = 90px
 			_bitmap.width = 90;
@@ -167,8 +183,8 @@ package
 			
 			// fake effect
 			paper.filters = [new BlurFilter(3,3,1)];
-			paper.rotationX = 10;
-			paper.rotationZ = 15;
+			//paper.rotationX = 10;
+			//paper.rotationZ = 15;
 			
 			// show time
 			process();
@@ -177,10 +193,10 @@ package
 		private function process():void
 		{
 			// get image into canvas
-			scene.container.visible = false;
+			sandyScene.container.visible = false;
 			canvas.fillRect(canvas.rect, 0);
 			canvas.draw(this);
-			scene.container.visible = true;
+			sandyScene.container.visible = true;
 
 			// flarkit pass
 			var n:int = detector.detectMarkerLite(raster, 128)
@@ -268,12 +284,12 @@ package
 
 				// I call render() to init sandy matrices - you can do matrix math by hand and
 				// not render a thing, or use better engine :-p~
-				scene.render();
+				sandyScene.render();
 
 				var face1:Polygon = Polygon(plane.aPolygons[0]);
-				scene.camera.projectArray(face1.vertices);
+				sandyScene.camera.projectArray(face1.vertices);
 				var face2:Polygon = Polygon(plane.aPolygons[1]);
-				scene.camera.projectArray(face2.vertices);
+				sandyScene.camera.projectArray(face2.vertices);
 
 				var p0:Point = new Point(face1.b.sx, face1.b.sy);
 				var p1:Point = new Point(face1.a.sx, face1.a.sy);
@@ -289,9 +305,51 @@ package
 				qrInfo.text = "";
 				qrResult.fillRect(qrResult.rect, 0);
 				qrImage.process();
+				
+				//
+				aVector3D = new Vector3D(face1.a.x, face1.a.y, face1.a.z);
+				bVector3D = new Vector3D(face1.b.x, face1.b.y, face1.b.z);
+				cVector3D = new Vector3D(face1.c.x, face1.c.y, face1.c.z);
+				
+				trace(aVector3D);
+				trace(bVector3D);
+				trace(cVector3D);
 			}
 		}
 
+		private var plane:Plane;
+
+		override protected function onInit():void
+		{
+			plane = new Plane(new WireColorMaterial());
+			scene.addChild(plane);
+			
+			var _sphereA:Sphere = new Sphere(new ColorMaterial(0xFF0000), 10, 4, 4);
+			scene.addChild(_sphereA);
+			
+			_sphereA.x = aVector3D.x;
+			_sphereA.y = aVector3D.y;
+			_sphereA.z = aVector3D.z;
+			
+			var _sphereB:Sphere = new Sphere(new ColorMaterial(0xFF0000), 10, 4, 4);
+			scene.addChild(_sphereB);
+			
+			_sphereB.x = bVector3D.x;
+			_sphereB.y = bVector3D.y;
+			_sphereB.z = bVector3D.z;
+			
+			var _sphereC:Sphere = new Sphere(new ColorMaterial(0xFF0000), 10, 4, 4);
+			scene.addChild(_sphereC);
+			
+			_sphereC.x = cVector3D.x;
+			_sphereC.y = cVector3D.y;
+			_sphereC.z = cVector3D.z;
+		}
+		
+		private var aVector3D:Vector3D;
+		private var bVector3D:Vector3D;
+		private var cVector3D:Vector3D;
+		
 		private function onQRCodeRead(e:QRreaderEvent):void
 		{
 			// you don't have to draw qrResult, it's for debug ;)
@@ -307,16 +365,18 @@ package
 			trace(e.data);
 			
 			// here is your chance to make changes to 3D scene
-			scene.render();
+			//scene.render();
 		}
 
 		private var file:FileReference;
 		private var loader:Loader;
 
-		[Embed(source='test.jpg')]
+		[Embed(source='../bin/112233.png')]
 		private var ImageData:Class;
+		
 		[Embed(source='flar.dat',mimeType='application/octet-stream')]
 		private var CameraData:Class;
+		
 		[Embed(source='flar.pat',mimeType='application/octet-stream')]
 		private var MarkerData:Class;
 
@@ -327,7 +387,7 @@ package
 		private var raster:FLARRgbRaster_BitmapData;
 		private var detector:FLARMultiMarkerDetector;
 
-		private var scene:Scene3D;
+		private var sandyScene:Scene3D;
 		private var stuff:Vector.<FLARBaseNode>;
 
 		private var homography:BitmapData;
