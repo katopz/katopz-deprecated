@@ -13,22 +13,52 @@ package com.sleepydesign.utils
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.IExternalizable;
-
+	
+	/**
+	 * @example
+	 * 
+	 * 	Browse image and add to container	: FileUtil.openImageTo(this);
+	 * 	Browse image and trace				: FileUtil.openImage(trace);
+	 * 	Browse jpg and listen				: FileUtil.open(["*.jpg"], eventHandler);
+	 * 
+	 * @author	katopz
+	 */	
 	public class FileUtil
 	{
-		// config here
-		public static var UPLOAD_URL:String = "http://127.0.0.1/localside/upload.php";
+		/**
+		 * Temporary eventHandler, prevent flash lost function scope (bug?)
+		 */
+		private static var eventHandler:Function;
+		
+		/**
+		 * Your upload path
+		 */
+		public static var UPLOAD_URL:String = "http://127.0.0.1/serverside/upload.php";
+		
+		/**
+		 * Limit your upload size
+		 */		
 		public static var UPLOAD_LIMIT:Number = 200000;
 
+		/**
+		 * Browse image and add to container
+		 * @param container
+		 * @return FileReference
+		 */		
 		public static function openImageTo(container:DisplayObjectContainer):FileReference
 		{
 			return openImage(function onGetImage(event:Event):void
 			{
 				if(event.type == Event.COMPLETE)
-					container.addChild(event.target["content"] as Bitmap).name = "bitmap";
+					container.addChild(event.target["content"] as Bitmap);
 			});
 		}
 
+		/**
+		 * Browse image and listen
+		 * @param eventHandler
+		 * @return FileReference
+		 */		
 		public static function openImage(eventHandler:Function):FileReference
 		{
 			return open(["*.jpg", "*.jpeg", "*.gif", "*.png"], function(event:Event):void
@@ -56,10 +86,16 @@ package com.sleepydesign.utils
 				}
 			});
 		}
-
+		
+		/**
+		 * Browse with any file type and listen
+		 * @param eventHandler
+		 * @return FileReference
+		 */	
 		public static function open(fileTypes:Array = null, eventHandler:Function = null):FileReference
 		{
 			fileTypes = fileTypes ? fileTypes : ["*.*"];
+			FileUtil.eventHandler = eventHandler = eventHandler is Function?eventHandler:trace;
 
 			var file:FileReference = new FileReference();
 			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
@@ -68,9 +104,7 @@ package com.sleepydesign.utils
 			{
 				trace(" ^ Select : " + file.name + " | " + file.size);
 				file = FileReference(event.target);
-
-				if (eventHandler is Function)
-					file.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
+				file.addEventListener(Event.COMPLETE, FileUtil.eventHandler);
 
 				try
 				{
@@ -109,6 +143,11 @@ package com.sleepydesign.utils
 			return file;
 		}
 
+		/**
+		 * Save image to local
+		 * @param eventHandler
+		 * @return FileReference
+		 */	
 		public static function save(data:*, defaultFileName:String = "undefined"):void
 		{
 			var rawBytes:ByteArray = new ByteArray();
