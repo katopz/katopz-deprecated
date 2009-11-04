@@ -1,11 +1,13 @@
 package
 {
+	import away3dlite.core.base.Object3D;
 	import away3dlite.materials.ColorMaterial;
 	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.primitives.Plane;
 	import away3dlite.primitives.Sphere;
 	import away3dlite.templates.BasicTemplate;
 	
+	import com.greensock.TweenLite;
 	import com.logosware.event.QRdecoderEvent;
 	import com.logosware.event.QRreaderEvent;
 	import com.logosware.utils.QRcode.GetQRimage;
@@ -15,17 +17,19 @@ package
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.Loader;
+	import flash.display.PixelSnapping;
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
+	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.filters.BlurFilter;
 	import flash.filters.DropShadowFilter;
 	import flash.geom.Matrix;
+	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
-	import flash.net.FileReference;
+	import flash.media.Camera;
+	import flash.media.Video;
 	import flash.text.TextField;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
@@ -43,7 +47,7 @@ package
 	import sandy.core.scenegraph.Group;
 	import sandy.materials.attributes.LineAttributes;
 	import sandy.primitive.Plane3D;
-
+	
 	/**
 	 * QRCodeReader + FLARToolKit PoC (libspark rev. 3199, sandy rev. 1138)
 	 * @license GPLv2
@@ -54,10 +58,24 @@ package
 	[SWF(backgroundColor="0x333333", frameRate="30", width="800", height="240")]
 	public class main extends BasicTemplate
 	{
+		private var base:Sprite;
+		
+		private var cameraContainer:Sprite;
+		private var container:Sprite;
+		
 		private var paper:Sprite;
 		private var tool:Sprite;
 		
 		private var _bitmap:Bitmap;
+		
+		private var A:FLARResult; 
+		private var B:FLARResult; 
+		private var C:FLARResult; 
+		
+		protected var _webcam:Camera;
+		protected var _video:Video;
+		private var _width:int=320;
+		private var _height:int=240;
 		
 		public function main()
 		{
@@ -65,19 +83,22 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			// layer
+			base = new Sprite();
+			addChild(base);
+			
+			container = new Sprite();
+			addChild(container);
+				
+			cameraContainer = new Sprite();
+			addChild(cameraContainer);
+			cameraContainer.visible = false;
+			
 			paper = new Sprite();
-			addChild(paper);
+			container.addChild(paper);
+			
 			tool = new Sprite();
 			addChild(tool);
-			
-			// init
-			init();
-			
-			// add test image in the background
-			setBitmap(Bitmap(new ImageData));
-			
-			// browse
-			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
+			tool.visible = false;
 		}
 		
 		private function init():void
@@ -111,7 +132,8 @@ package
 			homography = new BitmapData(240, 240, false, 0);
 			var hbmp:Bitmap = new Bitmap(homography);
 			hbmp.x = 320;
-			addChild(hbmp);
+			base.addChild(hbmp);
+			
 			qrImage = new GetQRimage(hbmp);
 			qrImage.addEventListener(QRreaderEvent.QR_IMAGE_READ_COMPLETE, onQRCodeRead);
 			qrDecoder = new QRdecode();
@@ -122,33 +144,79 @@ package
 			qrInfo.x = 320;
 			qrInfo.textColor = 0xFF00;
 			qrInfo.autoSize = "left";
-			addChild(qrInfo);
+			base.addChild(qrInfo);
 
 			qrResult = homography.clone();
 			var rbmp:Bitmap = new Bitmap(qrResult);
 			rbmp.x = 560;
-			addChild(rbmp);
-
-			//addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			//addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			base.addChild(rbmp);
 			
+			// add test image in the background
+			setBitmap(Bitmap(new ImageData));
+			
+			// browse
+			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
+			SystemUtil.addContext(this, "Toggle Source", onToggleSource);
+			
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			
+			//addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			addEventListener(Event.ENTER_FRAME, onRun);
 		}
+		private var _capture:Bitmap;
+		private var isCam:Boolean = false; 
 		
-		private function onMouseDown(e:MouseEvent):void
+		private function onToggleSource(event:ContextMenuEvent):void
 		{
-			addEventListener(Event.ENTER_FRAME, onRun);
+			isCam = !isCam;
+			
+			trace("isCam : " + isCam);
+			
+			if(!isCam)
+			{
+				container.visible = true;
+				cameraContainer.visible = false;
+			}else{
+				container.visible = false;
+				cameraContainer.visible = true;
+				
+				if(!_webcam)
+					_webcam = Camera.getCamera();
+				
+				if (_webcam) 
+				{
+					_webcam.setMode(_width, _height, 30);
+					_video = new Video(_width, _height);
+					_video.attachCamera(_webcam);
+					_capture = new Bitmap(new BitmapData(_width, _height, false, 0), PixelSnapping.AUTO, true);
+					cameraContainer.addChild(_capture);
+				}
+			}
+			
+			//dirty
+			isDecoded = false;
+		}
+		
+		private function onMouseDown(event:MouseEvent):void
+		{
+			TweenLite.to(paper, 1, {
+				rotationX:30*Math.random()-30*Math.random(),
+				rotationY:30*Math.random()-30*Math.random(),
+				rotationZ:30*Math.random()-30*Math.random()
+			});
 		}
 		
 		private function onMouseUp(e:MouseEvent):void
 		{
-			removeEventListener(Event.ENTER_FRAME, onRun);
+			//removeEventListener(Event.ENTER_FRAME, onRun);
 		}
 		
 		private function onRun(event:Event):void
 		{
-			//paper.rotationX = mouseX;
-			sandyScene.render();
+			if(isCam && _capture && _video)
+				_capture.bitmapData.draw(_video);
+			
+			process();
 		}
 		
 		private function onImageReady(event:Event):void
@@ -161,8 +229,10 @@ package
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-			if(_bitmap)
-				paper.removeChild(_bitmap);
+			//if(_bitmap)
+			//	paper.removeChild(_bitmap);
+			
+			isDecoded = false;
 			
 			_bitmap = bitmap;
 			
@@ -175,16 +245,11 @@ package
 			
 			paper.addChild(_bitmap);
 			
-			paper.graphics.clear();
-			paper.graphics.lineStyle();
-			
-			tool.graphics.clear();
-			tool.graphics.lineStyle();
-			
 			// fake effect
-			paper.filters = [new BlurFilter(3,3,1)];
-			//paper.rotationX = 10;
-			//paper.rotationZ = 15;
+			//paper.filters = [new BlurFilter(3,3,1)];
+			paper.rotationX = 15;
+			paper.rotationY = 15;
+			paper.rotationZ = 15;
 			
 			// show time
 			process();
@@ -192,11 +257,21 @@ package
 
 		private function process():void
 		{
+			tool.graphics.clear();
+			tool.graphics.lineStyle();
+						
 			// get image into canvas
 			sandyScene.container.visible = false;
 			canvas.fillRect(canvas.rect, 0);
-			canvas.draw(this);
-			sandyScene.container.visible = true;
+			
+			if(!isCam)
+			{
+				canvas.draw(container);
+			}else{
+				canvas.draw(cameraContainer);
+			}
+			
+			//sandyScene.container.visible = true;
 
 			// flarkit pass
 			var n:int = detector.detectMarkerLite(raster, 128)
@@ -217,7 +292,7 @@ package
 				results.splice(3, n - 3);
 
 				// sort them into right triangle
-				var A:FLARResult, B:FLARResult, C:FLARResult;
+				//var A:FLARResult, B:FLARResult, C:FLARResult;
 				for (k = 0; k < 3; k++)
 				{
 					A = FLARResult(results[(2 + k) % 3]);
@@ -241,6 +316,7 @@ package
 				{
 					// in 2D
 					var i:int, sq:FLARSquare = FLARResult(results[k]).square;
+					/*
 					tool.graphics.lineStyle(0, 0xFF0000);
 					for (i = 0; i < 4; i++)
 					{
@@ -251,6 +327,7 @@ package
 						tool.graphics.moveTo(ix + 0, iy - 3);
 						tool.graphics.lineTo(ix + 0, iy + 4);
 					}
+					*/
 
 					// or in 3D
 					stuff[k].setTransformMatrix(FLARResult(results[k]).result);
@@ -260,90 +337,99 @@ package
 				A = FLARResult(results[2]);
 				B = FLARResult(results[0]);
 				C = FLARResult(results[1]);
-				var scale3:Number = (1 + B.distance / size) / 3;
-				var aggregate:FLARTransMatResult = new FLARTransMatResult;
-				aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
-				aggregate.m13 = (A.result.m13 + C.result.m13) * 0.5;
-				aggregate.m23 = (A.result.m23 + C.result.m23) * 0.5;
-				aggregate.m00 = (A.result.m00 + B.result.m00 + C.result.m00) * scale3;
-				aggregate.m10 = (A.result.m10 + B.result.m10 + C.result.m10) * scale3;
-				aggregate.m20 = (A.result.m20 + B.result.m20 + C.result.m20) * scale3;
-				aggregate.m01 = (A.result.m01 + B.result.m01 + C.result.m01) * scale3;
-				aggregate.m11 = (A.result.m11 + B.result.m11 + C.result.m11) * scale3;
-				aggregate.m21 = (A.result.m21 + B.result.m21 + C.result.m21) * scale3;
-				aggregate.m02 = (A.result.m02 + B.result.m02 + C.result.m02) * scale3;
-				aggregate.m12 = (A.result.m12 + B.result.m12 + C.result.m12) * scale3;
-				aggregate.m22 = (A.result.m22 + B.result.m22 + C.result.m22) * scale3;
-				stuff[3].setTransformMatrix(aggregate);
-
-				// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
-				var plane:Plane3D = Plane3D(stuff[3].children[0]);
-
-				// since 3D fit is not perfect, we shall grab some extra area
-				plane.scaleX = plane.scaleY = plane.scaleZ = 1.05;
-
-				// I call render() to init sandy matrices - you can do matrix math by hand and
-				// not render a thing, or use better engine :-p~
-				sandyScene.render();
-
-				var face1:Polygon = Polygon(plane.aPolygons[0]);
-				sandyScene.camera.projectArray(face1.vertices);
-				var face2:Polygon = Polygon(plane.aPolygons[1]);
-				sandyScene.camera.projectArray(face2.vertices);
-
-				var p0:Point = new Point(face1.b.sx, face1.b.sy);
-				var p1:Point = new Point(face1.a.sx, face1.a.sy);
-				var p2:Point = new Point(face1.c.sx, face1.c.sy);
-				var p3:Point = new Point(face2.b.sx, face2.b.sy);
-
-				plane.scaleX = plane.scaleY = plane.scaleZ = 1.0;
-
-				homography.fillRect(homography.rect, 0);
-				homography.applyFilter(canvas, canvas.rect, canvas.rect.topLeft, new HomographyTransformFilter(240, 240, p0, p1, p2, p3));
-
-				// now read QR code
-				qrInfo.text = "";
-				qrResult.fillRect(qrResult.rect, 0);
-				qrImage.process();
 				
-				//
-				aVector3D = new Vector3D(face1.a.x, face1.a.y, face1.a.z);
-				bVector3D = new Vector3D(face1.b.x, face1.b.y, face1.b.z);
-				cVector3D = new Vector3D(face1.c.x, face1.c.y, face1.c.z);
+				if(!isDecoded)
+				{
+					
+					var scale3:Number = (1 + B.distance / size) / 3;
+					var aggregate:FLARTransMatResult = new FLARTransMatResult;
+					aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
+					aggregate.m13 = (A.result.m13 + C.result.m13) * 0.5;
+					aggregate.m23 = (A.result.m23 + C.result.m23) * 0.5;
+					aggregate.m00 = (A.result.m00 + B.result.m00 + C.result.m00) * scale3;
+					aggregate.m10 = (A.result.m10 + B.result.m10 + C.result.m10) * scale3;
+					aggregate.m20 = (A.result.m20 + B.result.m20 + C.result.m20) * scale3;
+					aggregate.m01 = (A.result.m01 + B.result.m01 + C.result.m01) * scale3;
+					aggregate.m11 = (A.result.m11 + B.result.m11 + C.result.m11) * scale3;
+					aggregate.m21 = (A.result.m21 + B.result.m21 + C.result.m21) * scale3;
+					aggregate.m02 = (A.result.m02 + B.result.m02 + C.result.m02) * scale3;
+					aggregate.m12 = (A.result.m12 + B.result.m12 + C.result.m12) * scale3;
+					aggregate.m22 = (A.result.m22 + B.result.m22 + C.result.m22) * scale3;
+					stuff[3].setTransformMatrix(aggregate);
 				
-				trace(aVector3D);
-				trace(bVector3D);
-				trace(cVector3D);
+					// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
+					var plane:Plane3D = Plane3D(stuff[3].children[0]);
+	
+					// since 3D fit is not perfect, we shall grab some extra area
+					plane.scaleX = plane.scaleY = plane.scaleZ = 1.05;
+	
+					// I call render() to init sandy matrices - you can do matrix math by hand and
+					// not render a thing, or use better engine :-p~
+					sandyScene.render();
+	
+					var face1:Polygon = Polygon(plane.aPolygons[0]);
+					sandyScene.camera.projectArray(face1.vertices);
+					var face2:Polygon = Polygon(plane.aPolygons[1]);
+					sandyScene.camera.projectArray(face2.vertices);
+	
+					var p0:Point = new Point(face1.b.sx, face1.b.sy);
+					var p1:Point = new Point(face1.a.sx, face1.a.sy);
+					var p2:Point = new Point(face1.c.sx, face1.c.sy);
+					var p3:Point = new Point(face2.b.sx, face2.b.sy);
+	
+					plane.scaleX = plane.scaleY = plane.scaleZ = 1.0;
+	
+					homography.fillRect(homography.rect, 0);
+					homography.applyFilter(canvas, canvas.rect, canvas.rect.topLeft, new HomographyTransformFilter(240, 240, p0, p1, p2, p3));
+	
+					// now read QR code
+					qrInfo.text = "";
+					qrResult.fillRect(qrResult.rect, 0);
+					qrImage.process();
+				}
 			}
+			
+			setTransform(_sphereA, A);
+			setTransform(_sphereB, B);
+			setTransform(_sphereC, C);
 		}
 
 		private var plane:Plane;
-
+		
+		private var _sphereA:Sphere;
+		private var _sphereB:Sphere;
+		private var _sphereC:Sphere;
+		
 		override protected function onInit():void
 		{
+			//debug = false;
+			
 			plane = new Plane(new WireColorMaterial());
 			scene.addChild(plane);
 			
-			var _sphereA:Sphere = new Sphere(new ColorMaterial(0xFF0000), 10, 4, 4);
+			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
 			scene.addChild(_sphereA);
 			
-			_sphereA.x = aVector3D.x;
-			_sphereA.y = aVector3D.y;
-			_sphereA.z = aVector3D.z;
-			
-			var _sphereB:Sphere = new Sphere(new ColorMaterial(0xFF0000), 10, 4, 4);
+			_sphereB = new Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
 			scene.addChild(_sphereB);
 			
-			_sphereB.x = bVector3D.x;
-			_sphereB.y = bVector3D.y;
-			_sphereB.z = bVector3D.z;
-			
-			var _sphereC:Sphere = new Sphere(new ColorMaterial(0xFF0000), 10, 4, 4);
+			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
 			scene.addChild(_sphereC);
 			
-			_sphereC.x = cVector3D.x;
-			_sphereC.y = cVector3D.y;
-			_sphereC.z = cVector3D.z;
+			view.x = 320/2;
+			
+			init();
+		}
+		
+		private function setTransform(object3D:Object3D, r:FLARResult):void
+		{
+			var m:FLARTransMatResult = r.result;
+			object3D.transform.matrix3D = new Matrix3D(Vector.<Number>([
+				 m.m00, m.m01, m.m02, 0,
+				 m.m01, m.m11, m.m21, 0,
+				 m.m02, m.m12, m.m22, 0,
+				 m.m03, m.m13, m.m23, 1
+			]));
 		}
 		
 		private var aVector3D:Vector3D;
@@ -359,6 +445,8 @@ package
 			qrDecoder.startDecode();
 		}
 
+		private var isDecoded:Boolean = false;
+		
 		private function onQRDecoded(e:QRdecoderEvent):void
 		{
 			qrInfo.text = "QR: " + e.data;
@@ -366,10 +454,9 @@ package
 			
 			// here is your chance to make changes to 3D scene
 			//scene.render();
+			
+			isDecoded = true;
 		}
-
-		private var file:FileReference;
-		private var loader:Loader;
 
 		[Embed(source='../bin/112233.png')]
 		private var ImageData:Class;
