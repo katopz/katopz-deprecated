@@ -1,7 +1,6 @@
 package
 {
 	import away3dlite.core.base.Object3D;
-	import away3dlite.materials.ColorMaterial;
 	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.primitives.Plane;
 	import away3dlite.primitives.Sphere;
@@ -52,10 +51,34 @@ package
 	 * QRCodeReader + FLARToolKit PoC (libspark rev. 3199, sandy rev. 1138)
 	 * @license GPLv2
 	 * @author makc
+	 * 
 	 * @see http://www.openqrcode.com/
 	 * 
+	 * [Step #1]
+	 * 1.1 JS --> Session
+	 * 1.2 QR --> Model ID
+	 * 1.3 AR --> Projection Matrix
+	 * 
+	 * [Step #2]
+	 * 2.1 Flash ---> Encypt[Session, Model ID] --> Server
+	 * 2.2 Casting/Loading Effect
+	 * 2.3 Flash <-- Model.SWF <--- Server
+	 * 2.4 Spawn Effect
+	 * 
+	 * [Step #3]
+	 * 3.1 Wait for user input for next step
+	 * 3.2 Flip Effect to next ingradient
+	 * 3.3 Repeat step 1.2 ---> 3.2 until finish condition
+	 * 
+	 * [Step #4]
+	 * 4.1 Flash ---> Encypt[Session, Model ID, Model ID,... ] --> Server
+	 * 4.2 Casting/Loading Effect
+	 * 4.3 Flash <-- Model.SWF <--- Server
+	 * 4.4 Spawn Effect
+	 * 
 	 */
-	[SWF(backgroundColor="0x333333", frameRate="30", width="800", height="240")]
+	 
+	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
 	public class main extends BasicTemplate
 	{
 		private var base:Sprite;
@@ -77,6 +100,9 @@ package
 		private var _width:int=320;
 		private var _height:int=240;
 		
+		private var _capture:Bitmap;
+		private var isCam:Boolean = false;
+		
 		public function main()
 		{
 			// sys
@@ -96,9 +122,11 @@ package
 			paper = new Sprite();
 			container.addChild(paper);
 			
+			/*
 			tool = new Sprite();
 			addChild(tool);
 			tool.visible = false;
+			*/
 		}
 		
 		private function init():void
@@ -117,6 +145,7 @@ package
 
 			// set up sandy
 			sandyScene = new Scene3D("scene", Sprite(addChild(new Sprite)), new FLARCamera3D(param, 0.001), new Group("root"));
+			sandyScene.container.visible = false;
 			stuff = new Vector.<FLARBaseNode>;
 			for (var i:int = 0; i < 4; i++)
 			{
@@ -139,12 +168,14 @@ package
 			qrDecoder = new QRdecode();
 			qrDecoder.addEventListener(QRdecoderEvent.QR_DECODE_COMPLETE, onQRDecoded);
 
+			/*
 			qrInfo = new TextField();
 			qrInfo.filters = [new DropShadowFilter(0, 0, 0, 1, 3, 3, 10)];
 			qrInfo.x = 320;
 			qrInfo.textColor = 0xFF00;
 			qrInfo.autoSize = "left";
 			base.addChild(qrInfo);
+			*/
 
 			qrResult = homography.clone();
 			var rbmp:Bitmap = new Bitmap(qrResult);
@@ -163,8 +194,6 @@ package
 			//addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			addEventListener(Event.ENTER_FRAME, onRun);
 		}
-		private var _capture:Bitmap;
-		private var isCam:Boolean = false; 
 		
 		private function onToggleSource(event:ContextMenuEvent):void
 		{
@@ -229,9 +258,6 @@ package
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-			//if(_bitmap)
-			//	paper.removeChild(_bitmap);
-			
 			isDecoded = false;
 			
 			_bitmap = bitmap;
@@ -245,23 +271,17 @@ package
 			
 			paper.addChild(_bitmap);
 			
-			// fake effect
-			//paper.filters = [new BlurFilter(3,3,1)];
-			paper.rotationX = 15;
-			paper.rotationY = 15;
-			paper.rotationZ = 15;
-			
 			// show time
 			process();
 		}
 
 		private function process():void
 		{
-			tool.graphics.clear();
-			tool.graphics.lineStyle();
+			//tool.graphics.clear();
+			//tool.graphics.lineStyle();
 						
 			// get image into canvas
-			sandyScene.container.visible = false;
+			//sandyScene.container.visible = false;
 			canvas.fillRect(canvas.rect, 0);
 			
 			if(!isCam)
@@ -274,7 +294,7 @@ package
 			//sandyScene.container.visible = true;
 
 			// flarkit pass
-			var n:int = detector.detectMarkerLite(raster, 128)
+			var n:int = detector.detectMarkerLite(raster, 128);
 			if (n > 2)
 			{
 				// we want 3 best matches
@@ -312,11 +332,12 @@ package
 				results.sortOn("cosine", Array.NUMERIC);
 
 				// display intermediate results
+				/*
 				for (k = 0; k < 3; k++)
 				{
 					// in 2D
 					var i:int, sq:FLARSquare = FLARResult(results[k]).square;
-					/*
+					
 					tool.graphics.lineStyle(0, 0xFF0000);
 					for (i = 0; i < 4; i++)
 					{
@@ -327,11 +348,11 @@ package
 						tool.graphics.moveTo(ix + 0, iy - 3);
 						tool.graphics.lineTo(ix + 0, iy + 4);
 					}
-					*/
 
 					// or in 3D
 					stuff[k].setTransformMatrix(FLARResult(results[k]).result);
 				}
+				*/
 
 				// aggregate 3D results (this assumes all markers are oriented same way)
 				A = FLARResult(results[2]);
@@ -340,7 +361,6 @@ package
 				
 				if(!isDecoded)
 				{
-					
 					var scale3:Number = (1 + B.distance / size) / 3;
 					var aggregate:FLARTransMatResult = new FLARTransMatResult;
 					aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
@@ -366,6 +386,12 @@ package
 					// I call render() to init sandy matrices - you can do matrix math by hand and
 					// not render a thing, or use better engine :-p~
 					sandyScene.render();
+					
+					//_projection.fieldOfView = 360*Math.atan2(loaderInfo.width, 2*_zoom*_focus)/Math.PI;
+					//_projection.focalLength = _zoom*_focus;
+					//_nFov = Math.atan2 (viewport.height2, f) * 114.591559 /* 2 * (180 / Math.PI) */;
+					trace("sandyScene focalLength:"+sandyScene.camera.focalLength);
+					trace("sandyScene fov:"+sandyScene.camera.fov);
 	
 					var face1:Polygon = Polygon(plane.aPolygons[0]);
 					sandyScene.camera.projectArray(face1.vertices);
@@ -383,7 +409,7 @@ package
 					homography.applyFilter(canvas, canvas.rect, canvas.rect.topLeft, new HomographyTransformFilter(240, 240, p0, p1, p2, p3));
 	
 					// now read QR code
-					qrInfo.text = "";
+					//qrInfo.text = "";
 					qrResult.fillRect(qrResult.rect, 0);
 					qrImage.process();
 				}
@@ -407,16 +433,35 @@ package
 			plane = new Plane(new WireColorMaterial());
 			scene.addChild(plane);
 			
-			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
+			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 100, 4, 4);
 			scene.addChild(_sphereA);
 			
-			_sphereB = new Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
+			_sphereB = new Sphere(new WireColorMaterial(0x00FF00), 100, 4, 4);
 			scene.addChild(_sphereB);
 			
-			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
+			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 100, 4, 4);
 			scene.addChild(_sphereC);
 			
 			view.x = 320/2;
+			
+			//_focus:Number = 100;
+			//_zoom:Number = 10;
+			
+			view.setSize(320, 240);
+			
+			//camera.projection.fieldOfView = 36.438788936833824;
+			camera.zoom = 6;
+			camera.focus = 100;
+			
+			trace("---------------------------------");
+			
+			trace("focalLength	: "+camera.projection.focalLength);
+			trace("fieldOfView	: "+camera.projection.fieldOfView);
+			
+			trace("focus		: "+camera.focus);
+			trace("zoom			: "+camera.zoom);
+			
+			trace("---------------------------------");
 			
 			init();
 		}
@@ -449,8 +494,9 @@ package
 		
 		private function onQRDecoded(e:QRdecoderEvent):void
 		{
-			qrInfo.text = "QR: " + e.data;
-			trace(e.data);
+			//qrInfo.text = "QR: " + e.data;
+			//trace(e.data);
+			title = "QR: " + e.data;
 			
 			// here is your chance to make changes to 3D scene
 			//scene.render();
@@ -483,7 +529,7 @@ package
 		private var qrDecoder:QRdecode;
 		private var qrResult:BitmapData;
 
-		private var qrInfo:TextField;
+		//private var qrInfo:TextField;
 	}
 }
 
