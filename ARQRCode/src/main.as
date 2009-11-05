@@ -2,7 +2,6 @@ package
 {
 	import away3dlite.core.base.Object3D;
 	import away3dlite.materials.WireColorMaterial;
-	import away3dlite.primitives.Plane;
 	import away3dlite.primitives.Sphere;
 	import away3dlite.templates.BasicTemplate;
 	
@@ -22,14 +21,12 @@ package
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.filters.DropShadowFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	import flash.media.Camera;
 	import flash.media.Video;
-	import flash.text.TextField;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
 	import org.libspark.flartoolkit.core.FLARSquare;
@@ -78,7 +75,7 @@ package
 	 * 
 	 */
 	 
-	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
+	[SWF(backgroundColor="0x333333", frameRate="30", width="800", height="240")]
 	public class main extends BasicTemplate
 	{
 		private var base:Sprite;
@@ -94,6 +91,10 @@ package
 		private var A:FLARResult; 
 		private var B:FLARResult; 
 		private var C:FLARResult; 
+		
+		private var _A:FLARResult; 
+		private var _B:FLARResult; 
+		private var _C:FLARResult; 
 		
 		protected var _webcam:Camera;
 		protected var _video:Video;
@@ -117,18 +118,17 @@ package
 				
 			cameraContainer = new Sprite();
 			addChild(cameraContainer);
-			cameraContainer.visible = false;
+			//cameraContainer.visible = false;
 			
 			paper = new Sprite();
 			container.addChild(paper);
 			
-			/*
 			tool = new Sprite();
 			addChild(tool);
-			tool.visible = false;
-			*/
+			//tool.visible = false;
 		}
 		
+		private var _FLARCamera3D:FLARCamera3D;
 		private function init():void
 		{
 			// set up FLARToolKit
@@ -144,8 +144,9 @@ package
 			detector.setContinueMode(false);
 
 			// set up sandy
-			sandyScene = new Scene3D("scene", Sprite(addChild(new Sprite)), new FLARCamera3D(param, 0.001), new Group("root"));
-			sandyScene.container.visible = false;
+			_FLARCamera3D = new FLARCamera3D(param, 0.001);
+			sandyScene = new Scene3D("scene", Sprite(addChild(new Sprite)), _FLARCamera3D, new Group("root"));
+			//sandyScene.container.visible = false;
 			stuff = new Vector.<FLARBaseNode>;
 			for (var i:int = 0; i < 4; i++)
 			{
@@ -156,6 +157,10 @@ package
 				stuff[i].addChild(p);
 				sandyScene.root.addChild(stuff[i]);
 			}
+			
+			// set up lite
+			camera.projection.fieldOfView = _FLARCamera3D.fov;
+			camera.projection.focalLength = _FLARCamera3D.focalLength;
 
 			// set up QRCodeReader
 			homography = new BitmapData(240, 240, false, 0);
@@ -199,7 +204,7 @@ package
 		{
 			isCam = !isCam;
 			
-			trace("isCam : " + isCam);
+			//trace("isCam : " + isCam);
 			
 			if(!isCam)
 			{
@@ -245,15 +250,20 @@ package
 			if(isCam && _capture && _video)
 				_capture.bitmapData.draw(_video);
 			
+			sandyScene.render();
+			
 			process();
 		}
 		
 		private function onImageReady(event:Event):void
 		{
-			if(_bitmap)
-				paper.removeChild(_bitmap);
-			
-			setBitmap(event.target.content);
+			if(event.type=="complete")
+			{
+				if(_bitmap)
+					paper.removeChild(_bitmap);
+				
+				setBitmap(event.target.content);
+			}
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
@@ -277,8 +287,8 @@ package
 
 		private function process():void
 		{
-			//tool.graphics.clear();
-			//tool.graphics.lineStyle();
+			tool.graphics.clear();
+			tool.graphics.lineStyle();
 						
 			// get image into canvas
 			//sandyScene.container.visible = false;
@@ -330,9 +340,8 @@ package
 				}
 
 				results.sortOn("cosine", Array.NUMERIC);
-
+				
 				// display intermediate results
-				/*
 				for (k = 0; k < 3; k++)
 				{
 					// in 2D
@@ -352,31 +361,30 @@ package
 					// or in 3D
 					stuff[k].setTransformMatrix(FLARResult(results[k]).result);
 				}
-				*/
 
 				// aggregate 3D results (this assumes all markers are oriented same way)
 				A = FLARResult(results[2]);
 				B = FLARResult(results[0]);
 				C = FLARResult(results[1]);
+							
+				var scale3:Number = (1 + B.distance / size) / 3;
+				var aggregate:FLARTransMatResult = new FLARTransMatResult;
+				aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
+				aggregate.m13 = (A.result.m13 + C.result.m13) * 0.5;
+				aggregate.m23 = (A.result.m23 + C.result.m23) * 0.5;
+				aggregate.m00 = (A.result.m00 + B.result.m00 + C.result.m00) * scale3;
+				aggregate.m10 = (A.result.m10 + B.result.m10 + C.result.m10) * scale3;
+				aggregate.m20 = (A.result.m20 + B.result.m20 + C.result.m20) * scale3;
+				aggregate.m01 = (A.result.m01 + B.result.m01 + C.result.m01) * scale3;
+				aggregate.m11 = (A.result.m11 + B.result.m11 + C.result.m11) * scale3;
+				aggregate.m21 = (A.result.m21 + B.result.m21 + C.result.m21) * scale3;
+				aggregate.m02 = (A.result.m02 + B.result.m02 + C.result.m02) * scale3;
+				aggregate.m12 = (A.result.m12 + B.result.m12 + C.result.m12) * scale3;
+				aggregate.m22 = (A.result.m22 + B.result.m22 + C.result.m22) * scale3;
+				stuff[3].setTransformMatrix(aggregate);
 				
 				if(!isDecoded)
 				{
-					var scale3:Number = (1 + B.distance / size) / 3;
-					var aggregate:FLARTransMatResult = new FLARTransMatResult;
-					aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
-					aggregate.m13 = (A.result.m13 + C.result.m13) * 0.5;
-					aggregate.m23 = (A.result.m23 + C.result.m23) * 0.5;
-					aggregate.m00 = (A.result.m00 + B.result.m00 + C.result.m00) * scale3;
-					aggregate.m10 = (A.result.m10 + B.result.m10 + C.result.m10) * scale3;
-					aggregate.m20 = (A.result.m20 + B.result.m20 + C.result.m20) * scale3;
-					aggregate.m01 = (A.result.m01 + B.result.m01 + C.result.m01) * scale3;
-					aggregate.m11 = (A.result.m11 + B.result.m11 + C.result.m11) * scale3;
-					aggregate.m21 = (A.result.m21 + B.result.m21 + C.result.m21) * scale3;
-					aggregate.m02 = (A.result.m02 + B.result.m02 + C.result.m02) * scale3;
-					aggregate.m12 = (A.result.m12 + B.result.m12 + C.result.m12) * scale3;
-					aggregate.m22 = (A.result.m22 + B.result.m22 + C.result.m22) * scale3;
-					stuff[3].setTransformMatrix(aggregate);
-				
 					// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
 					var plane:Plane3D = Plane3D(stuff[3].children[0]);
 	
@@ -387,12 +395,6 @@ package
 					// not render a thing, or use better engine :-p~
 					sandyScene.render();
 					
-					//_projection.fieldOfView = 360*Math.atan2(loaderInfo.width, 2*_zoom*_focus)/Math.PI;
-					//_projection.focalLength = _zoom*_focus;
-					//_nFov = Math.atan2 (viewport.height2, f) * 114.591559 /* 2 * (180 / Math.PI) */;
-					trace("sandyScene focalLength:"+sandyScene.camera.focalLength);
-					trace("sandyScene fov:"+sandyScene.camera.fov);
-	
 					var face1:Polygon = Polygon(plane.aPolygons[0]);
 					sandyScene.camera.projectArray(face1.vertices);
 					var face2:Polygon = Polygon(plane.aPolygons[1]);
@@ -412,15 +414,50 @@ package
 					//qrInfo.text = "";
 					qrResult.fillRect(qrResult.rect, 0);
 					qrImage.process();
+					
+					setTransform(_sphereA, A);
+					setTransform(_sphereB, B);
+					setTransform(_sphereC, C);
 				}
 			}
 			
-			setTransform(_sphereA, A);
-			setTransform(_sphereB, B);
-			setTransform(_sphereC, C);
+			//if(!isSwap)
+			//{
+				//setTransform(_objA, A);
+				//setTransform(_objB, B);
+				//setTransform(_objC, C);
+			//}else{
+				//setTransform(_objA, C);
+				//setTransform(_objB, B);
+				//setTransform(_objC, A);
+			//}
+			
+			if(!_positionA)
+				_positionA = _sphereA.position.clone();
+				
+			var isNear:Boolean = _positionA.nearEquals(_sphereA.position,10,true);// && _objC.position.nearEquals(_sphereC.position,10,true); 
+			
+			if(isNear)
+			{
+				setTransform(_sphereA, A);
+				setTransform(_sphereB, B);
+				setTransform(_sphereC, C);
+			}else{
+				setTransform(_sphereA, C);
+				setTransform(_sphereB, B);
+				setTransform(_sphereC, A);
+			}
+			
+			_positionA = _sphereA.position.clone();
 		}
 
-		private var plane:Plane;
+		private var isSwap:Boolean = false;
+		
+		//private var plane:Plane;
+		
+		private var _positionA:Vector3D;// = new Object3D();
+		private var _positionB:Vector3D;// = new Object3D();
+		private var _positionC:Vector3D;// = new Object3D();
 		
 		private var _sphereA:Sphere;
 		private var _sphereB:Sphere;
@@ -430,17 +467,21 @@ package
 		{
 			//debug = false;
 			
-			plane = new Plane(new WireColorMaterial());
-			scene.addChild(plane);
+			//plane = new Plane(new WireColorMaterial());
+			//scene.addChild(plane);
 			
-			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 100, 4, 4);
+			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
 			scene.addChild(_sphereA);
 			
-			_sphereB = new Sphere(new WireColorMaterial(0x00FF00), 100, 4, 4);
+			_sphereB = new Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
 			scene.addChild(_sphereB);
 			
-			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 100, 4, 4);
+			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
 			scene.addChild(_sphereC);
+			
+			//scene.addChild(_objA);
+			//scene.addChild(_objB);
+			//scene.addChild(_objC);
 			
 			view.x = 320/2;
 			
@@ -453,6 +494,7 @@ package
 			camera.zoom = 6;
 			camera.focus = 100;
 			
+			/*
 			trace("---------------------------------");
 			
 			trace("focalLength	: "+camera.projection.focalLength);
@@ -462,6 +504,7 @@ package
 			trace("zoom			: "+camera.zoom);
 			
 			trace("---------------------------------");
+			*/
 			
 			init();
 		}
