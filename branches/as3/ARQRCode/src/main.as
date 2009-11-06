@@ -123,9 +123,13 @@ package
 			paper = new Sprite();
 			container.addChild(paper);
 			
+			/*
 			tool = new Sprite();
 			addChild(tool);
-			//tool.visible = false;
+			tool.visible = false;
+			*/
+			
+			alpha = 0.05;
 		}
 		
 		private var _FLARCamera3D:FLARCamera3D;
@@ -192,7 +196,7 @@ package
 			
 			// browse
 			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
-			SystemUtil.addContext(this, "Toggle Source", onToggleSource);
+			SystemUtil.addContext(this, "Toggle Camera", onToggleSource);
 			
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			
@@ -283,12 +287,14 @@ package
 			
 			// show time
 			process();
+			
+			
 		}
 
 		private function process():void
 		{
-			tool.graphics.clear();
-			tool.graphics.lineStyle();
+			//tool.graphics.clear();
+			//tool.graphics.lineStyle();
 						
 			// get image into canvas
 			//sandyScene.container.visible = false;
@@ -344,6 +350,7 @@ package
 				// display intermediate results
 				for (k = 0; k < 3; k++)
 				{
+					/*
 					// in 2D
 					var i:int, sq:FLARSquare = FLARResult(results[k]).square;
 					
@@ -357,16 +364,42 @@ package
 						tool.graphics.moveTo(ix + 0, iy - 3);
 						tool.graphics.lineTo(ix + 0, iy + 4);
 					}
+					*/
 
 					// or in 3D
 					stuff[k].setTransformMatrix(FLARResult(results[k]).result);
 				}
-
+				
 				// aggregate 3D results (this assumes all markers are oriented same way)
 				A = FLARResult(results[2]);
 				B = FLARResult(results[0]);
 				C = FLARResult(results[1]);
-							
+				
+				/*
+				// aggregate 3D results (this assumes all markers are oriented same way)
+				var _crrentPositionA:Vector3D = new Vector3D(A.result.m03, A.result.m13, A.result.m23);
+				
+				// not init yet
+				if(!_positionA)
+					_positionA = _crrentPositionA.clone();
+				
+				// near old pos?
+				var isNear:Boolean = _positionA.nearEquals(_crrentPositionA,10,true);// && _objC.position.nearEquals(_sphereC.position,10,true); 
+				if(isNear)
+				{
+					A = FLARResult(results[2]);
+					B = FLARResult(results[0]);
+					C = FLARResult(results[1]);
+				}else{
+					C = FLARResult(results[2]);
+					B = FLARResult(results[0]);
+					A = FLARResult(results[1]);
+				}
+				
+				// store
+				_positionA = new Vector3D(A.result.m03, A.result.m13, A.result.m23);
+				*/
+				
 				var scale3:Number = (1 + B.distance / size) / 3;
 				var aggregate:FLARTransMatResult = new FLARTransMatResult;
 				aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
@@ -381,23 +414,29 @@ package
 				aggregate.m02 = (A.result.m02 + B.result.m02 + C.result.m02) * scale3;
 				aggregate.m12 = (A.result.m12 + B.result.m12 + C.result.m12) * scale3;
 				aggregate.m22 = (A.result.m22 + B.result.m22 + C.result.m22) * scale3;
+				
+				// debug plane 
 				stuff[3].setTransformMatrix(aggregate);
 				
+				//try to debug normal
+				//setTransform(_tempObject3D, aggregate);
+				//trace(_tempObject3D.transform.matrix3D.
+								
 				if(!isDecoded)
 				{
 					// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
-					var plane:Plane3D = Plane3D(stuff[3].children[0]);
+					var plane3D:Plane3D = Plane3D(stuff[3].children[0]);
 	
 					// since 3D fit is not perfect, we shall grab some extra area
-					plane.scaleX = plane.scaleY = plane.scaleZ = 1.05;
+					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.05;
 	
 					// I call render() to init sandy matrices - you can do matrix math by hand and
 					// not render a thing, or use better engine :-p~
 					sandyScene.render();
 					
-					var face1:Polygon = Polygon(plane.aPolygons[0]);
+					var face1:Polygon = Polygon(plane3D.aPolygons[0]);
 					sandyScene.camera.projectArray(face1.vertices);
-					var face2:Polygon = Polygon(plane.aPolygons[1]);
+					var face2:Polygon = Polygon(plane3D.aPolygons[1]);
 					sandyScene.camera.projectArray(face2.vertices);
 	
 					var p0:Point = new Point(face1.b.sx, face1.b.sy);
@@ -405,7 +444,7 @@ package
 					var p2:Point = new Point(face1.c.sx, face1.c.sy);
 					var p3:Point = new Point(face2.b.sx, face2.b.sy);
 	
-					plane.scaleX = plane.scaleY = plane.scaleZ = 1.0;
+					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.0;
 	
 					homography.fillRect(homography.rect, 0);
 					homography.applyFilter(canvas, canvas.rect, canvas.rect.topLeft, new HomographyTransformFilter(240, 240, p0, p1, p2, p3));
@@ -414,12 +453,12 @@ package
 					//qrInfo.text = "";
 					qrResult.fillRect(qrResult.rect, 0);
 					qrImage.process();
-					
-					setTransform(_sphereA, A);
-					setTransform(_sphereB, B);
-					setTransform(_sphereC, C);
 				}
 			}
+			
+			setTransform(_sphereA, A);
+			setTransform(_sphereB, B);
+			setTransform(_sphereC, C);
 			
 			//if(!isSwap)
 			//{
@@ -431,7 +470,7 @@ package
 				//setTransform(_objB, B);
 				//setTransform(_objC, A);
 			//}
-			
+			/*
 			if(!_positionA)
 				_positionA = _sphereA.position.clone();
 				
@@ -448,12 +487,14 @@ package
 				setTransform(_sphereC, A);
 			}
 			
-			_positionA = _sphereA.position.clone();
+			_positionA = _sphereA.position.clone();*/
 		}
 
 		private var isSwap:Boolean = false;
 		
 		//private var plane:Plane;
+		
+		private var _tempObject3D:Object3D = new Object3D();
 		
 		private var _positionA:Vector3D;// = new Object3D();
 		private var _positionB:Vector3D;// = new Object3D();
