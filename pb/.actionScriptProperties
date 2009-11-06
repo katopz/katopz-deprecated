@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="ExPBMath.as" version="3">
+<actionScriptProperties mainApplicationPath="ExPBKey.as" version="3">
 <compiler additionalCompilerArguments="-debug=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/katopz/trunk/as3/src"/>
@@ -24,6 +24,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
+<application path="ExPBKey.as"/>
 <application path="ExPBAlphaMatteComposite.as"/>
 <application path="ExPBMath.as"/>
 <application path="ExPBBloomBrightness.as"/>
