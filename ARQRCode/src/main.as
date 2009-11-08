@@ -1,6 +1,11 @@
 package
 {
+	import away3dlite.animators.BonesAnimator;
+	import away3dlite.containers.ObjectContainer3D;
 	import away3dlite.core.base.Object3D;
+	import away3dlite.events.Loader3DEvent;
+	import away3dlite.loaders.Collada;
+	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.primitives.Sphere;
 	import away3dlite.templates.BasicTemplate;
@@ -13,20 +18,15 @@ package
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.PixelSnapping;
-	import flash.display.Sprite;
-	import flash.display.StageScaleMode;
-	import flash.events.ContextMenuEvent;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
+	import flash.display.*;
+	import flash.events.*;
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	import flash.media.Camera;
 	import flash.media.Video;
+	import flash.utils.*;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
 	import org.libspark.flartoolkit.core.FLARSquare;
@@ -57,20 +57,20 @@ package
 	 * 1.3 AR --> Projection Matrix
 	 * 
 	 * [Step #2]
-	 * 2.1 Flash ---> Encypt[Session, Model ID] --> Server
-	 * 2.2 Casting/Loading Effect
-	 * 2.3 Flash <-- Model.SWF <--- Server
+	 * 2.1 Loading Effect
+	 * 2.2 Flash --> Encypt[Session, ModelID] --> Server
+	 * 2.3 Flash <-- Model.SWF <-- Server
 	 * 2.4 Spawn Effect
 	 * 
 	 * [Step #3]
 	 * 3.1 Wait for user input for next step
 	 * 3.2 Flip Effect to next ingradient
-	 * 3.3 Repeat step 1.2 ---> 3.2 until finish condition
+	 * 3.3 Repeat step 1.2 --> 3.2 until finish condition
 	 * 
 	 * [Step #4]
-	 * 4.1 Flash ---> Encypt[Session, Model ID, Model ID,... ] --> Server
-	 * 4.2 Casting/Loading Effect
-	 * 4.3 Flash <-- Model.SWF <--- Server
+	 * 4.1 Loading Effect
+	 * 4.2 Flash --> Encypt[Session, ModelID, ModelID,... ] --> Server
+	 * 4.3 Flash <-- Model.SWF <-- Server
 	 * 4.4 Spawn Effect
 	 * 
 	 */
@@ -104,6 +104,90 @@ package
 		private var _capture:Bitmap;
 		private var isCam:Boolean = false;
 		
+		// Collada
+		private var collada:Collada;
+		private var loader:Loader3D;
+		private var model:Object3D;
+		private var skinAnimation:BonesAnimator;
+		private var modelRoot:ObjectContainer3D;
+		
+		private function onSuccess(event:Loader3DEvent):void
+		{
+			model = loader.handle;
+			skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+		}
+		
+		private function initCollada():void
+		{
+			modelRoot = new ObjectContainer3D();
+			scene.addChild(modelRoot);
+			
+			collada = new Collada();
+			collada.scaling = 5;
+			
+			loader = new Loader3D();
+			loader.loadGeometry("assets/cat.dae", collada);
+			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			modelRoot.addChild(loader);
+		}
+		
+		override protected function onPreRender():void
+		{
+			getAxis();
+			
+			//setTransform(modelRoot, B);
+			
+			//modelRoot.lookAt( _sphereA.position );
+			
+			if(skinAnimation)
+				skinAnimation.update(getTimer()*2/1000);
+		}
+		
+		private var vX:Vector3D;
+		private var vY:Vector3D;
+		private var vZ:Vector3D;
+		
+		private var aa:Vector3D;
+		private var bb:Vector3D;
+		private var cc:Vector3D;
+		private var dd:Vector3D;
+		
+		public function getAxis():void
+		{
+			if(aa && aa.x == _sphereA.position.x)return;
+			
+			aa = _sphereA.position.clone();
+			bb = _sphereB.position.clone();
+			cc = _sphereC.position.clone();
+			
+			//vZ = bb.subtract(aa);
+			//vZ.normalize();
+			
+			setTransform(modelRoot, aggregate);
+			/*
+			modelRoot.x = (aa.x + bb.x + cc.x)/3
+			modelRoot.y = (aa.y + bb.y + cc.y)/3
+			modelRoot.z = (aa.z + bb.z + cc.z)/3
+			
+			modelRoot.lookAt( bb );
+			*/
+			//modelRoot.lookAt( aa );
+/*
+			vX = bb.subtract(cc);
+			vX.normalize();
+
+			// the real "up" vector is the dot product of X and Z
+			vY = vX.crossProduct(vZ);
+			
+			//_sphereD.position = vY;
+			
+			//trace(vY);
+			 
+			vY.normalize();
+*/		
+			//trace("*"+vY);
+		}
+		
 		public function main()
 		{
 			// sys
@@ -128,10 +212,9 @@ package
 			addChild(tool);
 			tool.visible = false;
 			*/
-			
-			alpha = 0.05;
 		}
 		
+		private var _stuff:FLARBaseNode;
 		private var _FLARCamera3D:FLARCamera3D;
 		private function init():void
 		{
@@ -150,7 +233,7 @@ package
 			// set up sandy
 			_FLARCamera3D = new FLARCamera3D(param, 0.001);
 			sandyScene = new Scene3D("scene", Sprite(addChild(new Sprite)), _FLARCamera3D, new Group("root"));
-			//sandyScene.container.visible = false;
+			sandyScene.container.visible = false;
 			stuff = new Vector.<FLARBaseNode>;
 			for (var i:int = 0; i < 4; i++)
 			{
@@ -161,6 +244,8 @@ package
 				stuff[i].addChild(p);
 				sandyScene.root.addChild(stuff[i]);
 			}
+			
+			_stuff = stuff[3];
 			
 			// set up lite
 			camera.projection.fieldOfView = _FLARCamera3D.fov;
@@ -287,10 +372,10 @@ package
 			
 			// show time
 			process();
-			
-			
 		}
 
+		private var aggregate:FLARTransMatResult
+		
 		private function process():void
 		{
 			//tool.graphics.clear();
@@ -401,7 +486,7 @@ package
 				*/
 				
 				var scale3:Number = (1 + B.distance / size) / 3;
-				var aggregate:FLARTransMatResult = new FLARTransMatResult;
+				aggregate = new FLARTransMatResult;
 				aggregate.m03 = (A.result.m03 + C.result.m03) * 0.5;
 				aggregate.m13 = (A.result.m13 + C.result.m13) * 0.5;
 				aggregate.m23 = (A.result.m23 + C.result.m23) * 0.5;
@@ -425,7 +510,7 @@ package
 				if(!isDecoded)
 				{
 					// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
-					var plane3D:Plane3D = Plane3D(stuff[3].children[0]);
+					var plane3D:Plane3D = Plane3D(_stuff.children[0]);
 	
 					// since 3D fit is not perfect, we shall grab some extra area
 					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.05;
@@ -456,9 +541,9 @@ package
 				}
 			}
 			
-			setTransform(_sphereA, A);
-			setTransform(_sphereB, B);
-			setTransform(_sphereC, C);
+			setTransform(_sphereA, A.result);
+			setTransform(_sphereB, B.result);
+			setTransform(_sphereC, C.result);
 			
 			//if(!isSwap)
 			//{
@@ -496,13 +581,14 @@ package
 		
 		private var _tempObject3D:Object3D = new Object3D();
 		
-		private var _positionA:Vector3D;// = new Object3D();
-		private var _positionB:Vector3D;// = new Object3D();
-		private var _positionC:Vector3D;// = new Object3D();
+		private var _positionA:Vector3D;
+		private var _positionB:Vector3D;
+		private var _positionC:Vector3D;
 		
 		private var _sphereA:Sphere;
 		private var _sphereB:Sphere;
 		private var _sphereC:Sphere;
+		private var _sphereD:Sphere;
 		
 		override protected function onInit():void
 		{
@@ -519,6 +605,9 @@ package
 			
 			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
 			scene.addChild(_sphereC);
+			
+			//_sphereD = new Sphere(new WireColorMaterial(0xFF00FF), 50, 4, 4);
+			//scene.addChild(_sphereD);
 			
 			//scene.addChild(_objA);
 			//scene.addChild(_objB);
@@ -547,14 +636,15 @@ package
 			trace("---------------------------------");
 			*/
 			
+			initCollada();
+			
 			init();
 		}
 		
-		private function setTransform(object3D:Object3D, r:FLARResult):void
+		private function setTransform(object3D:Object3D, m:FLARTransMatResult):void
 		{
-			var m:FLARTransMatResult = r.result;
 			object3D.transform.matrix3D = new Matrix3D(Vector.<Number>([
-				 m.m00, m.m01, m.m02, 0,
+				 m.m00, m.m10, m.m20, 0,
 				 m.m01, m.m11, m.m21, 0,
 				 m.m02, m.m12, m.m22, 0,
 				 m.m03, m.m13, m.m23, 1
