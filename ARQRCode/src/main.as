@@ -16,6 +16,8 @@ package
 	import com.logosware.utils.QRcode.GetQRimage;
 	import com.logosware.utils.QRcode.QRdecode;
 	import com.sleepydesign.utils.FileUtil;
+	import com.sleepydesign.utils.LoaderUtil;
+	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.*;
@@ -26,6 +28,7 @@ package
 	import flash.geom.Vector3D;
 	import flash.media.Camera;
 	import flash.media.Video;
+	import flash.net.URLVariables;
 	import flash.utils.*;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
@@ -43,6 +46,7 @@ package
 	import sandy.core.scenegraph.Group;
 	import sandy.materials.attributes.LineAttributes;
 	import sandy.primitive.Plane3D;
+
 	
 	/**
 	 * QRCodeReader + FLARToolKit PoC (libspark rev. 3199, sandy rev. 1138)
@@ -52,29 +56,29 @@ package
 	 * @see http://www.openqrcode.com/
 	 * 
 	 * [Step #1]
-	 * 1.1 JS --> Session
-	 * 1.2 QR --> Model ID
-	 * 1.3 AR --> Projection Matrix
+	 * 1.1 Loading Effect
+	 * 1.2 Server 	--> Session[UserID] --> Flash
+	 * 1.3 User 	--> Image[QR, AR] 	--> Model ID, Projection Matrix
+	 * 1.4 Wait for User playing/proceed to next step
 	 * 
 	 * [Step #2]
 	 * 2.1 Loading Effect
-	 * 2.2 Flash --> Encypt[Session, ModelID] --> Server
-	 * 2.3 Flash <-- Model.SWF <-- Server
+	 * 2.2 Flash 	--> Encypt[Time, UserID, ModelID]	--> Server
+	 * 2.3 Flash 	<-- Model[Mesh, Texture, Animation]	<-- Server
 	 * 2.4 Spawn Effect
 	 * 
 	 * [Step #3]
 	 * 3.1 Wait for user input for next step
 	 * 3.2 Flip Effect to next ingradient
-	 * 3.3 Repeat step 1.2 --> 3.2 until finish condition
+	 * 3.3 Repeat step 1.2 --> 3.2 until finish condition?
 	 * 
 	 * [Step #4]
 	 * 4.1 Loading Effect
-	 * 4.2 Flash --> Encypt[Session, ModelID, ModelID,... ] --> Server
-	 * 4.3 Flash <-- Model.SWF <-- Server
+	 * 4.2 Flash 	--> Encypt[Time, UserID, ModelID, ModelID]	--> Server
+	 * 4.3 Flash 	<-- Model[Mesh, Texture, Animation]			<-- Server
 	 * 4.4 Spawn Effect
 	 * 
 	 */
-	 
 	[SWF(backgroundColor="0x333333", frameRate="30", width="800", height="240")]
 	public class main extends BasicTemplate
 	{
@@ -162,8 +166,8 @@ package
 			
 			//vZ = bb.subtract(aa);
 			//vZ.normalize();
-			
-			setTransform(modelRoot, aggregate);
+			if(aggregate)
+				setTransform(modelRoot, aggregate);
 			/*
 			modelRoot.x = (aa.x + bb.x + cc.x)/3
 			modelRoot.y = (aa.y + bb.y + cc.y)/3
@@ -212,11 +216,28 @@ package
 			addChild(tool);
 			tool.visible = false;
 			*/
+			
+			alpha = 0.1;
+		}
+		
+		private function initUser():void
+		{
+			// get user data
+			LoaderUtil.loadVars("serverside/userData.php", onGetUserData);
+		}
+		
+		private function onGetUserData(event:Event):void
+		{
+			// wait for complete
+			if(event.type!="complete")return;
+			
+			var _userData:URLVariables = URLVariables(event.target["data"]);
+			ObjectUtil.print(_userData);
 		}
 		
 		private var _stuff:FLARBaseNode;
 		private var _FLARCamera3D:FLARCamera3D;
-		private function init():void
+		private function initARQR():void
 		{
 			// set up FLARToolKit
 			canvas = new BitmapData(320, 240, false, 0);
@@ -638,7 +659,9 @@ package
 			
 			initCollada();
 			
-			init();
+			initUser();
+			
+			initARQR();
 		}
 		
 		private function setTransform(object3D:Object3D, m:FLARTransMatResult):void
@@ -704,24 +727,5 @@ package
 		private var qrResult:BitmapData;
 
 		//private var qrInfo:TextField;
-	}
-}
-
-import org.libspark.flartoolkit.core.FLARSquare;
-import org.libspark.flartoolkit.core.transmat.FLARTransMatResult;
-import flash.events.MouseEvent;
-
-class FLARResult
-{
-	public var confidence:Number;
-	public var cosine:Number;
-	public var distance:Number;
-	public var result:FLARTransMatResult;
-	public var square:FLARSquare;
-
-	public function FLARResult()
-	{
-		confidence = 0;
-		result = new FLARTransMatResult;
 	}
 }
