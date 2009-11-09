@@ -14,6 +14,7 @@ package com.sleepydesign.utils
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;	
@@ -75,12 +76,35 @@ package com.sleepydesign.utils
 			return imageloader;
 		}
 		
+		/**
+		 * Load as ByteArray
+		 * @param byteArray
+		 * @param eventHandler
+		 * @return Loader
+		 */		
 		public static function loadBytes(byteArray:ByteArray, eventHandler:Function = null):Loader
 		{
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
 			loader.loadBytes(byteArray);
 			return loader;
+		}
+		
+		/**
+		 * Load as JSON
+		 * @param uri
+		 * @param eventHandler
+		 * @return URLLoader
+		 */		
+		public static function loadVars(uri:String, eventHandler:Function):URLLoader
+		{
+			return load(uri, function(event:Event):void
+			{
+				if(event.type=="complete")
+					event.target["data"] = new URLVariables(String(event.target["data"]));
+				
+				eventHandler(event);
+			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
 		/**
@@ -169,14 +193,14 @@ package com.sleepydesign.utils
 			}
 			
 			// callback
-			if(eventHandler!=null)
+			if(eventHandler is Function)
 			{
-				_loader.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
-	            _loader.addEventListener(ProgressEvent.PROGRESS, eventHandler, false, 0, true);
+				_loader.addEventListener(Event.COMPLETE, eventHandler);
+	            _loader.addEventListener(ProgressEvent.PROGRESS, eventHandler);
 	            
-	            _loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler, false, 0, true);
-	            _loader.addEventListener(IOErrorEvent.IO_ERROR, eventHandler, false, 0, true);
-	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler, false, 0, true);
+	            _loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
+	            _loader.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
+	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
 	  		}
             
             // gc
