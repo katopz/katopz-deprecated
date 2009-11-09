@@ -3,6 +3,7 @@ package
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.containers.ObjectContainer3D;
 	import away3dlite.core.base.Object3D;
+	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
@@ -117,6 +118,7 @@ package
 		private function onSuccess(event:Loader3DEvent):void
 		{
 			model = loader.handle;
+			model.rotationX = -90;
 			skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 		}
 		
@@ -125,11 +127,13 @@ package
 			modelRoot = new ObjectContainer3D();
 			scene.addChild(modelRoot);
 			
+			//Debug.active = true;
+			
 			collada = new Collada();
-			collada.scaling = 10;
+			collada.scaling = 25;
 			
 			loader = new Loader3D();
-			loader.loadGeometry("assets/cat.dae", collada);
+			loader.loadGeometry("assets/J7.dae", collada);
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			modelRoot.addChild(loader);
 		}
@@ -143,7 +147,7 @@ package
 			//modelRoot.lookAt( _sphereA.position );
 			
 			if(skinAnimation)
-				skinAnimation.update(getTimer()*2/1000);
+				skinAnimation.update(getTimer()/1000);
 		}
 		
 		private var vX:Vector3D;
@@ -174,7 +178,9 @@ package
 			modelRoot.y = (aa.y + bb.y + cc.y)/3
 			modelRoot.z = (aa.z + bb.z + cc.z)/3
 			
-			modelRoot.lookAt( aa );
+			//modelRoot.lookAt( aa );
+			//modelRoot.lookAt( bb );
+			
 /*
 			vX = bb.subtract(cc);
 			vX.normalize();
@@ -215,8 +221,6 @@ package
 			addChild(tool);
 			tool.visible = false;
 			*/
-			
-			alpha = 0.5;
 		}
 		
 		private function initUser():void
@@ -302,11 +306,18 @@ package
 			// browse
 			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
 			SystemUtil.addContext(this, "Toggle Camera", onToggleSource);
+			SystemUtil.addContext(this, "Reset Code", onResetCode);
 			
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			
 			//addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			addEventListener(Event.ENTER_FRAME, onRun);
+		}
+		
+		//reset decode state
+		private function onResetCode(event:ContextMenuEvent):void
+		{
+			isDecoded = false;
 		}
 		
 		private function onToggleSource(event:ContextMenuEvent):void
@@ -563,6 +574,9 @@ package
 					qrResult.fillRect(qrResult.rect, 0);
 					qrImage.process();
 				}
+			}else{
+				//trace("new one?")
+				//isDecoded = false;
 			}
 			/*
 			setTransform(_sphereA, A.result);
@@ -596,26 +610,23 @@ package
 
 		private var isSwap:Boolean = false;
 		
-		private var _tempObject3D:Object3D = new Object3D();
-		
 		private var _positionA:Vector3D;
 		private var _positionB:Vector3D;
 		private var _positionC:Vector3D;
 		
-		private var _sphereA:Sphere;
-		private var _sphereB:Sphere;
-		private var _sphereC:Sphere;
-		private var _sphereD:Sphere;
+		private var _sphereA:Object3D;
+		private var _sphereB:Object3D;
+		private var _sphereC:Object3D;
 		
 		override protected function onInit():void
 		{
-			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
+			_sphereA = new Object3D();//Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
 			scene.addChild(_sphereA);
 			
-			_sphereB = new Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
+			_sphereB = new Object3D();//Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
 			scene.addChild(_sphereB);
 			
-			_sphereC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
+			_sphereC = new Object3D();//Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
 			scene.addChild(_sphereC);
 			
 			//_sphereD = new Sphere(new WireColorMaterial(0xFF00FF), 50, 4, 4);

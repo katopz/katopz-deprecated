@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <authoring_tool>FBX COLLADA exporter</authoring_tool>
+    </contributor>
+    <contributor>
+      <author>katopz</author>
+      <authoring_tool>Maya8.5 | ColladaMaya v3.05B</authoring_tool>
+      <comments>ColladaMaya export options: bakeTransforms=1;exportPolygonMeshes=1;bakeLighting=0;isSampling=0;
+curveConstrainSampling=0;removeStaticCurves=1;exportCameraAsLookat=0;
+exportLights=0;exportCameras=0;exportJointsAndSkin=1;
+exportAnimations=1;exportTriangles=1;exportInvisibleNodes=0;
+exportNormals=0;exportTexCoords=1;
+exportVertexColors=0;exportVertexColorsAnimation=0;exportTangents=0;
+exportTexTangents=1;exportConstraints=0;exportPhysics=0;exportXRefs=1;
+dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
+    </contributor>
+    <created>2009-11-09T00:27:39Z</created>
+    <modified>2009-11-09T18:16:08Z</modified>
+    <unit meter="0.01" name="centimeter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_animations>
+    <animation id="G2_Joint1.matrix">
+      <source id="G2_Joint1.matrix_G2_Joint1_transform-input">
+        <float_array id="G2_Joint1.matrix_G2_Joint1_transform-input-array" count="48">0.041666 0.083333 0.125 0.166667 0.208333 0.25 0.291667 0.333333 0.375 0.416667 0.458333 0.5 0.541667 0.583333 0.625 0.666667 0.708333 0.75 0.791667 0.833333 0.875 0.916667 0.958333 1 1.04167 1.08333 1.125 1.16667 1.20833 1.25 1.29167 1.33333 1.375 1.41667 1.45833 1.5 1.54167 1.58333 1.625 1.66667 1.70833 1.75 1.79167 1.83333 1.875 1.91667 1.95833 2</float_array>
+        <technique_common>
+          <accessor source="#G2_Joint1.matrix_G2_Joint1_transform-input-array" count="48" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="G2_Joint1.matrix_G2_Joint1_transform-output">
+        <float_array id="G2_Joint1.matrix_G2_Joint1_transform-output-array" count="768">1 0 0 0 0 0.974569 0 0.000893 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 0.822806 0 0.002475 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 0.720264 0 0.001933 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 0.71649 0 0.001893 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 0.720518 0 0.001871 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 0.832147 0 0.001294 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 1.00655 0 0.000439 0 0 1 -22.053 0 0 0 1 1 0 0 0 0 1.1214 0 0 0 0 1 -22.053 0 0 0 1 0.999975 -0.000425 -0.007065 0 0 1.11256 -0.053987 2.25152 0.007076 0.06015 0.998517 -21.7814 0 0 0 1 0.999613 -0.006484 -0.02711 0 0 1.02467 -0.221926 6.95954 0.027804 0.233125 0.974687 -21.0107 0 0 0 1 0.998113 -0.030619 -0.053263 0 0 0.868994 -0.497679 11.0541 0.061408 0.497675 0.865724 -19.8068 0 0 0 1 0.994255 -0.085785 -0.064022 0 0 0.598104 -0.801419 12.9229 0.107042 0.796814 0.594667 -18.2515 0 0 0 1 0.986507 -0.161292 -0.028102 0 0 0.171645 -0.985159 14.2023 0.163722 0.971866 0.169329 -16.4478 0 0 0 1 0.973129 -0.216047 0.079642 0 0 -0.345883 -0.938278 15.0436 0.23026 0.913065 -0.336589 -14.4702 0 0 0 1 0.952289 -0.18131 0.245506 0 0 -0.804412 -0.594071 15.5281 0.305199 0.565727 -0.766033 -12.392 0 0 0 1 0.922177 0 0.386768 0 0 -1 0 15.7372 0.386768 0 -0.922177 -10.2867 0 0 0 1 0.88114 0.273644 0.386283 0 0 -0.819676 0.576757 15.8239 0.472855 -0.509921 -0.719817 -8.00666 0 0 0 1 0.827805 0.517138 0.231196 0 0 -0.41692 0.911137 15.7935 0.561016 -0.76306 -0.341141 -5.55662 0 0 0 1 0.761203 0.662303 -0.027622 0 0 0.043537 0.999093 15.5064 0.648514 -0.777388 0.032421 -3.23883 0 0 0 1 0.680879 0.675466 -0.328825 0 0 0.463403 0.893546 14.8225 0.732396 -0.627953 0.305695 -1.35547 0 0 0 1 0.586975 0.546278 -0.615567 0 0 0.789838 0.649537 13.6019 0.809605 -0.396059 0.446295 -0.208744 0 0 0 1 0.480286 0.28819 -0.830412 0 0 0.966219 0.321949 11.0775 0.877112 -0.157806 0.454714 0 0 0 0 1 0.362266 0.066923 -0.928941 0 0 0.873317 0.081939 4.24409 0.932075 -0.02601 0.361047 0 0 0 0 1 0.234997 -0.000000 -0.971996 0 0 0.78047 -0.000000 0 0.971996 0 0.234997 0 0 0 0 1 0.101107 -0.000000 -0.994875 0 0 0.815228 -0.000000 0 0.994875 0 0.101107 0 0 0 0 1 -0.036352 -0.000000 -0.999339 0 0 0.890183 -0.000000 0 0.999339 0 -0.036352 0 0 0 0 1 -0.174068 -0.000000 -0.984734 0 0 0.977805 -0.000000 0 0.984734 0 -0.174068 0 0 0 0 1 -0.308647 -0.000000 -0.951177 0 0 1.05056 -0.000000 0 0.951177 0 -0.308647 0 0 0 0 1 -0.436808 -0.000000 -0.899555 0 0 1.08036 -0.000000 0 0.899555 0 -0.436808 0 0 0 0 1 -0.555564 -0.000000 -0.831474 0 0 1.04155 -0.000000 0 0.831474 0 -0.555564 0 0 0 0 1 -0.662392 -0.000000 -0.749157 0 0 0.974271 -0.000000 0 0.749157 0 -0.662392 0 0 0 0 1 -0.755357 0 -0.655314 0 0 0.936903 -0.000000 0 0.655314 -0.000000 -0.755357 0 0 0 0 1 -0.833199 0 -0.552974 0 0 0.964212 -0.000000 0 0.552974 -0.000000 -0.833199 0 0 0 0 1 -0.895372 0 -0.445318 0 0 1.02068 -0.000000 0 0.445318 -0.000000 -0.895372 0 0 0 0 1 -0.942037 0 -0.335509 0 0 1.05924 -0.000000 0 0.335509 -0.000000 -0.942037 0 0 0 0 1 -0.974002 0 -0.226541 0 0 1.05328 -0.000000 0 0.226541 -0.000000 -0.974002 0 0 0 0 1 -0.992638 0 -0.121115 0 0 1.03263 -0.000000 0 0.121115 -0.000000 -0.992638 0 0 0 0 1 -0.999768 0 -0.021556 0 0 1.01544 -0.000000 0 0.021556 -0.000000 -0.999768 0 0 0 0 1 -0.997804 0 0.066242 0 0 1.01498 -0.000000 0 -0.066242 -0.000000 -0.997804 0 0 0 0 1 -0.991874 0 0.127221 0 0 1.02314 -0.000000 0 -0.127221 -0.000000 -0.991874 0 0 0 0 1 -0.986293 0 0.165004 0 0 1.03532 -0.000000 0 -0.165004 -0.000000 -0.986293 0 0 0 0 1 -0.982694 0 0.185237 0 0 1.04817 -0.000000 0 -0.185237 -0.000000 -0.982694 0 0 0 0 1 -0.981114 0 0.19343 0 0 1.05834 -0.000000 0 -0.19343 -0.000000 -0.981114 0 0 0 0 1 -0.980808 0 0.194974 0 0 1.06247 -0.000000 0 -0.194974 -0.000000 -0.980808 0 0 0 0 1 -0.980604 0 0.195998 0 0 1.05829 -0.000000 0 -0.195998 -0.000000 -0.980604 0 0 0 0 1 -0.980151 0 0.19825 0 0 1.04909 -0.000000 0 -0.19825 -0.000000 -0.980151 0 0 0 0 1 -0.979693 0 0.200501 0 0 1.03989 -0.000000 0 -0.200501 -0.000000 -0.979693 0 0 0 0 1 -0.979484 0 0.201524 0 0 1.0357 -0.000000 0 -0.201524 -0.000000 -0.979484 0 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#G2_Joint1.matrix_G2_Joint1_transform-output-array" count="48" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="G2_Joint1.matrix_G2_Joint1_transform-interpolations">
+        <Name_array id="G2_Joint1.matrix_G2_Joint1_transform-interpolations-array" count="48">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#G2_Joint1.matrix_G2_Joint1_transform-interpolations-array" count="48" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="G2_Joint1.matrix_G2_Joint1_transform-sampler">
+        <input semantic="INPUT" source="#G2_Joint1.matrix_G2_Joint1_transform-input"/>
+        <input semantic="OUTPUT" source="#G2_Joint1.matrix_G2_Joint1_transform-output"/>
+        <input semantic="INTERPOLATION" source="#G2_Joint1.matrix_G2_Joint1_transform-interpolations"/>
+      </sampler>
+      <channel source="#G2_Joint1.matrix_G2_Joint1_transform-sampler" target="G2_Joint1/transform"/>
+    </animation>
+    <animation id="G2_Joint2.matrix">
+      <source id="G2_Joint2.matrix_G2_Joint2_transform-input">
+        <float_array id="G2_Joint2.matrix_G2_Joint2_transform-input-array" count="48">0.041666 0.083333 0.125 0.166667 0.208333 0.25 0.291667 0.333333 0.375 0.416667 0.458333 0.5 0.541667 0.583333 0.625 0.666667 0.708333 0.75 0.791667 0.833333 0.875 0.916667 0.958333 1 1.04167 1.08333 1.125 1.16667 1.20833 1.25 1.29167 1.33333 1.375 1.41667 1.45833 1.5 1.54167 1.58333 1.625 1.66667 1.70833 1.75 1.79167 1.83333 1.875 1.91667 1.95833 2</float_array>
+        <technique_common>
+          <accessor source="#G2_Joint2.matrix_G2_Joint2_transform-input-array" count="48" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="G2_Joint2.matrix_G2_Joint2_transform-output">
+        <float_array id="G2_Joint2.matrix_G2_Joint2_transform-output-array" count="768">1 0 0 0 0 1.07535 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.900682 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.737811 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.580685 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.58445 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.820939 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.10558 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.29086 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.28956 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.19092 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.11216 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.10111 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.08149 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.05676 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.03344 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.01806 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.02543 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.09301 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.11394 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.911571 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.839034 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.941432 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.06491 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1091 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.02969 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 0.992781 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.05198 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.09217 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.09462 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.02488 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.01739 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.03665 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.06359 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.09134 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.11304 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.1218 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.11896 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.11272 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.10648 0 6.01875 0 0 1 0 0 0 0 1 1 0 0 0 0 1.10364 0 6.01875 0 0 1 0 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#G2_Joint2.matrix_G2_Joint2_transform-output-array" count="48" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="G2_Joint2.matrix_G2_Joint2_transform-interpolations">
+        <Name_array id="G2_Joint2.matrix_G2_Joint2_transform-interpolations-array" count="48">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#G2_Joint2.matrix_G2_Joint2_transform-interpolations-array" count="48" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="G2_Joint2.matrix_G2_Joint2_transform-sampler">
+        <input semantic="INPUT" source="#G2_Joint2.matrix_G2_Joint2_transform-input"/>
+        <input semantic="OUTPUT" source="#G2_Joint2.matrix_G2_Joint2_transform-output"/>
+        <input semantic="INTERPOLATION" source="#G2_Joint2.matrix_G2_Joint2_transform-interpolations"/>
+      </sampler>
+      <channel source="#G2_Joint2.matrix_G2_Joint2_transform-sampler" target="G2_Joint2/transform"/>
+    </animation>
+  </library_animations>
+  <library_images>
+    <image id="file4" name="file4">
+      <init_from>G2.png</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kFile</dgnode_type>
+          <image_sequence>0</image_sequence>
+        </technique>
+      </extra>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="M_G2" name="M_G2">
+      <instance_effect url="#M_G2-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="M_G2-fx">
+      <profile_COMMON>
+        <newparam sid="file4-surface">
+          <surface type="2D">
+            <init_from>file4</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="file4-sampler">
+          <sampler2D>
+            <source>file4-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="file4-sampler" texcoord="TEX0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <coverageU>1</coverageU>
+                    <coverageV>1</coverageV>
+                    <translateFrameU>0</translateFrameU>
+                    <translateFrameV>0</translateFrameV>
+                    <rotateFrame>0</rotateFrame>
+                    <stagger>0</stagger>
+                    <fast>0</fast>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <rotateUV>0</rotateUV>
+                    <noiseU>0</noiseU>
+                    <noiseV>0</noiseV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </lambert>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="S_G2Mesh" name="S_G2Mesh">
+      <mesh>
+        <source id="S_G2Mesh-positions" name="position">
+          <float_array id="S_G2Mesh-positions-array" count="300">2.38413 -0.002119 -1.54784 0.591399 -0.002119 -2.78005 -1.54756 -0.002119 -2.3837 -2.77977 -0.002119 -0.590973 -2.38343 -0.002119 1.54798 -0.590695 -0.002119 2.7802 1.54826 -0.002119 2.38385 2.78048 -0.002119 0.591121 2.78048 1.22199 0.591121 2.38413 1.22199 -1.54784 0.591399 1.22199 -2.78005 -1.54756 1.22199 -2.3837 -2.77977 1.22199 -0.590973 -2.38343 1.22199 1.54798 -0.590695 1.22199 2.7802 1.54826 1.22199 2.38385 4.09058 2.51986 -0.75784 2.35665 2.51986 -3.42808 -0.757562 2.51986 -4.09016 -3.4278 2.51986 -2.35623 -4.08988 2.51986 0.757988 -2.35595 2.51986 3.42823 0.758266 2.51986 4.0903 3.42851 2.51986 2.35638 5.29508 4.43854 0.069076 4.91846 4.43854 -1.96345 3.79269 4.43854 -3.69714 2.08916 4.43854 -4.86804 0.067217 4.43854 -5.2979 -1.96531 4.43854 -4.92128 -3.699 4.43854 -3.7955 -4.8699 4.43854 -2.09197 -5.29976 4.43854 -0.070032 -4.92313 4.43854 1.9625 -3.79736 4.43854 3.69618 -2.09383 4.43854 4.86708 -0.071889 4.43854 5.29694 1.96064 4.43854 4.92032 3.69432 4.43854 3.79454 4.86522 4.43854 2.09101 5.03401 6.76481 0.064441 4.6755 6.76481 -1.87033 3.60388 6.76481 -3.52062 1.98229 6.76481 -4.6352 0.057599 6.76481 -5.04439 -1.87717 6.76481 -4.68588 -3.52746 6.76481 -3.61425 -4.64205 6.76481 -1.99267 -5.05123 6.76481 -0.067978 -4.69272 6.76481 1.86679 -3.62109 6.76481 3.51708 -1.9995 6.76481 4.63166 -0.074817 6.76481 5.04085 1.85995 6.76481 4.68234 3.51024 6.76481 3.61071 4.62483 6.76481 1.98912 2.67999 10.1981 -0.503467 1.53644 10.1981 -2.26453 -0.517426 10.1981 -2.70117 -2.27849 10.1981 -1.55763 -2.71513 10.1981 0.49624 -1.57158 10.1981 2.2573 0.482284 10.1981 2.69395 2.24334 10.1981 1.5504 4.29271 8.56639 0.053153 3.98633 8.56639 -1.60029 3.07053 8.56639 -3.01062 1.68473 8.56639 -3.96313 0.039906 8.56639 -4.31282 -1.61353 8.56639 -4.00644 -3.02386 8.56639 -3.09064 -3.97638 8.56639 -1.70484 -4.32606 8.56639 -0.06001 -4.01968 8.56639 1.59343 -3.10388 8.56639 3.00376 -1.71808 8.56639 3.95627 -0.073256 8.56639 4.30596 1.58018 8.56701 3.99958 2.99051 8.56701 3.08378 3.94303 8.56701 1.69798 1.04423 10.9064 0.770349 0.712247 10.9064 -1.12964 -1.07938 10.9064 -0.777577 -0.74739 10.9064 1.12241 5.5528 6.4931 0.071252 5.15741 6.4931 -2.06257 3.97553 6.4931 -3.88265 2.18711 6.4931 -5.1119 0.064411 6.4931 -5.56318 -2.06941 6.4931 -5.16779 -3.88949 6.4931 -3.98591 -5.11874 6.4931 -2.19749 -5.57002 6.4931 -0.074789 -5.17463 6.4931 2.05903 -3.99275 6.4931 3.87911 -2.20433 6.4931 5.10836 -0.081629 6.4931 5.55964 2.05219 6.4931 5.16425 3.87227 6.4931 3.98237 5.10154 6.49422 2.19395</float_array>
+          <technique_common>
+            <accessor source="#S_G2Mesh-positions-array" count="100" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="S_G2Mesh-map1" name="map1">
+          <float_array id="S_G2Mesh-map1-array" count="300">0.962176 0.351943 0.979947 0.262851 0.929515 0.187286 0.840422 0.169516 0.764858 0.219948 0.747087 0.30904 0.797519 0.384605 0.886612 0.402375 0.235067 0.011913 0.412732 0.011913 0.590419 0.011913 0.723686 0.011913 0.235202 0.011913 0.412841 0.011913 0.590512 0.011913 0.723694 0.011913 0.679321 0.204886 0.01321 0.341467 0.101827 0.489681 0.54594 0.48968 0.457274 0.489682 0.368235 0.489682 0.279407 0.489681 0.190906 0.489684 0.101697 0.489681 0.013204 0.489683 0.634554 0.489682 0.368201 0.489681 0.279512 0.48968 0.190658 0.489683 0.546144 0.489682 0.457022 0.489681 0.013226 0.489679 0.634876 0.489685 0.057529 0.108445 0.013221 0.341467 0.235067 0.108445 0.412732 0.108445 0.590419 0.108445 0.057544 0.108445 0.235202 0.108445 0.412841 0.108445 0.590512 0.108445 0.057544 0.011913 0.146222 0.204886 0.32392 0.204886 0.501628 0.204886 0.01321 0.204886 0.146372 0.204886 0.323953 0.204886 0.501695 0.204886 0.013221 0.204886 0.101837 0.341467 0.057529 0.011913 0.190607 0.341467 0.279527 0.341467 0.368314 0.341467 0.45715 0.341467 0.546105 0.341467 0.634734 0.341467 0.723686 0.341467 0.101877 0.341467 0.190867 0.341467 0.279538 0.341467 0.368369 0.341467 0.457314 0.341467 0.546076 0.341467 0.634948 0.341467 0.723694 0.341467 0.723686 0.108445 0.271205 0.516353 0.530796 0.568668 0.271204 0.516352 0.013163 0.566981 0.271204 0.516352 0.530793 0.568676 0.271204 0.516352 0.013119 0.567005 0.271205 0.516352 0.530794 0.568667 0.271204 0.516352 0.013163 0.566981 0.271204 0.516352 0.530796 0.568676 0.271205 0.516352 0.013163 0.566981 0.359641 0.945786 0.173059 0.945861 0.359452 0.945792 0.1731 0.945885 0.359686 0.945805 0.173059 0.945861 0.359504 0.945782 0.173088 0.94586 0.271292 0.758863 0.437487 0.792564 0.271292 0.758863 0.105322 0.791511 0.271292 0.758863 0.436903 0.792642 0.271415 0.759249 0.105239 0.791772 0.271305 0.759221 0.43744 0.792806 0.271292 0.758863 0.105322 0.791511 0.271292 0.758863 0.437094 0.79234 0.271374 0.758832 0.105359 0.791269 0.745365 0.639713 0.852207 0.749969 0.74135 0.859199 0.633509 0.748176 0.101837 0.446625 0.723694 0.108445 0.190607 0.446625 0.279527 0.446625 0.368314 0.446625 0.45715 0.446625 0.546105 0.446625 0.634734 0.446625 0.01321 0.446625 0.101877 0.446625 0.190867 0.446625 0.279538 0.446625 0.368369 0.446625 0.457314 0.446625 0.546076 0.446625 0.634948 0.446625 0.013221 0.446625 0.67921 0.204886 0.723694 0.446625 0.723686 0.446625 0.723699 0.489679 0.72368 0.489683 0.909192 0.915273 0.739487 0.986531 0.505817 0.746564 0.913577 0.586993 0.173088 0.94586 0.580516 0.576121 0.978127 0.749002 0.173088 0.94586 0.575559 0.918518 0.013163 0.566981 0.750105 0.51334 0.105322 0.791511 0.105322 0.791511 0.013163 0.566981</float_array>
+          <technique_common>
+            <accessor source="#S_G2Mesh-map1-array" count="150" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="S_G2Mesh-vertices">
+          <input semantic="POSITION" source="#S_G2Mesh-positions"/>
+        </vertices>
+        <triangles material="M_G2SG" count="196">
+          <input semantic="VERTEX" source="#S_G2Mesh-vertices" offset="0"/>
+          <input semantic="TEXCOORD" source="#S_G2Mesh-map1" offset="1" set="0"/>
+          <p>7 53 0 8 9 36 9 36 8 34 7 53 0 8 1 9 10 37 10 37 9 36 0 8 1 9 2 10 11 38 11 38 10 37 1 9 2 10 3 11 12 69 12 69 11 38 2 10 3 43 4 12 13 40 13 40 12 39 3 43 4 12 5 13 14 41 14 41 13 40 4 12 5 13 6 14 15 42 15 42 14 41 5 13 6 14 7 15 8 115 8 115 15 42 6 14 6 6 4 4 3 3 2 2 0 0 7 7 56 139 81 111 80 110 56 139 57 142 81 111 57 142 58 136 81 111 58 136 82 112 81 111 58 136 59 137 82 112 59 137 60 144 82 112 60 144 83 113 82 112 60 144 61 138 83 113 62 141 83 113 61 138 62 141 80 110 83 113 62 141 63 146 80 110 63 146 56 139 80 110 8 34 9 36 16 44 9 36 17 45 16 44 9 36 10 37 17 45 10 37 18 46 17 45 10 37 11 38 18 46 11 38 19 131 18 46 11 38 12 69 19 131 12 39 20 48 19 47 12 39 13 40 20 48 13 40 21 49 20 48 13 40 14 41 21 49 14 41 22 50 21 49 14 41 15 42 22 50 15 42 23 16 22 50 15 42 8 115 23 16 8 34 16 44 23 51 16 44 25 54 24 52 16 44 17 45 26 55 26 55 25 54 16 44 17 45 27 56 26 55 17 45 18 46 28 57 28 57 27 56 17 45 18 46 29 58 28 57 18 46 19 131 30 59 30 59 29 58 18 46 19 131 31 60 30 59 19 47 20 48 32 61 32 61 31 17 19 47 20 48 33 62 32 61 20 48 21 49 34 63 34 63 33 62 20 48 34 63 21 49 35 64 21 49 22 50 36 65 36 65 35 64 21 49 22 50 37 66 36 65 22 50 23 16 38 67 38 67 37 66 22 50 23 16 39 68 38 67 23 51 16 44 24 52 24 52 39 35 23 51 24 52 25 54 85 116 85 116 84 114 24 52 25 54 26 55 86 117 86 117 85 116 25 54 26 55 27 56 87 118 87 118 86 117 26 55 27 56 28 57 88 119 88 119 87 118 27 56 28 57 29 58 89 120 89 120 88 119 28 57 29 58 30 59 90 121 90 121 89 120 29 58 30 59 31 60 91 133 91 133 90 121 30 59 31 17 32 61 92 123 92 123 91 122 31 17 32 61 33 62 93 124 93 124 92 123 32 61 33 62 34 63 94 125 94 125 93 124 33 62 94 125 34 63 35 64 35 64 95 126 94 125 36 65 96 127 95 126 95 126 35 64 36 65 36 65 37 66 97 128 97 128 96 127 36 65 37 66 38 67 98 129 98 129 97 128 37 66 38 67 39 68 99 132 99 132 98 129 38 67 39 35 24 52 84 114 84 114 99 130 39 35 41 29 40 18 84 114 84 114 85 116 41 29 42 28 41 29 85 116 85 116 86 117 42 28 43 27 42 28 86 117 86 117 87 118 43 27 44 31 43 27 87 118 87 118 88 119 44 31 45 30 44 31 88 119 88 119 89 120 45 30 46 26 45 30 89 120 89 120 90 121 46 26 47 135 46 26 90 121 90 121 91 133 47 135 48 24 47 25 91 122 91 122 92 123 48 24 49 23 48 24 92 123 92 123 93 124 49 23 50 22 49 23 93 124 93 124 94 125 50 22 50 22 94 125 95 126 95 126 51 21 50 22 96 127 52 20 51 21 51 21 95 126 96 127 53 19 52 20 96 127 96 127 97 128 53 19 54 33 53 19 97 128 97 128 98 129 54 33 55 134 54 33 98 129 98 129 99 132 55 134 40 18 55 32 99 130 99 130 84 114 40 18 40 70 41 71 65 95 65 95 64 94 40 70 41 71 42 72 66 96 66 96 65 95 41 71 42 72 43 145 67 148 67 148 66 96 42 72 43 73 44 74 68 98 68 98 67 97 43 73 44 74 45 75 69 99 69 99 68 98 44 74 45 75 46 76 70 100 70 100 69 99 45 75 46 76 47 77 71 101 71 101 70 100 46 76 47 77 48 78 72 102 72 102 71 101 47 77 48 78 49 79 73 103 73 103 72 102 48 78 49 79 50 80 74 104 74 104 73 103 49 79 74 104 50 80 51 149 51 149 75 147 74 104 52 82 76 106 75 105 75 105 51 81 52 82 52 82 53 83 77 107 77 107 76 106 52 82 53 83 54 84 78 108 78 108 77 107 53 83 54 84 55 85 79 109 79 109 78 108 54 84 55 85 40 70 64 94 64 94 79 109 55 85 83 113 80 110 81 111 81 111 82 112 83 113 64 94 65 95 56 86 65 95 66 96 57 87 57 87 56 86 65 95 66 96 67 148 57 87 67 97 68 98 58 88 58 88 57 140 67 97 68 98 69 99 58 88 69 99 70 100 59 89 59 89 58 88 69 99 70 100 71 101 59 89 71 101 72 102 60 90 60 90 59 89 71 101 72 102 73 103 60 90 73 103 74 104 61 91 61 91 60 90 73 103 61 91 74 104 75 147 76 106 62 92 61 143 61 143 75 105 76 106 76 106 77 107 62 92 77 107 78 108 63 93 63 93 62 92 77 107 78 108 79 109 63 93 79 109 64 94 56 86 56 86 63 93 79 109 2 2 7 7 3 3 0 0 2 2 1 1 6 6 3 3 7 7 4 4 6 6 5 5</p>
+        </triangles>
+      </mesh>
+      <extra>
+        <technique profile="MAYA">
+          <double_sided>1</double_sided>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="S_G2Mesh-skin" name="skinCluster1">
+      <skin source="#S_G2Mesh">
+        <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+        <source id="S_G2Mesh-skin-joints">
+          <Name_array id="S_G2Mesh-skin-joints-array" count="2">bone0 bone1</Name_array>
+          <technique_common>
+            <accessor source="#S_G2Mesh-skin-joints-array" count="2" stride="1">
+              <param name="JOINT" type="Name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="S_G2Mesh-skin-bind_poses">
+          <float_array id="S_G2Mesh-skin-bind_poses-array" count="32">0.234997 0 0.971996 0 -0.000000 1.28128 0 0 -0.971996 -0.000000 0.234997 0 0 0 0 1 0.234997 0 0.971996 0 -0.000000 1.15022 0 -5.40312 -0.971996 -0.000000 0.234997 0 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#S_G2Mesh-skin-bind_poses-array" count="2" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="S_G2Mesh-skin-weights">
+          <float_array id="S_G2Mesh-skin-weights-array" count="201">1 0.93306 0.06694 0.933076 0.066923 0.933092 0.066907 0.933099 0.0669 0.933093 0.066907 0.933076 0.066923 0.93306 0.06694 0.933053 0.066947 0.861575 0.138425 0.861586 0.138414 0.861611 0.138388 0.861637 0.138363 0.861648 0.138352 0.861637 0.138363 0.861612 0.138388 0.861586 0.138414 0.618763 0.381237 0.618772 0.381228 0.618786 0.381214 0.618795 0.381205 0.618795 0.381205 0.618786 0.381214 0.618772 0.381228 0.618763 0.381237 0.501194 0.498806 0.501194 0.498806 0.501193 0.498807 0.501193 0.498807 0.501193 0.498807 0.501192 0.498808 0.501192 0.498808 0.501192 0.498808 0.501192 0.498808 0.501192 0.498808 0.501192 0.498808 0.501193 0.498807 0.501193 0.498807 0.501193 0.498807 0.501194 0.498806 0.501194 0.498806 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</float_array>
+          <technique_common>
+            <accessor source="#S_G2Mesh-skin-weights-array" count="201" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#S_G2Mesh-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#S_G2Mesh-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="100">
+          <input semantic="JOINT" source="#S_G2Mesh-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#S_G2Mesh-skin-weights" offset="1"/>
+          <vcount>2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 </vcount>
+          <v>0 1 1 2 0 3 1 4 0 5 1 6 0 7 1 8 0 9 1 10 0 11 1 12 0 13 1 14 0 15 1 16 0 17 1 18 0 19 1 20 0 21 1 22 0 23 1 24 0 25 1 26 0 27 1 28 0 29 1 30 0 31 1 32 0 33 1 34 0 35 1 36 0 37 1 38 0 39 1 40 0 41 1 42 0 43 1 44 0 45 1 46 0 47 1 48 0 49 1 50 0 51 1 52 0 53 1 54 0 55 1 56 0 57 1 58 0 59 1 60 0 61 1 62 0 63 1 64 0 65 1 66 0 67 1 68 0 69 1 70 0 71 1 72 0 73 1 74 0 75 1 76 0 77 1 78 0 79 1 80 0 81 1 82 0 83 1 84 0 85 1 86 0 87 1 88 0 89 1 90 0 91 1 92 0 93 1 94 0 95 1 96 0 97 1 98 0 99 1 100 0 101 1 102 0 103 1 104 0 105 1 106 0 107 1 108 0 109 1 110 0 111 1 112 0 113 1 114 0 115 1 116 0 117 1 118 0 119 1 120 0 121 1 122 0 123 1 124 0 125 1 126 0 127 1 128 0 129 1 130 0 131 1 132 0 133 1 134 0 135 1 136 0 137 1 138 0 139 1 140 0 141 1 142 0 143 1 144 0 145 1 146 0 147 1 148 0 149 1 150 0 151 1 152 0 153 1 154 0 155 1 156 0 157 1 158 0 159 1 160 0 161 1 162 0 163 1 164 0 165 1 166 0 167 1 168 0 169 1 170 0 171 1 172 0 173 1 174 0 175 1 176 0 177 1 178 0 179 1 180 0 181 1 182 0 183 1 184 0 185 1 186 0 187 1 188 0 189 1 190 0 191 1 192 0 193 1 194 0 195 1 196 0 197 1 198 0 199 1 200</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_visual_scenes>
+    <visual_scene id="VisualSceneNode" name="G2_Animation">
+      <node id="S_G2" name="S_G2" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_controller url="#S_G2Mesh-skin">
+          <skeleton>#G2_Joint1</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="M_G2SG" target="#M_G2">
+                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+      </node>
+      <node id="G2_Joint1" name="G2_Joint1" sid="bone0" type="JOINT">
+        <matrix sid="transform">0.234997 -0.000000 -0.971996 0 0 0.78047 -0.000000 0 0.971996 0 0.234997 0 0 0 0 1</matrix>
+        <node id="G2_Joint2" name="G2_Joint2" sid="bone1" type="JOINT">
+          <matrix sid="transform">1 0 0 0 0 1.11394 0 6.01875 0 0 1 0 0 0 0 1</matrix>
+          <extra>
+            <technique profile="MAYA">
+              <segment_scale_compensate>1</segment_scale_compensate>
+            </technique>
+          </extra>
+        </node>
+        <extra>
+          <technique profile="MAYA">
+            <segment_scale_compensate>1</segment_scale_compensate>
+          </technique>
+        </extra>
+      </node>
+      <extra>
+        <technique profile="FCOLLADA">
+          <start_time>0.041666</start_time>
+          <end_time>2</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#VisualSceneNode"/>
+  </scene>
+</COLLADA>
