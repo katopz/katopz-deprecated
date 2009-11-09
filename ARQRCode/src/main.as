@@ -32,7 +32,6 @@ package
 	import flash.utils.*;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
-	import org.libspark.flartoolkit.core.FLARSquare;
 	import org.libspark.flartoolkit.core.param.FLARParam;
 	import org.libspark.flartoolkit.core.raster.rgb.FLARRgbRaster_BitmapData;
 	import org.libspark.flartoolkit.core.transmat.FLARTransMatResult;
@@ -127,7 +126,7 @@ package
 			scene.addChild(modelRoot);
 			
 			collada = new Collada();
-			collada.scaling = 5;
+			collada.scaling = 10;
 			
 			loader = new Loader3D();
 			loader.loadGeometry("assets/cat.dae", collada);
@@ -156,6 +155,8 @@ package
 		private var cc:Vector3D;
 		private var dd:Vector3D;
 		
+		private var wtf:FLARResult;
+		
 		public function getAxis():void
 		{
 			if(aa && aa.x == _sphereA.position.x)return;
@@ -166,16 +167,14 @@ package
 			
 			//vZ = bb.subtract(aa);
 			//vZ.normalize();
-			if(aggregate)
-				setTransform(modelRoot, aggregate);
-			/*
+			if(wtf)
+				setTransform(modelRoot, wtf.result);
+			
 			modelRoot.x = (aa.x + bb.x + cc.x)/3
 			modelRoot.y = (aa.y + bb.y + cc.y)/3
 			modelRoot.z = (aa.z + bb.z + cc.z)/3
 			
-			modelRoot.lookAt( bb );
-			*/
-			//modelRoot.lookAt( aa );
+			modelRoot.lookAt( aa );
 /*
 			vX = bb.subtract(cc);
 			vX.normalize();
@@ -217,7 +216,7 @@ package
 			tool.visible = false;
 			*/
 			
-			alpha = 0.1;
+			alpha = 0.5;
 		}
 		
 		private function initUser():void
@@ -346,7 +345,7 @@ package
 			TweenLite.to(paper, 1, {
 				rotationX:30*Math.random()-30*Math.random(),
 				rotationY:30*Math.random()-30*Math.random(),
-				rotationZ:30*Math.random()-30*Math.random()
+				rotationZ:60*Math.random()-60*Math.random()
 			});
 		}
 		
@@ -432,7 +431,7 @@ package
 
 				results.sortOn("confidence", Array.DESCENDING | Array.NUMERIC);
 				results.splice(3, n - 3);
-
+				
 				// sort them into right triangle
 				//var A:FLARResult, B:FLARResult, C:FLARResult;
 				for (k = 0; k < 3; k++)
@@ -452,6 +451,8 @@ package
 				}
 
 				results.sortOn("cosine", Array.NUMERIC);
+				
+				wtf = results[0];
 				
 				// display intermediate results
 				for (k = 0; k < 3; k++)
@@ -524,6 +525,8 @@ package
 				// debug plane 
 				stuff[3].setTransformMatrix(aggregate);
 				
+				_stuff = stuff[3];
+
 				//try to debug normal
 				//setTransform(_tempObject3D, aggregate);
 				//trace(_tempObject3D.transform.matrix3D.
@@ -561,44 +564,37 @@ package
 					qrImage.process();
 				}
 			}
-			
+			/*
 			setTransform(_sphereA, A.result);
 			setTransform(_sphereB, B.result);
 			setTransform(_sphereC, C.result);
+			*/
 			
-			//if(!isSwap)
-			//{
-				//setTransform(_objA, A);
-				//setTransform(_objB, B);
-				//setTransform(_objC, C);
-			//}else{
-				//setTransform(_objA, C);
-				//setTransform(_objB, B);
-				//setTransform(_objC, A);
-			//}
-			/*
-			if(!_positionA)
-				_positionA = _sphereA.position.clone();
-				
-			var isNear:Boolean = _positionA.nearEquals(_sphereA.position,10,true);// && _objC.position.nearEquals(_sphereC.position,10,true); 
+			_sphereA.x = (stuff[0]).x;
+			_sphereA.y = -(stuff[0]).y;
+			_sphereA.z = (stuff[0]).z;
 			
-			if(isNear)
+			if((stuff[1]).x< (stuff[2]).x)
 			{
-				setTransform(_sphereA, A);
-				setTransform(_sphereB, B);
-				setTransform(_sphereC, C);
+				_sphereB.x = (stuff[1]).x;
+				_sphereB.y = -(stuff[1]).y;
+				_sphereB.z = (stuff[1]).z;
+				
+				_sphereC.x = (stuff[2]).x;
+				_sphereC.y = -(stuff[2]).y;
+				_sphereC.z = (stuff[2]).z;
 			}else{
-				setTransform(_sphereA, C);
-				setTransform(_sphereB, B);
-				setTransform(_sphereC, A);
+				_sphereB.x = (stuff[2]).x;
+				_sphereB.y = -(stuff[2]).y;
+				_sphereB.z = (stuff[2]).z;
+				
+				_sphereC.x = (stuff[1]).x;
+				_sphereC.y = -(stuff[1]).y;
+				_sphereC.z = (stuff[1]).z;
 			}
-			
-			_positionA = _sphereA.position.clone();*/
 		}
 
 		private var isSwap:Boolean = false;
-		
-		//private var plane:Plane;
 		
 		private var _tempObject3D:Object3D = new Object3D();
 		
@@ -613,11 +609,6 @@ package
 		
 		override protected function onInit():void
 		{
-			//debug = false;
-			
-			//plane = new Plane(new WireColorMaterial());
-			//scene.addChild(plane);
-			
 			_sphereA = new Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
 			scene.addChild(_sphereA);
 			
