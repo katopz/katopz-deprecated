@@ -124,27 +124,5 @@ package com.sleepydesign.utils
 			
 			return isDone;
         }
-        
-		// ______________________________ File ______________________________
-
-		//:Dictionary = new Dictionary(true); 
-		
-		/*
-		private static function selectHandler(event:Event):void
-		{
-			file = FileReference(event.target);
-			trace(" ^ selectHandler : " + file.name);
-			openFileName = file.name;
-			file.addEventListener(Event.COMPLETE, onLoadComplete);
-			file["load"]();
-		}
-
-		private static function onLoadComplete(event:Event):void
-		{
-			trace(" ^ onLoadComplete : " + file["data"]);
-			file.removeEventListener(Event.COMPLETE, onLoadComplete);
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE, file["data"]));
-		}
-		*/
     }
 }
