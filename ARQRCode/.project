@@ -18,12 +18,12 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/3D/sandy3d/src</location>
+			<location>C:/Inetpub/wwwroot/Classes/3D/Sandy/as3/trunk/src</location>
 		</link>
 		<link>
 			<name>[source path] lite-libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/branches/lite/libs</location>
+			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/lite/libs</location>
 		</link>
 		<link>
 			<name>[source path] as3-libs</name>
