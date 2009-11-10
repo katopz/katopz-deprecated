@@ -7,6 +7,7 @@ package
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
+	import away3dlite.materials.BitmapMaterial;
 	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.primitives.Sphere;
 	
@@ -34,23 +35,59 @@ package
 		{
 			_scene = scene;
 			
-			_anchorA = new Object3D();//Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
+			_anchorA = new Object3D();
+			//_anchorA = new Sphere(new WireColorMaterial(0xFF0000), 50, 4, 4);
 			scene.addChild(_anchorA);
 			
-			_anchorB = new Object3D();//Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
+			_anchorB = new Object3D();
+			//_anchorB = new Sphere(new WireColorMaterial(0x00FF00), 50, 4, 4);
 			scene.addChild(_anchorB);
 			
-			_anchorC = new Object3D();//Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
+			_anchorC = new Object3D();
+			//_anchorC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
 			scene.addChild(_anchorC);
 			
 			_base = new ObjectContainer3D();
 			scene.addChild(_base);
 		}
 		
+		public function reset():void
+		{
+			if(_loader && _loader.parent)
+				_loader.parent.removeChild(_loader);
+		
+			if(_model && _model.parent)
+				_model.parent.removeChild(_model);
+		}
+		
+		public function setTexture(bitmap:Bitmap):void
+		{
+			trace("setTexture");
+			_model.materialLibrary.currentMaterialData.material = new BitmapMaterial(bitmap.bitmapData);
+		}
+		
+		public function parse(raw:*):void
+		{
+			trace("parse");
+			
+			_collada = new Collada();
+			_collada.scaling = 25;
+			
+			//_collada.parseXML(xml);
+			
+			_loader = new Loader3D();
+			var _xml:XML = new XML(raw);
+			_loader.loadXML(_xml, _collada);
+			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			_base.addChild(_loader);
+		}
+		
 		public function load(uri:String):void
 		{
+			trace(" load : " + uri);
+			
 			_collada = new Collada();
-			_collada.scaling = 50;
+			_collada.scaling = 25;
 			
 			if(_loader && _loader.parent)
 				_loader.parent.removeChild(_loader);
@@ -110,7 +147,7 @@ package
 			}
 		}
 		
-		public function update():void
+		public function updateAnchor():void
 		{
 			if(aa && aa.x == _anchorA.position.x)return;
 			

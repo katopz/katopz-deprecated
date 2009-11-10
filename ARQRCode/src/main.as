@@ -128,10 +128,6 @@ package
 
 		public function main()
 		{
-			// sys
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-
-			// no cam test
 			base = new Sprite();
 			addChild(base);
 			base.x = 160;
@@ -231,17 +227,33 @@ package
 			setBitmap(Bitmap(new ImageData));
 
 			// browse
-			SystemUtil.addContext(this, "Open Image", function ():void{FileUtil.openImage(onImageReady)});
+			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
 			SystemUtil.addContext(this, "Toggle Camera", onToggleSource);
-			SystemUtil.addContext(this, "Reset Code", onResetCode);
+			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
+			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
+			SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
 
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 
-			addEventListener(Event.ENTER_FRAME, onRun);
+			//addEventListener(Event.ENTER_FRAME, onRun);
 		}
-
+		
+		private function onTextureReady(event:Event):void
+		{
+			trace(" ^ onTextureReady : " + event);
+			if(event.type == Event.COMPLETE)
+				_modelViewer.setTexture(event.target.content);
+		}
+		
+		private function onOpenModel(event:Event):void
+		{
+			trace(" ^ onOpenModel");
+			if(event.type == Event.COMPLETE)
+				_modelViewer.parse(event["data"]);
+		}
+		
 		// got code
 		private function onQRCodeComplete(event:Event):void
 		{
@@ -255,16 +267,8 @@ package
 			}
 			
 			_isQRDecoded = true;
-			
 			// debug
-			title = "QR : " + QRReader.result + " | ";
-		}
-
-		//reset decode state
-		private function onResetCode(event:ContextMenuEvent):void
-		{
-			_isQRDecoded = false;
-			_QRReader.reset();
+			//title = "QR : " + QRReader.result + " | ";
 		}
 
 		private function onToggleSource(event:ContextMenuEvent):void
@@ -292,9 +296,7 @@ package
 				}
 			}
 
-			//dirty
-			_isQRDecoded = false;
-			_QRReader.reset();
+			reset();
 		}
 		
 		private var onDraging:Boolean;
@@ -328,21 +330,25 @@ package
 			//onDraging = false;
 		}
 
-		private function onRun(event:Event):void
+		override protected function onPreRender():void
 		{
 			if(isCam && _cameraBitmap && _video)
 				_cameraBitmap.bitmapData.draw(_video);
 
-			sandyScene.render();
+			//sandyScene.render();
 
 			process();
 
-			_modelViewer.update();
-		}
-
-		override protected function onPreRender():void
-		{
-			_modelViewer.draw();
+			if(_isQRDecoded)
+			{
+				view.visible = true;
+				_modelViewer.updateAnchor();
+				_modelViewer.draw();
+				stage.quality = "medium";
+			}else{
+				view.visible = false;
+				stage.quality = "low";
+			}
 		}
 
 		private function onImageReady(event:Event):void
@@ -358,12 +364,20 @@ package
 			}
 		}
 
+		private function reset():void
+		{
+			_isQRDecoded = false;
+			_QRReader.reset();
+			_modelViewer.reset();
+		}
+		
 		private function setBitmap(bitmap:Bitmap):void
 		{
 			trace(" ! setBitmap");
 			
-			_isQRDecoded = false;
-			_QRReader.reset();
+			reset();
+			
+			title = "reset";
 
 			_paperBitmap = bitmap;
 			_paperBitmap.width = _paperBitmap.height = QR_SIZE;
@@ -454,13 +468,13 @@ package
 
 				if(!_isQRDecoded)
 				{
-					trace(" * QR");
+					//trace(" * QR");
 					
 					// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
 					var plane3D:Plane3D = Plane3D(stuff[3].children[0]);
 
 					// since 3D fit is not perfect, we shall grab some extra area
-					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 0.05;
+					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.05;
 
 					// I call render() to init sandy matrices - you can do matrix math by hand and
 					// not render a thing, or use better engine :-p~
@@ -483,9 +497,19 @@ package
 
 					// now read QR code
 					_QRReader.run();
+					
+					title = "QR : processing...  | Marker : "+n+" | ";
+				}else{
+					title = "QR : " + QRReader.result + " | Marker : "+n+" | ";
 				}
 			}else{
 				//trace("new one?")
+				if(QRReader.result!="")
+				{
+					title = "QR : " + QRReader.result + " | Marker : "+n+" | ";
+				}else{
+					title = "QR : losting...     | Marker : "+n+" | ";
+				}
 			}
 
 			_modelViewer.setRefererPoint

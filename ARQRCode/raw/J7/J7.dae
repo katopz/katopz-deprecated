@@ -2,32 +2,29 @@
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
     <contributor>
-      <authoring_tool>FBX COLLADA exporter</authoring_tool>
-    </contributor>
-    <contributor>
-      <author>katopz</author>
-      <authoring_tool>Maya8.5 | ColladaMaya v3.05B</authoring_tool>
-      <comments>ColladaMaya export options: bakeTransforms=1;exportPolygonMeshes=1;bakeLighting=0;isSampling=0;
+      <author>BOBO</author>
+      <authoring_tool>Maya2009 | ColladaMaya v3.05B</authoring_tool>
+      <comments>ColladaMaya export options: bakeTransforms=0;exportPolygonMeshes=1;bakeLighting=0;isSampling=0;
 curveConstrainSampling=0;removeStaticCurves=1;exportCameraAsLookat=0;
-exportLights=0;exportCameras=0;exportJointsAndSkin=1;
-exportAnimations=1;exportTriangles=1;exportInvisibleNodes=0;
-exportNormals=0;exportTexCoords=1;
-exportVertexColors=0;exportVertexColorsAnimation=0;exportTangents=0;
-exportTexTangents=1;exportConstraints=0;exportPhysics=0;exportXRefs=1;
-dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
-      <source_data>file:///C:/Inetpub/wwwroot/Classes/katopz/branches/as3/ARQRCode/res/J7/J7.mb</source_data>
+exportLights=1;exportCameras=1;exportJointsAndSkin=1;
+exportAnimations=1;exportTriangles=0;exportInvisibleNodes=0;
+exportNormals=1;exportTexCoords=1;
+exportVertexColors=1;exportVertexColorsAnimation=0;exportTangents=0;
+exportTexTangents=0;exportConstraints=1;exportPhysics=1;exportXRefs=0;
+dereferenceXRefs=1;cameraXFov=0;cameraYFov=1</comments>
+      <source_data>file:///C:/Documents%20and%20Settings/BOBO/Desktop/Oishi_Project/Item/J7/J7_Animation.ma</source_data>
     </contributor>
-    <created>2009-11-09T00:49:46Z</created>
-    <modified>2009-11-09T19:17:09Z</modified>
+    <created>2009-11-10T01:40:40Z</created>
+    <modified>2009-11-10T01:40:40Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Y_UP</up_axis>
   </asset>
   <library_animations>
-    <animation id="J7_Joint1.matrix">
-      <source id="J7_Joint1.matrix_J7_Joint1_transform-input">
-        <float_array id="J7_Joint1.matrix_J7_Joint1_transform-input-array" count="48">0.041666 0.083333 0.125 0.166667 0.208333 0.25 0.291667 0.333333 0.375 0.416667 0.458333 0.5 0.541667 0.583333 0.625 0.666667 0.708333 0.75 0.791667 0.833333 0.875 0.916667 0.958333 1 1.04167 1.08333 1.125 1.16667 1.20833 1.25 1.29167 1.33333 1.375 1.41667 1.45833 1.5 1.54167 1.58333 1.625 1.66667 1.70833 1.75 1.79167 1.83333 1.875 1.91667 1.95833 2</float_array>
+    <animation id="J7_Joint1.translate">
+      <source id="J7_Joint1.translate_J7_Joint1_translate-input">
+        <float_array id="J7_Joint1.translate_J7_Joint1_translate-input-array" count="9">0.041666 0.125 0.25 0.5 0.625 0.75 0.958333 1.25 2</float_array>
         <technique_common>
-          <accessor source="#J7_Joint1.matrix_J7_Joint1_transform-input-array" count="48" stride="1">
+          <accessor source="#J7_Joint1.translate_J7_Joint1_translate-input-array" count="9" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
@@ -36,34 +33,64 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
           <post_infinity>CONSTANT</post_infinity>
         </technique>
       </source>
-      <source id="J7_Joint1.matrix_J7_Joint1_transform-output">
-        <float_array id="J7_Joint1.matrix_J7_Joint1_transform-output-array" count="768">0.695769 0 0 0 0 0.872378 0 0 0 0 0.695769 -21.747 0 0 0 1 0.701727 0 0 0 0 0.792651 0 0 0 0 0.702711 -21.747 0 0 0 1 0.715398 0 0 0 0 0.791125 0 0 0 0 0.71907 -21.747 0 0 0 1 0.733988 0 0.003109 0 0 1.00381 0 0 -0.00309 0 0.73846 -21.747 0 0 0 1 0.7576 0 0.012271 0 0 1.286 0 0 -0.012217 0 0.760958 -21.747 0 0 0 1 0.78419 0 0.027377 0 0 1.45126 0 0 -0.027194 0 0.789473 -21.747 0 0 0 1 0.811622 0 0.048468 0 0 1.47287 0 0.593253 -0.047741 0 0.823979 -21.2622 0 0 0 1 0.839697 0 0.075433 0 0 1.45516 0 2.07639 -0.073507 0 0.861708 -19.9424 0 0 0 1 0.86921 0 0.108026 0 0 1.40822 0 4.00446 -0.10417 0 0.901381 -17.9894 0 0 0 1 0.90098 0 0.145758 0 0 1.34212 0 5.93254 -0.139446 0 0.941758 -15.6051 0 0 0 1 0.935877 0 0.187856 0 0 1.26696 0 7.41567 -0.179089 0 0.981695 -12.9913 0 0 0 1 0.974848 0 0.23324 0 0 1.19282 0 8.00892 -0.222871 0 1.0202 -10.35 0 0 0 1 1.02014 0 0.287597 0 0 1.12018 0 7.81818 -0.273095 0 1.07431 -7.92278 0 0 0 1 1.05755 0 0.350594 0 0 1.04722 0 7.16318 -0.328053 0 1.13022 -5.7688 0 0 0 1 1.0643 0 0.406434 0 0 0.980637 0 5.91971 -0.378663 0 1.14235 -3.816 0 0 0 1 1.0164 0 0.431828 0 0 0.911651 0 3.68315 -0.410153 0 1.07012 -1.99278 0 0 0 1 0.941609 0 0.434447 0 0 0.849029 0 1.18383 -0.426299 0 0.959606 -0.572392 0 0 0 1 0.893208 0 0.449643 0 0 0.825736 0 0 -0.449643 0 0.893208 0 0 0 0 1 0.874166 0 0.485628 0 0 0.852678 0 0 -0.485628 0 0.874166 0 0 0 0 1 0.854044 0 0.5202 0 0 0.906283 0 0 -0.5202 0 0.854044 0 0 0 0 1 0.833053 0 0.553192 0 0 0.967793 0 0 -0.553192 0 0.833053 0 0 0 0 1 0.811423 0 0.584459 0 0 1.01845 0 0 -0.584459 0 0.811423 0 0 0 0 1 0.789401 0 0.613878 0 0 1.03951 0 0 -0.613878 0 0.789401 0 0 0 0 1 0.767249 0 0.641349 0 0 1.03928 0 0 -0.641349 0 0.767249 0 0 0 0 1 0.745239 0 0.666797 0 0 1.03869 0 0 -0.666797 0 0.745239 0 0 0 0 1 0.723651 0 0.690166 0 0 1.03789 0 0 -0.690166 0 0.723651 0 0 0 0 1 0.702768 0 0.711419 0 0 1.03702 0 0 -0.711419 0 0.702768 0 0 0 0 1 0.682874 0 0.730536 0 0 1.03621 0 0 -0.730536 0 0.682874 0 0 0 0 1 0.66425 0 0.74751 0 0 1.03563 0 0 -0.74751 0 0.66425 0 0 0 0 1 0.647173 0 0.762344 0 0 1.0354 0 0 -0.762344 0 0.647173 0 0 0 0 1 0.631373 0 0.775479 0 0 1.0354 0 0 -0.775479 0 0.631373 0 0 0 0 1 0.616427 0 0.787412 0 0 1.0354 0 0 -0.787412 0 0.616427 0 0 0 0 1 0.602368 0 0.798218 0 0 1.0354 0 0 -0.798218 0 0.602368 0 0 0 0 1 0.589222 0 0.807971 0 0 1.0354 0 0 -0.807971 0 0.589222 0 0 0 0 1 0.577006 0 0.81674 0 0 1.0354 0 0 -0.81674 0 0.577006 0 0 0 0 1 0.565733 0 0.824588 0 0 1.0354 0 0 -0.824588 0 0.565733 0 0 0 0 1 0.555413 0 0.831575 0 0 1.0354 0 0 -0.831575 0 0.555413 0 0 0 0 1 0.546047 0 0.837755 0 0 1.0354 0 0 -0.837755 0 0.546047 0 0 0 0 1 0.537634 0 0.843178 0 0 1.0354 0 0 -0.843178 0 0.537634 0 0 0 0 1 0.530169 0 0.847892 0 0 1.0354 0 0 -0.847892 0 0.530169 0 0 0 0 1 0.523645 0 0.851937 0 0 1.0354 0 0 -0.851937 0 0.523645 0 0 0 0 1 0.518049 0 0.855351 0 0 1.0354 0 0 -0.855351 0 0.518049 0 0 0 0 1 0.513368 0 0.858169 0 0 1.0354 0 0 -0.858169 0 0.513368 0 0 0 0 1 0.509585 0 0.860421 0 0 1.0354 0 0 -0.860421 0 0.509585 0 0 0 0 1 0.50668 0 0.862134 0 0 1.0354 0 0 -0.862134 0 0.50668 0 0 0 0 1 0.504635 0 0.863333 0 0 1.0354 0 0 -0.863333 0 0.504635 0 0 0 0 1 0.503425 0 0.864039 0 0 1.0354 0 0 -0.864039 0 0.503425 0 0 0 0 1 0.503027 0 0.864271 0 0 1.0354 0 0 -0.864271 0 0.503027 0 0 0 0 1</float_array>
+      <source id="J7_Joint1.translate_J7_Joint1_translate-output">
+        <float_array id="J7_Joint1.translate_J7_Joint1_translate-output-array" count="27">0 0 -21.747 0 0 -21.747 0 0 -21.747 0 8.00892 -10.35 0 5.91971 -3.816 0 0 0 0 0 0 0 0 0 0 0 0</float_array>
         <technique_common>
-          <accessor source="#J7_Joint1.matrix_J7_Joint1_transform-output-array" count="48" stride="16">
-            <param name="TRANSFORM" type="float4x4"/>
+          <accessor source="#J7_Joint1.translate_J7_Joint1_translate-output-array" count="9" stride="3">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="Z" type="float"/>
           </accessor>
         </technique_common>
       </source>
-      <source id="J7_Joint1.matrix_J7_Joint1_transform-interpolations">
-        <Name_array id="J7_Joint1.matrix_J7_Joint1_transform-interpolations-array" count="48">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+      <source id="J7_Joint1.translate_J7_Joint1_translate-interpolations">
+        <Name_array id="J7_Joint1.translate_J7_Joint1_translate-interpolations-array" count="9">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
         <technique_common>
-          <accessor source="#J7_Joint1.matrix_J7_Joint1_transform-interpolations-array" count="48" stride="1">
+          <accessor source="#J7_Joint1.translate_J7_Joint1_translate-interpolations-array" count="9" stride="1">
             <param name="INTERPOLATION" type="Name"/>
           </accessor>
         </technique_common>
       </source>
-      <sampler id="J7_Joint1.matrix_J7_Joint1_transform-sampler">
-        <input semantic="INPUT" source="#J7_Joint1.matrix_J7_Joint1_transform-input"/>
-        <input semantic="OUTPUT" source="#J7_Joint1.matrix_J7_Joint1_transform-output"/>
-        <input semantic="INTERPOLATION" source="#J7_Joint1.matrix_J7_Joint1_transform-interpolations"/>
+      <source id="J7_Joint1.translate_J7_Joint1_translate-intangents">
+        <float_array id="J7_Joint1.translate_J7_Joint1_translate-intangents-array" count="54">-0.291667 0 0.013888 0 -0.291667 -21.747 0.097222 0 0.097222 0 0.097222 -21.747 0.208333 0 -0.003987 0 0.208333 -21.747 0.416667 0 0.441091 8.00892 0.416667 -15.5257 0.583333 0 0.587296 7.49882 0.583333 -5.69224 0.708333 0 0.708333 0 0.708333 0 0.888889 0 0.888889 0 0.888889 0 1.15278 0 1.15278 0 1.15278 0 1.75 0 1.75 0 1.75 0</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.translate_J7_Joint1_translate-intangents-array" count="9" stride="6">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint1.translate_J7_Joint1_translate-outtangents">
+        <float_array id="J7_Joint1.translate_J7_Joint1_translate-outtangents-array" count="54">0.069444 0 0.069444 0 0.069444 -21.747 0.166667 0 0.166667 0 0.166667 -21.747 0.333333 0 0.253333 0.031027 0.333333 -21.747 0.541667 0 0.572798 8.00892 0.541667 -7.76214 0.666667 0 0.662704 4.3406 0.666667 -1.93976 0.819444 0 0.819444 0 0.819444 0 1.05556 0 1.05556 0 1.05556 0 1.5 0 1.5 0 1.5 0 2.33333 0 2.25 0 2.33333 0</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.translate_J7_Joint1_translate-outtangents-array" count="9" stride="6">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="J7_Joint1.translate_J7_Joint1_translate-sampler">
+        <input semantic="INPUT" source="#J7_Joint1.translate_J7_Joint1_translate-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint1.translate_J7_Joint1_translate-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint1.translate_J7_Joint1_translate-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint1.translate_J7_Joint1_translate-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint1.translate_J7_Joint1_translate-outtangents"/>
       </sampler>
-      <channel source="#J7_Joint1.matrix_J7_Joint1_transform-sampler" target="J7_Joint1/transform"/>
+      <channel source="#J7_Joint1.translate_J7_Joint1_translate-sampler" target="J7_Joint1/translate"/>
     </animation>
-    <animation id="J7_Joint2.matrix">
-      <source id="J7_Joint2.matrix_J7_Joint2_transform-input">
-        <float_array id="J7_Joint2.matrix_J7_Joint2_transform-input-array" count="48">0.041666 0.083333 0.125 0.166667 0.208333 0.25 0.291667 0.333333 0.375 0.416667 0.458333 0.5 0.541667 0.583333 0.625 0.666667 0.708333 0.75 0.791667 0.833333 0.875 0.916667 0.958333 1 1.04167 1.08333 1.125 1.16667 1.20833 1.25 1.29167 1.33333 1.375 1.41667 1.45833 1.5 1.54167 1.58333 1.625 1.66667 1.70833 1.75 1.79167 1.83333 1.875 1.91667 1.95833 2</float_array>
+    <animation id="J7_Joint1.rotateY">
+      <source id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-input">
+        <float_array id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-input-array" count="6">0.041666 0.125 0.5 0.625 1.25 2</float_array>
         <technique_common>
-          <accessor source="#J7_Joint2.matrix_J7_Joint2_transform-input-array" count="48" stride="1">
+          <accessor source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-input-array" count="6" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
@@ -72,33 +99,347 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
           <post_infinity>CONSTANT</post_infinity>
         </technique>
       </source>
-      <source id="J7_Joint2.matrix_J7_Joint2_transform-output">
-        <float_array id="J7_Joint2.matrix_J7_Joint2_transform-output-array" count="768">0.669986 0 0 0 0 1 0 3.42497 0 0 0.669986 0 0 0 0 1 0.697706 0 0 0 0 1 0 3.42497 0 0 0.697706 0 0 0 0 1 0.743833 0 0 0 0 1 0 3.42497 0 0 0.743833 0 0 0 0 1 0.801476 0 0 0 0 1 0 3.42497 0 0 0.801476 0 0 0 0 1 0.900779 0 0 0 0 0.863161 0 3.52546 0 0 0.902433 0 0 0 0 1 0.975507 0 0 0 0 0.791125 0 3.63938 0 0 0.975507 0 0 0 0 1 0.940671 0 0 0 0 1.06573 0 3.44708 0 0 0.924843 0 0 0 0 1 0.872475 0 0 0 0 1.44435 0 3.21908 0 0 0.837879 0 0 0 0 1 0.861251 0 0 0 0 1.64802 0 3.55933 0 0 0.828176 0 0 0 0 1 0.935108 0 0 0 0 1.61614 0 4.69062 0 0 0.929908 0 0 0 0 1 1.04644 0 0 0 0 1.50065 0 6.24545 0 0 1.08131 0 0 0 0 1 1.17202 0 0 0 0 1.34142 0 7.94234 0 0 1.25202 0 0 0 0 1 1.28861 0 0 0 0 1.17832 0 9.49983 0 0 1.4117 0 0 0 0 1 1.37296 0 0 0 0 1.05123 0 10.6364 0 0 1.52999 0 0 0 0 1 1.40186 0 0 0 0 1 0 11.0707 0 0 1.57653 0 0 0 0 1 1.3588 0 0 0 0 1 0 10.4973 0 0 1.52762 0 0 0 0 1 1.25907 0 0 0 0 1 0 9.08044 0 0 1.40279 0 0 0 0 1 1.12712 0 0 0 0 1 0 7.24266 0 0 1.23656 0 0 0 0 1 0.987376 0 0 0 0 1 0 5.40666 0 0 1.06348 0 0 0 0 1 0.864283 0 0 0 0 1 0 3.99512 0 0 0.918084 0 0 0 0 1 0.782279 0 0 0 0 1 0 3.43068 0 0 0.8349 0 0 0 0 1 0.754082 0 0 0 0 1.04436 0 3.43068 0 0 0.810062 0 0 0 0 1 0.767605 0 0 0 0 1.142 0 3.43068 0 0 0.813295 0 0 0 0 1 0.810075 0 0 0 0 1.23978 0 3.43068 0 0 0.839529 0 0 0 0 1 0.868721 0 0 0 0 1.28458 0 3.43068 0 0 0.88369 0 0 0 0 1 0.930524 0 0 0 0 1.24117 0 3.43068 0 0 0.936704 0 0 0 0 1 0.979848 0 0 0 0 1.14492 0 3.43068 0 0 0.981275 0 0 0 0 1 1 0 0 0 0 1.04852 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.00467 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.02293 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.05685 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.07511 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.06427 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.03841 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 1.00755 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.981692 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.970849 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.974806 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.982156 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.986113 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.983698 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.97794 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.971067 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.965309 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.962894 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.962894 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.962894 0 3.43068 0 0 1 0 0 0 0 1 1 0 0 0 0 0.962894 0 3.43068 0 0 1 0 0 0 0 1</float_array>
+      <source id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-output">
+        <float_array id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-output-array" count="6">0 0 12.8777 19.5849 49.6712 59.7995</float_array>
         <technique_common>
-          <accessor source="#J7_Joint2.matrix_J7_Joint2_transform-output-array" count="48" stride="16">
-            <param name="TRANSFORM" type="float4x4"/>
+          <accessor source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-output-array" count="6" stride="1">
+            <param name="ANGLE" type="float"/>
           </accessor>
         </technique_common>
       </source>
-      <source id="J7_Joint2.matrix_J7_Joint2_transform-interpolations">
-        <Name_array id="J7_Joint2.matrix_J7_Joint2_transform-interpolations-array" count="48">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+      <source id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-interpolations">
+        <Name_array id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-interpolations-array" count="6">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
         <technique_common>
-          <accessor source="#J7_Joint2.matrix_J7_Joint2_transform-interpolations-array" count="48" stride="1">
+          <accessor source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-interpolations-array" count="6" stride="1">
             <param name="INTERPOLATION" type="Name"/>
           </accessor>
         </technique_common>
       </source>
-      <sampler id="J7_Joint2.matrix_J7_Joint2_transform-sampler">
-        <input semantic="INPUT" source="#J7_Joint2.matrix_J7_Joint2_transform-input"/>
-        <input semantic="OUTPUT" source="#J7_Joint2.matrix_J7_Joint2_transform-output"/>
-        <input semantic="INTERPOLATION" source="#J7_Joint2.matrix_J7_Joint2_transform-interpolations"/>
+      <source id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-intangents">
+        <float_array id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-intangents-array" count="12">-0.291667 0 0.097222 0 0.375 6.79138 0.583333 17.1933 1.04167 43.5781 1.75 59.7995</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-intangents-array" count="6" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-outtangents">
+        <float_array id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-outtangents-array" count="12">0.069444 0 0.25 0 0.541667 14.9065 0.833333 31.5429 1.5 56.983 2.33333 59.7995</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-outtangents-array" count="6" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-sampler">
+        <input semantic="INPUT" source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-outtangents"/>
       </sampler>
-      <channel source="#J7_Joint2.matrix_J7_Joint2_transform-sampler" target="J7_Joint2/transform"/>
+      <channel source="#J7_Joint1.rotateY_J7_Joint1_rotateY.ANGLE-sampler" target="J7_Joint1/rotateY.ANGLE"/>
+    </animation>
+    <animation id="J7_Joint1.scale">
+      <source id="J7_Joint1.scale_J7_Joint1_scale-input">
+        <float_array id="J7_Joint1.scale_J7_Joint1_scale-input-array" count="9">0.041666 0.125 0.25 0.5 0.625 0.75 0.958333 1.25 2</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.scale_J7_Joint1_scale-input-array" count="9" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="J7_Joint1.scale_J7_Joint1_scale-output">
+        <float_array id="J7_Joint1.scale_J7_Joint1_scale-output-array" count="27">0.695769 0.872378 0.695769 0.715398 0.791125 0.71907 0.784661 1.45126 0.789948 1 1.19282 1.04652 1.12965 0.980637 1.2125 1 0.825736 1 1 1.03951 1 1 1.0354 1 1 1.0354 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.scale_J7_Joint1_scale-output-array" count="9" stride="3">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint1.scale_J7_Joint1_scale-interpolations">
+        <Name_array id="J7_Joint1.scale_J7_Joint1_scale-interpolations-array" count="9">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.scale_J7_Joint1_scale-interpolations-array" count="9" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint1.scale_J7_Joint1_scale-intangents">
+        <float_array id="J7_Joint1.scale_J7_Joint1_scale-intangents-array" count="54">-0.291667 0.695769 -0.291667 1.19739 -0.291667 0.695769 0.097222 0.705114 0.097222 0.713941 0.097222 0.706513 0.208333 0.756685 0.208333 1.40662 0.208333 0.75687 0.416667 0.898979 0.416667 1.33336 0.416667 0.952623 0.583333 1.12965 0.583333 1.04182 0.583333 1.22025 0.708333 1 0.708333 0.818377 0.708333 1 0.888889 1 0.888889 1.03951 0.888889 1 1.15278 1 1.15278 1.0354 1.15278 1 1.75 1 1.75 1.0354 1.75 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.scale_J7_Joint1_scale-intangents-array" count="9" stride="6">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint1.scale_J7_Joint1_scale-outtangents">
+        <float_array id="J7_Joint1.scale_J7_Joint1_scale-outtangents-array" count="54">0.069444 0.695769 0.069444 0.845293 0.069444 0.695769 0.166667 0.730824 0.166667 0.9069 0.166667 0.737906 0.333333 0.840614 0.333333 1.54052 0.333333 0.856103 0.541667 1.05051 0.541667 1.12255 0.541667 1.09347 0.666667 1.12965 0.666667 0.919456 0.666667 1.20475 0.819444 1 0.819444 0.838001 0.819444 1 1.05556 1 1.05556 1.03951 1.05556 1 1.5 1 1.5 1.0354 1.5 1 2.33333 1 2.33333 1.0354 2.33333 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint1.scale_J7_Joint1_scale-outtangents-array" count="9" stride="6">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="J7_Joint1.scale_J7_Joint1_scale-sampler">
+        <input semantic="INPUT" source="#J7_Joint1.scale_J7_Joint1_scale-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint1.scale_J7_Joint1_scale-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint1.scale_J7_Joint1_scale-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint1.scale_J7_Joint1_scale-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint1.scale_J7_Joint1_scale-outtangents"/>
+      </sampler>
+      <channel source="#J7_Joint1.scale_J7_Joint1_scale-sampler" target="J7_Joint1/scale"/>
+    </animation>
+    <animation id="J7_Joint2.translate">
+      <source id="J7_Joint2.translate_J7_Joint2_translate.Y-input">
+        <float_array id="J7_Joint2.translate_J7_Joint2_translate.Y-input-array" count="14">0.041666 0.166667 0.25 0.375 0.625 0.875 1.04167 1.16667 1.29167 1.41667 1.54167 1.625 1.70833 2</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.translate_J7_Joint2_translate.Y-input-array" count="14" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="J7_Joint2.translate_J7_Joint2_translate.Y-output">
+        <float_array id="J7_Joint2.translate_J7_Joint2_translate.Y-output-array" count="14">3.42498 3.42498 3.63938 3.55933 11.0707 3.43068 3.43068 3.43068 3.43068 3.43068 3.43068 3.43068 3.43068 3.43068</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.translate_J7_Joint2_translate.Y-output-array" count="14" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.translate_J7_Joint2_translate.Y-interpolations">
+        <Name_array id="J7_Joint2.translate_J7_Joint2_translate.Y-interpolations-array" count="14">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.translate_J7_Joint2_translate.Y-interpolations-array" count="14" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.translate_J7_Joint2_translate.Y-intangents">
+        <float_array id="J7_Joint2.translate_J7_Joint2_translate.Y-intangents-array" count="28">-0.291667 3.42498 0.125 3.42498 0.222222 3.62147 0.333333 2.73363 0.541667 11.0922 0.791667 3.43068 0.986111 3.43068 1.125 3.43068 1.25 3.43068 1.375 3.43068 1.5 3.43068 1.59722 3.43068 1.68056 3.43068 1.90278 3.43068</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.translate_J7_Joint2_translate.Y-intangents-array" count="14" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.translate_J7_Joint2_translate.Y-outtangents">
+        <float_array id="J7_Joint2.translate_J7_Joint2_translate.Y-outtangents-array" count="28">0.083333 3.42498 0.194444 3.42498 0.291667 3.66625 0.458333 5.21074 0.708333 11.0493 0.930556 3.43068 1.08333 3.43068 1.20833 3.43068 1.33333 3.43068 1.45833 3.43068 1.56944 3.43068 1.65278 3.43068 1.80556 3.43068 2.33333 3.43068</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.translate_J7_Joint2_translate.Y-outtangents-array" count="14" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="J7_Joint2.translate_J7_Joint2_translate.Y-sampler">
+        <input semantic="INPUT" source="#J7_Joint2.translate_J7_Joint2_translate.Y-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint2.translate_J7_Joint2_translate.Y-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint2.translate_J7_Joint2_translate.Y-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint2.translate_J7_Joint2_translate.Y-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint2.translate_J7_Joint2_translate.Y-outtangents"/>
+      </sampler>
+      <channel source="#J7_Joint2.translate_J7_Joint2_translate.Y-sampler" target="J7_Joint2/translate.Y"/>
+    </animation>
+    <animation id="J7_Joint2.scale">
+      <source id="J7_Joint2.scale_J7_Joint2_scale.X-input">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.X-input-array" count="14">0.041666 0.166667 0.25 0.375 0.625 0.875 1.04167 1.16667 1.29167 1.41667 1.54167 1.625 1.70833 2</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.X-input-array" count="14" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.X-output">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.X-output-array" count="14">0.669986 0.801476 0.975507 0.861251 1.40186 0.782279 0.868721 1 1 1 1 1 1 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.X-output-array" count="14" stride="1">
+            <param name="X" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.X-interpolations">
+        <Name_array id="J7_Joint2.scale_J7_Joint2_scale.X-interpolations-array" count="14">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.X-interpolations-array" count="14" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.X-intangents">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.X-intangents-array" count="28">-0.291667 0.54023 0.125 0.740372 0.222222 0.967537 0.333333 0.813879 0.541667 1.41502 0.791667 0.888906 0.986111 0.785419 1.125 1 1.25 1 1.375 1 1.5 1 1.59722 1 1.68056 1 1.90278 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.X-intangents-array" count="14" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.X-outtangents">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.X-outtangents-array" count="28">0.083333 0.686206 0.194444 0.842212 0.291667 0.987462 0.458333 0.955996 0.708333 1.3887 0.930556 0.711194 1.08333 0.931197 1.20833 1 1.33333 1 1.45833 1 1.56944 1 1.65278 1 1.80556 1 2.33333 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.X-outtangents-array" count="14" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Y-input">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Y-input-array" count="13">0.041666 0.166667 0.25 0.375 0.625 0.875 1.04167 1.20833 1.33333 1.54167 1.66667 1.875 2</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Y-input-array" count="13" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Y-output">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Y-output-array" count="13">1 1 0.791125 1.64802 1 1 1.28458 1.00467 1.07511 0.970849 0.986113 0.962894 0.962894</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Y-output-array" count="13" stride="1">
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Y-interpolations">
+        <Name_array id="J7_Joint2.scale_J7_Joint2_scale.Y-interpolations-array" count="13">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Y-interpolations-array" count="13" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Y-intangents">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Y-intangents-array" count="26">-0.291667 1 0.125 1 0.222222 0.704722 0.333333 1.62481 0.541667 1 0.791667 1 0.986111 1.2838 1.15278 1.00467 1.29167 1.07511 1.47222 0.970849 1.625 0.986113 1.80556 0.962894 1.95833 0.962894</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Y-intangents-array" count="13" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Y-outtangents">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Y-outtangents-array" count="26">0.083333 1 0.194444 1 0.291667 0.920729 0.458333 1.69444 0.708333 1 0.930556 1 1.09722 1.28536 1.25 1.00467 1.40278 1.07511 1.58333 0.970849 1.73611 0.986113 1.91667 0.962894 2.33333 0.962894</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Y-outtangents-array" count="13" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Z-input">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Z-input-array" count="14">0.041666 0.166667 0.25 0.375 0.625 0.875 1.04167 1.16667 1.29167 1.41667 1.54167 1.625 1.70833 2</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Z-input-array" count="14" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Z-output">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Z-output-array" count="14">0.669986 0.801476 0.975507 0.828176 1.57654 0.8349 0.88369 1 1 1 1 1 1 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Z-output-array" count="14" stride="1">
+            <param name="Z" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Z-interpolations">
+        <Name_array id="J7_Joint2.scale_J7_Joint2_scale.Z-interpolations-array" count="14">BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER BEZIER</Name_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Z-interpolations-array" count="14" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Z-intangents">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Z-intangents-array" count="28">-0.291667 0.54023 0.125 0.740372 0.222222 0.971947 0.333333 0.761395 0.541667 1.57541 0.791667 0.91603 0.986111 0.81511 1.125 1 1.25 1 1.375 1 1.5 1 1.59722 1 1.68056 1 1.90278 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Z-intangents-array" count="14" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="J7_Joint2.scale_J7_Joint2_scale.Z-outtangents">
+        <float_array id="J7_Joint2.scale_J7_Joint2_scale.Z-outtangents-array" count="28">0.083333 0.686206 0.194444 0.842212 0.291667 0.980847 0.458333 0.961738 0.708333 1.57766 0.930556 0.780813 1.08333 0.935124 1.20833 1 1.33333 1 1.45833 1 1.56944 1 1.65278 1 1.80556 1 2.33333 1</float_array>
+        <technique_common>
+          <accessor source="#J7_Joint2.scale_J7_Joint2_scale.Z-outtangents-array" count="14" stride="2">
+            <param name="X" type="float"/>
+            <param name="Y" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="J7_Joint2.scale_J7_Joint2_scale.X-sampler">
+        <input semantic="INPUT" source="#J7_Joint2.scale_J7_Joint2_scale.X-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint2.scale_J7_Joint2_scale.X-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint2.scale_J7_Joint2_scale.X-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint2.scale_J7_Joint2_scale.X-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint2.scale_J7_Joint2_scale.X-outtangents"/>
+      </sampler>
+      <sampler id="J7_Joint2.scale_J7_Joint2_scale.Y-sampler">
+        <input semantic="INPUT" source="#J7_Joint2.scale_J7_Joint2_scale.Y-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint2.scale_J7_Joint2_scale.Y-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint2.scale_J7_Joint2_scale.Y-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint2.scale_J7_Joint2_scale.Y-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint2.scale_J7_Joint2_scale.Y-outtangents"/>
+      </sampler>
+      <sampler id="J7_Joint2.scale_J7_Joint2_scale.Z-sampler">
+        <input semantic="INPUT" source="#J7_Joint2.scale_J7_Joint2_scale.Z-input"/>
+        <input semantic="OUTPUT" source="#J7_Joint2.scale_J7_Joint2_scale.Z-output"/>
+        <input semantic="INTERPOLATION" source="#J7_Joint2.scale_J7_Joint2_scale.Z-interpolations"/>
+        <input semantic="IN_TANGENT" source="#J7_Joint2.scale_J7_Joint2_scale.Z-intangents"/>
+        <input semantic="OUT_TANGENT" source="#J7_Joint2.scale_J7_Joint2_scale.Z-outtangents"/>
+      </sampler>
+      <channel source="#J7_Joint2.scale_J7_Joint2_scale.X-sampler" target="J7_Joint2/scale.X"/>
+      <channel source="#J7_Joint2.scale_J7_Joint2_scale.Y-sampler" target="J7_Joint2/scale.Y"/>
+      <channel source="#J7_Joint2.scale_J7_Joint2_scale.Z-sampler" target="J7_Joint2/scale.Z"/>
     </animation>
   </library_animations>
+  <library_physics_scenes>
+    <physics_scene id="MayaNativePhysicsScene">
+      <technique_common>
+        <gravity>0 -980 0</gravity>
+        <time_step>0.083</time_step>
+      </technique_common>
+    </physics_scene>
+  </library_physics_scenes>
   <library_images>
-    <image id="file1" name="file1">
-      <init_from>file://C/Documents%20and%20Settings/user/Desktop/Oishi_Project/J7/T_J7.png</init_from>
+    <image id="file2" name="file2">
+      <init_from>./J7.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -108,22 +449,22 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
     </image>
   </library_images>
   <library_materials>
-    <material id="M_J7" name="M_J7">
-      <instance_effect url="#M_J7-fx"/>
+    <material id="lambert7" name="lambert7">
+      <instance_effect url="#lambert7-fx"/>
     </material>
   </library_materials>
   <library_effects>
-    <effect id="M_J7-fx">
+    <effect id="lambert7-fx">
       <profile_COMMON>
-        <newparam sid="file1-surface">
+        <newparam sid="file2-surface">
           <surface type="2D">
-            <init_from>file1</init_from>
+            <init_from>file2</init_from>
             <format>A8R8G8B8</format>
           </surface>
         </newparam>
-        <newparam sid="file1-sampler">
+        <newparam sid="file2-sampler">
           <sampler2D>
-            <source>file1-surface</source>
+            <source>file2-surface</source>
             <wrap_s>WRAP</wrap_s>
             <wrap_t>WRAP</wrap_t>
             <minfilter>NONE</minfilter>
@@ -140,7 +481,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
               <color>0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="file1-sampler" texcoord="TEX0">
+              <texture texture="file2-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="MAYA">
                     <wrapU>1</wrapU>
@@ -181,35 +522,47 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
     </effect>
   </library_effects>
   <library_geometries>
-    <geometry id="S_J7Mesh" name="S_J7Mesh">
+    <geometry id="S_JShape7" name="S_JShape7">
       <mesh>
-        <source id="S_J7Mesh-positions" name="position">
-          <float_array id="S_J7Mesh-positions-array" count="312">1.68751 0 8.50077 1.1142 0 8.60559 8.30243 0 -2.52336 8.444 0 -1.95974 7.41817 3.66541 -2.34597 3.25577 3.66541 -5.03449 -3.25007 3.66541 5.03796 0.912338 3.66541 7.72648 8.44341 4.14059 -1.95268 1.69245 4.14059 8.49927 3.59412 0 -5.56447 3.59696 4.14059 -5.56274 8.29473 4.14059 -2.52843 -1.68617 0 -8.50285 -8.44265 0 1.95766 -8.43773 4.14059 1.95614 -1.68677 4.14059 -8.4958 -3.59412 0 5.56447 -3.59127 4.14059 5.56621 -8.28905 4.14059 2.53189 -8.28977 0 2.53153 7.55631 4.14059 -1.77703 1.48775 4.14059 7.61842 3.25577 4.14059 -5.03449 7.40763 4.14059 -2.35278 -7.55063 4.14059 1.7805 -1.48207 4.14059 -7.61496 -3.25007 4.14059 5.03796 -7.40195 4.14059 2.35624 7.55652 3.66541 -1.77736 1.48728 3.66541 7.61914 -7.55109 3.66541 1.78121 -1.48186 3.66541 -7.61528 -7.41249 3.66541 2.34944 1.1065 4.14059 8.60052 -1.10082 4.14059 -8.59705 -1.10154 0 -8.59742 0.901797 4.14059 7.71967 -0.896116 4.14059 -7.71621 -0.906657 3.66541 -7.72301 0.051254 7.5816 -0.032024 -1.4819 7.38123 -0.439473 -0.699999 7.33091 1.50864 1.91723 6.99661 0.63224 0.802782 7.22997 -1.48293 -2.63318 6.65802 -0.722623 -2.71703 6.66837 1.52844 -1.04694 6.66854 2.6021 1.57205 6.72598 2.24768 1.79335 6.64208 -2.35446 -1.08518 6.67229 -2.79331 -3.55235 5.55949 -1.47587 -3.58951 5.55949 0.073706 3.60426 5.55948 1.14273 3.42128 5.55948 0.07743 2.58801 6.66599 -0.653432 -3.90019 5.55949 1.11739 -4.12122 4.14478 0.098551 -3.48629 5.55949 2.76929 -2.38521 5.55949 3.76905 -0.614174 5.55948 3.73155 0.727097 5.55949 4.02226 2.05877 5.55949 3.48774 3.12067 5.55948 2.52541 4.04067 4.14455 1.37966 4.01628 5.55949 -1.14468 3.91218 4.14334 0.145288 3.48542 5.55949 -2.61552 2.43335 5.55949 -3.69113 0.683634 5.55949 -3.68667 -0.644881 5.55949 -3.9663 -2.03424 5.57209 -3.47383 -4.02727 4.14539 -1.69243 -3.82601 3.52083 -1.61158 -4.41159 4.14553 1.25148 -3.91118 3.52083 0.115188 -4.1784 3.52083 1.18297 -3.91649 4.14602 3.07836 -3.66874 3.52083 2.85152 -2.67679 4.14608 4.21869 -2.49152 3.52083 3.92791 -0.729667 4.14614 4.26379 -0.674119 3.52083 4.01312 0.741378 4.14618 4.58018 0.629053 3.52083 4.34005 2.38856 4.14612 3.89295 2.26425 3.52083 3.69349 3.51471 4.14538 2.8153 3.30935 3.52083 2.70333 3.82561 3.52083 1.28559 3.71914 3.52083 0.137923 4.53478 4.14488 -1.29399 4.29926 3.52083 -1.22913 3.93506 4.14606 -2.95824 3.73022 3.52083 -2.80574 2.74479 4.146 -4.1751 2.60249 3.52083 -3.95873 0.806265 4.14594 -4.23347 0.747918 3.52083 -3.98643 -0.72377 4.1459 -4.50219 -0.689508 3.52083 -4.26235 -2.30585 4.164 -3.91255 -2.1844 3.52266 -3.71665 -2.1844 3.51899 -3.71665</float_array>
+        <source id="S_JShape7-positions" name="position">
+          <float_array id="S_JShape7-positions-array" count="312">1.68751 0 8.50077 1.1142 0 8.60559 8.30243 0 -2.52336 8.444 0 -1.95974 7.41817 3.66541 -2.34597 3.25577 3.66541 -5.03449 -3.25007 3.66541 5.03796 0.912338 3.66541 7.72648 8.44341 4.14059 -1.95268 1.69245 4.14059 8.49927 3.59412 0 -5.56447 3.59696 4.14059 -5.56274 8.29473 4.14059 -2.52843 -1.68617 0 -8.50285 -8.44265 0 1.95766 -8.43773 4.14059 1.95614 -1.68677 4.14059 -8.4958 -3.59412 0 5.56447 -3.59127 4.14059 5.56621 -8.28905 4.14059 2.53189 -8.28977 0 2.53153 7.55631 4.14059 -1.77703 1.48775 4.14059 7.61842 3.25577 4.14059 -5.03449 7.40763 4.14059 -2.35278 -7.55063 4.14059 1.78049 -1.48207 4.14059 -7.61496 -3.25007 4.14059 5.03796 -7.40195 4.14059 2.35624 7.55652 3.66541 -1.77736 1.48728 3.66541 7.61914 -7.55109 3.66541 1.78121 -1.48186 3.66541 -7.61528 -7.41249 3.66541 2.34943 1.1065 4.14059 8.60052 -1.10082 4.14059 -8.59705 -1.10154 0 -8.59742 0.901797 4.14059 7.71967 -0.896116 4.14059 -7.71621 -0.906657 3.66541 -7.72301 0.051253 7.5816 -0.032023 -1.4819 7.38123 -0.439473 -0.699999 7.33091 1.50864 1.91723 6.99661 0.63224 0.802782 7.22997 -1.48293 -2.63318 6.65802 -0.722623 -2.71703 6.66837 1.52844 -1.04694 6.66854 2.6021 1.57205 6.72598 2.24768 1.79335 6.64208 -2.35446 -1.08518 6.67229 -2.79331 -3.55235 5.55949 -1.47587 -3.58951 5.55949 0.073705 3.60426 5.55948 1.14273 3.42128 5.55948 0.07743 2.58801 6.66599 -0.653432 -3.90019 5.55949 1.11739 -4.12122 4.14478 0.098551 -3.48629 5.55949 2.76929 -2.38521 5.55949 3.76905 -0.614174 5.55948 3.73155 0.727097 5.55949 4.02226 2.05877 5.55949 3.48773 3.12067 5.55948 2.52541 4.04067 4.14455 1.37966 4.01629 5.55949 -1.14468 3.91218 4.14334 0.145288 3.48542 5.55949 -2.61552 2.43335 5.55949 -3.69113 0.683634 5.55949 -3.68667 -0.644881 5.55949 -3.9663 -2.03424 5.57209 -3.47383 -4.02727 4.14539 -1.69243 -3.82601 3.52083 -1.61158 -4.41159 4.14553 1.25148 -3.91118 3.52083 0.115188 -4.1784 3.52083 1.18297 -3.91649 4.14602 3.07836 -3.66874 3.52083 2.85152 -2.67679 4.14608 4.21869 -2.49152 3.52083 3.92791 -0.729667 4.14614 4.26379 -0.674119 3.52083 4.01313 0.741378 4.14618 4.58018 0.629053 3.52083 4.34005 2.38856 4.14612 3.89295 2.26425 3.52083 3.69349 3.51471 4.14538 2.81531 3.30935 3.52083 2.70333 3.82561 3.52083 1.28559 3.71914 3.52083 0.137923 4.53478 4.14488 -1.29399 4.29926 3.52083 -1.22913 3.93506 4.14606 -2.95824 3.73022 3.52083 -2.80574 2.74479 4.146 -4.1751 2.60249 3.52083 -3.95873 0.806265 4.14594 -4.23347 0.747918 3.52083 -3.98643 -0.72377 4.1459 -4.50219 -0.689508 3.52083 -4.26235 -2.30585 4.164 -3.91255 -2.1844 3.52266 -3.71664 -2.1844 3.51899 -3.71664</float_array>
           <technique_common>
-            <accessor source="#S_J7Mesh-positions-array" count="104" stride="3">
+            <accessor source="#S_JShape7-positions-array" count="104" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="S_J7Mesh-map1" name="map1">
-          <float_array id="S_J7Mesh-map1-array" count="324">0.9828 0.4383 0.9864 0.4347 0.853 0.435 0.8567 0.4386 0.0303 0.3863 0.2438 0.3863 0.2438 0.9841 0.0303 0.9841 0.019 0.0101 0.9443 0.0101 0.9443 0.2636 0.019 0.2636 0.478 0.0101 0.478 0.2636 0.0194 0.2635 0.0194 0.01 0.4779 0.0101 0.4779 0.2637 0.0194 0.2636 0.0194 0.0101 0.9443 0.3298 0.019 0.3298 0.478 0.3298 0.0194 0.3299 0.478 0.3299 0.9443 0.367 0.019 0.367 0.478 0.3671 0.0194 0.3671 0.9443 0.3671 0.019 0.3671 0.986 0.0101 0.986 0.2636 0.9439 0.2637 0.9439 0.0101 0.986 0.2637 0.9861 0.0101 0.9861 0.2637 0.986 0.3299 0.9439 0.3299 0.986 0.3298 0.9861 0.3298 0.9439 0.3298 0.986 0.367 0.9439 0.3671 0.9861 0.3671 0.986 0.3671 0.853 0.3974 0.9864 0.3971 0.0135 0.9673 0.0135 0.4032 0.019 0.0101 0.9443 0.0101 0.9443 0.2636 0.019 0.2636 0.019 0.2636 0.9443 0.2636 0.9443 0.3298 0.019 0.3298 0.0194 0.3299 0.019 0.3298 0.9443 0.3298 0.0194 0.3299 0.478 0.3671 0.0194 0.3671 0.986 0.0101 0.9439 0.2637 0.9439 0.0101 0.986 0.0101 0.986 0.2636 0.9443 0.2636 0.9443 0.0101 0.9439 0.2637 0.9443 0.2636 0.986 0.2636 0.986 0.3298 0.9443 0.3298 0.986 0.367 0.9439 0.3671 0.986 0.3298 0.9443 0.3298 0.9864 0.4347 0.853 0.435 0.0303 0.3863 0.0303 0.9841 0.9439 0.0101 0.9439 0.2637 0.9439 0.2637 0.9439 0.3671 0.478 0.3671 0.9864 0.4347 0.9828 0.4383 0.8567 0.4386 0.853 0.435 0.0303 0.3863 0.0135 0.4032 0.0135 0.9673 0.0303 0.9841 0.6179 0.6868 0.6463 0.63105 0.6941 0.6999 0.592675 0.764175 0.545 0.67685 0.6674 0.58395 0.7531 0.63535 0.74645 0.715 0.66225 0.79055 0.48955 0.69925 0.5259 0.7549 0.5469 0.58345 0.7356 0.55135 0.78445 0.5733 0.8358 0.6358 0.845 0.70195 0.76385 0.81945 0.70335 0.85385 0.5607 0.8522 0.518075 0.821975 0.4536 0.799 0.44725 0.6067 0.4794 0.55445 0.5411 0.519 0.6679 0.51705 0.847 0.5259 0.7872 0.48285 0.9072 0.6147 0.91845 0.7048 0.86995 0.8012 0.79295 0.7652 0.82105 0.86915 0.73085 0.922 0.6377 0.9387 0.6329 0.86595 0.4748 0.892375 0.5458 0.9248 0.3909 0.8401 0.338 0.7559 0.41335 0.73785 0.32555 0.66455 0.3997 0.6718 0.37355 0.56785 0.42675 0.49915 0.513 0.45045 0.683375 0.4428 0.8197 0.436 0.8867 0.4897 0.9573 0.5946 0.9706 0.7103 0.9206 0.8285 0.8565 0.905 0.7503 0.9682 0.6423 0.988 0.5307 0.9727 0.44765 0.93885 0.3531 0.8719 0.2882 0.7707 0.2769 0.6566 0.3255 0.5371 0.3929 0.4597 0.4956 0.4024 0.69345 0.39205 0.4956 0.4024</float_array>
+        <source id="S_JShape7-normals" name="normal">
+          <float_array id="S_JShape7-normals-array" count="534">0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0.553544 0.000019 0.83282 0.986902 0.000121 0.161318 0.986902 0.000121 0.161318 0.553544 0.000019 0.83282 0.542567 -0.00002 -0.840012 0.542567 -0.00002 -0.840012 0.811914 0.000541 -0.583777 0.811914 0.000541 -0.583777 -0.549298 0.000921 -0.835626 -0.987468 0.000817 -0.157818 -0.987468 0.000817 -0.157818 -0.549298 0.000921 -0.835626 -0.542567 0.000021 0.840012 -0.542567 0.000021 0.840012 -0.809839 0.000383 0.586651 -0.809839 0.000383 0.586651 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0.000000 0 1 0.000000 0 1 0.000000 0 1 0.000000 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 -0.55432 -0.005272 -0.832287 -0.986588 -0.005074 -0.163149 -0.986588 -0.005074 -0.163149 -0.55432 -0.005272 -0.832287 -0.812977 -0.005004 0.582275 -0.542567 -0.000000 0.840012 -0.542567 -0.000000 0.840012 -0.812977 -0.005004 0.582275 0.554441 -0.005074 0.832208 0.986611 -0.005271 0.163006 0.986611 -0.005271 0.163006 0.554441 -0.005074 0.832208 0.812891 -0.005197 -0.582393 0.542568 -0.000000 -0.840012 0.542568 -0.000000 -0.840012 0.812891 -0.005197 -0.582393 -0.197478 0.000463 0.980307 -0.197478 0.000463 0.980307 0.202464 0.000463 -0.97929 0.202464 0.000463 -0.97929 0 1 0 0 1 0 0 1 0 0 1 0 0 1 -0.000000 0 1 -0.000000 0 1 -0.000000 0 1 -0.000000 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0.196572 -0.005198 -0.980476 0.196572 -0.005198 -0.980476 -0.196429 -0.005004 0.980505 -0.196429 -0.005004 0.980505 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 -0.000000 0 1 -0.000000 0 1 -0.000000 0 1 -0.000000 0 1 0 0 1 0 0 1 0 0 1 0 -0.542567 -0.000000 0.840012 -0.542567 -0.000000 0.840012 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0.082359 0.996596 0.003646 -0.269984 0.955706 -0.117197 -0.049703 0.957094 0.285484 0.463782 0.878754 0.112681 0.167726 0.957264 -0.235613 -0.615263 0.768167 -0.17712 -0.502162 0.843244 0.191763 -0.11062 0.806969 0.580142 0.269043 0.846056 0.460223 0.305514 0.851269 -0.426617 0.542936 0.839774 -0.000608 -0.147544 0.829797 -0.538207 -0.854066 0.510311 -0.100768 -0.847464 0.530486 0.019735 -0.692835 0.587379 0.41829 -0.260697 0.59978 0.756505 0.065091 0.623318 0.779254 0.44414 0.561978 0.697797 0.821602 0.565011 0.075722 0.809934 0.569236 0.141345 0.753944 0.65685 -0.010815 0.090293 0.607637 -0.789066 -0.066007 0.550698 -0.832091 -0.491301 0.543979 -0.680228 -0.794006 0.542486 -0.274342 -0.999889 -0.014644 0.002831 -0.988605 0.007168 -0.150361 -0.853727 -0.052599 0.518057 -0.366048 -0.05837 0.928764 -0.119152 -0.017145 0.992728 -0.08745 0.533474 0.841284 0.083524 -0.005245 0.996492 0.541525 -0.009649 0.840629 0.835869 -0.009537 0.548846 0.662556 0.622662 0.416307 0.988681 0.001581 0.150027 0.993486 -0.009506 0.113554 0.999183 0.001376 0.040395 0.847424 -0.003853 -0.530903 0.660064 0.623832 -0.418508 0.394443 -0.003569 -0.918914 0.304128 0.621528 -0.721948 0.101741 -0.00327 -0.994806 -0.083233 -0.001302 -0.996529 -0.591581 0.004057 -0.806235 -0.938844 0.009595 -0.344209 -0.748085 -0.654111 -0.111836 -0.552678 -0.833366 0.006904 -0.578881 -0.734687 0.353739 -0.248469 -0.744193 0.620032 -0.047757 -0.932234 0.358692 0.04254 -0.836599 0.546162 0.397808 -0.681275 0.614502 0.613938 -0.678923 0.40267 0.566142 -0.821275 0.070641 0.369732 -0.927364 0.057399 0.728887 -0.684162 0.025422 0.612018 -0.691636 -0.383503 0.211997 -0.844882 -0.491154 0.045841 -0.893734 -0.446248 -0.063679 -0.686607 -0.724235 -0.556233 -0.342184 -0.757308 -0.417495 -0.895309 -0.155303 0.000705 -0.999999 0.000834</float_array>
           <technique_common>
-            <accessor source="#S_J7Mesh-map1-array" count="162" stride="2">
+            <accessor source="#S_JShape7-normals-array" count="178" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="S_JShape7-map1" name="map1">
+          <float_array id="S_JShape7-map1-array" count="324">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</float_array>
+          <technique_common>
+            <accessor source="#S_JShape7-map1-array" count="162" stride="2">
               <param name="S" type="float"/>
               <param name="T" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <vertices id="S_J7Mesh-vertices">
-          <input semantic="POSITION" source="#S_J7Mesh-positions"/>
+        <vertices id="S_JShape7-vertices">
+          <input semantic="POSITION" source="#S_JShape7-positions"/>
         </vertices>
-        <triangles material="M_J7SG" count="198">
-          <input semantic="VERTEX" source="#S_J7Mesh-vertices" offset="0"/>
-          <input semantic="TEXCOORD" source="#S_J7Mesh-map1" offset="1" set="0"/>
-          <p>0 0 1 1 2 2 2 2 3 3 0 0 4 4 5 5 6 6 6 6 7 7 4 4 0 8 3 9 8 10 8 10 9 11 0 8 10 12 11 13 12 14 12 14 2 15 10 12 13 51 14 52 15 53 15 53 16 54 13 51 17 16 18 17 19 18 19 18 20 19 17 16 9 11 8 10 21 20 21 20 22 21 9 11 11 13 23 22 24 23 24 23 12 14 11 13 16 55 15 56 25 57 25 57 26 58 16 55 18 17 27 24 28 59 28 59 19 18 18 17 22 21 21 20 29 25 29 25 30 26 22 21 24 23 23 22 5 27 5 27 4 28 24 23 26 60 25 61 31 29 31 29 32 30 26 60 28 62 27 24 6 63 6 63 33 64 28 62 2 31 12 32 8 10 8 10 3 9 2 31 34 33 1 34 0 65 0 65 9 35 34 33 13 36 16 37 35 66 35 66 36 67 13 36 20 68 19 69 15 70 15 70 14 71 20 68 9 35 22 38 37 39 37 39 34 33 9 35 8 10 12 32 24 40 24 40 21 20 8 10 16 37 26 41 38 42 38 42 35 72 16 37 15 73 19 74 28 75 28 75 25 76 15 73 22 38 30 43 7 44 7 44 37 39 22 38 24 40 4 77 29 25 29 25 21 20 24 40 26 41 32 45 39 78 39 78 38 42 26 41 28 79 33 46 31 29 31 29 25 80 28 79 20 81 36 82 10 47 10 47 17 48 20 81 39 83 33 84 6 6 6 6 5 5 39 83 10 12 36 85 35 86 35 86 11 13 10 12 17 16 1 34 34 33 34 33 18 17 17 16 11 13 35 87 38 42 38 42 23 22 11 13 18 17 34 33 37 39 37 39 27 24 18 17 38 42 39 88 5 27 5 27 23 22 38 42 37 39 7 44 6 89 6 89 27 24 37 39 17 48 10 47 2 2 2 2 1 1 17 48 20 90 14 91 13 92 13 92 36 93 20 90 7 7 30 49 29 50 29 50 4 4 7 7 39 94 32 95 31 96 31 96 33 97 39 94 40 98 41 99 42 100 40 98 42 100 43 101 40 98 43 101 44 102 40 98 44 102 41 99 41 99 45 103 46 104 41 99 46 104 42 100 42 100 46 104 47 105 42 100 47 105 48 106 42 100 48 106 43 101 49 107 44 102 55 108 44 102 50 109 41 99 41 99 50 109 45 103 52 110 56 111 46 104 46 104 45 103 52 110 56 111 58 112 46 104 58 112 59 113 47 105 47 105 46 104 58 112 47 105 61 114 48 106 48 106 61 114 62 115 43 101 53 116 54 117 55 108 54 117 65 118 55 108 65 118 49 107 50 109 49 107 69 119 70 120 71 121 50 109 71 121 51 122 45 103 45 103 50 109 71 121 74 123 56 111 52 110 52 110 57 124 74 123 77 125 58 112 56 111 56 111 74 123 77 125 79 126 59 113 58 112 58 112 77 125 79 126 81 127 60 128 59 113 59 113 79 126 81 127 83 129 61 114 60 128 60 128 81 127 83 129 85 130 62 115 61 114 61 114 83 129 85 130 87 131 63 132 62 115 62 115 85 130 87 131 66 133 54 117 53 116 53 116 64 134 66 133 91 135 65 118 54 117 54 117 66 133 91 135 93 136 67 137 65 118 65 118 91 135 93 136 95 138 68 139 67 137 67 137 93 136 95 138 97 140 69 119 68 139 68 139 95 138 97 140 99 141 70 120 69 119 69 119 97 140 99 141 101 142 71 121 70 120 70 120 99 141 101 142 72 143 51 122 71 121 71 121 101 142 72 143 74 123 57 124 75 144 75 144 76 145 74 123 77 125 74 123 76 145 76 145 78 146 77 125 79 126 77 125 78 146 78 146 80 147 79 126 81 127 79 126 80 147 80 147 82 148 81 127 83 129 81 127 82 148 82 148 84 149 83 129 85 130 83 129 84 149 84 149 86 150 85 130 87 131 85 130 86 150 86 150 88 151 87 131 66 133 64 134 89 152 89 152 90 153 66 133 91 135 66 133 90 153 90 153 92 154 91 135 93 136 91 135 92 154 92 154 94 155 93 136 95 138 93 136 94 155 94 155 96 156 95 138 97 140 95 138 96 156 96 156 98 157 97 140 99 141 97 140 98 157 98 157 100 158 99 141 101 142 99 141 100 158 100 158 102 159 101 142 72 143 101 142 102 159 102 159 73 160 72 143 87 131 64 134 53 116 53 116 63 132 87 131 64 134 87 131 88 151 88 151 89 152 64 134 43 101 63 132 53 116 43 101 54 117 55 108 72 143 57 124 52 110 52 110 51 122 72 143 57 124 72 143 73 160 73 160 75 144 57 124 51 122 52 110 45 103 62 115 63 132 48 106 47 105 60 128 61 114 59 113 60 128 47 105 65 118 67 137 49 107 49 107 67 137 68 139 49 107 68 139 69 119 69 119 70 120 50 109 86 150 84 149 89 152 89 152 88 151 86 150 82 148 80 147 78 146 78 146 76 145 82 148 84 149 82 148 90 153 90 153 89 152 84 149 94 155 92 154 90 153 90 153 96 156 94 155 103 161 100 158 98 157 98 157 73 160 103 161 82 148 76 145 75 144 75 144 73 160 82 148 82 148 73 160 98 157 98 157 90 153 82 148 96 156 90 153 98 157 55 108 44 102 43 101 48 106 63 132 43 101 44 102 49 107 50 109</p>
-        </triangles>
+        <polylist material="lambert7SG" count="116">
+          <input semantic="VERTEX" source="#S_JShape7-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#S_JShape7-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#S_JShape7-map1" offset="2" set="0"/>
+          <vcount>4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 3 3 3 3 3 3 3 3 3 3 3 3 4 3 4 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 3 3 4 4 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 3 3 3 3</vcount>
+          <p>0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 0 8 8 3 9 9 8 10 10 9 11 11 10 12 12 11 13 13 12 14 14 2 15 15 13 16 16 14 17 17 15 18 18 16 19 19 17 20 16 18 21 17 19 22 18 20 23 19 9 24 11 8 25 10 21 26 20 22 27 21 11 28 13 23 29 22 24 30 23 12 31 14 16 32 24 15 33 25 25 34 26 26 35 27 18 36 17 27 37 24 28 38 28 19 39 18 22 40 21 21 41 20 29 42 25 30 43 26 24 44 23 23 45 22 5 46 27 4 47 28 26 48 29 25 49 30 31 50 29 32 51 30 28 52 31 27 53 24 6 54 32 33 55 33 2 15 31 12 14 32 8 10 10 3 9 9 34 56 33 1 57 34 0 8 35 9 11 35 13 16 36 16 19 37 35 58 38 36 59 39 20 23 40 19 22 41 15 18 42 14 17 43 9 60 35 22 61 38 37 62 39 34 63 33 8 64 10 12 65 32 24 66 40 21 67 20 16 68 37 26 69 41 38 70 42 35 71 44 15 72 45 19 73 46 28 74 47 25 75 48 22 40 38 30 43 43 7 76 44 37 77 39 24 44 40 4 47 49 29 42 25 21 41 20 26 48 41 32 51 45 39 78 50 38 79 42 28 52 51 33 55 46 31 50 29 25 49 52 20 80 53 36 81 54 10 82 47 17 83 48 39 84 55 33 85 56 6 86 6 5 87 5 10 12 12 36 59 57 35 58 58 11 13 13 17 20 16 1 57 34 34 56 33 18 21 17 11 88 13 35 89 59 38 90 42 23 91 22 18 92 17 34 93 33 37 94 39 27 95 24 38 79 42 39 78 60 5 96 27 23 97 22 37 77 39 7 76 44 6 54 61 27 53 24 17 98 48 10 99 47 2 100 2 1 101 1 20 102 62 14 103 63 13 104 64 36 105 65 7 106 7 30 107 49 29 108 50 4 109 4 39 110 66 32 111 67 31 112 68 33 113 69 40 114 70 41 115 71 42 116 72 40 114 73 42 116 74 43 117 75 40 114 76 43 117 77 44 118 78 40 114 79 44 118 80 41 115 81 41 115 82 45 119 83 46 120 84 41 115 85 46 120 86 42 116 87 42 116 88 46 120 89 47 121 90 42 116 91 47 121 92 48 122 93 42 116 94 48 122 95 43 117 96 49 123 97 44 118 98 55 124 99 44 118 100 50 125 101 41 115 99 41 115 99 50 125 102 45 119 103 52 126 104 56 127 105 46 120 104 45 119 103 56 127 106 58 128 107 46 120 104 58 128 108 59 129 109 47 121 105 46 120 104 47 121 105 61 130 110 48 122 106 48 122 106 61 130 111 62 131 112 43 117 101 53 132 113 54 133 114 55 124 108 54 133 115 65 134 116 55 124 108 65 134 117 49 123 107 50 125 109 49 123 107 69 135 118 70 136 119 71 137 120 50 125 109 71 137 121 51 138 122 45 119 103 50 125 109 74 139 123 56 127 111 52 126 110 57 140 124 77 141 125 58 128 112 56 127 111 74 139 123 79 142 126 59 129 113 58 128 112 77 141 125 81 143 127 60 144 128 59 129 113 79 142 126 83 145 129 61 130 114 60 144 128 81 143 127 85 146 130 62 131 115 61 130 114 83 145 129 87 147 131 63 148 132 62 131 115 85 146 130 66 149 133 54 133 117 53 132 116 64 150 134 91 151 135 65 134 118 54 133 117 66 149 133 93 152 136 67 153 137 65 134 118 91 151 135 95 154 138 68 155 139 67 153 137 93 152 136 97 156 140 69 135 119 68 155 139 95 154 138 99 157 141 70 136 120 69 135 119 97 156 140 101 158 142 71 137 121 70 136 120 99 157 141 72 159 143 51 138 122 71 137 121 101 158 142 74 139 123 57 140 124 75 160 144 76 161 145 77 141 125 74 139 123 76 161 145 78 162 146 79 142 126 77 141 125 78 162 146 80 163 147 81 143 127 79 142 126 80 163 147 82 164 148 83 145 129 81 143 127 82 164 148 84 165 149 85 146 130 83 145 129 84 165 149 86 166 150 87 147 131 85 146 130 86 166 150 88 167 151 66 149 133 64 150 134 89 168 152 90 169 153 91 151 135 66 149 133 90 169 153 92 170 154 93 152 136 91 151 135 92 170 154 94 171 155 95 154 138 93 152 136 94 171 155 96 172 156 97 156 140 95 154 138 96 172 156 98 173 157 99 157 141 97 156 140 98 173 157 100 174 158 101 158 142 99 157 141 100 174 158 102 175 159 72 159 143 101 158 142 102 175 159 73 176 160 87 147 131 64 150 134 53 132 116 63 148 132 64 150 134 87 147 131 88 167 151 89 168 152 43 117 101 63 148 132 53 132 116 43 117 101 54 133 117 55 124 108 72 159 143 57 140 124 52 126 110 51 138 122 57 140 124 72 159 143 73 176 160 75 160 144 51 138 122 52 126 110 45 119 103 62 131 115 63 148 132 48 122 106 47 121 105 60 144 128 61 130 114 59 129 113 60 144 128 47 121 105 65 134 118 67 153 137 49 123 107 49 123 107 67 153 137 68 155 139 49 123 107 68 155 139 69 135 119 69 135 119 70 136 120 50 125 109 86 166 150 84 165 149 89 168 152 88 167 151 82 164 148 80 163 147 78 162 146 76 161 145 84 165 149 82 164 148 90 169 153 89 168 152 94 171 155 92 170 154 90 169 153 96 172 156 103 177 161 100 174 158 98 173 157 73 176 160 82 164 148 76 161 145 75 160 144 73 176 160 82 164 148 73 176 160 98 173 157 90 169 153 96 172 156 90 169 153 98 173 157 55 124 108 44 118 102 43 117 101 48 122 106 63 148 132 43 117 101 44 118 102 49 123 107 50 125 109</p>
+        </polylist>
       </mesh>
       <extra>
         <technique profile="MAYA">
@@ -219,52 +572,61 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
     </geometry>
   </library_geometries>
   <library_controllers>
-    <controller id="S_J7Mesh-skin" name="skinCluster1">
-      <skin source="#S_J7Mesh">
+    <controller id="S_JShape7-skin" name="skinCluster1">
+      <skin source="#S_JShape7">
         <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
-        <source id="S_J7Mesh-skin-joints">
-          <Name_array id="S_J7Mesh-skin-joints-array" count="2">bone0 bone1</Name_array>
+        <source id="S_JShape7-skin-joints">
+          <Name_array id="S_JShape7-skin-joints-array" count="2">bone0 bone1</Name_array>
           <technique_common>
-            <accessor source="#S_J7Mesh-skin-joints-array" count="2" stride="1">
+            <accessor source="#S_JShape7-skin-joints-array" count="2" stride="1">
               <param name="JOINT" type="Name"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="S_J7Mesh-skin-bind_poses">
-          <float_array id="S_J7Mesh-skin-bind_poses-array" count="32">0.503027 0 -0.864271 0 0 0.96581 0 0 0.864271 0 0.503027 0 0 0 0 1 0.503027 0 -0.864271 0 0 1.00303 0 -3.56288 0.864271 0 0.503027 0 0 0 0 1</float_array>
+        <source id="S_JShape7-skin-bind_poses">
+          <float_array id="S_JShape7-skin-bind_poses-array" count="32">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 0 1 0 -3.51155 0 0 1 0 0 0 0 1</float_array>
           <technique_common>
-            <accessor source="#S_J7Mesh-skin-bind_poses-array" count="2" stride="16">
+            <accessor source="#S_JShape7-skin-bind_poses-array" count="2" stride="16">
               <param name="TRANSFORM" type="float4x4"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="S_J7Mesh-skin-weights">
-          <float_array id="S_J7Mesh-skin-weights-array" count="209">1 0.577022 0.422978 0.576848 0.423152 0.576848 0.423152 0.576994 0.423006 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.623743 0.376257 0.5 0.5 0.5 0.5 0.576994 0.423006 0.577022 0.422978 0.5 0.5 0.5 0.5 0.623743 0.376257 0.5 0.5 0.5 0.5 0.577005 0.422995 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.577005 0.422995 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.500028 0.499972 0.5 0.5 0.500032 0.499968 0.500026 0.499974 0.5 0.5 0.500023 0.499977 0.5 0.5 0.500023 0.499977 0.5 0.5 0.50003 0.49997 0.5 0.5 0.500025 0.499975 0.5 0.5 0.500026 0.499974 0.5 0.5 0.500027 0.499973 0.50003 0.49997 0.500035 0.499965 0.5 0.5 0.500024 0.499976 0.5 0.5 0.500022 0.499978 0.5 0.5 0.500022 0.499978 0.5 0.5 0.50003 0.49997 0.5 0.5 0.500026 0.499974 0.5 0.5 0.500023 0.499977 0.50003 0.49997</float_array>
+        <source id="S_JShape7-skin-weights">
+          <float_array id="S_JShape7-skin-weights-array" count="1">1</float_array>
           <technique_common>
-            <accessor source="#S_J7Mesh-skin-weights-array" count="209" stride="1">
+            <accessor source="#S_JShape7-skin-weights-array" count="1" stride="1">
               <param name="WEIGHT" type="float"/>
             </accessor>
           </technique_common>
         </source>
         <joints>
-          <input semantic="JOINT" source="#S_J7Mesh-skin-joints"/>
-          <input semantic="INV_BIND_MATRIX" source="#S_J7Mesh-skin-bind_poses"/>
+          <input semantic="JOINT" source="#S_JShape7-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#S_JShape7-skin-bind_poses"/>
         </joints>
         <vertex_weights count="104">
-          <input semantic="JOINT" source="#S_J7Mesh-skin-joints" offset="0"/>
-          <input semantic="WEIGHT" source="#S_J7Mesh-skin-weights" offset="1"/>
-          <vcount>2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 </vcount>
-          <v>0 1 1 2 0 3 1 4 0 5 1 6 0 7 1 8 0 9 1 10 0 11 1 12 0 13 1 14 0 15 1 16 0 17 1 18 0 19 1 20 0 21 1 22 0 23 1 24 0 25 1 26 0 27 1 28 0 29 1 30 0 31 1 32 0 33 1 34 0 35 1 36 0 37 1 38 0 39 1 40 0 41 1 42 0 43 1 44 0 45 1 46 0 47 1 48 0 49 1 50 0 51 1 52 0 53 1 54 0 55 1 56 0 57 1 58 0 59 1 60 0 61 1 62 0 63 1 64 0 65 1 66 0 67 1 68 0 69 1 70 0 71 1 72 0 73 1 74 0 75 1 76 0 77 1 78 0 79 1 80 0 81 1 82 0 83 1 84 0 85 1 86 0 87 1 88 0 89 1 90 0 91 1 92 0 93 1 94 0 95 1 96 0 97 1 98 0 99 1 100 0 101 1 102 0 103 1 104 0 105 1 106 0 107 1 108 0 109 1 110 0 111 1 112 0 113 1 114 0 115 1 116 0 117 1 118 0 119 1 120 0 121 1 122 0 123 1 124 0 125 1 126 0 127 1 128 0 129 1 130 0 131 1 132 0 133 1 134 0 135 1 136 0 137 1 138 0 139 1 140 0 141 1 142 0 143 1 144 0 145 1 146 0 147 1 148 0 149 1 150 0 151 1 152 0 153 1 154 0 155 1 156 0 157 1 158 0 159 1 160 0 161 1 162 0 163 1 164 0 165 1 166 0 167 1 168 0 169 1 170 0 171 1 172 0 173 1 174 0 175 1 176 0 177 1 178 0 179 1 180 0 181 1 182 0 183 1 184 0 185 1 186 0 187 1 188 0 189 1 190 0 191 1 192 0 193 1 194 0 195 1 196 0 197 1 198 0 199 1 200 0 201 1 202 0 203 1 204 0 205 1 206 0 207 1 208</v>
+          <input semantic="JOINT" source="#S_JShape7-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#S_JShape7-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</v>
         </vertex_weights>
       </skin>
     </controller>
   </library_controllers>
   <library_visual_scenes>
-    <visual_scene id="VisualSceneNode" name="J7">
+    <visual_scene id="VisualSceneNode" name="J7_Animation">
       <node id="J7_Joint1" name="J7_Joint1" sid="bone0" type="JOINT">
-        <matrix sid="transform">0.811622 0 0.048468 0 0 1.47287 0 0.593253 -0.047741 0 0.823979 -21.2622 0 0 0 1</matrix>
+        <translate sid="translate">0 0 -21.747</translate>
+        <rotate sid="jointOrientZ">0 0 1 0</rotate>
+        <rotate sid="jointOrientY">0 1 0 0</rotate>
+        <rotate sid="jointOrientX">1 0 0 0</rotate>
+        <rotate sid="rotateY">0 1 0 0</rotate>
+        <scale sid="scale">0.695769 0.872378 0.695769</scale>
         <node id="J7_Joint2" name="J7_Joint2" sid="bone1" type="JOINT">
-          <matrix sid="transform">0.940671 0 0 0 0 1.06573 0 3.44708 0 0 0.924843 0 0 0 0 1</matrix>
+          <translate sid="translate">0 3.42498 0</translate>
+          <rotate sid="jointOrientZ">0 0 1 0</rotate>
+          <rotate sid="jointOrientY">0 1 0 0</rotate>
+          <rotate sid="jointOrientX">1 0 0 0</rotate>
+          <scale sid="scale">0.669986 1 0.669986</scale>
           <extra>
             <technique profile="MAYA">
               <segment_scale_compensate>1</segment_scale_compensate>
@@ -278,12 +640,14 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         </extra>
       </node>
       <node id="S_J7" name="S_J7" type="NODE">
-        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <instance_controller url="#S_J7Mesh-skin">
+        <rotate sid="rotateZ">0 0 1 0</rotate>
+        <rotate sid="rotateY">0 1 0 0</rotate>
+        <rotate sid="rotateX">1 0 0 0</rotate>
+        <instance_controller url="#S_JShape7-skin">
           <skeleton>#J7_Joint1</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="M_J7SG" target="#M_J7">
+              <instance_material symbol="lambert7SG" target="#lambert7">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -292,13 +656,14 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
       </node>
       <extra>
         <technique profile="FCOLLADA">
-          <start_time>0.041666</start_time>
+          <start_time>0.033333</start_time>
           <end_time>2</end_time>
         </technique>
       </extra>
     </visual_scene>
   </library_visual_scenes>
   <scene>
+    <instance_physics_scene url="#MayaNativePhysicsScene"/>
     <instance_visual_scene url="#VisualSceneNode"/>
   </scene>
 </COLLADA>
