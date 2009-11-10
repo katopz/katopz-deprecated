@@ -154,6 +154,10 @@ package
 			view.x = SCREEN_WIDTH/2;
 			view.y = SCREEN_HEIGHT/2;
 			view.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+			
+			view.buttonMode = false;
+			view.mouseEnabled = false;
+			view.mouseEnabled3D = false;
 
 			camera.zoom = 6;
 			camera.focus = 100;
@@ -474,7 +478,7 @@ package
 					var plane3D:Plane3D = Plane3D(stuff[3].children[0]);
 
 					// since 3D fit is not perfect, we shall grab some extra area
-					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.05;
+					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 0.05;
 
 					// I call render() to init sandy matrices - you can do matrix math by hand and
 					// not render a thing, or use better engine :-p~
