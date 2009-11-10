@@ -1,0 +1,9 @@
+<SCADA>
+  <RAIN id="15MIN">Past 15 Min.</RAIN>
+  <RAIN id="1HOUR">Past 60 Min.</RAIN>
+  <RAIN id="3HOUR">Past 3 Hr.</RAIN>
+  <RAIN id="6HOUR">Past 6 Hr.</RAIN>
+  <RAIN id="24HOUR">Past 24 Hr.</RAIN>
+  <RAIN id="24HOUR_LAST">Past 24 Hr. Last Day</RAIN>
+  <RAIN id="DAILY_ACC_RAIN">Daily Accu. Rainfall</RAIN>
+</SCADA>

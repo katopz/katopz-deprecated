@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SCADA>
+  <STATION id="E00">
+    <NAME>Flood Control Center</NAME>
+    <RAIN_24HOUR>300.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E01">
+    <NAME>ปตร. คลองสองสายใต้</NAME>
+    <RAIN_24HOUR>300.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E02">
+    <NAME>ปตร. คลองพระยาสุเรนทร์</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E03">
+    <NAME>ปตร. คลองสามวา</NAME>
+    <RAIN_24HOUR>20.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E04">
+    <NAME>จุดวัดคลองบางบัว</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E05">
+    <NAME>สถานีสูบน้ำคลองตาอูฐ</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E06">
+    <NAME>จุดวัดคลองลำชะล่า</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E07">
+    <NAME>ปตร. คลองแสนแสบ ตอนนถนนประชาร่วมใจ</NAME>
+    <RAIN_24HOUR>30.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E08">
+    <NAME>สถานีสูบน้ำคลองบางเขนใหม่</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E09">
+    <NAME>ปตร. คลองบึงขวาง</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E10">
+    <NAME>สถานีสูบน้ำคลองบางซื่อ</NAME>
+    <RAIN_24HOUR>10.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E11">
+    <NAME>ปตร.คลองแสนแสบ ตอนบางชัน</NAME>
+    <RAIN_24HOUR>10.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E12">
+    <NAME>ปตร. คลองลาดพร้าว</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E13">
+    <NAME>สถานีสูบน้ำคลองสามเสน</NAME>
+    <RAIN_24HOUR>15.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E14">
+    <NAME>สถานีสูบน้ำคลองเจ้าคุณสิงห์</NAME>
+    <RAIN_24HOUR>20.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E15">
+    <NAME>สถานีสูบน้ำเทเวศร์</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E16">
+    <NAME>จุดวัดคลองสามเสน ตอนอนุสาวรีย์ชัยสมรภูมิ</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E17">
+    <NAME>จุดวัดคลองแสนแสบ เขตบางกะปิ</NAME>
+    <RAIN_24HOUR>30.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E18">
+    <NAME>สถานีสูบน้ำคลองสามเสน ตอนคลองแสนแสบ</NAME>
+    <RAIN_24HOUR>30.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E19">
+    <NAME>สถานีสูบน้ำคลองแสนแสบ ตอนคลองตัน</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E20">
+    <NAME>สถานีสูบน้ำกรุงเกษม</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E21">
+    <NAME>ปตร. คลองประเวศบุรีรมย์ ตอนลาดกระบัง</NAME>
+    <RAIN_24HOUR>30.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E22">
+    <NAME>ปตร. คลองประเวศบุรีรมย์ ตอนวัดกระทุ่มเสือปลา</NAME>
+    <RAIN_24HOUR>40.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E23">
+    <NAME>สถานีสูบน้ำคลองสาทร</NAME>
+    <RAIN_24HOUR>10.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E24">
+    <NAME>จุดวัดคลองพระโขนง ตอนวัดขจรศิริ</NAME>
+    <RAIN_24HOUR>20.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E25">
+    <NAME>สถานีสูบน้ำพระราม 4</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E26">
+    <NAME>สถานีสูบน้ำพระโขนง</NAME>
+    <RAIN_24HOUR>45.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E27">
+    <NAME>สถานีสูบน้ำคลองเตย</NAME>
+    <RAIN_24HOUR>30.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E28">
+    <NAME>สถานีสูบน้ำคลองเจ็ก</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E29">
+    <NAME>สถานีสูบน้ำคลองวัดไทร</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E30">
+    <NAME>สถานีสูบน้ำคลองบางอ้อ</NAME>
+    <RAIN_24HOUR>15.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E31">
+    <NAME>สถานีสูบน้ำคลองบางนา</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E32">
+    <NAME>จุดวัดคลองบางนา ตอนถนนศรีนครินทร์</NAME>
+    <RAIN_24HOUR>50.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E33">
+    <NAME>สถานีสูบน้ำคลองสำโรง</NAME>
+    <RAIN_24HOUR>0.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E34">
+    <NAME>ปตร. คลองแสนแสบ ตอนถนนสังฆสันติสุข</NAME>
+    <RAIN_24HOUR>14.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E35">
+    <NAME></NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E36">
+    <NAME>ประตูระบายน้ำ คลองบางจาก</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E37">
+    <NAME></NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E38">
+    <NAME>สถานีสูบน้ำรัชดาวิภาวดี</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E39">
+    <NAME>ปตร.คลองอรชร</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E40">
+    <NAME>จุดวัดอุทยานเบญจสิริ</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+   <STATION id="E41">
+    <NAME>ปตร. คลองสองสายใต้</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E42">
+    <NAME>ปตร. คลองพระยาสุเรนทร์</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E43">
+    <NAME>ปตร. คลองสามวา</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E44">
+    <NAME>จุดวัดคลองบางบัว</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E45">
+    <NAME>สถานีสูบน้ำคลองตาอูฐ</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E46">
+    <NAME>จุดวัดคลองลำชะล่า</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E47">
+    <NAME>ปตร. คลองแสนแสบ ตอนนถนนประชาร่วมใจ</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E48">
+    <NAME>สถานีสูบน้ำคลองบางเขนใหม่</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E49">
+    <NAME>ปตร. คลองบึงขวาง</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="E50">
+    <NAME>สถานีสูบน้ำคลองบางซื่อ</NAME>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W01">
+    <NAME>คลองทวีวัฒนา</NAME>
+    <RAIN_24HOUR>23.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W02">
+    <NAME>ปตร.คลองบัว ตอนทางรถไฟสายใต้</NAME>
+    <RAIN_24HOUR>42.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W03">
+    <NAME>สถานีสูบน้ำคลองชักพระ</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W04">
+    <NAME>สถานีสูบน้ำคลองมอญ</NAME>
+    <RAIN_24HOUR>20.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W05">
+    <NAME>จุดวัดคลองบางเชือกหนัง ตอนคลองราชมนตรี</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W06">
+    <NAME>สถานีสูบน้ำคลองบางกอกใหญ่</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W07">
+    <NAME>สถานีสูบน้ำคลองภาษีเจริญ</NAME>
+    <RAIN_24HOUR>10.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W08">
+    <NAME>จุดวัดคลองภาษีเจริญ ตอนคลองราชมนตรี</NAME>
+    <RAIN_24HOUR>10.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W09">
+    <NAME>สถานีสูบน้ำคลองสำเหร่</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W10">
+    <NAME>จุดวัดคลองสนามชัย ตอนคลองบางขุนเทียน</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W11">
+    <NAME>สถานีสูบน้ำคลองดาวคะนอง</NAME>
+    <RAIN_24HOUR>20.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W12">
+    <NAME>จุดวัดคลองทวีวัฒนา ตอนคลองภาษีเจริญ</NAME>
+    <RAIN_24HOUR>30.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W13">
+    <NAME>สถานีสูบน้ำคลองสี่บาท</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W14">
+    <NAME>สถานีสูบน้ำคลองแจงร้อน</NAME>
+    <RAIN_24HOUR>25.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W15">
+    <NAME>ปตร.คลองบางจาก ตอนถนนประชาอุทิศ</NAME>
+    <RAIN_24HOUR>26.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W16">
+    <NAME>สถานีสูบน้ำคลองเลนเปน</NAME>
+    <RAIN_24HOUR>12.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W17">
+    <NAME>สถานีสูบน้ำคลองระหาญ</NAME>
+    <RAIN_24HOUR>30.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W18">
+    <NAME>สถานีสูบน้ำคลองราชมนตรี</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W19">
+    <NAME></NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W20">
+    <NAME></NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W21">
+    <NAME>ปตร.คลองขุนศรีบุรีรักษ์</NAME>
+    <RAIN_24HOUR>20.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W22">
+    <NAME>คลองบางกอกใหญ่ ตอนคลองมอญ</NAME>
+    <RAIN_24HOUR>010</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W23">
+    <NAME>คลองทวีวัฒนา ตอนคลองบางเชือกหนัง </NAME>
+    <RAIN_24HOUR>0.50</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W24">
+    <NAME>คลองภาษีเจริญ ตอนคลองบางน้ำจืด</NAME>
+    <RAIN_24HOUR>30.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W25">
+    <NAME>คลองบางบอน ตอนวัดบางบอน</NAME>
+    <RAIN_24HOUR>0.00</RAIN_24HOUR>
+  </STATION>
+  <STATION id="W26">
+    <NAME>สถานีสูบน้ำคลองสนามชัย</NAME>
+    <RAIN_24HOUR>2.00</RAIN_24HOUR>
+  </STATION>
+</SCADA>
