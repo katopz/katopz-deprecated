@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <SCADA>
     <STATION id="E00">
     <NAME>Flood Control Center</NAME>
@@ -352,33 +352,27 @@
   </STATION>
 <STATION id="W21">
     <NAME>ปตร.คลองขุนศรีบุรีรักษ์</NAME>
-    <STATUS>1</STATUS>
     <RAIN_15MIN>20.00</RAIN_15MIN>
   </STATION>
   <STATION id="W22">
     <NAME>คลองบางกอกใหญ่ ตอนคลองมอญ</NAME>
-    <STATUS>1</STATUS>
     <RAIN_15MIN>010</RAIN_15MIN>
   </STATION>
   <STATION id="W23">
     <NAME>คลองทวีวัฒนา ตอนคลองบางเชือกหนัง </NAME>
-    <STATUS>1</STATUS>
     <RAIN_15MIN>0.50</RAIN_15MIN>
   </STATION>
   <STATION id="W24">
     <NAME>คลองภาษีเจริญ ตอนคลองบางน้ำจืด</NAME>
-    <STATUS>1</STATUS>
     <RAIN_15MIN>30.00</RAIN_15MIN>
   </STATION>
   <STATION id="W25">
     <NAME>คลองบางบอน ตอนวัดบางบอน</NAME>
-    <STATUS>1</STATUS>
     <RAIN_15MIN>0.00</RAIN_15MIN>
   </STATION>
   <STATION id="W26">
     <NAME>สถานีสูบน้ำคลองสนามชัย</NAME>
-    <STATUS>1</STATUS>
-    <RAIN_15MIN>50.00</RAIN_15MIN>
+    <RAIN_15MIN>2.00</RAIN_15MIN>
   </STATION>
 </SCADA>
 
