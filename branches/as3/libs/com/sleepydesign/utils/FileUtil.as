@@ -26,11 +26,6 @@ package com.sleepydesign.utils
 	public class FileUtil
 	{
 		/**
-		 * Temporary eventHandler, prevent flash lost function scope (bug?)
-		 */
-		private static var eventHandler:Function;
-		
-		/**
 		 * Your upload path
 		 */
 		public static var UPLOAD_URL:String = "http://127.0.0.1/serverside/upload.php";
@@ -95,17 +90,15 @@ package com.sleepydesign.utils
 		public static function open(fileTypes:Array = null, eventHandler:Function = null):FileReference
 		{
 			fileTypes = fileTypes ? fileTypes : ["*.*"];
-			FileUtil.eventHandler = eventHandler = eventHandler is Function?eventHandler:trace;
+			eventHandler = eventHandler = eventHandler is Function?eventHandler:trace;
 
 			var file:FileReference = new FileReference();
 			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
+			file.addEventListener(Event.COMPLETE, eventHandler);
 			file.addEventListener(Event.CANCEL, eventHandler);
 			file.addEventListener(Event.SELECT, function(event:Event):void
 			{
 				trace(" ^ Select : " + file.name + " | " + file.size);
-				file = FileReference(event.target);
-				file.addEventListener(Event.COMPLETE, FileUtil.eventHandler);
-
 				try
 				{
 					//FP10
