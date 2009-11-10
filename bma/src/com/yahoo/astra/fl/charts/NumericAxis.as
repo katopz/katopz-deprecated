@@ -471,9 +471,8 @@ package com.yahoo.astra.fl.charts
 			{
 				this._minimum = this._dataMinimum;
 			}
-			
-			//katopz//always reset	
-			//if(!this._maximumSetByUser)
+				
+			if(!this._maximumSetByUser)
 			{
 				this._maximum = this._dataMaximum;
 			}
@@ -625,9 +624,19 @@ package com.yahoo.astra.fl.charts
 			//we don't want extra labels or anything like that!
 			this._minimum = NumberUtil.roundToPrecision(this._minimum, 10);
 			//bug//katopz:when number close to 60, extra label is not visible (like 59)
-			this._maximum = 20+NumberUtil.roundToPrecision(this._maximum, 10);
+			this._maximum = NumberUtil.roundToPrecision(this._maximum, 10);
 			this._majorUnit = NumberUtil.roundToPrecision(this._majorUnit, 10);
 			this._minorUnit = NumberUtil.roundToPrecision(this._minorUnit, 10);
+			
+			//if(this._maximum > 40+NumberUtil.roundToPrecision(this._dataMaximum, 10))
+			//	this._maximum = 40+NumberUtil.roundToPrecision(this._dataMaximum, 10);
+			
+			_maximum += _majorUnit;
+			
+			trace("_minimum:"+_minimum);
+			trace("_maximum:"+_maximum);
+			trace("_majorUnit:"+_majorUnit);
+			trace("_minorUnit:"+_minorUnit);
 		}
 		
 		/**

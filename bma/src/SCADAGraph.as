@@ -57,7 +57,8 @@ package {
 			dataPath = "../../"+ dataPath;
 			
 			isTest = true
-			var data = <RAIN id="15MIN">Past 15 Min.</RAIN>
+			//var data = <RAIN id="15MIN">Past 15 Min.</RAIN>
+			var data = <RAIN id="24HOUR">Past 24 Hr.</RAIN>
 			setGraph(data);
 			
 		}
