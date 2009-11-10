@@ -73,8 +73,6 @@ package
 			_collada = new Collada();
 			_collada.scaling = 25;
 			
-			//_collada.parseXML(xml);
-			
 			_loader = new Loader3D();
 			var _xml:XML = new XML(raw);
 			_loader.loadXML(_xml, _collada);
