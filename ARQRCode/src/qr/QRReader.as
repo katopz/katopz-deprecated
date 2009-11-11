@@ -1,4 +1,4 @@
-package
+package qr
 {
 	import com.logosware.event.QRdecoderEvent;
 	import com.logosware.event.QRreaderEvent;
@@ -7,6 +7,7 @@ package
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.geom.Point;
 	import flash.utils.*;
 
 	public class QRReader extends EventDispatcher
@@ -17,9 +18,6 @@ package
 		
 		private var qrImage:GetQRimage;
 		private var qrDecoder:QRdecode;
-		
-		// Debug
-		//private var qrResult:BitmapData;
 		
 		public function QRReader(homography:BitmapData)
 		{
@@ -32,14 +30,6 @@ package
 			// Parse
 			qrDecoder = new QRdecode();
 			qrDecoder.addEventListener(QRdecoderEvent.QR_DECODE_COMPLETE, onQRDecoded);
-
-			// Debug
-			/*
-			qrResult = homography.clone();
-			var rbmp:Bitmap = new Bitmap(qrResult);
-			rbmp.x = 560;
-			base.addChild(rbmp);
-			*/
 		}
 		
 		public function reset():void
@@ -47,8 +37,11 @@ package
 			result = "";
 		}
 		
-		public function run():void
+		public function processHomography(bitmapData:BitmapData, width:Number, height:Number, p0:Point, p1:Point, p2:Point, p3:Point):void
 		{
+			homography.fillRect(homography.rect, 0);
+			homography.applyFilter(bitmapData, bitmapData.rect, bitmapData.rect.topLeft, new HomographyTransformFilter(width, height, p0, p1, p2, p3));
+			
 			// Debug
 			//qrResult.fillRect(qrResult.rect, 0);
 			

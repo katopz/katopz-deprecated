@@ -704,7 +704,7 @@ package com.logosware.utils.QRcode
 			}
 			__loopCount = __RSblock.length;
 			for ( __i = 0; __i < __loopCount; __i++) {
-				__RSblock[__i] = new Array();
+				__RSblock[__i] = [];
 			}
 			__loopCount2 = __dataNum[__loopCount-1];
 			for ( __j = 0; __j < __loopCount2; __j++) {
