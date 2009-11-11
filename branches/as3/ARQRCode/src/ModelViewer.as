@@ -8,8 +8,8 @@ package
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.BitmapMaterial;
-	import away3dlite.materials.WireColorMaterial;
-	import away3dlite.primitives.Sphere;
+	
+	import flars.FLARResult;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -54,10 +54,16 @@ package
 		public function reset():void
 		{
 			if(_loader && _loader.parent)
+			{
 				_loader.parent.removeChild(_loader);
+				_loader = null;
+			}
 		
 			if(_model && _model.parent)
+			{
 				_model.parent.removeChild(_model);
+				_model = null;
+			}
 		}
 		
 		public function setTexture(bitmap:Bitmap):void
@@ -88,7 +94,10 @@ package
 			_collada.scaling = 25;
 			
 			if(_loader && _loader.parent)
+			{
 				_loader.parent.removeChild(_loader);
+				_loader = null;
+			}
 			
 			_loader = new Loader3D();
 			_loader.loadGeometry(uri, _collada);
@@ -99,7 +108,10 @@ package
 		private function onSuccess(event:Loader3DEvent):void
 		{
 			if(_model && _model.parent)
+			{
 				_model.parent.removeChild(_model);
+				_model = null;
+			}
 				
 			_model = _loader.handle;
 			_model.rotationX = -90;

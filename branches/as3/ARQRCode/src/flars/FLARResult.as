@@ -1,4 +1,4 @@
-package
+package flars
 {
 	import away3dlite.core.base.Object3D;
 	

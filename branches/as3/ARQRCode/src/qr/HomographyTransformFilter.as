@@ -1,4 +1,5 @@
-﻿package {
+﻿package qr
+{
 	
 	import flash.display.Shader;
 	import flash.filters.ShaderFilter;
@@ -12,8 +13,8 @@
 	 */
 	public class HomographyTransformFilter extends ShaderFilter {
 		
-		[Embed(source='homography_s.pbj', mimeType='application/octet-stream')]
-		private static const ShaderByteClass2:Class;
+		[Embed(source='../pbks/homography.pbj', mimeType='application/octet-stream')]
+		private static const ShaderByteClass:Class;
 		
 		private var _shader:Shader;
 		
@@ -24,7 +25,7 @@
 		
 		public function HomographyTransformFilter(outWidth:int, outHeight:int, p0:Point, p1:Point, p2:Point, p3:Point) {
 			this._shader = new Shader();
-			this._shader.byteCode = new ShaderByteClass2;
+			this._shader.byteCode = new ShaderByteClass;
 			this.outWidth = outWidth;
 			this.outHeight = outHeight;
 			this.p0 = p0;

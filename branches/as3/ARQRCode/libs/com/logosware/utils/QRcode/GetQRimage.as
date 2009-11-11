@@ -20,7 +20,6 @@
 package com.logosware.utils.QRcode
 {
 	import com.logosware.event.QRreaderEvent;
-	import com.logosware.utils.LabelingClass;
 	
 	import flash.display.*;
 	import flash.events.EventDispatcher;
@@ -67,7 +66,8 @@ package com.logosware.utils.QRcode
 		 */
 		public function process():void {
 			var QRCodes:Array = detecter.detect();
-			for ( var i:int = 0; i < QRCodes.length; i++ ) {
+			var _QRCodes_length:int = QRCodes.length;
+			for ( var i:int = 0; i < _QRCodes_length; i++ ) {
 				var bmpData:BitmapData = QRCodes[i].image;
 				var colors:Array = QRCodes[i].borderColors;
 				// バージョンの取得
@@ -108,9 +108,12 @@ package com.logosware.utils.QRcode
 			}
 			__i = 0;
 			__thisColor = 0;
+			var _bmpData_getPixel:Function = bmpData.getPixel;
+			var _qrInfo_topRightRect_topLeft_x:Number = qrInfo.topRightRect.topLeft.x;
+			var _qrInfo_bottomLeftRect_topLeft_y:Number = qrInfo.bottomLeftRect.topLeft.y;
 			while ( __thisColor != 0xFFFFFF ) {
 				__i++;
-				__thisColor = bmpData.getPixel( qrInfo.topRightRect.topLeft.x + __i, qrInfo.bottomLeftRect.topLeft.y + __i );
+				__thisColor = _bmpData_getPixel( _qrInfo_topRightRect_topLeft_x + __i, _qrInfo_bottomLeftRect_topLeft_y + __i );
 			}
 			bmpData.floodFill( qrInfo.topRightRect.topLeft.x + __i, qrInfo.bottomLeftRect.topLeft.y + __i, 0xFFCCFFFF );
 			
@@ -132,8 +135,9 @@ package com.logosware.utils.QRcode
 			var __sum:Number = 0.0;
 			var __num:Number = 0.0;
 			
-			for ( __i = __blTop.y - qrInfo.cellSize; __i <= __blTop.y + qrInfo.cellSize; __i++ ) {
-				if ( bmpData.getPixel( __blTop.x, __i ) != 0xFFFFFF ) {
+			var _length:int = __blTop.y + qrInfo.cellSize;
+			for ( __i = __blTop.y - qrInfo.cellSize; __i <= _length; __i++ ) {
+				if (_bmpData_getPixel( __blTop.x, __i ) != 0xFFFFFF ) {
 					__sum += __i;
 					__num++;
 				}
@@ -165,12 +169,14 @@ package com.logosware.utils.QRcode
 				__endX[__i] = (( __end30 - __end3 ) / __tempNum1) * ( __i - 3 ) + __end3;
 				__b[__i] =  __startY[__i] - __a[__i] * __startX[__i];
 			}
+			
+			var __resultBmp_setPixel:Function = __resultBmp.setPixel;
 			for ( var __y:Number = 0; __y < __loopConst; __y++ ) {
 				var __y2:Number = __y - 3;
 				for ( var __x:Number = 0; __x < __loopConst; __x++ ) {
 					var __x2:Number = __x - 3;
-					if ( (bmpData.getPixel( __startX[__y] + ( __endX[__y] - __startX[__y] ) * ( __x / __loopConst2 ), __a[__y] * (__startX[__y] + ( __endX[__y] - __startX[__y] ) * ( __x / __loopConst2 )) + __b[__y] ) & 0xFF0000) < 0xFF0000) {
-						__resultBmp.setPixel( 4 + __x, 4 + __y, 0 );
+					if ( (_bmpData_getPixel( __startX[__y] + ( __endX[__y] - __startX[__y] ) * ( __x / __loopConst2 ), __a[__y] * (__startX[__y] + ( __endX[__y] - __startX[__y] ) * ( __x / __loopConst2 )) + __b[__y] ) & 0xFF0000) < 0xFF0000) {
+						__resultBmp_setPixel( 4 + __x, 4 + __y, 0 );
 						__resultArray[__y][__x] = 1;
 					}
 				}
@@ -194,15 +200,18 @@ package com.logosware.utils.QRcode
 			var tempX:uint;
 			var oldP:uint;
 			var whiteNum:uint = 0;
+			var _whiteArray_length:int;
+			var _bmp_width:Number = bmp.width;
+			var _bmp_getPixels:Function = bmp.getPixels;
 			for ( var j:int = -8; j <= 0; j++ ) {
 				tempX = 0;
 				var whiteArray:Array = [];
-				var tempArray:ByteArray = bmp.getPixels( new Rectangle( startTopLeft.x, startTopLeft.y + j, bmp.width - 52, 1 ) );
+				var tempArray:ByteArray = _bmp_getPixels( new Rectangle( startTopLeft.x, startTopLeft.y + j, _bmp_width - 52, 1 ) );
 				var startColor:uint = tempArray[1];
-				var endColor:uint = tempArray[4*(bmp.width-26-1)+1];
+				var endColor:uint = tempArray[4*(_bmp_width-26-1)+1];
 				if ( ( startColor != 0xFF ) && ( endColor != 0xFF ) ) {
 					oldP = startColor;
-					for ( i = 1; i < (bmp.width - 24); i++ ) {
+					for ( i = 1; i < (_bmp_width - 24); i++ ) {
 						var tempColor:uint = tempArray[4*i+1];
 						if ( tempColor != oldP ) {
 							tempX ++;
@@ -219,12 +228,13 @@ package com.logosware.utils.QRcode
 					}
 					var sum:Number = 0;
 					// 妥当性のチェック　白いマスが全部同じくらいのサイズだったらOK
-					for ( var k:uint = 0; k < whiteArray.length; k++ ) {
+					_whiteArray_length = whiteArray.length;
+					for ( var k:uint = 0; k < _whiteArray_length; k++ ) {
 						sum += Number( whiteArray[k] );
 					}
-					var average:Number = sum / whiteArray.length;
+					var average:Number = sum / _whiteArray_length;
 					var error:uint = 0;
-					for ( k = 0; k < whiteArray.length; k++ ) {
+					for ( k = 0; k < _whiteArray_length; k++ ) {
 						if ( ! ((whiteArray[k] > (average * 0.5)) && (whiteArray[k] < (average * 1.5)) ) ) {
 							error++;
 						}
@@ -263,12 +273,13 @@ package com.logosware.utils.QRcode
 					}
 					sum = 0;
 					// 妥当性のチェック　白いマスが全部同じくらいのサイズだったらOK
-					for ( k = 0; k < whiteArray.length; k++ ) {
+					_whiteArray_length = whiteArray.length;
+					for ( k = 0; k < _whiteArray_length; k++ ) {
 						sum += Number( whiteArray[k] );
 					}
-					average = sum / whiteArray.length;
+					average = sum / _whiteArray_length;
 					error = 0;
-					for ( k = 0; k < whiteArray.length; k++ ) {
+					for ( k = 0; k < _whiteArray_length; k++ ) {
 						if ( ! ((whiteArray[k] > (average * 0.5)) && (whiteArray[k] < (average * 1.5)) ) ) {
 							error++;
 						}
@@ -300,7 +311,8 @@ package com.logosware.utils.QRcode
 			bmp_check.lock();
 			var tempArray:ByteArray = bmp_check.getPixels( bmp_check.rect );
 			var sum:Number = 0.0;
-			for ( var i:uint = 0; i < bmp.height; i++ ) {
+			var _bmp_height:Number = bmp.height;
+			for ( var i:uint = 0; i < _bmp_height; i++ ) {
 				sum += tempArray[4*i+3]; // 緑成分で判定
 			}
 			sum /= bmp.height;
@@ -350,7 +362,7 @@ package com.logosware.utils.QRcode
 			var tempRect2:Rectangle;
 			var tempPoint:Point;
 			var loopCount:uint = divide;
-			var borderPoints:Array = new Array();
+			var borderPoints:Array = [];
 			for (var j:uint = 0; j <= loopCount; j++ ) {
 				tempX = ( (rect.width-1) * j ) / loopCount + rect.topLeft.x;
 				tempY = ( (rect.height-1) * j ) / loopCount + rect.topLeft.y;
@@ -384,5 +396,3 @@ package com.logosware.utils.QRcode
 		}
 	}	
 }
-import flash.geom.Point;
-

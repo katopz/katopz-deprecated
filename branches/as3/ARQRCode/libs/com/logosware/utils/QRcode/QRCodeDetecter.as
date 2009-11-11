@@ -20,20 +20,16 @@
 package com.logosware.utils.QRcode 
 {
 	import com.logosware.utils.LabelingClass;
-	import flash.display.Bitmap;
+	
 	import flash.display.BitmapData;
-	import flash.display.BlendMode;
 	import flash.display.DisplayObject;
-	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.filters.BlurFilter;
 	import flash.filters.ColorMatrixFilter;
 	import flash.filters.ConvolutionFilter;
-	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
 	
 	/**
 	 * @author UENO Kenichi
@@ -86,25 +82,27 @@ package com.logosware.utils.QRcode
 		 * 		...
 		 * 	]
 		 */
+		private var _temp_point:Point = new Point();
 		public function detect():Array {
 			var ret:Array = [];
 			bd.lock();
 			bd.draw(image);
 			
 			// グレー化
-			bd.applyFilter(bd, bd.rect, new Point(), new ColorMatrixFilter(grayConst));
-			bd.applyFilter(bd, bd.rect, new Point(), new ConvolutionFilter(5, 5, [
+			var _bd_rect:Rectangle = bd.rect;
+			bd.applyFilter(bd, _bd_rect, _temp_point, new ColorMatrixFilter(grayConst));
+			bd.applyFilter(bd, _bd_rect, _temp_point, new ConvolutionFilter(5, 5, [
 				0, -1, -1, -1, 0,
 				-1, -1, -2, -1, -1,
 				-1, -2, 25, -2, -1,
 				-1, -1, -2, -1, -1,
 				0, -1, -1, -1, 0
 			]));
-			bd.applyFilter(bd, bd.rect, new Point(), new BlurFilter(3, 3));
+			bd.applyFilter(bd, _bd_rect, _temp_point, new BlurFilter(3, 3));
 			
 			// 二値化
-			bd.threshold(bd, bd.rect, new Point(), ">", threshold, 0xFFFFFFFF, 0x0000FF00);
-			bd.threshold(bd, bd.rect, new Point(), "!=", 0xFFFFFFFF, 0xFF000000);
+			bd.threshold(bd, _bd_rect, _temp_point, ">", threshold, 0xFFFFFFFF, 0x0000FF00);
+			bd.threshold(bd, _bd_rect, _temp_point, "!=", 0xFFFFFFFF, 0xFF000000);
 			
 			// ラベリング
 			var LabelingObj:LabelingClass = new LabelingClass(); 
@@ -123,19 +121,23 @@ package com.logosware.utils.QRcode
 			
 			// 適切な角度で切り抜き
 			var images:Array = _clipCodes( bd, codes );
-			
-			for ( var i:int = 0; i < images.length; i++ ) {
-				ret.push( { image:images[i], borderColors:[codes[i][0].borderColor, codes[i][1].borderColor, codes[i][2].borderColor], originalLocation:[codes[i][0].borderRect, codes[i][1].borderRect, codes[i][2].borderRect] } );
+			var _images_length:int = images.length;
+			for ( var i:int = 0; i < _images_length; i++ ) {
+				var _codes_i:* = codes[i];
+				ret.push( { image:images[i], borderColors:[_codes_i[0].borderColor, _codes_i[1].borderColor, _codes_i[2].borderColor], originalLocation:[_codes_i[0].borderRect, _codes_i[1].borderRect, _codes_i[2].borderRect] } );
 			}
 			bd.unlock();
 			return ret;
 		}
 		private function _clipCodes( bd:BitmapData, codes:Array):Array {
 			var ret:Array = [];
-			for ( var i:int = 0; i < codes.length; i++ ) {
-				var marker1:Rectangle = codes[i][0].borderRect; // top left
-				var marker2:Rectangle = codes[i][1].borderRect; // top right
-				var marker3:Rectangle = codes[i][2].borderRect; // bottom left
+			var _codes_length:int = codes.length;
+			for ( var i:int = 0; i < _codes_length; i++ ) 
+			{
+				var _codes_i:* = codes[i];
+				var marker1:Rectangle = _codes_i[0].borderRect; // top left
+				var marker2:Rectangle = _codes_i[1].borderRect; // top right
+				var marker3:Rectangle = _codes_i[2].borderRect; // bottom left
 				var vector12:Point = marker2.topLeft.subtract( marker1.topLeft ); // vector: top left -> top right
 				var vector13:Point = marker3.topLeft.subtract( marker1.topLeft ); // vector: top left -> bottom left
 				var theta:Number = -Math.atan2( vector12.y, vector12.x ); // 平面状の回転角
@@ -182,11 +184,17 @@ package com.logosware.utils.QRcode
 				);
 			}
 			var retArray:Array = [];
-			for ( var i:int = 0; i < rectArray.length; i++ ) {
+			var _rectArray_length:int = rectArray.length;
+			var _bmp_getPixel:Function = bmp.getPixel;
+			for ( var i:int = 0; i < _rectArray_length; i++ ) {
+				var _rectArray_i:* = rectArray[i];
+				
 				var count:int = 0;
 				var target:Number = 0;
 				var tempRect:Rectangle = rectArray[i];// 外側
-				if( colorArray[i] != bmp.getPixel( rectArray[i].topLeft.x + rectArray[i].width*0.5, rectArray[i].topLeft.y + rectArray[i].height*0.5) ){
+				var _rectArray_i_width:int;
+				
+				if( colorArray[i] != _bmp_getPixel( _rectArray_i.topLeft.x + _rectArray_i.width*0.5, _rectArray_i.topLeft.y + _rectArray_i.height*0.5) ){
 					var oldFlg:uint = 0;
 					var tempFlg:uint = 0;
 					var index:int = -1;
@@ -195,9 +203,11 @@ package com.logosware.utils.QRcode
 					var constNum:Number;
 
 					// 横方向
-					constNum = rectArray[i].topLeft.y + rectArray[i].height*0.5;
-					for ( j = 0; j < rectArray[i].width; j++ ){
-						tempFlg = (bmp.getPixel( rectArray[i].topLeft.x + j, constNum ) == 0xFFFFFF)?0:1;
+					constNum = _rectArray_i.topLeft.y + _rectArray_i.height*0.5;
+					
+					_rectArray_i_width = _rectArray_i.width;
+					for ( j = 0; j < _rectArray_i_width; j++ ){
+						tempFlg = (_bmp_getPixel( _rectArray_i.topLeft.x + j, constNum ) == 0xFFFFFF)?0:1;
 						if( (index == -1) && (tempFlg == 0) ){
 							//go next
 						} else {
@@ -218,9 +228,10 @@ package com.logosware.utils.QRcode
 						oldFlg = tempFlg = 0;
 						index = -1;
 
-						constNum = rectArray[i].topLeft.x + rectArray[i].width*0.5;
-						for ( j = 0; j < rectArray[i].width; j++ ) {
-							tempFlg = (bmp.getPixel( constNum, rectArray[i].topLeft.y + j ) == 0xFFFFFF)?0:1;
+						constNum = _rectArray_i.topLeft.x + _rectArray_i.width*0.5;
+						_rectArray_i_width = _rectArray_i.width;
+						for ( j = 0; j < _rectArray_i_width; j++ ) {
+							tempFlg = (_bmp_getPixel( constNum, _rectArray_i.topLeft.y + j ) == 0xFFFFFF)?0:1;
 							if( (index == -1) && (tempFlg == 0) ){
 								//go next
 							} else {
@@ -235,10 +246,9 @@ package com.logosware.utils.QRcode
 							}
 						}
 						if ( isMarker(countArray) ) {
-							retArray.push( {borderColor:colorArray[i], borderRect:rectArray[i]} );
+							retArray.push( {borderColor:colorArray[i], borderRect:_rectArray_i} );
 						}
 					}
-
 				}
 			}
 			return retArray;
@@ -259,23 +269,35 @@ package com.logosware.utils.QRcode
 			}
 			var ret:Array = [];
 			var loop:int = borders.length;
-			for ( var i:int = 0; i < (loop-2); i++ ) {
-				for ( var j:int = i + 1; j < (loop-1); j++ ) {
-					var vec:Point = borders[i].borderRect.topLeft.subtract( borders[j].borderRect.topLeft );
-					for ( var k:int = j + 1; k < loop; k++ ) {
-						if( isNear( borders[k].borderRect.topLeft, new Point( borders[i].borderRect.topLeft.x + vec.y, borders[i].borderRect.topLeft.y - vec.x ), 0.125 * vec.length ))
-							ret.push( [borders[i], borders[j], borders[k]] );
-						else if ( isNear( borders[k].borderRect.topLeft, new Point( borders[i].borderRect.topLeft.x - vec.y, borders[i].borderRect.topLeft.y + vec.x ), 0.125 * vec.length ))
-							ret.push( [borders[i], borders[k], borders[j]] );
-						else if ( isNear( borders[k].borderRect.topLeft, new Point( borders[j].borderRect.topLeft.x + vec.y, borders[j].borderRect.topLeft.y - vec.x ), 0.125 * vec.length ))
-							ret.push( [borders[j], borders[k], borders[i]] );
-						else if ( isNear( borders[k].borderRect.topLeft, new Point( borders[j].borderRect.topLeft.x - vec.y, borders[j].borderRect.topLeft.y + vec.x ), 0.125 * vec.length ))
-							ret.push( [borders[j], borders[i], borders[k]] );
+			for ( var i:int = 0; i < (loop-2); i++ ) 
+			{
+				var borders_i:* = borders[i];
+				var borders_i_borderRect_topLeft:Point = borders_i.borderRect.topLeft;
+				
+				for ( var j:int = i + 1; j < (loop-1); j++ ) 
+				{
+					var borders_j:* = borders[j];
+					var borders_j_borderRect_topLeft:Point = borders_j.borderRect.topLeft;
+					var vec:Point = borders_i_borderRect_topLeft.subtract( borders_j_borderRect_topLeft );
+					var _0125_vec_length:Number = 0.125 * vec.length;
+					
+					for ( var k:int = j + 1; k < loop; k++ ) 
+					{
+						var borders_k:* = borders[k];
+						var borders_k_borderRect_topLeft:Point = borders_k.borderRect.topLeft;
+						
+						if( isNear( borders_k_borderRect_topLeft, new Point( borders_i_borderRect_topLeft.x + vec.y, borders_i_borderRect_topLeft.y - vec.x ), _0125_vec_length ))
+							ret.push( [borders_i, borders_j, borders_k] );
+						else if ( isNear( borders_k_borderRect_topLeft, new Point( borders_i_borderRect_topLeft.x - vec.y, borders_i_borderRect_topLeft.y + vec.x ), _0125_vec_length ))
+							ret.push( [borders_i, borders_k, borders_j] );
+						else if ( isNear( borders_k_borderRect_topLeft, new Point( borders_j_borderRect_topLeft.x + vec.y, borders_j_borderRect_topLeft.y - vec.x ), _0125_vec_length ))
+							ret.push( [borders_j, borders_k, borders_i] );
+						else if ( isNear( borders_k_borderRect_topLeft, new Point( borders_j_borderRect_topLeft.x - vec.y, borders_j_borderRect_topLeft.y + vec.x ), _0125_vec_length ))
+							ret.push( [borders_j, borders_i, borders_k] );
 					}
 				}
 			}
 			return ret;
 		}
 	}
-	
 }
