@@ -34,7 +34,38 @@ package com.sleepydesign.utils
 		 * Limit your upload size
 		 */		
 		public static var UPLOAD_LIMIT:Number = 200000;
-
+		
+		public static function openXML(eventHandler:Function):FileReference
+		{
+			return open(["*.xml", "*.dae"], function(event:Event):void
+			{
+				if (event.type == Event.COMPLETE || event.type == DataEvent.UPLOAD_COMPLETE_DATA)
+				{
+					// complete event
+					//try
+					//{
+						//FP10 just get data
+						//LoaderUtil.loadBytes(event.target["data"], eventHandler);
+						var _byte:ByteArray = event.target["data"] as ByteArray;
+						eventHandler(new DataEvent(Event.COMPLETE, false, false, _byte.readUTFBytes(_byte.length)));
+					//}
+					/*catch (e:*)
+					{
+						trace(e);
+						//FP9 need to reload ;p
+						if (event.type == DataEvent.UPLOAD_COMPLETE_DATA)
+							LoaderUtil.loadAsset(event["data"], eventHandler);
+					}*/
+				}
+				else
+				{
+					// other event
+					trace(" ^ event : "+event);
+					eventHandler(event);
+				}
+			});
+		}
+		
 		/**
 		 * Browse image and add to container
 		 * @param container
@@ -68,6 +99,7 @@ package com.sleepydesign.utils
 					}
 					catch (e:*)
 					{
+						trace(e);
 						//FP9 need to reload ;p
 						if (event.type == DataEvent.UPLOAD_COMPLETE_DATA)
 							LoaderUtil.loadAsset(event["data"], eventHandler);
@@ -106,6 +138,7 @@ package com.sleepydesign.utils
 				}
 				catch (e:*)
 				{
+					trace(e);
 					//FP9
 					var request:URLRequest = new URLRequest();
 					request.url = UPLOAD_URL;
