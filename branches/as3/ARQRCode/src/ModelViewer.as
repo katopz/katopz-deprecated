@@ -82,7 +82,7 @@ package
 			trace(" * Parse");
 			
 			_collada = new Collada();
-			_collada.scaling = 25;
+			_collada.scaling = 50;
 			
 			_loader = new Loader3D();
 			var _xml:XML = new XML(raw);
@@ -96,7 +96,7 @@ package
 			trace(" * load : " + uri);
 			
 			_collada = new Collada();
-			_collada.scaling = 25;
+			_collada.scaling = 50;
 			
 			if(_loader && _loader.parent)
 			{
