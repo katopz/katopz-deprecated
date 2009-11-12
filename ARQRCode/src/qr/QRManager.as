@@ -10,7 +10,7 @@ package qr
 	import flash.geom.Point;
 	import flash.utils.*;
 
-	public class QRReader extends EventDispatcher
+	public class QRManager extends EventDispatcher
 	{
 		public static var result:String = "";
 		
@@ -19,7 +19,7 @@ package qr
 		private var qrImage:GetQRimage;
 		private var qrDecoder:QRdecode;
 		
-		public function QRReader(homography:BitmapData)
+		public function QRManager(homography:BitmapData)
 		{
 			this.homography = homography;
 			
