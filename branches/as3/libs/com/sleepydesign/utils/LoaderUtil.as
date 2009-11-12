@@ -30,6 +30,8 @@ package com.sleepydesign.utils
 	 */	
 	public class LoaderUtil
 	{
+		public static var SEND_METHOD:String = URLRequestMethod.POST;
+		
 		public static var loaderClip:DisplayObject;
 		
 		public static function showLoader(parent:DisplayObjectContainer, show:Boolean=true):void
@@ -153,7 +155,7 @@ package com.sleepydesign.utils
 		 * @param type
 		 * @return Loader, URLLoader
 		 */		
-		public static function load(uri:String, eventHandler:Function = null, type:String = "auto"):Object
+		public static function load(uri:String, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest=null):Object
 		{
 			// select type
 			if(type=="auto")
@@ -217,12 +219,13 @@ package com.sleepydesign.utils
 			// load
 			try
 			{
+				urlRequest = urlRequest?urlRequest:new URLRequest(uri);
 				if(type=="asset")
 				{
-					loader.load(new URLRequest(uri), new LoaderContext(false, ApplicationDomain.currentDomain));
+					loader.load(urlRequest, new LoaderContext(false, ApplicationDomain.currentDomain));
 					return loader;
 				}else{
-					urlLoader.load(new URLRequest(uri));
+					urlLoader.load(urlRequest);
 					return urlLoader;
 				}
 			}catch (e:Error)
@@ -230,6 +233,15 @@ package com.sleepydesign.utils
 				trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
 			return null;
+		}
+		
+		public static function request(data:*, uri:String, eventHandler:Function = null, type:String = "auto"):Object
+		{
+			var _urlRequest:URLRequest = new URLRequest(uri);
+			_urlRequest.method = SEND_METHOD;
+			_urlRequest.data = data;
+			
+			return load(uri, eventHandler, type, _urlRequest);
 		}
 		
 		/**
