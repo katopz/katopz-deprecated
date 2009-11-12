@@ -77,7 +77,7 @@ package
 			_model.materialLibrary.currentMaterialData.material = new BitmapMaterial(bitmap.bitmapData);
 		}
 		
-		public function parse(raw:XML):void
+		public function parse(xml:XML):void
 		{
 			trace(" * Parse");
 			
@@ -85,8 +85,7 @@ package
 			_collada.scaling = 50;
 			
 			_loader = new Loader3D();
-			var _xml:XML = new XML(raw);
-			_loader.loadXML(_xml, _collada);
+			_loader.loadXML(xml, _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			_base.addChild(_loader);
 		}
