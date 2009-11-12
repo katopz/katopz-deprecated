@@ -3,6 +3,8 @@ package
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.greensock.TweenLite;
+	import com.sleepydesign.utils.DataUtil;
+	import com.sleepydesign.utils.DebugUtil;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.ObjectUtil;
@@ -12,6 +14,9 @@ package
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	import flash.utils.*;
 	
@@ -113,8 +118,6 @@ package
 			// cam test
 			cameraContainer = new Sprite();
 			base.addChild(cameraContainer);
-			
-			alpha = 0.1;
 		}
 
 		override protected function onInit():void
@@ -135,7 +138,7 @@ package
 			// get user data
 			LoaderUtil.loadVars(USER_URL, onGetUserData);
 			
-			initARQR();
+			DebugUtil.init(this, 0, SCREEN_HEIGHT/2);
 		}
 	
 		private function onGetUserData(event:Event):void
@@ -146,10 +149,19 @@ package
 			// grab user data
 			var _userData:URLVariables = URLVariables(event.target["data"]);
 			
+			// sore
+			DataUtil.addData(USER_DATA, _userData);
+			
 			// debug
-			ObjectUtil.print(_userData);
+			ObjectUtil.print(DataUtil.getDataByName(USER_DATA));
+			
+			DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
+			
+			initARQR();
 		}
-
+		
+		private const USER_DATA:String = "userData";
+		
 		private function initARQR():void
 		{
 			// AR
@@ -166,7 +178,7 @@ package
 			// debug
 			var rbmp:Bitmap = new Bitmap(_QRReader.homography);
 			rbmp.scaleX = rbmp.scaleY = .5;
-			rbmp.y = 160;
+			rbmp.y = 80;
 			addChild(rbmp);
 
 			// add test image in the background
@@ -198,12 +210,31 @@ package
 				_modelViewer.parse(event["data"]);
 		}
 		
+		private function onModelServerComplete(event:Event):void
+		{
+			trace(" ^ onModelServerComplete");
+			_modelViewer.parse(new XML(event.target["data"]));
+		}
+		
 		private function onQRCodeComplete(event:Event):void
 		{
 			trace(" ^ onQRCodeComplete");
 			
+			_modelViewer.load(USER_DATA);
+			
 			// TODO : send back user session, code
-			_modelViewer.load(MODEL_URL);
+			/*
+			var _loader:URLLoader = new URLLoader();
+			_loader.addEventListener(Event.COMPLETE, onModelServerComplete);
+			
+			var request:URLRequest = new URLRequest(MODEL_URL);
+			request.method = URLRequestMethod.POST;
+			request.data = DataUtil.getDataByName(USER_DATA);
+			
+			_loader.load(request);
+			*/
+			
+			//_modelViewer.request(MODEL_URL, DataUtil.getDataByName(USER_DATA));
 			
 			/*
 			if(QRReader.result=="A2A916")
@@ -320,6 +351,8 @@ package
 		
 		private function process():void
 		{
+			if(!_FLARManager || !_FLARManager.ready)return;
+			
 			var n:Number;
 			
 			if(!isCam)
