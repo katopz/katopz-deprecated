@@ -60,22 +60,22 @@ package com.sleepydesign.utils
 			return saveBinary(data, uri, eventHandler, "image/png");
 		}
 		
-		public static function saveBinary(data:ByteArray, uri:String, eventHandler:Function = null, contentType:String = "image/png"):URLLoader
+		public static function saveBinary(data:ByteArray, uri:String, eventHandler:Function = null, contentType:String = "application/octet-stream"):URLLoader
 		{
-			var imageloader:URLLoader = new URLLoader();
-			imageloader.dataFormat = URLLoaderDataFormat.BINARY;
-			imageloader.addEventListener(Event.COMPLETE, eventHandler);
+			var _loader:URLLoader = new URLLoader();
+			_loader.dataFormat = URLLoaderDataFormat.BINARY;
+			_loader.addEventListener(Event.COMPLETE, eventHandler);
 			
 			var request:URLRequest = new URLRequest(uri);
 			request.contentType = contentType;
 			request.method = URLRequestMethod.POST;
 			request.data = data;
 			
-			imageloader.load(request);
+			_loader.load(request);
 			
-			return imageloader;
+			return _loader;
 		}
-		
+			
 		/**
 		 * Load as ByteArray
 		 * @param byteArray
