@@ -8,34 +8,14 @@ package
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
-	import flars.FLARResult;
+	import flars.FLARManager;
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Point;
-	import flash.geom.Vector3D;
-	import flash.media.Camera;
-	import flash.media.Video;
 	import flash.net.URLVariables;
 	import flash.utils.*;
 	
-	import org.libspark.flartoolkit.core.FLARCode;
-	import org.libspark.flartoolkit.core.param.FLARParam;
-	import org.libspark.flartoolkit.core.raster.rgb.FLARRgbRaster_BitmapData;
-	import org.libspark.flartoolkit.core.transmat.FLARTransMatResult;
-	import org.libspark.flartoolkit.detector.FLARMultiMarkerDetector;
-	import org.libspark.flartoolkit.support.sandy.FLARBaseNode;
-	import org.libspark.flartoolkit.support.sandy.FLARCamera3D;
-	
-	import qr.QRReader;
-	
-	import sandy.core.Scene3D;
-	import sandy.core.data.Point3D;
-	import sandy.core.data.Polygon;
-	import sandy.core.scenegraph.Group;
-	import sandy.materials.attributes.LineAttributes;
-	import sandy.primitive.Plane3D;
-
+	import qr.QRManager;
 
 	/**
 	 * QRCodeReader + FLARToolKit PoC (libspark rev. 3199, sandy rev. 1138)
@@ -91,44 +71,21 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		private var container:Sprite;
-		private var paper:Sprite;
-		private var _paperBitmap:Bitmap;
-		
 		[Embed(source='../bin/assets/A2A916.png')]
 		private var ImageData:Class;
 		
-		// FLAR
-		private var A:FLARResult;
-		private var B:FLARResult;
-		private var C:FLARResult;
-
+		private var fakeContainer:Sprite;
+		private var fake:Sprite;
+		private var _fakeBitmap:Bitmap;
+		
 		// Camera
-		private var _webcam:Camera;
-		private var _video:Video;
-		private var _cameraBitmap:Bitmap;
 		private var isCam:Boolean = false;
 		
-		// FLAR
-		[Embed(source='flars/camera.dat',mimeType='application/octet-stream')]
-		private var CameraData:Class;
-
-		[Embed(source='flars/qr.pat',mimeType='application/octet-stream')]
-		private var MarkerData:Class;
+		// manager
+		private var _QRReader:QRManager;
+		private var _FLARManager:FLARManager;
 		
-		private var aggregate:FLARTransMatResult;
-		private const size:int = 100;
-		private var _bitmapData:BitmapData;
-		private var param:FLARParam;
-		private var code:FLARCode;
-		private var raster:FLARRgbRaster_BitmapData;
-		private var detector:FLARMultiMarkerDetector;
-		
-		// sandy
-		private var sandyScene:Scene3D;
-		private var stuff:Vector.<FLARBaseNode>;
-		
-		// effect
+		// result
 		private var _modelViewer:ModelViewer;
 		
 		// state
@@ -136,27 +93,28 @@ package
 
 		public function main()
 		{
+			// base
 			base = new Sprite();
 			addChild(base);
 			base.x = 160;
 			base.y = 120;
 
 			// no cam test
-			container = new Sprite();
-			base.addChild(container);
+			fakeContainer = new Sprite();
+			base.addChild(fakeContainer);
 
 			// fake code
-			paper = new Sprite();
-			container.addChild(paper);
+			fake = new Sprite();
+			fakeContainer.addChild(fake);
 
-			paper.x = CANVAS_WIDTH / 2 - QR_SIZE / 2;
-			paper.y = CANVAS_HEIGHT / 2 - QR_SIZE / 2;
+			fake.x = CANVAS_WIDTH / 2 - QR_SIZE / 2;
+			fake.y = CANVAS_HEIGHT / 2 - QR_SIZE / 2;
 
 			// cam test
 			cameraContainer = new Sprite();
 			base.addChild(cameraContainer);
 			
-			//alpha = 0.1;
+			alpha = 0.1;
 		}
 
 		override protected function onInit():void
@@ -174,68 +132,36 @@ package
 
 			_modelViewer = new ModelViewer(scene);
 
-			initUser();
-
-			initARQR();
-		}
-
-		private function initUser():void
-		{
 			// get user data
 			LoaderUtil.loadVars(USER_URL, onGetUserData);
+			
+			initARQR();
 		}
-
+	
 		private function onGetUserData(event:Event):void
 		{
-			// wait for complete
+			// wait until complete
 			if(event.type!="complete")return;
 
+			// grab user data
 			var _userData:URLVariables = URLVariables(event.target["data"]);
+			
+			// debug
 			ObjectUtil.print(_userData);
 		}
 
-		private var _QRReader:QRReader;
-		private var _stuff:FLARBaseNode;
-		private var _FLARCamera3D:FLARCamera3D;
-
 		private function initARQR():void
 		{
-			// set up FLARToolKit
-			_bitmapData = new BitmapData(CANVAS_WIDTH, CANVAS_HEIGHT, false, 0);
-			param = new FLARParam;
-			param.loadARParam(new CameraData);
-			param.changeScreenSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-			code = new FLARCode(16, 16, 70, 70);
-			code.loadARPatt(new MarkerData);
-			raster = new FLARRgbRaster_BitmapData(_bitmapData);
-			detector = new FLARMultiMarkerDetector(param, [code], [size], 1);
-			detector.setContinueMode(false);
-
-			// set up sandy
-			_FLARCamera3D = new FLARCamera3D(param, 0.001);
-			sandyScene = new Scene3D("scene", Sprite(addChild(new Sprite)), _FLARCamera3D, new Group("root"));
-			sandyScene.container.visible = false;
-
-			stuff = new Vector.<FLARBaseNode>;
-			for (var i:int = 0; i < 4; i++)
-			{
-				stuff[i] = new FLARBaseNode;
-				var p:Plane3D = new Plane3D("plane" + i);
-				LineAttributes(p.appearance.frontMaterial.attributes.attributes[0]).color = (i < 3) ? 0xFF00 : 0xFFFF00;
-				p.rotateX = 180;
-				stuff[i].addChild(p);
-				sandyScene.root.addChild(stuff[i]);
-			}
-
-			_stuff = stuff[3];
-
-			// set up lite
-			camera.projection.fieldOfView = _FLARCamera3D.fov;
-			camera.projection.focalLength = _FLARCamera3D.focalLength;
-
-			// set up QRCodeReader
-			_QRReader = new QRReader(new BitmapData(CANVAS_HEIGHT, CANVAS_HEIGHT, false, 0));
+			// AR
+			_FLARManager = new FLARManager(this, new BitmapData(CANVAS_WIDTH, CANVAS_HEIGHT, false, 0));
+			
+			// QR
+			_QRReader = new QRManager(new BitmapData(CANVAS_HEIGHT, CANVAS_HEIGHT, false, 0));
 			_QRReader.addEventListener(Event.COMPLETE, onQRCodeComplete);
+			
+			// lite
+			camera.projection.fieldOfView = _FLARManager.fieldOfView;
+			camera.projection.focalLength = _FLARManager.focalLength;
 			
 			// debug
 			var rbmp:Bitmap = new Bitmap(_QRReader.homography);
@@ -246,20 +172,18 @@ package
 			// add test image in the background
 			setBitmap(Bitmap(new ImageData));
 
-			// browse
+			// menu
 			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
-			SystemUtil.addContext(this, "Toggle Camera", onToggleSource);
+			SystemUtil.addContext(this, "Toggle Camera", onToggleCamera);
 			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
 			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
 			SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
 
+			// debug
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-
-			//addEventListener(Event.ENTER_FRAME, onRun);
 		}
 		
+		// for dev time
 		private function onTextureReady(event:Event):void
 		{
 			trace(" ^ onTextureReady : " + event);
@@ -274,11 +198,11 @@ package
 				_modelViewer.parse(event["data"]);
 		}
 		
-		// got code
 		private function onQRCodeComplete(event:Event):void
 		{
 			trace(" ^ onQRCodeComplete");
 			
+			// TODO : send back user session, code
 			_modelViewer.load(MODEL_URL);
 			
 			/*
@@ -291,84 +215,57 @@ package
 			*/
 			
 			_isQRDecoded = true;
+			
 			// debug
 			//title = "QR : " + QRReader.result + " | ";
 		}
 
-		private function onToggleSource(event:ContextMenuEvent):void
+		private function onToggleCamera(event:ContextMenuEvent):void
 		{
 			isCam = !isCam;
 
 			if(!isCam)
 			{
-				container.visible = true;
+				fakeContainer.visible = true;
 				cameraContainer.visible = false;
 			}else{
-				container.visible = false;
+				fakeContainer.visible = false;
 				cameraContainer.visible = true;
-
-				if(!_webcam)
-					_webcam = Camera.getCamera();
-
-				if (_webcam) 
-				{
-					_webcam.setMode(CANVAS_WIDTH, CANVAS_HEIGHT, 30);
-					_video = new Video(CANVAS_WIDTH, CANVAS_HEIGHT);
-					_video.attachCamera(_webcam);
-					_cameraBitmap = new Bitmap(new BitmapData(CANVAS_WIDTH, CANVAS_HEIGHT, false, 0), PixelSnapping.AUTO, true);
-					cameraContainer.addChild(_cameraBitmap);
-				}
+				
+				cameraContainer.addChild(_FLARManager.cameraBitmap);
 			}
 
 			reset();
 		}
 		
-		//private var onDraging:Boolean;
-		//private var _oldMousePoint:Point;
-		
 		private function onMouseDown(event:MouseEvent):void
 		{
-			//onDraging = true;
-			//_oldMousePoint = new Point(view.mouseX, view.mouseX);
-			
-			TweenLite.to(paper, .5, {
+			TweenLite.to(fake, .5, {
 				rotationX:60*Math.random()-60*Math.random(),
 				rotationY:60*Math.random()-60*Math.random(),
 				rotationZ:60*Math.random()-60*Math.random()
 			});
 		}
 
-		private function onMouseMove(e:MouseEvent):void
-		{
-			/*
-			if (onDraging)
-			{
-				paper.rotationY += (_oldMousePoint.x - view.mouseX)/100;
-				paper.rotationX += (_oldMousePoint.y - view.mouseY)/100;
-			}
-			*/
-		}
-		
-		private function onMouseUp(e:MouseEvent):void
-		{
-			//onDraging = false;
-		}
-
 		override protected function onPreRender():void
 		{
-			if(isCam && _cameraBitmap && _video)
-				_cameraBitmap.bitmapData.draw(_video);
-
-			//sandyScene.render();
+			if(isCam)
+			{
+				if(!_FLARManager.video)
+					_FLARManager.setCamera(CANVAS_WIDTH, CANVAS_HEIGHT, 30);
+				
+				_FLARManager.drawVideo();
+			}
 
 			process();
 
 			if(_isQRDecoded)
 			{
 				view.visible = true;
-				_modelViewer.updateAnchor();
-				_modelViewer.draw();
 				stage.quality = "medium";
+				
+				_modelViewer.updateAnchor();
+				_modelViewer.updateAnimation();
 			}else{
 				view.visible = false;
 				stage.quality = "low";
@@ -381,10 +278,10 @@ package
 
 			if(event.type == Event.COMPLETE)
 			{
-				if(_paperBitmap)
+				if(_fakeBitmap)
 				{
-					_paperBitmap.parent.removeChild(_paperBitmap);
-					_paperBitmap = null;
+					_fakeBitmap.parent.removeChild(_fakeBitmap);
+					_fakeBitmap = null;
 				}
 
 				setBitmap(event.target.content);
@@ -406,16 +303,16 @@ package
 			
 			title = "reset";
 			
-			if(_paperBitmap)
+			if(_fakeBitmap)
 			{
-				_paperBitmap.parent.removeChild(_paperBitmap);
-				_paperBitmap = null;
+				_fakeBitmap.parent.removeChild(_fakeBitmap);
+				_fakeBitmap = null;
 			}
 			
-			_paperBitmap = bitmap;
-			_paperBitmap.width = _paperBitmap.height = QR_SIZE;
+			_fakeBitmap = bitmap;
+			_fakeBitmap.width = _fakeBitmap.height = QR_SIZE;
 
-			paper.addChild(_paperBitmap);
+			fake.addChild(_fakeBitmap);
 
 			// show time
 			process();
@@ -423,150 +320,43 @@ package
 		
 		private function process():void
 		{
-			// get image into _bitmapData
-			_bitmapData.fillRect(_bitmapData.rect, 0);
-
-			stage.quality = "high";
+			var n:Number;
+			
 			if(!isCam)
 			{
-				_bitmapData.draw(container);
+				n = _FLARManager.getDetectNumber(fakeContainer);
 			}else{
-				_bitmapData.draw(cameraContainer);
+				n = _FLARManager.getDetectNumber(cameraContainer);
 			}
-			stage.quality = "low";
-
-			// flarkit pass
-			var n:int = detector.detectMarkerLite(raster, 128);
 			
 			if (n > 2)
 			{
-				var _A_result:FLARTransMatResult;
-				var _B_result:FLARTransMatResult;
-				var _C_result:FLARTransMatResult;
+				title = "AR : " + n;
 				
-				// we want 3 best matches
-				var k:int, results:Array = [];
-				for (k = 0; k < n; k++)
-				{
-					var r:FLARResult = new FLARResult();
-					r.confidence = detector.getConfidence(k);
-					detector.getTransmationMatrix(k, r.result);
-					r.square = detector.getResult(k).square;
-					results.push(r);
-				}
-
-				results.sortOn("confidence", Array.DESCENDING | Array.NUMERIC);
-				results.splice(3, n - 3);
-
-				// sort them into right triangle
-				for (k = 0; k < 3; k++)
-				{
-					A = FLARResult(results[(2 + k) % 3]);
-					B = FLARResult(results[(3 + k) % 3]);
-					C = FLARResult(results[(4 + k) % 3]);
-					
-					_A_result = A.result;
-					_B_result = B.result;
-					_C_result = C.result;
-					
-					// I will use sandy math but not coordinates here (feel free to inline)
-					var BA:Point3D = new Point3D((_B_result.m03 - _A_result.m03), (_B_result.m13 - _A_result.m13), (_B_result.m23 - _A_result.m23));
-					var BC:Point3D = new Point3D((_B_result.m03 - _C_result.m03), (_B_result.m13 - _C_result.m13), (_B_result.m23 - _C_result.m23));
-					// average distance is only meaningful for 1 vertex (you can compute it later)
-					B.distance = 0.5 * (BA.getNorm() + BC.getNorm());
-					BA.normalize();
-					BC.normalize();
-					B.cosine = Math.abs(BA.dot(BC));
-				}
-
-				results.sortOn("cosine", Array.NUMERIC);
-
-				_modelViewer.setAxis(results[0]);
-
-				// display intermediate results
-				for (k = 0; k < 3; k++)
-					stuff[k].setTransformMatrix(FLARResult(results[k]).result);
-
-				// aggregate 3D results (this assumes all markers are oriented same way)
-				A = FLARResult(results[2]);
-				B = FLARResult(results[0]);
-				C = FLARResult(results[1]);
+				_modelViewer.setAxis(_FLARManager.getAxis());
 				
-				_A_result = A.result;
-				_B_result = B.result;
-				_C_result = C.result;
-
-				var scale3:Number = (1 + B.distance / size) / 3;
-				aggregate = new FLARTransMatResult();
-				
-				aggregate.m03 = (_A_result.m03 + _C_result.m03) * 0.5;
-				aggregate.m13 = (_A_result.m13 + _C_result.m13) * 0.5;
-				aggregate.m23 = (_A_result.m23 + _C_result.m23) * 0.5;
-				aggregate.m00 = (_A_result.m00 + _B_result.m00 + _C_result.m00) * scale3;
-				aggregate.m10 = (_A_result.m10 + _B_result.m10 + _C_result.m10) * scale3;
-				aggregate.m20 = (_A_result.m20 + _B_result.m20 + _C_result.m20) * scale3;
-				aggregate.m01 = (_A_result.m01 + _B_result.m01 + _C_result.m01) * scale3;
-				aggregate.m11 = (_A_result.m11 + _B_result.m11 + _C_result.m11) * scale3;
-				aggregate.m21 = (_A_result.m21 + _B_result.m21 + _C_result.m21) * scale3;
-				aggregate.m02 = (_A_result.m02 + _B_result.m02 + _C_result.m02) * scale3;
-				aggregate.m12 = (_A_result.m12 + _B_result.m12 + _C_result.m12) * scale3;
-				aggregate.m22 = (_A_result.m22 + _B_result.m22 + _C_result.m22) * scale3;
-
-				// debug plane 
-				stuff[3].setTransformMatrix(aggregate);
-
 				if(!_isQRDecoded)
 				{
-					// shaking help QR detect!
-					var _randomNum:Number = 2*Math.random() - 2*Math.random();
-					
-					// homography (I shall use 3D engine math - you can mess with FLARParam if you want to)
-					var plane3D:Plane3D = Plane3D(stuff[3].children[0]);
-
-					// since 3D fit is not perfect, we shall grab some extra area
-					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.06 + 0.05*Math.random();
-
-					// I call render() to init sandy matrices - you can do matrix math by hand and
-					// not render a thing, or use better engine :-p~
-					sandyScene.render();
-
-					var face1:Polygon = Polygon(plane3D.aPolygons[0]);
-					sandyScene.camera.projectArray(face1.vertices);
-					
-					var face2:Polygon = Polygon(plane3D.aPolygons[1]);
-					sandyScene.camera.projectArray(face2.vertices);
-
-					// shaking abit 
-					var p0:Point = new Point(face1.b.sx + _randomNum, face1.b.sy + _randomNum);
-					var p1:Point = new Point(face1.a.sx + _randomNum, face1.a.sy + _randomNum);
-					var p2:Point = new Point(face1.c.sx + _randomNum, face1.c.sy + _randomNum);
-					var p3:Point = new Point(face2.b.sx + _randomNum, face2.b.sy + _randomNum);
-
-					plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.0;
+					var _point4:* = _FLARManager.getPoint();
 					
 					// now read QR code
-					_QRReader.processHomography(_bitmapData, CANVAS_HEIGHT, CANVAS_HEIGHT, p0, p1, p2, p3);
+					_QRReader.processHomography(_FLARManager._bitmapData, CANVAS_HEIGHT, CANVAS_HEIGHT, _point4.p0, _point4.p1, _point4.p2, _point4.p3);
 					
-					title = "AR : " + n + " | QR : processing... | ";
+					title += " | QR : processing... | ";
 				}else{
-					title = "AR : " + n + " | QR : " + QRReader.result + " | ";
+					title += " | QR : " + QRManager.result + " | ";
 				}
 			}else{
 				//trace("new one?")
-				if(QRReader.result!="")
+				if(QRManager.result!="")
 				{
-					title = "AR : " + n + " | QR : " + QRReader.result + " | ";
+					title += " | QR : " + QRManager.result + " | ";
 				}else{
-					title = "AR : " + n + " | QR : n/a  | ";
+					title += " | QR : n/a  | ";
 				}
 			}
-
-			_modelViewer.setRefererPoint
-			(
-				new Vector3D(stuff[0].x, stuff[0].y, stuff[0].z),
-				new Vector3D(stuff[1].x, stuff[1].y, stuff[1].z),
-				new Vector3D(stuff[2].x, stuff[2].y, stuff[2].z)
-			);
+			
+			_modelViewer.setRefererPoint(_FLARManager.getStuff());
 		}
 	}
 }

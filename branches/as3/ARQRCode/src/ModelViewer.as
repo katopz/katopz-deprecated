@@ -31,6 +31,10 @@ package
 		public var _anchorB:Object3D;
 		public var _anchorC:Object3D;
 		
+		private var aa:Vector3D;
+		private var bb:Vector3D;
+		private var cc:Vector3D;
+		
 		public function ModelViewer(scene:Scene3D)
 		{
 			_scene = scene;
@@ -120,60 +124,61 @@ package
 			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 		}
 		
-		private var aa:Vector3D;
-		private var bb:Vector3D;
-		private var cc:Vector3D;
-		
-		private var _FLARResult:FLARResult;
+		//private var _FLARResult:FLARResult;
 		
 		public function setAxis(_FLARResult:FLARResult):void
 		{
-			this._FLARResult = _FLARResult;
+			//this._FLARResult = _FLARResult;
+			_FLARResult.setTransform(_base);
 		}
 		
-		public function setRefererPoint(p0:Vector3D, p1:Vector3D, p2:Vector3D):void
+		public function setRefererPoint(p:Vector.<Number>):void
 		{
-			_anchorA.x = p0.x;
-			_anchorA.y = -p0.y;
-			_anchorA.z = p0.z;
+			//p0
+			_anchorA.x = p[0];
+			_anchorA.y = -p[1];
+			_anchorA.z = p[2];
 			
-			if(p1.x< p2.x)
+			if(p[3]<p[6])
 			{
-				_anchorB.x = p1.x;
-				_anchorB.y = -p1.y;
-				_anchorB.z = p1.z;
-				
-				_anchorC.x = p2.x;
-				_anchorC.y = -p2.y;
-				_anchorC.z = p2.z;
+				//p1
+				_anchorB.x = p[3];
+				_anchorB.y = -p[4];
+				_anchorB.z = p[5];
+				//p2
+				_anchorC.x = p[6];
+				_anchorC.y = -p[7];
+				_anchorC.z = p[8];
 			}else{
-				_anchorB.x = p2.x;
-				_anchorB.y = -p2.y;
-				_anchorB.z = p2.z;
-				
-				_anchorC.x = p1.x;
-				_anchorC.y = -p1.y;
-				_anchorC.z = p1.z;
+				//p2
+				_anchorB.x = p[6];
+				_anchorB.y = -p[7];
+				_anchorB.z = p[8];
+				//p1
+				_anchorC.x = p[3];
+				_anchorC.y = -p[4];
+				_anchorC.z = p[5];
 			}
 		}
 		
 		public function updateAnchor():void
 		{
+			// not dirty
 			if(aa && aa.x == _anchorA.position.x)return;
 			
 			aa = _anchorA.position;
 			bb = _anchorB.position;
 			cc = _anchorC.position;
 			
-			if(_FLARResult)
-				_FLARResult.setTransform(_base);
+			//if(_FLARResult)
+			//	_FLARResult.setTransform(_base);
 			
 			_base.x = (aa.x + bb.x + cc.x)/3;
 			_base.y = (aa.y + bb.y + cc.y)/3;
 			_base.z = (aa.z + bb.z + cc.z)/3;
 		}
 		
-		public function draw():void
+		public function updateAnimation():void
 		{
 			if(_skinAnimation)
 				_skinAnimation.update(getTimer()/1000);
