@@ -5,7 +5,6 @@ package flars
 	import flash.geom.Point;
 	import flash.media.Camera;
 	import flash.media.Video;
-	import flash.text.TextField;
 	import flash.utils.*;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
@@ -25,6 +24,8 @@ package flars
 	
 	public class FLARManager
 	{
+		public var ready:Boolean = false;
+		
 		// sandy
 		private var sandyScene:Scene3D;
 		private var stuff:Vector.<FLARBaseNode>;
@@ -114,6 +115,8 @@ package flars
 			}
 
 			_stuff = stuff[3];
+			
+			ready = true;
 		}
 		
 		public function drawVideo():void

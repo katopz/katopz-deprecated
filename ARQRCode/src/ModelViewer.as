@@ -14,6 +14,7 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Vector3D;
+	import flash.net.URLVariables;
 	import flash.utils.*;
 
 	public class ModelViewer
@@ -72,13 +73,13 @@ package
 		
 		public function setTexture(bitmap:Bitmap):void
 		{
-			trace("setTexture");
+			trace(" * setTexture");
 			_model.materialLibrary.currentMaterialData.material = new BitmapMaterial(bitmap.bitmapData);
 		}
 		
-		public function parse(raw:*):void
+		public function parse(raw:XML):void
 		{
-			trace("parse");
+			trace(" * Parse");
 			
 			_collada = new Collada();
 			_collada.scaling = 25;
@@ -92,7 +93,7 @@ package
 		
 		public function load(uri:String):void
 		{
-			trace(" load : " + uri);
+			trace(" * load : " + uri);
 			
 			_collada = new Collada();
 			_collada.scaling = 25;
