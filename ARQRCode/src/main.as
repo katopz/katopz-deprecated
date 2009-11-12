@@ -14,9 +14,6 @@ package
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	import flash.utils.*;
 	
@@ -207,7 +204,7 @@ package
 		{
 			trace(" ^ onOpenModel");
 			if(event.type == Event.COMPLETE)
-				_modelViewer.parse(event["data"]);
+				_modelViewer.parse(new XML(event["data"]));
 		}
 		
 		private function onModelServerComplete(event:Event):void
@@ -220,7 +217,7 @@ package
 		{
 			trace(" ^ onQRCodeComplete");
 			
-			_modelViewer.load(USER_DATA);
+			//_modelViewer.load(USER_DATA);
 			
 			// TODO : send back user session, code
 			/*
@@ -236,14 +233,12 @@ package
 			
 			//_modelViewer.request(MODEL_URL, DataUtil.getDataByName(USER_DATA));
 			
-			/*
-			if(QRReader.result=="A2A916")
+			if(QRManager.result=="A2A916")
 			{
-				_modelViewer.load("assets/J7.dae");
+				_modelViewer.load("serverside/J7.dae");
 			}else{
-				_modelViewer.load("assets/G2.dae");
+				_modelViewer.load("serverside/G2.dae");
 			}
-			*/
 			
 			_isQRDecoded = true;
 			
@@ -362,10 +357,10 @@ package
 				n = _FLARManager.getDetectNumber(cameraContainer);
 			}
 			
+			title = "AR : " + n;
+			
 			if (n > 2)
 			{
-				title = "AR : " + n;
-				
 				_modelViewer.setAxis(_FLARManager.getAxis());
 				
 				if(!_isQRDecoded)
