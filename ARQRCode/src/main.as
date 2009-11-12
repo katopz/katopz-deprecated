@@ -175,7 +175,7 @@ package
 			// debug
 			var rbmp:Bitmap = new Bitmap(_QRReader.homography);
 			rbmp.scaleX = rbmp.scaleY = .5;
-			rbmp.y = 80;
+			rbmp.y = 110;
 			addChild(rbmp);
 
 			// add test image in the background
@@ -257,8 +257,6 @@ package
 			}else{
 				fakeContainer.visible = false;
 				cameraContainer.visible = true;
-				
-				cameraContainer.addChild(_FLARManager.cameraBitmap);
 			}
 
 			reset();
@@ -278,7 +276,10 @@ package
 			if(isCam)
 			{
 				if(!_FLARManager.video)
+				{
 					_FLARManager.setCamera(CANVAS_WIDTH, CANVAS_HEIGHT, 30);
+					cameraContainer.addChild(_FLARManager.cameraBitmap);
+				}
 				
 				_FLARManager.drawVideo();
 			}
