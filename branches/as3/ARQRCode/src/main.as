@@ -3,6 +3,7 @@ package
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.greensock.TweenLite;
+	import com.sleepydesign.crypto.DES;
 	import com.sleepydesign.utils.DataUtil;
 	import com.sleepydesign.utils.DebugUtil;
 	import com.sleepydesign.utils.FileUtil;
@@ -67,6 +68,7 @@ package
 		// config
 		private var MODEL_URL:String = "serverside/modelData.php";
 		private var USER_URL:String = "serverside/userData.php";
+		private const USER_DATA:String = "userData";
 
 		// root
 		private var base:Sprite;
@@ -157,8 +159,6 @@ package
 			initARQR();
 		}
 		
-		private const USER_DATA:String = "userData";
-		
 		private function initARQR():void
 		{
 			// AR
@@ -207,43 +207,41 @@ package
 				_modelViewer.parse(new XML(event["data"]));
 		}
 		
-		private function onModelServerComplete(event:Event):void
+		private function onModelDecodeComplete(event:Event):void
 		{
-			trace(" ^ onModelServerComplete");
-			_modelViewer.parse(new XML(event.target["data"]));
+			trace(" ^ onModelDecodeComplete");
+			_modelViewer.load(String(event.target["data"]));
+			//if(event.type == Event.COMPLETE)
+			//	_modelViewer.parse(new XML(event.target["data"]));
 		}
 		
+		private const key:String = "thisisakey";
 		private function onQRCodeComplete(event:Event):void
 		{
 			trace(" ^ onQRCodeComplete");
+			_isQRDecoded = true;
 			
-			//_modelViewer.load(USER_DATA);
+			var _data:* = DataUtil.getDataByName(USER_DATA)
+			var _vars:URLVariables = URLVariables(_data);
+			_vars.code = QRManager.result;
 			
-			// TODO : send back user session, code
+			var _cipher:String = DES.encypt(key, _vars.toString()+"&");
+			_vars.session = DES.toHex(_cipher);
+			
+			trace("encypt : " + DES.toHex(_cipher));
+			trace("decypt : " + DES.decypt(key, _cipher));
+			
+			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
+			
 			/*
-			var _loader:URLLoader = new URLLoader();
-			_loader.addEventListener(Event.COMPLETE, onModelServerComplete);
-			
-			var request:URLRequest = new URLRequest(MODEL_URL);
-			request.method = URLRequestMethod.POST;
-			request.data = DataUtil.getDataByName(USER_DATA);
-			
-			_loader.load(request);
-			*/
-			
-			//_modelViewer.request(MODEL_URL, DataUtil.getDataByName(USER_DATA));
-			
+			// for testing
 			if(QRManager.result=="A2A916")
 			{
 				_modelViewer.load("serverside/J7.dae");
 			}else{
 				_modelViewer.load("serverside/G2.dae");
 			}
-			
-			_isQRDecoded = true;
-			
-			// debug
-			//title = "QR : " + QRReader.result + " | ";
+			*/
 		}
 
 		private function onToggleCamera(event:ContextMenuEvent):void

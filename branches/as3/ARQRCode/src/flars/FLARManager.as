@@ -254,7 +254,7 @@ package flars
 			sandyScene.camera.projectArray(face2.vertices);
 
 			// shaking abit 
-			var _randomNum:Number
+			var _randomNum:Number;
 			_randomNum = 4*Math.random() - 4*Math.random();
 			var p0:Point = new Point(face1.b.sx + _randomNum, face1.b.sy + _randomNum);
 			_randomNum = 4*Math.random() - 4*Math.random();
