@@ -177,7 +177,7 @@ package com.sleepydesign.utils
 				break;
 			}
 			
-			trace(" ! Load as : " +type);
+			trace(" ! Load ["+type+"] : "+ uri);
 			
 			// select loader
 			var _loader:*;
