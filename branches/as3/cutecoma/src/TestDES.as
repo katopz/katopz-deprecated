@@ -9,7 +9,7 @@ package
 	{
 		public function TestDES()
 		{
-			var key:String = "ก۩!۞۩3thisisakey";
+			var key:String = "thisisakey";
 			//
 			var message:String = "12345678";
 			var cipherText:String;
