@@ -124,11 +124,8 @@ package
 			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 		}
 		
-		//private var _FLARResult:FLARResult;
-		
 		public function setAxis(_FLARResult:FLARResult):void
 		{
-			//this._FLARResult = _FLARResult;
 			_FLARResult.setTransform(_base);
 		}
 		
@@ -169,9 +166,6 @@ package
 			aa = _anchorA.position;
 			bb = _anchorB.position;
 			cc = _anchorC.position;
-			
-			//if(_FLARResult)
-			//	_FLARResult.setTransform(_base);
 			
 			_base.x = (aa.x + bb.x + cc.x)/3;
 			_base.y = (aa.y + bb.y + cc.y)/3;
