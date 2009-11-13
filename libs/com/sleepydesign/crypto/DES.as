@@ -35,6 +35,16 @@ package com.sleepydesign.crypto
 			return des(key, cipher, 0, 0);
 		}
 		
+		public static function toHex(s:String):String
+		{
+			var r:String = "0x";
+			var hexes:Array = String("0123456789abcdef").split("");
+			for (var i:int = 0; i < s.length; i++)
+				r += hexes[s.charCodeAt(i) >> 4] + hexes[s.charCodeAt(i) & 0xf];
+			
+			return r;
+		}
+		
 		public static function  des(key:String, message:String, encrypt:int, mode:*= null, iv:*= null, padding:*= null):String
 		{
 		  //declaring this locally speeds things up a bit
