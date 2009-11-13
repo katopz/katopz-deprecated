@@ -235,7 +235,7 @@ package com.sleepydesign.utils
 			return null;
 		}
 		
-		public static function request(data:*, uri:String, eventHandler:Function = null, type:String = "auto"):Object
+		public static function request(uri:String, data:*, eventHandler:Function = null, type:String = "auto"):Object
 		{
 			var _urlRequest:URLRequest = new URLRequest(uri);
 			_urlRequest.method = SEND_METHOD;
