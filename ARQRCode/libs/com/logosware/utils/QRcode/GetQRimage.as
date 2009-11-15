@@ -66,6 +66,12 @@ package com.logosware.utils.QRcode
 		 */
 		public function process():void {
 			var QRCodes:Array = detecter.detect();
+			
+			var _resultImage_width:int = _resultImage.width;
+			var _resultImage_height:int = _resultImage.height;
+			var _resultImage_rect:Rectangle = _resultImage.rect;
+			var _conv:ConvolutionFilter = new ConvolutionFilter(7, 7, [1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1],33);
+			
 			var _QRCodes_length:int = QRCodes.length;
 			for ( var i:int = 0; i < _QRCodes_length; i++ ) {
 				var bmpData:BitmapData = QRCodes[i].image;
@@ -79,8 +85,8 @@ package com.logosware.utils.QRcode
 					_resultArray = _results[1];
 					
 					// グリッド中でもマーカー確認
-					var checkBmp:BitmapData = new BitmapData( _resultImage.width, _resultImage.height );
-					checkBmp.applyFilter(_resultImage,_resultImage.rect,_origin,new ConvolutionFilter(7, 7, [1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1],33));
+					var checkBmp:BitmapData = new BitmapData( _resultImage_width, _resultImage_height );
+					checkBmp.applyFilter(_resultImage,_resultImage_rect,_origin,_conv);
 					if ( (checkBmp.getPixel(7, 7) == 0) && (checkBmp.getPixel(checkBmp.width - 8, 7) == 0) && (checkBmp.getPixel(7, checkBmp.height - 8) == 0) ) {
 						dispatchEvent( new QRreaderEvent( QRreaderEvent.QR_IMAGE_READ_COMPLETE, _resultImage, _resultArray ) );
 					} else {
