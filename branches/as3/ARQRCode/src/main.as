@@ -2,6 +2,7 @@ package
 {
 	import away3dlite.templates.BasicTemplate;
 	
+	import com.adobe.crypto.MD5;
 	import com.greensock.TweenLite;
 	import com.sleepydesign.crypto.DES;
 	import com.sleepydesign.utils.DataUtil;
@@ -227,9 +228,12 @@ package
 			
 			var _cipher:String = DES.encypt(key, _vars.toString()+"&");
 			_vars.session = DES.toHex(_cipher);
+			_vars.hash = MD5.hash(_vars.toString());
 			
-			trace("encypt : " + DES.toHex(_cipher));
-			trace("decypt : " + DES.decypt(key, _cipher));
+			trace(" ! Encypt : " + DES.toHex(_cipher));
+			trace(" ! Decypt : " + DES.decypt(key, _cipher));
+			
+			trace(" ! Hash : " + _vars.hash);
 			
 			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			
@@ -338,9 +342,6 @@ package
 			_fakeBitmap.width = _fakeBitmap.height = QR_SIZE;
 
 			fake.addChild(_fakeBitmap);
-
-			// show time
-			process();
 		}
 		
 		private function process():void
@@ -358,6 +359,7 @@ package
 			
 			title = "AR : " + n;
 			
+			// marker more than 2
 			if (n > 2)
 			{
 				_modelViewer.setAxis(_FLARManager.getAxis());
@@ -374,7 +376,6 @@ package
 					title += " | QR : " + QRManager.result + " | ";
 				}
 			}else{
-				//trace("new one?")
 				if(QRManager.result!="")
 				{
 					title += " | QR : " + QRManager.result + " | ";
