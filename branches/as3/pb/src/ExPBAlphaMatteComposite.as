@@ -13,7 +13,7 @@ package
 	 */
 	public class ExPBAlphaMatteComposite extends Sprite
 	{
-		[Embed(source="../pbj/AlphaMatteComposite.pbj",mimeType="application/octet-stream")]
+		[Embed(source="../pbjs/AlphaMatteComposite.pbj",mimeType="application/octet-stream")]
 		private var AlphaMatteComposite:Class;
 
 		public function ExPBAlphaMatteComposite()

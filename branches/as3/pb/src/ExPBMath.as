@@ -17,13 +17,13 @@ package
 	 */
 	public class ExPBMath extends Sprite
 	{
-		[Embed(source="../pbj/PBSqrt.pbj",mimeType="application/octet-stream")]
+		[Embed(source="../pbjs/PBSqrt.pbj",mimeType="application/octet-stream")]
 		private var PBSqrt:Class;
 		
-		[Embed(source="../pbj/PBAdd.pbj",mimeType="application/octet-stream")]
+		[Embed(source="../pbjs/PBAdd.pbj",mimeType="application/octet-stream")]
 		private var PBAdd:Class;
 		
-		[Embed(source="../pbj/ZSort.pbj",mimeType="application/octet-stream")]
+		[Embed(source="../pbjs/ZSort.pbj",mimeType="application/octet-stream")]
 		private var ZSort:Class;
 		
 		private var total:int = 10000;

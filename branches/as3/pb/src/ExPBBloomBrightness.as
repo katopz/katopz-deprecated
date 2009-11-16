@@ -11,7 +11,7 @@ package
 	public class ExPBBloomBrightness extends Sprite
 	{
 		//pixel bender filter for HDR effect
-		[Embed(source="../pbj/BloomBrightness.pbj",mimeType="application/octet-stream")]
+		[Embed(source="../pbjs/BloomBrightness.pbj",mimeType="application/octet-stream")]
 		private var BloomBrightness:Class;
 
 		[Embed(source="assets/earth.jpg")]

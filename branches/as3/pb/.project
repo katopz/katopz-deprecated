@@ -15,7 +15,7 @@
 			<arguments>
 				<dictionary>
 					<key>output</key>
-					<value>pbj</value>
+					<value>pbjs</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
