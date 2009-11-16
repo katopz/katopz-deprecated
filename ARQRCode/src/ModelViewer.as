@@ -136,7 +136,9 @@ package
 			_anchorA.y = -p[1];
 			_anchorA.z = p[2];
 			
-			if(p[3]<p[6])
+			//p1.x < p2.x
+			//p1.screenZ > p2.screenZ
+			if(p[3]<p[6] && _anchorB.screenZ > _anchorC.screenZ)
 			{
 				//p1
 				_anchorB.x = p[3];
@@ -156,6 +158,7 @@ package
 				_anchorC.y = -p[4];
 				_anchorC.z = p[5];
 			}
+			trace(_anchorB.screenZ , _anchorC.screenZ)
 		}
 		
 		public function updateAnchor():void

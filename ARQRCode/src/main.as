@@ -117,7 +117,7 @@ package
 
 			// cam test
 			cameraContainer = new Sprite();
-			base.addChild(cameraContainer);
+			base.addChild(cameraContainer);alpha = 0.01
 		}
 
 		override protected function onInit():void
