@@ -1,5 +1,14 @@
 =====================================================================================
-1.1 Flash 	--> Request --> Server(userData.php)
+ 1.1 Flash	<-- HTML[UserURL, ModelURL]
+=====================================================================================
+
+UserURL : USER_URL=http://sleepydesign.com/oishi/serverside/userData.php
+ModelURL : MODEL_URL=http://sleepydesign.com/oishi/serverside/modelData.php
+
+HTML : "FlashVars", "USER_URL=http://sleepydesign.com/oishi/serverside/userData.php&MODEL_URL=http://sleepydesign.com/oishi/serverside/modelData.php"
+
+=====================================================================================
+1.2 Flash 	--> Request --> Server(userData.php)
 =====================================================================================
 
 GET /serverside/userData.php HTTP/1.1
@@ -13,7 +22,7 @@ Accept-Language: en-GB,en-US;q=0.8,en;q=0.6
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
 
 =====================================================================================
-1.2 Flash 	<-- Session[UserID] <-- Server
+1.3 Flash 	<-- Session[UserID] <-- Server
 =====================================================================================
 
 userid=ABC123456789&username=katopz
@@ -49,7 +58,17 @@ serverside/modelData.php?userid=ABC123456789&username=katopz&session=0x95fd90ff5
 =====================================================================================
 2.3 Flash 	<-- Model[Link]	<-- Server
 =====================================================================================
+// here's just examples
+// actually you need to get code from encrypted data
+// and also check hash for checking for cheating
 
-http://127.0.0.1/serverside/J7.dae
+<?php
+if($_GET['code']=="A2A916")
+{
+	echo "serverside/J7.dae";
+}else{
+	echo "serverside/G2.dae";
+}
+?>
 
 =====================================================================================
