@@ -1,0 +1,26 @@
+<languageVersion: 1.0;>
+kernel PBSqrt
+<
+	namespace: "PBDT";
+	vendor: "katopz";
+	version: 1;
+	description: "Calculates the square root of a list of number.";
+>
+{
+	input image3 source;
+	output pixel3 target;
+
+	void evaluatePixel()
+	{
+		// the input pixel. this is really a list of 3 floats.
+		pixel3 px = sample(source, outCoord());
+		
+		// run the sqrt on each float in the pixel
+		px[0] = sqrt(px[0]);
+		px[1] = sqrt(px[1]);
+		px[2] = sqrt(px[2]);
+		
+		// assign the pixel to the output pixel
+		target = px;
+	}
+}
