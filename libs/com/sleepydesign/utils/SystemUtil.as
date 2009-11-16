@@ -2,6 +2,7 @@ package com.sleepydesign.utils
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Stage;
 	import flash.events.ContextMenuEvent;
 	import flash.events.EventDispatcher;
 	import flash.external.ExternalInterface;
@@ -13,6 +14,15 @@ package com.sleepydesign.utils
 	
     public class SystemUtil extends EventDispatcher
     {
+        public static function getFlashVars(stage:Stage) : *
+        {
+    		if (stage.loaderInfo && stage.loaderInfo.parameters)
+			{
+				return stage.loaderInfo.parameters;
+			}
+			return null;
+        }
+       
         // Garbage collector
         public static function gc() : void
         {
