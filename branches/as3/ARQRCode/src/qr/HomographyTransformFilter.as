@@ -13,7 +13,7 @@
 	 */
 	public class HomographyTransformFilter extends ShaderFilter {
 		
-		[Embed(source='../pbks/homography.pbj', mimeType='application/octet-stream')]
+		[Embed(source='../pbjs/homography.pbj', mimeType='application/octet-stream')]
 		private static const ShaderByteClass:Class;
 		
 		private var _shader:Shader;
