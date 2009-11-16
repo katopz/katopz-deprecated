@@ -5,11 +5,13 @@ package
 	import com.adobe.crypto.MD5;
 	import com.greensock.TweenLite;
 	import com.sleepydesign.crypto.DES;
+	import com.sleepydesign.crypto.PBE;
 	import com.sleepydesign.utils.DataUtil;
 	import com.sleepydesign.utils.DebugUtil;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.ObjectUtil;
+	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flars.FLARManager;
@@ -29,28 +31,19 @@ package
 	 * @see http://www.openqrcode.com/
 	 *
 	 * [Step #1]
-	 * 1.1 Loading Effect
-	 * 1.2 Server 	--> Session[UserID] --> Flash
-	 * 1.3 User 	--> Image[QR, AR] 	--> Model ID, Projection Matrix
-	 * 1.4 Wait for User playing/proceed to next step
-	 *
+	 * 1.1 Flash	<-- HTML[UserURL, ModelURL]
+	 * 1.2 Flash 	--> Request[URL] --> Server
+	 * 1.3 Flash 	<-- Session[UserID] <-- Server
+	 * 
 	 * [Step #2]
-	 * 2.1 Loading Effect
-	 * 2.2 Flash 	--> Encypt[Time, UserID, ModelID]	--> Server
-	 * 2.3 Flash 	<-- Model[Mesh, Texture, Animation]	<-- Server
-	 * 2.4 Spawn Effect
-	 *
+	 * 2.1 User 	--> Image[QR, AR] 	--> Flash : Model ID, Projection Matrix
+	 * 2.2 Flash 	--> MD5[DES[UserID, UserName, Time, ModelID]]	--> Server
+	 * 2.3 Flash 	<-- Model[Link]	<-- Server
+	 * 
 	 * [Step #3]
-	 * 3.1 Wait for user input for next step
-	 * 3.2 Flip Effect to next ingradient
-	 * 3.3 Repeat step 1.2 --> 3.2 until finish condition?
-	 *
-	 * [Step #4]
-	 * 4.1 Loading Effect
-	 * 4.2 Flash 	--> Encypt[Time, UserID, ModelID, ModelID]	--> Server
-	 * 4.3 Flash 	<-- Model[Mesh, Texture, Animation]			<-- Server
-	 * 4.4 Spawn Effect
-	 *
+	 * 3.2 Flash 	--> Model[Link] --> Server
+	 * 3.3 Flash 	<-- Model[Mesh, Texture, Animation]	<-- Server
+	 * 
 	 */
 	[SWF(backgroundColor="0x333333", frameRate="30", width="640", height="480")]
 	public class main extends BasicTemplate
@@ -67,9 +60,11 @@ package
 		private const QR_SIZE:int = 90;
 		
 		// config
-		private var MODEL_URL:String = "serverside/modelData.php";
-		private var USER_URL:String = "serverside/userData.php";
+		private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
+		private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
+		
 		private const USER_DATA:String = "userData";
+		private const key:String = "ｪｩｵｴｪｴｦｬ｢ＯＯｺ";
 
 		// root
 		private var base:Sprite;
@@ -117,7 +112,7 @@ package
 
 			// cam test
 			cameraContainer = new Sprite();
-			base.addChild(cameraContainer);alpha = 0.01
+			base.addChild(cameraContainer);
 		}
 
 		override protected function onInit():void
@@ -134,11 +129,18 @@ package
 			camera.focus = 100;
 
 			_modelViewer = new ModelViewer(scene);
+			
+			//get flashvars
+			var _flashvars:Object = SystemUtil.getFlashVars(stage);
+			
+			// init
+			USER_URL = StringUtil.isNull(_flashvars["USER_URL"])?USER_URL:_flashvars["USER_URL"];
+			MODEL_URL = StringUtil.isNull(_flashvars["MODEL_URL"])?USER_URL:_flashvars["MODEL_URL"];
 
 			// get user data
 			LoaderUtil.loadVars(USER_URL, onGetUserData);
 			
-			DebugUtil.init(this, 0, SCREEN_HEIGHT/2);
+			DebugUtil.init(this, 0, SCREEN_HEIGHT/2+100);
 		}
 	
 		private function onGetUserData(event:Event):void
@@ -156,6 +158,7 @@ package
 			ObjectUtil.print(DataUtil.getDataByName(USER_DATA));
 			
 			DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
+			DebugUtil.addText(USER_URL);
 			
 			initARQR();
 		}
@@ -196,44 +199,58 @@ package
 		// for dev time
 		private function onTextureReady(event:Event):void
 		{
-			trace(" ^ onTextureReady : " + event);
+			DebugUtil.trace(" ^ onTextureReady : " + event);
 			if(event.type == Event.COMPLETE)
 				_modelViewer.setTexture(event.target.content);
 		}
 		
 		private function onOpenModel(event:Event):void
 		{
-			trace(" ^ onOpenModel");
 			if(event.type == Event.COMPLETE)
+			{
+				DebugUtil.trace(" ^ onOpenModel");
 				_modelViewer.parse(new XML(event["data"]));
+			}
 		}
 		
 		private function onModelDecodeComplete(event:Event):void
 		{
-			trace(" ^ onModelDecodeComplete");
-			_modelViewer.load(String(event.target["data"]));
-			//if(event.type == Event.COMPLETE)
-			//	_modelViewer.parse(new XML(event.target["data"]));
+			if(event.type == Event.COMPLETE)
+			{
+				DebugUtil.trace(" ^ onModelDecodeComplete");
+				DebugUtil.addText(" ! Model : " + String(event.target["data"]));
+				_modelViewer.load(String(event.target["data"]));
+			}
 		}
 		
-		private const key:String = "thisisakey";
 		private function onQRCodeComplete(event:Event):void
 		{
-			trace(" ^ onQRCodeComplete");
+			DebugUtil.trace(" ^ onQRCodeComplete");
 			_isQRDecoded = true;
 			
-			var _data:* = DataUtil.getDataByName(USER_DATA)
+			var _data:* = DataUtil.getDataByName(USER_DATA);
 			var _vars:URLVariables = URLVariables(_data);
 			_vars.code = QRManager.result;
+			_vars.time = new Date().valueOf();
 			
-			var _cipher:String = DES.encypt(key, _vars.toString()+"&");
+			//DebugUtil.trace(" ! Encypt : " + PBE.encypt(key));
+			//DebugUtil.trace(" ! Decypt : " + PBE.decypt(PBE.encypt(key)));
+			
+			var _key:String = PBE.decypt(key);
+			DebugUtil.trace(" ! Decypt Key : " + _key);
+			DebugUtil.addText("! Decypt Key : " + _key);
+			
+			var _cipher:String = DES.encypt(_key, _vars.toString()+"&");
 			_vars.session = DES.toHex(_cipher);
 			_vars.hash = MD5.hash(_vars.toString());
 			
-			trace(" ! Encypt : " + DES.toHex(_cipher));
-			trace(" ! Decypt : " + DES.decypt(key, _cipher));
+			DebugUtil.trace(" ! Encypt : " + DES.toHex(_cipher));
+			DebugUtil.trace(" ! Decypt : " + DES.decypt(_key, _cipher));
+			DebugUtil.trace(" ! Hash : " + _vars.hash);
 			
-			trace(" ! Hash : " + _vars.hash);
+			DebugUtil.addText("! Encypt : " + DES.toHex(_cipher));
+			DebugUtil.addText("! Decypt : " + DES.decypt(_key, _cipher));
+			DebugUtil.addText("! Hash : " + _vars.hash);
 			
 			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			
@@ -303,7 +320,7 @@ package
 
 		private function onImageReady(event:Event):void
 		{
-			trace(" ^ onImageReady : " + event);
+			DebugUtil.trace(" ^ onImageReady : " + event);
 
 			if(event.type == Event.COMPLETE)
 			{
@@ -326,7 +343,7 @@ package
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-			trace(" ! setBitmap");
+			DebugUtil.trace(" ! setBitmap");
 			
 			reset();
 			
