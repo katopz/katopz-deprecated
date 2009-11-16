@@ -158,7 +158,6 @@ package
 				_anchorC.y = -p[4];
 				_anchorC.z = p[5];
 			}
-			trace(_anchorB.screenZ , _anchorC.screenZ)
 		}
 		
 		public function updateAnchor():void
