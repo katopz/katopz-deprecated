@@ -1,0 +1,18 @@
+<languageVersion: 1.0;>
+kernel PBKey
+<
+	namespace: "PBDT";
+	vendor: "katopz";
+	version: 1;
+	description: "nvm";
+>
+{
+	input image3 source;
+	output pixel3 target;
+
+	void evaluatePixel()
+	{
+		pixel3 px = sample(source, outCoord());
+		target = pixel3(px[2]+255.0, px[1]+255.0, px[0]+255.0);
+	}
+}
