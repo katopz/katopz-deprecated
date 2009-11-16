@@ -13,7 +13,7 @@ package
 	 */
 	public class ExPBKey extends Sprite
 	{
-		[Embed(source="../pbj/PBKey.pbj",mimeType="application/octet-stream")]
+		[Embed(source="../pbjs/PBKey.pbj",mimeType="application/octet-stream")]
 		private var PBKey:Class;
 
 		public function ExPBKey()
