@@ -1,0 +1,85 @@
+WindowedApplication
+{
+	color: #ffffff;
+	text-roll-over-color: #ffffff;
+	theme-color: #db5800;
+}
+
+.titleBar
+{
+	background-color: #db5800;
+}
+
+.appTitleFirst, .appTitleSecond
+{
+	font-family: "Helvetica";
+	font-weight: bold;
+	font-size: 20;
+	color: #ffffff;
+}
+
+.appTitleSecond
+{
+	color: #ffffff;
+}
+
+.volumeName
+{
+	font-size: 13;	
+}
+
+Button
+{
+	fill-colors: #707070, #4c4c4c;
+	highlight-alphas: 0, 0;
+	fill-alphas: 1, 1;
+	border-color: #232323;
+	font-size: 13;
+}
+
+Alert
+{
+	color : #ffffff;
+	border-thickness: 1;
+	drop-shadow-enabled: false;
+	background-color: #333333;
+	corner-radius :6;
+	border-style :solid;
+	header-colors : #222222, #222222;
+	footer-colors : #222222, #222222;
+	border-color : #000000;
+	modalTransparencyColor: #333333;
+}
+
+ToolTip
+{
+	background-color: #353535;
+	border-color: #444444;
+	color: #DDDDDD;	
+}
+
+.appCloseButton
+{
+	up-skin: Embed("/assets/close_up.png");
+	over-skin: Embed("/assets/close_over.png");
+	down-skin: Embed("/assets/close_pressed.png");
+}
+
+.appMinimizeButton
+{
+	up-skin: Embed("/assets/minimize_up.png");
+	over-skin: Embed("/assets/minimize_over.png");
+	down-skin: Embed("/assets/minimize_pressed.png");
+}
+
+.appRestoreButton
+{
+	up-skin: Embed("/assets/restore_up.png");
+	over-skin: Embed("/assets/restore_over.png");
+	down-skin: Embed("/assets/restore_over.png");
+}
+
+.appGripper
+{
+	skin: Embed("/assets/gripper.png");
+}
