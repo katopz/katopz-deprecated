@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Adobe Systems Incorporated(r) Source Code License Agreement
+    Copyright(c) 2005 Adobe Systems Incorporated. All rights reserved.
+    
+    Please read this Source Code License Agreement carefully before using
+    the source code.
+    
+    Adobe Systems Incorporated grants to you a perpetual, worldwide, non-exclusive, 
+    no-charge, royalty-free, irrevocable copyright license, to reproduce,
+    prepare derivative works of, publicly display, publicly perform, and
+    distribute this source code and such derivative works in source or 
+    object code form without any attribution requirements.  
+    
+    The name "Adobe Systems Incorporated" must not be used to endorse or promote products
+    derived from the source code without prior written permission.
+    
+    You agree to indemnify, hold harmless and defend Adobe Systems Incorporated from and
+    against any loss, damage, claims or lawsuits, including attorney's 
+    fees that arise or result from your use or distribution of the source 
+    code.
+    
+    THIS SOURCE CODE IS PROVIDED "AS IS" AND "WITH ALL FAULTS", WITHOUT 
+    ANY TECHNICAL SUPPORT OR ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING,
+    BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+    FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  ALSO, THERE IS NO WARRANTY OF 
+    NON-INFRINGEMENT, TITLE OR QUIET ENJOYMENT.  IN NO EVENT SHALL ADOBE 
+    OR ITS SUPPLIERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+    OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
+    OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+						layout="absolute" xmlns:local="*"
+						showFlexChrome="false"
+						applicationComplete="onApplicationComplete();" backgroundColor="#333333">
+	
+	<mx:Script>
+		<![CDATA[
+			import flash.text.engine.FontMetrics;
+			import mx.core.UIComponent;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
+
+			import mx.collections.ArrayCollection;
+
+			[Bindable]
+            [Embed(source="assets/progressCircle.swf",symbol="progressCircle")]
+            private var progressSWF:Class;
+
+			private const TILE_SIZE:uint = 140;
+			private const TILES_PER_FRAME:uint = 2;
+			private const TILES_PER_PAGE:uint = 30;
+			private const MAX_FILES:uint = 200;
+
+			private var targetVolume:File;
+			private var fileList:Array;
+			private var currentVolumeNativePath:String;
+			private var selectedTiles:ArrayCollection;
+			private var fileIndex:uint;
+
+			private function onApplicationComplete():void
+			{
+				// Set up keyboard events
+				NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, true);
+				this.nativeWindow.addEventListener(Event.CLOSING, onClosing);
+
+				// Listen for VolumeChangeEvents
+				StorageVolumeInfo.storageVolumeInfo.addEventListener(StorageVolumeChangeEvent.STORAGE_VOLUME_MOUNT, onVolumeMount);
+				StorageVolumeInfo.storageVolumeInfo.addEventListener(StorageVolumeChangeEvent.STORAGE_VOLUME_UNMOUNT, onVolumeUnmount);
+
+				// Configure instructions
+				var modifier:String = (Capabilities.os.indexOf("Mac") == 0) ? "Command" : "Control";
+				this.instructions.text = "Plug in a storage device\nor press " + modifier + " + o\nto browse a directory";
+
+				this.mainView.selectedChild = instructionBox;
+
+				// Center the window
+				var initialBounds:Rectangle = new Rectangle((Screen.mainScreen.bounds.width / 2 - (this.width/2)), (Screen.mainScreen.bounds.height / 2 - (this.height/2)), this.width, this.height);
+				this.nativeWindow.bounds = initialBounds;
+				this.nativeWindow.visible = true;
+			}
+
+			private function onClosing(e:Event):void
+			{
+				for (var i:int = NativeApplication.nativeApplication.openedWindows.length - 1; i >= 0; --i)
+				{
+					NativeWindow(NativeApplication.nativeApplication.openedWindows[i]).close();
+				}
+			}
+
+			private function onVolumeMount(e:StorageVolumeChangeEvent):void
+			{
+				if (e.storageVolume.isRemovable)
+				{
+					this.nativeWindow.activate();
+					this.volumeName.text = e.storageVolume.name;
+					this.targetVolume = e.storageVolume.rootDirectory;
+					this.currentVolumeNativePath = this.targetVolume.nativePath;
+					this.start();
+				}
+			}
+
+			private function onVolumeUnmount(e:StorageVolumeChangeEvent):void
+			{
+				if (this.currentVolumeNativePath == e.rootDirectory.nativePath)
+				{
+					this.reset();
+					this.mainView.selectedChild = instructionBox;
+				}
+			}
+
+			private function onKeyDown(e:KeyboardEvent):void
+			{
+				if (e.commandKey || e.ctrlKey)
+				{
+					if (e.keyCode == Keyboard.O)
+					{
+						var homeDir:File = File.userDirectory;
+						homeDir.addEventListener(Event.SELECT, directorySelected);
+						homeDir.browseForDirectory("Choose a folder to open");
+					}
+					else if (e.keyCode == Keyboard.C)
+					{
+						this.copyFiles();
+					}
+				}
+				else if (e.keyCode == Keyboard.ESCAPE)
+				{
+					this.removeAllSelectedTiles();
+				}
+			}
+
+			private function directorySelected(e:Event):void
+			{
+				this.targetVolume = e.target as File;
+				this.start();
+			}
+
+			private function start():void
+			{
+				// Remove instructions
+				this.mainView.selectedChild = board;
+				
+				// Do some initialization
+				this.selectedTiles = new ArrayCollection();
+				this.fileList = new Array();
+				this.fileIndex = 0;
+				
+
+				// Get all the files in the volume and put them in the database
+				this.iterateFiles(this.targetVolume);
+				this.fileList.sort(compareCreationDates, Array.NUMERIC);
+
+				// Start the show
+				this.layoutFiles();
+			}
+
+			private function reset():void
+			{
+				this.previousButton.enabled = false;
+				this.nextButton.enabled = false;
+				this.board.removeAllChildren();
+				this.volumeName.text = "";
+			}
+
+			private function layoutFiles():void
+			{
+				this.previousButton.enabled = false;
+				this.nextButton.enabled = false;
+
+				this.board.removeAllChildren();
+				var mainBounds:Rectangle = this.bounds;
+
+				this.progressCircle.visible = true;				
+
+				this.stage.addEventListener(Event.ENTER_FRAME, renderTile);
+			}
+
+			private function renderTile(e:Event=null):void
+			{
+				for (var tileCount:uint = 0; tileCount < this.TILES_PER_FRAME; ++tileCount)
+				{
+					if ((this.board.getChildren().length) == (this.TILES_PER_PAGE) || this.fileIndex == this.fileList.length)
+					{
+						this.stopRendering();
+						return;
+					}
+
+					var tile:TileUnit = new TileUnit();
+					tile.file = this.fileList[this.fileIndex];
+					//trace(this.fileList[this.fileIndex].creationDate, this.fileList[this.fileIndex].creationDate.time);
+					tile.width = this.TILE_SIZE;
+					tile.height = this.TILE_SIZE;
+					tile.addEventListener(MouseEvent.RIGHT_CLICK, onRightClick);
+					tile.addEventListener(MouseEvent.CLICK, onClick);
+					tile.doubleClickEnabled = true;
+					tile.addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+					this.board.addChild(tile);
+
+					++this.fileIndex;
+				}
+
+				this.board.validateNow();
+			}
+			
+			private function stopRendering():void
+			{
+				this.stage.removeEventListener(Event.ENTER_FRAME, renderTile);
+				this.progressCircle.visible = false;
+
+				if (this.fileIndex < (this.fileList.length - 1))
+				{
+					this.nextButton.enabled = true;
+				}
+				else
+				{
+					this.nextButton.enabled = false;
+				}
+				if (this.fileIndex - this.TILES_PER_PAGE != 0)
+				{
+					this.previousButton.enabled = true;
+				}
+				else
+				{
+					this.previousButton.enabled = false;
+				}
+			}
+
+			private function compareCreationDates(f1:File, f2:File):Number
+			{
+				if (f1.creationDate.time > f2.creationDate.time)
+				{
+					return -1;
+				}
+				else if (f1.creationDate.time < f2.creationDate.time)
+				{
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+
+			private function iterateFiles(dir:File):void
+			{
+				if (!dir.isDirectory || dir.isHidden || !dir.exists || dir.name.search(/^\..*$/) != -1) return;
+				var listing:Array = dir.getDirectoryListing();
+				for each(var f:File in listing)
+				{
+					if (this.fileList.length >= this.MAX_FILES) break;
+					if (f.isHidden || !f.exists || f.name.search(/^\..*$/) != -1) continue;
+					if (f.isDirectory)
+					{
+						this.iterateFiles(f);
+					}
+					else
+					{
+						this.fileList.push(f);
+					}
+				}
+			}
+
+			private function copyFiles(e:Event=null):void
+			{
+				if (this.selectedTiles == null || this.selectedTiles.length == 0) return;
+				var filesToCopy:Array = new Array();
+				for each (var tile:TileUnit in this.selectedTiles)
+				{
+					tile.flash();
+					filesToCopy.push(tile.file);
+				}
+				// TBD: I'd like to clear just the file list format, but this is broken right now,
+				// so I have to clear all the data.
+				Clipboard.generalClipboard.clearData(ClipboardFormats.FILE_LIST_FORMAT);
+				//Clipboard.generalClipboard.clear();
+				Clipboard.generalClipboard.setData(ClipboardFormats.FILE_LIST_FORMAT, filesToCopy);
+			}
+
+			private function deleteFilesConfirm(e:Event):void
+			{
+				var pronoun:String, plural:String;
+				if (this.selectedTiles.length == 1)
+				{
+					pronoun = "this ";
+					plural = " file?";
+				}
+				else
+				{
+					pronoun = "these ";
+					plural = " files?";
+				}
+				Alert.show("Are you sure you want to delete " + pronoun + this.selectedTiles.length + plural,
+						   "Confirm",
+						   Alert.YES|Alert.NO,
+						   null,
+						   deleteFiles);
+			}
+
+			private function deleteFiles(e:CloseEvent):void
+			{
+				if (e.detail == Alert.YES)
+				{
+					for each (var tile:TileUnit in this.selectedTiles)
+					{
+						if (!tile.deleted)
+						{
+							tile.deleteFile();
+						}
+					}
+				}
+			}
+
+			private function openFilesConfirm(e:Event):void
+			{
+				if (this.selectedTiles.length == 1)
+				{
+					this.openFiles();
+					return;
+				}
+
+				Alert.show("Are you sure you want to open these " + this.selectedTiles.length + " files?",
+						   "Confirm",
+						   Alert.YES|Alert.NO,
+						   null,
+						   openFiles);
+			}
+
+			private function openFiles(e:CloseEvent=null):void
+			{
+				if (e == null || e.detail == Alert.YES)
+				{
+					for each (var tile:TileUnit in this.selectedTiles)
+					{
+						tile.file.openWithDefaultApplication();
+					}
+				}
+			}
+
+			private function previewFile(e:Event):void
+			{
+				if (this.selectedTiles.length > 1) return;
+				var tileToPreview:TileUnit = this.selectedTiles.getItemAt(this.selectedTiles.length - 1) as TileUnit;
+				var imagePreview:ImagePreview = new ImagePreview(tileToPreview);
+			}
+
+			private function onRightClick(e:MouseEvent):void
+			{
+				var tile:TileUnit = e.currentTarget as TileUnit;
+				if (!tile.selected)
+				{
+					this.onClick(e);
+				}
+				var file:File = tile.file;
+				var menu:NativeMenu = new NativeMenu();
+				
+				// Set up copy.  All files can be copied in all circumstances.
+				var copy:NativeMenuItem = new NativeMenuItem("Copy");
+				copy.addEventListener(Event.SELECT, copyFiles);
+				menu.addItem(copy);
+
+				// Preview
+				var preview:NativeMenuItem = new NativeMenuItem("Preview");
+				menu.addItem(preview);
+
+				if (this.selectedTiles.length == 1)
+				{
+					if ((file.extension.toLocaleLowerCase() == "jpg" ||
+						file.extension.toLocaleLowerCase() == "jpeg" ||
+						file.extension.toLocaleLowerCase() == "png" ||
+						file.extension.toLocaleLowerCase() == "gif") && tile.wasScaled)
+					{
+						preview.addEventListener(Event.SELECT, previewFile);
+					}
+					else
+					{
+						preview.enabled = false;
+					}
+				}
+				else
+				{
+					preview.enabled = false;
+				}
+
+				// Open
+				var open:NativeMenuItem = new NativeMenuItem("Open");
+				open.addEventListener(Event.SELECT, openFilesConfirm);
+				menu.addItem(open);			
+				
+				// Set up delete.  All files can be deleted in all circumstances.
+				var del:NativeMenuItem = new NativeMenuItem("Delete");
+				del.addEventListener(Event.SELECT, deleteFilesConfirm);
+				menu.addItem(del);
+				if (tile.deleted)
+				{
+					del.enabled = false;
+				}
+
+				menu.display(this.stage, e.stageX, e.stageY);
+			}
+
+			private function onClick(e:MouseEvent):void
+			{
+				var tile:TileUnit = e.currentTarget as TileUnit;
+
+				if (e.commandKey || e.ctrlKey)
+				{
+					if (!tile.selected)
+					{
+						tile.selected = true;
+						this.addSelectedTile(tile);
+					}
+					else
+					{
+						tile.selected = false;
+						this.removeSelectedTile(tile);
+					}
+				}
+				else if (e.shiftKey && this.selectedTiles.length > 0)
+				{
+					var lastSelectedTile:TileUnit = this.selectedTiles.getItemAt(this.selectedTiles.length - 1) as TileUnit;
+					var lastIndex:uint = this.board.getChildIndex(lastSelectedTile);
+					var thisIndex:uint = this.board.getChildIndex(tile);
+					var start:uint = Math.min(lastIndex, thisIndex);
+					var end:uint = Math.max(lastIndex, thisIndex);
+					for (var i:uint = start; i <= end; ++i)
+					{
+						var nextTile:TileUnit = this.board.getChildAt(i) as TileUnit;
+						if (!nextTile.selected)
+						{
+							nextTile.selected = true;
+							this.addSelectedTile(nextTile);
+						}
+					}
+				}
+				else
+				{
+					if (this.selectedTiles.length > 1)
+					{
+						this.deselectAllTiles();
+					}
+					
+					if (tile.selected)
+					{
+						tile.selected = false;
+						this.removeSelectedTile(tile);
+					}
+					else
+					{
+						tile.selected = true;
+						this.removeAllSelectedTiles();
+						this.addSelectedTile(tile);
+					}
+				}
+			}
+
+			private function onDoubleClick(e:MouseEvent):void
+			{
+				var tile:TileUnit = e.currentTarget as TileUnit;
+				tile.file.openWithDefaultApplication();
+			}
+
+			private function deselectAllTiles():void
+			{
+				if (this.selectedTiles.length > 0)
+				{
+					for each (var tile:TileUnit in this.selectedTiles)
+					{
+						tile.selected = false;
+					}
+					this.selectedTiles = new ArrayCollection();
+				}
+			}
+
+			private function addSelectedTile(tile:TileUnit):void
+			{
+				if (!this.selectedTiles.contains(tile))
+				{
+					this.selectedTiles.addItem(tile);
+				}
+			}
+
+			private function removeSelectedTile(tile:TileUnit):void
+			{
+				this.selectedTiles.removeItemAt(this.selectedTiles.getItemIndex(tile));
+			}
+
+			private function removeAllSelectedTiles():void
+			{
+				if (this.selectedTiles == null) return;
+				for each (var tile:TileUnit in this.selectedTiles.source)
+				{
+					tile.selected = false;
+				}
+				this.selectedTiles = new ArrayCollection();
+			}
+
+			private function onPrevious():void
+			{
+				this.fileIndex = this.fileIndex - (this.TILES_PER_PAGE + this.board.getChildren().length);
+				if (this.fileIndex < 0)
+				{
+					this.fileIndex = 0;
+				}
+				this.layoutFiles();
+			}
+
+			private function onNext():void
+			{
+				this.layoutFiles();
+			}
+
+			private function onRestore():void
+			{
+				if (this.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED)
+				{
+					this.nativeWindow.restore();
+					restoreButton.toolTip = "Maximize Application";
+				}
+				else
+				{
+					this.nativeWindow.maximize();
+					restoreButton.toolTip = "Restore Application";
+				}
+			}
+
+		]]>
+	</mx:Script>
+	<mx:Style source="assets/stylesheet.css" />
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalGap="0" horizontalGap="0">
+		<mx:Canvas id="appTitleBar" width="100%" height="35" styleName="titleBar" mouseDown="nativeWindow.startMove();" doubleClickEnabled="true" doubleClick="nativeWindow.minimize();" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+			<mx:Image source="@Embed('/assets/logo_small.png')" top="3" left="5"/>
+			<mx:Label text="File" styleName="appTitleFirst" top="8" left="37"/>
+			<mx:Label text="Tile" styleName="appTitleSecond" top="8" left="70"/>
+			<mx:Button styleName="appCloseButton" click="this.nativeWindow.close();" toolTip="Close Application" right="9" top="10"/>
+			<mx:Button id="restoreButton" styleName="appRestoreButton" click="onRestore();" toolTip="Maximize Application" right="23" top="10"/>
+			<mx:Button styleName="appMinimizeButton" click="this.nativeWindow.minimize()" toolTip="Minimize Application" right="36" top="10"/>
+			<mx:VBox width="100%" horizontalAlign="center" verticalAlign="middle" top="8">
+				<mx:Label id="volumeName" text="" styleName="volumeName"/>
+			</mx:VBox>
+		</mx:Canvas>
+		<mx:ViewStack id="mainView" width="100%" height="100%" creationPolicy="all">
+			<mx:Tile id="board" width="100%" height="100%" paddingTop="5" paddingLeft="5"/>
+			<mx:Box id="instructionBox" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+				<mx:Text id="instructions" width="700" height="300" textAlign="center" color="#ffffff" fontSize="50" fontWeight="bold"/>
+			</mx:Box>
+		</mx:ViewStack>
+	</mx:VBox>
+	<mx:Button label="Previous" id="previousButton" left="5" bottom="5" click="onPrevious();" enabled="false"/>
+	<mx:Button label="Next" id="nextButton" right="5" bottom="5" click="onNext();" enabled="false"/>
+	<mx:Button id="appGripper" styleName="appGripper" bottom="1" right="1" mouseDown="nativeWindow.startResize(NativeWindowResize.BOTTOM_RIGHT);"/>
+	<mx:SWFLoader id="progressCircle" source="{progressSWF}" height="300" width="300" x="{(this.width/2)-150}" y="{(this.height/2)-150}" alpha=".50" visible="false"/>
+</mx:WindowedApplication>

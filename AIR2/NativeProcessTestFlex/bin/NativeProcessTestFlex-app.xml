@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/2.0beta">
+	<id>com.NativeProcessTestFlex</id>
+	<version>1.0</version>
+	<filename>NativeProcessTestFlex</filename>
+	<description>A Sample AIR 2.0 application.</description>
+	<name>Native Process Test - Flex</name>
+	<copyright>(c) 2009 Adobe Systems Inc.</copyright>
+	<initialWindow>
+		<content>NativeProcessTestFlex.swf</content>
+		<systemChrome>standard</systemChrome>
+		<transparent>false</transparent>
+		<visible>true</visible>
+		<width>600</width>
+		<height>250</height>
+		<fullScreen>true</fullScreen>
+		<aspectRatio>portrait</aspectRatio>
+		<maximizable>false</maximizable>
+		<minimizable>true</minimizable>
+		<resizable>false</resizable>
+	</initialWindow>
+	<customUpdateUI>false</customUpdateUI>
+	<allowBrowserInvocation>false</allowBrowserInvocation>
+	<supportedProfiles>extendedDesktop</supportedProfiles>
+	<icon>
+		<image16x16>icons/AIRApp_16.png</image16x16>
+		<image32x32>icons/AIRApp_32.png</image32x32>
+		<image48x48>icons/AIRApp_48.png</image48x48>
+		<image128x128>icons/AIRApp_128.png</image128x128>
+	</icon>
+</application>

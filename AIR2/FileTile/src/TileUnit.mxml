@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="onCreationComplete();" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Image;
+			import mx.core.UIComponent;
+			
+			[Bindable]
+            [Embed(source="assets/rotate.png")]
+            private var rotationArrowClass:Class;
+
+			private var _file:File;
+			private var _selected:Boolean;
+			public var wasScaled:Boolean = false;
+			public var deleted:Boolean = false;
+			
+			public function set selected(s:Boolean):void
+			{
+				this._selected = s;
+				if (this._selected)
+				{
+					this.drawSelection();
+				}
+				else
+				{
+					this.cancelSelection();
+				}
+			}
+
+			public function get selected():Boolean
+			{
+				return this._selected;
+			}
+
+			public function set file(f:File):void
+			{
+				this._file = f;
+			}
+
+			public function get file():File
+			{
+				return this._file;
+			}
+
+			private function showRotationArrow(e:MouseEvent):void
+			{
+				this.rotationArrow.visible = true;
+			}
+
+			private function hideRotationArrow(e:MouseEvent):void
+			{
+				this.rotationArrow.visible = false;
+			}
+			
+			private function onCreationComplete():void
+			{
+				this.drawBackground();
+				
+				this.fileName.text = this._file.name;
+				var uic:UIComponent = new UIComponent();
+				if (this._file.extension != null &&
+					(this._file.extension.toLocaleLowerCase() == "jpg" ||
+					this._file.extension.toLocaleLowerCase() == "jpeg" ||
+					this._file.extension.toLocaleLowerCase() == "png" ||
+					this._file.extension.toLocaleLowerCase() == "gif"))
+				{
+					this.addEventListener(MouseEvent.MOUSE_OVER, showRotationArrow);
+					this.addEventListener(MouseEvent.MOUSE_OUT, hideRotationArrow);
+					var imageBytes:ByteArray = new ByteArray();
+					var stream:FileStream = new FileStream();
+					stream.open(this._file, FileMode.READ);
+                    stream.readBytes(imageBytes);
+                    stream.close();
+                    var loader:Loader = new Loader();
+                    loader.contentLoaderInfo.addEventListener(Event.COMPLETE,
+	                    function (event:Event):void
+    	                {
+							var scaleFactor:Number = 1;
+							
+							if (loader.width > loader.height && loader.width > 128)
+							{
+								scaleFactor = 128 / loader.width;
+								wasScaled = true;
+							}
+							if (loader.height > loader.width && loader.height > 128)
+							{
+								scaleFactor = 128 / loader.height;
+								wasScaled = true;
+							}
+
+							var bmd:BitmapData = Bitmap(loader.content).bitmapData;
+							var scaledBMD:BitmapData = new BitmapData(loader.width * scaleFactor, loader.height * scaleFactor);
+							var matrix:Matrix = new Matrix();
+							matrix.scale(scaleFactor, scaleFactor);
+							scaledBMD.draw(bmd, matrix, null, null, null, true);
+							uic.x = (scaledBMD.width/2) * -1;
+							uic.y = (scaledBMD.height/2) * -1;
+							uic.addChild(new Bitmap(scaledBMD));
+							loader.unload();
+							bmd = null;
+	                    });
+                    loader.loadBytes(imageBytes);
+				}
+				else
+				{
+					var bitmaps:Array = this._file.icon.bitmaps;
+					var iconData:BitmapData = this.getBiggestIcon(bitmaps);
+					var bm:Bitmap = new Bitmap(iconData, "auto", true);
+					bm.opaqueBackground = null;
+					bm.width = 128;
+					bm.height = 128;
+					uic.x = (bm.width/2) * -1;
+					uic.y = (bm.height/2) * -1;
+					uic.addChild(bm);
+				}
+				
+				iconCanvas.addChild(uic);
+				
+				if (this.deleted || !this._file.exists)
+				{
+					this.drawDeletedGraphics();
+				}
+			}
+
+			private function getBiggestIcon(icons:Array):BitmapData
+			{
+				var biggest:BitmapData = icons[0] as BitmapData;
+				for each (var icon:BitmapData in icons)
+				{
+					if (icon.width > biggest.width || icon.width == 128)
+					{
+						biggest = icon;
+					}
+				}
+				return biggest;
+			}
+
+			public function deleteFile():void
+			{
+				this.file.deleteFile();
+				this.deleted = true;
+				this.drawDeletedGraphics();
+			}
+
+			public function drawDeletedGraphics():void
+			{
+				this.iconCanvas.alpha = .25;
+				var graphics:Graphics = this.graphics;
+				graphics.lineStyle(10, 0xff0000, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE);
+				graphics.moveTo(120, 0);
+				graphics.lineTo(140, 20);
+				graphics.moveTo(140, 0);
+				graphics.lineTo(120, 20);
+			}
+
+			private function drawBackground():void
+			{
+				// Rounded corners
+				this.graphics.clear();
+				this.graphics.beginFill(0x000000, .5);
+				this.graphics.drawRoundRectComplex(0, 0, this.width, this.height, 10, 10, 10, 10);
+				this.graphics.endFill();
+			}
+			
+			private function drawSelection(e:Event=null):void
+			{
+				this.graphics.clear();
+				this.graphics.beginFill(0xdb5800, .5);
+				this.graphics.drawRoundRectComplex(0, 0, this.width, this.height, 10, 10, 10, 10);
+				this.graphics.endFill();
+				if (this.deleted)
+				{
+					this.drawDeletedGraphics();
+				}
+			}
+			
+			private function cancelSelection():void
+			{
+				this.graphics.clear();
+				this.graphics.beginFill(0x000000, .5);
+				this.graphics.drawRoundRectComplex(0, 0, this.width, this.height, 10, 10, 10, 10);
+				this.graphics.endFill();
+				if (this.deleted)
+				{
+					this.drawDeletedGraphics();
+				}
+			}
+			
+			public function flash():void
+			{
+				this.graphics.clear();
+				var t:Timer = new Timer(100, 1);
+				t.addEventListener(TimerEvent.TIMER, drawSelection);
+				t.start();
+			}
+			
+			private function doFlash(e:TimerEvent):void
+			{
+				this.alpha = (this.alpha - .1);
+			}
+			
+			private function rotationImage(e:MouseEvent):void
+			{
+				e.stopImmediatePropagation();
+				this.iconCanvas.rotation += 90;
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:DropShadowFilter id="shadow" quality="4" distance="1" angle="90" blurX="2" blurY="2" color="0x000000" alpha="0.65" />
+	<mx:Canvas id="iconCanvas" width="128" height="128" horizontalScrollPolicy="off" verticalScrollPolicy="off" x="70" y="66" clipContent="false"/>
+	<mx:Label id="fileName" filters="{[shadow]}" truncateToFit="true" color="0xffffff" width="140" x="4" y="123"/>
+	<mx:SWFLoader id="rotationArrow" source="{rotationArrowClass}" height="18" width="18" x="3" y="3" visible="false" click="rotationImage(event);"/>
+</mx:Canvas>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" applicationComplete="init()" layout="vertical">
+<mx:Script>
+	<![CDATA[
+		private var process:NativeProcess;
+		public function init():void
+		{
+			if (NativeProcess.isSupported)
+			{
+				launchEchoTest();
+			}
+			else
+			{
+				textReceived.text = "NativeProcess not supported.";
+			}
+		}
+		public function launchEchoTest():void
+		{	 
+			var file:File = File.applicationDirectory;
+			file = file.resolvePath("NativeApps");
+			if (Capabilities.os.toLowerCase().indexOf("win") > -1)
+			{
+				file = file.resolvePath("Windows/bin/echoTestWin.exe");
+			}
+			else if (Capabilities.os.toLowerCase().indexOf("mac") > -1)
+			{
+				file = file.resolvePath("Mac/bin/echoTestMac");
+			}
+
+			var nativeProcessStartupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+			nativeProcessStartupInfo.executable = file;
+			
+			process = new NativeProcess();
+			process.start(nativeProcessStartupInfo);
+			process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, onOutputData);
+			process.addEventListener(ProgressEvent.STANDARD_INPUT_PROGRESS, inputProgressListener);
+		}
+		public function writeData():void
+		{
+			process.standardInput.writeUTFBytes(textToSend.text + "\n");
+		}
+		public function inputProgressListener(event:ProgressEvent):void
+		{
+			process.closeInput();
+		}
+		public function onOutputData(event:ProgressEvent):void
+		{
+			textReceived.text = process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable);
+			var date:Date = new Date();
+			dateField.text = date.toString();
+			launchEchoTest();
+		}
+	]]>
+	</mx:Script>
+	<mx:VBox horizontalAlign="left" width="100%">
+		<mx:Label text="Send text:" textAlign="left"/>
+		<mx:TextInput id="textToSend" width="100%"/>
+		<mx:Button id="submitBtn" label="Submit" click="writeData()"/>
+		<mx:Spacer />
+		<mx:Label text="Text received:" textAlign="left"/>
+		<mx:TextInput id="textReceived" width="100%"/>
+		<mx:Text id="dateField"/>
+	</mx:VBox>
+</mx:WindowedApplication>
