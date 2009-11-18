@@ -14,7 +14,6 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Vector3D;
-	import flash.net.URLVariables;
 	import flash.utils.*;
 
 	public class ModelViewer

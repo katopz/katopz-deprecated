@@ -135,7 +135,7 @@ package
 			
 			// init
 			USER_URL = StringUtil.isNull(_flashvars["USER_URL"])?USER_URL:_flashvars["USER_URL"];
-			MODEL_URL = StringUtil.isNull(_flashvars["MODEL_URL"])?USER_URL:_flashvars["MODEL_URL"];
+			MODEL_URL = StringUtil.isNull(_flashvars["MODEL_URL"])?MODEL_URL:_flashvars["MODEL_URL"];
 
 			// get user data
 			LoaderUtil.loadVars(USER_URL, onGetUserData);
@@ -218,7 +218,7 @@ package
 			if(event.type == Event.COMPLETE)
 			{
 				DebugUtil.trace(" ^ onModelDecodeComplete");
-				DebugUtil.addText(" ! Model : " + String(event.target["data"]));
+				DebugUtil.addText("! Model : " + String(event.target["data"]));
 				_modelViewer.load(String(event.target["data"]));
 			}
 		}
