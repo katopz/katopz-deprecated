@@ -9,6 +9,8 @@ package
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.BitmapMaterial;
 	
+	import com.sleepydesign.utils.DebugUtil;
+	
 	import flars.FLARResult;
 	
 	import flash.display.*;
@@ -35,6 +37,8 @@ package
 		private var bb:Vector3D;
 		private var cc:Vector3D;
 		
+		public var visible:Boolean = true;
+		
 		public function ModelViewer(scene:Scene3D)
 		{
 			_scene = scene;
@@ -55,6 +59,11 @@ package
 			scene.addChild(_base);
 		}
 		
+		public function get model():Object3D
+		{
+			return _model;
+		}
+		
 		public function reset():void
 		{
 			if(_loader && _loader.parent)
@@ -68,6 +77,8 @@ package
 				_model.parent.removeChild(_model);
 				_model = null;
 			}
+			
+			//DebugUtil.addText("! Model reset");
 		}
 		
 		public function setTexture(bitmap:Bitmap):void
@@ -83,6 +94,9 @@ package
 			_collada = new Collada();
 			_collada.scaling = 50;
 			
+			reset();
+			visible = false;
+			
 			_loader = new Loader3D();
 			_loader.loadXML(xml, _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
@@ -96,11 +110,8 @@ package
 			_collada = new Collada();
 			_collada.scaling = 50;
 			
-			if(_loader && _loader.parent)
-			{
-				_loader.parent.removeChild(_loader);
-				_loader = null;
-			}
+			reset();
+			visible = false;
 			
 			_loader = new Loader3D();
 			_loader.loadGeometry(uri, _collada);
@@ -110,17 +121,15 @@ package
 		
 		private function onSuccess(event:Loader3DEvent):void
 		{
-			if(_model && _model.parent)
-			{
-				_model.parent.removeChild(_model);
-				_model = null;
-			}
-				
+			visible = true;
+			
 			_model = _loader.handle;
 			_model.rotationX = -90;
 			_model.rotationZ = -90;
 			
+			try{
 			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			}catch(e:*){}
 		}
 		
 		public function setAxis(_FLARResult:FLARResult):void
