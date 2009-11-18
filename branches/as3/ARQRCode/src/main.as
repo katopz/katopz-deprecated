@@ -18,7 +18,11 @@ package
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.filters.GlowFilter;
 	import flash.net.URLVariables;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	import flash.utils.*;
 	
 	import qr.QRManager;
@@ -43,6 +47,10 @@ package
 	 * [Step #3]
 	 * 3.2 Flash 	--> Model[Link] --> Server
 	 * 3.3 Flash 	<-- Model[Mesh, Texture, Animation]	<-- Server
+	 * 
+	 * G2, G6, G7, G8
+	 * ข้าว, กุ้ง, ไข่, หอมใหญ่
+	 * 058454, 26B0EA, 2AFF7A, 2BD35D
 	 * 
 	 */
 	[SWF(backgroundColor="0x333333", frameRate="30", width="640", height="480")]
@@ -71,7 +79,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../bin/assets/A2A916.png')]
+		[Embed(source='../bin/codes/G2_058454.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -87,6 +95,7 @@ package
 		
 		// result
 		private var _modelViewer:ModelViewer;
+		private var _itemNameTextField:TextField;
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
@@ -140,7 +149,17 @@ package
 			// get user data
 			LoaderUtil.loadVars(USER_URL, onGetUserData);
 			
-			DebugUtil.init(this, 0, SCREEN_HEIGHT/2+100);
+			// add some text
+			_itemNameTextField = new TextField();
+			_itemNameTextField.defaultTextFormat = new TextFormat("Tahoma", 20, 0xFFFFFF);
+			_itemNameTextField.autoSize = TextFieldAutoSize.CENTER;
+			_itemNameTextField.x = SCREEN_WIDTH/2 - _itemNameTextField.width/2;
+			_itemNameTextField.y = SCREEN_HEIGHT/2 + 100;
+			_itemNameTextField.filters = [new GlowFilter(0x000000, .6, 4,4,2 )]
+			
+			addChild(_itemNameTextField);
+			
+			DebugUtil.init(this, 0, SCREEN_HEIGHT/2+130);
 		}
 	
 		private function onGetUserData(event:Event):void
@@ -217,10 +236,16 @@ package
 		{
 			if(event.type == Event.COMPLETE)
 			{
+				DebugUtil.clear();
 				DebugUtil.trace(" ^ onModelDecodeComplete");
-				DebugUtil.addText("! Model : " + String(event.target["data"]));
-				_modelViewer.load(String(event.target["data"]));
+				var _vars:URLVariables = new URLVariables(String(event.target["data"])); 
+				DebugUtil.addText("! Model : " + _vars.name+", "+_vars.src);
+				
+				_modelViewer.load(_vars.src);
+				_itemNameTextField.text = _vars.name;
 			}
+			
+			DebugUtil.trace(event);
 		}
 		
 		private function onQRCodeComplete(event:Event):void
@@ -252,7 +277,11 @@ package
 			DebugUtil.addText("! Decypt : " + DES.decypt(_key, _cipher));
 			DebugUtil.addText("! Hash : " + _vars.hash);
 			
-			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
+			_itemNameTextField.text = "loading...";
+			
+			_modelViewer.visible = false;
+			
+			//LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			
 			/*
 			// for testing
@@ -263,6 +292,32 @@ package
 				_modelViewer.load("serverside/G2.dae");
 			}
 			*/
+			var _name:String;
+			var _src:String;
+			 
+			if(QRManager.result=="058454")
+			{
+				_name="ข้าว";
+				_src="serverside/G2.dae";
+			}
+			else if(QRManager.result=="26B0EA")
+			{
+				_name="กุ้ง";
+				_src="serverside/G6.dae";
+			}
+			else if(QRManager.result=="2AFF7A")
+			{
+				_name="ไข่";
+				_src="serverside/G7.dae";
+			}
+			else// if(QRManager.result=="2BD35D")
+			{
+				_name="หอมใหญ่";
+				_src="serverside/G8.dae";
+			}
+			
+			_modelViewer.load(_src);
+			_itemNameTextField.text = _name;
 		}
 
 		private function onToggleCamera(event:ContextMenuEvent):void
@@ -307,15 +362,19 @@ package
 
 			if(_isQRDecoded)
 			{
-				view.visible = true;
-				stage.quality = "medium";
+				//view.visible = true;
+				//stage.quality = "medium";
 				
 				_modelViewer.updateAnchor();
 				_modelViewer.updateAnimation();
 			}else{
-				view.visible = false;
-				stage.quality = "low";
+				//view.visible = false;
+				//stage.quality = "low";
+				_modelViewer.visible = false;
 			}
+			
+			if(view.visible != _modelViewer.visible)
+				view.visible = _modelViewer.visible;
 		}
 
 		private function onImageReady(event:Event):void
@@ -339,6 +398,10 @@ package
 			_isQRDecoded = false;
 			_QRReader.reset();
 			_modelViewer.reset();
+			
+			_itemNameTextField.text = "";
+			
+			DebugUtil.label.text = "";
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
@@ -357,6 +420,7 @@ package
 			
 			_fakeBitmap = bitmap;
 			_fakeBitmap.width = _fakeBitmap.height = QR_SIZE;
+			_fakeBitmap.smoothing = true;
 
 			fake.addChild(_fakeBitmap);
 		}
