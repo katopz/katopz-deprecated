@@ -167,6 +167,8 @@ package com.sleepydesign.utils
 				case "swf":
 					type="asset";
 				break;
+				case "asp":
+				case "php":
 				case "text":
 				case "json":
 				case "xml":
