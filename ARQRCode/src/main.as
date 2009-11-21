@@ -68,8 +68,11 @@ package
 		private const QR_SIZE:int = 90;
 		
 		// config
-		private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
-		private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
+		private var USER_URL:String = "serverside/userData.txt";
+		private var MODEL_URL:String = "serverside/modelData.txt";
+		
+		//private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
+		//private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
 		
 		private const USER_DATA:String = "userData";
 		private const key:String = "ｪｩｵｴｪｴｦｬ｢ＯＯｺ";
@@ -99,7 +102,7 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
-
+		
 		public function main()
 		{
 			// base
@@ -124,6 +127,19 @@ package
 			base.addChild(cameraContainer);
 		}
 
+		public function show():void
+		{
+			start();
+			visible = true;
+		}
+		
+		public function hide():void
+		{
+			reset();
+			stop();
+			visible = false;
+		}
+		
 		override protected function onInit():void
 		{
 			view.x = SCREEN_WIDTH/2;
@@ -281,17 +297,10 @@ package
 			
 			_modelViewer.visible = false;
 			
+			// for real use
 			//LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			
-			/*
 			// for testing
-			if(QRManager.result=="A2A916")
-			{
-				_modelViewer.load("serverside/J7.dae");
-			}else{
-				_modelViewer.load("serverside/G2.dae");
-			}
-			*/
 			var _name:String;
 			var _src:String;
 			 
@@ -318,6 +327,9 @@ package
 			
 			_modelViewer.load(_src);
 			_itemNameTextField.text = _name;
+			
+			// dispatch
+			Oishi.setCode(QRManager.result);
 		}
 
 		private function onToggleCamera(event:ContextMenuEvent):void
@@ -347,6 +359,8 @@ package
 
 		override protected function onPreRender():void
 		{
+			if(!visible)return;
+			
 			if(isCam)
 			{
 				if(!_FLARManager.video)
@@ -427,6 +441,8 @@ package
 		
 		private function process():void
 		{
+			// prevent error
+			try{
 			if(!_FLARManager || !_FLARManager.ready)return;
 			
 			var n:Number;
@@ -466,6 +482,7 @@ package
 			}
 			
 			_modelViewer.setRefererPoint(_FLARManager.getStuff());
+			}catch(e:*){}
 		}
 	}
 }
