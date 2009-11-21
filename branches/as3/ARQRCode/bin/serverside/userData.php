@@ -1,1 +1,1 @@
-userid=ABC123456789&username=katopz
+<?=userid=ABC123456789&username=katopz?>

@@ -254,14 +254,15 @@ package flars
 			sandyScene.camera.projectArray(face2.vertices);
 
 			// shaking abit 
+			var _factor:int = 2;
 			var _randomNum:Number;
-			_randomNum = 4*Math.random() - 4*Math.random();
+			_randomNum = _factor*Math.random() - _factor*Math.random();
 			var p0:Point = new Point(face1.b.sx + _randomNum, face1.b.sy + _randomNum);
-			_randomNum = 4*Math.random() - 4*Math.random();
+			_randomNum = _factor*Math.random() - _factor*Math.random();
 			var p1:Point = new Point(face1.a.sx + _randomNum, face1.a.sy + _randomNum);
-			_randomNum = 4*Math.random() - 4*Math.random();
+			_randomNum = _factor*Math.random() - _factor*Math.random();
 			var p2:Point = new Point(face1.c.sx + _randomNum, face1.c.sy + _randomNum);
-			_randomNum = 4*Math.random() - 4*Math.random();
+			_randomNum = _factor*Math.random() - _factor*Math.random();
 			var p3:Point = new Point(face2.b.sx + _randomNum, face2.b.sy + _randomNum);
 
 			plane3D.scaleX = plane3D.scaleY = plane3D.scaleZ = 1.0;
