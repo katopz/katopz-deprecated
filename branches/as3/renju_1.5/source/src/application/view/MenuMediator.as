@@ -64,7 +64,7 @@ package application.view
 		
 		private function onRules(event:Event):void
 		{
-			if ( data.soundState ) alertSound.play();
+			//if ( data.soundState ) alertSound.play();
 			sendNotification(ApplicationFacade.SHOW_RULES);
 		}
 		
