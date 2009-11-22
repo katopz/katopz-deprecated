@@ -92,8 +92,8 @@ package application.view.components
 			tile.gotoAndStop("AITile");
 			setTileEnabled(tile, false);
 			
-			var sound:Sound = new TileSound();
-			if ( soundState ) sound.play();
+			//var sound:Sound = new TileSound();
+			//if ( soundState ) sound.play();
 		}
 		
 		public function drawWinLine(y1:Number, x1:Number, y2:Number, x2:Number, tile:Number):void
@@ -124,8 +124,8 @@ package application.view.components
 			
 			GlowFilterHelper.apply(line, 0xffffff, 1, 5, 5, 2);
 			
-			var sound:Sound = new GameOverSound();
-			if ( soundState ) sound.play();
+			//var sound:Sound = new GameOverSound();
+			//if ( soundState ) sound.play();
 		}
 		
 		private function onOver(event:MouseEvent):void

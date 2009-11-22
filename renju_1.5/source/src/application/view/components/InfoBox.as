@@ -1,6 +1,6 @@
 package application.view.components
 {
-	import fl.controls.UIScrollBar;
+	//import fl.controls.UIScrollBar;
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
@@ -65,13 +65,13 @@ package application.view.components
 			messageFormat.leading = 5;
 			
 			messageTF.setTextFormat( messageFormat );
-			
+			/*
 			// Scroll.
 			var scroll:UIScrollBar = new UIScrollBar();
 			scroll.move( Math.round(messageTF.x + messageTF.width), Math.round(messageTF.y));
 			scroll.setSize(13, messageTF.height);
 			scroll.scrollTarget = messageTF;
-			
+			*/
 			// CloseButton.
 			var closeButton:AlertButton = new AlertButton();
 			closeButton.label = "close";
@@ -81,7 +81,7 @@ package application.view.components
 			
 			this.addChild(titleTF);
 			this.addChild(messageTF);
-			this.addChild(scroll);
+			//this.addChild(scroll);
 			this.addChild(closeButton);
 		}
 		

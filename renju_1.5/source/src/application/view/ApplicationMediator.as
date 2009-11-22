@@ -237,8 +237,8 @@ package application.view
 			
 			if ( data.soundState ) 
 			{
-				channel = loop.play(0, 9999);			
-				setSound(true);
+				//channel = loop.play(0, 9999);			
+				//setSound(true);
 			}
 			
 			alignContent();
