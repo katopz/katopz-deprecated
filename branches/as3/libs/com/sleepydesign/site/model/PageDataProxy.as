@@ -13,19 +13,16 @@ package com.sleepydesign.site.model
 		
         public function PageDataProxy( )
         {
-        	/**
-        	 * Here, we initialize SpriteDataProxy with a var named "data" 
-        	 * of type Object(), a built-in property of the Proxy class. 
-        	 * This var will be used for storing data retrieved from the xml document.
-        	 */
             super( NAME, {} );
             
-            Page.addEventListener(SDEvent.UPDATE, onDataChange);
+            // sniff all page data event
+            //Page.addEventListener(SDEvent.UPDATE, onDataChange);
         }
         
 		public function updateData(data:*):void
 		{
-			
+			// data is on the line
+			onDataChange(new SDEvent(SDEvent.DATA, data));
 		}
 		
 		private function onDataChange(event:SDEvent):void

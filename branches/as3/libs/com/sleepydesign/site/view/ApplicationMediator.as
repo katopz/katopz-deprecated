@@ -86,9 +86,6 @@ package com.sleepydesign.site.view
 			 */
 			var navMediator:NavigationMediator = facade.retrieveMediator( NavigationMediator.NAME ) as NavigationMediator;
 			sendNotification( ApplicationFacade.SECTION_CHANGED, ApplicationFacade.focusPath );
-			
-			//var pageMediator:NavigationMediator = facade.retrieveMediator( PageMediator.NAME ) as PageMediator;
-			//sendNotification( ApplicationFacade.DATA_CHANGED, "test" );
         }
 
 		/**

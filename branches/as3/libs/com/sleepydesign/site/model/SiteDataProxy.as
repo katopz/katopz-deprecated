@@ -35,9 +35,6 @@ package com.sleepydesign.site.model
         	 */
             super( NAME, {} );
             
-            //SDApplication.loader.addEventListener( SDEvent.COMPLETE, onDataLoaded, false, 0, true);
-            //SDApplication.loader.load(SDApplication.getInstance().configURI);
-            
             LoaderUtil.loadXML(SDApplication.getInstance().configURI, onDataHandler);
         }
 		
@@ -45,9 +42,7 @@ package com.sleepydesign.site.model
 		{
 			if(event.type!="complete")return;
 			
-			//SDApplication.loader.removeEventListener( SDEvent.COMPLETE, onDataLoaded );
-			 
-			var xml:XML = event.target["data"];//new XML(event.target["data"]);// SDLoader(event.target).getContent(SDApplication.getInstance().configURI) );
+			var xml:XML = event.target["data"];
 			XML.ignoreWhitespace = true;
 			XML.ignoreComments = true;
 			
@@ -60,14 +55,8 @@ package com.sleepydesign.site.model
 			
 			// focus from xml
 			ApplicationFacade.focusPath = Navigation.defaultPath?Navigation.defaultPath:SiteVO(data).focus;
-			//ApplicationFacade.currrentPath = ApplicationFacade.focusPath;
 			
-			//ApplicationFacade.currentSection = ApplicationFacade.currentSection?ApplicationFacade.currentSection:ApplicationFacade.currrentPath.split("/")[0];
-			
-			trace(" ! Focus\t: "+ApplicationFacade.focusPath);
-			
-			//trace(" ! Paths	: "+ApplicationFacade.currrentPath);
-			//trace(" ! Section	: "+ApplicationFacade.currentSection);
+			trace(" ! XML Focus\t: "+ApplicationFacade.focusPath);
 			
 			/**
 			 * When SiteDataProxy is done loading and parsing data, it 
@@ -79,12 +68,7 @@ package com.sleepydesign.site.model
 		/* current traverse only main nav!!! need to create site map data here and send to mediator */ 
 		private function parse( xml:XML ):Object
 		{
-			//var contents:SDGroup = new SDGroup("site");
 			var siteVO:SiteVO = new SiteVO(xml);
-			//trace(data.contents)
-			//var content:XMLList = xml.content;
-			//navIDs = [];
-			
 			
 			var xmlList:XMLList = xml.children();
 			for ( var i:uint=0; i< xmlList.length(); i++ ) 
@@ -104,13 +88,9 @@ package com.sleepydesign.site.model
 					break;
 					// content(s) layer
 					default:
-						//var id:String = contentXML.@id;
-						//navIDs.push(id);
-						
 						//default 1st child page
-						if(!siteVO.focus)siteVO.focus = contentXML.@id;
-						
-						//data.contents.insert(new ContentVO(contentXML.@id, contentXML ));
+						if(!siteVO.focus)
+							siteVO.focus = contentXML.@id;
 					break;
 				}
 			}

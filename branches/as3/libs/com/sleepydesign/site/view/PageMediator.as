@@ -13,8 +13,8 @@ package com.sleepydesign.site.view
 {
     import com.sleepydesign.site.ApplicationFacade;
     import com.sleepydesign.site.model.PageDataProxy;
-    import com.sleepydesign.site.model.SiteDataProxy;
     import com.sleepydesign.site.view.components.Page;
+    import com.sleepydesign.utils.ObjectUtil;
     
     import org.puremvc.as3.interfaces.*;
     import org.puremvc.as3.patterns.mediator.Mediator;
@@ -24,7 +24,6 @@ package com.sleepydesign.site.view
         // Cannonical name of the Mediator
         public static const NAME:String = "PageMediator";
         private var _pageDataProxy:PageDataProxy;
-		private var _siteDataProxy:SiteDataProxy;
 		
         public function PageMediator( viewComponent:Object ) 
         {
@@ -32,13 +31,10 @@ package com.sleepydesign.site.view
     		
 			// Retrieve reference to PageDataProxy
 			_pageDataProxy = facade.retrieveProxy( PageDataProxy.NAME ) as PageDataProxy;
-			
 			var data:Object = _pageDataProxy.getData();
 			
-			trace("PageMediator:"+data);
-			
-			// preload base elements
-			//page.parse( data );
+			trace("do something with this data!");
+			ObjectUtil.print(data);
         }
 		
 		/**
