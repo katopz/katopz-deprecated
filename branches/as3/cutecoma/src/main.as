@@ -6,17 +6,39 @@ package {
 	 * ___________________________________________________________________________
 	 *  
 	 * Sleepy FrameWork
+	 * 
+	 * [System]
+	 *    |
+	 *    +-- [Modal] : Alert Box, Authen
+	 *    |
+	 *  [XML]
+	 *    |
+	 *  [Site]
+	 *    |
+	 *  [Links] : Global link
+	 *    |
+	 *  [Pages] : Transition
+	 *    |
+	 *    +-- [Page]
+	 *    |
+	 *    +-- [Page]
+	 *           |
+	 *           +-- [Content]
+	 *                  |
+	 *                  +-- [Text]
+	 *                  +-- [Image]
+	 *                  +-- [Button]
+	 *                  +-- [Form]
+	 * 
 	 * ___________________________________________________________________________
 	 * 
 	 * [Feature]
 	 *  » Minimalism both Memory and File size
-	 *  » Build with Flash IDE and Compile by Flex
-	 *  » Easy to config by XML with HTML syntax like, 
-	 *  » StyleSheet, Skin support
-	 *  » Developer handy injection/proxy
-	 *  » Lazy Load/Unload with Progress/Cache/Garbage collection
-	 *  » Got basic component : MinimalComps, Fancy TextField, ScrollBar, Tree
-	 *  » Dependencies RIA, RESTful, RPC, WebService, ETC.
+	 *  » Design assets via Flash IDE and Coding via Flex
+	 *  » Configurable by XML 
+	 *  » Simple Loader
+	 *  » Garbage collection
+	 *  » Got basic component : TextField, TextInput, ScrollBar, Tree
 	 *  » Support Thai language ;)
 	 * ___________________________________________________________________________
 	 * 
@@ -38,13 +60,6 @@ package {
 	 * 	    - Content(SDContainer)
 	 * ___________________________________________________________________________
 	 * 
-	 * Sleepy 3D
-	 * ___________________________________________________________________________
-	 * 
-	 * [Feature]
-	 *  » Use pure Flash 10
-	 *  » Basic z-sort
-	 * 
 	 * @author katopz
 	 * 
 	 */
@@ -57,7 +72,6 @@ package {
 			super();
 			var facade:ApplicationFacade = ApplicationFacade.getInstance();
 			facade.startup( content );
-			alpha = .5 
 		}
 	}
 }
