@@ -346,7 +346,7 @@ var xml:XML = event.target["data"];
 		
 		protected function onGetContent(event:Event=null):void
 		{
-			if(event && event.type!="complete")return;
+			if(!event || event.type!="complete")return;
 			
 			_content = event.target["content"];
 			
