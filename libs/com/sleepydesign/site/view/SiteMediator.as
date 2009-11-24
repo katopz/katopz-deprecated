@@ -76,45 +76,10 @@ package com.sleepydesign.site.view
         	if(currrentPath==path)return;
         	currrentPath=path;
         	
-        	//var id:String = path.split("/").shift();
-        	trace(" ^ "+this+".update\t: "+path);
         	var paths:Array = path.split("/");
          	var xml:XML = XMLUtil.getXMLById(XML(Site.getInstance().config.xml), paths.shift());
         	var vo:PageVO = new PageVO(xml.@id, null, xml, path);       	
-        	
-        	/*
-        	var baseXML:XML = XMLUtil.getXMLById(XML(Site.getInstance().config.xml), paths.shift());
-        	var pageXML:XML = pageXML.normalize()
-        	for each(var id:String in paths)
-        	{
-        		trace("vo:"+id);
-        		xml.appendChild(XMLUtil.getXMLById(xml,id));
-        	}
-        	*/
-        	
-
-        	
-        	/*
-        	var paths:Array = path.split("/")
-        	var contentVOs:Array=[];
-        	for each(var id:String in paths)
-        	{
-        		trace("vo:"+id);
-        		var xml:XML = XMLUtil.getXMLById(XML(Site.getInstance().config.xml),id);
-        		var vo:PageVO = new PageVO(xml.@id, xml);
-        		contentVOs.push(vo);
-        	}
-        	*/
-        	//var data:SiteVO = SiteVO(_siteDataProxy.getData());
-        	
-        	// TODO : optimize this
-        	//var vo:ContentVO = ContentVO(data.contents.findBy( id ));
-        	////var xml:XML = XMLUtil.getXMLById(XML(Site.getInstance().config.xml),id);
-        	////var vo:PageVO = new PageVO(xml.@id, xml);
-        	
-        	//navSources
-        	//var asset:XMLList = vo.asset;
-        	
+         	
         	// parse asset
         	site.update( vo );
         	

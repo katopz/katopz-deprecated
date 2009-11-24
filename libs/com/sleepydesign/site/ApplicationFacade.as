@@ -26,13 +26,8 @@ package com.sleepydesign.site
         public static const SECTION_CHANGED:String  = "sectionChanged";
         
         public static const DATA_CHANGED:String  = "dataChanged";
-        
-        //public static var defaultPath:String;
          
-        //public static var currentSection:String; 
-        //public static var currrentPath:String;
-         
-        public static var focusPath:String; 
+        public static var focusPath:String;
 
         public static function getInstance() : ApplicationFacade 
         {
@@ -59,6 +54,8 @@ package com.sleepydesign.site
             * registering AddressChangeCommand
             */
             registerCommand(SECTION_CHANGED, AddressChangeCommand);
+            
+            // sniff all data change
             registerCommand(DATA_CHANGED, DataChangeCommand);
         }
         

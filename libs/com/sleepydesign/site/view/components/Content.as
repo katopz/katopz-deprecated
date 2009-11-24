@@ -52,10 +52,7 @@
 		protected var configURI:String;
 		protected var dataURI:String;
 		
-		//public var cachedBitmap:Bitmap;
-		
 		protected var loader:SDLoader;
-		//protected var queues:Array;
 		
 		protected var links:SDGroup;
 		
@@ -67,12 +64,6 @@
 		
 		protected var dirty:Boolean = true;
 		
-		
-		//public function Content(id:String=null, source:*=null, xml:XML=null)
-		
-		// id for collecter
-		// 
-		
 		/**
 		 * 
 		 * @param id	Need for collector, all content need name 
@@ -83,27 +74,7 @@
 		{
 			// loader for load external assete only!
 			loader = SDApplication.getLoader();
-			
-			/*
-			
-			CAN YOU DO THIS LATER? THIS WILL KILL ON STAGE MC WHEN DESTROY !!!!!
-			
-			// Reparent for "on stage MovieClip" : parentClip.clip -> parentClip.Content.clip
-			// to gain power of content :P
-			if(source && source is MovieClip && source.parent && !(source is SDMovieClip))
-			{
-				DisplayObjectUtil.cloak(this, source);
-			}
-			*/
-			// no xml config let's add manual config
-			//config = {id:id, source:source, xml:xml};
-			
 			super( id );
-			
-			// mark lowest depth
-			//content = new Shape();
-			//addChild(content);
-			//content = null
 			
 			// autorun
 			if(source)
