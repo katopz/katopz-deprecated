@@ -5,3 +5,6 @@ C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\T
 C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\Temporary Projects\HelloSTD\obj\Debug\HelloSTD.pdb
 C:\Inetpub\wwwroot\Classes\katopz\trunk\vcs\HelloSTD\obj\Debug\HelloSTD.exe
 C:\Inetpub\wwwroot\Classes\katopz\trunk\vcs\HelloSTD\obj\Debug\HelloSTD.pdb
+C:\Inetpub\wwwroot\Classes\katopz\trunk\vcs\HelloSTD\bin\Debug\HelloSTD.exe
+C:\Inetpub\wwwroot\Classes\katopz\trunk\vcs\HelloSTD\bin\Debug\HelloSTD.pdb
+C:\Inetpub\wwwroot\Classes\katopz\trunk\vcs\HelloSTD\obj\Debug\ResolveAssemblyReference.cache

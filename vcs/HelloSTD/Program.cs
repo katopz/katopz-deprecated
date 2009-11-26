@@ -10,24 +10,26 @@ namespace HelloSTD
     {
         static void Main(string[] args)
         {
-            TextReader tIn = Console.In;
-            TextWriter tOut = Console.Out;
 
-            tOut.Write("Hello World!");
+            using (Stream stdin = Console.OpenStandardInput())
+            using (Stream stdout = Console.OpenStandardOutput())
+            {
+                byte[] buffer = new byte[2048];
+                int bytes;
+                while ((bytes = stdin.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    stdout.Write(buffer, 0, bytes);
+                }
+            }
         }
     }
 }
 
 /*
-    using (Stream stdin = Console.OpenStandardInput())
-    using (Stream stdout = Console.OpenStandardOutput())
-    {
-        byte[] buffer = new byte[2048];
-        int bytes;
-        while ((bytes = stdin.Read(buffer, 0, buffer.Length)) > 0) {
-            stdout.Write(buffer, 0, bytes);
-        }
-    }
+TextReader tIn = Console.In;
+TextWriter tOut = Console.Out;
+
+tOut.Write("Hello World!" + tIn.ReadLine());
 */
 
 /*
