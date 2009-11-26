@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application xmlns="http://ns.adobe.com/air/application/2.0beta">
-	<id>com.NativeProcessTestFlex</id>
+	<id>NativeProcessTestFlex</id>
 	<version>1.0</version>
 	<filename>NativeProcessTestFlex</filename>
 	<description>A Sample AIR 2.0 application.</description>
