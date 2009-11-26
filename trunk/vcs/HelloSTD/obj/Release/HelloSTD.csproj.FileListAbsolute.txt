@@ -1,0 +1,5 @@
+C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\Temporary Projects\HelloSTD\bin\Release\HelloSTD.exe
+C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\Temporary Projects\HelloSTD\bin\Release\HelloSTD.pdb
+C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\Temporary Projects\HelloSTD\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\Temporary Projects\HelloSTD\obj\Release\HelloSTD.exe
+C:\Documents and Settings\todsaporn.banjerdkit\Local Settings\Application Data\Temporary Projects\HelloSTD\obj\Release\HelloSTD.pdb
