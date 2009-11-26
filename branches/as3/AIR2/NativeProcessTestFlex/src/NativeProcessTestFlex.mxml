@@ -20,7 +20,7 @@
 			file = file.resolvePath("NativeApps");
 			if (Capabilities.os.toLowerCase().indexOf("win") > -1)
 			{
-				file = file.resolvePath("Windows/bin/echoTestWin.exe");
+				file = file.resolvePath("HelloSTD.exe");
 			}
 			else if (Capabilities.os.toLowerCase().indexOf("mac") > -1)
 			{
@@ -41,14 +41,14 @@
 		}
 		public function inputProgressListener(event:ProgressEvent):void
 		{
-			process.closeInput();
+			//process.closeInput();
 		}
 		public function onOutputData(event:ProgressEvent):void
 		{
 			textReceived.text = process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable);
 			var date:Date = new Date();
 			dateField.text = date.toString();
-			launchEchoTest();
+			//launchEchoTest();
 		}
 	]]>
 	</mx:Script>
