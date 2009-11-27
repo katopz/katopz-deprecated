@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" applicationComplete="init()" layout="vertical">
+<mx:Script>
+	<![CDATA[
+		[Embed(source='icons/AIRApp_128.png')]
+		private var Icon:Class;
+		private var bitmap:Bitmap;
+		private var bitmapData:BitmapData;
+	
+		private var process:NativeProcess;
+		
+		public function init():void
+		{
+			bitmap = Bitmap(new Icon());
+			image.addChild(bitmap);
+			
+			if (NativeProcess.isSupported)
+			{
+				launchEchoTest();
+			}
+			else
+			{
+				textReceived.text = "NativeProcess not supported.";
+			}
+		}
+		public function launchEchoTest():void
+		{	 
+			var file:File = File.applicationDirectory;
+			file = file.resolvePath("NativeApps");
+			if (Capabilities.os.toLowerCase().indexOf("win") > -1)
+			{
+				file = file.resolvePath("HelloSTD.exe");
+			}
+			else if (Capabilities.os.toLowerCase().indexOf("mac") > -1)
+			{
+				file = file.resolvePath("Mac/bin/echoTestMac");
+			}
+
+			var nativeProcessStartupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+			nativeProcessStartupInfo.executable = file;
+			
+			process = new NativeProcess();
+			process.start(nativeProcessStartupInfo);
+			process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, onOutputData);
+			process.addEventListener(ProgressEvent.STANDARD_INPUT_PROGRESS, inputProgressListener);
+		}
+		public function writeData():void
+		{
+			//process.standardInput.writeUTFBytes(textToSend.text + "\n");
+			//var pixels:ByteArray = new ByteArray();//bitmap.bitmapData.getPixels( new Rectangle(0,0,bitmap.width,bitmap.height) );
+			//pixels.writeBytes(bitmap.bitmapData.getPixels( new Rectangle(0,0,bitmap.width,bitmap.height) ));
+			//process.standardInput.writeBytes(pixels);
+			//pixels.position = 0;
+			//loader.contentLoaderInfo.addEventListener(Event.COMPLETE, getBitmapData);
+			//loader.loadBytes(pixels);
+			
+			bitmapData = new BitmapData(10,10,false, 0xFF0000);
+			
+			var v : Vector.<uint> = bitmapData.getVector( bitmapData.rect );
+			/*
+			var o : Vector.<uint> = new Vector.<uint>( 10*10 , true );
+			for(var i:int=0;i<v.length;i++) 
+			    o[i] = v[i] + 1;
+			    */
+		
+			process.standardInput.writeUTFBytes(v.toString());
+		}
+		/*
+		private var loader:Loader = new Loader();
+		private function getBitmapData(e:Event):void
+		{
+			var content:* = loader.content;
+			bitmap.bitmapData = bitmapData = new BitmapData(content.width, content.height);
+		}
+		*/
+
+		public function inputProgressListener(event:ProgressEvent):void
+		{
+			//process.closeInput();
+		}
+		public function onOutputData(event:ProgressEvent):void
+		{
+			
+			//textReceived.text = process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable);
+			//var byte:ByteArray = new ByteArray();
+			//process.standardOutput.readBytes(byte);
+			//byteArrayToBitmapData(byte);
+			var raw:* = process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable);
+			
+			var v : Vector.<uint> = Vector.<uint>(String(raw).split(","));//bitmapData.getVector( bitmapData.rect );
+			
+			bitmap.bitmapData.lock();
+			bitmap.bitmapData.setVector( bitmapData.rect , v );
+			bitmap.bitmapData.unlock( bitmapData.rect );
+			
+			var date:Date = new Date();
+			dateField.text = date.toString();
+			//launchEchoTest();
+		}
+	]]>
+	</mx:Script>
+	<mx:VBox horizontalAlign="left" width="100%">
+		<mx:Label text="Send text:" textAlign="left"/>
+		<mx:TextInput id="textToSend" width="100%"/>
+		<mx:Image width="175" height="122" id="image" scaleContent="false" autoLoad="false"/>
+		<mx:Button id="submitBtn" label="Submit" click="writeData()"/>
+		<mx:Spacer />
+		<mx:Label text="Text received:" textAlign="left"/>
+		<mx:TextInput id="textReceived" width="100%"/>
+		<mx:Text id="dateField"/>
+	</mx:VBox>
+</mx:WindowedApplication>
