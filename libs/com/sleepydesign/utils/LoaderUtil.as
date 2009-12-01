@@ -1,7 +1,5 @@
 package com.sleepydesign.utils
 {
-	import com.sleepydesign.components.SDMacPreloader;
-	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -34,13 +32,10 @@ package com.sleepydesign.utils
 		
 		public static var loaderClip:DisplayObject;
 		
-		public static function showLoader(parent:DisplayObjectContainer, show:Boolean=true):void
+		public static function addLoaderTo(parent:DisplayObjectContainer, loaderClip:DisplayObject, show:Boolean=true):void
 		{
 			if(show)
 			{
-				if(!loaderClip)
-					loaderClip = new SDMacPreloader();
-				
 				if(!loaderClip.parent && parent)
 					parent.addChild(loaderClip);
 				
@@ -50,8 +45,10 @@ package com.sleepydesign.utils
 			}else{
 				loaderClip.visible = false;
 			}
+			
+			LoaderUtil.loaderClip = loaderClip;
 		}
-		
+				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
 		{
 			return saveBinary(data, uri, eventHandler, "image/jpeg");
@@ -93,7 +90,7 @@ package com.sleepydesign.utils
 		}
 		
 		/**
-		 * Load as JSON
+		 * Load as URLVariables
 		 * @param uri
 		 * @param eventHandler
 		 * @return URLLoader
@@ -205,18 +202,18 @@ package com.sleepydesign.utils
 	            _loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
 	            _loader.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
 	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-	  		}
             
-            // gc
-			_loader.addEventListener(Event.COMPLETE, function():void
-			{
-			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
-			    _loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
-			    
-			    _loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
-	            _loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
-	            _loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-			}, false, 0, true);
+	            // gc
+				_loader.addEventListener(Event.COMPLETE, function():void
+				{
+				    _loader.removeEventListener(Event.COMPLETE, eventHandler);
+				    _loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
+				    
+				    _loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
+		            _loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
+		            _loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+				}, false, 0, true);
+			}
 			
 			// load
 			try
@@ -244,6 +241,17 @@ package com.sleepydesign.utils
 			_urlRequest.data = data;
 			
 			return load(uri, eventHandler, type, _urlRequest);
+		}
+		
+		public static function requestVars(uri:String, data:*, eventHandler:Function):URLLoader
+		{
+			return request(uri, data,  function(event:Event):void
+			{
+				if(event.type=="complete")
+					event.target["data"] = new URLVariables(String(event.target["data"]));
+				
+				eventHandler(event);
+			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
 		/**
