@@ -14,5 +14,16 @@
 		<page id="focused-child" label="Focused Child" src="child-swf.swf"/>
 		<page id="not-focused-child" label="Not Focused Child" src="deep-child.swf"/>
 	</page>
+	<page id="Authen" label="Simple Authen" src="Authen.swf">
+		<content id="logIn" src="logInClip">
+			<form id="logInForm" action="serverside/logout.xml" method="POST">
+				<textfield id="username" src="usernameInput" label="Your username" maxlength="100" required="true" />
+				<textfield id="password" src="passwordInput" label="Your password" type="password" required="true" />
+				<button id="logInButton" src="logInButton" type="submit"/>
+			</form>
+			<button id="forgetButton" src="forgetButton" href="forgot.php"/>
+			<button id="registerButton" src="registerButton" href="register.php"/>
+		</content>
+	</page>
 	<page id="background" type="background" src="background.swf"/>
 </site>
