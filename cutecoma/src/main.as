@@ -1,4 +1,5 @@
-package {
+package 
+{
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.site.ApplicationFacade;
 
@@ -7,28 +8,28 @@ package {
 	 *  
 	 * Sleepy FrameWork
 	 * 
-	 * [System]
+	 * o-[System]
+	 * |
+	 * +-- [Modal] : Alert Box, Authen
+	 * |
+	 * o-[XML]
+	 * |
+	 * o-[Site]
+	 * |
+	 * o-[Links] : Global link
+	 * |
+	 * o-[Pages] : Transition
+	 * |
+	 * +--o-[Page]
+	 * |
+	 * +--o-[Page]
+	 * |
+	 * +--o-[Content]
 	 *    |
-	 *    +-- [Modal] : Alert Box, Authen
-	 *    |
-	 *  [XML]
-	 *    |
-	 *  [Site]
-	 *    |
-	 *  [Links] : Global link
-	 *    |
-	 *  [Pages] : Transition
-	 *    |
-	 *    +-- [Page]
-	 *    |
-	 *    +-- [Page]
-	 *           |
-	 *           +-- [Content]
-	 *                  |
-	 *                  +-- [Text]
-	 *                  +-- [Image]
-	 *                  +-- [Button]
-	 *                  +-- [Form]
+	 *    +-- [Text]
+	 *    +-- [Image]
+	 *    +-- [Button]
+	 *    +-- [Form]
 	 * 
 	 * ___________________________________________________________________________
 	 * 

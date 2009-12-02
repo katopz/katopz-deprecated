@@ -8,13 +8,16 @@ package
 	{
 		[Embed(source="../fla/simple-login.swf", symbol="FormClip")]
 		private var FormClip:Class;
-		private var formClip:MovieClip;
+		public var logInClip:MovieClip;
 		
 		public function Authen()
 		{
 			// asset
-			formClip = addChild(new FormClip()) as MovieClip;
+			logInClip = addChild(new FormClip()) as MovieClip;
 			
+			super("Authen");
+			
+			alpha = .1
 			// TODO :
 			// intit config.xml
 		}
