@@ -89,8 +89,8 @@ package com.sleepydesign.core
 						switch(String(itemXML.@type)) 
 						{
 							case "submit":
-								button.removeEventListener(MouseEvent.CLICK, buttonListener);
-								button.addEventListener(MouseEvent.CLICK, buttonListener);
+								//button.removeEventListener(MouseEvent.CLICK, buttonListener);
+								//button.addEventListener(MouseEvent.CLICK, buttonListener);
 							break;
 						}
 					break;

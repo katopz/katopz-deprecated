@@ -321,9 +321,15 @@ package com.sleepydesign.site.view.components
 					}
 
 					// case#3 SDMovieClip.clip
-					if (DisplayObjectContainer(content) && !clip)
+					if (DisplayObjectContainer(content) && !clip && content is SDMovieClip)
 					{
 						clip = SDMovieClip(content).clip.getChildByName(sourceString)
+					}
+					
+					// case#4 embed asset
+					if(!clip)
+					{
+						clip = content[sourceString];
 					}
 
 					trace(" ! Clip\t: " + sourceString + ":" + clip);

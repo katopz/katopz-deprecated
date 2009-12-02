@@ -47,6 +47,7 @@
 	 */
 	public class Content extends SDContainer
 	{
+		
 		public var content:DisplayObject;
 		
 		protected var configURI:String;
@@ -84,7 +85,7 @@
 			}
 			
 			// dependency call
-			if(stage)
+			if(stage && parent==stage)
 			{
 				trace(" ! Dependency call : "+this)
 				getConfig(configURI?configURI:SDApplication.getInstance().configURI);
@@ -137,15 +138,23 @@
 		// external config -> * update
 		protected function onGetConfigHandler(event:Event):void
 		{
-			trace(" ^ onGetConfig\t : "+event);
-			
 			if(event.type!="complete")return;
+			
+			trace(" ^ onGetConfig\t : "+event);
 			
 			//if(!loader.isContent(configURI))return;
 			
 			//loader.removeEventListener(SDEvent.COMPLETE, onGetConfig);
 			var xml:XML = event.target["data"];//new XML(loader.getContent(configURI));
 			//trace(xml.toXMLString())
+
+			// dependency self update data
+			if(stage && parent==stage)
+			{
+				var _xml:XML = XMLUtil.getXMLById(xml, id);
+				if(!StringUtil.isNull(_xml))xml = _xml;
+			}
+			
 			update(new ContentVO(xml.@id, content, xml));
 			
 		}
@@ -206,7 +215,7 @@ var xml:XML = event.target["data"];
 			if(data.xml)
 			{
 				// dependency self update data
-				if(stage)
+				if(parent && parent!=stage)
 				{
 					var xml:XML = XMLUtil.getXMLById(data.xml, data.id);
 					if(!StringUtil.isNull(xml))data.xml = xml;
@@ -266,7 +275,7 @@ var xml:XML = event.target["data"];
 							// bypass load = publish
 							if(dirty)
 							{
-								onGetContent();
+								initContent();
 							}
 						break;
 						// external source : swf, jpg, png
@@ -280,7 +289,7 @@ var xml:XML = event.target["data"];
 								dirty = false;
 								
 								// just apply config
-								onGetContent();
+								initContent();
 							}else{
 								// mark as dirty
 								dirty = true;
@@ -295,7 +304,15 @@ var xml:XML = event.target["data"];
 								loader.addEventListener(SDEvent.COMPLETE, onGetContent, false, 0, true);
 								loader.start();
 								*/
-								LoaderUtil.loadAsset(data.source, onGetContent);
+								trace("parent:"+parent)
+								trace("stage:"+stage)
+								if(stage && parent==stage)
+								{
+									_content = this;
+									initContent();
+								}else{
+									LoaderUtil.loadAsset(data.source, onGetContent);
+								}
 							}
 						break;
 						// unsupported type : htm ,html, php, asp, ....
@@ -315,14 +332,17 @@ var xml:XML = event.target["data"];
 		
 		protected var _content:*;
 		
-		protected function onGetContent(event:Event=null):void
+		protected function onGetContent(event:Event):void
 		{
 			if(!event || event.type!="complete")return;
 			
 			_content = event.target["content"];
 			
-			trace("\n_content:"+_content+"\n");
-			
+			initContent();
+		}
+		
+		protected function initContent():void
+		{
 			// direct load
 			if(!_data || !_data.xml)
 			{
@@ -430,6 +450,7 @@ var xml:XML = event.target["data"];
 				clip.alpha = _alpha;
 			} 
 			*/
+			trace(" ! itemXML : "+String(itemXML.name()));
 			switch(String(itemXML.name()))
 			{
 				case "textfield" : //labelText
@@ -559,32 +580,38 @@ var xml:XML = event.target["data"];
 			
 			// external : this content is belong to me?
 		
-			
-			if(_content)
+			//if(parent && parent!=stage)
+			//{
+			if(stage && parent==stage)
 			{
-				// only one single source allow in content layer
-				// can be destroy or dirty
-				if(destroyable || dirty)
+				content = _content;
+				trace(" ! Internal\t: "+ content);
+			}else{
+				if(_content)
 				{
-					kill(content);
+					// only one single source allow in content layer
+					// can be destroy or dirty
+					if(destroyable || dirty)
+					{
+						kill(content);
+					}
+					
+					content = _content//loader.getContent(_config.source);
+					
+					// DIRTY
+					if(content is Bitmap)
+						Bitmap(content).smoothing = true;
+					
+					// add new content
+					addContent(content);
+					
+					// remove listener after thing created
+					//loader.removeEventListener(SDEvent.COMPLETE, onGetContent);
+					
+					trace(" ! External\t: "+ content);
 				}
-				
-				content = _content//loader.getContent(_config.source);
-				
-				// DIRTY
-				if(content is Bitmap)
-					Bitmap(content).smoothing = true;
-				
-				// add new content
-				addContent(content);
-				
-				// remove listener after thing created
-				//loader.removeEventListener(SDEvent.COMPLETE, onGetContent);
-				
-				trace(" ! External\t: "+ content);
 			}
 
-			
 			// ================================ Phase 2 : Config ================================
 			
 			if(!content)
