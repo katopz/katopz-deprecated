@@ -33,8 +33,8 @@ package com.sleepydesign.site.view
 			_pageDataProxy = facade.retrieveProxy( PageDataProxy.NAME ) as PageDataProxy;
 			var data:Object = _pageDataProxy.getData();
 			
-			trace("do something with this data!");
-			ObjectUtil.print(data);
+			//trace("do something with this data!");
+			//ObjectUtil.print(data);
         }
 		
 		/**

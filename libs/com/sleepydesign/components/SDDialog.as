@@ -37,15 +37,19 @@ package com.sleepydesign.components
 			super();
 		}
 		
+		/*
 		override protected function onStage(event:Event=null):void
 		{
 			align = "center";
 			this.caller = caller?caller:this.parent;
 			super.onStage(event);
 		}
+		*/
 
 		override protected function init():void
 		{
+			align = "center";
+			this.caller = caller?caller:this.parent;
 			super.init();
 			mouseEnabled = true;
 			mouseChildren = true;
