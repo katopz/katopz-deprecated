@@ -73,13 +73,12 @@
 			
 			this.id = id?id:name;
 
-			if(!hasEventListener(Event.ADDED_TO_STAGE))
-				addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
+			/*addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 		
 		protected function onStage(event:Event=null):void
 		{
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);*/
 			init();
 		}
 		
@@ -134,7 +133,7 @@
 		// self destruction
 		override public function destroy():void
 		{
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			//removeEventListener(Event.ADDED_TO_STAGE, onStage);
 				
 			_data = null;
 			_config = null;

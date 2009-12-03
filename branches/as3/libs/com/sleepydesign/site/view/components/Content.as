@@ -304,8 +304,8 @@ var xml:XML = event.target["data"];
 								loader.addEventListener(SDEvent.COMPLETE, onGetContent, false, 0, true);
 								loader.start();
 								*/
-								trace("parent:"+parent)
-								trace("stage:"+stage)
+								//trace("parent:"+parent)
+								//trace("stage:"+stage)
 								if(stage && parent==stage)
 								{
 									_content = this;

@@ -28,7 +28,7 @@ package com.sleepydesign.components
 			mouseEnabled = false;
 			mouseChildren = false;
 			
-			create();
+			//create();
 		}
 		
 		override public function create(config:Object=null):void

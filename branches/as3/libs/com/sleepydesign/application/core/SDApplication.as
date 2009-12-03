@@ -67,7 +67,7 @@ package com.sleepydesign.application.core
 					configURI = flashVars["config"]?flashVars["config"]:configURI;
 				}
 				
-				ObjectUtil.print(flashVars);
+				//ObjectUtil.print(flashVars);
 				
 				configURI = URLUtil.killCache(configURI, SystemUtil.isHTTP(this));
 				

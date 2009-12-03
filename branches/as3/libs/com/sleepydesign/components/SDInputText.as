@@ -16,29 +16,41 @@ package com.sleepydesign.components
 	 */	
 	public class SDInputText extends SDComponent
 	{
-		private var _back:Sprite;
+		//private var _back:Sprite;
 		private var _password:Boolean 		= false;
 		private var _text:String 			= "";
 		private var _tf:TextField;
 		
-		private var type:String 			= "";
+		public var type:String 				= "";
 		
 		public var defaultText : String 	= "";
 		public var isRequired : Boolean 	= false;
 		public var isReset : Boolean 		= false;
 		
-		public var _disable : Boolean 		= false;
-		public var isEdit : Boolean 		= false;
-		public var isValid : Boolean 		= false;
+		private var _disable : Boolean 		= false;
+		private var isEdit : Boolean 		= false;
+		private var isValid : Boolean 		= false;
 		public var onInvalidCommand : String	= "";
 		
 		private var _isFlash:Boolean 		= false;
 		
 		public function get label():TextField{return _tf}
-		
-		public function SDInputText( label:String = "" )
+		public function set label(value:TextField):void
 		{
-			_text = this.defaultText = label;
+			addChildAt(value, 0);
+			create();
+		}
+		
+		public function SDInputText(text:String = "" , textField:TextField = null)
+		{
+			_text = this.defaultText = text;
+			
+			if(textField)
+			{
+				textField.parent.addChild(this);
+				label = textField;
+			}
+			
 			super();
 		}
 		
@@ -54,7 +66,7 @@ package com.sleepydesign.components
 			try
 			{
 				// Flash TextField exist
-				_tf = this["labelText"];
+				_tf = this.getChildAt(0) as TextField;//["labelText"];
 				_isFlash = true;
 				
 				// no internal config?

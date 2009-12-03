@@ -1,15 +1,16 @@
 package com.sleepydesign.core
 {
 	import com.sleepydesign.application.core.SDApplication;
+	import com.sleepydesign.components.SDInputText;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.utils.StringUtil;
-	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
 	import flash.net.URLVariables;
+	import flash.text.TextField;
 	import flash.utils.Dictionary;
 
 	public class SDForm extends SDContainer
@@ -45,14 +46,16 @@ package com.sleepydesign.core
 				var instanceString:String = String(itemXML.@id);
 				instanceString = !StringUtil.isNull(itemXML.@src)?String(itemXML.@src):instanceString;
 
-				var item:* = {};
+				//var item:* = {};
 				
 				trace("   + " + name + "\t: " + String(itemXML.@id));
 				
 				switch(name) 
 				{
 					case "textfield":
-						item = instance.getChildByName(instanceString);
+						var _textField:TextField = instance.getChildByName(instanceString) as TextField;
+						var item:SDInputText = new SDInputText(_textField.text, _textField);
+						
 						if(item)
 						{
 							item.defaultText = (String(itemXML.@label) != "")? String(itemXML.@label):item.text;
@@ -76,7 +79,7 @@ package com.sleepydesign.core
 							item.onInvalidCommand = (String(itemXML.@onInvalid) != "")? String(itemXML.@onInvalid):"";
 							
 							item.label.removeEventListener(FocusEvent.FOCUS_IN, focusListener);
-							item.label.addEventListener(FocusEvent.FOCUS_IN, focusListener, false, 0, true);
+							item.label.addEventListener(FocusEvent.FOCUS_IN, focusListener);
 							
 							//reg
 							inputs[String(itemXML.@id)] = item;
@@ -89,8 +92,8 @@ package com.sleepydesign.core
 						switch(String(itemXML.@type)) 
 						{
 							case "submit":
-								//button.removeEventListener(MouseEvent.CLICK, buttonListener);
-								//button.addEventListener(MouseEvent.CLICK, buttonListener);
+								button.removeEventListener(MouseEvent.CLICK, buttonListener);
+								button.addEventListener(MouseEvent.CLICK, buttonListener);
 							break;
 						}
 					break;
@@ -132,7 +135,7 @@ package com.sleepydesign.core
 						break;
 					}
 					item.parent.setText(item.text);
-					event.currentTarget.addEventListener(FocusEvent.FOCUS_OUT, focusListener,false,0,true);
+					event.currentTarget.addEventListener(FocusEvent.FOCUS_OUT, focusListener);
 				break;
 				case FocusEvent.FOCUS_OUT :
 					
