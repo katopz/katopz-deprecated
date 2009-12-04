@@ -536,9 +536,9 @@ var xml:XML = event.target["data"];
 		}
 		
 		// must parse to ContentVO 1st
-		override public function parse(raw:Object=null):void
+		public function parse(raw:Object=null):void
 		{
-			super.parse(raw);
+			//super.parse(raw);
 			
 			// try to parse string -> content.MovieClip
 			if(_data && _data.xml)
