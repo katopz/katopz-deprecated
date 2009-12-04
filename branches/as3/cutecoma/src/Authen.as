@@ -21,7 +21,6 @@ package
 			
 			super("Authen");
 			
-			alpha = .1
 			// TODO :
 			// intit config.xml
 		}
