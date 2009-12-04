@@ -53,13 +53,14 @@
 		{
 			_id = id;
 		}
-		
+		/*
 		public static var instance : SDContainer;
         public static function getInstance() : SDContainer
         {
-            if ( instance == null ) instance = new SDContainer();
+            if ( instance == null ) instance = this;
             return instance as SDContainer;
         }
+        */
         
 		/**
 		 * SleepyDesign Container
@@ -68,8 +69,8 @@
 		{
 			super();
 			
-			if ( instance == null )
-				instance = this;
+			//if ( instance == null )
+			//	instance = this;
 			
 			this.id = id?id:name;
 
@@ -95,11 +96,12 @@
 		 * Parse Strategy
 		 * - Provide default data if external data not exist 
 		 * - Serialize external data from config collector
-		 */
+		 *
 		public function parse(raw:Object=null):void
 		{
 			// parse : raw -> config
 		}
+		*/
 		
 		// ______________________________ Create ______________________________
 		
@@ -125,10 +127,12 @@
 		// ______________________________ Destroy ______________________________
 		
 		// soft reset
+		/*
 		public function dispose():void
 		{
 			
 		}
+		*/
 		
 		// self destruction
 		override public function destroy():void

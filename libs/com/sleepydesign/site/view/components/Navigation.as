@@ -48,7 +48,7 @@ package com.sleepydesign.site.view.components
 		
 		// ______________________________ Initialize ______________________________
 		
-		override public function parse(raw:Object=null):void
+		public function parse(raw:Object=null):void
 		{
 			var data:SiteVO = SiteVO(raw.data);
 			var navIDs:Array = [];//raw.navIDs;

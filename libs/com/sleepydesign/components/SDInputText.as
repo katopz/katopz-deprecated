@@ -28,7 +28,7 @@ package com.sleepydesign.components
 		public var isReset : Boolean 		= false;
 		
 		private var _disable : Boolean 		= false;
-		private var isEdit : Boolean 		= false;
+		public var isEdit : Boolean 		= false;
 		private var isValid : Boolean 		= false;
 		public var onInvalidCommand : String	= "";
 		
