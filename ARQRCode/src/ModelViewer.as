@@ -127,6 +127,9 @@ package
 			_model.rotationX = -90;
 			_model.rotationZ = -90;
 			
+			_model.scaleX = -1;
+			_model.scaleZ = -1;
+			
 			try{
 			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 			}catch(e:*){}
