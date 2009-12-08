@@ -221,6 +221,7 @@ package
 			setBitmap(Bitmap(new ImageData));
 
 			// menu
+			SystemUtil.addContext(this, "ARQRCode version 1");
 			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
 			SystemUtil.addContext(this, "Toggle Camera", onToggleCamera);
 			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
@@ -319,10 +320,13 @@ package
 				_name="ไข่";
 				_src="serverside/G7.dae";
 			}
-			else// if(QRManager.result=="2BD35D")
+			else if(QRManager.result=="2BD35D")
 			{
 				_name="หอมใหญ่";
 				_src="serverside/G8.dae";
+			}else {
+				_name="Oishi";
+				_src="serverside/Logo.dae";
 			}
 			
 			_modelViewer.load(_src);

@@ -184,8 +184,10 @@ package
 		
 		public function updateAnimation():void
 		{
+			try{
 			if(_skinAnimation)
 				_skinAnimation.update(getTimer()/1000);
+			}catch(e:*){trace(e)};
 		}
 	}
 }
