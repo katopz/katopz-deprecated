@@ -82,7 +82,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../bin/codes/G2_058454.png')]
+		[Embed(source='../bin/codes/OOOOOO.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -171,7 +171,7 @@ package
 			_itemNameTextField.autoSize = TextFieldAutoSize.CENTER;
 			_itemNameTextField.x = SCREEN_WIDTH/2 - _itemNameTextField.width/2;
 			_itemNameTextField.y = SCREEN_HEIGHT/2 + 100;
-			_itemNameTextField.filters = [new GlowFilter(0x000000, .6, 4,4,2 )]
+			_itemNameTextField.filters = [new GlowFilter(0x000000, .6, 4,4,2 )];
 			
 			addChild(_itemNameTextField);
 			
