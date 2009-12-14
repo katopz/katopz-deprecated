@@ -71,6 +71,7 @@ package
 			if(event.type=="complete")
 			{
 				_reader = event.target.content as Sprite;
+				_reader["isOnline"] = false;
 				addChild(_reader);
 			}
 		}
