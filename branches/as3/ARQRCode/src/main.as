@@ -104,6 +104,7 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
+		public var isOnline:Boolean = false;
 		
 		public function main()
 		{
@@ -323,46 +324,89 @@ package
 			
 			_modelViewer.visible = false;
 			
-			// for real use
-			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
-			
-			// for testing
-			/*
-			var _name:String;
-			var _src:String;
-			 
-			if(QRManager.result=="058454")
+			if(isOnline)
 			{
-				_name="ข้าว";
-				_src="serverside/G2.dae";
+				// for real use
+				LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			}
-			else if(QRManager.result=="26B0EA")
+			else
 			{
-				_name="กุ้ง";
-				_src="serverside/G6.dae";
+				// for testing
+				var _name:String;
+				var _src:String;
+				 
+				if(QRManager.result=="058454")
+				{
+					_name="ข้าว";
+					_src="serverside/G2.dae";
+				}
+				else if(QRManager.result=="26B0EA")
+				{
+					_name="กุ้ง";
+					_src="serverside/G6.dae";
+				}
+				else if(QRManager.result=="2AFF7A")
+				{
+					_name="ไข่";
+					_src="serverside/G7.dae";
+				}
+				else if(QRManager.result=="2BD35D")
+				{
+					_name="หอมใหญ่";
+					_src="serverside/G8.dae";
+				}
+				else if(QRManager.result=="378E05")
+				{
+					_name="หมูสับ";
+					_src="serverside/G10.dae";
+				}
+				else if(QRManager.result=="CCF29C")
+				{
+					_name="น้ำปลา";
+					_src="serverside/T5.dae";
+				}
+				else if(QRManager.result=="B71B5C")
+				{
+					_name="น้ำซุปแดง";
+					_src="serverside/T1.dae";
+				}
+				else if(QRManager.result=="C071FB")
+				{
+					_name="พริก";
+					_src="serverside/T2.dae";
+				}
+				else if(QRManager.result=="353869")
+				{
+					_name="มะนาว";
+					_src="serverside/G9.dae";
+				}
+				else
+				{
+					_name="Oishi";
+					_src="serverside/Logo.dae";
+				}
+				
+				_modelViewer.load(_src);
+				_itemNameTextField.text = _name;
+				
+				
+				/* 15/12/09
+				ข้าวผัดกุ้ง - ข้าว/ไข่/หอมใหญ่/กุ้ง
+				ข้าวไข่เจียวหมูสับ - ข้าว/ไข่/หมูสับ/น้ำปลา
+				ต้มยำกุ้ง - กุ้ง/น้ำซุปแดง/พริก/มะนาว
+				
+				หมูสับ = G10
+				น้ำปลา = T5
+				น้ำซุปแดง = T1
+				พริก = T2
+				มะนาว = G9
+				*/
 			}
-			else if(QRManager.result=="2AFF7A")
-			{
-				_name="ไข่";
-				_src="serverside/G7.dae";
-			}
-			else if(QRManager.result=="2BD35D")
-			{
-				_name="หอมใหญ่";
-				_src="serverside/G8.dae";
-			}else {
-				_name="Oishi";
-				_src="serverside/Logo.dae";
-			}
-			
-			_modelViewer.load(_src);
-			_itemNameTextField.text = _name;
-			*/
 			
 			// dispatch
 			Oishi.setCode(QRManager.result);
 		}
-
+		
 		public function toggleCamera():void
 		{
 			isCam = !isCam;
