@@ -1,1 +1,3 @@
-<?=userid=ABC123456789&username=katopz?>
+<?php
+echo "userid=ABC123456789&username=katopz";
+?>
