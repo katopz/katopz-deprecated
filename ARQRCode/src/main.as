@@ -259,7 +259,7 @@ package
 				DebugUtil.clear();
 				DebugUtil.trace(" ^ onModelDecodeComplete");
 				var _vars:URLVariables = new URLVariables(String(event.target["data"])); 
-				DebugUtil.addText("! Model : " + _vars.name+", "+_vars.src);
+				DebugUtil.addText(" ! Model : " + _vars.name+", "+_vars.src);
 				
 				if(_vars.src)
 				{
@@ -267,7 +267,7 @@ package
 					_itemNameTextField.text = _vars.name;
 				}else{
 					DebugUtil.trace(" ! Error : " + String(event.target["data"]));
-					DebugUtil.addText("! Error : " + String(event.target["data"]));
+					DebugUtil.addText(" ! Error : " + String(event.target["data"]));
 					_itemNameTextField.text = "Error";
 				}
 			}
@@ -290,20 +290,21 @@ package
 			
 			var _key:String = PBE.decypt(key);
 			DebugUtil.trace(" ! Decypt Key : " + _key);
-			DebugUtil.addText("! Decypt Key : " + _key);
+			DebugUtil.addText(" ! Decypt Key : " + _key);
 			
 			var _cipher:String = DES.encypt(_key, _vars.toString()+"&");
 			_vars.session = DES.toHex(_cipher);
-			DebugUtil.trace(" * Hash : " + _vars.toString());
 			_vars.hash = MD5.hash(_vars.toString());
 			
+			DebugUtil.trace(" * Hash : " + _vars.toString());
 			DebugUtil.trace(" ! Encypt : " + DES.toHex(_cipher));
 			DebugUtil.trace(" ! Decypt : " + DES.decypt(_key, _cipher));
 			DebugUtil.trace(" ! Hash : " + _vars.hash);
 			
-			DebugUtil.addText("! Encypt : " + DES.toHex(_cipher));
-			DebugUtil.addText("! Decypt : " + DES.decypt(_key, _cipher));
-			DebugUtil.addText("! Hash : " + _vars.hash);
+			DebugUtil.addText(" * Hash : " + _vars.toString());
+			DebugUtil.addText(" ! Encypt : " + DES.toHex(_cipher));
+			DebugUtil.addText(" ! Decypt : " + DES.decypt(_key, _cipher));
+			DebugUtil.addText(" ! Hash : " + _vars.hash);
 			
 			_itemNameTextField.text = "loading...";
 			
