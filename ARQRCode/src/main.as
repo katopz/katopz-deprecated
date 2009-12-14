@@ -256,13 +256,14 @@ package
 		{
 			if(event.type == Event.COMPLETE)
 			{
-				DebugUtil.clear();
 				DebugUtil.trace(" ^ onModelDecodeComplete");
 				var _vars:URLVariables = new URLVariables(String(event.target["data"])); 
-				DebugUtil.addText(" ! Model : " + _vars.name+", "+_vars.src);
 				
 				if(_vars.src)
 				{
+					DebugUtil.clear();
+					DebugUtil.addText(" ! Model : " + _vars.name+", "+_vars.src);
+					
 					_modelViewer.load(_vars.src);
 					_itemNameTextField.text = _vars.name;
 				}else{
