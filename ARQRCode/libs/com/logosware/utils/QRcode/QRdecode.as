@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
 * LOGOSWARE Class Library.
 *
 * Copyright 2009 (c) LOGOSWARE (http://www.logosware.com) All rights reserved.
@@ -523,7 +523,7 @@ package com.logosware.utils.QRcode
 									__errorNum = [22,22];
 								break;
 							case 3: // Q
-									__RSblock = new Array(1);
+									__RSblock = new Array(2);
 									__dataNum = [17,17];
 									__errorNum = [18,18];
 								break;
