@@ -20,8 +20,12 @@ else if($code=="2AFF7A")
 {
 	echo "name=ไข่&src=serverside/G7.dae";
 }
-else// if($code=="2BD35D")
+else if($code=="2BD35D")
 {
 	echo "name=หอมใหญ่&src=serverside/G8.dae";
+}
+else 
+{
+	echo "name=Oishi&src=serverside/Logo.xml";
 }
 ?>

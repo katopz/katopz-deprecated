@@ -68,11 +68,11 @@ package
 		private const QR_SIZE:int = 90;
 		
 		// config
-		private var USER_URL:String = "serverside/userData.txt";
-		private var MODEL_URL:String = "serverside/modelData.txt";
+		//private var USER_URL:String = "serverside/userData.txt";
+		//private var MODEL_URL:String = "serverside/modelData.txt";
 		
-		//private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
-		//private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
+		private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
+		private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
 		
 		private const USER_DATA:String = "userData";
 		private const key:String = "ｪｩｵｴｪｴｦｬ｢ＯＯｺ";
@@ -82,7 +82,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../bin/codes/OOOOOO.png')]
+		[Embed(source='../bin/codes/G2_058454.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -157,6 +157,9 @@ package
 			
 			//get flashvars
 			var _flashvars:Object = SystemUtil.getFlashVars(stage);
+			
+			trace(" ! USER_URL : "+_flashvars["USER_URL"]);
+			trace(" ! MODEL_URL : "+_flashvars["MODEL_URL"]);
 			
 			// init
 			USER_URL = StringUtil.isNull(_flashvars["USER_URL"])?USER_URL:_flashvars["USER_URL"];
@@ -258,8 +261,15 @@ package
 				var _vars:URLVariables = new URLVariables(String(event.target["data"])); 
 				DebugUtil.addText("! Model : " + _vars.name+", "+_vars.src);
 				
-				_modelViewer.load(_vars.src);
-				_itemNameTextField.text = _vars.name;
+				if(_vars.src)
+				{
+					_modelViewer.load(_vars.src);
+					_itemNameTextField.text = _vars.name;
+				}else{
+					DebugUtil.trace(" ! Error : " + String(event.target["data"]));
+					DebugUtil.addText("! Error : " + String(event.target["data"]));
+					_itemNameTextField.text = "Error";
+				}
 			}
 			
 			DebugUtil.trace(event);
@@ -299,9 +309,10 @@ package
 			_modelViewer.visible = false;
 			
 			// for real use
-			//LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
+			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			
 			// for testing
+			/*
 			var _name:String;
 			var _src:String;
 			 
@@ -331,6 +342,7 @@ package
 			
 			_modelViewer.load(_src);
 			_itemNameTextField.text = _name;
+			*/
 			
 			// dispatch
 			Oishi.setCode(QRManager.result);
