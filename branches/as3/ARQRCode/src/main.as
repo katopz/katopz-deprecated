@@ -294,6 +294,7 @@ package
 			
 			var _cipher:String = DES.encypt(_key, _vars.toString()+"&");
 			_vars.session = DES.toHex(_cipher);
+			DebugUtil.trace(" * Hash : " + _vars.toString());
 			_vars.hash = MD5.hash(_vars.toString());
 			
 			DebugUtil.trace(" ! Encypt : " + DES.toHex(_cipher));
