@@ -23,7 +23,7 @@
 		<link>
 			<name>[source path] lite-libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/lite/libs</location>
+			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/branches/lite/libs</location>
 		</link>
 		<link>
 			<name>[source path] as3-libs</name>
