@@ -84,7 +84,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../bin/codes/G2_058454.png')]
+		[Embed(source='../codes/G2_058454.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -104,7 +104,7 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
-		public var isOnline:Boolean = true;
+		public var isOnline:Boolean = !true;
 		
 		public function main()
 		{
