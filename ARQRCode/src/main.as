@@ -67,14 +67,14 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = true;
+		private const CAMERA_BY_DEFAULT:Boolean = !true;
 		
 		// config
-		//private var USER_URL:String = "serverside/userData.txt";
-		//private var MODEL_URL:String = "serverside/modelData.txt";
+		private var USER_URL:String = "serverside/userData.txt";
+		private var MODEL_URL:String = "serverside/modelData.txt";
 		
-		private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
-		private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
+		//private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
+		//private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
 		
 		private const USER_DATA:String = "userData";
 		private const key:String = "ｪｩｵｴｪｴｦｬ｢ＯＯｺ";
@@ -104,7 +104,7 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
-		public var isOnline:Boolean = false;
+		public var isOnline:Boolean = true;
 		
 		public function main()
 		{
@@ -324,6 +324,8 @@ package
 			
 			_modelViewer.visible = false;
 			
+			DebugUtil.trace(" ! isOnline : " + isOnline);
+			DebugUtil.addText(" ! isOnline : " + isOnline);
 			if(isOnline)
 			{
 				// for real use
