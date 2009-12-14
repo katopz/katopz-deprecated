@@ -67,7 +67,7 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = false;
+		private const CAMERA_BY_DEFAULT:Boolean = true;
 		
 		// config
 		//private var USER_URL:String = "serverside/userData.txt";
