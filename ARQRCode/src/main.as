@@ -67,6 +67,8 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
+		private const CAMERA_BY_DEFAULT:Boolean = false;
+		
 		// config
 		//private var USER_URL:String = "serverside/userData.txt";
 		//private var MODEL_URL:String = "serverside/modelData.txt";
@@ -186,6 +188,8 @@ package
 			// wait until complete
 			if(event.type!="complete")return;
 
+			trace(" ! onGetUserData");
+			
 			// grab user data
 			var _userData:URLVariables = URLVariables(event.target["data"]);
 			
@@ -199,6 +203,10 @@ package
 			DebugUtil.addText(USER_URL);
 			
 			initARQR();
+			
+			// cam as default
+			if(CAMERA_BY_DEFAULT)
+				toggleCamera();			
 		}
 		
 		private function initARQR():void
@@ -226,7 +234,7 @@ package
 			// menu
 			SystemUtil.addContext(this, "ARQRCode version 1");
 			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
-			SystemUtil.addContext(this, "Toggle Camera", onToggleCamera);
+			SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
 			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
 			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
 			SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
@@ -293,6 +301,10 @@ package
 			DebugUtil.trace(" ! Decypt Key : " + _key);
 			DebugUtil.addText(" ! Decypt Key : " + _key);
 			
+			//reset
+			_vars.session = "";
+			_vars.hash = "";
+			
 			var _cipher:String = DES.encypt(_key, _vars.toString()+"&");
 			_vars.session = DES.toHex(_cipher);
 			_vars.hash = MD5.hash(_vars.toString());
@@ -351,7 +363,7 @@ package
 			Oishi.setCode(QRManager.result);
 		}
 
-		private function onToggleCamera(event:ContextMenuEvent):void
+		public function toggleCamera():void
 		{
 			isCam = !isCam;
 
@@ -426,14 +438,14 @@ package
 			}
 		}
 
-		private function reset():void
+		public function reset():void
 		{
 			_isQRDecoded = false;
 			_QRReader.reset();
 			_modelViewer.reset();
-			
+				
 			_itemNameTextField.text = "";
-			
+				
 			DebugUtil.label.text = "";
 		}
 		

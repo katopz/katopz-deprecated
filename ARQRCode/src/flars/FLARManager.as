@@ -149,9 +149,9 @@ package flars
 			// get image into _bitmapData
 			_bitmapData.fillRect(_bitmapData.rect, 0);
 
-			_container.stage.quality = "high";
+			_container.stage.quality = StageQuality.HIGH;
 			_bitmapData.draw(target);
-			_container.stage.quality = "low";
+			_container.stage.quality = StageQuality.MEDIUM;
 			
 			n = detector.detectMarkerLite(raster, 128);
 			return n;
