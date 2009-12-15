@@ -6,7 +6,7 @@ package com.sleepydesign.effect
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
-	import com.greensock.TweenMax;
+	import com.greensock.TweenLite;
 
 	public class SDParallax
 	{
@@ -55,7 +55,7 @@ package com.sleepydesign.effect
 			for each(var parallaxItem:ParallaxItem in elements.childs)
 			{
 				var newX:Number = parallaxItem._x+_x/parallaxItem.z*factorX;//+ (_x - parallaxItem._x)/parallaxItem.z;
-				TweenMax.to(parallaxItem, 0.5, {x:newX});
+				TweenLite.to(parallaxItem, 0.5, {x:newX});
 			}
 		}
 	}

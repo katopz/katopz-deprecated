@@ -1,7 +1,7 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.text.SDTextField;
-	import com.sleepydesign.utils.URLUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
@@ -268,7 +268,7 @@ package com.sleepydesign.components
 
 		private function linkHandler(e:TextEvent):void
 		{
-			URLUtil.link(e.text, caller);
+			SystemUtil.link(e.text, caller);
 		}
 	}
 }

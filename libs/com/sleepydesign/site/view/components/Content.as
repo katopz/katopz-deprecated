@@ -446,7 +446,7 @@ var xml:XML = event.target["data"];
 				var _alpha:Number= !StringUtil.isNull(itemXML.@alpha)?Number(itemXML.@alpha):1;
 			
 				trace(" ! Clip\t: "+clip, idString, _alpha);
-				//TweenMax.to(clip, 1, {delay:4, alphaTo:_alpha});
+				//TweenLite.to(clip, 1, {delay:4, alphaTo:_alpha});
 				clip.alpha = _alpha;
 			} 
 			*/
@@ -679,7 +679,7 @@ var xml:XML = event.target["data"];
 				{
 					// auto reveal
 					if(!_config.alpha)_config.alpha = 1;
-					TweenMax.to(content, .5, {autoAlpha:_config.alpha});
+					TweenLite.to(content, .5, {autoAlpha:_config.alpha});
 				}
 			}
 			*/
@@ -704,7 +704,7 @@ var xml:XML = event.target["data"];
 			////addChild(cachedBitmap);
 			
 			// effect -> destroy
-			////TweenMax.to(cachedBitmap, 1, {autoAlpha:0, onComplete:destroy, onCompleteParams:[[cachedBitmap]]});
+			////TweenLite.to(cachedBitmap, 1, {autoAlpha:0, onComplete:destroy, onCompleteParams:[[cachedBitmap]]});
 			
 			// bye
 			////removeChild(content);

@@ -1,6 +1,6 @@
 ﻿﻿package com.sleepydesign.game.player
 {
-	import com.greensock.TweenMax;
+	import com.greensock.;
 	import com.greensock.easing.Linear;
 	import com.sleepydesign.components.SDBalloon;
 	import com.sleepydesign.core.SDObject;
@@ -162,7 +162,7 @@
 		{
 			trace("onAnimationComplete#3");
 			//balloonClip.y = 70;
-			TweenMax.to(instance, 1, {autoAlpha:1});
+			.to(instance, 1, {autoAlpha:1});
 			dispatchEvent(event.clone());
 		}
 		
@@ -257,7 +257,7 @@
 				
 				positions.shift();
 				
-				TweenMax.killTweensOf(dolly);
+				.killTweensOf(dolly);
 				
 				act(PlayerEvent.WALK);
 				
@@ -269,7 +269,7 @@
 				var _rotationY:Number = -90+180*Math.atan2(decoy.z-dolly.z,decoy.x-dolly.x)/Math.PI 
 				trace("rotationY:"+_rotationY);
 				
-				TweenMax.to(instance, 0.5, 
+				.to(instance, 0.5, 
 				{
 					rotationY:_rotationY
 				})
@@ -277,7 +277,7 @@
 				
 				//instance.lookAt(decoy);
 				
-				TweenMax.to(dolly, time, 
+				.to(dolly, time, 
 				{
 					x:decoy.x, y:decoy.y, z:decoy.z,
 					//bezier:positions,
@@ -406,7 +406,7 @@
 		
 		override public function destroy():void
 		{
-			TweenMax.killTweensOf(dolly);
+			.killTweensOf(dolly);
 			/*
 			id = null;
 			instance = null;
