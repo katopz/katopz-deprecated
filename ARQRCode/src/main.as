@@ -19,6 +19,7 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.GlowFilter;
+	import flash.media.Camera;
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -67,7 +68,7 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = true;
+		private const CAMERA_BY_DEFAULT:Boolean = !StringUtil.isNull(Camera.names);
 		
 		// config
 		private var USER_URL:String = "serverside/userData.txt";
@@ -117,6 +118,8 @@ package
 			// no cam test
 			fakeContainer = new Sprite();
 			base.addChild(fakeContainer);
+			
+			isOnline = isOnline && SystemUtil.isHTTP(this);
 
 			// fake code
 			fake = new Sprite();
@@ -207,7 +210,7 @@ package
 			
 			// cam as default
 			if(CAMERA_BY_DEFAULT)
-				toggleCamera();			
+				toggleCamera();
 		}
 		
 		private function initARQR():void
@@ -492,7 +495,7 @@ package
 				
 			_itemNameTextField.text = "";
 				
-			DebugUtil.label.text = "";
+			DebugUtil.clear();
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
