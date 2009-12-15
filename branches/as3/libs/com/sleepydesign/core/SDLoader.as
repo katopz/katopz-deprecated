@@ -17,7 +17,7 @@ package com.sleepydesign.core
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	
-	import com.greensock.TweenMax;
+	import com.greensock.TweenLite;
 	
     /**
 	 * SleepyDesign Loader
@@ -272,9 +272,9 @@ package com.sleepydesign.core
 			{
 				// not appear yet
 				if(!instance.visible) 
-					TweenMax.to(instance, 0.5, {autoAlpha:1});
+					TweenLite.to(instance, 0.5, {autoAlpha:1});
 			}else{
-				TweenMax.to(instance, 0.5, {autoAlpha:0});
+				TweenLite.to(instance, 0.5, {autoAlpha:0});
 			}
 			
 			dispatchEvent(new SDEvent(SDEvent.PROGRESS, {loader:event.target, event:event, percent:percent}));
@@ -321,7 +321,7 @@ package com.sleepydesign.core
 			//unregister();
 			
 			//instance.visible = false;
-			//TweenMax.to(instance, 0.5, {autoAlpha:0});
+			//TweenLite.to(instance, 0.5, {autoAlpha:0});
 		}
 		
 		/*

@@ -1,6 +1,6 @@
 package com.sleepydesign.core
 {
-    import com.greensock.TweenMax;
+    import com.greensock.TweenLite;
     import com.sleepydesign.events.SDEvent;
     import com.sleepydesign.utils.DisplayObjectUtil;
     import com.sleepydesign.utils.ObjectUtil;
@@ -154,7 +154,7 @@ package com.sleepydesign.core
 			
 			// MovieClip : auto show
 			clip.gotoAndPlay("show");
-			TweenMax.to(content, .5, {autoAlpha:1});
+			TweenLite.to(content, .5, {autoAlpha:1});
 			trace(" ------------------------------------------ /");
 			*/
 		}
@@ -181,7 +181,7 @@ package com.sleepydesign.core
 			//trace(" * removeChild	: "+DisplayObjectUtil.toString(child));
 
 			// Tween?
-			TweenMax.killTweensOf(child);
+			TweenLite.killTweensOf(child);
 			
         	// got some child to kill
         	if(child is DisplayObjectContainer)
@@ -248,7 +248,7 @@ package com.sleepydesign.core
 		
 		public function hide(transition:Object = null):void 
 		{
-			TweenMax.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 0 }));
+			TweenLite.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 0 }));
 			
 			if(clip.currentLabels.length>1)
 			{
@@ -259,7 +259,7 @@ package com.sleepydesign.core
 		
 		public function show(transition:Object = null):void 
 		{
-			TweenMax.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 1 }));
+			TweenLite.to(this, .5, ObjectUtil.merge(transition, { autoAlpha: 1 }));
 			
 			if(clip.currentLabels.length>1)
 			{

@@ -1,6 +1,6 @@
 package com.sleepydesign.site.view.components
 {
-	import com.greensock.TweenMax;
+	import com.greensock.TweenLite;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.core.SDMovieClip;

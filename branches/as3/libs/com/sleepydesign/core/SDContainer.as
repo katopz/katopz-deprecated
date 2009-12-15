@@ -6,7 +6,7 @@
     import flash.display.DisplayObject;
     import flash.events.Event;
     
-    import com.greensock.TweenMax;
+    import com.greensock.TweenLite;
     
     /**
 	 * SleepyDesign Container
@@ -188,12 +188,12 @@
 		
 		public function hide(transition:Object = null):void 
 		{
-			TweenMax.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 0 }));
+			TweenLite.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 0 }));
 		}
 		
 		public function show(transition:Object = null):void 
 		{
-			TweenMax.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 1 }));
+			TweenLite.to(this, 1, ObjectUtil.merge(transition, { autoAlpha: 1 }));
 		}
 	}	
 }

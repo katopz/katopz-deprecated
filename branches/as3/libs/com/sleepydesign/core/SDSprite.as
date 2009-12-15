@@ -1,7 +1,7 @@
 package com.sleepydesign.core
 {
 	//import com.sleepydesign.utils.DisplayObjectUtil;
-	import com.greensock.TweenMax;
+	import com.greensock.TweenLite;
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
@@ -60,7 +60,7 @@ package com.sleepydesign.core
 			//trace(" * removeChild	: "+DisplayObjectUtil.toString(child));
 
 			// Tween?
-			TweenMax.killTweensOf(child);
+			TweenLite.killTweensOf(child);
 
 			if (child is Shape)
 			{

@@ -6,7 +6,7 @@ package com.sleepydesign.components
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
 
-	import com.greensock.TweenMax;
+	import com.greensock.TweenLite;
 
 	public class SDButton extends SDComponent
 	{
@@ -75,7 +75,7 @@ package com.sleepydesign.components
 		protected function onMouseOver(event:MouseEvent):void
 		{
 			_over = true;
-			TweenMax.to(_back, .25, SDStyle.BUTTON_OVER_TWEEN);
+			TweenLite.to(_back, .25, SDStyle.BUTTON_OVER_TWEEN);
 			addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 		}
 
@@ -85,18 +85,18 @@ package com.sleepydesign.components
 			_over = false;
 			if (!_down)
 			{
-				TweenMax.to(_back, .25, SDStyle.BUTTON_UP_TWEEN);
+				TweenLite.to(_back, .25, SDStyle.BUTTON_UP_TWEEN);
 			}
 			else
 			{
-				TweenMax.to(_back, .25, SDStyle.BUTTON_DOWN_TWEEN);
+				TweenLite.to(_back, .25, SDStyle.BUTTON_DOWN_TWEEN);
 			}
 		}
 
 		protected function onMouseDown(event:MouseEvent):void
 		{
 			_down = true;
-			TweenMax.to(_back, .1, SDStyle.BUTTON_DOWN_TWEEN);
+			TweenLite.to(_back, .1, SDStyle.BUTTON_DOWN_TWEEN);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 		}
 
@@ -110,11 +110,11 @@ package com.sleepydesign.components
 			_down = _selected;
 			if (_over)
 			{
-				TweenMax.to(_back, .1, SDStyle.BUTTON_OVER_TWEEN);
+				TweenLite.to(_back, .1, SDStyle.BUTTON_OVER_TWEEN);
 			}
 			else
 			{
-				TweenMax.to(_back, .1, SDStyle.BUTTON_UP_TWEEN);
+				TweenLite.to(_back, .1, SDStyle.BUTTON_UP_TWEEN);
 			}
 
 			dispatchEvent(new SDMouseEvent(SDMouseEvent.CLICK, {selected: _selected}, event))
