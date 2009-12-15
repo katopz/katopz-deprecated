@@ -67,7 +67,7 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = !true;
+		private const CAMERA_BY_DEFAULT:Boolean = true;
 		
 		// config
 		private var USER_URL:String = "serverside/userData.txt";
@@ -104,7 +104,7 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
-		public var isOnline:Boolean = !true;
+		public var isOnline:Boolean = true;
 		
 		public function main()
 		{
@@ -233,7 +233,7 @@ package
 			setBitmap(Bitmap(new ImageData));
 
 			// menu
-			SystemUtil.addContext(this, "ARQRCode version 1");
+			SystemUtil.addContext(this, "ARQRCode version 1.1");
 			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
 			SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
 			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
