@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.1
- * DATE: 10/18/2009
+ * VERSION: 11.13
+ * DATE: 12/8/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -221,7 +221,7 @@ package com.greensock {
 		}
 		
 		/** @private **/
-		public static const version:Number = 11.1;
+		public static const version:Number = 11.13;
 		/** @private When plugins are activated, the class is added (named based on the special property) to this object so that we can quickly look it up in the initTweenVals() method.**/
 		public static var plugins:Object = {}; 
 		/** @private **/
@@ -285,8 +285,8 @@ package com.greensock {
 			propTweenLookup = {};
 			_ease = defaultEase; //temporarily - we'll check the vars object for an ease property in the init() method. We set it to the default initially for speed purposes.
 			
-			//handle overwriting (if necessary) on tweens of the same object and add the tween to the Dictionary for future reference
-			_overwrite = (!("overwrite" in vars) || (!overwriteManager.enabled && vars.overwrite > 1)) ? overwriteManager.mode : int(vars.overwrite);
+			//handle overwriting (if necessary) on tweens of the same object and add the tween to the Dictionary for future reference. Also remember to accommodate TweenLiteVars and TweenMaxVars
+			_overwrite = (!(Number(vars.overwrite) > -1) || (!overwriteManager.enabled && vars.overwrite > 1)) ? overwriteManager.mode : int(vars.overwrite);
 			var a:Array = masterList[target];
 			if (!a) {
 				masterList[target] = [this];
@@ -327,7 +327,7 @@ package com.greensock {
 			for (p in this.vars) {
 				if (p in _reservedProps && !(p == "timeScale" && this.target is TweenCore)) { 
 					//ignore
-				} else if (p in plugins && (plugin = new plugins[p]()).onInitTween(this.target, this.vars[p], this)) {
+				} else if (p in plugins && (plugin = new (plugins[p] as Class)()).onInitTween(this.target, this.vars[p], this)) {
 					this.cachedPT1 = new PropTween(plugin, 
 												    "changeFactor", 
 												    0, 
@@ -395,7 +395,9 @@ package com.greensock {
 		/** @private **/
 		override public function renderTime(time:Number, suppressEvents:Boolean=false, force:Boolean=false):void {
 			var isComplete:Boolean, prevTime:Number = this.cachedTime;
-			this.active = true; //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
+			if (!this.active && !this.cachedPaused) {
+				this.active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
+			}
 			if (time >= this.cachedDuration) {
 				this.cachedTotalTime = this.cachedTime = this.cachedDuration;
 				this.ratio = 1;
@@ -518,19 +520,17 @@ package com.greensock {
 		
 		/** @private **/	
 		override public function setEnabled(enabled:Boolean, ignoreTimeline:Boolean=false):Boolean {
-			if (enabled == this.gc) {
-				if (enabled) {
-					var a:Array = TweenLite.masterList[this.target];
-					if (!a) {
-						TweenLite.masterList[this.target] = [this];
-					} else {
-						a[a.length] = this;
-					}
+			if (enabled) {
+				var a:Array = TweenLite.masterList[this.target];
+				if (!a) {
+					TweenLite.masterList[this.target] = [this];
+				} else {
+					a[a.length] = this;
 				}
-				super.setEnabled(enabled, ignoreTimeline);
-				if (_notifyPluginsOfEnabled && this.cachedPT1) {
-					return onPluginEvent(((enabled) ? "onEnable" : "onDisable"), this);
-				}
+			}
+			super.setEnabled(enabled, ignoreTimeline);
+			if (_notifyPluginsOfEnabled && this.cachedPT1) {
+				return onPluginEvent(((enabled) ? "onEnable" : "onDisable"), this);
 			}
 			return false;
 		}
@@ -612,7 +612,7 @@ package com.greensock {
 		 * 
 		 * @param e ENTER_FRAME Event
 		 */
-		protected static function updateAll(e:Event = null):void {
+		 protected static function updateAll(e:Event = null):void {
 			rootTimeline.renderTime(((getTimer() * 0.001) - rootTimeline.cachedStartTime) * rootTimeline.cachedTimeScale, false, false);
 			rootFrame++;
 			rootFramesTimeline.renderTime((rootFrame - rootFramesTimeline.cachedStartTime) * rootFramesTimeline.cachedTimeScale, false, false);
@@ -634,6 +634,7 @@ package com.greensock {
 			}
 			
 		}
+		
 		
 		/**
 		 * Kills all the tweens of a particular object, optionally completing them first.
