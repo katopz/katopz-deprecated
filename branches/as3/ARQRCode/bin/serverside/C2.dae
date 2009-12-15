@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>BOBO</author>
+      <authoring_tool>Maya2009 | ColladaMaya v3.05B</authoring_tool>
+      <comments>ColladaMaya export options: bakeTransforms=1;exportPolygonMeshes=1;bakeLighting=0;isSampling=0;
+curveConstrainSampling=0;removeStaticCurves=1;exportCameraAsLookat=0;
+exportLights=0;exportCameras=0;exportJointsAndSkin=1;
+exportAnimations=1;exportTriangles=1;exportInvisibleNodes=0;
+exportNormals=0;exportTexCoords=1;
+exportVertexColors=0;exportVertexColorsAnimation=0;exportTangents=0;
+exportTexTangents=1;exportConstraints=0;exportPhysics=0;exportXRefs=1;
+dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
+      <source_data>file:///C:/Documents%20and%20Settings/BOBO/Desktop/Oishi_Project/Item/Complete/C2/C2.ma</source_data>
+    </contributor>
+    <created>2009-12-15T15:31:38Z</created>
+    <modified>2009-12-15T15:31:38Z</modified>
+    <unit meter="0.01" name="centimeter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_animations>
+    <animation id="joint1.matrix">
+      <source id="joint1.matrix_joint1_transform-input">
+        <float_array id="joint1.matrix_joint1_transform-input-array" count="75">0.033333 0.066666 0.1 0.133333 0.166667 0.2 0.233333 0.266667 0.3 0.333333 0.366667 0.4 0.433333 0.466667 0.5 0.533333 0.566667 0.6 0.633333 0.666667 0.7 0.733333 0.766667 0.8 0.833333 0.866667 0.9 0.933333 0.966667 1 1.03333 1.06667 1.1 1.13333 1.16667 1.2 1.23333 1.26667 1.3 1.33333 1.36667 1.4 1.43333 1.46667 1.5 1.53333 1.56667 1.6 1.63333 1.66667 1.7 1.73333 1.76667 1.8 1.83333 1.86667 1.9 1.93333 1.96667 2 2.03333 2.06667 2.1 2.13333 2.16667 2.2 2.23333 2.26667 2.3 2.33333 2.36667 2.4 2.43333 2.46667 2.5</float_array>
+        <technique_common>
+          <accessor source="#joint1.matrix_joint1_transform-input-array" count="75" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="joint1.matrix_joint1_transform-output">
+        <float_array id="joint1.matrix_joint1_transform-output-array" count="1200">1.06474 0 0 0 0 1 0 0 0 0 1.00543 0 0 0 0 1 1.04518 0 0 0 0 1 0 0.031434 0 0 0.992478 0 0 0 0 1 1.0292 0 0 0 0 1 0 0.12083 0 0 0.981887 0 0 0 0 1 1.0165 0 0 0 0 1 0 0.260827 0 0 0.973476 0 0 0 0 1 1.00681 0 0 0 0 1 0 0.444066 0 0 0.967058 0 0 0 0 1 0.999854 0 0 0 0 1 0 0.663185 0 0 0.96245 0 0 0 0 1 0.99535 0 0 0 0 1 0 0.910825 0 0 0.959466 0 0 0 0 1 0.993016 0 0 0 0 1 0 1.17963 0 0 0.957921 0 0 0 0 1 0.992605 0 0 0 0 1 0 1.46223 0 0 0.957648 0 0 0 0 1 0.994464 0 0 0 0 1 0 1.75127 0 0 0.95888 0 0 0 0 1 0.99851 0 0 0 0 1 0 2.03939 0 0 0.961559 0 0 0 0 1 1.00439 0 0 0 0 1 0 2.31923 0 0 0.965452 0 0 0 0 1 1.01174 0 0 0 0 1 0 2.58343 0 0 0.970321 0 0 0 0 1 1.0202 0 0 0 0 1 0 2.82463 0 0 0.97593 0 0 0 0 1 1.02943 0 0 0 0 1 0 3.03547 0 0 0.982044 0 0 0 0 1 1.03907 0 0 0 0 1 0 3.20859 0 0 0.988426 0 0 0 0 1 1.04875 0 0 0 0 1 0 3.33662 0 0 0.994841 0 0 0 0 1 1.05813 0 0 0 0 1 0 3.41222 0 0 1.00105 0 0 0 0 1 1.06694 0 0 0 0 1 0 3.42826 0 0 1.00689 0 0 0 0 1 1.07709 0 0 0 0 1 0 3.38637 0 0 1.01361 0 0 0 0 1 1.08887 0 0 0 0 1 0 3.29375 0 0 1.02142 0 0 0 0 1 1.10164 0 0 0 0 1 0 3.15664 0 0 1.02987 0 0 0 0 1 1.11471 0 0 0 0 1 0 2.98128 0 0 1.03853 0 0 0 0 1 1.12743 0 0 0 0 1 0 2.77391 0 0 1.04696 0 0 0 0 1 1.13914 0 0 0 0 1 0 2.5408 0 0 1.05471 0 0 0 0 1 1.14916 0 0 0 0 1 0 2.28816 0 0 1.06135 0 0 0 0 1 1.15684 0 0 0 0 1 0 2.02226 0 0 1.06644 0 0 0 0 1 1.16151 0 0 0 0 1 0 1.74934 0 0 1.06953 0 0 0 0 1 1.16247 0 0 0 0 1 0 1.47563 0 0 1.07017 0 0 0 0 1 1.15877 0 0 0 0 1 0 1.20739 0 0 1.06772 0 0 0 0 1 1.15093 0 0 0 0 1 0 0.950851 0 0 1.06252 0 0 0 0 1 1.13989 0 0 0 0 1 0 0.712268 0 0 1.05521 0 0 0 0 1 1.12661 0 0 0 0 1 0 0.497882 0 0 1.04642 0 0 0 0 1 1.11205 0 0 0 0 1 0 0.313937 0 0 1.03677 0 0 0 0 1 1.09715 0 0 0 0 1 0 0.166676 0 0 1.0269 0 0 0 0 1 1.08289 0 0 0 0 1 0 0.062344 0 0 1.01745 0 0 0 0 1 1.0702 0 0 0 0 1 0 0.007187 0 0 1.00905 0 0 0 0 1 1.05945 0 0 0 0 1 0 0.007187 0 0 1.00193 0 0 0 0 1 1.04796 0 0 0 0 1 0 0.062344 0 0 0.994314 0 0 0 0 1 1.03577 0 0 0 0 1 0 0.166676 0 0 0.986245 0 0 0 0 1 1.02355 0 0 0 0 1 0 0.313937 0 0 0.978148 0 0 0 0 1 1.01193 0 0 0 0 1 0 0.497882 0 0 0.97045 0 0 0 0 1 1.00156 0 0 0 0 1 0 0.712268 0 0 0.963578 0 0 0 0 1 0.993071 0 0 0 0 1 0 0.950851 0 0 0.957957 0 0 0 0 1 0.987118 0 0 0 0 1 0 1.20739 0 0 0.954013 0 0 0 0 1 0.98434 0 0 0 0 1 0 1.47563 0 0 0.952173 0 0 0 0 1 0.985114 0 0 0 0 1 0 1.74934 0 0 0.952686 0 0 0 0 1 0.988836 0 0 0 0 1 0 2.02226 0 0 0.955151 0 0 0 0 1 0.994978 0 0 0 0 1 0 2.28816 0 0 0.95922 0 0 0 0 1 1.00303 0 0 0 0 1 0 2.5408 0 0 0.964553 0 0 0 0 1 1.01248 0 0 0 0 1 0 2.77392 0 0 0.970811 0 0 0 0 1 1.02281 0 0 0 0 1 0 2.98128 0 0 0.977657 0 0 0 0 1 1.03352 0 0 0 0 1 0 3.15664 0 0 0.984751 0 0 0 0 1 1.04409 0 0 0 0 1 0 3.29375 0 0 0.991756 0 0 0 0 1 1.05402 0 0 0 0 1 0 3.38637 0 0 0.998332 0 0 0 0 1 1.06279 0 0 0 0 1 0 3.42826 0 0 1.00414 0 0 0 0 1 1.07078 0 0 0 0 1 0 3.41405 0 0 1.00943 0 0 0 0 1 1.07966 0 0 0 0 1 0 3.34601 0 0 1.01532 0 0 0 0 1 1.08901 0 0 0 0 1 0 3.23036 0 0 1.02151 0 0 0 0 1 1.09833 0 0 0 0 1 0 3.07335 0 0 1.02768 0 0 0 0 1 1.1071 0 0 0 0 1 0 2.88121 0 0 1.03349 0 0 0 0 1 1.11481 0 0 0 0 1 0 2.66019 0 0 1.0386 0 0 0 0 1 1.12095 0 0 0 0 1 0 2.41653 0 0 1.04266 0 0 0 0 1 1.125 0 0 0 0 1 0 2.15648 0 0 1.04535 0 0 0 0 1 1.12647 0 0 0 0 1 0 1.88629 0 0 1.04632 0 0 0 0 1 1.1253 0 0 0 0 1 0 1.61219 0 0 1.04555 0 0 0 0 1 1.12203 0 0 0 0 1 0 1.34043 0 0 1.04338 0 0 0 0 1 1.11703 0 0 0 0 1 0 1.07727 0 0 1.04007 0 0 0 0 1 1.11067 0 0 0 0 1 0 0.828926 0 0 1.03586 0 0 0 0 1 1.10332 0 0 0 0 1 0 0.601661 0 0 1.03099 0 0 0 0 1 1.09536 0 0 0 0 1 0 0.401715 0 0 1.02572 0 0 0 0 1 1.08715 0 0 0 0 1 0 0.23533 0 0 1.02028 0 0 0 0 1 1.07906 0 0 0 0 1 0 0.108754 0 0 1.01492 0 0 0 0 1 1.07147 0 0 0 0 1 0 0.028229 0 0 1.00989 0 0 0 0 1 1.06474 0 0 0 0 1 0 0 0 0 1.00543 0 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#joint1.matrix_joint1_transform-output-array" count="75" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="joint1.matrix_joint1_transform-interpolations">
+        <Name_array id="joint1.matrix_joint1_transform-interpolations-array" count="75">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#joint1.matrix_joint1_transform-interpolations-array" count="75" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="joint1.matrix_joint1_transform-sampler">
+        <input semantic="INPUT" source="#joint1.matrix_joint1_transform-input"/>
+        <input semantic="OUTPUT" source="#joint1.matrix_joint1_transform-output"/>
+        <input semantic="INTERPOLATION" source="#joint1.matrix_joint1_transform-interpolations"/>
+      </sampler>
+      <channel source="#joint1.matrix_joint1_transform-sampler" target="joint1/transform"/>
+    </animation>
+  </library_animations>
+  <library_images>
+    <image id="file1" name="file1">
+      <init_from>./C2%20.png</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kFile</dgnode_type>
+          <image_sequence>0</image_sequence>
+        </technique>
+      </extra>
+    </image>
+    <image id="Camera_file5" name="Camera_file5">
+      <init_from>../../../Pic_qr.png</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kFile</dgnode_type>
+          <image_sequence>0</image_sequence>
+        </technique>
+      </extra>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="lambert2" name="lambert2">
+      <instance_effect url="#lambert2-fx"/>
+    </material>
+    <material id="Camera_lambert7" name="Camera_lambert7">
+      <instance_effect url="#Camera_lambert7-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="lambert2-fx">
+      <profile_COMMON>
+        <newparam sid="file1-surface">
+          <surface type="2D">
+            <init_from>file1</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="file1-sampler">
+          <sampler2D>
+            <source>file1-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="file1-sampler" texcoord="TEX0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <coverageU>1</coverageU>
+                    <coverageV>1</coverageV>
+                    <translateFrameU>0</translateFrameU>
+                    <translateFrameV>0</translateFrameV>
+                    <rotateFrame>0</rotateFrame>
+                    <stagger>0</stagger>
+                    <fast>0</fast>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <rotateUV>0</rotateUV>
+                    <noiseU>0</noiseU>
+                    <noiseV>0</noiseV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </lambert>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="Camera_lambert7-fx">
+      <profile_COMMON>
+        <newparam sid="Camera_file5-surface">
+          <surface type="2D">
+            <init_from>Camera_file5</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="Camera_file5-sampler">
+          <sampler2D>
+            <source>Camera_file5-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="Camera_file5-sampler" texcoord="TEX0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <coverageU>1</coverageU>
+                    <coverageV>1</coverageV>
+                    <translateFrameU>0</translateFrameU>
+                    <translateFrameV>0</translateFrameV>
+                    <rotateFrame>0</rotateFrame>
+                    <stagger>0</stagger>
+                    <fast>0</fast>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <rotateUV>0</rotateUV>
+                    <noiseU>0</noiseU>
+                    <noiseV>0</noiseV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </lambert>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="Object02Shape" name="Object02Shape">
+      <mesh>
+        <source id="Object02Shape-positions" name="position">
+          <float_array id="Object02Shape-positions-array" count="366">2.2336 6.1543 4.9905 3.7649 6.5803 0.6485 -0.8279 6.6491 3.8316 5.6208 5.3612 -6.4363 2.8593 5.0898 -5.3622 2.9098 6.6812 -5.3142 5.5891 6.4876 -6.2999 -0.8279 5.0114 3.8316 2.0932 5.0624 5.0105 -2.523 7.2487 0.0956 0.6497 6.914 -3.8601 -0.178 6.5741 -2.8252 8.16 5.6556 -5.6796 8.1028 6.6539 -5.5029 4.5307 5.2296 5.0649 4.5308 6.0456 5.0183 -2.0829 5.1368 3.8405 -1.9902 6.9371 3.7124 9.4378 5.8308 -4.3791 9.3669 6.8453 -4.3563 7.3278 5.4515 5.6672 7.3765 6.2284 5.6118 8.5964 5.6574 5.1481 8.5381 6.4046 5.0972 9.8746 5.9457 -2.8946 9.8422 6.808 -2.8805 10.0641 5.9427 1.2029 10.0527 6.7501 1.2013 10.8006 6.0559 -1.8194 10.7408 6.8995 -1.772 -2.859 7.2022 2.5228 -2.5744 6.6454 0.1086 -2.9607 6.5889 2.5425 -2.498 6.5422 3.0825 -2.3955 5.1642 3.148 2.7329 6.5967 -3.429 7.1784 6.6725 0.9486 8.9977 6.7581 -2.1327 0.0359 6.9767 0.3206 5.6952 6.1571 -2.816 2.0948 6.6377 -4.7949 0.5837 6.5676 -3.8059 -12.1673 6.2759 6.9604 -7.2271 5.4416 6.8939 -7.2266 5.4415 4.9978 -10.8235 6.0673 5.0474 -0.021 4.9551 6.7985 -0.0209 4.9551 4.9024 -12.1673 5.1634 6.9604 -6.9279 4.2694 6.89 -12.165 6.2753 -8.2116 -12.165 5.1634 -8.2116 -12.1645 5.1635 -0.9158 -0.021 3.8462 6.7985 -7.2231 5.441 -8.2752 -0.0199 4.9549 -8.3702 -0.0199 3.8459 -8.3702 -6.9236 4.2688 -8.2791 -10.0182 2.8375 4.9206 -6.5506 2.2662 4.8352 -0.02 2.0192 -6.4741 -6.5632 2.2731 -6.3891 -0.0209 2.0195 4.9085 -0.0209 -0.0335 4.9085 -10.0187 -0.0346 -6.343 -10.0187 2.8399 -6.343 -10.0182 -0.0305 4.9206 -0.02 -0.0338 -6.4741 -10.0187 2.8384 -0.9158 7.184 5.4437 -8.4653 10.7817 6.0708 -6.6187 12.1641 6.2799 -8.5315 12.1364 5.1635 6.6393 12.1364 6.2799 6.6393 7.1838 5.4437 6.7032 6.8881 4.2712 6.7071 6.8817 4.2712 -8.4614 12.164 5.1635 -8.5316 6.3746 2.2699 4.8352 9.9857 2.8399 4.7778 6.3982 2.2695 -6.5592 9.9857 -0.0323 4.7778 9.9844 -0.0322 -6.6068 12.1258 5.1627 -0.9158 9.9863 2.8384 -0.9158 9.9844 2.8399 -6.6068 -12.1662 6.2756 -0.6256 12.1503 6.2799 -0.9461 -11.0111 6.0668 -6.3311 -10.9173 6.0671 -0.6419 -8.3737 5.6186 -4.2481 -6.4199 5.3869 -6.3897 10.9117 6.0708 1.2372 10.97 6.0708 5.126 -8.2407 5.6134 3.4482 -7.2261 5.4415 3.3074 -4.0986 5.2741 3.6466 -0.02 4.9549 -7.3476 -1.5522 5.0583 -8.1278 -4.1663 5.2347 -8.1957 -9.7841 5.875 -0.0502 -9.4478 5.8201 2.3202 -6.4648 6.9419 -6.4692 -4.1784 6.655 -8.1787 -4.1715 6.6543 3.5998 -7.4364 7.1088 3.363 -10.1274 7.7106 0.2663 -8.2159 7.262 -4.4304 -1.5418 6.5081 -8.1323 -8.5844 7.3404 3.5805 -0.003 6.5135 -7.3943 0.9173 5.0185 -6.0098 0.8738 6.5467 -6.1156 2.0514 6.6255 -5.3096 2.0984 5.0748 -4.8165 2.1007 5.0525 -5.2748 -9.7566 7.6155 2.6885 -2.9876 6.4633 -3.347 -5.7583 6.8866 -3.9212 -7.0084 7.1566 0.6906 -4.1131 6.6424 1.0844 -0.02 4.9549 -6.4741</float_array>
+          <technique_common>
+            <accessor source="#Object02Shape-positions-array" count="122" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Object02Shape-map1" name="map1">
+          <float_array id="Object02Shape-map1-array" count="574">0.7005 0.549 0.7124 0.7062 0.5922 0.5535 0.6854 0.9751 0.6114 0.9142 0.6409 0.8833 0.7141 0.94 0.5927 0.5143 0.703 0.509 0.5084 0.6695 0.5833 0.819 0.551 0.7894 0.8107 0.9743 0.7199 0.9857 0.7981 0.934 0.7804 0.522 0.7746 0.5667 0.5549 0.5123 0.5519 0.5534 0.8679 0.9458 0.8449 0.9107 0.8758 0.5322 0.8713 0.5759 0.9017 0.5437 0.9326 0.5723 0.903 0.6049 0.9071 0.9077 0.877 0.8728 0.9475 0.6016 0.9599 0.7409 0.9164 0.7429 0.9596 0.8433 0.915 0.8435 0.9427 0.8774 0.5111 0.5869 0.486 0.6673 0.4901 0.5858 0.5166 0.555 0.5054 0.5379 0.523 0.5224 0.6518 0.824 0.8231 0.7261 0.8577 0.8392 0.5914 0.6844 0.7491 0.8312 0.6182 0.8626 0.5698 0.8233 0.4883 0.6804 0.2955 0.0519 0.4272 0.0507 0.427 0.1003 0.3303 0.1009 0.619 0.0508 0.6183 0.1015 0.2972 0.0227 0.4387 0.022 0.2946 0.4472 0.2661 0.4849 0.2661 0.2531 0.6198 0.0225 0.4214 0.4619 0.6192 0.4542 0.6198 0.4836 0.4387 0.4842 0.0441 0.1516 0.1029 0.207 0.1069 0.2923 0.05 0.2781 0.0466 0.4416 0.1028 0.4448 0.3931 0.9517 0.5453 0.9181 0.5455 0.9506 0.3088 0.9185 0.3089 0.9659 0.1281 0.8177 0.354 0.8177 0.354 0.687 0.1282 0.687 0.2185 0.1102 0.2341 0.1758 0.8123 0.4552 0.91 0.4058 0.9441 0.4543 0.9424 0.0227 0.9441 0.0519 0.8104 0.0507 0.8009 0.022 0.8009 0.4842 0.9424 0.4835 0.354 0.5564 0.1281 0.5564 0.2661 0.0518 0.174 0.9659 0.2909 0.2489 0.0392 0.9659 0.0392 0.9185 0.9735 0.0518 0.9735 0.2531 0.944 0.2538 0.9735 0.4543 0.3188 0.3964 0.327 0.2506 0.3962 0.3478 0.4268 0.4041 0.9113 0.1957 0.9128 0.092 0.3997 0.1436 0.4268 0.147 0.5621 0.1277 0.5125 0.1356 0.5962 0.122 0.6729 0.0993 0.8153 0.079 0.7417 0.095 0.8498 0.0921 0.9113 0.2779 0.8897 0.1966 0.8754 0.3457 0.8857 0.3059 0.6198 0.4272 0.5787 0.4484 0.5087 0.4512 0.3585 0.237 0.3672 0.174 0.6101 0.9142 0.5477 0.8432 0.469 0.691 0.9153 0.8264 0.961 0.8272 0.4644 0.6652 0.4716 0.5843 0.4863 0.5546 0.7498 0.7809 0.6616 0.8011 0.6107 0.6527 0.7057 0.6372 0.8388 0.7616 0.763 0.6601 0.8643 0.7952 0.7386 0.581 0.7554 0.5616 0.7629 0.5191 0.558 0.1486 0.4986 0.5687 0.5881 0.8892 0.6989 0.3757 0.6759 0.3696 0.7 0.3565 0.772 0.4033 0.841 0.3847 0.6449 0.3914 0.6198 0.404 0.1069 0.2923 0.05 0.2781 0.0466 0.4416 0.1028 0.4448 0.3931 0.9517 0.0441 0.1516 0.05 0.2781 0.1069 0.2923 0.1029 0.207 0.0441 0.1516 0.1029 0.207 0.1069 0.2923 0.1029 0.207 0.0441 0.1516 0.05 0.2781 0.1069 0.2923 0.05 0.2781 0.0466 0.4416 0.1028 0.4448 0.1069 0.2923 0.05 0.2781 0.3088 0.9185 0.3089 0.9659 0.3931 0.9517 0.5453 0.9181 0.3931 0.9517 0.3088 0.9185 0.2185 0.1102 0.0441 0.1516 0.1029 0.207 0.2341 0.1758 0.0441 0.1516 0.1029 0.207 0.1069 0.2923 0.05 0.2781 0.2185 0.1102 0.2341 0.1758 0.1029 0.207 0.0441 0.1516 0.3089 0.9659 0.3088 0.9185 0.3088 0.9185 0.0392 0.9659 0.0392 0.9185 0.174 0.9659 0.174 0.9659 0.3088 0.9185 0.3089 0.9659 0.174 0.9659 0.0392 0.9185 0.3088 0.9185 0.3088 0.9185 0.3089 0.9659 0.3088 0.9185 0.3088 0.9185 0.3931 0.9517 0.3931 0.9517 0.3931 0.9517 0.5453 0.9181 0.3931 0.9517 0.5455 0.9506 0.5453 0.9181 0.5453 0.9181 0.5455 0.9506 0.3931 0.9517 0.3088 0.9185 0.3931 0.9517 0.3089 0.9659 0.6854 0.9751 0.6409 0.8833 0.7141 0.94 0.5927 0.5143 0.703 0.509 0.7005 0.549 0.5922 0.5535 0.5084 0.6695 0.5833 0.819 0.8107 0.9743 0.7199 0.9857 0.7141 0.94 0.7981 0.934 0.5549 0.5123 0.5927 0.5143 0.5922 0.5535 0.5519 0.5534 0.5833 0.819 0.6409 0.8833 0.8679 0.9458 0.8107 0.9743 0.7981 0.934 0.8449 0.9107 0.9071 0.9077 0.8679 0.9458 0.8449 0.9107 0.877 0.8728 0.915 0.8435 0.9596 0.8433 0.9427 0.8774 0.9071 0.9077 0.877 0.8728 0.915 0.8435 0.5111 0.5869 0.5084 0.6695 0.523 0.5224 0.5519 0.5534 0.5111 0.5869 0.7141 0.94 0.6409 0.8833 0.5833 0.819 0.6409 0.8833 0.5111 0.5869 0.5519 0.5534 0.5922 0.5535 0.5084 0.6695 0.5922 0.5535 0.5922 0.5535 0.7005 0.549 0.5833 0.819 0.5084 0.6695 0.5922 0.5535 0.5084 0.6695 0.7981 0.934 0.877 0.8728 0.8449 0.9107 0.7981 0.934 0.7981 0.934 0.7141 0.94 0.7981 0.934 0.915 0.8435 0.877 0.8728 0.7005 0.549 0.7005 0.549 0.703 0.509 0.877 0.8728</float_array>
+          <technique_common>
+            <accessor source="#Object02Shape-map1-array" count="287" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Object02Shape-vertices">
+          <input semantic="POSITION" source="#Object02Shape-positions"/>
+        </vertices>
+        <triangles material="lambert2SG" count="239">
+          <input semantic="VERTEX" source="#Object02Shape-vertices" offset="0"/>
+          <input semantic="TEXCOORD" source="#Object02Shape-map1" offset="1" set="0"/>
+          <p>0 0 1 1 2 2 3 3 4 4 6 6 6 6 4 4 5 5 8 8 0 0 7 7 7 7 0 0 2 2 9 9 10 10 11 11 3 13 6 6 12 12 12 12 6 6 13 14 8 8 14 15 0 0 0 0 14 15 15 16 7 7 2 2 16 17 16 17 2 2 17 18 12 12 13 14 18 19 18 19 13 14 19 20 14 15 20 21 15 16 15 16 20 21 21 22 20 23 22 24 21 22 21 22 22 24 23 25 18 19 19 20 24 26 24 26 19 20 25 27 22 28 26 29 23 25 23 25 26 29 27 30 26 29 28 31 27 30 27 30 28 31 29 32 24 26 25 27 28 33 28 33 25 27 29 32 9 9 31 35 30 34 30 34 31 35 32 36 34 38 16 39 33 37 33 37 16 39 17 18 9 9 30 34 17 18 35 40 5 5 10 10 36 41 27 30 37 42 37 42 27 30 29 32 9 9 38 43 10 10 10 10 38 43 35 40 39 44 13 14 6 6 19 20 37 42 25 27 2 2 1 1 38 43 27 30 36 41 15 16 15 16 1 1 0 0 27 30 15 16 23 25 21 22 23 25 15 16 38 43 1 1 35 40 35 40 1 1 39 44 6 6 35 40 39 44 1 1 36 41 39 44 39 44 36 41 37 42 25 27 37 42 29 32 15 16 36 41 1 1 9 9 17 18 38 43 38 43 17 18 2 2 13 14 37 42 19 20 5 5 35 40 6 6 39 44 37 42 13 14 5 5 40 45 10 10 10 10 40 45 41 46 31 47 9 9 11 11 42 48 43 49 45 51 45 51 43 49 44 50 43 49 46 52 44 50 44 50 46 52 47 53 49 55 43 49 48 54 48 54 43 49 42 48 50 56 51 57 52 58 43 49 49 55 46 52 46 52 49 55 53 59 54 60 55 61 57 63 57 63 55 61 56 62 48 64 58 65 49 67 49 67 58 65 59 66 60 69 61 153 56 68 56 68 61 153 57 154 49 67 59 66 53 155 53 155 59 66 62 156 59 70 63 71 62 72 61 157 64 73 65 74 66 75 64 76 63 78 63 78 64 76 67 77 68 80 58 65 52 79 52 79 58 65 48 64 51 158 57 159 65 161 65 161 57 159 61 160 51 162 65 163 52 79 52 79 65 163 68 80 69 81 70 82 71 83 73 85 74 86 72 84 72 84 74 86 75 87 76 88 69 81 77 89 77 89 69 81 71 83 53 59 75 87 46 52 46 52 75 87 74 86 69 81 76 88 55 61 55 61 76 88 56 62 78 164 79 165 75 167 75 167 79 165 72 166 60 69 56 68 80 168 80 168 56 68 76 169 62 171 78 172 53 170 53 170 78 172 75 173 81 174 79 175 78 176 67 177 80 178 82 179 82 90 81 91 67 77 67 77 81 91 63 78 72 181 79 182 83 180 83 180 79 182 84 183 77 184 85 185 76 187 76 187 85 185 80 186 84 189 85 190 83 188 83 188 85 190 77 191 42 48 52 58 48 92 58 192 68 93 66 193 52 58 86 94 50 56 68 93 65 95 64 96 68 93 64 96 66 194 73 85 72 97 83 98 79 195 81 196 84 197 73 85 83 98 87 99 71 83 83 98 77 100 84 198 82 199 85 200 84 201 81 202 82 203 59 70 66 204 63 71 59 70 58 205 66 206 81 207 78 208 63 71 63 71 78 209 62 72 61 210 67 211 64 73 61 212 60 213 67 214 67 215 60 216 80 217 82 218 80 219 85 220 88 101 89 102 90 103 91 104 54 60 88 101 88 101 54 60 50 56 73 85 92 105 93 106 89 102 88 101 86 94 86 94 88 101 50 56 57 63 51 57 54 60 54 60 51 57 50 56 87 99 83 98 71 83 42 48 86 94 52 58 42 48 45 51 86 94 86 94 45 51 89 102 94 107 44 50 95 108 16 109 96 110 47 53 47 53 96 110 44 50 16 109 47 53 7 111 7 111 47 53 8 112 74 86 8 112 46 52 46 52 8 112 47 53 20 113 14 114 74 86 74 86 14 114 8 112 20 113 74 86 93 106 93 106 74 86 73 85 20 113 93 106 22 115 92 105 28 116 26 117 28 116 70 82 24 119 70 82 18 118 24 119 97 120 55 61 98 121 99 122 54 60 91 104 100 123 89 102 101 124 101 124 45 51 94 107 99 221 91 125 103 223 103 223 91 125 102 222 96 225 104 226 95 224 95 224 104 226 105 227 90 126 100 127 107 229 107 229 100 127 106 228 98 230 99 231 108 233 108 233 99 231 103 232 95 235 105 236 94 234 94 234 105 236 109 237 91 125 90 126 102 239 102 239 90 126 107 238 97 240 98 241 110 243 110 243 98 241 108 242 111 244 97 245 112 247 112 247 97 245 110 246 40 128 114 129 113 248 113 248 114 129 115 249 115 250 111 251 113 253 113 253 111 251 112 252 100 130 101 131 106 255 106 255 101 131 116 254 94 256 109 257 101 132 101 132 109 257 116 258 117 133 118 134 120 136 120 136 118 134 119 135 118 134 103 259 102 260 107 261 118 134 102 262 109 264 105 265 116 263 116 263 105 265 106 266 120 136 119 135 105 267 120 136 105 268 104 269 118 134 107 270 119 135 119 135 107 270 106 271 105 272 119 135 106 273 117 133 108 274 118 134 108 277 11 137 110 276 112 275 110 276 11 137 118 134 108 278 103 279 117 133 11 137 108 280 11 137 117 133 31 138 31 138 117 133 120 136 113 281 112 282 40 128 40 128 112 282 41 139 120 136 104 283 32 140 32 140 104 283 33 141 104 284 96 285 33 141 33 141 96 285 34 142 112 286 11 137 41 139 31 138 120 136 32 140 71 83 70 82 87 99 87 99 70 82 28 116 92 105 26 117 93 106 93 106 26 117 22 115 16 109 34 143 96 110 32 144 33 37 30 34 30 34 33 37 17 18 5 5 4 4 40 45 40 45 4 4 114 145 4 146 115 147 114 148 70 82 69 81 12 150 12 150 69 81 3 149 115 147 55 61 111 151 111 151 55 61 97 120 111 151 97 120 121 152 12 150 18 118 70 82 115 147 4 146 55 61 4 146 3 149 55 61 3 149 69 81 55 61 54 60 99 122 55 61 55 61 99 122 98 121 90 103 91 104 88 101 90 103 89 102 100 123 101 124 89 102 45 51 96 110 95 108 44 50 45 51 44 50 94 107 87 99 28 116 92 105 73 85 87 99 92 105 10 10 41 46 11 11</p>
+        </triangles>
+      </mesh>
+      <extra>
+        <technique profile="MAYA">
+          <double_sided>1</double_sided>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="Object02Shape-skin" name="skinCluster1">
+      <skin source="#Object02Shape">
+        <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+        <source id="Object02Shape-skin-joints">
+          <Name_array id="Object02Shape-skin-joints-array" count="1">bone0</Name_array>
+          <technique_common>
+            <accessor source="#Object02Shape-skin-joints-array" count="1" stride="1">
+              <param name="JOINT" type="Name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Object02Shape-skin-bind_poses">
+          <float_array id="Object02Shape-skin-bind_poses-array" count="16">0.939194 0 0 0 0 1 0 0 0 0 0.994595 0 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Object02Shape-skin-bind_poses-array" count="1" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Object02Shape-skin-weights">
+          <float_array id="Object02Shape-skin-weights-array" count="1">1</float_array>
+          <technique_common>
+            <accessor source="#Object02Shape-skin-weights-array" count="1" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Object02Shape-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Object02Shape-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="122">
+          <input semantic="JOINT" source="#Object02Shape-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Object02Shape-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_visual_scenes>
+    <visual_scene id="VisualSceneNode" name="C2">
+      <node id="joint1" name="joint1" sid="bone0" type="JOINT">
+        <matrix sid="transform">1.06474 0 0 0 0 1 0 0 0 0 1.00543 0 0 0 0 1</matrix>
+        <extra>
+          <technique profile="MAYA">
+            <segment_scale_compensate>1</segment_scale_compensate>
+          </technique>
+        </extra>
+      </node>
+      <node id="Object02" name="Object02" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_controller url="#Object02Shape-skin">
+          <skeleton>#joint1</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="lambert2SG" target="#lambert2">
+                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+      </node>
+      <extra>
+        <technique profile="FCOLLADA">
+          <start_time>0.033333</start_time>
+          <end_time>2.5</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#VisualSceneNode"/>
+  </scene>
+</COLLADA>

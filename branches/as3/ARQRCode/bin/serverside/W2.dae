@@ -12,10 +12,10 @@ exportNormals=0;exportTexCoords=1;
 exportVertexColors=0;exportVertexColorsAnimation=0;exportTangents=0;
 exportTexTangents=1;exportConstraints=0;exportPhysics=0;exportXRefs=1;
 dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
-      <source_data>file:///C:/Documents%20and%20Settings/BOBO/Desktop/Oishi_Project/Item/Complete/G10/G10.ma</source_data>
+      <source_data>file:///C:/Documents%20and%20Settings/BOBO/Desktop/Oishi_Project/Item/Complete/W2/W2.ma</source_data>
     </contributor>
-    <created>2009-12-15T15:30:44Z</created>
-    <modified>2009-12-15T15:30:44Z</modified>
+    <created>2009-12-15T15:29:20Z</created>
+    <modified>2009-12-15T15:29:20Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -131,7 +131,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
   </library_animations>
   <library_images>
     <image id="G10_file1" name="G10_file1">
-      <init_from>./G10.png</init_from>
+      <init_from>./W2.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -305,7 +305,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
     </controller>
   </library_controllers>
   <library_visual_scenes>
-    <visual_scene id="VisualSceneNode" name="G10">
+    <visual_scene id="VisualSceneNode" name="W2">
       <node id="joint1" name="joint1" sid="bone0" type="JOINT">
         <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <node id="joint2" name="joint2" sid="bone1" type="JOINT">
