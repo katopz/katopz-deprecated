@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.3
- * DATE: 9/15/2009
+ * VERSION: 1.31
+ * DATE: 10/22/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -65,7 +65,7 @@ package com.greensock.plugins {
  * @author Jack Doyle, jack@greensock.com
  */
 	public class TweenPlugin {
-		public static const VERSION:Number = 1.3;
+		public static const VERSION:Number = 1.31;
 		/** @private If the API/Framework for plugins changes in the future, this number helps determine compatibility **/
 		public static const API:Number = 1.0; 
 		
@@ -270,7 +270,7 @@ package com.greensock.plugins {
 			var i:int = plugins.length, instance:Object;
 			while (i--) {
 				if (plugins[i].hasOwnProperty("API")) {
-					instance = new plugins[i]();
+					instance = new (plugins[i] as Class)();
 					TweenLite.plugins[instance.propName] = plugins[i];
 				}
 			}

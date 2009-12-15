@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.1
- * DATE: 10/18/2009
+ * VERSION: 11.12
+ * DATE: 11/25/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com 
  **/
@@ -282,7 +282,7 @@ package com.greensock {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.1;
+		public static const version:Number = 11.12;
 		
 		TweenPlugin.activate([
 			
@@ -290,25 +290,25 @@ package com.greensock {
 			//ACTIVATE (OR DEACTIVATE) PLUGINS HERE...
 			
 			AutoAlphaPlugin,			//tweens alpha and then toggles "visible" to false if/when alpha is zero
-			//EndArrayPlugin,				//tweens numbers in an Array
+			EndArrayPlugin,				//tweens numbers in an Array
 			FramePlugin,				//tweens MovieClip frames
-			//RemoveTintPlugin,			//allows you to remove a tint
-			//TintPlugin,					//tweens tints
+			RemoveTintPlugin,			//allows you to remove a tint
+			TintPlugin,					//tweens tints
 			VisiblePlugin,				//tweens a target's "visible" property
 			VolumePlugin,				//tweens the volume of a MovieClip or SoundChannel or anything with a "soundTransform" property
 			
-			//BevelFilterPlugin,			//tweens BevelFilters
-			//BezierPlugin,				//enables bezier tweening
-			//BezierThroughPlugin,		//enables bezierThrough tweening
-			//BlurFilterPlugin,			//tweens BlurFilters
-			//ColorMatrixFilterPlugin,	//tweens ColorMatrixFilters (including hue, saturation, colorize, contrast, brightness, and threshold)
-			//ColorTransformPlugin,		//tweens advanced color properties like exposure, brightness, tintAmount, redOffset, redMultiplier, etc.
-			//DropShadowFilterPlugin,		//tweens DropShadowFilters
-			//FrameLabelPlugin,			//tweens a MovieClip to particular label
+			BevelFilterPlugin,			//tweens BevelFilters
+			BezierPlugin,				//enables bezier tweening
+			BezierThroughPlugin,		//enables bezierThrough tweening
+			BlurFilterPlugin,			//tweens BlurFilters
+			ColorMatrixFilterPlugin,	//tweens ColorMatrixFilters (including hue, saturation, colorize, contrast, brightness, and threshold)
+			ColorTransformPlugin,		//tweens advanced color properties like exposure, brightness, tintAmount, redOffset, redMultiplier, etc.
+			DropShadowFilterPlugin,		//tweens DropShadowFilters
+			FrameLabelPlugin,			//tweens a MovieClip to particular label
 			GlowFilterPlugin,			//tweens GlowFilters
-			//HexColorsPlugin,			//tweens hex colors
-			//RoundPropsPlugin,			//enables the roundProps special property for rounding values (ONLY for TweenMax!)
-			//ShortRotationPlugin,		//tweens rotation values in the shortest direction
+			HexColorsPlugin,			//tweens hex colors
+			RoundPropsPlugin,			//enables the roundProps special property for rounding values (ONLY for TweenMax!)
+			ShortRotationPlugin,		//tweens rotation values in the shortest direction
 			
 			//QuaternionsPlugin,			//tweens 3D Quaternions
 			//ScalePlugin,				//Tweens both the _xscale and _yscale properties
@@ -411,7 +411,7 @@ package com.greensock {
 			}
 			//accommodate rounding if necessary...
 			if (this.vars.roundProps != null && "roundProps" in TweenLite.plugins) {
-				var j:int, prop:String, multiProps:String, rp:Array = this.vars.roundProps, plugin:Object, pt:PropTween;
+				var j:int, prop:String, multiProps:String, rp:Array = this.vars.roundProps, plugin:Object, ptPlugin:PropTween, pt:PropTween;
 				var i:int = rp.length;
 				while (i--) {
 					prop = rp[i];
@@ -425,11 +425,12 @@ package com.greensock {
 									plugin = new TweenLite.plugins.roundProps();
 									plugin.add(pt.target, prop, pt.start, pt.change);
 									_hasPlugins = true;
-									this.cachedPT1 = insertPropTween(plugin, "changeFactor", 0, 1, "_MULTIPLE_", true, this.cachedPT1);
+									this.cachedPT1 = ptPlugin = insertPropTween(plugin, "changeFactor", 0, 1, "_MULTIPLE_", true, this.cachedPT1);
 								} else {
 									plugin.add(pt.target, prop, pt.start, pt.change); //using a single plugin for rounding speeds processing
 								}
 								this.removePropTween(pt);
+								this.propTweenLookup[prop] = ptPlugin;
 							}
 						} else if (pt.isPlugin && pt.name == "_MULTIPLE_" && !pt.target.round) {
 							multiProps = " " + pt.target.overwriteProps.join(" ") + " ";
@@ -526,7 +527,7 @@ package com.greensock {
 				for (p in vars) {
 					if (p in _reservedProps) { 
 						//ignore
-					} else if (p in plugins && (plugin = new plugins[p]()).onInitTween(this.target, vars[p], this)) {
+					} else if (p in plugins && (plugin = new (plugins[p] as Class)()).onInitTween(this.target, vars[p], this)) {
 						pluginKillVars = {};
 						i = plugin.overwriteProps.length;
 						while (i--) {
@@ -585,17 +586,16 @@ package com.greensock {
 				var inv:Number = 1 / (1 - this.ratio);
 				var pt:PropTween = this.cachedPT1, endValue:Number;
 				while (pt) {
-					endValue = pt.start + pt.change; 
-					if (pt.isPlugin) { //can't read the "progress" value of a plugin, but we know what it is based on the ratio (above)
-						pt.change = (endValue - this.ratio) * inv;
-					} else {
+					if (!pt.isPlugin) { 
+						endValue = pt.start + pt.change; 
 						pt.change = (endValue - pt.target[pt.property]) * inv;
+						pt.start = endValue - pt.change;
+						pt = pt.nextNode;
 					}
-					pt.start = endValue - pt.change;
-					pt = pt.nextNode;
 				}
 			}
 		}
+		
 		
 		/**
 		 * Allows particular properties of the tween to be killed, much like the killVars() method
@@ -655,28 +655,37 @@ package com.greensock {
 				}
 			} else {
 				this.cachedTotalTime = this.cachedTime = time;
-				if (_repeat == 0) {
-					setRatio = true;
-				}
+				setRatio = true;
 			}
 			
 			if (_repeat != 0) {
+				
 				var cycleDuration:Number = this.cachedDuration + _repeatDelay;
-				if (time > 0) {
-					this.cachedTime = ((this.yoyo && (this.cachedTotalTime / cycleDuration) % 2 >= 1) || (!this.yoyo && !((this.cachedTotalTime / cycleDuration) % 1))) ? this.cachedDuration - (this.cachedTotalTime % cycleDuration) : this.cachedTotalTime % cycleDuration;
-					if (this.cachedTime >= this.cachedDuration) {
+				if (isComplete) {
+					if (this.yoyo && _repeat % 2) {
+						this.cachedTime = this.ratio = 0;
+					}
+				} else if (time > 0) {
+					if (_cyclesComplete != (_cyclesComplete = int(this.cachedTotalTime / cycleDuration))) {
+						repeated = true;
+					}
+					
+					this.cachedTime = ((this.cachedTotalTime / cycleDuration) - _cyclesComplete) * cycleDuration; //originally this.cachedTotalTime % cycleDuration but floating point errors caused problems, so I normalized it. (4 % 0.8 should be 0 but Flash reports it as 0.79999999!)
+					
+					if (this.yoyo && _cyclesComplete % 2) {
+						this.cachedTime = this.cachedDuration - this.cachedTime;
+					} else if (this.cachedTime >= this.cachedDuration) {
 						this.cachedTime = this.cachedDuration;
 						this.ratio = 1;
-					} else if (this.cachedTime <= 0) {
-						this.cachedTime = this.ratio = 0;
-					} else {
-						setRatio = true;
+						setRatio = false;
 					}
-				}
-				if (_cyclesComplete != int(this.cachedTotalTime / cycleDuration) && !isComplete) {
-					repeated = true;
-					_cyclesComplete = int(this.cachedTotalTime / cycleDuration);
-				}
+					
+					if (this.cachedTime <= 0) {
+						this.cachedTime = this.ratio = 0;
+						setRatio = false;
+					}
+				}	
+				
 			}
 			
 			if (prevTime == this.cachedTime && !force) {
@@ -766,7 +775,7 @@ package com.greensock {
 		override public function complete(skipRender:Boolean=false, suppressEvents:Boolean=false):void {
 			super.complete(skipRender, suppressEvents);
 			if (!suppressEvents && _dispatcher) {
-				if (this.cachedTime == this.cachedDuration && !this.cachedReversed) {
+				if (this.cachedTotalTime == this.cachedTotalDuration && !this.cachedReversed) {
 					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.COMPLETE));
 				} else if (this.cachedReversed && this.cachedTotalTime == 0) {
 					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.REVERSE_COMPLETE));
@@ -1297,12 +1306,15 @@ package com.greensock {
 		
 		/** Multiplier describing the speed of the root timelines where 1 is normal speed, 0.5 is half-speed, 2 is double speed, etc. The lowest globalTimeScale possible is 0.0001. **/
 		public static function get globalTimeScale():Number {
-			return TweenLite.rootTimeline.cachedTimeScale;
+			return (TweenLite.rootTimeline == null) ? 1 : TweenLite.rootTimeline.cachedTimeScale;
 		}
 		
 		public static function set globalTimeScale(n:Number):void {
 			if (n == 0) { //can't allow zero because it'll throw the math off
 				n = 0.0001;
+			}
+			if (TweenLite.rootTimeline == null) {
+				TweenLite.to({}, 0, {}); //forces initialization in case globalTimeScale is set before any tweens are created.
 			}
 			var tl:SimpleTimeline = TweenLite.rootTimeline;
 			var curTime:Number = (getTimer() * 0.001)

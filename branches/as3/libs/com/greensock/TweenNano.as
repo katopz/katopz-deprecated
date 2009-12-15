@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 10/18/2009
+ * VERSION: 1.01
+ * DATE: 10/22/2009
  * AS3 (AS2 is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenNano.com
  **/
@@ -241,9 +241,7 @@ package com.greensock {
 		 */
 		public function init():void {
 			for (var p:String in this.vars) {
-				if (p in _reservedProps) { 
-					//ignore
-				} else {
+				if (!(p in _reservedProps)) {
 					_propTweens[_propTweens.length] = [p, this.target[p], (typeof(this.vars[p]) == "number") ? this.vars[p] - this.target[p] : Number(this.vars[p])]; //[property, start, change]
 				}
 			}

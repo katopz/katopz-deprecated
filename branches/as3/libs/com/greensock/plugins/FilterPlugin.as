@@ -1,6 +1,6 @@
 /**
- * VERSION: 2.02
- * DATE: 10/17/2009
+ * VERSION: 2.03
+ * DATE: 10/22/2009
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -20,7 +20,7 @@ package com.greensock.plugins {
  */
 	public class FilterPlugin extends TweenPlugin {
 		/** @private **/
-		public static const VERSION:Number = 2.02;
+		public static const VERSION:Number = 2.03;
 		/** @private **/
 		public static const API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		
@@ -70,9 +70,7 @@ package com.greensock.plugins {
 			i = propNames.length;
 			while (i--) {
 				p = propNames[i];
-				if (!(p in props) || _filter[p] == props[p]) {
-					//ignore
-				} else {
+				if (p in props && _filter[p] != props[p]) {
 					if (p == "color" || p == "highlightColor" || p == "shadowColor") {
 						colorTween = new HexColorsPlugin();
 						colorTween.initColor(_filter, p, _filter[p], props[p]);
