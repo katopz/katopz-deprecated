@@ -1,5 +1,6 @@
 package
 {
+	import away3dlite.core.clip.Clipping;
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.adobe.crypto.MD5;
@@ -19,7 +20,6 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.GlowFilter;
-	import flash.media.Camera;
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -54,12 +54,12 @@ package
 	 * 058454, 26B0EA, 2AFF7A, 2BD35D
 	 * 
 	 */
-	[SWF(backgroundColor="0x333333", frameRate="30", width="640", height="480")]
+	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
 	public class main extends BasicTemplate
 	{
 		// screen
-		private const SCREEN_WIDTH:int = 640;
-		private const SCREEN_HEIGHT:int = 480;
+		private const SCREEN_WIDTH:int = 320;
+		private const SCREEN_HEIGHT:int = 240;
 
 		// capture size
 		private const CANVAS_WIDTH:int = 320;
@@ -68,7 +68,7 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = !StringUtil.isNull(Camera.names);
+		private const CAMERA_BY_DEFAULT:Boolean = true;//Camera.names.length>0;
 		
 		// config
 		private var USER_URL:String = "serverside/userData.txt";
@@ -107,13 +107,17 @@ package
 		private var _isQRDecoded:Boolean = false;
 		public var isOnline:Boolean = true;
 		
+		//logo
+		//[Embed(source='OISHI_LOGO.png')]
+		//private var OISHILogo:Class;
+		
 		public function main()
 		{
 			// base
 			base = new Sprite();
 			addChild(base);
-			base.x = 160;
-			base.y = 120;
+			//base.x = 160/2;
+			//base.y = 120/2;
 
 			// no cam test
 			fakeContainer = new Sprite();
@@ -131,6 +135,12 @@ package
 			// cam test
 			cameraContainer = new Sprite();
 			base.addChild(cameraContainer);
+			
+			//logo
+			//var logo:Bitmap = new OISHILogo() as Bitmap 
+			//addChild(logo);
+			//logo.x = 640-logo.width;
+			//logo.y = 480-logo.height;
 		}
 
 		public function show():void
@@ -151,6 +161,8 @@ package
 			view.x = SCREEN_WIDTH/2;
 			view.y = SCREEN_HEIGHT/2;
 			view.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+			
+			view.clipping = new Clipping();
 			
 			view.buttonMode = false;
 			view.mouseEnabled = false;
@@ -182,9 +194,15 @@ package
 			_itemNameTextField.y = SCREEN_HEIGHT/2 + 100;
 			_itemNameTextField.filters = [new GlowFilter(0x000000, .6, 4,4,2 )];
 			
-			addChild(_itemNameTextField);
+			//deprecated//addChild(_itemNameTextField);
 			
 			DebugUtil.init(this, 0, SCREEN_HEIGHT/2+130);
+			
+			DebugUtil.enable = false;
+			debug = false;
+			
+			removeChild(stats);
+			removeChild(debugText);
 		}
 	
 		private function onGetUserData(event:Event):void
@@ -201,10 +219,13 @@ package
 			DataUtil.addData(USER_DATA, _userData);
 			
 			// debug
-			ObjectUtil.print(DataUtil.getDataByName(USER_DATA));
-			
-			DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
-			DebugUtil.addText(USER_URL);
+			if(debug)
+			{
+				ObjectUtil.print(DataUtil.getDataByName(USER_DATA));
+				
+				DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
+				DebugUtil.addText(USER_URL);
+			}
 			
 			initARQR();
 			
@@ -227,21 +248,25 @@ package
 			camera.projection.focalLength = _FLARManager.focalLength;
 			
 			// debug
+			/*
 			var rbmp:Bitmap = new Bitmap(_QRReader.homography);
 			rbmp.scaleX = rbmp.scaleY = .5;
 			rbmp.y = 110;
 			addChild(rbmp);
+			*/
 
 			// add test image in the background
 			setBitmap(Bitmap(new ImageData));
 
 			// menu
-			SystemUtil.addContext(this, "ARQRCode version 1.1");
-			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
+			SystemUtil.addContext(this, "ARQRCode version 1.2");
 			SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
-			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
+			
+			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
 			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
 			SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
+			
+			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
 
 			// debug
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
