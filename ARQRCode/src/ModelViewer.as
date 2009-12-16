@@ -92,7 +92,6 @@ package
 			trace(" * Parse");
 			
 			_collada = new Collada();
-			_collada.scaling = 50;
 			
 			reset();
 			visible = false;
@@ -108,7 +107,7 @@ package
 			trace(" * load : " + uri);
 			
 			_collada = new Collada();
-			_collada.scaling = 50;
+			_collada.scaling = 40;
 			
 			reset();
 			visible = false;
