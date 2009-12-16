@@ -71,8 +71,8 @@ package
 		private const CAMERA_BY_DEFAULT:Boolean = true;//Camera.names.length>0;
 		
 		// config
-		private var USER_URL:String = "serverside/userData.txt";
-		private var MODEL_URL:String = "serverside/modelData.txt";
+		public var USER_URL:String = "serverside/userData.txt";
+		public var MODEL_URL:String = "serverside/modelData.txt";
 		
 		//private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
 		//private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
@@ -123,7 +123,7 @@ package
 			fakeContainer = new Sprite();
 			base.addChild(fakeContainer);
 			
-			isOnline = isOnline && SystemUtil.isHTTP(this);
+			//isOnline = isOnline && SystemUtil.isHTTP(this);
 
 			// fake code
 			fake = new Sprite();
@@ -338,6 +338,7 @@ package
 			_vars.session = DES.toHex(_cipher);
 			_vars.hash = MD5.hash(_vars.toString());
 			
+			/*
 			DebugUtil.trace(" * Hash : " + _vars.toString());
 			DebugUtil.trace(" ! Encypt : " + DES.toHex(_cipher));
 			DebugUtil.trace(" ! Decypt : " + DES.decypt(_key, _cipher));
@@ -347,6 +348,7 @@ package
 			DebugUtil.addText(" ! Encypt : " + DES.toHex(_cipher));
 			DebugUtil.addText(" ! Decypt : " + DES.decypt(_key, _cipher));
 			DebugUtil.addText(" ! Hash : " + _vars.hash);
+			*/
 			
 			_itemNameTextField.text = "loading...";
 			
@@ -354,6 +356,9 @@ package
 			
 			DebugUtil.trace(" ! isOnline : " + isOnline);
 			DebugUtil.addText(" ! isOnline : " + isOnline);
+			
+			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
+			/*
 			if(isOnline)
 			{
 				// for real use
@@ -418,20 +423,8 @@ package
 				
 				_modelViewer.load(_src);
 				_itemNameTextField.text = _name;
-				
-				
-				/* 15/12/09
-				ข้าวผัดกุ้ง - ข้าว/ไข่/หอมใหญ่/กุ้ง
-				ข้าวไข่เจียวหมูสับ - ข้าว/ไข่/หมูสับ/น้ำปลา
-				ต้มยำกุ้ง - กุ้ง/น้ำซุปแดง/พริก/มะนาว
-				
-				หมูสับ = G10
-				น้ำปลา = T5
-				น้ำซุปแดง = T1
-				พริก = T2
-				มะนาว = G9
-				*/
 			}
+			*/
 			
 			// dispatch
 			Oishi.setCode(QRManager.result);
