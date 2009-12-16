@@ -57,8 +57,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	AC_FL_RunContent(
 		"src", "playerProductInstall",
 		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
-		"width", "640",
-		"height", "480",
+		"width", "320",
+		"height", "240",
 		"align", "middle",
 		"id", "main",
 		"quality", "high",
@@ -74,8 +74,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "main",
-			"width", "640",
-			"height", "480",
+			"width", "320",
+			"height", "240",
 			"align", "middle",
 			"id", "main",
 			"quality", "high",
@@ -96,14 +96,14 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 </script>
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="main" width="640" height="480"
+			id="main" width="320" height="240"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 			<param name="movie" value="main.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#333333" />
 			<param name="allowScriptAccess" value="sameDomain" />
 			<embed src="main.swf" quality="high" bgcolor="#333333"
-				width="640" height="480" name="main" align="middle"
+				width="320" height="240" name="main" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
