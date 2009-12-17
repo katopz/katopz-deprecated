@@ -9,8 +9,6 @@ package
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.BitmapMaterial;
 	
-	import com.sleepydesign.utils.DebugUtil;
-	
 	import flars.FLARResult;
 	
 	import flash.display.*;
@@ -128,6 +126,16 @@ package
 			
 			_model.scaleX = -1;
 			_model.scaleZ = -1;
+			
+			/*
+			_model.rotationX = Oishi.ROTATION_X;
+			_model.rotationY = Oishi.ROTATION_Y;
+			_model.rotationZ = Oishi.ROTATION_Z;
+			
+			_model.scaleX = Oishi.SCALE_X;
+			_model.scaleY = Oishi.SCALE_Y;
+			_model.scaleZ = Oishi.SCALE_Z;
+			*/
 			
 			try{
 			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;

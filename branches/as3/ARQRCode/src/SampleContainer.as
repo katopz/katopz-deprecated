@@ -9,7 +9,7 @@ package
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
-	[SWF(backgroundColor="0x333333", frameRate="30", width="640", height="480")]
+	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
 	public class SampleContainer extends Sprite
 	{
 		private var _label:TextField;
@@ -28,8 +28,8 @@ package
 			_label.mouseWheelEnabled = true;
 			_label.mouseEnabled = true;
 			
-			_label.x = 640-200;
-			_label.y = 480/2-200;
+			//_label.x = 34-200;
+			//_label.y = 480/2-200;
 			
 			_label.text = " i'm parent container!\n click me to open/close reader.";
 			addChild(_label);
@@ -38,6 +38,15 @@ package
 			
 			// listen for code
 			Oishi.addEventListener(DataEvent.DATA, onGetCode);
+			
+			// default setting
+			/*
+			Oishi.ROTATION_X = -90;
+			Oishi.ROTATION_Z = -90;
+			
+			Oishi.SCALE_X = -1;
+			Oishi.SCALE_Z = -1;
+			*/
 		}
 		
 		private function onGetCode(event:DataEvent):void

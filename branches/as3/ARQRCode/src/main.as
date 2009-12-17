@@ -8,7 +8,6 @@ package
 	import com.sleepydesign.crypto.DES;
 	import com.sleepydesign.crypto.PBE;
 	import com.sleepydesign.utils.DataUtil;
-	import com.sleepydesign.utils.DebugUtil;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.ObjectUtil;
@@ -19,11 +18,8 @@ package
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.filters.GlowFilter;
 	import flash.net.URLVariables;
 	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
 	import flash.utils.*;
 	
 	import qr.QRManager;
@@ -68,7 +64,7 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = true;//Camera.names.length>0;
+		private const CAMERA_BY_DEFAULT:Boolean = !true;//Camera.names.length>0;
 		
 		// config
 		public var USER_URL:String = "serverside/userData.txt";
@@ -187,24 +183,26 @@ package
 			LoaderUtil.loadVars(USER_URL, onGetUserData);
 			
 			// add some text
+			/*
 			_itemNameTextField = new TextField();
 			_itemNameTextField.defaultTextFormat = new TextFormat("Tahoma", 20, 0xFFFFFF);
 			_itemNameTextField.autoSize = TextFieldAutoSize.CENTER;
 			_itemNameTextField.x = SCREEN_WIDTH/2 - _itemNameTextField.width/2;
 			_itemNameTextField.y = SCREEN_HEIGHT/2 + 100;
 			_itemNameTextField.filters = [new GlowFilter(0x000000, .6, 4,4,2 )];
+			*/
 			
 			//deprecated//addChild(_itemNameTextField);
 			
-			DebugUtil.init(this, 0, SCREEN_HEIGHT/2+130);
+			//DebugUtil.init(this, 0, SCREEN_HEIGHT/2+130);
 			
-			DebugUtil.enable = false;
+			//DebugUtil.enable = false;
 			debug = false;
 			
 			removeChild(stats);
 			removeChild(debugText);
 		}
-	
+		
 		private function onGetUserData(event:Event):void
 		{
 			// wait until complete
@@ -223,8 +221,8 @@ package
 			{
 				ObjectUtil.print(DataUtil.getDataByName(USER_DATA));
 				
-				DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
-				DebugUtil.addText(USER_URL);
+				//DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
+				//DebugUtil.addText(USER_URL);
 			}
 			
 			initARQR();
@@ -275,7 +273,7 @@ package
 		// for dev time
 		private function onTextureReady(event:Event):void
 		{
-			DebugUtil.trace(" ^ onTextureReady : " + event);
+			//DebugUtil.trace(" ^ onTextureReady : " + event);
 			if(event.type == Event.COMPLETE)
 				_modelViewer.setTexture(event.target.content);
 		}
@@ -284,7 +282,7 @@ package
 		{
 			if(event.type == Event.COMPLETE)
 			{
-				DebugUtil.trace(" ^ onOpenModel");
+				//DebugUtil.trace(" ^ onOpenModel");
 				_modelViewer.parse(new XML(event["data"]));
 			}
 		}
@@ -293,29 +291,29 @@ package
 		{
 			if(event.type == Event.COMPLETE)
 			{
-				DebugUtil.trace(" ^ onModelDecodeComplete");
+				//DebugUtil.trace(" ^ onModelDecodeComplete");
 				var _vars:URLVariables = new URLVariables(String(event.target["data"])); 
 				
 				if(_vars.src)
 				{
-					DebugUtil.clear();
-					DebugUtil.addText(" ! Model : " + _vars.name+", "+_vars.src);
+					//DebugUtil.clear();
+					//DebugUtil.addText(" ! Model : " + _vars.name+", "+_vars.src);
 					
 					_modelViewer.load(_vars.src);
-					_itemNameTextField.text = _vars.name;
+					//_itemNameTextField.text = _vars.name;
 				}else{
-					DebugUtil.trace(" ! Error : " + String(event.target["data"]));
-					DebugUtil.addText(" ! Error : " + String(event.target["data"]));
-					_itemNameTextField.text = "Error";
+					//DebugUtil.trace(" ! Error : " + String(event.target["data"]));
+					//DebugUtil.addText(" ! Error : " + String(event.target["data"]));
+					//_itemNameTextField.text = "Error";
 				}
 			}
 			
-			DebugUtil.trace(event);
+			//DebugUtil.trace(event);
 		}
 		
 		private function onQRCodeComplete(event:Event):void
 		{
-			DebugUtil.trace(" ^ onQRCodeComplete");
+			//DebugUtil.trace(" ^ onQRCodeComplete");
 			_isQRDecoded = true;
 			
 			var _data:* = DataUtil.getDataByName(USER_DATA);
@@ -327,8 +325,8 @@ package
 			//DebugUtil.trace(" ! Decypt : " + PBE.decypt(PBE.encypt(key)));
 			
 			var _key:String = PBE.decypt(key);
-			DebugUtil.trace(" ! Decypt Key : " + _key);
-			DebugUtil.addText(" ! Decypt Key : " + _key);
+			//DebugUtil.trace(" ! Decypt Key : " + _key);
+			//DebugUtil.addText(" ! Decypt Key : " + _key);
 			
 			//reset
 			_vars.session = "";
@@ -350,12 +348,12 @@ package
 			DebugUtil.addText(" ! Hash : " + _vars.hash);
 			*/
 			
-			_itemNameTextField.text = "loading...";
+			//_itemNameTextField.text = "loading...";
 			
 			_modelViewer.visible = false;
 			
-			DebugUtil.trace(" ! isOnline : " + isOnline);
-			DebugUtil.addText(" ! isOnline : " + isOnline);
+			//DebugUtil.trace(" ! isOnline : " + isOnline);
+			//DebugUtil.addText(" ! isOnline : " + isOnline);
 			
 			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
 			/*
@@ -491,7 +489,7 @@ package
 
 		private function onImageReady(event:Event):void
 		{
-			DebugUtil.trace(" ^ onImageReady : " + event);
+			//DebugUtil.trace(" ^ onImageReady : " + event);
 
 			if(event.type == Event.COMPLETE)
 			{
@@ -511,14 +509,14 @@ package
 			_QRReader.reset();
 			_modelViewer.reset();
 				
-			_itemNameTextField.text = "";
+			//_itemNameTextField.text = "";
 				
-			DebugUtil.clear();
+			//DebugUtil.clear();
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-			DebugUtil.trace(" ! setBitmap");
+			//DebugUtil.trace(" ! setBitmap");
 			
 			reset();
 			
@@ -580,6 +578,7 @@ package
 			}
 			
 			_modelViewer.setRefererPoint(_FLARManager.getStuff());
+			
 			}catch(e:*){}
 		}
 	}
