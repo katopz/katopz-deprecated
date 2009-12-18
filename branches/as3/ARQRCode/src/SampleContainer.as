@@ -3,6 +3,7 @@ package
 	import com.sleepydesign.utils.LoaderUtil;
 	
 	import flash.display.Sprite;
+	import flash.display.StageScaleMode;
 	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -17,6 +18,8 @@ package
 		
 		public function SampleContainer()
 		{
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
 			_label = new TextField();
 			_label.autoSize = "left"
 			_label.cacheAsBitmap = true;
@@ -47,6 +50,9 @@ package
 			Oishi.SCALE_X = -1;
 			Oishi.SCALE_Z = -1;
 			*/
+			
+			Oishi.POSITION_Y = 300;
+			Oishi.POSITION_Z = -100;
 		}
 		
 		private function onGetCode(event:DataEvent):void
