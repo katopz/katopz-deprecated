@@ -53,7 +53,7 @@
 		protected var configURI:String;
 		protected var dataURI:String;
 		
-		protected var loader:SDLoader;
+		//protected var loader:SDLoader;
 		
 		protected var links:SDGroup;
 		
@@ -73,8 +73,9 @@
 		 */		
 		public function Content(id:String=null, source:*=null, xml:XML=null)
 		{
+			trace(" ! source\t: "+ source);
 			// loader for load external assete only!
-			loader = SDApplication.getLoader();
+			//loader = SDApplication.getLoader();
 			super( id );
 			
 			// autorun
@@ -119,9 +120,9 @@
 		public function getData(dataURI:String):void
 		{
 			this.dataURI = dataURI;
-			loader.load(dataURI);
-			loader.removeEventListener(SDEvent.COMPLETE, onGetData);
-			loader.addEventListener(SDEvent.COMPLETE, onGetData, false, 0, true);
+			//loader.load(dataURI);
+			//loader.removeEventListener(SDEvent.COMPLETE, onGetData);
+			//loader.addEventListener(SDEvent.COMPLETE, onGetData, false, 0, true);
 		}
 		
 		public function getConfig(configURI:String):void
@@ -168,8 +169,7 @@
 		
 		protected function onGetData(event:SDEvent):void
 		{
-			
-if(event.type!="complete")return;
+			if(event.type!="complete")return;
 			
 			trace(" ^ onGetData\t:"+event);
 			
@@ -180,8 +180,8 @@ if(event.type!="complete")return;
 				//event.target.removeEventListener(SDEvent.COMPLETE, onGetData);
 				//loader.removeEventListener(SDEvent.COMPLETE, onGetData);
 				
-//todo//var xml:XML = new XML(loader.getContent(dataURI));
-var xml:XML = event.target["data"];
+				//todo//var xml:XML = new XML(loader.getContent(dataURI));
+				var xml:XML = event.target["data"];
 				//trace(xml.toXMLString())
 				
 				//trace(xml.@id +"=="+ id)
@@ -334,7 +334,8 @@ var xml:XML = event.target["data"];
 		
 		protected function onGetContent(event:Event):void
 		{
-			if(!event || event.type!="complete")return;
+			//trace("!!!onGetContent:"+event);
+			if(event.type!="complete")return;
 			
 			_content = event.target["content"];
 			
@@ -688,7 +689,7 @@ var xml:XML = event.target["data"];
 		
 		override public function destroy():void
 		{
-			loader.removeEventListener(SDEvent.COMPLETE, onGetData);
+			//loader.removeEventListener(SDEvent.COMPLETE, onGetData);
 			if(content)
 				content.removeEventListener(SDEvent.READY, onContentReady);
 			super.destroy();

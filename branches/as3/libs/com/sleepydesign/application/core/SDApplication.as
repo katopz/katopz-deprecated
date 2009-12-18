@@ -30,14 +30,14 @@ package com.sleepydesign.application.core
 		public static var content:SDSprite;
 		
 		public var configURI:String = "config.xml";
-		
+		/*
 		public static var loader:SDLoader;
         public static function getLoader() : SDLoader 
         {
             if ( loader == null ) loader = new SDLoader();
             return loader as SDLoader;
         }
-        
+        */
 		public static var instance : SDApplication;
         public static function getInstance() : SDApplication 
         {
@@ -91,7 +91,7 @@ package com.sleepydesign.application.core
 				addChild(system);
 				
 				//loader layer
-				loader = loaderObject?new SDLoader(loaderObject):new SDLoader();
+				//loader = loaderObject?new SDLoader(loaderObject):new SDLoader();
 				
 				//system.parse({instance:this});
 			}

@@ -145,6 +145,8 @@ package com.sleepydesign.utils
 			return load(uri, eventHandler, URLLoaderDataFormat.BINARY) as URLLoader;
 		}
 		
+		public static var loaders:Array = [];
+		
 		/**
 		 * Just load
 		 * @param uri
@@ -193,6 +195,9 @@ package com.sleepydesign.utils
 				_loader = urlLoader;
 			}
 			
+			// prevent gc
+			//loaders.push(_loader);
+			
 			// callback
 			if(eventHandler is Function)
 			{
@@ -212,6 +217,9 @@ package com.sleepydesign.utils
 				    _loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
 		            _loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
 		            _loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+		            
+		            // gc
+		            removeItem(loaders, _loader);
 				}, false, 0, true);
 			}
 			
@@ -269,6 +277,22 @@ package com.sleepydesign.utils
 			var results:Array = value.split(".");
 			//type
 			return results[results.length - 1];
+		}
+		
+		private static function removeItem(tarArray:Array, item:*):uint 
+		{
+			var i:int  = tarArray.indexOf(item);
+			var f:uint = 0;
+			
+			while (i != -1) {
+				tarArray.splice(i, 1);
+				
+				i = tarArray.indexOf(item, i);
+				
+				f++;
+			}
+			
+			return f;
 		}
 	}
 }
