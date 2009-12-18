@@ -51,7 +51,7 @@ package
 			Oishi.SCALE_Z = -1;
 			*/
 			
-			Oishi.POSITION_Y = 300;
+			Oishi.POSITION_Y = 320;
 			Oishi.POSITION_Z = -100;
 		}
 		
