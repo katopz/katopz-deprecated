@@ -146,7 +146,7 @@ package com.sleepydesign.site.view.components
 		// 
 		override public function update(data:Object = null):void
 		{
-			if (!data)return;
+			if (!data || !data.xml)return;
 			
 			var currentSection:String;
 			var xml:XML;

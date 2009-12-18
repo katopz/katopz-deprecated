@@ -15,7 +15,7 @@ package com.sleepydesign.core
 
 	public class SDForm extends SDContainer
 	{
-		public var loader : SDLoader;
+		//public var loader : SDLoader;
 		
 		public var inputs : Dictionary;
 		public var action : String; 
@@ -27,7 +27,7 @@ package com.sleepydesign.core
 		{
 			super(id);
 			
-			loader = SDApplication.getLoader();
+			//loader = SDApplication.getLoader();
 			
 			trace("\n / [Form."+id+"] ------------------------------- ");
 			
@@ -277,12 +277,15 @@ package com.sleepydesign.core
 		public function submit():void
 		{
 			trace(" ! Submit");
+			
+			/*
 			dispatchEvent(new SDEvent(SDEvent.LOAD, loader));
 			
 			loader.addEventListener(SDEvent.COMPLETE, onGetFormData);
 			loader.addEventListener(SDEvent.ERROR, onGetFormData);
 			
 			loader.load(action, _data);
+			*/
 		}
 		
 		// ____________________________________________ Data ____________________________________________
