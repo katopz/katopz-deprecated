@@ -26,6 +26,7 @@ package
 		private var _collada:Collada;
 		private var _model:Object3D;
 		private var _base:ObjectContainer3D;
+		private var _root:ObjectContainer3D;
 		
 		public var _anchorA:Object3D;
 		public var _anchorB:Object3D;
@@ -55,6 +56,21 @@ package
 			
 			_base = new ObjectContainer3D();
 			scene.addChild(_base);
+			
+			_root = new ObjectContainer3D();
+			_base.addChild(_root);
+			
+			_root.x = Oishi.POSITION_X;
+			_root.y = Oishi.POSITION_Y;
+			_root.x = Oishi.POSITION_Z;
+			
+			_root.rotationX = Oishi.ROTATION_X;
+			_root.rotationY = Oishi.ROTATION_Y;
+			_root.rotationZ = Oishi.ROTATION_Z;
+			
+			_root.scaleX = Oishi.SCALE_X;
+			_root.scaleY = Oishi.SCALE_Y;
+			_root.scaleZ = Oishi.SCALE_Z;
 		}
 		
 		public function get model():Object3D
@@ -97,7 +113,7 @@ package
 			_loader = new Loader3D();
 			_loader.loadXML(xml, _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			_base.addChild(_loader);
+			_root.addChild(_loader);
 		}
 		
 		public function load(uri:String):void
@@ -113,7 +129,7 @@ package
 			_loader = new Loader3D();
 			_loader.loadGeometry(uri, _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			_base.addChild(_loader);
+			_root.addChild(_loader);
 		}
 		
 		private function onSuccess(event:Loader3DEvent):void
@@ -121,19 +137,13 @@ package
 			visible = true;
 			
 			_model = _loader.handle;
+			/*
 			_model.rotationX = -90;
 			_model.rotationZ = -90;
 			
 			_model.scaleX = -1;
 			_model.scaleZ = -1;
-			
-			_model.rotationX = Oishi.ROTATION_X;
-			_model.rotationY = Oishi.ROTATION_Y;
-			_model.rotationZ = Oishi.ROTATION_Z;
-			
-			_model.scaleX = Oishi.SCALE_X;
-			_model.scaleY = Oishi.SCALE_Y;
-			_model.scaleZ = Oishi.SCALE_Z;
+			*/
 			
 			try{
 			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;

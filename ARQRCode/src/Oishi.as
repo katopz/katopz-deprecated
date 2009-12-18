@@ -6,6 +6,10 @@ package
 
 	public class Oishi
 	{
+		public static var POSITION_X:Number = 0;
+		public static var POSITION_Y:Number = 0;
+		public static var POSITION_Z:Number = 0;
+					
 		public static var ROTATION_X:Number = 0;
 		public static var ROTATION_Y:Number = 0;
 		public static var ROTATION_Z:Number = 0;

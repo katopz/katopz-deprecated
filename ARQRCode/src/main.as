@@ -257,7 +257,7 @@ package
 			setBitmap(Bitmap(new ImageData));
 
 			// menu
-			SystemUtil.addContext(this, "ARQRCode version 1.2");
+			SystemUtil.addContext(this, "ARQRCode version 1.3");
 			SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
 			
 			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
@@ -505,6 +505,7 @@ package
 
 		public function reset():void
 		{
+			try{
 			_isQRDecoded = false;
 			_QRReader.reset();
 			_modelViewer.reset();
@@ -512,6 +513,7 @@ package
 			//_itemNameTextField.text = "";
 				
 			//DebugUtil.clear();
+			}catch(e:*){}
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
