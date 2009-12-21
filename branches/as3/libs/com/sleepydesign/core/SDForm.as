@@ -1,12 +1,13 @@
 package com.sleepydesign.core
 {
-	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.SDInputText;
 	import com.sleepydesign.events.SDEvent;
+	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.StringUtil;
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
+	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
 	import flash.net.URLVariables;
@@ -286,6 +287,7 @@ package com.sleepydesign.core
 			
 			loader.load(action, _data);
 			*/
+			LoaderUtil.loadXML(action, onGetFormData);
 		}
 		
 		// ____________________________________________ Data ____________________________________________
@@ -296,15 +298,17 @@ package com.sleepydesign.core
 		}
 		
 		
-		private function onGetFormData(event:SDEvent=null):void
+		private function onGetFormData(event:Event=null):void
 		{
-			event.target.removeEventListener(SDEvent.COMPLETE, onGetFormData);
-			event.target.removeEventListener(SDEvent.ERROR, onGetFormData);
+			if(event.type!="complete")return;
 			
 			trace(" ^ onGetFormData\t: "+event);
+			dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event.target}));
+			
+			/*
 			switch(event.type) 
 			{
-				case SDEvent.COMPLETE:
+				case Event.COMPLETE:
 					for each(var input:* in inputs) 
 					{
 						if (input.isReset) 
@@ -319,6 +323,7 @@ package com.sleepydesign.core
 			}
 			//dispatchEvent(event.clone());
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event.target}));
+			*/
 		}
 	}
 }

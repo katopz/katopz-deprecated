@@ -4,7 +4,6 @@
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDForm;
 	import com.sleepydesign.core.SDGroup;
-	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDMovieClip;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.model.vo.ContentVO;
@@ -18,7 +17,6 @@
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
-	import flash.display.SimpleButton;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -47,6 +45,7 @@
 	 */
 	public class Content extends SDContainer
 	{
+		protected var _clip:MovieClip;
 		
 		public var content:DisplayObject;
 		
@@ -82,6 +81,13 @@
 			if(source)
 			{
 				trace(" ! Autorun\t: "+ source);
+				if(source is DisplayObject)
+				{
+					if(!source.parent)
+						addChild(source);
+					content = source;
+				}
+					
 				update(new ContentVO(id, source, xml));
 			}
 			
@@ -403,7 +409,7 @@
 			
 			// apply config -> content(s)
 			var xmlList:XMLList = _data.xml.children();
-			for (var i:uint = 0; i < xmlList.length(); i++ ) 
+			for (var i:uint = 0; i < xmlList.length(); i++ )
 			{
 				var itemXML:XML = xmlList[i];
 				var name:String = String(itemXML.name());
@@ -485,6 +491,11 @@
 					}
 				break;
 				case "button" :
+					
+					if(!clip.hasEventListener(MouseEvent.CLICK))
+						clip.addEventListener(MouseEvent.CLICK, onContentClick);
+					
+					/*
 					if(!elements.findBy(idString))
 					{
 						var button:* = clip.getChildByName(sourceString) as SimpleButton;
@@ -518,7 +529,7 @@
 							links.insert(itemXML, button);
 							return button;
 						}
-					}
+					}*/
 				break;
 				case "asset" :
 					if(!elements.findBy(idString))
@@ -626,6 +637,7 @@
 			}
 			else if(content is MovieClip )//&& MovieClip(content).currentLabels.length>0)
 			{		
+				/*
 				// bad boy cloak it!
 				var _content_MovieClip:SDMovieClip = new SDMovieClip();//id+"_MovieClip", MovieClip(content));
 				_content_MovieClip.init({id:id+"_MovieClip", source:content});
@@ -647,6 +659,7 @@
 				}
 				
 				content = _content_MovieClip
+				*/
 			}
 			
 			trace(" * Create\t: " + content);
@@ -733,15 +746,19 @@
 			}
 		}
 		
-		protected function onButtonClick(event:MouseEvent):void
+		private function onContentClick(event:MouseEvent):void
 		{
-			trace(" ! onButtonClick");
-			var linkXML:XML = XML(links.find(event.target))
+			trace(" ! onContentClick : " + event.target.name);
+			//var linkXML:XML = XML(links.find(event.target))
 			
 			// 2nd try
-			if(StringUtil.isNull(linkXML.@link))
-				 linkXML = XML(links.find(event.currentTarget))
+			//if(StringUtil.isNull(linkXML.@link))
+			//	 linkXML = XML(links.find(event.currentTarget))
 				 
+			var linkXML:XML = XMLUtil.getXMLById(_data_xml, event.target.name);
+			
+			if(StringUtil.isNull(linkXML.toXMLString()))return;
+			
 			// link to other node
 			if(!StringUtil.isNull(linkXML.@link))
 			{
