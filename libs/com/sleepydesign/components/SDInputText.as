@@ -29,7 +29,7 @@ package com.sleepydesign.components
 		
 		private var _disable : Boolean 		= false;
 		public var isEdit : Boolean 		= false;
-		private var isValid : Boolean 		= false;
+		public var isValid : Boolean 		= false;
 		public var onInvalidCommand : String	= "";
 		
 		private var _isFlash:Boolean 		= false;

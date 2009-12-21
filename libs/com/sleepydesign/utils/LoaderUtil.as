@@ -196,7 +196,7 @@ package com.sleepydesign.utils
 			}
 			
 			// prevent gc
-			//loaders.push(_loader);
+			loaders.push(_loader);
 			
 			// callback
 			if(eventHandler is Function)

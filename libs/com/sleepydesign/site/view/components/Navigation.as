@@ -16,11 +16,11 @@ package com.sleepydesign.site.view.components
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.ApplicationFacade;
-	import com.sleepydesign.site.model.SWFAddressProxy;
 	import com.sleepydesign.site.model.vo.SiteVO;
 	import com.sleepydesign.utils.URLUtil;
 	
 	import flash.events.*;
+	import flash.filters.GlowFilter;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 
@@ -119,6 +119,7 @@ package com.sleepydesign.site.view.components
 			tree.y = 10
 			tree.addEventListener(SDEvent.CHANGE_FOCUS, onSiteMap);
 			tree.visible = false;
+			tree.filters = [new GlowFilter(0xFFFFFF,1, 4, 4,2)];
 			addChild(tree);
 		}
 		

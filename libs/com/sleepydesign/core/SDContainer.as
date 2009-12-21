@@ -1,12 +1,12 @@
 ﻿package com.sleepydesign.core
 {
+    import com.greensock.TweenLite;
+    import com.greensock.plugins.FramePlugin;
+    import com.greensock.plugins.TweenPlugin;
     import com.sleepydesign.events.SDEvent;
     import com.sleepydesign.utils.ObjectUtil;
     
     import flash.display.DisplayObject;
-    import flash.events.Event;
-    
-    import com.greensock.TweenLite;
     
     /**
 	 * SleepyDesign Container
@@ -67,6 +67,8 @@
 		 */		
 		public function SDContainer(id:String=null)
 		{
+			TweenPlugin.activate([FramePlugin,{}]);
+			
 			super();
 			
 			//if ( instance == null )

@@ -326,11 +326,18 @@ package com.sleepydesign.site.view.components
 						clip = SDMovieClip(content).clip.getChildByName(sourceString)
 					}
 					
+					if(!clip)
+					{
+						clip = _clip[sourceString];
+					}
+					
+					/*
 					// case#4 embed asset
 					if(!clip)
 					{
 						clip = content[sourceString];
 					}
+					*/
 
 					trace(" ! Clip\t: " + sourceString + ":" + clip);
 
@@ -345,6 +352,7 @@ package com.sleepydesign.site.view.components
 					}
 
 					// internal
+					
 					if (contents && contents.findBy(idString))
 					{
 						// exist?
@@ -366,6 +374,7 @@ package com.sleepydesign.site.view.components
 					{
 						innerContent.visible = true;
 					}
+					
 					break;
 			}
 			return innerContent;
