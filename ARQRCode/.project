@@ -18,17 +18,17 @@
 		<link>
 			<name>[source path] src</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/3D/Sandy/as3/trunk/src</location>
+			<location>C:/inetpub/wwwroot/Classes/3D/Sandy/as3/trunk/src</location>
 		</link>
 		<link>
 			<name>[source path] lite-libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/branches/lite/libs</location>
+			<location>C:/inetpub/wwwroot/Classes/3D/Away3D/branches/lite/libs</location>
 		</link>
 		<link>
 			<name>[source path] as3-libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
+			<location>C:/inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
 		</link>
 	</linkedResources>
 </projectDescription>

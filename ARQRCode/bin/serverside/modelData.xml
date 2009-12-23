@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ingredients>
+	<ingredient>
+		<code>058454</code>
+		<name><![CDATA[ข้าว]]></name>
+		<src>serverside/G2.dae</src>
+	</ingredient>
+	<ingredient>
+		<code>26B0EA</code>
+		<name><![CDATA[ไข่]]></name>
+		<src>serverside/G6.dae</src>
+	</ingredient>
+	<ingredient>
+		<code>2AFF7A</code>
+		<name><![CDATA[กุ้ง]]></name>
+		<src>serverside/G7.dae</src>
+	</ingredient>
+</ingredients>

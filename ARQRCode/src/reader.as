@@ -3,15 +3,9 @@ package
 	import away3dlite.core.clip.Clipping;
 	import away3dlite.templates.BasicTemplate;
 	
-	import com.adobe.crypto.MD5;
 	import com.greensock.TweenLite;
-	import com.sleepydesign.crypto.DES;
-	import com.sleepydesign.crypto.PBE;
-	import com.sleepydesign.utils.DataUtil;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
-	import com.sleepydesign.utils.ObjectUtil;
-	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flars.FLARManager;
@@ -44,14 +38,9 @@ package
 	 * [Step #3]
 	 * 3.2 Flash 	--> Model[Link] --> Server
 	 * 3.3 Flash 	<-- Model[Mesh, Texture, Animation]	<-- Server
-	 * 
-	 * G2, G6, G7, G8
-	 * ข้าว, กุ้ง, ไข่, หอมใหญ่
-	 * 058454, 26B0EA, 2AFF7A, 2BD35D
-	 * 
 	 */
 	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
-	public class main extends BasicTemplate
+	public class reader extends BasicTemplate
 	{
 		// screen
 		private const SCREEN_WIDTH:int = 320;
@@ -64,15 +53,7 @@ package
 		// 3.2cm = 90px
 		private const QR_SIZE:int = 90;
 		
-		private const CAMERA_BY_DEFAULT:Boolean = !true;//Camera.names.length>0;
-		
 		// config
-		public var USER_URL:String = "serverside/userData.txt";
-		public var MODEL_URL:String = "serverside/modelData.txt";
-		
-		//private var USER_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/userData.php";
-		//private var MODEL_URL:String = "http://127.0.0.1/Classes/katopz/branches/as3/ARQRCode/bin/serverside/modelData.php";
-		
 		private const USER_DATA:String = "userData";
 		private const key:String = "ｪｩｵｴｪｴｦｬ｢ＯＯｺ";
 
@@ -81,7 +62,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../codes/G2_058454.png')]
+		[Embed(source='../codes/G6_26B0EA.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -103,11 +84,7 @@ package
 		private var _isQRDecoded:Boolean = false;
 		public var isOnline:Boolean = true;
 		
-		//logo
-		//[Embed(source='OISHI_LOGO.png')]
-		//private var OISHILogo:Class;
-		
-		public function main()
+		public function reader()
 		{
 			// base
 			base = new Sprite();
@@ -119,8 +96,6 @@ package
 			fakeContainer = new Sprite();
 			base.addChild(fakeContainer);
 			
-			//isOnline = isOnline && SystemUtil.isHTTP(this);
-
 			// fake code
 			fake = new Sprite();
 			fakeContainer.addChild(fake);
@@ -131,12 +106,6 @@ package
 			// cam test
 			cameraContainer = new Sprite();
 			base.addChild(cameraContainer);
-			
-			//logo
-			//var logo:Bitmap = new OISHILogo() as Bitmap 
-			//addChild(logo);
-			//logo.x = 640-logo.width;
-			//logo.y = 480-logo.height;
 		}
 
 		public function show():void
@@ -169,66 +138,49 @@ package
 
 			_modelViewer = new ModelViewer(scene);
 			
-			//get flashvars
-			var _flashvars:Object = SystemUtil.getFlashVars(stage);
-			
-			trace(" ! USER_URL : "+_flashvars["USER_URL"]);
-			trace(" ! MODEL_URL : "+_flashvars["MODEL_URL"]);
-			
-			// init
-			USER_URL = StringUtil.isNull(_flashvars["USER_URL"])?USER_URL:_flashvars["USER_URL"];
-			MODEL_URL = StringUtil.isNull(_flashvars["MODEL_URL"])?MODEL_URL:_flashvars["MODEL_URL"];
-
-			// get user data
-			LoaderUtil.loadVars(USER_URL, onGetUserData);
-			
-			// add some text
-			/*
-			_itemNameTextField = new TextField();
-			_itemNameTextField.defaultTextFormat = new TextFormat("Tahoma", 20, 0xFFFFFF);
-			_itemNameTextField.autoSize = TextFieldAutoSize.CENTER;
-			_itemNameTextField.x = SCREEN_WIDTH/2 - _itemNameTextField.width/2;
-			_itemNameTextField.y = SCREEN_HEIGHT/2 + 100;
-			_itemNameTextField.filters = [new GlowFilter(0x000000, .6, 4,4,2 )];
-			*/
-			
-			//deprecated//addChild(_itemNameTextField);
-			
-			//DebugUtil.init(this, 0, SCREEN_HEIGHT/2+130);
-			
-			//DebugUtil.enable = false;
 			debug = false;
 			
 			removeChild(stats);
 			removeChild(debugText);
+			
+			// get model data
+			LoaderUtil.loadXML(Oishi.MODEL_DATA_URL, onGetModelData);
 		}
 		
-		private function onGetUserData(event:Event):void
+		public static function getModelNameByCode(target:String):String
+		{
+			if(Oishi.MODEL_XML)
+				return Oishi.MODEL_XML.ingredient.(code == target).name.text();
+			else{
+				trace("[ERROR] Must load xml data first!");
+				return null;
+			}
+		}
+		
+		public static function getModelSourceByCode(target:String):String
+		{
+			if(Oishi.MODEL_XML)
+				return Oishi.MODEL_XML.ingredient.(code == target).src.text();
+			else{
+				trace("[ERROR] Must load xml data first!");
+				return null;
+			}
+		}
+		
+		private function onGetModelData(event:Event):void
 		{
 			// wait until complete
 			if(event.type!="complete")return;
 
-			trace(" ! onGetUserData");
+			Oishi.MODEL_XML = event.target["data"];
 			
-			// grab user data
-			var _userData:URLVariables = URLVariables(event.target["data"]);
-			
-			// sore
-			DataUtil.addData(USER_DATA, _userData);
-			
-			// debug
-			if(debug)
-			{
-				ObjectUtil.print(DataUtil.getDataByID(USER_DATA));
-				
-				//DebugUtil.label.text = DataUtil.getDataByName(USER_DATA);
-				//DebugUtil.addText(USER_URL);
-			}
+			//tell all
+			Oishi.dispatchEvent(new Event(Event.COMPLETE));
 			
 			initARQR();
 			
 			// cam as default
-			if(CAMERA_BY_DEFAULT)
+			if(Oishi.USE_CAMERA)
 				toggleCamera();
 		}
 		
@@ -245,26 +197,21 @@ package
 			camera.projection.fieldOfView = _FLARManager.fieldOfView;
 			camera.projection.focalLength = _FLARManager.focalLength;
 			
-			// debug
-			/*
-			var rbmp:Bitmap = new Bitmap(_QRReader.homography);
-			rbmp.scaleX = rbmp.scaleY = .5;
-			rbmp.y = 110;
-			addChild(rbmp);
-			*/
-
 			// add test image in the background
 			setBitmap(Bitmap(new ImageData));
 
 			// menu
-			SystemUtil.addContext(this, "ARQRCode version 1.3");
-			SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
-			
-			SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
-			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
-			SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
-			
-			SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
+			if(Oishi.USE_CONTEXT)
+			{
+				SystemUtil.addContext(this, "ARQRCode version 1.4");
+				SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
+				
+				SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
+				SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
+				SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
+				
+				SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
+			}
 
 			// debug
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
@@ -273,7 +220,6 @@ package
 		// for dev time
 		private function onTextureReady(event:Event):void
 		{
-			//DebugUtil.trace(" ^ onTextureReady : " + event);
 			if(event.type == Event.COMPLETE)
 				_modelViewer.setTexture(event.target.content);
 		}
@@ -281,148 +227,30 @@ package
 		private function onOpenModel(event:Event):void
 		{
 			if(event.type == Event.COMPLETE)
-			{
-				//DebugUtil.trace(" ^ onOpenModel");
 				_modelViewer.parse(new XML(event["data"]));
-			}
 		}
 		
 		private function onModelDecodeComplete(event:Event):void
 		{
 			if(event.type == Event.COMPLETE)
 			{
-				//DebugUtil.trace(" ^ onModelDecodeComplete");
 				var _vars:URLVariables = new URLVariables(String(event.target["data"])); 
 				
 				if(_vars.src)
-				{
-					//DebugUtil.clear();
-					//DebugUtil.addText(" ! Model : " + _vars.name+", "+_vars.src);
-					
 					_modelViewer.load(_vars.src);
-					//_itemNameTextField.text = _vars.name;
-				}else{
-					//DebugUtil.trace(" ! Error : " + String(event.target["data"]));
-					//DebugUtil.addText(" ! Error : " + String(event.target["data"]));
-					//_itemNameTextField.text = "Error";
-				}
 			}
-			
-			//DebugUtil.trace(event);
 		}
 		
 		private function onQRCodeComplete(event:Event):void
 		{
-			//DebugUtil.trace(" ^ onQRCodeComplete");
 			_isQRDecoded = true;
 			
-			var _data:* = DataUtil.getDataByID(USER_DATA);
-			var _vars:URLVariables = URLVariables(_data);
-			_vars.code = QRManager.result;
-			_vars.time = new Date().valueOf();
-			
-			//DebugUtil.trace(" ! Encypt : " + PBE.encypt(key));
-			//DebugUtil.trace(" ! Decypt : " + PBE.decypt(PBE.encypt(key)));
-			
-			var _key:String = PBE.decypt(key);
-			//DebugUtil.trace(" ! Decypt Key : " + _key);
-			//DebugUtil.addText(" ! Decypt Key : " + _key);
-			
-			//reset
-			_vars.session = "";
-			_vars.hash = "";
-			
-			var _cipher:String = DES.encypt(_key, _vars.toString()+"&");
-			_vars.session = DES.toHex(_cipher);
-			_vars.hash = MD5.hash(_vars.toString());
-			
-			/*
-			DebugUtil.trace(" * Hash : " + _vars.toString());
-			DebugUtil.trace(" ! Encypt : " + DES.toHex(_cipher));
-			DebugUtil.trace(" ! Decypt : " + DES.decypt(_key, _cipher));
-			DebugUtil.trace(" ! Hash : " + _vars.hash);
-			
-			DebugUtil.addText(" * Hash : " + _vars.toString());
-			DebugUtil.addText(" ! Encypt : " + DES.toHex(_cipher));
-			DebugUtil.addText(" ! Decypt : " + DES.decypt(_key, _cipher));
-			DebugUtil.addText(" ! Hash : " + _vars.hash);
-			*/
-			
-			//_itemNameTextField.text = "loading...";
-			
-			_modelViewer.visible = false;
-			
-			//DebugUtil.trace(" ! isOnline : " + isOnline);
-			//DebugUtil.addText(" ! isOnline : " + isOnline);
-			
-			LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
-			/*
-			if(isOnline)
-			{
-				// for real use
-				LoaderUtil.request(MODEL_URL + "?"+_vars.toString(), _vars, onModelDecodeComplete);
+			var _srcURL:String = getModelSourceByCode(QRManager.result);
+			if(_srcURL)
+				_modelViewer.load(_srcURL);
+			else{
+				trace("[ERROR] Model source not found!");
 			}
-			else
-			{
-				// for testing
-				var _name:String;
-				var _src:String;
-				 
-				if(QRManager.result=="058454")
-				{
-					_name="ข้าว";
-					_src="serverside/G2.dae";
-				}
-				else if(QRManager.result=="26B0EA")
-				{
-					_name="กุ้ง";
-					_src="serverside/G6.dae";
-				}
-				else if(QRManager.result=="2AFF7A")
-				{
-					_name="ไข่";
-					_src="serverside/G7.dae";
-				}
-				else if(QRManager.result=="2BD35D")
-				{
-					_name="หอมใหญ่";
-					_src="serverside/G8.dae";
-				}
-				else if(QRManager.result=="378E05")
-				{
-					_name="หมูสับ";
-					_src="serverside/G10.dae";
-				}
-				else if(QRManager.result=="CCF29C")
-				{
-					_name="น้ำปลา";
-					_src="serverside/T5.dae";
-				}
-				else if(QRManager.result=="B71B5C")
-				{
-					_name="น้ำซุปแดง";
-					_src="serverside/T1.dae";
-				}
-				else if(QRManager.result=="C071FB")
-				{
-					_name="พริก";
-					_src="serverside/T2.dae";
-				}
-				else if(QRManager.result=="353869")
-				{
-					_name="มะนาว";
-					_src="serverside/G9.dae";
-				}
-				else
-				{
-					_name="Oishi";
-					_src="serverside/Logo.dae";
-				}
-				
-				_modelViewer.load(_src);
-				_itemNameTextField.text = _name;
-			}
-			*/
 			
 			// dispatch
 			Oishi.setCode(QRManager.result);
@@ -472,14 +300,9 @@ package
 
 			if(_isQRDecoded)
 			{
-				//view.visible = true;
-				//stage.quality = "medium";
-				
 				_modelViewer.updateAnchor();
 				_modelViewer.updateAnimation();
 			}else{
-				//view.visible = false;
-				//stage.quality = "low";
 				_modelViewer.visible = false;
 			}
 			
@@ -489,8 +312,6 @@ package
 
 		private function onImageReady(event:Event):void
 		{
-			//DebugUtil.trace(" ^ onImageReady : " + event);
-
 			if(event.type == Event.COMPLETE)
 			{
 				if(_fakeBitmap)
@@ -505,21 +326,16 @@ package
 
 		public function reset():void
 		{
-			try{
-			_isQRDecoded = false;
-			_QRReader.reset();
-			_modelViewer.reset();
-				
-			//_itemNameTextField.text = "";
-				
-			//DebugUtil.clear();
+			try
+			{
+				_isQRDecoded = false;
+				_QRReader.reset();
+				_modelViewer.reset();
 			}catch(e:*){}
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-			//DebugUtil.trace(" ! setBitmap");
-			
 			reset();
 			
 			title = "reset";
