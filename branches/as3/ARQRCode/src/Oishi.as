@@ -6,6 +6,11 @@ package
 
 	public class Oishi
 	{
+		public static var MODEL_DATA_URL:String = "serverside/modelData.xml";
+		public static var MODEL_XML:XML;
+		public static var USE_CAMERA:Boolean = true;
+		public static var USE_CONTEXT:Boolean = true;
+		
 		public static var POSITION_X:Number = 0;
 		public static var POSITION_Y:Number = 0;
 		public static var POSITION_Z:Number = 0;

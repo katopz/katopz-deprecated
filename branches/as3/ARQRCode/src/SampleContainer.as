@@ -53,6 +53,10 @@ package
 			
 			Oishi.POSITION_Y = 320;
 			Oishi.POSITION_Z = -100;
+			
+			Oishi.USE_CAMERA = false;
+			Oishi.USE_CONTEXT = false;
+			Oishi.MODEL_DATA_URL = "serverside/modelData.xml";
 		}
 		
 		private function onGetCode(event:DataEvent):void
@@ -70,7 +74,7 @@ package
 		{
 			if(!_reader)
 			{
-				LoaderUtil.load("main.swf", onLoad);
+				LoaderUtil.load("reader.swf", onLoad);
 			}else{
 				if(_reader.visible)
 				{	
