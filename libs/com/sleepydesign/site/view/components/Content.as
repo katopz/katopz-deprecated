@@ -4,10 +4,11 @@
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDForm;
 	import com.sleepydesign.core.SDGroup;
-	import com.sleepydesign.core.SDMovieClip;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.site.model.vo.ContentVO;
+	import com.sleepydesign.utils.DataUtil;
 	import com.sleepydesign.utils.LoaderUtil;
+	import com.sleepydesign.utils.ProxyUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
@@ -17,8 +18,10 @@
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
+	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.utils.*;
 	
@@ -95,7 +98,7 @@
 			if(stage && parent==stage)
 			{
 				trace(" ! Dependency call : "+this)
-				getConfig(configURI?configURI:SDApplication.getInstance().configURI);
+				getConfig(configURI?configURI:SDApplication.configURI);
 			}
 		}
 		
@@ -125,7 +128,11 @@
 		
 		public function getData(dataURI:String):void
 		{
+			if(StringUtil.isNull(dataURI))return;
+			
 			this.dataURI = dataURI;
+			LoaderUtil.loadXML(dataURI, onGetData);
+			
 			//loader.load(dataURI);
 			//loader.removeEventListener(SDEvent.COMPLETE, onGetData);
 			//loader.addEventListener(SDEvent.COMPLETE, onGetData, false, 0, true);
@@ -173,11 +180,35 @@
 			visible = false;
 		}
 		
-		protected function onGetData(event:SDEvent):void
+		/*
+		protected function onFormDataComplete(event:Event):void
 		{
-			if(event.type!="complete")return;
+			trace(" ^ onFormDataComplete\t:"+event);
+		}
+		*/
+
+		//DataEvent.DATA came from SDForm
+		protected function onGetData(event:Event):void
+		{
+			var _event:* = event;
 			
-			trace(" ^ onGetData\t:"+event);
+			var xml:XML;
+			if(event.type==DataEvent.DATA)
+			{
+				xml = new XML(event["data"]);
+			}
+			else if(event.type==Event.COMPLETE)
+			{
+				xml = event.target["data"];
+				
+				_event = new DataEvent(DataEvent.DATA, false, false, event.target.data);
+				ProxyUtil.dispatchEvent(_event);
+				
+			}else{
+				return;
+			}
+			
+			trace(" ^ onGetData\t:"+_event);
 			
 			// Form data :P
 			//if(event.target is SDForm)
@@ -187,20 +218,26 @@
 				//loader.removeEventListener(SDEvent.COMPLETE, onGetData);
 				
 				//todo//var xml:XML = new XML(loader.getContent(dataURI));
-				var xml:XML = event.target["data"];
+				//var xml:XML = new XML(event["data"]);
 				//trace(xml.toXMLString())
 				
-				//trace(xml.@id +"=="+ id)
 				if(xml.@id == id)
 				{
 					// it's my data let's update!
 					update(new ContentVO(xml.@id, this, xml));
 				}else{
 					// it's not my data let's tell someone else especialy my mom
+					dispatchEvent(_event);
 					//dispatchEvent(new SDEvent(SDEvent.DATA, {xml:xml}));
+					
+					//throw to global ;(
+					ProxyUtil.dispatchEvent(_event);
 				}
 				
-				dispatchEvent(new SDEvent(SDEvent.DATA, {xml:xml}));
+				//throw to global ;(
+				//ProxyUtil.dispatchEvent(event);
+				
+				//dispatchEvent(new SDEvent(SDEvent.DATA, {xml:xml}));
 			//}
 		}
 		
@@ -276,13 +313,18 @@
 							if(sourceString.length>0)
 							{
 								// need parent clip before parse element(s)
-								if(data.source is MovieClip) content = data.source;
+								if(data.source is MovieClip) 
+								{	
+									content = data.source;
+								}
+								
+								if(dirty)
+									initContent();
 							}
+							
 							// bypass load = publish
 							if(dirty)
-							{
 								initContent();
-							}
 						break;
 						// external source : swf, jpg, png
 						case "swf":
@@ -340,7 +382,6 @@
 		
 		protected function onGetContent(event:Event):void
 		{
-			//trace("!!!onGetContent:"+event);
 			if(event.type!="complete")return;
 			
 			_content = event.target["content"];
@@ -375,6 +416,23 @@
 			}else{
 				dispatchEvent(new SDEvent(SDEvent.COMPLETE, {content:content}));
 			}
+			
+			onInitContent();
+			/*
+			// loaded content
+			try{
+			//if(_content["content"] && _content["content"] is Content)
+				_content["content"].onInitContent();
+			}catch(e:*){trace(e)};
+			*/
+			//TODO:move up
+			if(this.content is Content && content!= this)
+				Content(content).onInitContent();
+  		}
+  		
+  		protected function onInitContent():void
+  		{
+
   		}
   		
   		// element(s) on stage state from SDMovieClip need parse config to element(s) 
@@ -437,6 +495,10 @@
 			if(clip is Content && clip["content"] && clip["content"] is DisplayObjectContainer)
 				clip = clip["content"];
 			
+			//TODO:move up
+			if(clip is Content && clip["content"] && clip["content"] is DisplayObjectContainer)
+				clip = clip["content"];
+				
 			var child:* = clip.getChildByName(String(_data.xml.@id));
 			
 			try{
@@ -457,7 +519,9 @@
 				clip.alpha = _alpha;
 			} 
 			*/
+			
 			trace(" ! itemXML : "+String(itemXML.name()));
+			
 			switch(String(itemXML.name()))
 			{
 				case "textfield" : //labelText
@@ -472,6 +536,8 @@
 						var form:SDForm = new SDForm(sourceString, clip, itemXML);
 						dataURI = form.action;
 						
+						//TODO:rip to 1 handler
+						
 						//incomplete
 						form.removeEventListener(SDEvent.INCOMPLETE, onInComplete);
 						form.addEventListener(SDEvent.INCOMPLETE, onInComplete);
@@ -481,19 +547,36 @@
 						form.addEventListener(SDEvent.INVALID, onInvalid);
 						
 						//valid
-						form.removeEventListener(SDEvent.COMPLETE, onGetData);
-						form.addEventListener(SDEvent.COMPLETE, onGetData);
+						//form.removeEventListener(SDEvent.COMPLETE, onGetData);
+						//form.addEventListener(SDEvent.COMPLETE, onGetData);
 						
 						// hide while submitting
 						form.removeEventListener(SDEvent.LOAD, onLoadData);
 						form.addEventListener(SDEvent.LOAD, onLoadData);
+						
+						//data
+						form.removeEventListener(DataEvent.DATA, onGetData);
+						form.addEventListener(DataEvent.DATA, onGetData);
+						
+						/*
+						form.removeEventListener(Event.COMPLETE, onFormDataComplete);
+						form.addEventListener(Event.COMPLETE, onFormDataComplete);
+						*/
+						
 						return form;
 					}
 				break;
 				case "button" :
 					
-					if(!clip.hasEventListener(MouseEvent.CLICK))
-						clip.addEventListener(MouseEvent.CLICK, onContentClick);
+					clip.removeEventListener(MouseEvent.CLICK, onContentClick);
+					clip.addEventListener(MouseEvent.CLICK, onContentClick);
+					
+					/*
+					trace(itemXML.@visible);
+					
+					if(String(itemXML.@visible)=="false")
+						clip.visible = false;
+					*/
 					
 					/*
 					if(!elements.findBy(idString))
@@ -661,6 +744,14 @@
 				content = _content_MovieClip
 				*/
 			}
+			else if(content is Content)//&& MovieClip(content).currentLabels.length>0)
+			{
+				/*
+				content.parent.addChild(content["content"]);
+				content.parent.removeChild(content);
+				content = content["content"];
+				*/
+			}
 			
 			trace(" * Create\t: " + content);
 			
@@ -746,9 +837,13 @@
 			}
 		}
 		
-		private function onContentClick(event:MouseEvent):void
+		protected function onContentClick(event:MouseEvent):void
 		{
 			trace(" ! onContentClick : " + event.target.name);
+			//TODO:move up
+			if(content is Content && content != this)
+				Content(content).onContentClick(event);
+				
 			//var linkXML:XML = XML(links.find(event.target))
 			
 			// 2nd try
@@ -793,9 +888,38 @@
 				//URLUtil.getURL(linkXML.@href, linkXML.@target);
 				Navigation.getURL(linkXML.@id, linkXML.@href, linkXML.@target);
 			}
+			else if(!StringUtil.isNull(linkXML.@action))
+			{
+				var _URLVariables:URLVariables = new URLVariables();
+				//index=GIRL_SELECT&score=GIRL_SCORE
+				
+				//TODO!
+				var _varsString:String = String(linkXML.@vars);
+				_varsString = _varsString.split(AXE.GIRL_SELECT).join(DataUtil.getDataByID(AXE.GIRL_SELECT));
+				_varsString = _varsString.split(AXE.GIRL_SCORE).join(DataUtil.getDataByID(AXE.GIRL_SCORE));
+				
+				_URLVariables.decode(_varsString);
+				
+				trace("GIRL_SELECT"+DataUtil.getDataByID(AXE.GIRL_SELECT));
+				trace("GIRL_SCORE"+DataUtil.getDataByID(AXE.GIRL_SCORE));
+				
+				trace(" ! action\t: " + linkXML.@action);
+				trace(" ! _URLVariables\t: " + _URLVariables);
+				
+				LoaderUtil.requestXML(linkXML.@action, _URLVariables, onActionData);
+			}
 			
 			//trace(" ! Link : " + event.data.link);
 			//Navigation.setFocusById(new SDLink(event.data.link).source);
+		}
+		
+		private function onActionData(event:Event):void
+		{
+			if(event.type!=Event.COMPLETE)return;
+			
+			trace(" ^ onActionData\t: "+event);
+			var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
+			ProxyUtil.dispatchEvent(_dataEvent);
 		}
 		
 		// always lowest depth replace old content

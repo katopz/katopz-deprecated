@@ -84,7 +84,7 @@ package com.sleepydesign.utils
 		public static function loadBytes(byteArray:ByteArray, eventHandler:Function = null):Loader
 		{
 			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler, false, 0, true);
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
 			loader.loadBytes(byteArray);
 			return loader;
 		}
@@ -220,7 +220,7 @@ package com.sleepydesign.utils
 		            
 		            // gc
 		            removeItem(loaders, _loader);
-				}, false, 0, true);
+				});
 			}
 			
 			// load
@@ -248,6 +248,8 @@ package com.sleepydesign.utils
 			_urlRequest.method = SEND_METHOD;
 			_urlRequest.data = data;
 			
+			ObjectUtil.print(_urlRequest.data);
+			
 			return load(uri, eventHandler, type, _urlRequest);
 		}
 		
@@ -257,6 +259,17 @@ package com.sleepydesign.utils
 			{
 				if(event.type=="complete")
 					event.target["data"] = new URLVariables(String(event.target["data"]));
+				
+				eventHandler(event);
+			}, URLLoaderDataFormat.TEXT) as URLLoader;
+		}
+		
+		public static function requestXML(uri:String, data:*, eventHandler:Function):URLLoader
+		{
+			return request(uri, data,  function(event:Event):void
+			{
+				if(event.type=="complete")
+					event.target["data"] = new XML(String(event.target["data"]));
 				
 				eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;

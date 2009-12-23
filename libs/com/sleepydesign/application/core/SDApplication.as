@@ -1,9 +1,7 @@
 package com.sleepydesign.application.core
 {
 	import com.sleepydesign.core.SDContainer;
-	import com.sleepydesign.core.SDLoader;
 	import com.sleepydesign.core.SDSprite;
-	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
@@ -29,7 +27,8 @@ package com.sleepydesign.application.core
 		public static var system:SDSystem;
 		public static var content:SDSprite;
 		
-		public var configURI:String = "config.xml";
+		public static var configURI:String = SystemUtil.isBrowser()?"config.xml":"localside/config.xml";
+		
 		/*
 		public static var loader:SDLoader;
         public static function getLoader() : SDLoader 
@@ -66,6 +65,9 @@ package com.sleepydesign.application.core
 					flashVars = loaderInfo.parameters;
 					configURI = flashVars["config"]?flashVars["config"]:configURI;
 				}
+				
+				//if(!SystemUtil.isBrowser())
+				//	configURI = "localside/"+configURI;
 				
 				//ObjectUtil.print(flashVars);
 				
