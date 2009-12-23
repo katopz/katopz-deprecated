@@ -35,7 +35,7 @@ package com.sleepydesign.site.model
         	 */
             super( NAME, {} );
             
-            LoaderUtil.loadXML(SDApplication.getInstance().configURI, onDataHandler);
+            LoaderUtil.loadXML(SDApplication.configURI, onDataHandler);
         }
 		
 		private function onDataHandler( event:Event ):void

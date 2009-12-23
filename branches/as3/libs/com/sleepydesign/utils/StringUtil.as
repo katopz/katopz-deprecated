@@ -75,6 +75,17 @@ package com.sleepydesign.utils {
 			return true;
 		}
 
+		public static function validateNumber(value:String):Boolean
+		{
+			return !isNaN(Number(value));
+		}
+		
+		// REGEX for phone validation
+		public static function validatePhone(value:String):Boolean {
+	        var phoneExpression:RegExp = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,3})|(\(?\d{2,3}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/i;
+        	return ! phoneExpression.test(value);
+		}
+		
 		//validates email fields
 		public static function validateEmail(value:String, multipleFields:Boolean = false):Boolean
 		{

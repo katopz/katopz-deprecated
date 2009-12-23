@@ -170,7 +170,6 @@ package com.sleepydesign.site.view.components
 						super.update(new ContentVO(data.xml.@id, data.xml.@src, data.xml));
 					break;
 				*/
-				/*
 				case "layer":
 					// Page::Layer type no SWFAddress invoke here
 					currentSection = String(data.xml.@id);
@@ -203,7 +202,6 @@ package com.sleepydesign.site.view.components
 
 					trace(" -------------------------------------- [Layer.update:" + currentSection + "] /\n");
 					break;
-				*/
 				default:
 					// normal case, destroy and swap page
 					var queuePaths:Array = Navigation.queuePaths ? Navigation.queuePaths : null;
@@ -326,9 +324,16 @@ package com.sleepydesign.site.view.components
 						clip = SDMovieClip(content).clip.getChildByName(sourceString)
 					}
 					
-					if(!clip)
+					if(!clip && _clip)
 					{
 						clip = _clip[sourceString];
+					}
+					
+					// case#4 embed asset
+					if(!clip && !_clip && content["content"])
+					{
+						//clip = _clip[sourceString];
+						clip = content["content"][sourceString];
 					}
 					
 					/*
@@ -352,7 +357,6 @@ package com.sleepydesign.site.view.components
 					}
 
 					// internal
-					
 					if (contents && contents.findBy(idString))
 					{
 						// exist?

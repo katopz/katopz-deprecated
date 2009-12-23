@@ -7,6 +7,7 @@ package com.sleepydesign.core
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
+	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
@@ -56,7 +57,7 @@ package com.sleepydesign.core
 					case "textfield":
 						var _textField:TextField = instance.getChildByName(instanceString) as TextField;
 						var item:SDInputText = new SDInputText(_textField.text, _textField);
-						
+						item.restrict
 						if(item)
 						{
 							item.defaultText = (String(itemXML.@label) != "")? String(itemXML.@label):item.text;
@@ -76,6 +77,7 @@ package com.sleepydesign.core
 							item.isReset = Boolean(String(itemXML.@reset) == "true");
 							
 							item.maxChars = !StringUtil.isNull(itemXML.@maxlength)?int(itemXML.@maxlength):0;
+							item.restrict = !StringUtil.isNull(itemXML.@restrict)?String(itemXML.@restrict):null;
 							
 							item.onInvalidCommand = (String(itemXML.@onInvalid) != "")? String(itemXML.@onInvalid):"";
 							
@@ -213,15 +215,25 @@ package com.sleepydesign.core
 					//validate
 					switch(input.type) 
 					{
+						/*
 						case "password" :
 							isValid = isValid && StringUtil.validateString(input.text);
 						break;	
 						case "string" :
 							isValid = isValid && StringUtil.validateString(input.text);
 						break;
+						*/
 						case "email" :
 							isValid = isValid && StringUtil.validateEmail(input.text);
 						break;
+						/*
+						case "phone" :
+							isValid = isValid && StringUtil.validatePhone(input.text);
+						break;
+						case "number" :
+							isValid = isValid && StringUtil.validateNumber(input.text);
+						break;
+						*/
 						default :
 							isValid = isValid && StringUtil.validateString(input.text);
 						break;
@@ -279,15 +291,16 @@ package com.sleepydesign.core
 		{
 			trace(" ! Submit");
 			
-			/*
-			dispatchEvent(new SDEvent(SDEvent.LOAD, loader));
+			//dispatchEvent(new SDEvent(SDEvent.LOAD, LoaderUtil.loadXML(action, onGetFormData)));
 			
+			/*
 			loader.addEventListener(SDEvent.COMPLETE, onGetFormData);
 			loader.addEventListener(SDEvent.ERROR, onGetFormData);
 			
 			loader.load(action, _data);
 			*/
-			LoaderUtil.loadXML(action, onGetFormData);
+			//LoaderUtil.loadXML(action, onGetFormData);
+			LoaderUtil.requestXML(action, _data, onGetFormData);
 		}
 		
 		// ____________________________________________ Data ____________________________________________
@@ -297,13 +310,16 @@ package com.sleepydesign.core
 			//return loader.getContent(uri);
 		}
 		
-		
-		private function onGetFormData(event:Event=null):void
+		//public static var data:*;
+		private function onGetFormData(event:Event):void
 		{
-			if(event.type!="complete")return;
+			if(event.type!=Event.COMPLETE)return;
 			
 			trace(" ^ onGetFormData\t: "+event);
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE, {loader:event.target}));
+			var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
+			dispatchEvent(_dataEvent);
+			dispatchEvent(event);
+			//dispatchEvent(new SDEvent(SDEvent.VALID, {loader:event.target}));
 			
 			/*
 			switch(event.type) 
