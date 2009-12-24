@@ -47,9 +47,8 @@ package com.sleepydesign.utils
 			var result:String = "";
 			
 			for (var i:* in object) 
-			{
-				result = result + " " + i + "\t= " + object[i].toString() + "\n";
-			}
+				if(object[i])
+					result = result + " " + i + "\t= " + object[i].toString() + "\n";
 			
 			if(result.length>0)
 			{

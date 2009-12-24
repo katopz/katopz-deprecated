@@ -1,5 +1,6 @@
 package com.sleepydesign.utils
 {
+	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
 	
 	public class DataUtil
@@ -26,10 +27,19 @@ package com.sleepydesign.utils
         
         public static function getDataByID(id:String):*
         {
-			if(_datas && _datas[id])
+			if(_datas)
 				return _datas[id];
 			else
 				return null;
+		}
+		
+        public static function getDataByVars(_varsString:String):URLVariables
+        {
+			var _URLVariables:URLVariables = new URLVariables(_varsString);
+			for(var _name:String in _URLVariables)
+				_URLVariables[_name] = DataUtil.getDataByID(_URLVariables[_name]);
+			
+			return _URLVariables;
 		}
 		
 		public static function removeAllData():void

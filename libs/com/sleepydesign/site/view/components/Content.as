@@ -1,5 +1,8 @@
 ﻿package com.sleepydesign.site.view.components
 {
+	import com.greensock.plugins.AutoAlphaPlugin;
+	import com.greensock.plugins.FramePlugin;
+	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDForm;
@@ -75,6 +78,8 @@
 		 */		
 		public function Content(id:String=null, source:*=null, xml:XML=null)
 		{
+			TweenPlugin.activate([FramePlugin, AutoAlphaPlugin]);
+			
 			trace(" ! source\t: "+ source);
 			// loader for load external assete only!
 			//loader = SDApplication.getLoader();
@@ -568,8 +573,9 @@
 				break;
 				case "button" :
 					
-					clip.removeEventListener(MouseEvent.CLICK, onContentClick);
-					clip.addEventListener(MouseEvent.CLICK, onContentClick);
+					removeEventListener(MouseEvent.CLICK, onContentClick);
+					//if(!hasEventListener(MouseEvent.CLICK))
+					addEventListener(MouseEvent.CLICK, onContentClick);
 					
 					/*
 					trace(itemXML.@visible);
@@ -839,10 +845,14 @@
 		
 		protected function onContentClick(event:MouseEvent):void
 		{
-			trace(" ! onContentClick : " + event.target.name);
-			//TODO:move up
-			if(content is Content && content != this)
-				Content(content).onContentClick(event);
+			trace(" ! onContentClick : " + this, ":", event.target.name);
+			
+			trace(this==event.target.parent);
+			trace(this==event.target.root);
+			
+//TODO:move up
+//if(content is Content && content != this)
+//Content(content).onContentClick(event);
 				
 			//var linkXML:XML = XML(links.find(event.target))
 			
@@ -851,7 +861,12 @@
 			//	 linkXML = XML(links.find(event.currentTarget))
 				 
 			var linkXML:XML = XMLUtil.getXMLById(_data_xml, event.target.name);
-			
+			link(linkXML);
+		}
+		
+		//todo:link utils?
+		protected function link(linkXML:XML):void
+		{	
 			if(StringUtil.isNull(linkXML.toXMLString()))return;
 			
 			// link to other node
@@ -886,28 +901,40 @@
 			{
 				trace(" ! href\t: " + linkXML.@href);
 				//URLUtil.getURL(linkXML.@href, linkXML.@target);
-				Navigation.getURL(linkXML.@id, linkXML.@href, linkXML.@target);
+				
+				if(StringUtil.isNull(linkXML.@vars))
+				{
+					Navigation.getURL(linkXML.@id, linkXML.@href, linkXML.@target);
+				}else{
+					var _href:String = String(linkXML.@href);
+					
+					//have some args to replace
+					if(_href.indexOf("$")>0)
+					{
+						_varsString = String(linkXML.@vars);
+						_URLVariables = DataUtil.getDataByVars(_varsString);
+						for(var _var:String in _URLVariables)
+							_href = _href.split(_var).join("'"+DataUtil.getDataByID(_var.split("$").join(""))+"'");
+						
+						Navigation.getURL(linkXML.@id, _href, linkXML.@target);
+					}else{
+						_varsString = String(linkXML.@vars);
+						_URLVariables = DataUtil.getDataByVars(_varsString);
+					
+						Navigation.getURL(linkXML.@id, _href+"&"+_URLVariables.toString(), linkXML.@target);
+					}
+				}
 			}
 			else if(!StringUtil.isNull(linkXML.@action))
 			{
-				var _URLVariables:URLVariables = new URLVariables();
-				//index=GIRL_SELECT&score=GIRL_SCORE
-				
-				//TODO!
-				var _varsString:String = String(linkXML.@vars);
-				_varsString = _varsString.split(AXE.GIRL_SELECT).join(DataUtil.getDataByID(AXE.GIRL_SELECT));
-				_varsString = _varsString.split(AXE.GIRL_SCORE).join(DataUtil.getDataByID(AXE.GIRL_SCORE));
-				
-				_URLVariables.decode(_varsString);
-				
-				trace("GIRL_SELECT"+DataUtil.getDataByID(AXE.GIRL_SELECT));
-				trace("GIRL_SCORE"+DataUtil.getDataByID(AXE.GIRL_SCORE));
-				
-				trace(" ! action\t: " + linkXML.@action);
-				trace(" ! _URLVariables\t: " + _URLVariables);
+				_varsString = String(linkXML.@vars);
+				_URLVariables = DataUtil.getDataByVars(_varsString);
 				
 				LoaderUtil.requestXML(linkXML.@action, _URLVariables, onActionData);
 			}
+			
+			var _varsString:String;
+			var _URLVariables:URLVariables;
 			
 			//trace(" ! Link : " + event.data.link);
 			//Navigation.setFocusById(new SDLink(event.data.link).source);
