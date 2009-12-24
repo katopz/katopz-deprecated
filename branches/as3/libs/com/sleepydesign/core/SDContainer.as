@@ -1,6 +1,7 @@
 ﻿package com.sleepydesign.core
 {
     import com.greensock.TweenLite;
+    import com.greensock.plugins.AutoAlphaPlugin;
     import com.greensock.plugins.FramePlugin;
     import com.greensock.plugins.TweenPlugin;
     import com.sleepydesign.events.SDEvent;
@@ -67,7 +68,7 @@
 		 */		
 		public function SDContainer(id:String=null)
 		{
-			TweenPlugin.activate([FramePlugin,{}]);
+			TweenPlugin.activate([AutoAlphaPlugin]);
 			
 			super();
 			
