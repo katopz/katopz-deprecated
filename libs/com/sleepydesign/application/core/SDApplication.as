@@ -1,7 +1,13 @@
 package com.sleepydesign.application.core
 {
+	import com.greensock.TweenLite;
+	import com.greensock.plugins.AutoAlphaPlugin;
+	import com.greensock.plugins.TweenPlugin;
+	import com.sleepydesign.components.SDMacPreloader;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDSprite;
+	import com.sleepydesign.draw.SDSquare;
+	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
@@ -96,6 +102,23 @@ package com.sleepydesign.application.core
 				//loader = loaderObject?new SDLoader(loaderObject):new SDLoader();
 				
 				//system.parse({instance:this});
+				
+				var _loader:SDSquare = new SDSquare(1000, 700, 0x000000, 0.75,0,0x000000,"c");
+				_loader.addChild(new SDMacPreloader());
+				
+				TweenPlugin.activate([AutoAlphaPlugin]);
+				
+				LoaderUtil.showLoader = function():void
+				{
+					TweenLite.to(_loader, 0.5, {autoAlpha:1});
+				};
+				
+				LoaderUtil.hideLoader = function():void
+				{
+					TweenLite.to(_loader, 0.5, {autoAlpha:0});
+				};
+				
+				LoaderUtil.addLoaderTo(this, _loader);
 			}
 		}
 		

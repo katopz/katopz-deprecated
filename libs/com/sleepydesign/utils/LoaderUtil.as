@@ -30,6 +30,9 @@ package com.sleepydesign.utils
 	{
 		public static var SEND_METHOD:String = URLRequestMethod.POST;
 		
+		public static var showLoader:Function;
+		public static var hideLoader:Function;
+		
 		public static var loaderClip:DisplayObject;
 		
 		public static function addLoaderTo(parent:DisplayObjectContainer, loaderClip:DisplayObject, show:Boolean=true):void
@@ -156,6 +159,9 @@ package com.sleepydesign.utils
 		 */		
 		public static function load(uri:String, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest=null):Object
 		{
+			if(loaderClip && showLoader is Function)
+				showLoader();
+			
 			// select type
 			if(type=="auto")
 			switch(getType(uri))
@@ -217,6 +223,9 @@ package com.sleepydesign.utils
 				    _loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
 		            _loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
 		            _loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+		            
+		            if(loaderClip && hideLoader is Function)
+						hideLoader();
 		            
 		            // gc
 		            removeItem(loaders, _loader);
