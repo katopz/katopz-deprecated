@@ -573,10 +573,12 @@
 				break;
 				case "button" :
 					
-					removeEventListener(MouseEvent.CLICK, onContentClick);
-					//if(!hasEventListener(MouseEvent.CLICK))
-					addEventListener(MouseEvent.CLICK, onContentClick);
+					//Navigation.getInstance().removeEventListener(MouseEvent.CLICK, onContentClick);
+					//if(!Site.getInstance().hasEventListener(MouseEvent.CLICK))
+					//	Site.getInstance().addEventListener(MouseEvent.CLICK, onContentClick);
 					
+					removeEventListener(MouseEvent.CLICK, onContentClick);
+					addEventListener(MouseEvent.CLICK, onContentClick);
 					/*
 					trace(itemXML.@visible);
 					
@@ -847,12 +849,15 @@
 		{
 			trace(" ! onContentClick : " + this, ":", event.target.name);
 			
-			trace(this==event.target.parent);
-			trace(this==event.target.root);
+			/*
+			trace("this:"+this);
+			trace("target:"+event.target);
+			trace("currentTarget:"+event.currentTarget);
+			*/
 			
 //TODO:move up
-//if(content is Content && content != this)
-//Content(content).onContentClick(event);
+if(content is Content && content != this)
+	Content(content).onContentClick(event);
 				
 			//var linkXML:XML = XML(links.find(event.target))
 			
@@ -900,11 +905,11 @@
 			else if(!StringUtil.isNull(linkXML.@href))
 			{
 				trace(" ! href\t: " + linkXML.@href);
-				//URLUtil.getURL(linkXML.@href, linkXML.@target);
+				//URLUtil.delayGetURL(linkXML.@href, linkXML.@target);
 				
 				if(StringUtil.isNull(linkXML.@vars))
 				{
-					Navigation.getURL(linkXML.@id, linkXML.@href, linkXML.@target);
+					Navigation.delayGetURL(linkXML.@id, linkXML.@href, linkXML.@target);
 				}else{
 					var _href:String = String(linkXML.@href);
 					
@@ -916,12 +921,12 @@
 						for(var _var:String in _URLVariables)
 							_href = _href.split(_var).join("'"+DataUtil.getDataByID(_var.split("$").join(""))+"'");
 						
-						Navigation.getURL(linkXML.@id, _href, linkXML.@target);
+						Navigation.delayGetURL(linkXML.@id, _href, linkXML.@target);
 					}else{
 						_varsString = String(linkXML.@vars);
 						_URLVariables = DataUtil.getDataByVars(_varsString);
 					
-						Navigation.getURL(linkXML.@id, _href+"&"+_URLVariables.toString(), linkXML.@target);
+						Navigation.delayGetURL(linkXML.@id, _href+"&"+_URLVariables.toString(), linkXML.@target);
 					}
 				}
 			}

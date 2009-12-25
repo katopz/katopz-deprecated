@@ -11,6 +11,7 @@
  */
 package com.sleepydesign.site.view.components
 {
+	import com.greensock.TweenLite;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.SDTreeNode;
 	import com.sleepydesign.core.SDContainer;
@@ -224,6 +225,13 @@ package com.sleepydesign.site.view.components
 			// sometime call from dependency
 			if(instance)
 				instance.dispatchEvent( new SDEvent( SDEvent.UPDATE, { id:id }));
+		}
+		
+		// TODO : fix this rapid call from button!
+		public static function delayGetURL(id:String, uri:String, window:String = "_blank"):void 
+		{
+			trace(" * Navigation.delayGetURL : "+ uri);
+			TweenLite.to(getInstance(), 0.25, {alpha:1 ,onComplete:function():void{getURL(id, uri, window);}})
 		}
 	}
 }
