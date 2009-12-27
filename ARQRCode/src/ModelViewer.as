@@ -126,11 +126,17 @@ package
 			reset();
 			visible = false;
 			
-			_loader = new Loader3D();
-			_loader.loadGeometry(uri, _collada);
-			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			_loader.addEventListener(Loader3DEvent.LOAD_ERROR, onError);
-			_root.addChild(_loader);
+			try{
+				_loader = new Loader3D();
+				_loader.loadGeometry(uri, _collada);
+				_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+				_loader.addEventListener(Loader3DEvent.LOAD_ERROR, onError);
+				
+				if(_root.contains(_loader))
+					_root.removeChild(_loader);
+				
+				_root.addChild(_loader);
+			}catch(e:*){trace(e)};
 		}
 		
 		private function onError(event:Loader3DEvent):void
@@ -143,6 +149,8 @@ package
 		
 		private function onSuccess(event:Loader3DEvent):void
 		{
+			trace("[Success] : " + event);
+			
 			visible = true;
 			
 			_model = _loader.handle;
@@ -212,8 +220,8 @@ package
 		public function updateAnimation():void
 		{
 			try{
-			if(_skinAnimation)
-				_skinAnimation.update(getTimer()/1000);
+				if(_skinAnimation)
+					_skinAnimation.update(getTimer()/1000);
 			}catch(e:*){trace(e)};
 		}
 	}
