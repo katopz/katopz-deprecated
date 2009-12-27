@@ -23,12 +23,13 @@ package com.sleepydesign.components
 		
 		public function SDBalloon( text:String="" )
 		{
-			_htmlText = text;
-			
+			_htmlText = _text = text;
+
 			mouseEnabled = false;
 			mouseChildren = false;
 			
 			//create();
+			super();
 		}
 		
 		override public function create(config:Object=null):void

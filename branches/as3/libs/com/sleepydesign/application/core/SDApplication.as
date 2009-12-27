@@ -65,7 +65,7 @@ package com.sleepydesign.application.core
 				}
 				
 				//scrollRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);		
-	
+				
 				if (loaderInfo && loaderInfo.parameters)
 				{
 					flashVars = loaderInfo.parameters;
@@ -103,8 +103,11 @@ package com.sleepydesign.application.core
 				
 				//system.parse({instance:this});
 				
-				var _loader:SDSquare = new SDSquare(1000, 700, 0x000000, 0.75,0,0x000000,"c");
+				var _loader:SDSquare = new SDSquare(1000, 700, 0x000000, 0.75, 0, 0x000000,"c");
 				_loader.addChild(new SDMacPreloader());
+				_loader.alpha = 0;
+				_loader.visible = false;
+				_loader.mouseEnabled = false;
 				
 				TweenPlugin.activate([AutoAlphaPlugin]);
 				
@@ -136,4 +139,3 @@ package com.sleepydesign.application.core
 		*/
 	}
 }
-

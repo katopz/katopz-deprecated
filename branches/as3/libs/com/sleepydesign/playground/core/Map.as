@@ -49,7 +49,7 @@ package com.sleepydesign.playground.core
 		
         // ______________________________ Initialize ______________________________
         
-		override public function parse(raw:Object=null):void
+		public function parse(raw:Object=null):void
 		{
 			if(!raw)return;
 			
