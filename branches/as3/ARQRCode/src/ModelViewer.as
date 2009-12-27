@@ -129,7 +129,16 @@ package
 			_loader = new Loader3D();
 			_loader.loadGeometry(uri, _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			_loader.addEventListener(Loader3DEvent.LOAD_ERROR, onError);
 			_root.addChild(_loader);
+		}
+		
+		private function onError(event:Loader3DEvent):void
+		{
+			if(_loader.IOErrorText)
+				trace("[IOError] : " + _loader.IOErrorText);
+			
+			trace("[ERROR] : " + event);
 		}
 		
 		private function onSuccess(event:Loader3DEvent):void
