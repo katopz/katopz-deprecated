@@ -30,7 +30,7 @@
 		
         // ______________________________ Initialize ______________________________
         
-		override public function parse(raw:Object=null):void
+		public function parse(raw:Object=null):void
 		{
 			id  = raw.id;
 			data = AreaData(raw);

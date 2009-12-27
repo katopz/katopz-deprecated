@@ -1,6 +1,6 @@
 ﻿﻿package com.sleepydesign.game.player
 {
-	import com.greensock.;
+	import com.greensock.*;
 	import com.greensock.easing.Linear;
 	import com.sleepydesign.components.SDBalloon;
 	import com.sleepydesign.core.SDObject;
@@ -162,7 +162,7 @@
 		{
 			trace("onAnimationComplete#3");
 			//balloonClip.y = 70;
-			.to(instance, 1, {autoAlpha:1});
+			TweenLite.to(instance, 1, {autoAlpha:1});
 			dispatchEvent(event.clone());
 		}
 		
@@ -257,7 +257,7 @@
 				
 				positions.shift();
 				
-				.killTweensOf(dolly);
+				TweenLite.killTweensOf(dolly);
 				
 				act(PlayerEvent.WALK);
 				
@@ -277,7 +277,7 @@
 				
 				//instance.lookAt(decoy);
 				
-				.to(dolly, time, 
+				TweenLite.to(dolly, time, 
 				{
 					x:decoy.x, y:decoy.y, z:decoy.z,
 					//bezier:positions,
@@ -406,7 +406,7 @@
 		
 		override public function destroy():void
 		{
-			.killTweensOf(dolly);
+			TweenLite.killTweensOf(dolly);
 			/*
 			id = null;
 			instance = null;

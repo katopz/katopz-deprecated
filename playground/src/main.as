@@ -1,5 +1,7 @@
 ﻿package
 {
+	import com.greensock.plugins.GlowFilterPlugin;
+	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.SDChatBox;
 	import com.sleepydesign.components.SDConnector;
@@ -27,7 +29,6 @@
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.ProfilerUtil;
 	
-	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
@@ -35,8 +36,6 @@
 	[SWF(backgroundColor="0xFFFFFF", frameRate = "30", width = "800", height = "480")]
 	public class main extends SDApplication
 	{
-		//private var fake:Vector.<int>;
-
 		private var engine3D:Engine3D;
 		private var game:Game;
 		private var connector:SDConnector;
@@ -46,19 +45,18 @@
 		private const VERSION:String = "PlayGround 2.1";
 
 		private var area:Area;
-		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
+		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
 		//rtmp://203.150.230.224/oflaDemo
-		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
+		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 
 		private var currentRoomID:String = "";
 
 		public function main()
 		{
+			TweenPlugin.activate([GlowFilterPlugin]);
 			super("PlayGround", new SDMacPreloader());
 
 			ProfilerUtil.addStat(SDApplication.system);
-			//fake = new Vector.<int>();
-			alpha = .1;
 		}
 
 		// ______________________________ Initialize ______________________________
@@ -72,7 +70,8 @@
 		private var config2:AreaData = new AreaData("l0r1", "assets/day2.jpg", "l0r1.dat", 40, 40, new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)));
 
 		private var configs:Dictionary;
-
+		private var areaDialog:SDDialog;
+		
 		override protected function init():void
 		{
 			// TODO load from external and put to group
@@ -80,11 +79,10 @@
 
 			configs[3] = config1;
 			configs[4] = config2;
-		}
+		//}
 		
-		private var areaDialog:SDDialog;
-		override protected function onStage(event:Event=null):void
-		{
+		//protected function onStage(event:Event=null):void
+		//{
 			// ___________________________________________________________ Area
 
 			//TODO : ask from external call, add user name 
@@ -95,9 +93,9 @@
 					<answer src="as:onUserSelectArea(4)"><![CDATA[select area 4]]></answer>
 				</question>, false, this);
 			
-			system.addChild(areaDialog);
+			this.addChild(areaDialog);
 			
-			init();
+			//init();
 		}
 		
 		public function onUserSelectArea(id:int):void
@@ -241,8 +239,7 @@
 			catch (e:*)
 			{
 				trace(e)
-			}
-			;
+			};
 		}
 
 		// _______________________________________________________ System
