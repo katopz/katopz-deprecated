@@ -81,6 +81,8 @@ package flars
 		private var _width:int = 320;
 		private var _height:int = 240;
 		
+		public static var DEFAULT_QUALITY:String = StageQuality.HIGH;
+		
 		public function FLARManager(container:DisplayObjectContainer, bitmapData:BitmapData)
 		{
 			_container = container;
@@ -149,9 +151,13 @@ package flars
 			// get image into _bitmapData
 			_bitmapData.fillRect(_bitmapData.rect, 0);
 
-			_container.stage.quality = StageQuality.HIGH;
+			if(_container.stage.quality != StageQuality.HIGH)
+				_container.stage.quality = StageQuality.HIGH;
+			
 			_bitmapData.draw(target);
-			_container.stage.quality = StageQuality.MEDIUM;
+			
+			if(_container.stage.quality != DEFAULT_QUALITY)
+				_container.stage.quality = DEFAULT_QUALITY;
 			
 			n = detector.detectMarkerLite(raster, 128);
 			return n;
