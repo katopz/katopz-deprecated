@@ -120,23 +120,30 @@ package
 		{
 			trace(" * load : " + uri);
 			
+			// gc
+			if(_collada)
+				_collada = null;
+			
 			_collada = new Collada();
 			_collada.scaling = 40;
 			
 			reset();
 			visible = false;
 			
-			try{
+			//try{
+			
+				// gc
+				if(_loader && _root.contains(_loader))
+					_root.removeChild(_loader);
+
 				_loader = new Loader3D();
-				_loader.loadGeometry(uri, _collada);
 				_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 				_loader.addEventListener(Loader3DEvent.LOAD_ERROR, onError);
-				
-				if(_root.contains(_loader))
-					_root.removeChild(_loader);
+				_loader.loadGeometry(uri, _collada);
 				
 				_root.addChild(_loader);
-			}catch(e:*){trace(e)};
+				
+			//}catch(e:*){trace(e)};
 		}
 		
 		private function onError(event:Loader3DEvent):void
@@ -163,7 +170,7 @@ package
 			*/
 			
 			try{
-			_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+				_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 			}catch(e:*){}
 		}
 		

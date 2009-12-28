@@ -54,6 +54,7 @@ package
 			Oishi.POSITION_Y = 320;
 			Oishi.POSITION_Z = -100;
 			
+			Oishi.USE_DEDUG = true;
 			Oishi.USE_CAMERA = true;
 			Oishi.USE_CONTEXT = true;
 			Oishi.MODEL_DATA_URL = "serverside/modelData.xml";
@@ -90,7 +91,6 @@ package
 			if(event.type=="complete")
 			{
 				_reader = event.target.content as Sprite;
-				_reader["isOnline"] = false;
 				addChild(_reader);
 			}
 		}

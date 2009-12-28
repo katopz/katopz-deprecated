@@ -72,6 +72,9 @@ package
 		// Camera
 		private var isCam:Boolean = false;
 		
+		// Debug
+		private var _rbmp:Bitmap;
+		
 		// manager
 		private var _QRReader:QRManager;
 		private var _FLARManager:FLARManager;
@@ -82,7 +85,6 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
-		public var isOnline:Boolean = true;
 		
 		public function reader()
 		{
@@ -138,10 +140,13 @@ package
 
 			_modelViewer = new ModelViewer(scene);
 			
-			debug = false;
+			debug = Oishi.USE_DEDUG;
 			
-			removeChild(stats);
-			removeChild(debugText);
+			if(!debug)
+			{
+				stats.visible = false;
+				debugText.visible = false;
+			}
 			
 			// get model data
 			LoaderUtil.loadXML(Oishi.MODEL_DATA_URL, onGetModelData);
@@ -197,14 +202,22 @@ package
 			camera.projection.fieldOfView = _FLARManager.fieldOfView;
 			camera.projection.focalLength = _FLARManager.focalLength;
 			
+			//debug
+			_rbmp = new Bitmap(_QRReader.homography);
+			_rbmp.scaleX = _rbmp.scaleY = .25;
+			_rbmp.y = 110;
+			_rbmp.visible = debug;
+			addChild(_rbmp);
+			
 			// add test image in the background
 			setBitmap(Bitmap(new ImageData));
 
 			// menu
 			if(Oishi.USE_CONTEXT)
 			{
-				SystemUtil.addContext(this, "ARQRCode version 1.4");
+				SystemUtil.addContext(this, "ARQRCode version 1.5");
 				SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
+				SystemUtil.addContext(this, "Toggle Debug", function ():void{toggleDebug()});
 				
 				SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
 				SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
@@ -256,6 +269,14 @@ package
 			Oishi.setCode(QRManager.result);
 		}
 		
+		public function toggleDebug():void
+		{		
+			debug = !debug;
+			stats.visible = debug;
+			debugText.visible = debug;
+			_rbmp.visible = debug;
+		}
+		
 		public function toggleCamera():void
 		{
 			isCam = !isCam;
@@ -274,6 +295,7 @@ package
 		
 		private function onMouseDown(event:MouseEvent):void
 		{
+			if(!isCam)
 			TweenLite.to(fake, .5, {
 				rotationX:60*Math.random()-60*Math.random(),
 				rotationY:60*Math.random()-60*Math.random(),
@@ -326,12 +348,15 @@ package
 
 		public function reset():void
 		{
-			try
-			{
-				_isQRDecoded = false;
+			_isQRDecoded = false;
+			
+			try{
 				_QRReader.reset();
+			}catch(e:*){trace(e);}
+			
+			try{
 				_modelViewer.reset();
-			}catch(e:*){}
+			}catch(e:*){trace(e);}
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
@@ -356,7 +381,7 @@ package
 		private function process():void
 		{
 			// prevent error
-			try{
+			//try{
 			if(!_FLARManager || !_FLARManager.ready)return;
 			
 			var n:Number;
@@ -397,7 +422,7 @@ package
 			
 			_modelViewer.setRefererPoint(_FLARManager.getStuff());
 			
-			}catch(e:*){}
+			//}catch(e:*){}
 		}
 	}
 }
