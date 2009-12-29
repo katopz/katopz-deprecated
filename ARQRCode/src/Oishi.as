@@ -13,6 +13,9 @@ package
 		public static var USE_CONTEXT:Boolean = true;
 		public static var USE_DEDUG:Boolean = false;
 		
+		public static var USE_LOCK_AXIS:Boolean = true;
+		public static var MATRIX3D_INTERPOLATE:Number = 0.25;
+				
 		public static var POSITION_X:Number = 0;
 		public static var POSITION_Y:Number = 0;
 		public static var POSITION_Z:Number = 0;

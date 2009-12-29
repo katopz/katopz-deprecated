@@ -58,6 +58,8 @@ package
 			Oishi.USE_CAMERA = true;
 			Oishi.USE_CONTEXT = true;
 			Oishi.MODEL_DATA_URL = "serverside/modelData.xml";
+			
+			Oishi.MATRIX3D_INTERPOLATE = .25;
 		}
 		
 		private function onGetCode(event:DataEvent):void
