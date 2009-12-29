@@ -64,9 +64,11 @@ package
 			_root.y = Oishi.POSITION_Y;
 			_root.x = Oishi.POSITION_Z;
 			
+			/*
 			_root.rotationX = Oishi.ROTATION_X;
 			_root.rotationY = Oishi.ROTATION_Y;
 			_root.rotationZ = Oishi.ROTATION_Z;
+			*/
 			
 			_root.scaleX = Oishi.SCALE_X;
 			_root.scaleY = Oishi.SCALE_Y;
@@ -92,6 +94,7 @@ package
 				_model = null;
 			}
 			
+			trace(" ! Model reset");
 			//DebugUtil.addText("! Model reset");
 		}
 		
@@ -169,14 +172,42 @@ package
 			_model.scaleZ = -1;
 			*/
 			
+			_model.rotationX = Oishi.ROTATION_X+90;
+			_model.rotationY = Oishi.ROTATION_Y;
+			_model.rotationZ = Oishi.ROTATION_Z+90;
+			
 			try{
 				_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 			}catch(e:*){}
 		}
 		
+		private var _temp:Object3D = new Object3D();
+		private var _old:Object3D = new Object3D();
 		public function setAxis(_FLARResult:FLARResult):void
 		{
-			_FLARResult.setTransform(_base);
+			_FLARResult.setTransform(_temp);
+			
+			//trace(int(_temp.rotationX), int(_temp.rotationY), int(_temp.rotationZ));
+			if(Oishi.USE_LOCK_AXIS)
+			{
+				var rotationX_diff:Number = Math.abs(_old.rotationX-_temp.rotationX);
+				var rotationY_diff:Number = Math.abs(_old.rotationY-_temp.rotationY);
+				var rotationZ_diff:Number = Math.abs(_old.rotationZ-_temp.rotationZ);
+				
+				//trace(rotationX_diff, rotationZ_diff);
+				
+				if(rotationX_diff>180)
+					_temp.rotationX = Math.abs(_temp.rotationX);
+					
+				if(rotationY_diff>180)
+					_temp.rotationY = Math.abs(_temp.rotationY);
+					
+				if(rotationZ_diff>180)
+					_temp.rotationZ = Math.abs(_temp.rotationZ);
+			}
+			
+			_base.transform.matrix3D.interpolateTo(_temp.transform.matrix3D, Oishi.MATRIX3D_INTERPOLATE);
+			_old.transform.matrix3D = _base.transform.matrix3D.clone();
 		}
 		
 		public function setRefererPoint(p:Vector.<Number>):void

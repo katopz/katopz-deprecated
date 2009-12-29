@@ -88,6 +88,19 @@ package
 		
 		public function reader()
 		{
+			//setting
+			Oishi.USE_DEDUG = true;
+			Oishi.USE_CAMERA = false;
+			Oishi.USE_CONTEXT = true;
+			Oishi.POSITION_Y = 320;
+			Oishi.POSITION_Z = -100;
+			
+			Oishi.ROTATION_X = -90;
+			Oishi.ROTATION_Z = -90;
+			
+			//Oishi.SCALE_X = -1;
+			//Oishi.SCALE_Z = -1;
+			
 			// base
 			base = new Sprite();
 			addChild(base);
