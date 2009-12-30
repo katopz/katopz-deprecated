@@ -17,16 +17,16 @@ package
 		public static var MATRIX3D_INTERPOLATE:Number = 0.25;
 				
 		public static var POSITION_X:Number = 0;
-		public static var POSITION_Y:Number = 0;
-		public static var POSITION_Z:Number = 0;
+		public static var POSITION_Y:Number = 320;
+		public static var POSITION_Z:Number = -100;
 					
-		public static var ROTATION_X:Number = 0;
+		public static var ROTATION_X:Number = -90;
 		public static var ROTATION_Y:Number = 0;
-		public static var ROTATION_Z:Number = 0;
+		public static var ROTATION_Z:Number = -90;
 			
-		public static var SCALE_X:Number = 1;
+		public static var SCALE_X:Number = -1;
 		public static var SCALE_Y:Number = 1;
-		public static var SCALE_Z:Number = 1;
+		public static var SCALE_Z:Number = -1;
 		
 		private static var _eventDispatcher:EventDispatcher;
 		private static var _code:String;
