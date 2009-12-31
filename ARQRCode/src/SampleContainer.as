@@ -55,7 +55,7 @@ package
 			Oishi.POSITION_Z = -100;
 			
 			Oishi.USE_DEDUG = true;
-			Oishi.USE_CAMERA = true;
+			Oishi.USE_CAMERA = false;
 			Oishi.USE_CONTEXT = true;
 			Oishi.MODEL_DATA_URL = "serverside/modelData.xml";
 			
