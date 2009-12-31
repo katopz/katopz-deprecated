@@ -3,7 +3,7 @@
 	<ingredient>
 		<code>058454</code>
 		<name><![CDATA[ข้าว]]></name>
-		<src>serverside/G2.bin</src>
+		<src>serverside/G2.dae</src>
 	</ingredient>
 	<ingredient>
 		<code>26B0EA</code>
