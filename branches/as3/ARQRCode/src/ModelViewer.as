@@ -9,6 +9,9 @@ package
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.BitmapMaterial;
 	
+	import com.sleepydesign.utils.LoaderUtil;
+	import com.sleepydesign.utils.URLUtil;
+	
 	import flars.FLARResult;
 	
 	import flash.display.*;
@@ -37,6 +40,11 @@ package
 		private var cc:Vector3D;
 		
 		public var visible:Boolean = true;
+		
+		public static var currentXML:XML;
+		public static var currentURI:String;
+		
+		private var _texturePath:String;
 		
 		public function ModelViewer(scene:Scene3D)
 		{
@@ -108,13 +116,16 @@ package
 		{
 			trace(" * Parse");
 			
+			currentXML = xml;
+			
 			_collada = new Collada();
+			_collada.scaling = 40;
 			
 			reset();
 			visible = false;
 			
 			_loader = new Loader3D();
-			_loader.loadXML(xml, _collada);
+			_loader.loadXML(xml, _collada, _texturePath);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			_root.addChild(_loader);
 		}
@@ -122,6 +133,7 @@ package
 		public function load(uri:String):void
 		{
 			trace(" * load : " + uri);
+			currentURI = uri;
 			
 			// gc
 			if(_collada)
@@ -133,20 +145,36 @@ package
 			reset();
 			visible = false;
 			
-			//try{
-			
-				// gc
-				if(_loader && _root.contains(_loader))
-					_root.removeChild(_loader);
-
+			if(URLUtil.getType(uri)=="bin")
+			{
+				var _paths:Array = uri.split("/");
+				_paths.pop();
+				_texturePath = _paths.join("/")+"/";
+				
+				LoaderUtil.loadZIP(uri, onLoadZIP);
+			}else{
 				_loader = new Loader3D();
+				_loader.addEventListener(DataEvent.DATA, onXMLComplete);
 				_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 				_loader.addEventListener(Loader3DEvent.LOAD_ERROR, onError);
 				_loader.loadGeometry(uri, _collada);
-				
 				_root.addChild(_loader);
-				
-			//}catch(e:*){trace(e)};
+			}
+		}
+		
+		private function onXMLComplete(event:DataEvent):void
+		{
+			currentXML = new XML(event["data"]);
+		}
+		
+		private function onLoadZIP(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+			{
+				var _byte:ByteArray = ByteArray(event.target["data"]);
+				var _xml:XML = new XML(_byte.readUTFBytes(_byte.length)); 
+				parse(_xml);
+			}
 		}
 		
 		private function onError(event:Loader3DEvent):void

@@ -62,7 +62,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../codes/G6_26B0EA.png')]
+		[Embed(source='../codes/G2_058454.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -103,6 +103,9 @@ package
 			Oishi.SCALE_X = -1;
 			Oishi.SCALE_Z = -1;
 			*/
+			
+			Oishi.USE_DEDUG = true;
+			Oishi.USE_CAMERA = false;
 			
 			// base
 			base = new Sprite();
@@ -239,6 +242,21 @@ package
 				SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
 				SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
 				
+				
+				SystemUtil.addContext(this, "Open Model (Compress)", function ():void
+				{
+					FileUtil.openCompress(onOpenModel)
+				});
+				SystemUtil.addContext(this, "Save Model (Compress)", function ():void
+				{
+					if(ModelViewer.currentXML)
+					{
+						var _srcURLs:Array = ModelViewer.currentURI.split("/");
+						var _fileName:String = _srcURLs.pop();
+						FileUtil.saveCompress(ModelViewer.currentXML.toXMLString(), _fileName.split(".")[0]+".bin");
+					}
+				});
+				
 				SystemUtil.addContext(this, "Reset Code", function ():void{reset()});
 			}
 
@@ -256,7 +274,11 @@ package
 		private function onOpenModel(event:Event):void
 		{
 			if(event.type == Event.COMPLETE)
+			{
 				_modelViewer.parse(new XML(event["data"]));
+			} else if(event.type == Event.SELECT){
+				ModelViewer.currentURI = event.target["name"];
+			}
 		}
 		
 		private function onModelDecodeComplete(event:Event):void
