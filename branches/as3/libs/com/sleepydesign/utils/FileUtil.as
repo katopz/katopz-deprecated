@@ -66,6 +66,25 @@ package com.sleepydesign.utils
 			});
 		}
 		
+		public static function openCompress(eventHandler:Function):FileReference
+		{
+			return open(["*.bin"], function(event:Event):void
+			{
+				if (event.type == Event.COMPLETE || event.type == DataEvent.UPLOAD_COMPLETE_DATA)
+				{
+						var _byte:ByteArray = event.target["data"] as ByteArray;
+						_byte.uncompress();
+						eventHandler(new DataEvent(Event.COMPLETE, false, false, _byte.readUTFBytes(_byte.length)));
+				}
+				else
+				{
+					// other event
+					trace(" ^ event : "+event);
+					eventHandler(event);
+				}
+			});
+		}
+		
 		/**
 		 * Browse image and add to container
 		 * @param container
@@ -128,7 +147,8 @@ package com.sleepydesign.utils
 			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
 			file.addEventListener(Event.COMPLETE, eventHandler);
 			file.addEventListener(Event.CANCEL, eventHandler);
-			file.addEventListener(Event.SELECT, function(event:Event):void
+			file.addEventListener(Event.SELECT, eventHandler);
+			var _onCompleteFunction:Function = function(event:Event):void
 			{
 				trace(" ^ Select : " + file.name + " | " + file.size);
 				try
@@ -146,14 +166,16 @@ package com.sleepydesign.utils
 					if (file.size < UPLOAD_LIMIT)
 					{
 						trace(" * Uploading : " + file.size);
-						file.addEventListener(Event.CANCEL, eventHandler, false, 0, true);
-						file.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler, false, 0, true);
-						file.addEventListener(IOErrorEvent.IO_ERROR, eventHandler, false, 0, true);
-						file.addEventListener(Event.OPEN, eventHandler, false, 0, true);
-						file.addEventListener(ProgressEvent.PROGRESS, eventHandler, false, 0, true);
-						file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler, false, 0, true);
-						file.addEventListener(Event.SELECT, eventHandler, false, 0, true);
-						file.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, eventHandler, false, 0, true);
+						file.addEventListener(Event.CANCEL, eventHandler);
+						file.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
+						file.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
+						file.addEventListener(Event.OPEN, eventHandler);
+						file.addEventListener(ProgressEvent.PROGRESS, eventHandler);
+						file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+						file.addEventListener(Event.SELECT, eventHandler);
+						file.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, eventHandler);
+						
+						// TODO : gc
 
 						file.upload(request);
 					}
@@ -162,6 +184,16 @@ package com.sleepydesign.utils
 						trace("File is too large : " + int(file.size / 1024) + "KB");
 					}
 				}
+			}
+			file.addEventListener(Event.SELECT, _onCompleteFunction);
+			
+			//gc
+			file.addEventListener(Event.COMPLETE, function(event:Event):void
+			{
+				file.removeEventListener(Event.COMPLETE, eventHandler);
+				file.removeEventListener(Event.CANCEL, eventHandler);
+				file.removeEventListener(Event.SELECT, eventHandler);
+				file.removeEventListener(Event.SELECT, _onCompleteFunction);
 			});
 
 			file.browse(typeFilter);
@@ -188,6 +220,15 @@ package com.sleepydesign.utils
 
 			var fileReference:FileReference = new FileReference();
 			fileReference["save"](rawBytes, defaultFileName);
+		}
+		
+		public static function saveCompress(data:*, defaultFileName:String = "undefined"):void
+		{
+			var rawBytes:ByteArray = new ByteArray();
+			rawBytes.writeUTFBytes(data);
+			rawBytes.compress();
+			
+			save(rawBytes, defaultFileName);
 		}
 	}
 }
