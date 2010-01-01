@@ -77,7 +77,7 @@ package com.sleepydesign.utils
 			
 			return _loader;
 		}
-			
+				
 		/**
 		 * Load as ByteArray
 		 * @param byteArray
@@ -146,6 +146,20 @@ package com.sleepydesign.utils
 		public static function loadBinary(uri:String, eventHandler:Function = null):URLLoader
 		{
 			return load(uri, eventHandler, URLLoaderDataFormat.BINARY) as URLLoader;
+		}
+		
+		public static function loadCompress(uri:String, eventHandler:Function = null):URLLoader
+		{
+			return load(uri, function(event:Event):void
+			{
+				if(event.type=="complete")
+				{
+					event.target["data"] = ByteArray(event.target["data"]);
+					ByteArray(event.target["data"]).uncompress();
+				}
+				
+				eventHandler(event);
+			} , URLLoaderDataFormat.BINARY) as URLLoader;
 		}
 		
 		public static var loaders:Array = [];
