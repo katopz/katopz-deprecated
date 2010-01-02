@@ -119,6 +119,7 @@ package
 			currentXML = xml;
 			
 			_collada = new Collada();
+			//_collada.bothsides = false;
 			_collada.scaling = 40;
 			
 			reset();
@@ -140,6 +141,7 @@ package
 				_collada = null;
 			
 			_collada = new Collada();
+			//_collada.bothsides = false;
 			_collada.scaling = 40;
 			
 			reset();
@@ -151,20 +153,14 @@ package
 				_paths.pop();
 				_texturePath = _paths.join("/")+"/";
 				
-				LoaderUtil.loadZIP(uri, onLoadZIP);
+				LoaderUtil.loadCompress(uri, onLoadZIP);
 			}else{
 				_loader = new Loader3D();
-				_loader.addEventListener(DataEvent.DATA, onXMLComplete);
 				_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 				_loader.addEventListener(Loader3DEvent.LOAD_ERROR, onError);
 				_loader.loadGeometry(uri, _collada);
 				_root.addChild(_loader);
 			}
-		}
-		
-		private function onXMLComplete(event:DataEvent):void
-		{
-			currentXML = new XML(event["data"]);
 		}
 		
 		private function onLoadZIP(event:Event):void
@@ -190,6 +186,8 @@ package
 			trace("[Success] : " + event);
 			
 			visible = true;
+			
+			currentXML = new XML(_loader.data);
 			
 			_model = _loader.handle;
 			/*
