@@ -301,7 +301,7 @@ package com.sleepydesign.site.view.components
 			var sourceString:String = idString;
 			sourceString = !StringUtil.isNull(itemXML.@src) ? String(itemXML.@src) : sourceString;
 
-			trace(" ! itemXML : " + itemXML.@id);
+			//trace(" ! itemXML : " + itemXML.@id);
 
 			// parse all item(s)
 			var i:uint;
@@ -330,12 +330,18 @@ package com.sleepydesign.site.view.components
 					}
 					
 					// case#4 embed asset
+					if(!clip && !_clip && content)
+					{
+						try{clip = content[sourceString];}catch(e:*){trace(e)}
+					}
+					
+					// case#5 inner embed asset
 					if(!clip && !_clip && content["content"])
 					{
 						//clip = _clip[sourceString];
 						clip = content["content"][sourceString];
 					}
-					
+										
 					/*
 					// case#4 embed asset
 					if(!clip)

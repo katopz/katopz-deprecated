@@ -1,5 +1,6 @@
 package com.sleepydesign.core
 {
+	import com.greensock.TweenLite;
 	import com.sleepydesign.components.SDInputText;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.utils.LoaderUtil;
@@ -98,6 +99,13 @@ package com.sleepydesign.core
 								button.removeEventListener(MouseEvent.CLICK, buttonListener);
 								button.addEventListener(MouseEvent.CLICK, buttonListener);
 							break;
+						}
+						
+						if(String(itemXML.@visible)=="false")
+						{
+							TweenLite.to(button, 0, {autoAlpha:0});
+						}else{
+							TweenLite.to(button, 0, {autoAlpha:1});
 						}
 					break;
 				}
