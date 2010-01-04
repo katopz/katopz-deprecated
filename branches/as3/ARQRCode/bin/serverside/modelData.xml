@@ -15,4 +15,9 @@
 		<name><![CDATA[กุ้ง]]></name>
 		<src>serverside/G7.dae</src>
 	</ingredient>
+	<ingredient>
+		<code>E7BFAC</code>
+		<name><![CDATA[Voucher]]></name>
+		<src>assets/Voucher.dae</src>
+	</ingredient>
 </ingredients>

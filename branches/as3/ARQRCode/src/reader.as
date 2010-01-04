@@ -62,7 +62,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../codes/G2_058454.png')]
+		[Embed(source='../bin/codes/1K_E7BFAC.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
@@ -298,8 +298,11 @@ package
 			
 			var _srcURL:String = getModelSourceByCode(QRManager.result);
 			if(_srcURL)
+			{
 				_modelViewer.load(_srcURL);
-			else{
+			}
+			else
+			{
 				trace("[ERROR] Model source not found!");
 			}
 			
