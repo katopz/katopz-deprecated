@@ -133,7 +133,7 @@ package flars
 		{
 			// 1st case : MAC use 2nd cam
 			if (!_webcam && Capabilities.os.indexOf("Mac")>-1)
-				_webcam = Camera.getCamera(Camera.names[1]);
+				_webcam = Camera.getCamera("2");
 
 			// 2nd case : default cam
 			if(!_webcam)
