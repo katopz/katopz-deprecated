@@ -5,6 +5,8 @@ package flars
 	import flash.geom.Point;
 	import flash.media.Camera;
 	import flash.media.Video;
+	import flash.system.Capabilities;
+	import flash.system.System;
 	import flash.utils.*;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
@@ -129,14 +131,21 @@ package flars
 		
 		public function setCamera(w:Number, h:Number, fps:int):Camera
 		{
+			// 1st try PC default cam
 			if(!_webcam)
 				_webcam = Camera.getCamera();
+			
+			// 2nd try MAC
+			if (!_webcam && Capabilities.os.indexOf("Mac")>-1)
+				_webcam = Camera.getCamera(Camera.names[1]);
 
 			if(_webcam)
 			{
 				_webcam.setMode(w, h, fps);
 				_video = new Video(w, h);
 				_video.attachCamera(_webcam);
+			}else{
+				trace("[ERROR] : No web cam detected! : " + Camera.names.length);
 			}
 			
 			_cameraBitmap = new Bitmap(new BitmapData(w, h, false, 0), PixelSnapping.AUTO, true);
