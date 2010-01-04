@@ -131,14 +131,14 @@ package flars
 		
 		public function setCamera(w:Number, h:Number, fps:int):Camera
 		{
-			// 1st try PC default cam
-			if(!_webcam)
-				_webcam = Camera.getCamera();
-			
-			// 2nd try MAC
+			// 1st case : MAC use 2nd cam
 			if (!_webcam && Capabilities.os.indexOf("Mac")>-1)
 				_webcam = Camera.getCamera(Camera.names[1]);
 
+			// 2nd case : default cam
+			if(!_webcam)
+				_webcam = Camera.getCamera();
+			
 			if(_webcam)
 			{
 				_webcam.setMode(w, h, fps);
