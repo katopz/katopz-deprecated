@@ -26,8 +26,6 @@ package com.sleepydesign.text
 			
 			parseCSS(css);
 			
-			trace("text:"+text);
-			
 			if (text)
 				this.htmlText = "<p>"+text+"</p>";
 		}

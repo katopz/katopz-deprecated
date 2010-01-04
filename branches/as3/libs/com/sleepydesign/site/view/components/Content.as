@@ -80,7 +80,9 @@
 		{
 			TweenPlugin.activate([FramePlugin, AutoAlphaPlugin]);
 			
-			trace(" ! source\t: "+ source);
+			if(source)
+				trace(" ! source\t: "+ source);
+			
 			// loader for load external assete only!
 			//loader = SDApplication.getLoader();
 			super( id );
@@ -525,7 +527,7 @@
 			} 
 			*/
 			
-			trace(" ! itemXML : "+String(itemXML.name()));
+			//trace(" ! itemXML : "+String(itemXML.name()));
 			
 			switch(String(itemXML.name()))
 			{
@@ -579,6 +581,7 @@
 					
 					removeEventListener(MouseEvent.CLICK, onContentClick);
 					addEventListener(MouseEvent.CLICK, onContentClick);
+					
 					/*
 					trace(itemXML.@visible);
 					
