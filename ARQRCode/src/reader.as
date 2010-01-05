@@ -146,6 +146,7 @@ package
 		override protected function setupStage():void
 		{
 			// no setup stage need
+			stage.scaleMode = StageScaleMode.NO_SCALE;
 		}
 		
 		override protected function onInit():void
