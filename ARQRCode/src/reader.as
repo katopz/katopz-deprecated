@@ -143,6 +143,11 @@ package
 			visible = false;
 		}
 		
+		override protected function setupStage():void
+		{
+			// no setup stage need
+		}
+		
 		override protected function onInit():void
 		{
 			view.x = SCREEN_WIDTH/2;
