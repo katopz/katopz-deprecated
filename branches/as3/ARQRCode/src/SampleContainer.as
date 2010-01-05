@@ -11,8 +11,6 @@ package
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
-	import net.hires.debug.Stats;
-	
 	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
 	public class SampleContainer extends Sprite
 	{
@@ -97,7 +95,6 @@ package
 			{
 				_reader = event.target.content as Sprite;
 				addChild(_reader);
-				addChild(new Stats());
 			}
 		}
 	}
