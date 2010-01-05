@@ -6,7 +6,6 @@ package flars
 	import flash.media.Camera;
 	import flash.media.Video;
 	import flash.system.Capabilities;
-	import flash.system.System;
 	import flash.utils.*;
 	
 	import org.libspark.flartoolkit.core.FLARCode;
@@ -82,8 +81,6 @@ package flars
 		
 		private var _width:int = 320;
 		private var _height:int = 240;
-		
-		public static var DEFAULT_QUALITY:String = StageQuality.HIGH;
 		
 		public function FLARManager(container:DisplayObjectContainer, bitmapData:BitmapData)
 		{
@@ -165,8 +162,8 @@ package flars
 			
 			_bitmapData.draw(target);
 			
-			if(_container.stage.quality != DEFAULT_QUALITY)
-				_container.stage.quality = DEFAULT_QUALITY;
+			if(_container.stage.quality != Oishi.DEFAULT_QUALITY)
+				_container.stage.quality = Oishi.DEFAULT_QUALITY;
 			
 			n = detector.detectMarkerLite(raster, 128);
 			return n;

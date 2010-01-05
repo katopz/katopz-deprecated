@@ -1,11 +1,14 @@
 package
 {
+	import flash.display.StageQuality;
 	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
 	public class Oishi
 	{
+		public static var DEFAULT_QUALITY:String = StageQuality.HIGH;
+		
 		public static var MODEL_DATA_URL:String = "serverside/modelData.xml";
 		public static var MODEL_XML:XML;
 		
