@@ -85,6 +85,7 @@ package
 		
 		// state
 		private var _isQRDecoded:Boolean = false;
+		private var _quality:String;
 		
 		public function reader()
 		{
@@ -127,6 +128,13 @@ package
 			// cam test
 			cameraContainer = new Sprite();
 			base.addChild(cameraContainer);
+			
+			if(stage)
+			{
+				_quality = stage.quality;
+			}else{
+				_quality = StageQuality.HIGH;
+			}
 		}
 
 		public function show():void
@@ -144,6 +152,9 @@ package
 		
 		override protected function onInit():void
 		{
+			// restore
+			stage.quality = _quality;
+			
 			view.x = SCREEN_WIDTH/2;
 			view.y = SCREEN_HEIGHT/2;
 			view.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);

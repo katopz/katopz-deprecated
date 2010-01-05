@@ -157,13 +157,12 @@ package flars
 			// get image into _bitmapData
 			_bitmapData.fillRect(_bitmapData.rect, 0);
 
-			if(_container.stage.quality != StageQuality.HIGH)
-				_container.stage.quality = StageQuality.HIGH;
+			var _quality:String = _container.stage.quality;
+			_container.stage.quality = StageQuality.HIGH;
 			
 			_bitmapData.draw(target);
 			
-			if(_container.stage.quality != Oishi.DEFAULT_QUALITY)
-				_container.stage.quality = Oishi.DEFAULT_QUALITY;
+			_container.stage.quality = _quality;
 			
 			n = detector.detectMarkerLite(raster, 128);
 			return n;

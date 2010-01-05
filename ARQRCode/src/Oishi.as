@@ -7,8 +7,6 @@ package
 
 	public class Oishi
 	{
-		public static var DEFAULT_QUALITY:String = StageQuality.HIGH;
-		
 		public static var MODEL_DATA_URL:String = "serverside/modelData.xml";
 		public static var MODEL_XML:XML;
 		

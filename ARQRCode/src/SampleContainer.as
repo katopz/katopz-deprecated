@@ -11,6 +11,8 @@ package
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	import net.hires.debug.Stats;
+	
 	[SWF(backgroundColor="0x333333", frameRate="30", width="320", height="240")]
 	public class SampleContainer extends Sprite
 	{
@@ -51,8 +53,6 @@ package
 			Oishi.SCALE_X = -1;
 			Oishi.SCALE_Z = -1;
 			*/
-			
-			Oishi.DEFAULT_QUALITY = StageQuality.LOW;
 			
 			Oishi.POSITION_Y = 320;
 			Oishi.POSITION_Z = -100;
@@ -97,6 +97,7 @@ package
 			{
 				_reader = event.target.content as Sprite;
 				addChild(_reader);
+				addChild(new Stats());
 			}
 		}
 	}
