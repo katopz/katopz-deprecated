@@ -215,7 +215,7 @@
 				return;
 			}
 			
-			trace(" ^ onGetData\t:"+_event);
+			//trace(" ^ onGetData\t:"+_event);
 			
 			// Form data :P
 			//if(event.target is SDForm)
@@ -870,6 +870,9 @@ if(content is Content && content != this)
 				 
 			var linkXML:XML = XMLUtil.getXMLById(_data_xml, event.target.name);
 			link(linkXML);
+			
+			//if(_data_xml)
+			//	trace(_data_xml.toXMLString());
 		}
 		
 		//todo:link utils?
@@ -912,7 +915,7 @@ if(content is Content && content != this)
 				
 				if(StringUtil.isNull(linkXML.@vars))
 				{
-					Navigation.delayGetURL(linkXML.@id, linkXML.@href, linkXML.@target);
+					Navigation.getURL(linkXML.@id, linkXML.@href, linkXML.@target);
 				}else{
 					var _href:String = String(linkXML.@href);
 					
@@ -924,12 +927,12 @@ if(content is Content && content != this)
 						for(var _var:String in _URLVariables)
 							_href = _href.split(_var).join("'"+DataUtil.getDataByID(_var.split("$").join(""))+"'");
 						
-						Navigation.delayGetURL(linkXML.@id, _href, linkXML.@target);
+						Navigation.getURL(linkXML.@id, _href, linkXML.@target);
 					}else{
 						_varsString = String(linkXML.@vars);
 						_URLVariables = DataUtil.getDataByVars(_varsString);
 					
-						Navigation.delayGetURL(linkXML.@id, _href+"&"+_URLVariables.toString(), linkXML.@target);
+						Navigation.getURL(linkXML.@id, _href+"&"+_URLVariables.toString(), linkXML.@target);
 					}
 				}
 			}
