@@ -3,6 +3,7 @@ package
 	import com.sleepydesign.utils.LoaderUtil;
 	
 	import flash.display.Sprite;
+	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.DataEvent;
 	import flash.events.Event;
@@ -50,6 +51,8 @@ package
 			Oishi.SCALE_X = -1;
 			Oishi.SCALE_Z = -1;
 			*/
+			
+			Oishi.DEFAULT_QUALITY = StageQuality.LOW;
 			
 			Oishi.POSITION_Y = 320;
 			Oishi.POSITION_Z = -100;
