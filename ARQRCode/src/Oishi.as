@@ -27,7 +27,7 @@ package
 			
 		public static var SCALE_X:Number = -1;
 		public static var SCALE_Y:Number = 1;
-		public static var SCALE_Z:Number = -1;
+		public static var SCALE_Z:Number = 1;
 		
 		private static var _eventDispatcher:EventDispatcher;
 		private static var _code:String;
