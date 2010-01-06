@@ -128,7 +128,7 @@ package com.sleepydesign.core
 				for each (var child:*in lists)
 				{
 					if (child is DisplayObject)
-						removeChild(child);
+						child.parent.removeChild(child);
 					child = null;
 				}
 
