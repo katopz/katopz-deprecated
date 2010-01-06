@@ -43,8 +43,6 @@ package com.sleepydesign.utils
 					parent.addChild(loaderClip);
 				
 				loaderClip.visible = true;
-				loaderClip.x = parent.stage.stageWidth/2;
-				loaderClip.y = parent.stage.stageHeight/2;
 			}else{
 				loaderClip.visible = false;
 			}
