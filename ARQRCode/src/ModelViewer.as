@@ -8,6 +8,9 @@ package
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.BitmapMaterial;
+	import away3dlite.materials.WireColorMaterial;
+	import away3dlite.primitives.Cube6;
+	import away3dlite.primitives.Sphere;
 	
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.URLUtil;
@@ -34,6 +37,7 @@ package
 		public var _anchorA:Object3D;
 		public var _anchorB:Object3D;
 		public var _anchorC:Object3D;
+		//public var _anchorD:Sphere;
 		
 		private var aa:Vector3D;
 		private var bb:Vector3D;
@@ -61,6 +65,9 @@ package
 			_anchorC = new Object3D();
 			//_anchorC = new Sphere(new WireColorMaterial(0x0000FF), 50, 4, 4);
 			scene.addChild(_anchorC);
+			
+			//_anchorD = new Sphere(new WireColorMaterial(0xFF00FF), 50, 4, 4);
+			//scene.addChild(_anchorD);
 			
 			_base = new ObjectContainer3D();
 			scene.addChild(_base);
@@ -197,23 +204,79 @@ package
 			_model.scaleX = -1;
 			_model.scaleZ = -1;
 			*/
-			
+			/*
 			_model.rotationX = Oishi.ROTATION_X+90;
 			_model.rotationY = Oishi.ROTATION_Y;
 			_model.rotationZ = Oishi.ROTATION_Z+90;
-			
+			*/
 			try{
 				_skinAnimation = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 			}catch(e:*){}
 		}
+		/*
+		public var _anchorA:Sphere;
+		public var _anchorB:Sphere;
+		public var _anchorC:Sphere;
+		*/
+		// the camera referential
+		private var vX:Vector3D = Vector3D.X_AXIS;
+		private var vY:Vector3D = Vector3D.Y_AXIS;
+		private var vZ:Vector3D = Vector3D.Z_AXIS;
 		
+		private var _default:Object3D;
 		private var _temp:Object3D = new Object3D();
-		private var _old:Object3D = new Object3D();
+		//private var _old:Object3D = new Object3D();
+		private var _cube:Cube6;
 		public function setAxis(_FLARResult:FLARResult):void
 		{
 			_FLARResult.setTransform(_temp);
 			
+			if(!_default)
+			{
+				_default = new Object3D();
+				_FLARResult.setTransform(_default);
+				//trace("*", getAngle(_default.rotationX), getAngle(_default.rotationY), getAngle(_default.rotationZ));
+			}
+			
+			//trace(getAngle(_temp.rotationX), getAngle(_temp.rotationY), getAngle(_temp.rotationZ));
+			
+			var _ok:Boolean = true;
+			if(Oishi.USE_LOCK_AXIS)
+			{
+				if(Math.abs(getAngle(_default.rotationZ)-getAngle(_temp.rotationZ))>30)
+					_ok = false;
+			}
+			
+			
+			/*
+			vZ = _anchorA.position.subtract(_anchorB.position);
+			vZ.normalize();
+
+			vX = _anchorA.position.subtract(_anchorC.position);
+			vX.normalize();
+
+			vY = vX.crossProduct(vZ);
+			vY.normalize();
+			*/
+			//_temp.transform.matrix3D.pointAt(vY., vY, vY);
+			/*
+			_anchorD.x = _anchorA.x;// + vY.x*100;
+			_anchorD.y = _anchorA.y + vY.y*1000;
+			_anchorD.z = _anchorA.z;// + vY.z*100;
+			*/
+			/*
+			_anchorD.transform.matrix3D.position = _anchorA.position.clone();
+			vY.scaleBy(500);
+			//_anchorD.transform.matrix3D.position.incrementBy(vY);
+			
+			_anchorD.x += vY.x;
+			_anchorD.y += vY.y;
+			_anchorD.z += vY.z;
+			*/
+			//trace(vY);
+			
 			//trace(int(_temp.rotationX), int(_temp.rotationY), int(_temp.rotationZ));
+			/*
 			if(Oishi.USE_LOCK_AXIS)
 			{
 				var rotationX_diff:Number = Math.abs(_old.rotationX-_temp.rotationX);
@@ -231,9 +294,16 @@ package
 				if(rotationZ_diff>180)
 					_temp.rotationZ = Math.abs(_temp.rotationZ);
 			}
+			*/
 			
-			_base.transform.matrix3D.interpolateTo(_temp.transform.matrix3D, Oishi.MATRIX3D_INTERPOLATE);
-			_old.transform.matrix3D = _base.transform.matrix3D.clone();
+			if(_ok)
+				_base.transform.matrix3D.interpolateTo(_temp.transform.matrix3D, Oishi.MATRIX3D_INTERPOLATE);
+			//_old.transform.matrix3D = _base.transform.matrix3D.clone();
+		}
+		
+		private function getAngle(value:Number):int
+		{
+			return (360+int(value))%360;
 		}
 		
 		public function setRefererPoint(p:Vector.<Number>):void

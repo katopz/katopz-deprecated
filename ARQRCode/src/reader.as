@@ -105,8 +105,8 @@ package
 			Oishi.SCALE_Z = -1;
 			*/
 			
-			//Oishi.USE_DEDUG = true;
-			//Oishi.USE_CAMERA = false;
+			Oishi.USE_DEDUG = true;
+			Oishi.USE_CAMERA = false;
 			
 			// base
 			base = new Sprite();
@@ -443,6 +443,8 @@ package
 			
 			title = "AR : " + n;
 			
+			_modelViewer.setRefererPoint(_FLARManager.getStuff());
+			
 			// marker more than 2
 			if (n > 2)
 			{
@@ -467,8 +469,6 @@ package
 					title += " | QR : n/a  | ";
 				}
 			}
-			
-			_modelViewer.setRefererPoint(_FLARManager.getStuff());
 			
 			//}catch(e:*){}
 		}
