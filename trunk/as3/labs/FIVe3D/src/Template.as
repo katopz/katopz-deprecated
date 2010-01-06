@@ -19,6 +19,9 @@ package
 			// init stage
 			setupStage();
 			
+			//
+			setupLayer();
+			
 			//init scene
 			_scene = new Scene3D();
 			_scene.x = stage.stageWidth / 2;
@@ -38,7 +41,7 @@ package
 			debugText.mouseWheelEnabled = false;
 			debugText.defaultTextFormat = new TextFormat("Tahoma", 12, 0x000000);
 			debugText.autoSize = "left";
-			debugText.x = 140;
+			debugText.x = 75;
 			debugText.textColor = 0xFFFFFF;
 			debugText.filters = [new GlowFilter(0x000000, 1, 4, 4, 2, 1)];
 			
@@ -68,6 +71,11 @@ package
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.quality = StageQuality.MEDIUM;
+		}
+		
+		protected function setupLayer():void
+		{
+			// override me
 		}
 		
 		protected function onAddedToStage(event:Event):void
