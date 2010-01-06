@@ -3,15 +3,13 @@ package com.sleepydesign.application.core
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
-	import com.sleepydesign.components.SDMacPreloader;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDSprite;
-	import com.sleepydesign.draw.SDSquare;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
-	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	
@@ -52,7 +50,7 @@ package com.sleepydesign.application.core
         
         public static var currentStage : Stage;
         
-        public function SDApplication(id:String="application", loaderObject:DisplayObject=null, configURI:String="config.xml")
+        public function SDApplication(id:String="application", loaderObject:DisplayObjectContainer=null, configURI:String="config.xml")
 		{
 			super(id);
 			
@@ -103,25 +101,22 @@ package com.sleepydesign.application.core
 				
 				//system.parse({instance:this});
 				
-				var _loader:SDSquare = new SDSquare(1000, 700, 0x000000, 0.75, 0, 0x000000,"c");
-				_loader.addChild(new SDMacPreloader());
-				_loader.alpha = 0;
-				_loader.visible = false;
-				_loader.mouseEnabled = false;
-				
-				TweenPlugin.activate([AutoAlphaPlugin]);
-				
-				LoaderUtil.showLoader = function():void
+				if(loaderObject)
 				{
-					TweenLite.to(_loader, 0.5, {autoAlpha:1});
-				};
-				
-				LoaderUtil.hideLoader = function():void
-				{
-					TweenLite.to(_loader, 0.5, {autoAlpha:0});
-				};
-				
-				LoaderUtil.addLoaderTo(this, _loader);
+					TweenPlugin.activate([AutoAlphaPlugin]);
+					
+					LoaderUtil.showLoader = function():void
+					{
+						TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:1});
+					};
+					
+					LoaderUtil.hideLoader = function():void
+					{
+						TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:0});
+					};
+					
+					LoaderUtil.addLoaderTo(this, loaderObject);
+				}
 			}
 		}
 		
