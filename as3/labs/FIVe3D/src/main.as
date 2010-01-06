@@ -6,6 +6,7 @@ package
 	import flash.display.Sprite;
 	import flash.filters.BlurFilter;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	
 	import net.badimon.five3D.display.Bitmap3D;
 	import net.badimon.five3D.display.Sprite3D;
@@ -36,11 +37,13 @@ package
 		
 		//private var _candlesEffectBitmapData:BitmapData;
 		private var _candlesEffectBitmap:Bitmap;
+		private var _effectLayer:Sprite;
+		private var _effectBitmapData:BitmapData;
 		
 		override protected function onInit():void
 		{
 			setupData();
-			setupLayer();
+			setupCanvas();
 			setupView();
 			start();
 		}
@@ -58,7 +61,7 @@ package
 			}
 		}
 		
-		private function setupLayer():void
+		private function setupCanvas():void
 		{
 			_mapCanvas = new Sprite3D();
 			
@@ -75,7 +78,7 @@ package
 			while(i--)
 			{
 				var _candle:Candle = Candle(candles[i]);
-				_candlesBitmapData.setPixel(_candle.x, _candle.y, 0xFFFFFF*Math.random());
+				_candlesBitmapData.setPixel(_candle.x, _candle.y, 0xFFFFFF*Math.random()/2 + 0xFFFFFF/2);
 			}
 			
 			// bitmap -> _mapCanvas
@@ -85,21 +88,8 @@ package
 			
 			_mapCanvas.addChild(_candleBitmap3D);
 			_scene.addChild(_mapCanvas);
-			
-			//effect
-			/*
-			effectLayer = new Sprite();
-			addChild(effectLayer);
-			effectLayer.filters = [new BlurFilter(8,8,1)];
-			*/
-			effectBitmapData = new BitmapData(640,480, true, 0xFFFFFF);
-			_candlesEffectBitmap = new Bitmap(effectBitmapData);
-			addChild(_candlesEffectBitmap);
-			_candlesEffectBitmap.blendMode = BlendMode.ADD;
 		}
 		
-		private var effectLayer:Sprite;
-		private var effectBitmapData:BitmapData;
 		private function setupView():void
 		{
 			// angle
@@ -108,15 +98,21 @@ package
 			_mapCanvas.rotationZ = 0;
 		}
 		
+		override protected function setupLayer():void
+		{
+			_effectBitmapData = new BitmapData(640,480, false, 0x000000);
+			_candlesEffectBitmap = new Bitmap(_effectBitmapData);
+			addChild(_candlesEffectBitmap);
+		}
+		
+		private var _matrix:Matrix = new Matrix(1,0,0,1,640*.5,480*.5);
+		
 		override protected function onPreRender():void
 		{
-			_mapCanvas.rotationZ++;// data -> BitmapData
-			var _matrix:Matrix = new Matrix();
-			_matrix.tx = 640/2
-			_matrix.ty = 480/2
+			_mapCanvas.rotationZ++;// = mouseX;
 			
-			effectBitmapData.draw(_mapCanvas,_matrix);
-			_candlesEffectBitmap.filters = [new BlurFilter(8,8,1)];
+			_effectBitmapData.draw(_mapCanvas, _matrix);
+			_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, new Point(0, 0), new BlurFilter(4, 4, 1));
 		}
 	}
 }
