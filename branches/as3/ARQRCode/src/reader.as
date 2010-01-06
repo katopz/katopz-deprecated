@@ -105,8 +105,8 @@ package
 			Oishi.SCALE_Z = -1;
 			*/
 			
-			Oishi.USE_DEDUG = true;
-			Oishi.USE_CAMERA = false;
+			//Oishi.USE_DEDUG = true;
+			//Oishi.USE_CAMERA = false;
 			
 			// base
 			base = new Sprite();
