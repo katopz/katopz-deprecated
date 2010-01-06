@@ -1,107 +1,122 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.BlendMode;
 	import flash.display.Sprite;
-	import flash.display.StageScaleMode;
-	import flash.events.Event;
+	import flash.filters.BlurFilter;
+	import flash.geom.Matrix;
 	
 	import net.badimon.five3D.display.Bitmap3D;
-	import net.badimon.five3D.display.Scene3D;
 	import net.badimon.five3D.display.Sprite3D;
-	import net.hires.debug.Stats;
 
 	/*
-	TODO:
-	1. create fake dot data array (1000 x 500 = 500,000)
-	2. read data and wirte to map as set pixel (10,000-100,000)
-	3. add view controller move/pan/rotate
-	4. add click to view msg (getPixel)
-	5. create candle with perlin noise flame (BitmapSprite Clip?)
-	6. add button and move to prefer angle view for place candle
-	7. add dialog to get user input (name, msg)
-	8. send data to server
-	9. add blur/glow effect
-	10. add LOD setpixel <-> copypixel 
-	
-	*/
-	[SWF(width="640", height="480", frameRate="30", backgroundColor="#FFFFFF")]
-	public class main extends Sprite
+	   TODO:
+	   1. create fake dot data array (1000 x 1000 = 1,000,000)
+	   2. read data and write to map as set pixel (10,000-100,000)
+	   3. add view controller move/pan/rotate
+	   4. add click to view msg (getPixel)
+	   5. create candle with perlin noise flame (BitmapSprite Clip?)
+	   6. add button and move to prefer angle view for place candle
+	   7. add dialog to get user input (name, msg)
+	   8. send data to server (time, x, y, name, msg)
+	   9. add blur/glow effect
+	   10. add LOD setpixel <-> copypixel
+	 */
+	[SWF(width="640",height="480",frameRate="30",backgroundColor="#000000")]
+	public class main extends Template
 	{
-		[Embed(source="assets/thai_map.txt", mimeType="application/octet-stream")]
-		private var ThaiMap:Class;
-		private var _map:SVG3D;
-
-/*
-		[Embed(source="assets/thai_map.swf")]
-		private var ThaiMapSWF:Class;
-*/
-[Embed(source="assets/thai_map.png")]
+		[Embed(source="assets/thai_map.png")]
 		private var ThaiMapPNG:Class;
-		private var _scene:Scene3D;
 		
-		public function main()
+		private var _mapCanvas:Sprite3D;
+		private var _candleCanvas:Sprite3D;
+		private var _candleEffectCanvas:Sprite3D;
+		private var candles:Array;
+		
+		//private var _candlesEffectBitmapData:BitmapData;
+		private var _candlesEffectBitmap:Bitmap;
+		
+		override protected function onInit():void
 		{
-			// setup
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-
-			_scene = new Scene3D();
-			_scene.x = stage.stageWidth / 2;
-			_scene.y = stage.stageHeight / 2;
-			addChild(_scene);
-
-			// svg map
-			//_map = new SVG3D(new ThaiMap() as ByteArray, 1, -410.656 / 2, -758.187 / 2);
-			//_scene.addChild(_map);
-			//clip = new ThaiMapSWF() as Sprite;
-			//clip.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			//addChild(clip);
+			setupData();
+			setupLayer();
+			setupView();
+			start();
+		}
+		
+		private function setupData():void
+		{
+			//fake data
+			candles = [];
 			
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			var totalPoint:int=100000;
+			for(var i:int=0;i<totalPoint;i++)
+			{
+				var _candle:Candle = new Candle(String(i), int(1000*Math.random()), int(1000*Math.random()));
+				candles[i] = _candle;
+			}
 		}
-		private var clip:Sprite 
 		
-		protected function onInit(event:Event):void
+		private function setupLayer():void
 		{
-			trace("onInit");
-		}
-		
-		protected function onAddedToStage(event:Event):void
-		{
-			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			/*
-			var _clip:Sprite = new Sprite();
-			_clip.graphics.beginFill(0xFF0000, .5);
-			_clip.graphics.drawCircle(0,0,100);
-			_clip.graphics.endFill();
-			_clip.addChild(clip);
-			*/
-			//var bmpData:BitmapData = new BitmapData(410.656, 758.187, true, 0xCC000000);
-			//bmpData.draw(_clip);
-			//var bitmap:Bitmap = new Bitmap(bmpData);
+			_mapCanvas = new Sprite3D();
+			
 			var bitmap:Bitmap = new ThaiMapPNG as Bitmap
-			//addChild(bitmap);
+			var _bitmap3D:Bitmap3D = new Bitmap3D(bitmap.bitmapData);
+			//_mapCanvas.addChild(_bitmap3D);
+			//_scene.addChild(_mapCanvas);
 			
-			_canvas = new Sprite3D();
+			//candles
+			var _candlesBitmapData:BitmapData = new BitmapData(500, 500, false, 0x000000);
 			
-			var _bitmap:Bitmap3D = new Bitmap3D(bitmap.bitmapData);
+			// data -> BitmapData
+			var i:int = candles.length;
+			while(i--)
+			{
+				var _candle:Candle = Candle(candles[i]);
+				_candlesBitmapData.setPixel(_candle.x, _candle.y, 0xFFFFFF*Math.random());
+			}
 			
-			_canvas.addChild(_bitmap);
-			_scene.addChild(_canvas);
+			// bitmap -> _mapCanvas
+			var _candleBitmap3D:Bitmap3D = new Bitmap3D(_candlesBitmapData);
+			_candleBitmap3D.x = -_candleBitmap3D.bitmapData.width/2;
+			_candleBitmap3D.y = -_candleBitmap3D.bitmapData.height/2;
 			
-			_canvas.rotationX = -45;
-			_canvas.rotationY = 0;
-			_canvas.rotationZ = 0;
-
-			// draw
-			addEventListener(Event.ENTER_FRAME, starEnterFrameHandler);
+			_mapCanvas.addChild(_candleBitmap3D);
+			_scene.addChild(_mapCanvas);
 			
-			// debug
-			addChild(new Stats());
+			//effect
+			/*
+			effectLayer = new Sprite();
+			addChild(effectLayer);
+			effectLayer.filters = [new BlurFilter(8,8,1)];
+			*/
+			effectBitmapData = new BitmapData(640,480, true, 0xFFFFFF);
+			_candlesEffectBitmap = new Bitmap(effectBitmapData);
+			addChild(_candlesEffectBitmap);
+			_candlesEffectBitmap.blendMode = BlendMode.ADD;
 		}
-private var _canvas:Sprite3D
-		private function starEnterFrameHandler(event:Event):void
+		
+		private var effectLayer:Sprite;
+		private var effectBitmapData:BitmapData;
+		private function setupView():void
 		{
-			_canvas.rotationZ++;
+			// angle
+			_mapCanvas.rotationX = -45;
+			_mapCanvas.rotationY = 0;
+			_mapCanvas.rotationZ = 0;
+		}
+		
+		override protected function onPreRender():void
+		{
+			_mapCanvas.rotationZ++;// data -> BitmapData
+			var _matrix:Matrix = new Matrix();
+			_matrix.tx = 640/2
+			_matrix.ty = 480/2
+			
+			effectBitmapData.draw(_mapCanvas,_matrix);
+			_candlesEffectBitmap.filters = [new BlurFilter(8,8,1)];
 		}
 	}
 }
