@@ -148,7 +148,8 @@ package com.sleepydesign.utils
 			file.addEventListener(Event.COMPLETE, eventHandler);
 			file.addEventListener(Event.CANCEL, eventHandler);
 			file.addEventListener(Event.SELECT, eventHandler);
-			var _onCompleteFunction:Function = function(event:Event):void
+			var _onCompleteFunction:Function;
+			file.addEventListener(Event.SELECT, _onCompleteFunction = function(event:Event):void
 			{
 				trace(" ^ Select : " + file.name + " | " + file.size);
 				try
@@ -184,8 +185,7 @@ package com.sleepydesign.utils
 						trace("File is too large : " + int(file.size / 1024) + "KB");
 					}
 				}
-			}
-			file.addEventListener(Event.SELECT, _onCompleteFunction);
+			});
 			
 			//gc
 			file.addEventListener(Event.COMPLETE, function(event:Event):void
@@ -193,6 +193,7 @@ package com.sleepydesign.utils
 				file.removeEventListener(Event.COMPLETE, eventHandler);
 				file.removeEventListener(Event.CANCEL, eventHandler);
 				file.removeEventListener(Event.SELECT, eventHandler);
+				
 				file.removeEventListener(Event.SELECT, _onCompleteFunction);
 			});
 

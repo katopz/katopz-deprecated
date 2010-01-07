@@ -73,6 +73,19 @@ package com.sleepydesign.utils
 			
 			_loader.load(request);
 			
+			loaders.push(_loader);
+			
+			// gc
+			_loader.addEventListener(Event.COMPLETE, function():void
+			{
+			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
+	            if(loaderClip && hideLoader is Function)
+					hideLoader();
+	            
+	            // gc
+	            removeItem(loaders, _loader);
+			});
+			
 			return _loader;
 		}
 				
@@ -84,10 +97,24 @@ package com.sleepydesign.utils
 		 */		
 		public static function loadBytes(byteArray:ByteArray, eventHandler:Function = null):Loader
 		{
-			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
-			loader.loadBytes(byteArray);
-			return loader;
+			var _loader:Loader = new Loader();
+			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
+			_loader.loadBytes(byteArray);
+			
+			loaders.push(_loader);
+			
+			// gc
+			_loader.addEventListener(Event.COMPLETE, function():void
+			{
+			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
+	            if(loaderClip && hideLoader is Function)
+					hideLoader();
+	            
+	            // gc
+	            removeItem(loaders, _loader);
+			});
+				
+			return _loader;
 		}
 		
 		/**
