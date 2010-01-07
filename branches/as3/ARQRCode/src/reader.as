@@ -301,6 +301,9 @@ package
 		
 		private function onQRCodeComplete(event:Event):void
 		{
+			if(Oishi.ALWAYS_RESET)
+				_modelViewer.reset();
+			
 			_isQRDecoded = true;
 			
 			var _srcURL:String = getModelSourceByCode(QRManager.result);
@@ -368,7 +371,7 @@ package
 
 			process();
 
-			if(_isQRDecoded)
+			if(_isQRDecoded || Oishi.ALWAYS_RESET)
 			{
 				_modelViewer.updateAnchor();
 				_modelViewer.updateAnimation();
@@ -450,7 +453,7 @@ package
 			{
 				_modelViewer.setAxis(_FLARManager.getAxis());
 				
-				if(!_isQRDecoded)
+				if(!_isQRDecoded || Oishi.ALWAYS_RESET)
 				{
 					var _point4:* = _FLARManager.getPoint();
 					

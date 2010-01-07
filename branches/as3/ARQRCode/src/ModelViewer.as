@@ -192,8 +192,16 @@ package
 			
 			visible = true;
 			
-			currentXML = new XML(_loader.data);
-			
+			//currentXML = new XML(_loader.data);
+			// void junk byte, flash player bug
+			try{
+            	currentXML = new XML(_loader.data);
+   			}catch(e:*){
+   				trace("Junk byte!?");
+   				var _pos:int = String(_loader.data).indexOf("</COLLADA>"); 
+  				currentXML = new XML(String(_loader.data).substring(0, _pos+String("</COLLADA>").length));
+   			}
+   			
 			_model = _loader.handle;
 			/*
 			_model.rotationX = -90;

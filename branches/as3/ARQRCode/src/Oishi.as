@@ -10,6 +10,8 @@ package
 		public static var MODEL_DATA_URL:String = "serverside/modelData.xml";
 		public static var MODEL_XML:XML;
 		
+		public static var ALWAYS_RESET:Boolean = true;
+		
 		public static var USE_CAMERA:Boolean = true;
 		public static var USE_CONTEXT:Boolean = true;
 		public static var USE_DEDUG:Boolean = false;
