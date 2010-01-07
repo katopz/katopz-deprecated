@@ -415,7 +415,8 @@ package
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-//reset();
+			reset();
+			
 			if(_fakeBitmap)
 			{
 				_fakeBitmap.parent.removeChild(_fakeBitmap);
