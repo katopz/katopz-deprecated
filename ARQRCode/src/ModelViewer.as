@@ -79,11 +79,9 @@ package
 			_root.y = Oishi.POSITION_Y;
 			_root.x = Oishi.POSITION_Z;
 			
-			/*
 			_root.rotationX = Oishi.ROTATION_X;
 			_root.rotationY = Oishi.ROTATION_Y;
 			_root.rotationZ = Oishi.ROTATION_Z;
-			*/
 			
 			_root.scaleX = Oishi.SCALE_X;
 			_root.scaleY = Oishi.SCALE_Y;
@@ -247,6 +245,10 @@ package
 					_ok = false;
 			}
 			
+			//void rotationX, rotationZ
+			if(Oishi.USE_LOCK_Z_AXIS)
+				_temp.rotationZ = 180;
+			//_temp.rotationY = 0;
 			
 			/*
 			vZ = _anchorA.position.subtract(_anchorB.position);
