@@ -399,6 +399,7 @@ package
 
 		public function reset():void
 		{
+			trace(" ! reset");
 			_isQRDecoded = false;
 			
 			try{
@@ -408,14 +409,13 @@ package
 			try{
 				_modelViewer.reset();
 			}catch(e:*){trace(e);}
+			
+			title = "reset";
 		}
 		
 		private function setBitmap(bitmap:Bitmap):void
 		{
-			reset();
-			
-			title = "reset";
-			
+//reset();
 			if(_fakeBitmap)
 			{
 				_fakeBitmap.parent.removeChild(_fakeBitmap);
@@ -464,6 +464,8 @@ package
 				}else{
 					title += " | QR : " + QRManager.result + " | ";
 				}
+			}else if(n<=Oishi.AR_RESET_NUM && _isQRDecoded){
+				reset();
 			}else{
 				if(QRManager.result!="")
 				{

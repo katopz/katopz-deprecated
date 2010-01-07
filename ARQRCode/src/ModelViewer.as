@@ -95,19 +95,19 @@ package
 		
 		public function reset():void
 		{
-			if(_loader && _loader.parent)
+			if(_loader)
 			{
-				_loader.parent.removeChild(_loader);
+				try{_root.removeChild(_loader);}catch(e:*){}
 				_loader = null;
 			}
 		
-			if(_model && _model.parent)
+			if(_model)
 			{
-				_model.parent.removeChild(_model);
+				try{_root.removeChild(_model);}catch(e:*){}
 				_model = null;
+				trace(" ! Model reset");
 			}
-			
-			trace(" ! Model reset");
+
 			//DebugUtil.addText("! Model reset");
 		}
 		
