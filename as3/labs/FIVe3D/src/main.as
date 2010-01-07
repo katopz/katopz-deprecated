@@ -109,7 +109,7 @@ package
 		
 		override protected function onPreRender():void
 		{
-			_mapCanvas.rotationZ++;// = mouseX;
+			_mapCanvas.rotationZ = mouseX;
 			
 			_effectBitmapData.draw(_mapCanvas, _matrix);
 			_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, new Point(0, 0), new BlurFilter(4, 4, 1));
