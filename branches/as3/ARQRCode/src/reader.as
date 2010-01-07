@@ -62,7 +62,7 @@ package
 		private var cameraContainer:Sprite;
 
 		// fake
-		[Embed(source='../bin/codes/1K_E7BFAC.png')]
+		[Embed(source='../codes/OOOOOO.png')]
 		private var ImageData:Class;
 		
 		private var fakeContainer:Sprite;
