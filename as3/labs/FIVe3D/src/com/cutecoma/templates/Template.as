@@ -1,4 +1,4 @@
-package
+package com.cutecoma.templates
 {
 	import flash.display.*;
 	import flash.events.*;

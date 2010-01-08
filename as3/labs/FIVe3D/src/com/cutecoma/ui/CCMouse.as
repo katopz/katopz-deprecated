@@ -26,6 +26,7 @@ package com.cutecoma.ui
 		{
 			_target.addEventListener(MouseEvent.MOUSE_DOWN, onMouseHandler);
 			_target.addEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
+			_target.addEventListener(MouseEvent.ROLL_OUT, onMouseHandler);
 			
 			_target.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
@@ -35,6 +36,7 @@ package com.cutecoma.ui
 			_target.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
+			_target.removeEventListener(MouseEvent.MOUSE_OUT, onMouseHandler);
 			
 			_target.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
@@ -52,6 +54,7 @@ package com.cutecoma.ui
 					
 					_target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler, false, 0, true);
 				break;
+				case MouseEvent.ROLL_OUT:
 				case MouseEvent.MOUSE_UP:
 					_target["mouseChildren"] = true;
 					isMouseDown = false;
