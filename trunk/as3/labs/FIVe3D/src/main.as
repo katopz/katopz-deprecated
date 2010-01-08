@@ -6,9 +6,11 @@ package
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.BlendMode;
+	import flash.display.PixelSnapping;
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.filters.BlurFilter;
+	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
@@ -31,21 +33,20 @@ package
 	[SWF(width="640",height="480",frameRate="30",backgroundColor="#000000")]
 	public class main extends Template
 	{
-		[Embed(source="assets/thai_map.png")]
-		private var ThaiMapPNG:Class;
+		[Embed(source="assets/ThaiMap.swf", symbol="ThaiMap")]
+		private var ThaiMapSWF:Class;
 		
-		private var _mapCanvas:Sprite3D;
-		private var _candleCanvas:Sprite3D;
-		private var _candleEffectCanvas:Sprite3D;
+		private var _canvas3D:Sprite3D;
 		private var candles:Array;
 		
-		//private var _candlesEffectBitmapData:BitmapData;
 		private var _candlesEffectBitmap:Bitmap;
 		private var _effectLayer:Sprite;
 		private var _effectBitmapData:BitmapData;
 		
 		private var _matrix:Matrix = new Matrix(1,0,0,1,640*.5,480*.5);
 		private var _transformDirty:Boolean = false;
+		
+		private var _point:Point = new Point(0, 0);
 		
 		override protected function onInit():void
 		{
@@ -71,15 +72,22 @@ package
 		
 		private function setupCanvas():void
 		{
-			_mapCanvas = new Sprite3D();
+			_canvas3D = new Sprite3D();
+			_canvas3D.mouseEnabled = false;
 			
-			var bitmap:Bitmap = new ThaiMapPNG as Bitmap
-			var _bitmap3D:Bitmap3D = new Bitmap3D(bitmap.bitmapData);
-			//_mapCanvas.addChild(_bitmap3D);
-			//_scene.addChild(_mapCanvas);
+			// map
+			var _mapSprite:Sprite = new ThaiMapSWF() as Sprite;
+			var _mapBitmapData:BitmapData = new BitmapData(_mapSprite.width, _mapSprite.height, true, 0x000000);
+			_mapBitmapData.draw(_mapSprite);
 			
-			//candles
-			var _candlesBitmapData:BitmapData = new BitmapData(500, 500, false, 0x000000);
+			var _bitmap3D:Bitmap3D = new Bitmap3D(_mapBitmapData);
+			_bitmap3D.x = -_mapBitmapData.width/2;
+			_bitmap3D.y = -_mapBitmapData.height/2;
+			_canvas3D.addChild(_bitmap3D);
+			_bitmap3D
+			
+			// candles
+			var _candlesBitmapData:BitmapData = new BitmapData(500, 500, true, 0x000000);
 			
 			// data -> BitmapData
 			var i:int = candles.length;
@@ -92,27 +100,28 @@ package
 			}
 			_candlesBitmapData.unlock();
 			
-			// bitmap -> _mapCanvas
+			// bitmap -> _canvas3D
 			var _candleBitmap3D:Bitmap3D = new Bitmap3D(_candlesBitmapData);
 			_candleBitmap3D.x = -_candleBitmap3D.bitmapData.width/2;
 			_candleBitmap3D.y = -_candleBitmap3D.bitmapData.height/2;
 			
-			_mapCanvas.addChild(_candleBitmap3D);
-			_scene.addChild(_mapCanvas);
+			_canvas3D.addChild(_candleBitmap3D);
+			_scene.addChild(_canvas3D);
 		}
 		
 		private function setupView():void
 		{
 			// angle
-			_mapCanvas.rotationX = -45;
-			_mapCanvas.rotationY = 0;
-			_mapCanvas.rotationZ = 0;
+			_canvas3D.rotationX = -60;
+			_canvas3D.rotationY = 0;
+			_canvas3D.rotationZ = 0;
 		}
 		
 		private function setupUI():void
 		{
 			// add hitArea
-			var _hitArea:Sprite = DrawUtil.drawRect(640,480,0xFF0000,.1);
+			var _hitArea:Sprite = DrawUtil.drawRect(640,480,0x000000);
+			_hitArea.blendMode = BlendMode.ERASE;
 			addChild(_hitArea);
 			
 			var _ccMouse:CCMouse = new CCMouse(_hitArea);
@@ -122,19 +131,36 @@ package
 		override protected function setupLayer():void
 		{
 			_effectBitmapData = new BitmapData(640,480, false, 0x000000);
-			_candlesEffectBitmap = new Bitmap(_effectBitmapData);
+			_candlesEffectBitmap = new Bitmap(_effectBitmapData, PixelSnapping.NEVER, false);
 			addChild(_candlesEffectBitmap);
 		}
 		
 		private function onDrag(event:CCMouseEvent):void
 		{
-			_mapCanvas.rotationZ += event.data.dx;
+			_canvas3D.x += event.data.dx;
+			_canvas3D.y += event.data.dy;
+			
+			//_canvas3D.z =
+			trace(_canvas3D.x, _canvas3D.y, _canvas3D.z) 
+			
+			// hover
+			/*
+			
+			_______o (x,y,z)
+			     /
+			   / r
+			o/_30___
+			
+			*/
+			
 			_transformDirty = true;
 		}
 		
+
+		
 		override protected function onPreRender():void
 		{
-			//_mapCanvas.rotationZ = mouseX;
+			//_canvas3D.rotationZ = mouseX;
 			//_transformDirty = true;
 		}
 		
@@ -143,8 +169,9 @@ package
 			if(_transformDirty)
 			{
 				_effectBitmapData.lock();
-				_effectBitmapData.draw(_mapCanvas, _matrix);
-				_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, new Point(0, 0), new BlurFilter(4, 4, 1));
+				_effectBitmapData.draw(_canvas3D, _matrix);
+				_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, _point, new BlurFilter(4, 4, 1));
+				_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, _point, new ColorMatrixFilter( [ 1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0.8,0 ] ) );
 				_effectBitmapData.unlock();
 			}
 		}
