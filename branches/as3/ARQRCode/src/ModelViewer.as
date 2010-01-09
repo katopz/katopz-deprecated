@@ -356,7 +356,7 @@ package
 			bb = _anchorB.position;
 			cc = _anchorC.position;
 			
-			_base.x = (aa.x + bb.x + cc.x)/3;
+			_base.x = -(aa.x + bb.x + cc.x)/3;
 			_base.y = (aa.y + bb.y + cc.y)/3;
 			_base.z = (aa.z + bb.z + cc.z)/3;
 		}
