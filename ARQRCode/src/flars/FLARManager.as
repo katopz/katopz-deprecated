@@ -2,6 +2,7 @@ package flars
 {
 	import flash.display.*;
 	import flash.events.*;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.media.Camera;
 	import flash.media.Video;
@@ -123,11 +124,12 @@ package flars
 		public function drawVideo():void
 		{
 			if(_cameraBitmap && _video)
-				_cameraBitmap.bitmapData.draw(_video);
+				_cameraBitmap.bitmapData.draw(_video);//, new Matrix(-1,0,0,1,w,0));
 		}
-		
+		private var w:Number;
 		public function setCamera(w:Number, h:Number, fps:int):Camera
 		{
+			this.w = w;
 			// 1st case : MAC use 2nd cam
 			if (!_webcam && Capabilities.os.indexOf("Mac")>-1)
 				_webcam = Camera.getCamera("2");
@@ -151,8 +153,7 @@ package flars
 		};
 		
 		private var n:Number;
-		
-		public function getDetectNumber(target:DisplayObject):Number
+		public function getDetectNumber(target:DisplayObject, isFlip:Boolean = false):Number
 		{
 			// get image into _bitmapData
 			_bitmapData.fillRect(_bitmapData.rect, 0);
@@ -161,6 +162,13 @@ package flars
 			_container.stage.quality = StageQuality.HIGH;
 			
 			_bitmapData.draw(target);
+			
+			if(isFlip)
+			{
+				_bitmapData.draw(target, new Matrix(-1,0,0,1,-w,0));
+			}else{
+				_bitmapData.draw(target);
+			}
 			
 			_container.stage.quality = _quality;
 			

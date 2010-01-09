@@ -106,6 +106,8 @@ package
 			*/
 			
 			//Oishi.USE_DEDUG = true;
+			//Oishi.ALWAYS_RESET = false;
+			
 			//Oishi.USE_CAMERA = false;
 			
 			// base
@@ -127,6 +129,8 @@ package
 
 			// cam test
 			cameraContainer = new Sprite();
+			cameraContainer.scaleX = -1;
+			cameraContainer.x = CANVAS_WIDTH; 
 			base.addChild(cameraContainer);
 		}
 
@@ -147,6 +151,7 @@ package
 		{
 			// no setup stage need
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.quality = StageQuality.MEDIUM;
 		}
 		
 		override protected function onInit():void
@@ -442,7 +447,7 @@ package
 			{
 				n = _FLARManager.getDetectNumber(fakeContainer);
 			}else{
-				n = _FLARManager.getDetectNumber(cameraContainer);
+				n = _FLARManager.getDetectNumber(cameraContainer, true);
 			}
 			
 			title = "AR : " + n;
