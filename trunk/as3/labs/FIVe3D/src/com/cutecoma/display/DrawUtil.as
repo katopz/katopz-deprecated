@@ -1,4 +1,4 @@
-package com.cutecoma.utils
+package com.cutecoma.display
 {
 	import flash.display.Sprite;
 
