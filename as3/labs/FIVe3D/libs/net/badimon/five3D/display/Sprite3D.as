@@ -136,6 +136,13 @@ package net.badimon.five3D.display {
 				return __concatenatedMatrix.getInverseCoordinates(scene.mouseX, scene.mouseY, scene.viewDistance);
 			}
 		}
+		
+		public function setPosition(x:Number, y:Number, z:Number):void {
+			__x = x;
+			__y = y;
+			__z = z;
+			askRendering();
+		}
 
 		/**
 		 * Indicates the x coordinate along the x-axis of the Sprite3D instance relative to the local coordinate system of the 3D parent container.

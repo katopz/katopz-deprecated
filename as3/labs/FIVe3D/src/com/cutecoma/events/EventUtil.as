@@ -1,9 +1,9 @@
-package com.sleepydesign.utils
+package com.cutecoma.events
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
-	public class ProxyUtil
+	public class EventUtil
 	{
 		private static var _dispatcher:EventDispatcher = new EventDispatcher();
 
