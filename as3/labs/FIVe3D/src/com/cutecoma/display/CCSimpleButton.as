@@ -36,7 +36,6 @@ package com.cutecoma.display {
 	import com.cutecoma.core.IDestroyable;
 	import com.cutecoma.events.IRemovableEventDispatcher;
 	import com.cutecoma.events.ListenerManager;
-	import com.cutecoma.utils.StageUtil;
 	import flash.display.DisplayObject;
 	import com.cutecoma.utils.DisplayObjectUtil;
 	
@@ -102,19 +101,6 @@ package com.cutecoma.display {
 		
 		public function removeEventListeners():void {
 			this._listenerManager.removeEventListeners();
-		}
-		
-		/**
-			The Stage of the display object or if the display object is not added to the display list and {@link StageUtil} is defined <code>stage</code> will return the {@link StageUtil#STAGE_DEFAULT default stage}; otherwise <code>null</code>.
-		*/
-		override public function get stage():Stage {
-			if (super.stage == null) {
-				try {
-					return StageUtil.getStage();
-				} catch (e:Error) {}
-			}
-			
-			return super.stage;
 		}
 		
 		/**
