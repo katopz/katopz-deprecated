@@ -1,6 +1,7 @@
 package com.cutecoma.ui
 {
 	import com.cutecoma.events.CCMouseEvent;
+
 	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
@@ -8,6 +9,10 @@ package com.cutecoma.ui
 
 	public class CCMouse extends EventDispatcher
 	{
+		private var _target:InteractiveObject;
+		private var _dragTarget:*;
+
+		private var _lastPosition:Point = new Point();
 
 		public static var isMouseDown:Boolean = false;
 
@@ -16,10 +21,6 @@ package com.cutecoma.ui
 			_target = target;
 			create();
 		}
-		private var _dragTarget:*;
-
-		private var _lastPosition:Point = new Point();
-		private var _target:InteractiveObject;
 
 		public function create():void
 		{
@@ -35,10 +36,12 @@ package com.cutecoma.ui
 			_target.removeEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_OUT, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+
 			_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
 
 			_target = null;
 			_dragTarget = null;
+			_lastPosition = null;
 		}
 
 		private function onMouseHandler(event:MouseEvent):void
@@ -81,11 +84,11 @@ package com.cutecoma.ui
 					/*
 					   if ( isMouseDown && (isCTRL || isSHIFT || isSPACE))
 					   {
-						   _lastPosition.x = event.stageX;
-						   _lastPosition.y = event.stageY;
-	
-						   _targetRotationY = lastRotationY - (_lastPosition.x - event.stageX) *.5;
-						   _targetRotationX = lastRotationX + (_lastPosition.y - event.stageY) *.5;
+					   _lastPosition.x = event.stageX;
+					   _lastPosition.y = event.stageY;
+
+					   _targetRotationY = lastRotationY - (_lastPosition.x - event.stageX) *.5;
+					   _targetRotationX = lastRotationX + (_lastPosition.y - event.stageY) *.5;
 					   }
 					 */
 					break;

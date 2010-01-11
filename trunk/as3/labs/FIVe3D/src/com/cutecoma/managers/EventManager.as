@@ -1,9 +1,9 @@
-package com.cutecoma.events
+package com.cutecoma.managers
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
-	public class EventUtil
+	public class EventManager
 	{
 		private static var _dispatcher:EventDispatcher = new EventDispatcher();
 

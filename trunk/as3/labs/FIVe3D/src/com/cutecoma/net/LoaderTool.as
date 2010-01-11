@@ -26,7 +26,7 @@ package com.cutecoma.net
 	 * 
 	 * @author	katopz
 	 */	
-	public class LoaderUtil
+	public class LoaderTool
 	{
 		public static var SEND_METHOD:String = URLRequestMethod.POST;
 		
@@ -47,7 +47,7 @@ package com.cutecoma.net
 				loaderClip.visible = false;
 			}
 			
-			LoaderUtil.loaderClip = loaderClip;
+			LoaderTool.loaderClip = loaderClip;
 		}
 				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
