@@ -1,9 +1,9 @@
 package
 {
 	import com.cutecoma.containers.Preloader;
-	import com.cutecoma.display.BitmapTool;
 	import com.cutecoma.display.DrawTool;
 	import com.cutecoma.events.CCMouseEvent;
+	import com.cutecoma.net.LoaderTool;
 	import com.cutecoma.templates.Template;
 	import com.cutecoma.ui.CCMouse;
 	import com.greensock.TweenLite;
@@ -23,6 +23,7 @@ package
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import net.badimon.five3D.display.Bitmap3D;
 	import net.badimon.five3D.display.Sprite2D;
@@ -47,14 +48,19 @@ package
 		// const
 		private const SCREEN_WIDTH:int = 1132;
 		private const SCREEN_HEIGHT:int = 758;
+		
 		private const DEFAULT_ANGLE:int = 60;
-
+		
+		private const DEFAULT_X:int = 0;
+		private const DEFAULT_Y:int = -145;
+		private const DEFAULT_Z:int = 0;
+		
 		private const USE_EFFECT:Boolean = false;
 		private const EFFECT_TIMEOUT_NUM:int = 30;
 
-		private const HIT_ARGB:String = "17170";
+		private const HIT_ARGB:uint = 202020;//"17170";
 		
-		private const SPRITE_SCALE:Number = 1;
+		private const SPRITE_SCALE:Number = .1;
 
 		private const _matrix:Matrix = new Matrix(1, 0, 0, 1, SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
 		private const _point:Point = new Point(0, 0);
@@ -115,7 +121,7 @@ package
 			//fake data
 			candles = [];
 
-			var totalPoint:int = 100;
+			var totalPoint:int = 1000;
 			for (var i:int = 0; i < totalPoint; i++)
 			{
 				var _candle:Candle = new Candle(String(i), int(1000 * Math.random()), int(1000 * Math.random()));
@@ -155,11 +161,12 @@ package
 			var _mapBitmapData:BitmapData = new BitmapData(_mapSprite.width, _mapSprite.height, true, 0x000000);
 			_mapBitmapData.draw(_mapSprite);
 
-			_mapBitmap3D = new Bitmap3D(_mapBitmapData);
-			_mapBitmap3D.x = -_mapBitmapData.width / 2;
-			_mapBitmap3D.y = -_mapBitmapData.height / 2;
+			_mapBitmap3D = new Bitmap3D(_mapBitmapData, true, 10, 10);
+			_mapBitmap3D.x = -_mapBitmapData.width/2;
+			_mapBitmap3D.y = -_mapBitmapData.height/2;
 			_mapBitmap3D.singleSided = true;
 			_canvas3D.addChild(_mapBitmap3D);
+			_mapBitmap3D.clipRect = new Rectangle(-1132-1132, -758-758, 1132*2+1132, 758*2+758);
 
 			// candles
 			var _candlesBitmapData:BitmapData = new BitmapData(_mapSprite.width, _mapSprite.height, true, 0x00000000);
@@ -183,8 +190,8 @@ package
 					
 					// sprite2D
 					var _sprite2D:Sprite2D = new Sprite2D();
-					_sprite2D.x = _candle.x;
-					_sprite2D.y = _candle.y;
+					_sprite2D.x = _candle.x - _candlesBitmapData.width/2 - _candleBitmapData.width/2;
+					_sprite2D.y = _candle.y - _candlesBitmapData.height/2 - _candleBitmapData.height;
 					_sprite2D.graphics.beginBitmapFill(_candleBitmapData);
 					_sprite2D.graphics.drawRect(0, 0, _candleBitmapData.width, _candleBitmapData.height);
 					_sprite2D.graphics.endFill();
@@ -195,18 +202,25 @@ package
 			_candlesBitmapData.unlock();
 
 			// bitmap -> _canvas3D
-			_candleBitmap3D = new Bitmap3D(_candlesBitmapData);
-			_canvas3D.addChild(_candleCanvas3D);
+			
+			/*
+			_candleBitmap3D = new Bitmap3D(_candlesBitmapData, true);
+			_candleCanvas3D.addChild(_candleBitmap3D);
 			_candleBitmap3D.x = -_candleBitmap3D.bitmapData.width / 2;
 			_candleBitmap3D.y = -_candleBitmap3D.bitmapData.height / 2;
 			_candleBitmap3D.singleSided = true;
-			_candleCanvas3D.addChild(_candleBitmap3D);
+			*/
+			
+			_canvas3D.addChild(_candleCanvas3D);
 		}
 
 		private function setupView():void
 		{
-			// angle
-			_canvas3D.rotationX = -DEFAULT_ANGLE;
+			_canvas3D.x = -50;
+			_canvas3D.y = -120;
+			_canvas3D.z = 830;
+			
+			_canvas3D.rotationX = 0;
 			_canvas3D.rotationY = 0;
 			_canvas3D.rotationZ = 0;
 		}
@@ -259,17 +273,16 @@ package
 			_candleButton.y = 590;
 			_candleButton.buttonMode = true;
 			addChild(_candleButton);
-			_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 
-		/*
-		   // add bound
-		   var _boundArea:Sprite = DrawUtil.drawRect(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0xFF0000, .5);
-		   _boundArea.x = SCREEN_WIDTH/2 - _boundArea.width/2;
-		   _boundArea.y = SCREEN_HEIGHT/2 - _boundArea.height/2;
-
-		   //_boundArea.blendMode = BlendMode.ERASE;
-		   addChild(_boundArea);
-		 */
+			/*
+			   // add bound
+			   var _boundArea:Sprite = DrawUtil.drawRect(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0xFF0000, .5);
+			   _boundArea.x = SCREEN_WIDTH/2 - _boundArea.width/2;
+			   _boundArea.y = SCREEN_HEIGHT/2 - _boundArea.height/2;
+	
+			   //_boundArea.blendMode = BlendMode.ERASE;
+			   addChild(_boundArea);
+			 */
 		}
 
 		private function onCandleButtonClick(event:MouseEvent):void
@@ -281,21 +294,24 @@ package
 		{
 			trace("onCandleDrop");
 
-			_dropPoint.x = int(_candleBitmap3D.mouseX);
-			_dropPoint.y = int(_candleBitmap3D.mouseY);
+			_dropPoint.x = int(_mapBitmap3D.mouseX);
+			_dropPoint.y = int(_mapBitmap3D.mouseY);
 
 			// drop-in map?
-			var _ARGB:Object = BitmapTool.getARGB(_mapBitmap3D.bitmapData.getPixel32(_dropPoint.x, _dropPoint.y));
-			var _ARGBString:String = String(_ARGB.r) + String(_ARGB.g) + String(_ARGB.b);
+			//var _ARGB:Object = BitmapTool.getARGB(_mapBitmap3D.bitmapData.getPixel32(_dropPoint.x, _dropPoint.y));
+			//var _ARGBString:String = String(_ARGB.r) + String(_ARGB.g) + String(_ARGB.b);
+			
+			var _ARGB:int = _mapBitmap3D.bitmapData.getPixel32(_dropPoint.x, _dropPoint.y)
 			
 			// debug
-			title = _dropPoint.toString() + " | " + _ARGBString;
+			title = _dropPoint.toString() + " | " + _ARGB;
 
 			// only hit area
-			if (_ARGBString != HIT_ARGB)
-				return;
+			//if (_ARGBString != HIT_ARGB)
+			//	return;
 
-			if (_candleBitmap3D.bitmapData.getPixel32(_dropPoint.x, _dropPoint.y) <= 0x000000)
+			//if (_candleBitmap3D.bitmapData.getPixel32(_dropPoint.x, _dropPoint.y) <= 0x000000)
+			if (_ARGB < 0 )
 			{
 				status = "drop";
 			//}else if(_hitArea.hitTestPoint(mouseX, mouseY)){
@@ -307,6 +323,11 @@ package
 			}
 		}
 
+		private function onExploreClick(event:Event):void
+		{
+			trace(event.target, event.currentTarget,event);
+		}
+		
 		private function set status(value:String):void
 		{
 			trace(" ! Status : " + value);
@@ -325,11 +346,16 @@ package
 					TweenLite.to(this, 2, {autoAlpha: 1, onComplete: function():void
 						{
 							// go idle
-							status = "idle";
+							TweenLite.to(this, 2, {autoAlpha: 1, onComplete: function():void
+							{
+								status = "idle";
+							}});
 						}});
 					break;
 				case "idle":
-					// move cam around
+					// go default angle
+					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+					
 					// wait for drag, explore
 					var onExplore:Function;
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExplore = function():void
@@ -337,27 +363,37 @@ package
 							stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExplore);
 							status = "explore";
 						});
+					
+					// wait for candle click
+					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
+					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "explore":
 					// move cam to defined position
-					TweenLite.to(_canvas3D, 1, {rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+					
 					// click to view
-
+					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					break;
 				case "drag":
+					// no more click
+					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
+					
 					// draging in bound
-					_candleButton.mouseEnabled = false;
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 0.25});
+					TweenLite.to(_candleClip, 0.25, {autoAlpha: 1});
 
-					if (!_candleClip)
-						addChild(_candleClip);
-						
+					addChild(_candleClip);
 					_candleClip.startDrag(true);
 
 					// wait for drop
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					break;
 				case "drop":
+					// drop
+					_candleClip.stopDrag();
+					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
+					
 					// get id
 					var _id:String = new Date().valueOf() as String;
 
@@ -365,18 +401,27 @@ package
 					var candleData:CandleData = new CandleData(_id, _dropPoint.x, _dropPoint.y);
 
 					// wait for text input
-					_candleClip.stopDrag();
-					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					status = "input";
+					
+					// wait for candle click
+					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
+					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);				
 					break;
 				case "drop-out":
-					// cancel drag
+					// drop
+					_candleClip.stopDrag();
+					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
+					
 					TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
 						{
 							_candleClip.parent.removeChild(_candleClip);
-							_candleClip = null;
 						}});
 					// go explore
+					
+					
+					// wait for candle click
+					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
+					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "input":
 					// wait for submit
@@ -409,7 +454,7 @@ package
 		override protected function setupLayer():void
 		{
 			// guide
-			//addChild(LoaderUtil.loadAsset("../src/assets/bg.png"));
+			addChild(LoaderTool.loadAsset("../src/assets/bg.png"));
 
 			_effectBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_HEIGHT, true, 0x000000);
 			var _effectBitmap:Bitmap = new Bitmap(_effectBitmapData, PixelSnapping.NEVER, false);
@@ -434,9 +479,11 @@ package
 			_y = _y + 5 * event.delta * Math.sin(DEFAULT_ANGLE);
 			_z = _z + 5 * event.delta * Math.cos(DEFAULT_ANGLE);
 
-			_canvas3D.setPosition(_x, _y, _z);
-
-			setDirty();
+			if(_z>-320)
+			{
+				_canvas3D.setPosition(_x, _y, _z);
+				setDirty();
+			}
 		}
 
 		private function setDirty():void

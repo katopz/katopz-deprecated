@@ -9,17 +9,17 @@ http://five3D.mathieu-badimon.com  |  http://five3d.mathieu-badimon.com/archives
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package net.badimon.five3D.display {
-	import net.badimon.five3D.geom.Matrix3D;
-	import net.badimon.five3D.geom.Point3D;
-	import net.badimon.five3D.utils.InternalUtils;
-	
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;	
+	import flash.geom.Rectangle;
+	
+	import net.badimon.five3D.geom.Matrix3D;
+	import net.badimon.five3D.geom.Point3D;
+	import net.badimon.five3D.utils.InternalUtils;	
 
 	/**
 	 * The Bitmap3D class is the equivalent in the FIVe3D package of the Bitmap class in the Flash package.
@@ -564,7 +564,45 @@ package net.badimon.five3D.display {
 				__matrices.unshift(matrix.clone());
 			}
 		}
-
+		
+		public var clipRect:Rectangle;
+		
+		private function drawBitmap():void {
+			var triangle:Array, point1:Object, point2:Object, point3:Object;
+			var xp1:Number, yp1:Number, xp2:Number, yp2:Number, xp3:Number, yp3:Number;
+			var len:int = __triangles.length;
+			
+			var _super_graphics:Graphics = super.graphics;
+			_super_graphics.clear();
+			//var _clipRect1:Rectangle = new Rectangle(-1132, -758, 1132*2, 758*2);
+			var _rect:Rectangle = new Rectangle();
+			
+			while (--len > -1) {
+				triangle = __triangles[len];
+				point1 = triangle[0];
+				point2 = triangle[1];
+				point3 = triangle[2];
+				_rect.x = xp1 = point1["xp"];
+				_rect.y = yp1 = point1["yp"];
+				xp2 = point2["xp"];
+				yp2 = point2["yp"];
+				_rect.width = xp3 = point3["xp"];
+				_rect.height = yp3 = point3["yp"];
+				
+				
+				if(clipRect.containsRect(_rect))
+				{
+					_super_graphics.beginBitmapFill(__bitmapData, __matrices[len], false, __smoothing);
+					_super_graphics.moveTo(xp1, yp1);
+					_super_graphics.lineTo(xp2, yp2);
+					_super_graphics.lineTo(xp3, yp3);
+					_super_graphics.lineTo(xp1, yp1);
+					_super_graphics.endFill();
+				}
+			}
+		}
+		
+		/*
 		private function drawBitmap():void {
 			var triangle:Array, point1:Object, point2:Object, point3:Object;
 			var xp1:Number, yp1:Number, xp2:Number, yp2:Number, xp3:Number, yp3:Number;
@@ -590,6 +628,7 @@ package net.badimon.five3D.display {
 			}
 			__drawing = true;
 		}
+		*/
 
 		private function removeBitmap():void {
 			super.graphics.clear();
