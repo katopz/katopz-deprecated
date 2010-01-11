@@ -9,9 +9,9 @@ package
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
-
+	
 	import data.CandleData;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
@@ -23,8 +23,9 @@ package
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-
+	
 	import net.badimon.five3D.display.Bitmap3D;
+	import net.badimon.five3D.display.Sprite2D;
 	import net.badimon.five3D.display.Sprite3D;
 
 	/*
@@ -52,6 +53,8 @@ package
 		private const EFFECT_TIMEOUT_NUM:int = 30;
 
 		private const HIT_ARGB:String = "17170";
+		
+		private const SPRITE_SCALE:Number = 1;
 
 		private const _matrix:Matrix = new Matrix(1, 0, 0, 1, SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
 		private const _point:Point = new Point(0, 0);
@@ -98,7 +101,7 @@ package
 		override protected function onInit():void
 		{
 			visible = false;
-			alpha = 0.1;
+			alpha = .5;
 
 			TweenPlugin.activate([AutoAlphaPlugin]);
 
@@ -112,7 +115,7 @@ package
 			//fake data
 			candles = [];
 
-			var totalPoint:int = 100000;
+			var totalPoint:int = 100;
 			for (var i:int = 0; i < totalPoint; i++)
 			{
 				var _candle:Candle = new Candle(String(i), int(1000 * Math.random()), int(1000 * Math.random()));
@@ -140,6 +143,7 @@ package
 		private function setupCanvas():void
 		{
 			_canvas3D = new Sprite3D();
+			_scene.addChild(_canvas3D);
 			_canvas3D.mouseEnabled = false;
 
 			_candleCanvas3D = new Sprite3D();
@@ -164,23 +168,39 @@ package
 			var i:int = candles.length;
 			var _candle:Candle;
 			_candlesBitmapData.lock();
+			
+			_candleClip = new CandleClip() as Sprite;
+			var _candleBitmapData:BitmapData = new BitmapData(_candleClip.width*SPRITE_SCALE, _candleClip.height*SPRITE_SCALE, true, 0xFF0000);
+			_candleBitmapData.draw(_candleClip, new Matrix(SPRITE_SCALE, 0, 0, SPRITE_SCALE, _candleBitmapData.width/2, _candleBitmapData.height));
+
 			while (i--)
 			{
 				_candle = Candle(candles[i]);
 				if (_mapBitmapData.getPixel32(_candle.x, _candle.y) > 0)
+				{
+					// particle
 					_candlesBitmapData.setPixel32(_candle.x, _candle.y, 0xFFFFCC00 + 0x00003300 * Math.random());
+					
+					// sprite2D
+					var _sprite2D:Sprite2D = new Sprite2D();
+					_sprite2D.x = _candle.x;
+					_sprite2D.y = _candle.y;
+					_sprite2D.graphics.beginBitmapFill(_candleBitmapData);
+					_sprite2D.graphics.drawRect(0, 0, _candleBitmapData.width, _candleBitmapData.height);
+					_sprite2D.graphics.endFill();
+					
+					_candleCanvas3D.addChild(_sprite2D);
+				}
 			}
 			_candlesBitmapData.unlock();
 
 			// bitmap -> _canvas3D
 			_candleBitmap3D = new Bitmap3D(_candlesBitmapData);
+			_canvas3D.addChild(_candleCanvas3D);
 			_candleBitmap3D.x = -_candleBitmap3D.bitmapData.width / 2;
 			_candleBitmap3D.y = -_candleBitmap3D.bitmapData.height / 2;
 			_candleBitmap3D.singleSided = true;
 			_candleCanvas3D.addChild(_candleBitmap3D);
-
-			_scene.addChild(_canvas3D);
-			_canvas3D.addChild(_candleCanvas3D);
 		}
 
 		private function setupView():void
@@ -330,10 +350,8 @@ package
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 0.25});
 
 					if (!_candleClip)
-					{
-						_candleClip = new CandleClip() as Sprite;
 						addChild(_candleClip);
-					}
+						
 					_candleClip.startDrag(true);
 
 					// wait for drop
@@ -433,6 +451,11 @@ package
 			{
 				_canvas3D.rotationZ++;
 				setDirty();
+			} 
+			
+			if (_transformDirty)
+			{
+				
 			}
 		}
 
