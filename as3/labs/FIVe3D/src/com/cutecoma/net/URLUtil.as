@@ -7,76 +7,31 @@ package com.cutecoma.net
 
 	public class URLUtil
 	{
-		public static function getCurrentURL():String
+		public static function getURL(url:String, window:String = "_blank"):void
 		{
-			if (ExternalInterface.available)
+			if (url.indexOf("javascript:") != 0)
 			{
-				return String(ExternalInterface.call("window.location.href.toString"));
-			}
-			else
-			{
-				return "";
-			}
-		}
-
-		public static function getFileName(value:String):String
-		{
-			var result:String;
-			if (value.indexOf("?") == -1)
-			{
-				result = value.split("#")[0];
-			}
-			else
-			{
-				result = value.split("?")[0];
-			}
-			result = result.substr(result.lastIndexOf("/") + 1);
-			if (result.indexOf("//") > -1)
-				result = result.substr(result.lastIndexOf("//") + 1);
-			var results:Array = result.split(".");
-			return results[0];
-		}
-
-		public static function getType(value:String):String
-		{
-			var result:String;
-			if (value.indexOf("?") == -1)
-			{
-				result = value.split("#")[0];
-			}
-			else
-			{
-				result = value.split("?")[0];
-			}
-			var results:Array = result.split(".");
-			return results[results.length - 1];
-		}
-
-		public static function getURL(uri:String, window:String = "_blank"):void
-		{
-			if (uri.indexOf("javascript:") != 0)
-			{
-				trace(" < html\t: " + uri);
-				navigateToURL(new URLRequest(uri), window);
+				trace(" < html\t: " + url);
+				navigateToURL(new URLRequest(url), window);
 			}
 			else
 			{
 				if (Capabilities.playerType != "StandAlone" && Capabilities.playerType != "External")
 				{
-					navigateToURL(new URLRequest(uri), "_self");
+					navigateToURL(new URLRequest(url), "_self");
 				}
 				else
 				{
-					trace(" < javascript\t: " + uri);
+					trace(" < javascript\t: " + url);
 				}
 			}
 		}
 
-		public static function isURL(uri:String):Boolean
+		public static function isURL(url:String):Boolean
 		{
-			return (uri.indexOf("http://") == 0 || uri.indexOf("javascript:") == 0)
+			return (url.indexOf("http://") == 0 || url.indexOf("javascript:") == 0)
 		}
-
+		
 		public static function killCache(value:String, isNeed:Boolean = false):String
 		{
 			var result:String = "";
@@ -92,7 +47,7 @@ package com.cutecoma.net
 				{
 					result = value + "&";
 				}
-				result = result + "nocat=" + myDate.getTime();
+				result = result + "rev=" + myDate.getTime();
 			}
 			else
 			{
@@ -101,7 +56,7 @@ package com.cutecoma.net
 
 			result = unescape(result);
 
-			trace(" * killCache\t: " + result);
+			//trace(" * killCache\t: " + result);
 
 			return result;
 		}

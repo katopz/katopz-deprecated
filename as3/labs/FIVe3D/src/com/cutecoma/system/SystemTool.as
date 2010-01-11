@@ -12,7 +12,7 @@ package com.cutecoma.system
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-    public class SystemUtil extends EventDispatcher
+    public class SystemTool
     {
         public static function getFlashVars(stage:Stage) : *
         {

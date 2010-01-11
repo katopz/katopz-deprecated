@@ -23,7 +23,7 @@ package com.cutecoma.net
 	 *
 	 * @author	katopz
 	 */
-	public class FileUtil
+	public class FileTool
 	{
 		/**
 		 * Limit your upload size
@@ -143,14 +143,14 @@ package com.cutecoma.net
 					try
 					{
 						//FP10 just get data
-						LoaderUtil.loadBytes(event.target["data"], eventHandler);
+						LoaderTool.loadBytes(event.target["data"], eventHandler);
 					}
 					catch (e:*)
 					{
 						trace(e);
 						//FP9 need to reload ;p
 						if (event.type == DataEvent.UPLOAD_COMPLETE_DATA)
-							LoaderUtil.loadAsset(event["data"], eventHandler);
+							LoaderTool.loadAsset(event["data"], eventHandler);
 					}
 				}
 				else
@@ -193,7 +193,7 @@ package com.cutecoma.net
 					{
 						//FP9 need to reload ;p
 						if (event.type == DataEvent.UPLOAD_COMPLETE_DATA)
-							LoaderUtil.loadAsset(event["data"], eventHandler);
+							LoaderTool.loadAsset(event["data"], eventHandler);
 					}
 				}
 				else
