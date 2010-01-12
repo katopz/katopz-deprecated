@@ -1,11 +1,13 @@
 package
 {
 	import com.cutecoma.containers.Preloader;
+	import com.cutecoma.display.CCSprite;
 	import com.cutecoma.display.DrawTool;
 	import com.cutecoma.events.CCMouseEvent;
 	import com.cutecoma.net.LoaderTool;
 	import com.cutecoma.templates.Five3DTemplate;
 	import com.cutecoma.ui.CCMouse;
+	import com.cutecoma.utils.XMLUtil;
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
@@ -26,6 +28,7 @@ package
 	import flash.geom.Rectangle;
 	
 	import net.badimon.five3D.display.Bitmap3D;
+	import net.badimon.five3D.display.Particles;
 	import net.badimon.five3D.display.Sprite2D;
 	import net.badimon.five3D.display.Sprite3D;
 
@@ -41,6 +44,7 @@ package
 	   \8. send data to server (time, x, y, name, msg)
 	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
+	   11. add mask
 	 */
 	[SWF(width="1132",height="758",frameRate="30",backgroundColor="#000000")]
 	public class main extends Five3DTemplate
@@ -80,6 +84,7 @@ package
 		private var _loader:Preloader;
 
 		// data
+		private var _xmlData:XML;
 		private var candles:Array;
 		private var _dropPoint:Point = new Point();
 
@@ -103,41 +108,56 @@ package
 		// UI
 		private var _candleButton:Sprite;
 		private var _hitArea:Sprite;
-
+		
+		// layer
+		//private var contentLayer:CCSprite = new CCSprite();
+		private var systemLayer:CCSprite = new CCSprite();
+		
 		override protected function onInit():void
 		{
 			visible = false;
 			alpha = .5;
 
 			TweenPlugin.activate([AutoAlphaPlugin]);
+			
+			addChild(systemLayer);
+			LoaderTool.loaderClip = systemLayer.addChild(new Preloader(systemLayer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
-			setupData();
+			// get external config
+			LoaderTool.loadXML("config.xml", function(event:Event):void
+			{
+				if(event.type!="complete")return;
+				_xmlData = event.target.data;
+				getData(XMLUtil.getXMLById(_xmlData, "GET_CANDLES").@src);
+			});
 		}
 
-		private function setupData():void
+		private function getData(uri:String):void
 		{
 			status = "preload";
-
-			//fake data
+			
+			LoaderTool.loadVars(uri, function(event:Event):void
+			{
+				if(event.type!="complete")return;
+				var _candleList:Array = String(event.target.data.candles).split(";");
+				setupData(_candleList);
+			});
+		} 
+		
+		private function setupData(candleList:Array):void
+		{
 			candles = [];
-
-			////var _result:String = "";
-			var totalPoint:int = 1000;
+			var totalPoint:int = candleList.length;
 			for (var i:int = 0; i < totalPoint; i++)
 			{
-				var _candle:Candle = new Candle(String(i), int(1000 * Math.random()), int(1000 * Math.random()));
+				var _candleData:* = candleList[i].split(",");
+				var _candle:Candle = new Candle(_candleData[0], int(_candleData[1]), int(_candleData[2]));
 				candles[i] = _candle;
-				
-				////_result += _candle.id+","+_candle.x+","+_candle.y+";";
 			}
-			
-			////trace(_result)
-
-			// fake complete
-			////onData();
+			onDataComplete();
 		}
-
-		private function onData():void
+		
+		private function onDataComplete():void
 		{
 			status = "init";
 
@@ -145,6 +165,7 @@ package
 			setupView();
 			//setupMask();
 			setupUI();
+			addChild(systemLayer);
 
 			status = "intro";
 
@@ -201,6 +222,7 @@ package
 					_sprite2D.graphics.beginBitmapFill(_candleBitmapData);
 					_sprite2D.graphics.drawRect(0, 0, _candleBitmapData.width, _candleBitmapData.height);
 					_sprite2D.graphics.endFill();
+					_sprite2D.cacheAsBitmap = true;
 					
 					_candleCanvas3D.addChild(_sprite2D);
 				}
@@ -218,8 +240,25 @@ package
 			*/
 			
 			_canvas3D.addChild(_candleCanvas3D);
+			
+			// -------------------------------------------------------------
+			// try setPixel
+			
+			var particles:Particles = new Particles(particlesBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_WIDTH));
+			_canvas3D.addChild(particles);
+			
+			/*
+			i = candles.length;
+			while (i--)
+			{
+				
+			}
+			*/
 		}
-
+		
+		private var particlesBitmapData:BitmapData;
+		private var particles:Particles;
+		
 		private function setupView():void
 		{
 			_canvas3D.x = -50;

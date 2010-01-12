@@ -129,7 +129,7 @@ package com.cutecoma.net
 			return load(uri, function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new URLVariables(String(event.target["data"]));
+					event.target.data = new URLVariables(String(event.target.data));
 				
 				eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
@@ -146,7 +146,7 @@ package com.cutecoma.net
 			return load(uri, function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new XML(event.target["data"]);
+					event.target.data = new XML(event.target.data);
 				
 				eventHandler(event);
 			} , "xml") as URLLoader;
@@ -180,8 +180,8 @@ package com.cutecoma.net
 			{
 				if(event.type=="complete")
 				{
-					event.target["data"] = ByteArray(event.target["data"]);
-					ByteArray(event.target["data"]).uncompress();
+					event.target.data = ByteArray(event.target.data);
+					ByteArray(event.target.data).uncompress();
 				}
 				
 				eventHandler(event);
@@ -305,7 +305,7 @@ package com.cutecoma.net
 			return request(uri, data,  function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new URLVariables(String(event.target["data"]));
+					event.target.data = new URLVariables(String(event.target.data));
 				
 				eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
@@ -316,7 +316,7 @@ package com.cutecoma.net
 			return request(uri, data,  function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new XML(String(event.target["data"]));
+					event.target.data = new XML(String(event.target.data));
 				
 				eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
