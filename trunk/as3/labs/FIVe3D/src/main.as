@@ -37,26 +37,26 @@ package
 	   /1. create fake dot data array (1000 x 1000 = 1,000,000)
 	   /2. read data and write to map as set pixel (10,000-100,000)
 	   /3. add view controller move/pan/rotate
-	   4. add click to view msg (getPixel)
+	   \4. add click to view msg (getPixel)
 	   5. create candle with perlin noise flame (BitmapSprite Clip?)
 	   /6. add button and move to prefer angle view for place candle
 	   \7. add dialog to get user input (name, msg)
 	   \8. send data to server (time, x, y, name, msg)
 	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
-	   11. add mask
+	   /11. add mask
 	 */
-	[SWF(width="1132",height="758",frameRate="30",backgroundColor="#000000")]
+	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
 	public class main extends Five3DTemplate
 	{
 		// const
 		private const SCREEN_WIDTH:int = 1132;
-		private const SCREEN_HEIGHT:int = 758;
+		private const SCREEN_HEIGHT:int = 654;
 		
 		private const DEFAULT_ANGLE:int = 60;
 		
 		private const DEFAULT_X:int = 0;
-		private const DEFAULT_Y:int = -145;
+		private const DEFAULT_Y:int = -80;
 		private const DEFAULT_Z:int = 0;
 		
 		private const USE_EFFECT:Boolean = false;
@@ -72,13 +72,25 @@ package
 		// assets
 		[Embed(source="assets/ThaiMap.swf",symbol="ThaiMap")]
 		private var ThaiMapSWF:Class;
+		private var _mapSprite:Sprite = new ThaiMapSWF() as Sprite;
 
 		[Embed(source="assets/ThaiMap.swf",symbol="CandleButton")]
 		private var CandleButton:Class;
+		private var _candleButton:Sprite = new CandleButton() as Sprite;
 
 		[Embed(source="assets/ThaiMap.swf",symbol="CandleClip")]
 		private var CandleClip:Class;
-		private var _candleClip:Sprite;
+		private var _candleClip:Sprite = new CandleClip() as Sprite;
+		
+		/*
+		[Embed(source="assets/ThaiMap.swf",symbol="FormClip")]
+		private var FormClip:Class;
+		private var _formClip:Sprite;
+		*/
+		
+		[Embed(source="assets/ThaiMap.swf",symbol="ForeGroundClip")]
+		private var ForeGroundClip:Class;
+		private var _foreGroundClip:Sprite = new ForeGroundClip as Sprite;
 
 		// loader
 		private var _loader:Preloader;
@@ -106,7 +118,6 @@ package
 		private var _dirtyNum:int = 0;
 
 		// UI
-		private var _candleButton:Sprite;
 		private var _hitArea:Sprite;
 		
 		// layer
@@ -116,12 +127,13 @@ package
 		override protected function onInit():void
 		{
 			visible = false;
-			alpha = .5;
+			alpha = 0;
+			show();
 
 			TweenPlugin.activate([AutoAlphaPlugin]);
 			
 			addChild(systemLayer);
-			LoaderTool.loaderClip = systemLayer.addChild(new Preloader(systemLayer, SCREEN_WIDTH, SCREEN_HEIGHT));
+			LoaderTool.addLoaderTo(systemLayer, new Preloader(systemLayer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
 			// get external config
 			LoaderTool.loadXML("config.xml", function(event:Event):void
@@ -184,7 +196,6 @@ package
 			_candleCanvas3D.mouseEnabled = false;
 
 			// map
-			var _mapSprite:Sprite = new ThaiMapSWF() as Sprite;
 			var _mapBitmapData:BitmapData = new BitmapData(_mapSprite.width, _mapSprite.height, true, 0x000000);
 			_mapBitmapData.draw(_mapSprite);
 
@@ -193,7 +204,7 @@ package
 			_mapBitmap3D.y = -_mapBitmapData.height/2;
 			_mapBitmap3D.singleSided = true;
 			_canvas3D.addChild(_mapBitmap3D);
-			_mapBitmap3D.clipRect = new Rectangle(-1132-1132, -758-758, 1132*2+1132, 758*2+758);
+			_mapBitmap3D.clipRect = new Rectangle(-1132, -654, 1132*2, 654*2);
 
 			// candles
 			var _candlesBitmapData:BitmapData = new BitmapData(_mapSprite.width, _mapSprite.height, true, 0x00000000);
@@ -203,7 +214,6 @@ package
 			var _candle:Candle;
 			_candlesBitmapData.lock();
 			
-			_candleClip = new CandleClip() as Sprite;
 			var _candleBitmapData:BitmapData = new BitmapData(_candleClip.width*SPRITE_SCALE, _candleClip.height*SPRITE_SCALE, true, 0xFF0000);
 			_candleBitmapData.draw(_candleClip, new Matrix(SPRITE_SCALE, 0, 0, SPRITE_SCALE, _candleBitmapData.width/2, _candleBitmapData.height));
 
@@ -244,8 +254,8 @@ package
 			// -------------------------------------------------------------
 			// try setPixel
 			
-			var particles:Particles = new Particles(particlesBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_WIDTH));
-			_canvas3D.addChild(particles);
+			//var particles:Particles = new Particles(particlesBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_WIDTH));
+			//_canvas3D.addChild(particles);
 			
 			/*
 			i = candles.length;
@@ -254,6 +264,13 @@ package
 				
 			}
 			*/
+			
+			_foreGroundClip.mouseChildren = false;
+			_foreGroundClip.mouseEnabled = false;
+			addChild(_foreGroundClip);
+			
+			addChild(stats);
+			addChild(debugText);
 		}
 		
 		private var particlesBitmapData:BitmapData;
@@ -262,7 +279,7 @@ package
 		private function setupView():void
 		{
 			_canvas3D.x = -50;
-			_canvas3D.y = -120;
+			_canvas3D.y = 0;
 			_canvas3D.z = 830;
 			
 			_canvas3D.rotationX = 0;
@@ -272,12 +289,12 @@ package
 
 		public function show():void
 		{
-			TweenLite.to(this, 0.25, {autoAlpha: 1});
+			TweenLite.to(this, 2, {autoAlpha: 1});
 		}
 
 		public function hide():void
 		{
-			TweenLite.to(this, 0.25, {autoAlpha: 0});
+			TweenLite.to(this, 2, {autoAlpha: 0});
 		}
 
 		/*
@@ -304,16 +321,10 @@ package
 
 		private function setupUI():void
 		{
-			// add hitArea
-			_hitArea = DrawTool.drawRect(SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000);
-			_hitArea.blendMode = BlendMode.ERASE;
-			addChild(_hitArea);
-
-			var _ccMouse:CCMouse = new CCMouse(_hitArea);
+			var _ccMouse:CCMouse = new CCMouse(stage);
 			_ccMouse.addEventListener(CCMouseEvent.MOUSE_DRAG, onDrag);
 			_ccMouse.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
-			_candleButton = new CandleButton() as Sprite;
 			_candleButton.x = 1036;
 			_candleButton.y = 590;
 			_candleButton.buttonMode = true;
@@ -380,11 +391,8 @@ package
 			switch (_status)
 			{
 				case "preload":
-					_loader = new Preloader(this);
-					addChild(_loader);
 					break;
 				case "init":
-					removeChild(_loader);
 					break;
 				case "intro":
 					// fade in
@@ -499,8 +507,14 @@ package
 		override protected function setupLayer():void
 		{
 			// guide
-			addChild(LoaderTool.loadAsset("../src/assets/bg.png"));
+			if (parent && parent==stage)
+				addChild(LoaderTool.loadAsset("../src/assets/bg.png"));
 
+			// add hitArea
+			_hitArea = DrawTool.drawRect(SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000);
+			_hitArea.blendMode = BlendMode.ERASE;
+			addChild(_hitArea);
+			
 			_effectBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_HEIGHT, true, 0x000000);
 			var _effectBitmap:Bitmap = new Bitmap(_effectBitmapData, PixelSnapping.NEVER, false);
 			addChild(_effectBitmap);
@@ -508,24 +522,33 @@ package
 
 		private function onDrag(event:CCMouseEvent):void
 		{
-			_canvas3D.x += event.data.dx;
-			_canvas3D.z += event.data.dy * Math.sin(90 - _canvas3D.rotationX);
-			_canvas3D.y += event.data.dy;
-
-			setDirty();
+			if(_status=="explore" || _status=="drag")
+			{
+				_canvas3D.x += event.data.dx;
+				_canvas3D.z += event.data.dy * Math.sin(90 - _canvas3D.rotationX);
+				_canvas3D.y += event.data.dy;
+	
+				setDirty();
+			}
 		}
 
 		private function onWheel(event:MouseEvent):void
 		{
-			var _x:Number = _canvas3D.x;
-			var _y:Number = _canvas3D.y;
-			var _z:Number = _canvas3D.z;
-
-			_y = _y + 5 * event.delta * Math.sin(DEFAULT_ANGLE);
-			_z = _z + 5 * event.delta * Math.cos(DEFAULT_ANGLE);
-
-			if(_z>-320)
+			if(_status=="explore" || _status=="drag")
 			{
+				var _x:Number = _canvas3D.x;
+				var _y:Number = _canvas3D.y;
+				var _z:Number = _canvas3D.z;
+	
+				_y = _y + 5 * event.delta * Math.sin(DEFAULT_ANGLE);
+				_z = _z + 5 * event.delta * Math.cos(DEFAULT_ANGLE);
+	
+				if(_z<-320)
+				{
+					_z = _canvas3D.z;
+					_y = _canvas3D.y;
+				}
+				
 				_canvas3D.setPosition(_x, _y, _z);
 				setDirty();
 			}
@@ -545,10 +568,8 @@ package
 				setDirty();
 			} 
 			
-			if (_transformDirty)
-			{
-				
-			}
+			if(_canvas3D)
+				title = String(_canvas3D.mouseXY);
 		}
 
 		override protected function onPostRender():void

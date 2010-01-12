@@ -574,7 +574,7 @@ package net.badimon.five3D.display {
 			
 			var _super_graphics:Graphics = super.graphics;
 			_super_graphics.clear();
-			//var _clipRect1:Rectangle = new Rectangle(-1132, -758, 1132*2, 758*2);
+			
 			var _rect:Rectangle = new Rectangle();
 			
 			while (--len > -1) {
@@ -588,7 +588,6 @@ package net.badimon.five3D.display {
 				yp2 = point2["yp"];
 				_rect.width = xp3 = point3["xp"];
 				_rect.height = yp3 = point3["yp"];
-				
 				
 				if(clipRect.containsRect(_rect))
 				{

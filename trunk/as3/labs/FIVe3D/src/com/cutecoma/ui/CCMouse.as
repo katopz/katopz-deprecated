@@ -69,7 +69,7 @@ package com.cutecoma.ui
 					break;
 				case MouseEvent.MOUSE_MOVE:
 					_target["mouseChildren"] = false;
-					if (isMouseDown && event.target == _dragTarget && event.relatedObject == null)
+					if (isMouseDown)// && event.target == _dragTarget && event.relatedObject == null)
 					{
 						var dx:Number = event.stageX - _lastPosition.x;
 						var dy:Number = event.stageY - _lastPosition.y;

@@ -43,9 +43,11 @@ package com.cutecoma.net
 				if(!loaderClip.parent && parent)
 					parent.addChild(loaderClip);
 				
-				loaderClip.visible = true;
+				//loaderClip.alpha = 1;
+				//loaderClip.visible = true;
 			}else{
-				loaderClip.visible = false;
+				//loaderClip.alpha = 0;
+				//loaderClip.visible = false;
 			}
 			
 			LoaderTool.loaderClip = loaderClip;

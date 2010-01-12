@@ -3,7 +3,6 @@
 <compiler additionalCompilerArguments="-debug=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="9.0.124" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="libs"/>
-<compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/Framework/casa/releases/latest/code"/>
 </compilerSourcePath>
 <libraryPath defaultLinkType="1">
 <libraryPathEntry kind="4" path="">
@@ -25,6 +24,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
+<application path="TestMouse.as"/>
 <application path="Authen.as"/>
 <application path="main.as"/>
 </applications>
