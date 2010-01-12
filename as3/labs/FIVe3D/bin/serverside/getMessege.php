@@ -1,0 +1,1 @@
+result=200&id=0&msg="normal<b>bold</b>"
