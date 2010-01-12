@@ -8,8 +8,7 @@ package com.cutecoma.containers
 	import com.greensock.plugins.TweenPlugin;
 	
 	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
-	import flash.events.Event;	
+	import flash.display.Sprite;	
 	
 	public class Preloader extends CCSprite
 	{
@@ -29,29 +28,29 @@ package com.cutecoma.containers
 			
 			// bg
 			_bg = DrawTool.drawRect(width, height, 0x000000, 0.75);
+			addChild(_bg);
 			
 			// loader
 			_loader = addChild(new MacLoadingClip()) as Sprite;
-			_loader.alpha = 0;
-			_loader.visible = false;
-			_loader.mouseEnabled = false;
 			_loader.x = width/2;
 			_loader.y = height/2;
+			
+			mouseEnabled = false;
+			alpha = 0;
+			visible = false;
 			
 			// effect
 			TweenPlugin.activate([AutoAlphaPlugin]);
 			
 			LoaderTool.showLoader = function():void
 			{
-				TweenLite.to(_loader, 0.5, {autoAlpha:1});
+				TweenLite.to(this, 0.5, {autoAlpha:1});
 			};
 			
 			LoaderTool.hideLoader = function():void
 			{
-				TweenLite.to(_loader, 0.5, {autoAlpha:0});
+				TweenLite.to(this, 0.5, {autoAlpha:0});
 			};
-			
-			LoaderTool.addLoaderTo(containter, _loader);
 		}
 			
 		override public function destroy():void
