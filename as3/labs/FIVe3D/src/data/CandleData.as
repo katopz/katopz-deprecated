@@ -13,6 +13,7 @@ package data
 			this.id = id;
 			this.x = x;
 			this.y = y;
+			this.msg = msg
 		}
 	}
 }

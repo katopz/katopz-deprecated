@@ -11,7 +11,7 @@ package com.cutecoma.templates
 	/**
 	 * Base template class.
 	 */
-	public class Template extends Sprite
+	public class Five3DTemplate extends Sprite
 	{
 		/** @private */
 		protected function init():void
@@ -175,7 +175,7 @@ package com.cutecoma.templates
 		/**
 		 * Creates a new <code>Template</code> object.
 		 */
-		public function Template()
+		public function Five3DTemplate()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}

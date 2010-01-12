@@ -4,7 +4,7 @@ package
 	import com.cutecoma.display.DrawTool;
 	import com.cutecoma.events.CCMouseEvent;
 	import com.cutecoma.net.LoaderTool;
-	import com.cutecoma.templates.Template;
+	import com.cutecoma.templates.Five3DTemplate;
 	import com.cutecoma.ui.CCMouse;
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
@@ -36,14 +36,14 @@ package
 	   /3. add view controller move/pan/rotate
 	   4. add click to view msg (getPixel)
 	   5. create candle with perlin noise flame (BitmapSprite Clip?)
-	   6. add button and move to prefer angle view for place candle
-	   7. add dialog to get user input (name, msg)
-	   8. send data to server (time, x, y, name, msg)
-	   9. add blur/glow effect
+	   /6. add button and move to prefer angle view for place candle
+	   \7. add dialog to get user input (name, msg)
+	   \8. send data to server (time, x, y, name, msg)
+	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
 	 */
 	[SWF(width="1132",height="758",frameRate="30",backgroundColor="#000000")]
-	public class main extends Template
+	public class main extends Five3DTemplate
 	{
 		// const
 		private const SCREEN_WIDTH:int = 1132;
@@ -121,15 +121,20 @@ package
 			//fake data
 			candles = [];
 
+			////var _result:String = "";
 			var totalPoint:int = 1000;
 			for (var i:int = 0; i < totalPoint; i++)
 			{
 				var _candle:Candle = new Candle(String(i), int(1000 * Math.random()), int(1000 * Math.random()));
 				candles[i] = _candle;
+				
+				////_result += _candle.id+","+_candle.x+","+_candle.y+";";
 			}
+			
+			////trace(_result)
 
 			// fake complete
-			onData();
+			////onData();
 		}
 
 		private function onData():void
@@ -150,6 +155,7 @@ package
 		{
 			_canvas3D = new Sprite3D();
 			_scene.addChild(_canvas3D);
+			_canvas3D.singleSided = true;
 			_canvas3D.mouseEnabled = false;
 
 			_candleCanvas3D = new Sprite3D();
