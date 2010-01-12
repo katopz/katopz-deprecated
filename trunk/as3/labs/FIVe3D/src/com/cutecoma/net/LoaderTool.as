@@ -29,6 +29,7 @@ package com.cutecoma.net
 	public class LoaderTool
 	{
 		public static var SEND_METHOD:String = URLRequestMethod.POST;
+		public static var useDebug:Boolean = true;
 		
 		public static var showLoader:Function;
 		public static var hideLoader:Function;
@@ -223,7 +224,7 @@ package com.cutecoma.net
 				break;
 			}
 			
-			trace(" ! Load ["+type+"] : "+ uri);
+			if(useDebug)trace(" ! Load ["+type+"] : "+ uri);
 			
 			// select loader
 			var _loader:*;
@@ -285,7 +286,7 @@ package com.cutecoma.net
 				}
 			}catch (e:Error)
 			{
-				trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
+				if(useDebug)trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
 			return null;
 		}

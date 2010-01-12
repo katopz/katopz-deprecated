@@ -29,13 +29,16 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.display {
-	import flash.display.Stage;
-	import flash.events.Event;
-	import flash.text.TextField;
+package com.cutecoma.text {
 	import com.cutecoma.core.IDestroyable;
 	import com.cutecoma.events.IRemovableEventDispatcher;
 	import com.cutecoma.events.ListenerManager;
+	
+	import flash.events.Event;
+	import flash.filters.GlowFilter;
+	import flash.text.StyleSheet;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
 	
 	/**
 		A base TextField that implements {@link IRemovableEventDispatcher} and {@link IDestroyable}.
@@ -50,7 +53,7 @@ package com.cutecoma.display {
 		
 		/**
 			Creates a new CasaTextField.
-		*/
+		*
 		public function CCTextField() {
 			super();
 			
@@ -112,6 +115,50 @@ package com.cutecoma.display {
 			
 			if (this.parent != null)
 				this.parent.removeChild(this);
+		}
+		
+		// -----------------------------------------------------------------------------------
+		
+		public var defaultText:String = "";
+
+		public function CCTextField(text:String = null, textFormat:TextFormat = null, css:String=null)
+		{
+			super();
+			this._listenerManager = ListenerManager.getManager(this);
+			
+			// Flash CS4 assets
+			if(name.indexOf("instance")!=0) return;
+			
+			selectable = false;
+			mouseEnabled = false;
+			mouseWheelEnabled = false;
+			defaultTextFormat = textFormat ? textFormat : new TextFormat("Tahoma", 12, 0x000000);
+			autoSize = "left";
+			cacheAsBitmap = true;
+			filters = [new GlowFilter(0x000000, 0, 0, 0, 0, 0)];
+			
+			parseCSS(css);
+			
+			if (text)
+				this.htmlText = "<p>"+text+"</p>";
+		}
+
+		public function parseCSS(css:String = null):void
+		{
+			var style:StyleSheet = new StyleSheet();
+			var p:String;
+			var aLink:String;
+			var aHover:String;
+
+			if (!css)
+			{
+				p = "p {font-family: Tahoma;font-size: 12px;color:#000000;}";
+				aLink = "a:link {color:#009900;}";
+				aHover = "a:hover {color:#00CC00;text-decoration:underline}";
+				css = p + aLink + aHover;
+			}
+			style.parseCSS(css);
+			//styleSheet = style;
 		}
 	}
 }
