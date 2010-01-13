@@ -2,7 +2,7 @@ package com.sleepydesign.display
 {
 	import flash.display.Sprite;
 
-	public class DrawTool
+	public class DrawUtil
 	{
 		public static function drawRect(width:Number = 100, height:Number = 100, color:uint = 0x000000, alpha:Number = 1.0):Sprite
 		{

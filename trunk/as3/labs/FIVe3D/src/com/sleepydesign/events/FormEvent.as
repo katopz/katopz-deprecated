@@ -17,9 +17,6 @@ package com.sleepydesign.events
 		
 		// submit
 		public static const SUBMIT:String = "cc-form-submit";
-		
-		// data in
-		public static const GET_SERVER_DATA:String = "cc-form-data";
 
 		// _____________________ Form Data _____________________
 

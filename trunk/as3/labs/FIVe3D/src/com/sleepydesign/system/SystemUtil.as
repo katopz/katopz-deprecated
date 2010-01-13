@@ -12,7 +12,7 @@ package com.sleepydesign.system
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-    public class SystemTool
+    public class SystemUtil
     {
         public static function getFlashVars(stage:Stage) : *
         {

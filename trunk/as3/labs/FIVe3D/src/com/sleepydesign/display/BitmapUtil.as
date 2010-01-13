@@ -3,7 +3,7 @@ package com.sleepydesign.display
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 
-	public class BitmapTool
+	public class BitmapUtil
 	{
 		public static function drawRect(width:Number = 100, height:Number = 100, color:uint = 0x000000, alpha:Number = 1.0):Bitmap
 		{

@@ -1,13 +1,15 @@
-package com.sleepydesign.controls
+package com.sleepydesign.site
 {
+	import com.sleepydesign.components.InputText;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.FormEvent;
-	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
+	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.FocusEvent;
@@ -16,7 +18,7 @@ package com.sleepydesign.controls
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 
-	public class FormBuilder extends EventDispatcher implements IDestroyable
+	public class FormTool extends EventDispatcher implements IDestroyable
 	{
 		private var _container:DisplayObjectContainer;
 		private var _loader:Object/*URLLoader, Loader*/;
@@ -33,7 +35,7 @@ package com.sleepydesign.controls
 		
 		public static var useDebug:Boolean = false;
 
-		public function FormBuilder(container:DisplayObjectContainer = null, xml:XML = null, eventHandler:Function = null)
+		public function FormTool(container:DisplayObjectContainer = null, xml:XML = null, eventHandler:Function = null)
 		{
 			if(useDebug)trace("\n / [Form] ------------------------------- ");
 
@@ -279,13 +281,13 @@ package com.sleepydesign.controls
 		public function submit():void
 		{
 			if(useDebug)trace(" ! Submit");
-			LoaderTool.SEND_METHOD = method;
+			LoaderUtil.SEND_METHOD = method;
 			
 			if(returnType == URLVariables)
 			{
-				_loader = LoaderTool.requestVars(action, _data, onGetFormData);
+				_loader = LoaderUtil.requestVars(action, _data, onGetFormData);
 			}else{
-				_loader = LoaderTool.request(action, _data, onGetFormData);
+				_loader = LoaderUtil.request(action, _data, onGetFormData);
 			}
 			
 			var _formEvent:FormEvent = new FormEvent(FormEvent.SUBMIT, {_items: _items}); 
@@ -297,8 +299,9 @@ package com.sleepydesign.controls
 
 		private function onGetFormData(event:Event):void
 		{
-			if(useDebug)trace(" ^ onGetFormData\t: " + event);
-			if (event.type != Event.COMPLETE)
+			//if(useDebug)
+			trace(" ^ onGetFormData\t: " + event);
+			if (event.type != Event.COMPLETE && event.type != DataEvent.DATA)
 				return;
 
 			// reset?
@@ -307,12 +310,9 @@ package com.sleepydesign.controls
 					input.text = input.defaultText;
 			
 			// form data event
-			var _formEvent:FormEvent = new FormEvent(FormEvent.GET_SERVER_DATA, event.target.data); 
-			dispatchEvent(_formEvent);
-			_eventHandler(_formEvent);
-
-			// native event
+			//var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
 			dispatchEvent(event);
+			_eventHandler(event);
 		}
 		
 		// ____________________________________________ Gabage Collector ____________________________________________
