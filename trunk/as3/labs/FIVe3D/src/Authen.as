@@ -12,7 +12,7 @@ package
 
 	public class Authen extends CCSprite
 	{
-		[Embed(source="assets/simple-login.swf", symbol="FormClip")]
+		//[Embed(source="assets/simple-login.swf", symbol="FormClip")]
 		private var FormClip:Class;
 		public var logInClip:Sprite = new FormClip() as Sprite;
 
