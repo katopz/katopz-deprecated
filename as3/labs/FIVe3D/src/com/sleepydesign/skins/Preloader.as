@@ -1,4 +1,4 @@
-package com.sleepydesign.containers
+package com.sleepydesign.skins
 {
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.display.DrawTool;

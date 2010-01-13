@@ -1,16 +1,15 @@
 package
 {
-	import com.sleepydesign.containers.Preloader;
-	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.display.DrawTool;
-	import com.sleepydesign.events.SDMouseEvent;
-	import com.sleepydesign.net.LoaderTool;
-	import com.sleepydesign.templates.Five3DTemplate;
-	import com.sleepydesign.ui.SDMouse;
-	import com.sleepydesign.utils.XMLUtil;
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
+	import com.sleepydesign.display.DrawTool;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.SDMouseEvent;
+	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.skins.Preloader;
+	import com.sleepydesign.ui.SDMouse;
+	import com.sleepydesign.utils.XMLUtil;
 	
 	import data.CandleData;
 	
@@ -31,6 +30,7 @@ package
 	import net.badimon.five3D.display.Particles;
 	import net.badimon.five3D.display.Sprite2D;
 	import net.badimon.five3D.display.Sprite3D;
+	import net.badimon.five3D.templates.Five3DTemplate;
 
 	/*
 	   TODO:
@@ -45,6 +45,8 @@ package
 	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
 	   /11. add mask
+	   12. continue load queue 1,000 perrequest
+	   13. doing data proxy, get/set while send
 	 */
 	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
 	public class main extends Five3DTemplate

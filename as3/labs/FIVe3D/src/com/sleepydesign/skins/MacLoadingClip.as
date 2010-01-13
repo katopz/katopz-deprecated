@@ -1,12 +1,13 @@
-package com.sleepydesign.containers
+package com.sleepydesign.skins
 {
+	import com.sleepydesign.display.SDSprite;
+	
 	import flash.display.Shape;
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
-	public class MacLoadingClip extends Sprite
+	public class MacLoadingClip extends SDSprite
 	{
 		private var timer:Timer;
 		private var slices:int;

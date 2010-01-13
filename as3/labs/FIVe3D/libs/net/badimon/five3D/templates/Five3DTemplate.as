@@ -1,4 +1,4 @@
-package com.sleepydesign.templates
+package net.badimon.five3D.templates
 {
 	import flash.display.*;
 	import flash.events.*;
