@@ -45,7 +45,7 @@ package
 	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
 	   /11. add mask
-	   12. continue load queue 1,000 perrequest
+	   12. continue load queue 1,000 per request
 	   13. doing data proxy, get/set while send
 	 */
 	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
@@ -123,7 +123,7 @@ package
 		private var _hitArea:Sprite;
 		
 		// layer
-		//private var contentLayer:CCSprite = new CCSprite();
+		//private var contentLayer:SDSprite = new SDSprite();
 		private var systemLayer:SDSprite = new SDSprite();
 		
 		override protected function onInit():void
