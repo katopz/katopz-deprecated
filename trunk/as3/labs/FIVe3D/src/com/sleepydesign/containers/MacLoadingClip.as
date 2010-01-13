@@ -1,4 +1,4 @@
-package com.cutecoma.containers
+package com.sleepydesign.containers
 {
 	import flash.display.Shape;
 	import flash.display.Sprite;

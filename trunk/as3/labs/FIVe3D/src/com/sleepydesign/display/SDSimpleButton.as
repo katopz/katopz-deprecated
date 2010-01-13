@@ -29,15 +29,15 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.display {
+package com.sleepydesign.display {
 	import flash.display.SimpleButton;
 	import flash.display.Stage;
 	import flash.events.Event;
-	import com.cutecoma.core.IDestroyable;
-	import com.cutecoma.events.IRemovableEventDispatcher;
-	import com.cutecoma.events.ListenerManager;
+	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.events.IRemovableEventDispatcher;
+	import com.sleepydesign.events.ListenerManager;
 	import flash.display.DisplayObject;
-	import com.cutecoma.utils.DisplayObjectUtil;
+	import com.sleepydesign.utils.DisplayObjectUtil;
 	
 	
 	/**
@@ -46,7 +46,7 @@ package com.cutecoma.display {
 		@author Aaron Clinger
 		@version 05/29/09
 	*/
-	public class CCSimpleButton extends SimpleButton implements IRemovableEventDispatcher, IDestroyable {
+	public class SDSimpleButton extends SimpleButton implements IRemovableEventDispatcher, IDestroyable {
 		protected var _listenerManager:ListenerManager;
 		protected var _isDestroyed:Boolean;
 		
@@ -59,7 +59,7 @@ package com.cutecoma.display {
 			@param downState: The initial value for the SimpleButton down state.
 			@param hitTestState: The initial value for the SimpleButton hitTest state.
 		*/
-		public function CCSimpleButton(upState:DisplayObject = null, overState:DisplayObject = null, downState:DisplayObject = null, hitTestState:DisplayObject = null) {
+		public function SDSimpleButton(upState:DisplayObject = null, overState:DisplayObject = null, downState:DisplayObject = null, hitTestState:DisplayObject = null) {
 			super(upState, overState, downState, hitTestState);
 			
 			this._listenerManager = ListenerManager.getManager(this);

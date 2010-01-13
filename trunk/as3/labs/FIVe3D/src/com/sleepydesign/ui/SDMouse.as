@@ -1,13 +1,13 @@
-package com.cutecoma.ui
+package com.sleepydesign.ui
 {
-	import com.cutecoma.events.CCMouseEvent;
+	import com.sleepydesign.events.SDMouseEvent;
 
 	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	public class CCMouse extends EventDispatcher
+	public class SDMouse extends EventDispatcher
 	{
 		private var _target:InteractiveObject;
 		private var _dragTarget:*;
@@ -16,7 +16,7 @@ package com.cutecoma.ui
 
 		public static var isMouseDown:Boolean = false;
 
-		public function CCMouse(target:InteractiveObject)
+		public function SDMouse(target:InteractiveObject)
 		{
 			_target = target;
 			create();
@@ -75,7 +75,7 @@ package com.cutecoma.ui
 						var dy:Number = event.stageY - _lastPosition.y;
 						var distance:Number = Point.distance(new Point(event.stageX, event.stageY), _lastPosition);
 
-						dispatchEvent(new CCMouseEvent(CCMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+						dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
 
 						_lastPosition.x = event.stageX;
 						_lastPosition.y = event.stageY;

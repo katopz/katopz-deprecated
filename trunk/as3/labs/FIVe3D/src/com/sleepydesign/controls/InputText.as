@@ -1,6 +1,6 @@
-package com.cutecoma.controls
+package com.sleepydesign.controls
 {
-	import com.cutecoma.text.CCTextField;
+	import com.sleepydesign.text.SDTextField;
 	
 	import flash.events.Event;
 	import flash.text.TextField;
@@ -77,7 +77,7 @@ package com.cutecoma.controls
 			{
 				// Pure AS3
 				_isFlash = false;
-				_tf = new CCTextField(_text);
+				_tf = new SDTextField(_text);
 	    		_tf.selectable = true;
 	    		_tf.mouseEnabled = true;
 	    		_tf.background = true;

@@ -1,4 +1,4 @@
-package com.cutecoma.events
+package com.sleepydesign.events
 {
 	import flash.events.Event;
 

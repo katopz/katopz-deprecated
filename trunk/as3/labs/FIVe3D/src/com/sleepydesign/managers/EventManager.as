@@ -1,4 +1,4 @@
-package com.cutecoma.managers
+package com.sleepydesign.managers
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;

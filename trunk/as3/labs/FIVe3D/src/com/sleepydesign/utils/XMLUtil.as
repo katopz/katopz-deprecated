@@ -1,4 +1,4 @@
-package com.cutecoma.utils
+package com.sleepydesign.utils
 {
 	import flash.xml.XMLDocument;
 

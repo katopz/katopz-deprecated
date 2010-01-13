@@ -1,11 +1,11 @@
-package com.cutecoma.controls
+package com.sleepydesign.controls
 {
-	import com.cutecoma.display.CCSprite;
-	import com.cutecoma.events.TransformEvent;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.TransformEvent;
 	
 	import flash.events.Event;
 	
-	public class AbstractComponent extends CCSprite
+	public class AbstractComponent extends SDSprite
 	{
 		protected var _width:Number = 0;
 		protected var _height:Number = 0;

@@ -1,4 +1,4 @@
-package com.cutecoma.templates
+package com.sleepydesign.templates
 {
 	import flash.display.*;
 	import flash.events.*;

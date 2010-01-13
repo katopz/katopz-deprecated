@@ -1,10 +1,10 @@
-package com.cutecoma.controls
+package com.sleepydesign.controls
 {
-	import com.cutecoma.core.IDestroyable;
-	import com.cutecoma.events.FormEvent;
-	import com.cutecoma.net.LoaderTool;
-	import com.cutecoma.utils.StringUtil;
-	import com.cutecoma.utils.ValidationUtil;
+	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.events.FormEvent;
+	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.utils.StringUtil;
+	import com.sleepydesign.utils.ValidationUtil;
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;

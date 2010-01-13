@@ -29,14 +29,14 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.display {
+package com.sleepydesign.display {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Stage;
 	import flash.events.Event;
-	import com.cutecoma.core.IDestroyable;
-	import com.cutecoma.events.IRemovableEventDispatcher;
-	import com.cutecoma.events.ListenerManager;
+	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.events.IRemovableEventDispatcher;
+	import com.sleepydesign.events.ListenerManager;
 	
 	/**
 		A base Bitmap that implements {@link IRemovableEventDispatcher} and {@link IDestroyable}.
@@ -44,7 +44,7 @@ package com.cutecoma.display {
 		@author Aaron Clinger
 		@version 06/10/09
 	*/
-	public class CCBitmap extends Bitmap implements IRemovableEventDispatcher, IDestroyable {
+	public class SDBitmap extends Bitmap implements IRemovableEventDispatcher, IDestroyable {
 		protected var _listenerManager:ListenerManager;
 		protected var _isDestroyed:Boolean;
 		
@@ -56,7 +56,7 @@ package com.cutecoma.display {
 			@param pixelSnapping: Whether or not the Bitmap object is snapped to the nearest pixel.
 			@param smoothing: Whether or not the bitmap is smoothed when scaled.
 		*/
-		public function CCBitmap(bitmapData:BitmapData = null, pixelSnapping:String = "auto", smoothing:Boolean = false) {
+		public function SDBitmap(bitmapData:BitmapData = null, pixelSnapping:String = "auto", smoothing:Boolean = false) {
 			super(bitmapData, pixelSnapping, smoothing);
 			
 			this._listenerManager = ListenerManager.getManager(this);

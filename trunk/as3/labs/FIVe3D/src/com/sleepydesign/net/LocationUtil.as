@@ -29,7 +29,7 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.net {
+package com.sleepydesign.net {
 	import flash.display.DisplayObject;
 	import flash.external.ExternalInterface;
 	import flash.system.Capabilities;
