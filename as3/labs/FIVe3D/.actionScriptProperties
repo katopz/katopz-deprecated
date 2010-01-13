@@ -24,7 +24,6 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
-<application path="TestMouse.as"/>
 <application path="Authen.as"/>
 <application path="main.as"/>
 </applications>
