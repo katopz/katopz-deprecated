@@ -2,9 +2,10 @@ package com.sleepydesign.utils
 {
 	public class StringUtil
 	{
-		public static function replace(source:String, oldString:String, newString:String, pattern:String = "g"):String
+		public static function replace(source:String, findString:String, replaceString:String, pattern:String = "g"):String
 		{
-			return source.replace(new RegExp(oldString, pattern), newString);
+			return source.split(findString).join(replaceString); 
+			//return source.replace(new RegExp(oldString, pattern), newString);
 		}
 
 		public static function getDefaultIfNull(newValue:String, defaultValue:String = ""):String

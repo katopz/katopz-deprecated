@@ -4,6 +4,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.FormEvent;
 	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
 	
@@ -34,6 +35,10 @@ package com.sleepydesign.site
 		public var returnType:* = URLVariables;
 		
 		public static var useDebug:Boolean = false;
+		
+		private var alertText:TextField;
+		private var onInvalidCommand:String;
+		private var onIncompleteCommand:String;
 
 		public function FormTool(container:DisplayObjectContainer = null, xml:XML = null, eventHandler:Function = null)
 		{
@@ -58,12 +63,23 @@ package com.sleepydesign.site
 				_containerID = StringUtil.getDefaultIfNull(itemXML.@src, String(itemXML.@id));
 
 				if(useDebug)trace("   + " + name + "\t: " + _containerID);
+				var _textField:TextField;
+				var item:InputText
 
 				switch (name)
 				{
 					case "textfield":
-						var _textField:TextField = _container.getChildByName(_containerID) as TextField;
-						var item:InputText = new InputText(_textField.text, _textField);
+						_textField = _container.getChildByName(_containerID) as TextField;
+						if (String(itemXML.@type)=="alert")
+						{
+							alertText = _textField;
+							onInvalidCommand =  String(xml.@onInvalid);
+							onIncompleteCommand =  String(xml.@onIncomplete);
+						}
+					break;
+					case "textinput":
+						_textField = _container.getChildByName(_containerID) as TextField;
+						item = new InputText(_textField.text, _textField);
 						if (item)
 						{
 							item.defaultText = (String(itemXML.@label) != "") ? String(itemXML.@label) : item.text;
@@ -81,8 +97,6 @@ package com.sleepydesign.site
 
 							item.maxChars = !StringUtil.isNull(itemXML.@maxlength) ? int(itemXML.@maxlength) : 0;
 							item.restrict = !StringUtil.isNull(itemXML.@restrict) ? String(itemXML.@restrict) : null;
-
-							item.onInvalidCommand = (String(itemXML.@onInvalid) != "") ? String(itemXML.@onInvalid) : "";
 
 							item.label.removeEventListener(FocusEvent.FOCUS_IN, focusListener);
 							item.label.addEventListener(FocusEvent.FOCUS_IN, focusListener);
@@ -154,12 +168,12 @@ package com.sleepydesign.site
 			{
 				submit();
 			}
-			else
+			/*else
 			{
 				var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {_items: _items}); 
 				dispatchEvent(_formEvent);
 				_eventHandler(_formEvent);
-			}
+			}*/
 		}
 
 		// ____________________________________________ Validate ____________________________________________
@@ -173,6 +187,8 @@ package com.sleepydesign.site
 			var input:*
 			
 			var _formEvent:FormEvent;
+			var _inCompleteList:Array = [];
+			var _inValidNameList:Array = [];
 
 			// fill all?
 			for each (input in _items)
@@ -185,15 +201,23 @@ package com.sleepydesign.site
 
 				// only 1 required mean required
 				isRequired = isRequired || input.isRequired;
+				
+				if(!input.isEdit && input.isRequired)
+					_inCompleteList.push(input);
 			}
 
 			if (isRequired)
 			{
 				if (!isComplete)
 				{
-					_formEvent = new FormEvent(FormEvent.INCOMPLETE, {_items: _items});
+					/*
+					_formEvent = new FormEvent(FormEvent.INCOMPLETE, {items: _items});
 					dispatchEvent(_formEvent);
 					_eventHandler(_formEvent);
+					*/
+					
+					showIncomplete(_inCompleteList);
+					
 					// no mercy!
 					return null;
 				}
@@ -213,10 +237,10 @@ package com.sleepydesign.site
 					switch (input.type)
 					{
 						case "email":
-							isValid = isValid && ValidationUtil.validateEmail(input.text);
+							input.isValid = ValidationUtil.validateEmail(input.text);
 							break;
 						default:
-							isValid = isValid && ValidationUtil.validateString(input.text);
+							input.isValid = ValidationUtil.validateString(input.text);
 							break;
 					}
 				}
@@ -226,28 +250,18 @@ package com.sleepydesign.site
 					if (input.isRequired)
 					{
 						isValid = false;
-						_formEvent = new FormEvent(FormEvent.INCOMPLETE, {_items: _items});
-						dispatchEvent(_formEvent);
-						_eventHandler(_formEvent);
+						showIncomplete(input);
 					}
 				}
 
-				input.isValid = isValid;
-
-				if (isValid)
+				if (input.isValid)
 				{
 					if (input.isEdit)
-					{
 						formData[input.id] = input.text;
-					}
 				}
 				else
 				{
-					if(useDebug)trace(" ! Invalid");
-					_formEvent = new FormEvent(FormEvent.INVALID, {_items: _items}); 
-					dispatchEvent(_formEvent);
-					_eventHandler(_formEvent);
-					return null;
+					_inValidNameList.push(input.defaultText);
 				}
 
 				//clear
@@ -260,6 +274,8 @@ package com.sleepydesign.site
 							break;
 					}
 				}
+				
+				isValid = input.isValid && isValid;
 			}
 
 			//finally!
@@ -269,11 +285,41 @@ package com.sleepydesign.site
 			}
 			else
 			{
-				_formEvent = new FormEvent(FormEvent.INCOMPLETE, {_items: _items}); 
-				dispatchEvent(_formEvent);
-				_eventHandler(_formEvent);
+				showInvalid(_inValidNameList);
 				return null;
 			}
+		}
+		
+		public function alert(msg:String):void
+		{
+			if(alertText)
+				alertText.htmlText = msg;
+		}
+		
+		private function showIncomplete(items:Array):void
+		{
+			if(useDebug)
+				trace(" ! Incomplete");
+				
+			if(onIncompleteCommand)
+				SystemUtil.doCommand(onIncompleteCommand, this);
+				
+			var _formEvent:FormEvent = new FormEvent(FormEvent.INCOMPLETE, {items: items});
+			dispatchEvent(_formEvent);
+			_eventHandler(_formEvent);
+			
+		}
+		
+		private function showInvalid(items:Array):void
+		{
+			if(useDebug)trace(" ! Invalid");
+			
+			if(onInvalidCommand)
+				SystemUtil.doCommand(StringUtil.replace(onInvalidCommand, "$invalid_list", items.join(",")), this);
+				
+			var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: items});
+			dispatchEvent(_formEvent);
+			_eventHandler(_formEvent);
 		}
 
 		// ____________________________________________ Action ____________________________________________
