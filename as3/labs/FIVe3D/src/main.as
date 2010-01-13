@@ -48,6 +48,7 @@ package
 	   /11. add gradient mask
 	   \12. continue load queue 1,000 per request
 	   13. doing data proxy, get/set while send
+	   14. particle clipping
 	 */
 	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
 	public class main extends Five3DTemplate
