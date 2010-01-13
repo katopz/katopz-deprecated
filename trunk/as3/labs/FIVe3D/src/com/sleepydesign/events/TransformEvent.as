@@ -5,7 +5,7 @@ package com.sleepydesign.events
 
 	public class TransformEvent extends Event
 	{
-		public static const RESIZE:String = "cc-resize";
+		public static const RESIZE:String = "sd-resize";
 		public var transform:Transform;
 
 		public function TransformEvent(type:String, transform:Transform = null, bubbles:Boolean = false, cancelable:Boolean = false)

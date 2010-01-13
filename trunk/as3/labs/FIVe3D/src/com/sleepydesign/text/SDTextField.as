@@ -54,7 +54,7 @@ package com.sleepydesign.text {
 		/**
 			Creates a new CasaTextField.
 		*
-		public function CCTextField() {
+		public function SDTextField() {
 			super();
 			
 			this._listenerManager = ListenerManager.getManager(this);

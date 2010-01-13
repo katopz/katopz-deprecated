@@ -6,13 +6,13 @@ package com.sleepydesign.events
 	public class SDMouseEvent extends Event
 	{
 		/*
-		public static const CLICK:String = "cc-click";
+		public static const CLICK:String = "sd-click";
 
-		public static const MOUSE_DOWN:String = "cc-mouse-down";
-		public static const MOUSE_UP:String = "cc-mouse-up";
+		public static const MOUSE_DOWN:String = "sd-mouse-down";
+		public static const MOUSE_UP:String = "sd-mouse-up";
 		*/
 		
-		public static const MOUSE_DRAG:String = "CCmouseDrag";
+		public static const MOUSE_DRAG:String = "cc-mouse-drag";
 
 		public var mouseEvent:*;
 		public var data:*;
@@ -32,7 +32,7 @@ package com.sleepydesign.events
 
 		public override function toString():String
 		{
-			return formatToString("CCMouseEvent", "type", "bubbles", "cancelable", "eventPhase", "data");
+			return formatToString("SDMouseEvent", "type", "bubbles", "cancelable", "eventPhase", "data");
 		}
 	}
 }

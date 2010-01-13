@@ -52,7 +52,7 @@ package com.sleepydesign.display
 		
 		
 		/**
-			Creates a new CCSprite.
+			Creates a new SDSprite.
 		*/
 		public function SDSprite() {
 			super();
@@ -99,7 +99,7 @@ package com.sleepydesign.display
 		}
 		
 		/**
-			Removes and optionally destroys children of the CCSprite.
+			Removes and optionally destroys children of the SDSprite.
 			
 			@param destroyChildren: If a child implements {@link IDestroyable} call its {@link IDestroyable#destroy destroy} method <code>true</code>, or don't destroy <code>false</code>; defaults to <code>false</code>.
 			@param recursive: Call this method with the same arguments on all of the children's children (all the way down the display list) <code>true</code>, or leave the children's children <code>false</code>; defaults to <code>false</code>.
@@ -109,7 +109,7 @@ package com.sleepydesign.display
 		}
 		
 		/**
-			Removes and optionally destroys children of the CCSprite then destroys itself.
+			Removes and optionally destroys children of the SDSprite then destroys itself.
 			
 			@param destroyChildren: If a child implements {@link IDestroyable} call its {@link IDestroyable#destroy destroy} method <code>true</code>, or don't destroy <code>false</code>; defaults to <code>false</code>.
 			@param recursive: Call this method with the same arguments on all of the children's children (all the way down the display list) <code>true</code>, or leave the children's children <code>false</code>; defaults to <code>false</code>.
