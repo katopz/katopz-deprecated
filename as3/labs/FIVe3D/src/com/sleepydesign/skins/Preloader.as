@@ -1,8 +1,8 @@
 package com.sleepydesign.skins
 {
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.display.DrawTool;
-	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.display.DrawUtil;
+	import com.sleepydesign.net.LoaderUtil;
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
@@ -27,7 +27,7 @@ package com.sleepydesign.skins
 			}
 			
 			// bg
-			_bg = DrawTool.drawRect(width, height, 0x000000, 0.75);
+			_bg = DrawUtil.drawRect(width, height, 0x000000, 0.75);
 			addChild(_bg);
 			
 			// loader
@@ -42,12 +42,12 @@ package com.sleepydesign.skins
 			// effect
 			TweenPlugin.activate([AutoAlphaPlugin]);
 			
-			LoaderTool.showLoader = function():void
+			LoaderUtil.showLoader = function():void
 			{
 				TweenLite.to(this, 0.5, {autoAlpha:1});
 			};
 			
-			LoaderTool.hideLoader = function():void
+			LoaderUtil.hideLoader = function():void
 			{
 				TweenLite.to(this, 0.5, {autoAlpha:0});
 			};
@@ -61,8 +61,8 @@ package com.sleepydesign.skins
 			if(_bg)
 				_bg.parent.removeChild(_bg);
 			
-			if(LoaderTool.loaderClip==_loader)
-				LoaderTool.loaderClip = null;
+			if(LoaderUtil.loaderClip==_loader)
+				LoaderUtil.loaderClip = null;
 			
 			super.destroy()
 		}

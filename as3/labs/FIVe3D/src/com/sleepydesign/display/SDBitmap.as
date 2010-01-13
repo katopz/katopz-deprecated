@@ -50,7 +50,7 @@ package com.sleepydesign.display {
 		
 		
 		/**
-			Creates a new CasaBitmap.
+			Creates a new SDBitmap.
 			
 			@param bitmapData: The BitmapData object being referenced.
 			@param pixelSnapping: Whether or not the Bitmap object is snapped to the nearest pixel.
@@ -107,7 +107,7 @@ package com.sleepydesign.display {
 		/**
 			{@inheritDoc}
 			
-			Calling <code>destroy()</code> on a CASA display object also removes it from its current parent.
+			Calling <code>destroy()</code> on a SD display object also removes it from its current parent.
 		*/
 		public function destroy():void {
 			this.removeEventListeners();

@@ -26,7 +26,7 @@ package com.sleepydesign.net
 	 * 
 	 * @author	katopz
 	 */	
-	public class LoaderTool
+	public class LoaderUtil
 	{
 		public static var SEND_METHOD:String = URLRequestMethod.POST;
 		public static var useDebug:Boolean = true;
@@ -50,7 +50,7 @@ package com.sleepydesign.net
 				//loaderClip.visible = false;
 			}
 			
-			LoaderTool.loaderClip = loaderClip;
+			LoaderUtil.loaderClip = loaderClip;
 		}
 				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader

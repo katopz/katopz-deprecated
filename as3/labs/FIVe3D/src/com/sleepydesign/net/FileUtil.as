@@ -23,7 +23,7 @@ package com.sleepydesign.net
 	 *
 	 * @author	katopz
 	 */
-	public class FileTool
+	public class FileUtil
 	{
 		/**
 		 * Limit your upload size
@@ -143,14 +143,14 @@ package com.sleepydesign.net
 					try
 					{
 						//FP10 just get data
-						LoaderTool.loadBytes(event.target["data"], eventHandler);
+						LoaderUtil.loadBytes(event.target["data"], eventHandler);
 					}
 					catch (e:*)
 					{
 						trace(e);
 						//FP9 need to reload ;p
 						if (event.type == DataEvent.UPLOAD_COMPLETE_DATA)
-							LoaderTool.loadAsset(event["data"], eventHandler);
+							LoaderUtil.loadAsset(event["data"], eventHandler);
 					}
 				}
 				else
@@ -193,7 +193,7 @@ package com.sleepydesign.net
 					{
 						//FP9 need to reload ;p
 						if (event.type == DataEvent.UPLOAD_COMPLETE_DATA)
-							LoaderTool.loadAsset(event["data"], eventHandler);
+							LoaderUtil.loadAsset(event["data"], eventHandler);
 					}
 				}
 				else

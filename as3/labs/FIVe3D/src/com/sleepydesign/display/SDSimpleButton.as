@@ -52,7 +52,7 @@ package com.sleepydesign.display {
 		
 		
 		/**
-			Creates a new CasaSimpleButton.
+			Creates a new SDSimpleButton.
 			
 			@param upState: The initial value for the SimpleButton up state.
 			@param overState: The initial value for the SimpleButton over state.
@@ -104,7 +104,7 @@ package com.sleepydesign.display {
 		}
 		
 		/**
-			Removes and optionally destroys the button states of the CasaSprite.
+			Removes and optionally destroys the button states of the SDSprite.
 			
 			@param destroyChildren: If the button state implements {@link IDestroyable} call its {@link IDestroyable#destroy destroy} method <code>true</code>, or don't destroy <code>false</code>; defaults to <code>false</code>.
 			@param recursive: Call this method with the same arguments on all of the button state's children (all the way down the display list) <code>true</code>, or leave the button state's children <code>false</code>; defaults to <code>false</code>.
@@ -114,7 +114,7 @@ package com.sleepydesign.display {
 		}
 		
 		/**
-			Removes and optionally destroys the button states of the CasaSprite then destroys itself.
+			Removes and optionally destroys the button states of the SDSprite then destroys itself.
 			
 			@param destroyChildren: If the button state implements {@link IDestroyable} call its {@link IDestroyable#destroy destroy} method <code>true</code>, or don't destroy <code>false</code>; defaults to <code>false</code>.
 			@param recursive: Call this method with the same arguments on all of the button state's children (all the way down the display list) <code>true</code>, or leave the button state's children <code>false</code>; defaults to <code>false</code>.
@@ -131,7 +131,7 @@ package com.sleepydesign.display {
 		/**
 			{@inheritDoc}
 			
-			Calling <code>destroy()</code> on a CASA display object also removes it from its current parent.
+			Calling <code>destroy()</code> on a SD display object also removes it from its current parent.
 		*/
 		public function destroy():void {
 			this.removeEventListeners();

@@ -1,13 +1,13 @@
 package com.sleepydesign.ui
 {
-	import com.sleepydesign.events.SDMouseEvent;
+	import com.sleepydesign.events.MouseUIEvent;
 
 	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	public class SDMouse extends EventDispatcher
+	public class MouseUI extends EventDispatcher
 	{
 		private var _target:InteractiveObject;
 		private var _dragTarget:*;
@@ -16,7 +16,7 @@ package com.sleepydesign.ui
 
 		public static var isMouseDown:Boolean = false;
 
-		public function SDMouse(target:InteractiveObject)
+		public function MouseUI(target:InteractiveObject)
 		{
 			_target = target;
 			create();
@@ -75,7 +75,7 @@ package com.sleepydesign.ui
 						var dy:Number = event.stageY - _lastPosition.y;
 						var distance:Number = Point.distance(new Point(event.stageX, event.stageY), _lastPosition);
 
-						dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+						dispatchEvent(new MouseUIEvent(MouseUIEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
 
 						_lastPosition.x = event.stageX;
 						_lastPosition.y = event.stageY;

@@ -1,4 +1,4 @@
-package com.sleepydesign.controls
+package com.sleepydesign.components
 {
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TransformEvent;

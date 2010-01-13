@@ -126,7 +126,7 @@ package com.sleepydesign.display
 		/**
 			{@inheritDoc}
 			
-			Calling <code>destroy()</code> on a CASA display object also removes it from its current parent.
+			Calling <code>destroy()</code> on a SD display object also removes it from its current parent.
 		*/
 		public function destroy():void {
 			this.removeEventListeners();

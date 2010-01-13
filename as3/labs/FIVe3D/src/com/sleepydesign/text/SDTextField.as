@@ -52,7 +52,7 @@ package com.sleepydesign.text {
 		
 		
 		/**
-			Creates a new CasaTextField.
+			Creates a new SDTextField.
 		*
 		public function SDTextField() {
 			super();
@@ -105,7 +105,7 @@ package com.sleepydesign.text {
 		/**
 			{@inheritDoc}
 			
-			Calling <code>destroy()</code> on a CASA display object also removes it from its current parent.
+			Calling <code>destroy()</code> on a SD display object also removes it from its current parent.
 		*/
 		public function destroy():void {
 			this.removeEventListeners();
@@ -123,7 +123,6 @@ package com.sleepydesign.text {
 
 		public function SDTextField(text:String = null, textFormat:TextFormat = null, css:String=null)
 		{
-			super();
 			this._listenerManager = ListenerManager.getManager(this);
 			
 			// Flash CS4 assets
@@ -158,7 +157,7 @@ package com.sleepydesign.text {
 				css = p + aLink + aHover;
 			}
 			style.parseCSS(css);
-			//styleSheet = style;
+			styleSheet = style;
 		}
 	}
 }

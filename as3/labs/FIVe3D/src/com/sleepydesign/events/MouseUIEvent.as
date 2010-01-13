@@ -3,7 +3,7 @@ package com.sleepydesign.events
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
-	public class SDMouseEvent extends Event
+	public class MouseUIEvent extends Event
 	{
 		/*
 		public static const CLICK:String = "sd-click";
@@ -17,7 +17,7 @@ package com.sleepydesign.events
 		public var mouseEvent:*;
 		public var data:*;
 
-		public function SDMouseEvent(type:String, data:* = null, mouseEvent:MouseEvent = null, bubbles:Boolean = false, cancelable:Boolean = false)
+		public function MouseUIEvent(type:String, data:* = null, mouseEvent:MouseEvent = null, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -27,7 +27,7 @@ package com.sleepydesign.events
 
 		override public function clone():Event
 		{
-			return new SDMouseEvent(type, data, mouseEvent, bubbles, cancelable);
+			return new MouseUIEvent(type, data, mouseEvent, bubbles, cancelable);
 		}
 
 		public override function toString():String

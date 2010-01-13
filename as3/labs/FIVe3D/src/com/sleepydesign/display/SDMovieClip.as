@@ -41,7 +41,7 @@ package com.sleepydesign.display {
 	
 	
 	/**
-		A base MovieClip that implements {@link IRemovableEventDispatcher} and {@link ICasaDisplayObjectContainer}.
+		A base MovieClip that implements {@link IRemovableEventDispatcher} and {@link ISDDisplayObjectContainer}.
 		
 		@author Aaron Clinger
 		@author Mike Creighton
@@ -53,7 +53,7 @@ package com.sleepydesign.display {
 		
 		
 		/**
-			Creates a new CasaMovieClip.
+			Creates a new SDMovieClip.
 		*/
 		public function SDMovieClip() {
 			super();
@@ -100,7 +100,7 @@ package com.sleepydesign.display {
 		}
 		
 		/**
-			Removes and optionally destroys children of the CasaMovieClip.
+			Removes and optionally destroys children of the SDMovieClip.
 			
 			@param destroyChildren: If a child implements {@link IDestroyable} call its {@link IDestroyable#destroy destroy} method <code>true</code>, or don't destroy <code>false</code>; defaults to <code>false</code>.
 			@param recursive: Call this method with the same arguments on all of the children's children (all the way down the display list) <code>true</code>, or leave the children's children <code>false</code>; defaults to <code>false</code>.
@@ -110,7 +110,7 @@ package com.sleepydesign.display {
 		}
 		
 		/**
-			Removes and optionally destroys children of the CasaMovieClip then destroys itself.
+			Removes and optionally destroys children of the SDMovieClip then destroys itself.
 			
 			@param destroyChildren: If a child implements {@link IDestroyable} call its {@link IDestroyable#destroy destroy} method <code>true</code>, or don't destroy <code>false</code>; defaults to <code>false</code>.
 			@param recursive: Call this method with the same arguments on all of the children's children (all the way down the display list) <code>true</code>, or leave the children's children <code>false</code>; defaults to <code>false</code>.
@@ -127,7 +127,7 @@ package com.sleepydesign.display {
 		/**
 			{@inheritDoc}
 			
-			Calling <code>destroy()</code> on a CASA display object also removes it from its current parent.
+			Calling <code>destroy()</code> on a SD display object also removes it from its current parent.
 		*/
 		public function destroy():void {
 			this.removeEventListeners();
