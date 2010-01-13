@@ -255,9 +255,8 @@ package com.sleepydesign.net
 	            _loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
 	            _loader.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
 	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-            
-	            // gc
-				_loader.addEventListener(Event.COMPLETE, function():void
+	            
+	            var _removeEventListeners:Function = function():void
 				{
 				    _loader.removeEventListener(Event.COMPLETE, eventHandler);
 				    _loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
@@ -271,6 +270,16 @@ package com.sleepydesign.net
 		            
 		            // gc
 		            removeItem(loaders, _loader);
+				};
+	            
+	            // gc
+				_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+				
+				// 404
+				_loader.addEventListener(IOErrorEvent.IO_ERROR, function():void
+				{
+					if(useDebug)trace(" ! Not found : "+ uri);
+					_removeEventListeners();
 				});
 			}
 			
