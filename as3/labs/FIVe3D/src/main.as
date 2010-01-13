@@ -1,13 +1,13 @@
 package
 {
-	import com.cutecoma.containers.Preloader;
-	import com.cutecoma.display.CCSprite;
-	import com.cutecoma.display.DrawTool;
-	import com.cutecoma.events.CCMouseEvent;
-	import com.cutecoma.net.LoaderTool;
-	import com.cutecoma.templates.Five3DTemplate;
-	import com.cutecoma.ui.CCMouse;
-	import com.cutecoma.utils.XMLUtil;
+	import com.sleepydesign.containers.Preloader;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.display.DrawTool;
+	import com.sleepydesign.events.SDMouseEvent;
+	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.templates.Five3DTemplate;
+	import com.sleepydesign.ui.SDMouse;
+	import com.sleepydesign.utils.XMLUtil;
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
@@ -122,7 +122,7 @@ package
 		
 		// layer
 		//private var contentLayer:CCSprite = new CCSprite();
-		private var systemLayer:CCSprite = new CCSprite();
+		private var systemLayer:SDSprite = new SDSprite();
 		
 		override protected function onInit():void
 		{
@@ -321,8 +321,8 @@ package
 
 		private function setupUI():void
 		{
-			var _ccMouse:CCMouse = new CCMouse(stage);
-			_ccMouse.addEventListener(CCMouseEvent.MOUSE_DRAG, onDrag);
+			var _ccMouse:SDMouse = new SDMouse(stage);
+			_ccMouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onDrag);
 			_ccMouse.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
 			_candleButton.x = 1036;
@@ -520,7 +520,7 @@ package
 			addChild(_effectBitmap);
 		}
 
-		private function onDrag(event:CCMouseEvent):void
+		private function onDrag(event:SDMouseEvent):void
 		{
 			if(_status=="explore" || _status=="drag")
 			{

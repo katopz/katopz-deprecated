@@ -29,15 +29,15 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.display {
+package com.sleepydesign.display {
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
-	import com.cutecoma.events.IRemovableEventDispatcher;
-	import com.cutecoma.events.ListenerManager;
-	import com.cutecoma.core.IDestroyable;
-	import com.cutecoma.utils.DisplayObjectUtil;
+	import com.sleepydesign.events.IRemovableEventDispatcher;
+	import com.sleepydesign.events.ListenerManager;
+	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.utils.DisplayObjectUtil;
 	
 	
 	/**
@@ -47,7 +47,7 @@ package com.cutecoma.display {
 		@author Mike Creighton
 		@version 05/29/09
 	*/
-	dynamic public class CCMovieClip extends MovieClip implements IRemovableEventDispatcher, IDestroyable {
+	dynamic public class SDMovieClip extends MovieClip implements IRemovableEventDispatcher, IDestroyable {
 		protected var _listenerManager:ListenerManager;
 		protected var _isDestroyed:Boolean;
 		
@@ -55,7 +55,7 @@ package com.cutecoma.display {
 		/**
 			Creates a new CasaMovieClip.
 		*/
-		public function CCMovieClip() {
+		public function SDMovieClip() {
 			super();
 			
 			this._listenerManager = ListenerManager.getManager(this);

@@ -29,12 +29,12 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.display
+package com.sleepydesign.display
 {
-	import com.cutecoma.core.IDestroyable;
-	import com.cutecoma.events.IRemovableEventDispatcher;
-	import com.cutecoma.events.ListenerManager;
-	import com.cutecoma.utils.DisplayObjectUtil;
+	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.events.IRemovableEventDispatcher;
+	import com.sleepydesign.events.ListenerManager;
+	import com.sleepydesign.utils.DisplayObjectUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -46,7 +46,7 @@ package com.cutecoma.display
 		@author Aaron Clinger
 		@version 05/29/09
 	*/
-	public class CCSprite extends Sprite implements IRemovableEventDispatcher, IDestroyable {
+	public class SDSprite extends Sprite implements IRemovableEventDispatcher, IDestroyable {
 		protected var _listenerManager:ListenerManager;
 		protected var _isDestroyed:Boolean;
 		
@@ -54,7 +54,7 @@ package com.cutecoma.display
 		/**
 			Creates a new CCSprite.
 		*/
-		public function CCSprite() {
+		public function SDSprite() {
 			super();
 			
 			this._listenerManager = ListenerManager.getManager(this);

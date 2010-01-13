@@ -1,4 +1,4 @@
-package com.cutecoma.display
+package com.sleepydesign.display
 {
 	import flash.display.Sprite;
 

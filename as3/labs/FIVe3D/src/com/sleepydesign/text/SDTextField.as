@@ -29,10 +29,10 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.cutecoma.text {
-	import com.cutecoma.core.IDestroyable;
-	import com.cutecoma.events.IRemovableEventDispatcher;
-	import com.cutecoma.events.ListenerManager;
+package com.sleepydesign.text {
+	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.events.IRemovableEventDispatcher;
+	import com.sleepydesign.events.ListenerManager;
 	
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
@@ -46,7 +46,7 @@ package com.cutecoma.text {
 		@author Aaron Clinger
 		@version 06/10/09
 	*/
-	public class CCTextField extends TextField implements IRemovableEventDispatcher, IDestroyable {
+	public class SDTextField extends TextField implements IRemovableEventDispatcher, IDestroyable {
 		protected var _listenerManager:ListenerManager;
 		protected var _isDestroyed:Boolean;
 		
@@ -121,7 +121,7 @@ package com.cutecoma.text {
 		
 		public var defaultText:String = "";
 
-		public function CCTextField(text:String = null, textFormat:TextFormat = null, css:String=null)
+		public function SDTextField(text:String = null, textFormat:TextFormat = null, css:String=null)
 		{
 			super();
 			this._listenerManager = ListenerManager.getManager(this);

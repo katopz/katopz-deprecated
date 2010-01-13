@@ -3,11 +3,12 @@
 	<link id="GET_CANDLES" src="serverside/getCandles.php"/>
 	<link id="GET_MESSEGE" src="serverside/getMessege.php"/>
 	<link id="SET_CANDLE" src="serverside/setCandle.php"/>
-	<page id="Authen" label="Simple Authen" src="Authen.swf">
+	<page id="Authen" label="Authen" src="Authen.swf">
 		<content id="logIn" src="logInClip">
 			<form id="logInForm" action="serverside/setCandle.php" method="POST" vars="x=$CANDLE_X&y=$CANDLE_Y">
-				<textfield id="name" src="usernameInput" label="Your Name" maxlength="50" required="true"/>
-				<textfield id="msg" src="passwordInput" label="Your Messege" maxlength="130" required="true"/>
+				<textfield id="msg" src="messegeInput" label="Your Messege" maxlength="130" required="true"/>
+				<textfield id="name" src="nameInput" label="Your Name" maxlength="50" required="true"/>
+				<textfield id="email" src="emailInput" label="Your E-Mail" maxlength="100" required="true" type="email"/>
 				<button id="submitButton" src="submitButton" type="submit"/>
 			</form>
 		</content>

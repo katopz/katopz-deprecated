@@ -1,8 +1,8 @@
-package com.cutecoma.containers
+package com.sleepydesign.containers
 {
-	import com.cutecoma.display.CCSprite;
-	import com.cutecoma.display.DrawTool;
-	import com.cutecoma.net.LoaderTool;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.display.DrawTool;
+	import com.sleepydesign.net.LoaderTool;
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
@@ -10,7 +10,7 @@ package com.cutecoma.containers
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;	
 	
-	public class Preloader extends CCSprite
+	public class Preloader extends SDSprite
 	{
 		public static const DEFAULT:String = "default";
 		

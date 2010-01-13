@@ -1,4 +1,4 @@
-package com.cutecoma.net
+package com.sleepydesign.net
 {
 	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;

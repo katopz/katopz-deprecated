@@ -1,16 +1,16 @@
 package
 {
-	import com.cutecoma.controls.FormBuilder;
-	import com.cutecoma.display.CCSprite;
-	import com.cutecoma.events.FormEvent;
-	import com.cutecoma.net.LoaderTool;
-	import com.cutecoma.utils.XMLUtil;
+	import com.sleepydesign.controls.FormBuilder;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.FormEvent;
+	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.utils.XMLUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.net.URLVariables;
 
-	public class Authen extends CCSprite
+	public class Authen extends SDSprite
 	{
 		//[Embed(source="assets/simple-login.swf", symbol="FormClip")]
 		private var FormClip:Class;
