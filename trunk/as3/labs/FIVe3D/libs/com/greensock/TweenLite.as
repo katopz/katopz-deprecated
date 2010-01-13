@@ -166,6 +166,7 @@ package com.greensock {
 			
 			
 			//ACTIVATE PLUGINS HERE...
+			TweenPlugin.activate([AutoAlphaPlugin]);
 			/*
 			TweenPlugin.activate([
 							

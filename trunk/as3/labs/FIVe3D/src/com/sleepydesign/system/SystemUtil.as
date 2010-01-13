@@ -1,12 +1,15 @@
 package com.sleepydesign.system
 {
+	import com.sleepydesign.net.URLUtil;
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.events.ContextMenuEvent;
-	import flash.events.EventDispatcher;
 	import flash.external.ExternalInterface;
 	import flash.net.LocalConnection;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
 	import flash.system.System;
 	import flash.ui.ContextMenu;
@@ -98,7 +101,7 @@ package com.sleepydesign.system
         {
         	if(isBrowser())
         	{
-        		URLUtil.getURL("javascript:alert('"+msg+"');void(0);","_self");
+        		navigateToURL(new URLRequest("javascript:alert('"+msg+"');void(0);"), "_self");
         	}else{
         		trace("\n ! Alert : " + msg + "\n");
         	}
@@ -135,18 +138,18 @@ package com.sleepydesign.system
 			return isDone;
         }
         
-		public static function link(uri:String, caller:*=null):void
+		public static function doCommand(uri:String, caller:*=null):void
 		{
 			var src:Array = uri.split(":")
 			var protocal:String = src[0];
 			var functionString:String = uri.substring(1 + uri.indexOf(":"));
 			var functionName:String = functionString.split("(")[0];
 			var argumentString:String = functionString.substring(1 + functionString.indexOf("("), functionString.lastIndexOf(")"))
-			var argumentArray:Array = argumentString.split(",");
+			//var argumentArray:Array = argumentString.split(",");
 			var argument:*;
 
 			//TODO arguments
-			var arg:String = argumentArray[0];
+			var arg:String = argumentString;//argumentArray[0];
 			if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length - 1))
 			{
 				//string

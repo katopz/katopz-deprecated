@@ -1,11 +1,9 @@
 package com.sleepydesign.skins
 {
-	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.display.DrawUtil;
-	import com.sleepydesign.net.LoaderUtil;
 	import com.greensock.TweenLite;
-	import com.greensock.plugins.AutoAlphaPlugin;
-	import com.greensock.plugins.TweenPlugin;
+	import com.sleepydesign.display.DrawUtil;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.net.LoaderUtil;
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;	
@@ -40,15 +38,15 @@ package com.sleepydesign.skins
 			visible = false;
 			
 			// effect
-			TweenPlugin.activate([AutoAlphaPlugin]);
-			
 			LoaderUtil.showLoader = function():void
 			{
+				mouseEnabled = true;
 				TweenLite.to(this, 0.5, {autoAlpha:1});
 			};
 			
 			LoaderUtil.hideLoader = function():void
 			{
+				mouseEnabled = false;
 				TweenLite.to(this, 0.5, {autoAlpha:0});
 			};
 		}

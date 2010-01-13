@@ -36,6 +36,7 @@ package com.sleepydesign.net
 		
 		public static var loaderClip:DisplayObject;
 		
+		/*
 		public static function addLoaderTo(parent:DisplayObjectContainer, loaderClip:DisplayObject, show:Boolean=true):void
 		{
 			if(show)
@@ -43,15 +44,16 @@ package com.sleepydesign.net
 				if(!loaderClip.parent && parent)
 					parent.addChild(loaderClip);
 				
-				//loaderClip.alpha = 1;
-				//loaderClip.visible = true;
+				loaderClip.alpha = 1;
+				loaderClip.visible = true;
 			}else{
-				//loaderClip.alpha = 0;
-				//loaderClip.visible = false;
+				loaderClip.alpha = 0;
+				loaderClip.visible = false;
 			}
 			
 			LoaderUtil.loaderClip = loaderClip;
 		}
+		*/
 				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
 		{

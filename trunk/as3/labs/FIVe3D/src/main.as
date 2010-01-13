@@ -1,7 +1,6 @@
 package
 {
 	import com.greensock.TweenLite;
-	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.components.DialogBalloon;
 	import com.sleepydesign.display.DrawUtil;
@@ -41,7 +40,7 @@ package
 	   \4. add click to view msg (getPixel)
 	   5. create candle with perlin noise flame (BitmapSprite Clip?)
 	   /6. add button and move to prefer angle view for place candle
-	   \7. add dialog to get user input (name, msg)
+	   /7. add dialog to get user input (name, msg)
 	   \8. send data to server (time, x, y, name, msg)
 	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
@@ -86,12 +85,6 @@ package
 		private var CandleClip:Class;
 		private var _candleClip:Sprite = new CandleClip() as Sprite;
 		
-		/*
-		[Embed(source="assets/ThaiMap.swf",symbol="FormClip")]
-		private var FormClip:Class;
-		private var _formClip:Sprite;
-		*/
-		
 		[Embed(source="assets/ThaiMap.swf",symbol="ForeGroundClip")]
 		private var ForeGroundClip:Class;
 		private var _foreGroundClip:Sprite = new ForeGroundClip as Sprite;
@@ -125,8 +118,10 @@ package
 		private var _hitArea:Sprite;
 		
 		// layer
-		//private var contentLayer:SDSprite = new SDSprite();
 		private var systemLayer:SDSprite = new SDSprite();
+		
+		// modal
+		private var submitPage:SDSprite;
 		
 		override protected function onInit():void
 		{
@@ -134,10 +129,8 @@ package
 			alpha = 0;
 			show();
 
-			TweenPlugin.activate([AutoAlphaPlugin]);
-			
 			addChild(systemLayer);
-			LoaderUtil.addLoaderTo(systemLayer, new Preloader(systemLayer, SCREEN_WIDTH, SCREEN_HEIGHT));
+			LoaderUtil.loaderClip = new Preloader(systemLayer, 1132, 654);
 
 			// get external config
 			LoaderUtil.loadXML("config.xml", function(event:Event):void
@@ -179,7 +172,6 @@ package
 
 			setupCanvas();
 			setupView();
-			//setupMask();
 			setupUI();
 			addChild(systemLayer);
 
@@ -231,10 +223,10 @@ package
 					
 					// sprite2D
 					var _sprite2D:Sprite2D = new Sprite2D();
-					_sprite2D.x = _candle.x - _candlesBitmapData.width/2 - _candleBitmapData.width/2;
-					_sprite2D.y = _candle.y - _candlesBitmapData.height/2 - _candleBitmapData.height;
-					_sprite2D.graphics.beginBitmapFill(_candleBitmapData);
-					_sprite2D.graphics.drawRect(0, 0, _candleBitmapData.width, _candleBitmapData.height);
+					_sprite2D.x = _candle.x - _mapBitmapData.width/2;
+					_sprite2D.y = _candle.y - _mapBitmapData.height/2;
+					_sprite2D.graphics.beginBitmapFill(_candleBitmapData, new Matrix(1,0,0,1,-_candleBitmapData.width/2, -_candleBitmapData.height));
+					_sprite2D.graphics.drawRect(-_candleBitmapData.width/2, -_candleBitmapData.height, _candleBitmapData.width, _candleBitmapData.height);
 					_sprite2D.graphics.endFill();
 					_sprite2D.cacheAsBitmap = true;
 					
@@ -243,16 +235,6 @@ package
 			}
 			_candlesBitmapData.unlock();
 
-			// bitmap -> _canvas3D
-			
-			/*
-			_candleBitmap3D = new Bitmap3D(_candlesBitmapData, true);
-			_candleCanvas3D.addChild(_candleBitmap3D);
-			_candleBitmap3D.x = -_candleBitmap3D.bitmapData.width / 2;
-			_candleBitmap3D.y = -_candleBitmap3D.bitmapData.height / 2;
-			_candleBitmap3D.singleSided = true;
-			*/
-			
 			_canvas3D.addChild(_candleCanvas3D);
 			
 			// -------------------------------------------------------------
@@ -293,35 +275,13 @@ package
 
 		public function show():void
 		{
-			TweenLite.to(this, 2, {autoAlpha: 1});
+			TweenLite.to(this, 0.5, {autoAlpha: 1});
 		}
 
 		public function hide():void
 		{
-			TweenLite.to(this, 2, {autoAlpha: 0});
+			TweenLite.to(this, 0.5, {autoAlpha: 0});
 		}
-
-		/*
-		   private function setupMask():void
-		   {
-		   var mat:Matrix = new Matrix();
-		   var colors:Array = [0xFFFFFF, 0xFFFFFF];
-		   var alphas:Array = [1, 0];
-		   var ratios:Array = [200, 255];
-
-		   mat.createGradientBox(SCREEN_WIDTH, SCREEN_HEIGHT);
-		   var maskingShape:Shape = new Shape();
-		   maskingShape.graphics.lineStyle();
-		   maskingShape.graphics.beginGradientFill(GradientType.RADIAL, colors, alphas, ratios, mat);
-		   maskingShape.graphics.drawEllipse(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		   maskingShape.graphics.endFill();
-
-		   maskingShape.cacheAsBitmap = true;
-		   _scene.cacheAsBitmap = true;
-
-		   _scene.mask = maskingShape;
-		   }
-		 */
 
 		private function setupUI():void
 		{
@@ -400,10 +360,10 @@ package
 					break;
 				case "intro":
 					// fade in
-					TweenLite.to(this, 2, {autoAlpha: 1, onComplete: function():void
+					TweenLite.to(this, 0.5, {autoAlpha: 1, onComplete: function():void
 						{
 							// go idle
-							TweenLite.to(this, 2, {autoAlpha: 1, onComplete: function():void
+							TweenLite.to(this, 0.5, {autoAlpha: 1, onComplete: function():void
 							{
 								status = "idle";
 							}});
@@ -418,7 +378,13 @@ package
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExplore = function():void
 						{
 							stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExplore);
-							status = "explore";
+							
+							// move cam to defined position
+							TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0, onComplete: function():void
+							{
+								// go explore
+								status = "explore";
+							}});
 						});
 					
 					// wait for candle click
@@ -426,9 +392,6 @@ package
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "explore":
-					// move cam to defined position
-					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
-					
 					// click to view
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					break;
@@ -462,7 +425,7 @@ package
 					
 					// wait for candle click
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
-					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);				
+					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);			
 					break;
 				case "drop-out":
 					// drop
@@ -470,11 +433,12 @@ package
 					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					
 					TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
-						{
-							_candleClip.parent.removeChild(_candleClip);
-						}});
-					// go explore
-					
+					{
+						_candleClip.parent.removeChild(_candleClip);
+						
+						// go explore
+						status = "explore";
+					}});
 					
 					// wait for candle click
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
@@ -485,14 +449,72 @@ package
 					title += "...wait for input";
 
 					// wait for server response
+					LoaderUtil.load("SubmitPage.swf", function(event:Event):void
+					{
+						if(event.type=="complete")
+						{
+							submitPage = event.target["content"] as SDSprite;
+							submitPage.alpha = 0;
+							submitPage.visible = false;
+							addChild(submitPage);
+							
+							// show
+							TweenLite.to(submitPage, 0.5, {autoAlpha: 1});
+							TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
+							{
+								_candleClip.parent.removeChild(_candleClip);
+							}});
+							
+							// hide
+							submitPage.addEventListener(Event.CLOSE, function(event:Event):void
+							{
+								status = "submit";
+							});
+						}
+					});
 					break;
 				case "submit":
 					// view msg
+					setupBalloon();
+					
 					// go idle
+					TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
+					{
+						status = "idle";
+					}});
 					break;
 			}
 		}
+		
+		private var _sprite2D:Sprite2D;
+		private function setupBalloon():void
+		{
+			// msg
+			var _baloon:DialogBalloon = new DialogBalloon("ok<br/>123");
+			_sprite2D = new Sprite2D();
+			_baloon.y=-50;
+			_sprite2D.addChild(_baloon);
+			_sprite2D.cacheAsBitmap = true;
+			_sprite2D.x = _dropPoint.x-_mapBitmap3D.bitmapData.width/2;
+			_sprite2D.y = _dropPoint.y-_mapBitmap3D.bitmapData.height/2;
 
+			// candle
+			var _candleBitmapData:BitmapData = new BitmapData(_candleClip.width*SPRITE_SCALE*2, _candleClip.height*SPRITE_SCALE*2, true, 0xFF0000);
+			_candleBitmapData.draw(_candleClip, new Matrix(SPRITE_SCALE*2, 0, 0, SPRITE_SCALE*2, _candleBitmapData.width/2, _candleBitmapData.height));
+
+			_sprite2D.graphics.beginBitmapFill(_candleBitmapData);
+			_sprite2D.graphics.drawRect(-_candleBitmapData.width, -_candleBitmapData.height, _candleBitmapData.width, _candleBitmapData.height);
+			_sprite2D.graphics.endFill();
+			
+			_sprite2D.visible = false;
+			_sprite2D.alpha = 0;
+			
+			TweenLite.to(_baloon, 1, {y:-20});
+			TweenLite.to(_sprite2D, 1, {autoAlpha: 1});
+					
+			_candleCanvas3D.addChild(_sprite2D);
+		}
+		
 		private function dragHandler(event:Event):void
 		{
 			if (_candleClip)
@@ -523,7 +545,7 @@ package
 			var _effectBitmap:Bitmap = new Bitmap(_effectBitmapData, PixelSnapping.NEVER, false);
 			addChild(_effectBitmap);
 		}
-
+		
 		private function onDrag(event:MouseUIEvent):void
 		{
 			if(_status=="explore" || _status=="drag")
@@ -573,7 +595,7 @@ package
 			} 
 			
 			if(_canvas3D)
-				title = String(_canvas3D.mouseXY);
+				title = _dropPoint+"|"+String(_canvas3D.mouseXY);
 		}
 
 		override protected function onPostRender():void

@@ -24,7 +24,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
-<application path="Authen.as"/>
+<application path="SubmitPage.as"/>
 <application path="main.as"/>
 </applications>
 <modules/>

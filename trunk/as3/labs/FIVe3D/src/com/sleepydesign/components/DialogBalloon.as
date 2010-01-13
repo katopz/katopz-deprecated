@@ -1,7 +1,7 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.text.SDTextField;
-
+	
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.text.TextFormat;
@@ -13,7 +13,7 @@ package com.sleepydesign.components
 		protected var _htmlText:String = "";
 
 		public var pad:uint = 8;
-		public var length:uint = 8;
+		public var length:uint = 4;
 		public var textFormat:TextFormat;
 		public var multiline:Boolean = true;
 		public var color:Number = 0xDDFFFFFF;
@@ -61,14 +61,16 @@ package com.sleepydesign.components
 			var w:Number = (label.width > pad) ? label.width : pad;
 			var h:Number = (label.height > pad) ? label.height : pad;
 
-			_tf.x = int(-w * .5);
+			//_tf.x = int(-w * .5);
+			var _p0:int = w*.5-pad;
+			_tf.x = int(_p0-w * .5);
 			_tf.y = int(-pad - length - h + pad * .25 - 1);
 
 			_back.graphics.clear();
 			_back.graphics.beginFill(color);
-			_back.graphics.drawRoundRect(-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, h + pad * .5, pad, pad);
+			_back.graphics.drawRoundRect(_p0-w * .5 - pad * .5 + pad * .25, -h - pad - length, _p0+w + pad * .5, h + pad * .5, pad, pad);
 			_back.graphics.moveTo(0, 0);
-			_back.graphics.lineTo(-4, -length - pad * .5);
+			_back.graphics.lineTo(0, -length - pad * .5);
 			_back.graphics.lineTo(4, -length - pad * .5);
 
 			_width = _back.width;
