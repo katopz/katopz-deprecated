@@ -3,12 +3,13 @@ package
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.TweenPlugin;
-	import com.sleepydesign.display.DrawTool;
+	import com.sleepydesign.components.DialogBalloon;
+	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.events.SDMouseEvent;
-	import com.sleepydesign.net.LoaderTool;
+	import com.sleepydesign.events.MouseUIEvent;
+	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
-	import com.sleepydesign.ui.SDMouse;
+	import com.sleepydesign.ui.MouseUI;
 	import com.sleepydesign.utils.XMLUtil;
 	
 	import data.CandleData;
@@ -44,8 +45,8 @@ package
 	   \8. send data to server (time, x, y, name, msg)
 	   \9. add blur/glow effect
 	   10. add LOD setpixel <-> copypixel
-	   /11. add mask
-	   12. continue load queue 1,000 per request
+	   /11. add gradient mask
+	   \12. continue load queue 1,000 per request
 	   13. doing data proxy, get/set while send
 	 */
 	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
@@ -99,7 +100,7 @@ package
 
 		// data
 		private var _xmlData:XML;
-		private var candles:Array;
+		private var _candles:Array;
 		private var _dropPoint:Point = new Point();
 
 		// canvas
@@ -135,10 +136,10 @@ package
 			TweenPlugin.activate([AutoAlphaPlugin]);
 			
 			addChild(systemLayer);
-			LoaderTool.addLoaderTo(systemLayer, new Preloader(systemLayer, SCREEN_WIDTH, SCREEN_HEIGHT));
+			LoaderUtil.addLoaderTo(systemLayer, new Preloader(systemLayer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
 			// get external config
-			LoaderTool.loadXML("config.xml", function(event:Event):void
+			LoaderUtil.loadXML("config.xml", function(event:Event):void
 			{
 				if(event.type!="complete")return;
 				_xmlData = event.target.data;
@@ -150,7 +151,7 @@ package
 		{
 			status = "preload";
 			
-			LoaderTool.loadVars(uri, function(event:Event):void
+			LoaderUtil.loadVars(uri, function(event:Event):void
 			{
 				if(event.type!="complete")return;
 				var _candleList:Array = String(event.target.data.candles).split(";");
@@ -160,13 +161,13 @@ package
 		
 		private function setupData(candleList:Array):void
 		{
-			candles = [];
+			_candles = [];
 			var totalPoint:int = candleList.length;
 			for (var i:int = 0; i < totalPoint; i++)
 			{
 				var _candleData:* = candleList[i].split(",");
 				var _candle:Candle = new Candle(_candleData[0], int(_candleData[1]), int(_candleData[2]));
-				candles[i] = _candle;
+				_candles[i] = _candle;
 			}
 			onDataComplete();
 		}
@@ -212,7 +213,7 @@ package
 			var _candlesBitmapData:BitmapData = new BitmapData(_mapSprite.width, _mapSprite.height, true, 0x00000000);
 
 			// data -> BitmapData
-			var i:int = candles.length;
+			var i:int = _candles.length;
 			var _candle:Candle;
 			_candlesBitmapData.lock();
 			
@@ -221,7 +222,7 @@ package
 
 			while (i--)
 			{
-				_candle = Candle(candles[i]);
+				_candle = Candle(_candles[i]);
 				if (_mapBitmapData.getPixel32(_candle.x, _candle.y) > 0)
 				{
 					// particle
@@ -323,8 +324,8 @@ package
 
 		private function setupUI():void
 		{
-			var _ccMouse:SDMouse = new SDMouse(stage);
-			_ccMouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onDrag);
+			var _ccMouse:MouseUI = new MouseUI(stage);
+			_ccMouse.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
 			_ccMouse.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
 			_candleButton.x = 1036;
@@ -510,10 +511,10 @@ package
 		{
 			// guide
 			if (parent && parent==stage)
-				addChild(LoaderTool.loadAsset("../src/assets/bg.png"));
+				addChild(LoaderUtil.loadAsset("../src/assets/bg.png"));
 
 			// add hitArea
-			_hitArea = DrawTool.drawRect(SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000);
+			_hitArea = DrawUtil.drawRect(SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000);
 			_hitArea.blendMode = BlendMode.ERASE;
 			addChild(_hitArea);
 			
@@ -522,7 +523,7 @@ package
 			addChild(_effectBitmap);
 		}
 
-		private function onDrag(event:SDMouseEvent):void
+		private function onDrag(event:MouseUIEvent):void
 		{
 			if(_status=="explore" || _status=="drag")
 			{
