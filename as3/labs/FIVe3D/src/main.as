@@ -1,8 +1,8 @@
 package
 {
 	import com.greensock.TweenLite;
-	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.components.DialogBalloon;
+	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.MouseUIEvent;
@@ -13,18 +13,12 @@ package
 	
 	import data.CandleData;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.BlendMode;
-	import flash.display.PixelSnapping;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.filters.BlurFilter;
-	import flash.filters.ColorMatrixFilter;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.filters.*;
+	import flash.geom.*;
+	import flash.net.URLVariables;
+	import flash.utils.Dictionary;
 	
 	import net.badimon.five3D.display.Bitmap3D;
 	import net.badimon.five3D.display.Particles;
@@ -34,20 +28,22 @@ package
 
 	/*
 	   TODO:
+	   
 	   /1. create fake dot data array (1000 x 1000 = 1,000,000)
 	   /2. read data and write to map as set pixel (10,000-100,000)
 	   /3. add view controller move/pan/rotate
-	   \4. add click to view msg (getPixel)
-	   5. create candle with perlin noise flame (BitmapSprite Clip?)
+	\4. add click to view msg (getPixel)
+5. create candle with perlin noise flame (BitmapSprite Clip?)
 	   /6. add button and move to prefer angle view for place candle
 	   /7. add dialog to get user input (name, msg)
-	   \8. send data to server (time, x, y, name, msg)
-	   \9. add blur/glow effect
-	   10. add LOD setpixel <-> copypixel
+	   /8. send data to server (time, x, y, name, msg)
+	\9. add blur/glow effect
+10. add LOD setpixel <-> copypixel
 	   /11. add gradient mask
-	   \12. continue load queue 1,000 per request
-	   13. doing data proxy, get/set while send
-	   14. particle clipping
+	\12. continue load queue 1,000 per request
+	   /13. doing data proxy, get/set while send
+	\14. particle clipping
+	
 	 */
 	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
 	public class main extends Five3DTemplate
@@ -141,45 +137,80 @@ package
 			});
 		}
 
-		private function getData(uri:String):void
+		private function getData(uri:String, isReload:Boolean=false):void
 		{
-			status = "preload";
+			trace(! "getData : " + uri);
+			//status = "preload";
 			
 			LoaderUtil.loadVars(uri, function(event:Event):void
 			{
 				if(event.type!="complete")return;
 				var _candleList:Array = String(event.target.data.candles).split(";");
 				setupData(_candleList);
+				
+				if(!isReload)
+				{
+					//status = "init";
+	
+					setupCanvas();
+					setupView();
+					setupUI();
+					addChild(systemLayer);
+	
+					status = "intro";
+	
+					start();
+				}
+				
+				// next page?
+				if(event.target.data.next)
+				{
+					// delay abit
+					TweenLite.to(this, 1, {autoAlpha: 1, onComplete: function():void
+					{
+						getData(uri.split("?")[0] + "?page=" + event.target.data.next, true);
+					}});
+				}
 			});
 		} 
 		
+		private var candleDict:Dictionary = new Dictionary(true);
+		
 		private function setupData(candleList:Array):void
 		{
-			_candles = [];
+			if(!_candles)
+			{
+				// new 
+				_candles = [];
+			}else{
+				// dispose
+				var _oldLength:int = _candles.length;
+				while(_oldLength--)
+					Candle(_candles[_oldLength]).visible = false;
+			}
+				
 			var totalPoint:int = candleList.length;
 			for (var i:int = 0; i < totalPoint; i++)
 			{
 				var _candleData:* = candleList[i].split(",");
-				var _candle:Candle = new Candle(_candleData[0], int(_candleData[1]), int(_candleData[2]));
-				_candles[i] = _candle;
+				
+				// dup?
+				var _id:String = String(_candleData[0]);
+				var _candle:Candle;
+				if(!candleDict[_id])
+				{
+					// new
+					_candle = new Candle(_candleData[0], int(_candleData[1]), int(_candleData[2]));
+					// store
+					candleDict[_id] = _candle;
+				}else{
+					// restore
+					_candle = candleDict[_id];
+					_candle.visible = true;
+				}
 			}
-			onDataComplete();
 		}
 		
-		private function onDataComplete():void
-		{
-			status = "init";
-
-			setupCanvas();
-			setupView();
-			setupUI();
-			addChild(systemLayer);
-
-			status = "intro";
-
-			start();
-		}
-
 		private function setupCanvas():void
 		{
 			_canvas3D = new Sprite3D();
@@ -200,6 +231,7 @@ package
 			_mapBitmap3D.y = -_mapBitmapData.height/2;
 			_mapBitmap3D.singleSided = true;
 			_canvas3D.addChild(_mapBitmap3D);
+			//TODO:TEST
 			_mapBitmap3D.clipRect = new Rectangle(-1132, -654, 1132*2, 654*2);
 
 			// candles
@@ -223,12 +255,14 @@ package
 					
 					// sprite2D
 					var _sprite2D:Sprite2D = new Sprite2D();
+					_sprite2D.name = _candle.id;
 					_sprite2D.x = _candle.x - _mapBitmapData.width/2;
 					_sprite2D.y = _candle.y - _mapBitmapData.height/2;
 					_sprite2D.graphics.beginBitmapFill(_candleBitmapData, new Matrix(1,0,0,1,-_candleBitmapData.width/2, -_candleBitmapData.height));
 					_sprite2D.graphics.drawRect(-_candleBitmapData.width/2, -_candleBitmapData.height, _candleBitmapData.width, _candleBitmapData.height);
 					_sprite2D.graphics.endFill();
 					_sprite2D.cacheAsBitmap = true;
+//_sprite2D.clipRect = new Rectangle(-1132, -654, 1132*2, 654*2);
 					
 					_candleCanvas3D.addChild(_sprite2D);
 				}
@@ -345,7 +379,10 @@ package
 
 		private function onExploreClick(event:Event):void
 		{
-			trace(event.target, event.currentTarget,event);
+			//trace(event.target, event.currentTarget,event);
+			// it's candle
+			if(event.target is Sprite2D && String(event.target.name).indexOf("candle_")==0)
+				setupOtherBalloon(event.target as Sprite2D);
 		}
 		
 		private function set status(value:String):void
@@ -445,8 +482,10 @@ package
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "input":
-					// wait for submit
-					title += "...wait for input";
+					// add data
+					DataProxy.addData("$CANDLE_TIME", new Date().valueOf());
+					DataProxy.addData("$CANDLE_X", _dropPoint.x);
+					DataProxy.addData("$CANDLE_Y", _dropPoint.y);
 
 					// wait for server response
 					LoaderUtil.load("SubmitPage.swf", function(event:Event):void
@@ -468,14 +507,14 @@ package
 							// hide
 							submitPage.addEventListener(Event.CLOSE, function(event:Event):void
 							{
-								status = "submit";
+								status = "view";
 							});
 						}
 					});
 					break;
-				case "submit":
+				case "view":
 					// view msg
-					setupBalloon();
+					setupUserBalloon();
 					
 					// go idle
 					TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
@@ -487,12 +526,15 @@ package
 		}
 		
 		private var _sprite2D:Sprite2D;
-		private function setupBalloon():void
+		private function setupUserBalloon():void
 		{
 			// msg
-			var _baloon:DialogBalloon = new DialogBalloon("ok<br/>123");
+			var _baloon:DialogBalloon = new DialogBalloon
+			(
+				DataProxy.getDataByID("$CANDLE_EMAIL")+ "<br/>" + DataProxy.getDataByID("$CANDLE_MSG")
+			);
 			_sprite2D = new Sprite2D();
-			_baloon.y=-50;
+			_baloon.y = -50;
 			_sprite2D.addChild(_baloon);
 			_sprite2D.cacheAsBitmap = true;
 			_sprite2D.x = _dropPoint.x-_mapBitmap3D.bitmapData.width/2;
@@ -513,6 +555,35 @@ package
 			TweenLite.to(_sprite2D, 1, {autoAlpha: 1});
 					
 			_candleCanvas3D.addChild(_sprite2D);
+		}
+		
+		private var _lastBalloon:DialogBalloon;
+		
+		private function setupOtherBalloon(_sprite2D:Sprite2D):void
+		{
+			// destroy
+			if(_lastBalloon)
+			TweenLite.to(_lastBalloon, 1, {autoAlpha: 0, onComplete: function():void
+			{
+				_lastBalloon.destroy();
+			}});
+			
+			// msg
+			var _baloon:DialogBalloon = new DialogBalloon("loading...");
+			_baloon.y = -_sprite2D.height+20;
+			_baloon.alpha = 0;
+			_baloon.visible = false;
+			_sprite2D.addChild(_baloon);
+			
+			TweenLite.to(_baloon, 1, {y:-_sprite2D.height, autoAlpha: 1});
+			
+			// load msg
+			LoaderUtil.requestVars(XMLUtil.getXMLById(_xmlData, "GET_CANDLE").@src, new URLVariables("id="+_sprite2D.name), function(event:Event):void
+			{
+				_baloon.htmlText = event.target.data.msg;
+			});
+			
+			_lastBalloon = _baloon;
 		}
 		
 		private function dragHandler(event:Event):void

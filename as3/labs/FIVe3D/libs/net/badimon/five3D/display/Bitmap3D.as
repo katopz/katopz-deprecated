@@ -589,7 +589,7 @@ package net.badimon.five3D.display {
 				_rect.width = xp3 = point3["xp"];
 				_rect.height = yp3 = point3["yp"];
 				
-				if(clipRect.containsRect(_rect))
+				if(clipRect && clipRect.containsRect(_rect) || !clipRect)
 				{
 					_super_graphics.beginBitmapFill(__bitmapData, __matrices[len], false, __smoothing);
 					_super_graphics.moveTo(xp1, yp1);

@@ -4,7 +4,7 @@
 	<link id="GET_MESSEGE" src="serverside/getMessege.php" get="id=$CANDLE_ID"/>
 	<page id="SubmitPage" label="SubmitPage" src="SubmitPage.swf">
 		<content id="formClip" src="FormClip">
-			<form id="submitForm" action="serverside/setCandle.php" method="POST" post="x=$CANDLE_X&y=$CANDLE_Y" onIncomplete="as:alert('กรุณากรอกข้อมูลให้ครบ')" onInvalid="as:alert('กรุณากรอก $invalid_list ให้ถูกต้อง')">
+			<form id="submitForm" action="serverside/setCandle.php" method="POST" post="time=$CANDLE_TIME&x=$CANDLE_X&y=$CANDLE_Y" onIncomplete="as:alert('กรุณากรอกข้อมูลให้ครบ')" onInvalid="as:alert('กรุณากรอก $invalid_list ให้ถูกต้อง')">
 				<textinput id="msg" src="msgInput" label="ข้อความถวายพระพร" maxlength="130" required="true"/>
 				<textinput id="name" src="nameInput" label="ชื่อ" maxlength="50" required="true"/>
 				<textinput id="email" src="emailInput" label="อีเมล์" maxlength="100" required="true" type="!email"/>

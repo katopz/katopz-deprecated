@@ -1,7 +1,9 @@
 package
 {
 	import com.greensock.TweenLite;
+	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.FormEvent;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.site.FormTool;
 	import com.sleepydesign.skins.Preloader;
@@ -21,6 +23,14 @@ package
 
 		public function SubmitPage()
 		{
+			//test
+			if(stage && parent == stage)
+			{
+				DataProxy.addData("$CANDLE_TIME", new Date().valueOf());
+				DataProxy.addData("$CANDLE_X", 100);
+				DataProxy.addData("$CANDLE_Y", 200);
+			}
+			
 			// asset
 			addChild(formClip);
 			
@@ -55,6 +65,14 @@ package
 					dispatchEvent(new Event(Event.CLOSE));
 					destroy();
 				}});
+			} 
+			else if(event.type == FormEvent.SUBMIT)
+			{
+				DataProxy.addData("$CANDLE_EMAIL", FormEvent(event).data.email);
+				DataProxy.addData("$CANDLE_MSG", FormEvent(event).data.msg);
+				
+				trace("add $CANDLE_EMAIL : "+DataProxy.getDataByID("$CANDLE_EMAIL"));
+				trace("add $CANDLE_MSG : "+DataProxy.getDataByID("$CANDLE_MSG"));
 			}
 		}
 	}
