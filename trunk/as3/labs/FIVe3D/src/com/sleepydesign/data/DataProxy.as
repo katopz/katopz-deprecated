@@ -1,9 +1,9 @@
-package com.sleepydesign.collections
+package com.sleepydesign.data
 {
 	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
 
-	public class DataUtil
+	public class DataProxy
 	{
 		private static var _datas:Dictionary;
 
@@ -34,9 +34,10 @@ package com.sleepydesign.collections
 				return null;
 		}
 
-		public static function getDataByVars(_varsString:String):URLVariables
+		public static function getVarsFromString(_varsString:String):URLVariables
 		{
 			var _URLVariables:URLVariables = new URLVariables(_varsString);
+
 			for (var _name:String in _URLVariables)
 				_URLVariables[_name] = getDataByID(_URLVariables[_name]);
 
@@ -54,5 +55,24 @@ package com.sleepydesign.collections
 				_datas[id] = null;
 			}
 		}
+		
+		public static function getDataByVars(varsString:String):URLVariables
+		{
+			var _URLVariables:URLVariables = new URLVariables(varsString);
+			for (var _name:String in _URLVariables)
+				_URLVariables[_name] = getDataByID(_URLVariables[_name]);
+
+			return _URLVariables;
+		}
+		
+		/*
+		public static function setDataToQuery(varsString:String):String
+		{
+			var _URLVariables:URLVariables = getDataByVars(varsString);
+			for(var _var:String in _URLVariables)
+				varsString = varsString.split(_var).join("'"+getDataByID(_var.split("$").join(""))+"'");
+			return varsString;
+		}
+		*/
 	}
 }

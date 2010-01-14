@@ -193,7 +193,7 @@ package net.badimon.five3D.display {
 		 */
 		public function askRenderingShading():void {
 		}
-
+		
 		/**
 		 * @private
 		 */
@@ -216,10 +216,22 @@ package net.badimon.five3D.display {
 				}
 			}
 		}
-
+		
+		public var clipRect:Rectangle;
+		
 		private function setPlacement():void {
-			super.x = __point1Out.x * __perspective;
-			super.y = __point1Out.y * __perspective;
+			if(clipRect)
+			{
+				if(clipRect.containsRect(getRect(this)))
+				{
+					visible = false;
+				}else{
+					visible = visible && true;
+				}
+			}else{
+				super.x = __point1Out.x * __perspective;
+				super.y = __point1Out.y * __perspective;
+			}
 		}
 
 		private function applyScaling():void {

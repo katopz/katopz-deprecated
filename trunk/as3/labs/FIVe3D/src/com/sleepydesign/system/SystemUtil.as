@@ -191,15 +191,11 @@ package com.sleepydesign.system
 					{
 						isExternal = callJS(functionName);
 					}
-					/*
-					   if(!isExternal)
-					   {
-					   URLUtil.getURL(String(uri));
-					   }
-					 */
+
 					break;
+				case "https":
 				case "http":
-					URLUtil.getURL(String(uri));
+					navigateToURL(new URLRequest(String(uri)), "_self");
 					break;
 			}
 		}

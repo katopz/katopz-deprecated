@@ -8,6 +8,8 @@ package
 		public var x:int;
 		public var y:int;
 		
+		public var visible:Boolean = true;
+		
 		public var next:Candle;
 		
 		public var bitmapData:BitmapData;
