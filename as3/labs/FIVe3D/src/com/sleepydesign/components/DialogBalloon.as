@@ -4,6 +4,7 @@ package com.sleepydesign.components
 	
 	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.filters.GlowFilter;
 	import flash.text.TextFormat;
 
 	public class DialogBalloon extends AbstractComponent
@@ -16,7 +17,9 @@ package com.sleepydesign.components
 		public var length:uint = 4;
 		public var textFormat:TextFormat;
 		public var multiline:Boolean = true;
-		public var color:Number = 0xDDFFFFFF;
+		public var color:Number = 0xFFFFFF;
+		public var borderColor:Number = 0x000000;
+		public var textColor:Number = 0x000000;
 
 		protected var _tf:SDTextField;
 
@@ -25,13 +28,19 @@ package com.sleepydesign.components
 			return _tf
 		}
 
-		public function DialogBalloon(text:String = "")
+		public function DialogBalloon(text:String = "", textFormat:TextFormat = null, color:int = 0xFFFFFF, borderColor:int = 0x000000, pad:uint = 8, length:uint = 4)
 		{
 			_htmlText = _text = text;
 
 			mouseEnabled = false;
 			mouseChildren = false;
-
+			
+			this.textFormat = textFormat;
+			this.color = color;
+			this.borderColor = borderColor;
+			this.pad = pad;
+			this.length = length;
+			
 			create();
 			draw();
 		}
@@ -48,8 +57,6 @@ package com.sleepydesign.components
 
 			addChild(_tf);
 
-			filters = this.filters;
-
 			_tf.addEventListener(Event.CHANGE, onChange);
 		}
 
@@ -60,6 +67,8 @@ package com.sleepydesign.components
 
 			var w:Number = (label.width > pad) ? label.width : pad;
 			var h:Number = (label.height > pad) ? label.height : pad;
+			
+			w = (w < pad*2)?pad*2:w;
 
 			//_tf.x = int(-w * .5);
 			var _p0:int = w*.5-pad;
@@ -67,11 +76,13 @@ package com.sleepydesign.components
 			_tf.y = int(-pad - length - h + pad * .25 - 1);
 
 			_back.graphics.clear();
+			//_back.graphics.lineStyle(1, borderColor, .75, true);
 			_back.graphics.beginFill(color);
-			_back.graphics.drawRoundRect(_p0-w * .5 - pad * .5 + pad * .25, -h - pad - length, _p0+w + pad * .5, h + pad * .5, pad, pad);
+			_back.graphics.drawRoundRect(_p0-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, h + pad * .5, pad, pad);
 			_back.graphics.moveTo(0, 0);
 			_back.graphics.lineTo(0, -length - pad * .5);
-			_back.graphics.lineTo(4, -length - pad * .5);
+			_back.graphics.lineTo(pad, -length - pad * .5);
+			_back.filters = [new GlowFilter(borderColor,1,2,2,6,1, true)];
 
 			_width = _back.width;
 			_height = _back.height;

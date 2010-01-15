@@ -1,1 +1,1 @@
-result=200&id=0&email=x@y.com&msg="normal<b>bold</b><br/>newline"
+email=x@y.com&msg=normal<b>bold</b><br/>newline

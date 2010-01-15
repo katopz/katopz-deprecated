@@ -224,9 +224,11 @@ package net.badimon.five3D.display {
 			{
 				if(clipRect.containsRect(getRect(this)))
 				{
-					visible = false;
-				}else{
 					visible = visible && true;
+					super.x = __point1Out.x * __perspective;
+					super.y = __point1Out.y * __perspective;
+				}else{
+					visible = false;
 				}
 			}else{
 				super.x = __point1Out.x * __perspective;

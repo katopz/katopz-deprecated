@@ -140,12 +140,12 @@ package com.sleepydesign.site
 						item.text = "";
 
 					switch (item.parent.type)
-				{
-					case "password":
-						item.text = "";
-						item.displayAsPassword = true;
-						break;
-				}
+					{
+						case "password":
+							item.text = "";
+							item.displayAsPassword = true;
+							break;
+					}
 					item.parent.setText(item.text);
 					event.currentTarget.addEventListener(FocusEvent.FOCUS_OUT, focusListener);
 					break;
@@ -350,8 +350,7 @@ package com.sleepydesign.site
 
 			if(useDebug)
 			{
-				trace(" ! Submit");
-				ObjectUtil.print(url);
+				trace(" * Submit");
 				ObjectUtil.print(_data);
 			}
 			

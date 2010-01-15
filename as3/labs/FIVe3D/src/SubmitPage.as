@@ -55,10 +55,10 @@ package
 		
 		private function formHandler(event:Event):void
 		{
-			trace(" ^ formHandler : "+event);
+			//trace(" ^ formHandler : "+event);
 			if(event.type == Event.COMPLETE)
 			{
-				trace(" ^ onServerData :" + event.target.data.result);
+				//trace(" ^ onServerData :" + event.target.data.result);
 				filters = [new GlowFilter(0x0000,0,0,0,0,0)];
 				TweenLite.to(this, 0.5, {autoAlpha: 0, onComplete: function():void
 				{
@@ -70,9 +70,6 @@ package
 			{
 				DataProxy.addData("$CANDLE_EMAIL", FormEvent(event).data.email);
 				DataProxy.addData("$CANDLE_MSG", FormEvent(event).data.msg);
-				
-				trace("add $CANDLE_EMAIL : "+DataProxy.getDataByID("$CANDLE_EMAIL"));
-				trace("add $CANDLE_MSG : "+DataProxy.getDataByID("$CANDLE_MSG"));
 			}
 		}
 	}
