@@ -345,7 +345,7 @@ package com.sleepydesign.site
 			if(!StringUtil.isNull(_xml.@post))
 			{
 				var _externalPOSTData:URLVariables = DataProxy.getDataByVars(_xml.@post);
-				_data = ObjectUtil.merge(_data, _externalPOSTData);
+				_data = ObjectUtil.addValue(_data, _externalPOSTData);
 			}
 
 			if(useDebug)
