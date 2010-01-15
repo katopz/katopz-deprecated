@@ -19,6 +19,6 @@ package
 		public var bitmapData:BitmapData;
 		public var scale:Number = 1;
 		
-		public var scales:Vector.<BitmapData>;
+		public var scales:Array;//Vector.<BitmapData>;
 	}
 }
