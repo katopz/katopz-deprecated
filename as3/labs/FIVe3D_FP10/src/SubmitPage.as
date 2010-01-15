@@ -14,7 +14,7 @@ package
 	import flash.filters.GlowFilter;
 	import flash.net.URLVariables;
 
-	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
+	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
 	public class SubmitPage extends SDSprite
 	{
 		[Embed(source="assets/ThaiMap.swf", symbol="FormClip")]
