@@ -50,9 +50,6 @@ package
 	public class CandlePage extends Five3DTemplate
 	{
 		// const
-		private const SCREEN_WIDTH:int = 1680;
-		private const SCREEN_HEIGHT:int = 822;
-		
 		private const DEFAULT_ANGLE:int = 60;
 		
 		private const DEFAULT_X:int = 0;
@@ -69,7 +66,7 @@ package
 		private const SPRITE_SCALE:Number = .1;
 		private const USER_SPRITE_SCALE:Number = .25;
 
-		private const _matrix:Matrix = new Matrix(1, 0, 0, 1, SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
+		private var _matrix:Matrix;
 		private const _point:Point = new Point(0, 0);
 
 		// assets
@@ -337,7 +334,7 @@ package
 			// -------------------------------------------------------------
 			// try setPixel
 			
-			//var particles:Particles = new Particles(particlesBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_WIDTH));
+			//var particles:Particles = new Particles(particlesBitmapData = new BitmapData(_stageWidth, _stageWidth));
 			//_canvas3D.addChild(particles);
 			
 			/*
@@ -398,9 +395,9 @@ package
 
 			/*
 			   // add bound
-			   var _boundArea:Sprite = DrawUtil.drawRect(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0xFF0000, .5);
-			   _boundArea.x = SCREEN_WIDTH/2 - _boundArea.width/2;
-			   _boundArea.y = SCREEN_HEIGHT/2 - _boundArea.height/2;
+			   var _boundArea:Sprite = DrawUtil.drawRect(_stageWidth/2, _stageHeight/2, 0xFF0000, .5);
+			   _boundArea.x = _stageWidth/2 - _boundArea.width/2;
+			   _boundArea.y = _stageHeight/2 - _boundArea.height/2;
 	
 			   //_boundArea.blendMode = BlendMode.ERASE;
 			   addChild(_boundArea);
@@ -722,20 +719,26 @@ package
 
 		override protected function setupLayer():void
 		{
+			_stageWidth = 1680;
+			_stageHeight = 822;
+			
+			_matrix = new Matrix(1, 0, 0, 1, _stageWidth * .5, _stageHeight * .5);
+			
 			// guide
 			if (parent && parent==stage)
 				addChild(LoaderUtil.loadAsset("bg.jpg"));
 
 			// add hitArea
-			_hitArea = DrawUtil.drawRect(SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000);
+			_hitArea = DrawUtil.drawRect(_stageWidth, _stageHeight, 0x000000);
 			_hitArea.blendMode = BlendMode.ERASE;
 			addChild(_hitArea);
 			
-			_effectBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_HEIGHT, true, 0x000000);
+			_effectBitmapData = new BitmapData(_stageWidth, _stageHeight, true, 0x000000);
 			_effectBitmap = new Bitmap(_effectBitmapData, PixelSnapping.NEVER, false);
 			_baseLayer.addChild(_effectBitmap);
 			addChild(_baseLayer);
 		}
+		
 		private var _effectBitmap:Bitmap;
 		private var _baseLayer:SDSprite = new SDSprite();
 		
@@ -849,10 +852,12 @@ package
 				{
 					_transformDirty = false;
 					_dirtyNum = 0;
-					TweenLite.to(_effectLayer, 3, {autoAlpha: 0, onComplete: function():void
-					{
-						_baseLayer.addChild(_effectBitmap);
-					}});
+					
+					if (USE_EFFECT)
+						TweenLite.to(_effectLayer, 3, {autoAlpha: 0, onComplete: function():void
+						{
+							_baseLayer.addChild(_effectBitmap);
+						}});
 				}
 			}
 		}

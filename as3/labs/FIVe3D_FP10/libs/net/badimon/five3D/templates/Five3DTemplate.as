@@ -13,6 +13,9 @@ package net.badimon.five3D.templates
 	 */
 	public class Five3DTemplate extends Sprite
 	{
+		protected var _stageWidth:int;
+		protected var _stageHeight:int;
+		
 		/** @private */
 		protected function init():void
 		{
@@ -24,8 +27,8 @@ package net.badimon.five3D.templates
 			
 			//init scene
 			_scene = new Scene3D();
-			_scene.x = stage.stageWidth / 2;
-			_scene.y = stage.stageHeight / 2;
+			_scene.x = _stageWidth?_stageWidth/2:stage.stageWidth / 2;
+			_scene.y = _stageHeight?_stageHeight/2:stage.stageHeight / 2;
 			addChild(_scene);
 			
 			//init stats panel
