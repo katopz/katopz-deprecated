@@ -753,29 +753,33 @@ package
 
 		override protected function onPreRender():void
 		{
-			if (_status == "idle")
+			if (_status == "idle" && _canvas3D)
 			{
 				_canvas3D.rotationZ++;
 				setDirty();
 			}
 			
-			if(_canvas3D)
-				title = _dropPoint+"|"+String(_canvas3D.mouseXY);
-				
-			if(_status!="idle")
+			// move mouse?
 			if(mouseX==_mouseX && mouseY==_mouseY)
 			{
+				// break limit?
 				if(idleNum<IDLE_TIME)
 				{
+					// count down
 					idleNum++;
 				}else{
-					status = "idle";
+					//reset
+					idleNum = 0;
+					
+					// idle activate if in explore mode
+					if(_status=="explore")
+						status = "idle";
 				}
-			}else{
-				idleNum = 0;
-				_mouseX = mouseX;
-				_mouseY = mouseY;
 			}
+			
+			// mem last position
+			_mouseX = mouseX;
+			_mouseY = mouseY;
 		}
 		
 		private var _mouseX:Number = 0;
