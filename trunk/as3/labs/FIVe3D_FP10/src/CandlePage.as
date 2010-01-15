@@ -46,12 +46,12 @@ package
 	   /14. particle clipping
 	
 	 */
-	[SWF(width="1132",height="654",frameRate="30",backgroundColor="#000000")]
+	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
 	public class CandlePage extends Five3DTemplate
 	{
 		// const
-		private const SCREEN_WIDTH:int = 1132;
-		private const SCREEN_HEIGHT:int = 654;
+		private const SCREEN_WIDTH:int = 1680;
+		private const SCREEN_HEIGHT:int = 822;
 		
 		private const DEFAULT_ANGLE:int = 60;
 		
@@ -85,9 +85,11 @@ package
 		private var CandleClip:Class;
 		private var _candleClip:Sprite = new CandleClip() as Sprite;
 		
+		/*
 		[Embed(source="assets/ThaiMap.swf",symbol="ForeGroundClip")]
 		private var ForeGroundClip:Class;
 		private var _foreGroundClip:Sprite = new ForeGroundClip as Sprite;
+		*/
 		
 		[Embed(source="assets/ThaiMap.swf",symbol="LightClip")]
 		private var LightClip:Class;
@@ -349,9 +351,11 @@ package
 			_effectLayer.mouseEnabled = false;
 			addChild(_effectLayer);
 			
+			/*
 			_foreGroundClip.mouseChildren = false;
 			_foreGroundClip.mouseEnabled = false;
 			addChild(_foreGroundClip);
+			*/
 			
 			addChild(stats);
 			addChild(debugText);
@@ -600,7 +604,7 @@ package
 		private var _sprite2D:Sprite2D;
 		private function setupUserBalloon():void
 		{
-			//baseLayer.addChild(_effectBitmap);
+			//_baseLayer.addChild(_effectBitmap);
 			
 			// msg
 			var _baloon:DialogBalloon = new DialogBalloon
@@ -668,8 +672,6 @@ package
 		
 		private function setupOtherBalloon(_sprite2D:Sprite2D):void
 		{
-			//baseLayer.addChild(_effectBitmap);
-			
 			// destroy
 			if(_lastBalloon)
 				disposeBalloon();
@@ -722,7 +724,7 @@ package
 		{
 			// guide
 			if (parent && parent==stage)
-				addChild(LoaderUtil.loadAsset("../src/assets/bg.png"));
+				addChild(LoaderUtil.loadAsset("bg.jpg"));
 
 			// add hitArea
 			_hitArea = DrawUtil.drawRect(SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000);
@@ -731,11 +733,11 @@ package
 			
 			_effectBitmapData = new BitmapData(SCREEN_WIDTH, SCREEN_HEIGHT, true, 0x000000);
 			_effectBitmap = new Bitmap(_effectBitmapData, PixelSnapping.NEVER, false);
-			baseLayer.addChild(_effectBitmap);
-			addChild(baseLayer);
+			_baseLayer.addChild(_effectBitmap);
+			addChild(_baseLayer);
 		}
 		private var _effectBitmap:Bitmap;
-		private var baseLayer:SDSprite = new SDSprite();
+		private var _baseLayer:SDSprite = new SDSprite();
 		
 		private function onDrag(event:MouseUIEvent):void
 		{
@@ -835,8 +837,12 @@ package
 					_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, _point, _blurFilter);
 					_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, _point, _colorMatrixFilter);
 					_effectBitmapData.unlock();
-					_effectLayer.addChild(_effectBitmap);
-					TweenLite.to(_effectLayer, 0.5, {autoAlpha:1});
+					
+					if(!_effectLayer.contains(_effectBitmap))
+					{
+						_effectLayer.addChild(_effectBitmap);
+						TweenLite.to(_effectLayer, 0.5, {autoAlpha:1});
+					}
 				}
 
 				if (_dirtyNum++ > EFFECT_TIMEOUT_NUM)
@@ -845,7 +851,7 @@ package
 					_dirtyNum = 0;
 					TweenLite.to(_effectLayer, 3, {autoAlpha: 0, onComplete: function():void
 					{
-						baseLayer.addChild(_effectBitmap);
+						_baseLayer.addChild(_effectBitmap);
 					}});
 				}
 			}
