@@ -13,6 +13,9 @@ package
 		public var visible:Boolean = true;
 		public var sprite2D:Sprite2D;
 		
+		public var currentFrame:uint = 1;
+		public var totalFrames:uint = 1;
+		
 		public var next:Candle;
 		
 		public var bitmapData:BitmapData;
