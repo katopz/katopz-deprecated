@@ -11,6 +11,7 @@ package
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.filters.BlurFilter;
 	import flash.filters.GlowFilter;
 	import flash.net.URLVariables;
 
@@ -36,7 +37,7 @@ package
 			
 			//loader
 			if(!LoaderUtil.loaderClip)
-				LoaderUtil.loaderClip = new Preloader(this, 1132, 654);
+				LoaderUtil.loaderClip = new Preloader(this, 1680, 822);
 
 			// get external config
 			LoaderUtil.loadXML("config.xml", onGetConfig);
@@ -59,7 +60,6 @@ package
 			if(event.type == Event.COMPLETE)
 			{
 				//trace(" ^ onServerData :" + event.target.data.result);
-				filters = [new GlowFilter(0x0000,0,0,0,0,0)];
 				TweenLite.to(this, 0.5, {autoAlpha: 0, onComplete: function():void
 				{
 					dispatchEvent(new Event(Event.CLOSE));
@@ -70,6 +70,8 @@ package
 			{
 				DataProxy.addData("$CANDLE_EMAIL", FormEvent(event).data.email);
 				DataProxy.addData("$CANDLE_MSG", FormEvent(event).data.msg);
+				formClip.filters = [new BlurFilter(4,4,1)];
+				formClip.mouseEnabled = false;
 			}
 		}
 	}

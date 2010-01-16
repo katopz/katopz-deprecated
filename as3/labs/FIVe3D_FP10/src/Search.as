@@ -1,0 +1,44 @@
+package
+{
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	
+	public class Search
+	{
+		public static var isGetResult:Boolean = false;
+		
+		private static var _dispatcher:EventDispatcher = new EventDispatcher();
+
+		public static function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
+		{
+			_dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
+		}
+
+		public static function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
+		{
+			_dispatcher.removeEventListener(type, listener, useCapture);
+		}
+
+		public static function dispatchEvent(event:Event):Boolean
+		{
+			return _dispatcher.dispatchEvent(event);
+		}
+
+		public static function hasEventListener(type:String):Boolean
+		{
+			return _dispatcher.hasEventListener(type);
+		}
+		
+		//
+		
+		public static function show():void
+		{
+			dispatchEvent(new Event(Event.OPEN));
+		}
+		
+		public static function hide():void
+		{
+			dispatchEvent(new Event(Event.CLOSE));
+		}
+	}
+}

@@ -1,0 +1,1 @@
+result=ok&x=300&y=400&email=foundx@y.com&msg=normal<b>bold</b><br/>newline found!

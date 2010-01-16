@@ -17,6 +17,7 @@ package com.sleepydesign.site
 	import flash.events.EventDispatcher;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
+	import flash.filters.BlurFilter;
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
