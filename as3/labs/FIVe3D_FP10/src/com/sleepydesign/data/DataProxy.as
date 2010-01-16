@@ -59,10 +59,12 @@ package com.sleepydesign.data
 		public static function getDataByVars(varsString:String):URLVariables
 		{
 			var _URLVariables:URLVariables = new URLVariables(varsString);
+			var _resultURLVariables:URLVariables = new URLVariables();
+			
 			for (var _name:String in _URLVariables)
-				_URLVariables[_name] = getDataByID(_URLVariables[_name]);
+				_resultURLVariables[_name] = getDataByID(_URLVariables[_name]);
 
-			return _URLVariables;
+			return _resultURLVariables;
 		}
 		
 		/*

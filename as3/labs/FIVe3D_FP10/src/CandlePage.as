@@ -557,7 +557,6 @@ package
 					DataProxy.addData("$CANDLE_TIME", new Date().valueOf());
 					DataProxy.addData("$CANDLE_X", _dropPoint.x);
 					DataProxy.addData("$CANDLE_Y", _dropPoint.y);
-					trace(_dropPoint.x, _dropPoint.y);
 
 					// wait for server response
 					LoaderUtil.load("SubmitPage.swf", function(event:Event):void
