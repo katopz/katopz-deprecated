@@ -23,6 +23,7 @@ package com.sleepydesign.skins
 				width = containter.stage.stageWidth;
 				height = containter.stage.stageHeight;
 			}
+			containter.addChild(this);
 			
 			// bg
 			_bg = DrawUtil.drawRect(width, height, 0x000000, 0.75);
@@ -41,13 +42,13 @@ package com.sleepydesign.skins
 			LoaderUtil.showLoader = function():void
 			{
 				mouseEnabled = true;
-				TweenLite.to(this, 0.5, {autoAlpha:1});
+				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:1});
 			};
 			
 			LoaderUtil.hideLoader = function():void
 			{
 				mouseEnabled = false;
-				TweenLite.to(this, 0.5, {autoAlpha:0});
+				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:0});
 			};
 		}
 			

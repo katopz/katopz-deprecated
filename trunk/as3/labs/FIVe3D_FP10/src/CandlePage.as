@@ -137,7 +137,7 @@ package
 			//show();
 
 			addChild(systemLayer);
-			LoaderUtil.loaderClip = new Preloader(systemLayer, 1132, 654);
+			LoaderUtil.loaderClip = new Preloader(systemLayer, _stageWidth, _stageHeight);
 
 			// get external config
 			LoaderUtil.loadXML("config.xml", function(event:Event):void
@@ -150,7 +150,21 @@ package
 				
 				getData(XMLUtil.getXMLById(_xmlData, "GET_CANDLES").@src);
 			});
+			
+			//search
+			Search.addEventListener(Event.CLOSE, function(event:Event):void
+			{
+				if(searchPage)
+					searchPage.destroy();
+				status = "explore";
+			});
+						
+			Search.addEventListener(Event.OPEN, function(event:Event):void
+			{
+				status = "search";
+			});
 		}
+		private var searchPage:SDSprite;
 
 		private function getData(uri:String, isReload:Boolean=false):void
 		{
@@ -444,7 +458,7 @@ package
 
 		private function onExploreClick(event:Event):void
 		{
-			trace(event.target, event.currentTarget,event);
+			//trace(event.target, event.currentTarget,event);
 			// it's candle
 			if(event.target is Sprite2D && String(event.target.name).indexOf("candle_")==0)
 				setupOtherBalloon(event.target as Sprite2D);
@@ -472,26 +486,28 @@ package
 					}});
 					break;
 				case "idle":
-					//_effectLayer.addChild(_effectBitmap);
 					// go default angle
 					//TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
 					
 					// wait for drag, explore
 					var onExplore:Function;
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExplore = function():void
+					{
+						if(_status=="search" || _status=="input")
+							return;
+						
+						stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExplore);
+						
+						// move cam to defined position
+						TweenLite.to(_mapCanvas3D, 1, {rotationZ: 0});
+						TweenLite.to(_candleCanvas3D, 1, {rotationZ: 0});
+						TweenLite.to(_ballonCanvas3D, 1, {rotationZ: 0});
+						TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0, onComplete: function():void
 						{
-							stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExplore);
-							
-							// move cam to defined position
-							TweenLite.to(_mapCanvas3D, 1, {rotationZ: 0});
-							TweenLite.to(_candleCanvas3D, 1, {rotationZ: 0});
-							TweenLite.to(_ballonCanvas3D, 1, {rotationZ: 0});
-							TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0, onComplete: function():void
-							{
-								// go explore
-								status = "explore";
-							}});
-						});
+							// go explore
+							status = "explore";
+						}});
+					});
 					
 					// wait for candle click
 					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
@@ -502,7 +518,6 @@ package
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					break;
 				case "drag":
-					//_effectLayer.addChild(_effectBitmap);
 					Mouse.hide();
 					// no more click
 					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
@@ -584,10 +599,12 @@ package
 					});
 					break;
 				case "view":
-					//_effectLayer.addChild(_effectBitmap);
-					
 					// view msg
-					setupUserBalloon();
+					setupUserBalloon(
+						DataProxy.getDataByID("$CANDLE_MSG") + "<br/>" + DataProxy.getDataByID("$CANDLE_EMAIL"),
+						_dropPoint.x,
+						_dropPoint.y
+					);
 					
 					// go idle
 					TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
@@ -595,18 +612,54 @@ package
 						status = "explore";
 					}});
 					break;
+				case "search":
+					LoaderUtil.load("SearchPage.swf", function(event:Event):void
+					{
+						if(event.type=="complete")
+						{
+							searchPage = event.target["content"] as SDSprite;
+							searchPage.alpha = 0;
+							searchPage.visible = false;
+							addChild(searchPage);
+							
+							// show
+							TweenLite.to(searchPage, 0.5, {autoAlpha: 1});
+							
+							// hide
+							searchPage.addEventListener(Event.CLOSE, function(event:Event):void
+							{
+								status = "search-done";
+							});
+						}
+					});
+				break;
+				case "search-done":
+					// view msg
+					if(Search.isGetResult)
+					{
+						setupUserBalloon(
+							DataProxy.getDataByID("$SEARCH_MSG") + "<br/>" + DataProxy.getDataByID("$SEARCH_EMAIL"),
+							int(DataProxy.getDataByID("$SEARCH_X")),
+							int(DataProxy.getDataByID("$SEARCH_Y"))
+						);
+					}else{
+						// go idle
+						TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
+						{
+							status = "explore";
+						}});
+					}
+				break;
 			}
 		}
 		
 		private var _sprite2D:Sprite2D;
-		private function setupUserBalloon():void
+		private function setupUserBalloon(msg:String, x:Number, y:Number):void
 		{
-			//_baseLayer.addChild(_effectBitmap);
-			
 			// msg
 			var _baloon:DialogBalloon = new DialogBalloon
 			(
-				DataProxy.getDataByID("$CANDLE_MSG") + "<br/>" + DataProxy.getDataByID("$CANDLE_EMAIL"),
+				msg,
 				new TextFormat("Tahoma", 12, 0xF4B800), 0x000000, 0xFFFFFF,4,8
 			);
 			_sprite2D = new Sprite2D();
@@ -615,8 +668,8 @@ package
 			_baloon.visible = false;
 			//_sprite2D.addChild(_baloon);
 			_sprite2D.cacheAsBitmap = true;
-			_sprite2D.x = _dropPoint.x-_mapBitmap3D.bitmapData.width/2;
-			_sprite2D.y = _dropPoint.y-_mapBitmap3D.bitmapData.height/2;
+			_sprite2D.x = x-_mapBitmap3D.bitmapData.width/2;
+			_sprite2D.y = y-_mapBitmap3D.bitmapData.height/2;
 
 			// candle
 			var _candleBitmapData:BitmapData = new BitmapData(_candleClip.width*USER_SPRITE_SCALE, _candleClip.height*USER_SPRITE_SCALE, true, 0x000000);
@@ -744,6 +797,9 @@ package
 		
 		private function onDrag(event:MouseUIEvent):void
 		{
+			if(_status=="search" || _status=="input")
+				return;
+							
 			if(_status=="explore" || _status=="drag")
 			{
 				_canvas3D.x += event.data.dx;
