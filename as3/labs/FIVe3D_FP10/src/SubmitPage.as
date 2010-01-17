@@ -4,6 +4,7 @@ package
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.FormEvent;
+	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.site.FormTool;
 	import com.sleepydesign.skins.Preloader;
@@ -11,8 +12,6 @@ package
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.filters.BlurFilter;
-	import flash.filters.GlowFilter;
 	import flash.net.URLVariables;
 
 	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
@@ -24,6 +23,7 @@ package
 
 		public function SubmitPage()
 		{
+			/*
 			//test
 			if(stage && parent == stage)
 			{
@@ -31,6 +31,9 @@ package
 				DataProxy.addData("$CANDLE_X", 100);
 				DataProxy.addData("$CANDLE_Y", 200);
 			}
+			*/
+			
+			EventManager.addEventListener(FormEvent.EXTERNAL_SUBMIT, formHandler);
 			
 			// asset
 			addChild(formClip);
@@ -50,13 +53,41 @@ package
 				return;
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "submitForm");
 			FormTool.useDebug = true;
-			var _form:FormTool = new FormTool(formClip, _xml, formHandler);
+			_form = new FormTool(formClip, _xml, formHandler);
+			_form.addEventListener(FormEvent.COMPLETE, formHandler);
 			_form.returnType = URLVariables;
 		}
 		
+		private var _form:FormTool;
+		
 		private function formHandler(event:Event):void
 		{
-			//trace(" ^ formHandler : "+event);
+			trace(" ^ formHandler : "+event);
+			
+			if(event.type == FormEvent.COMPLETE)
+			{
+				_form.removeEventListener(FormEvent.COMPLETE, formHandler);
+				
+				DataProxy.addData("$CANDLE_EMAIL", FormEvent(event).data.email);
+				DataProxy.addData("$CANDLE_MSG", FormEvent(event).data.msg);
+				
+				TweenLite.to(this, 0.5, {autoAlpha: 0, onComplete: function():void
+				{
+					dispatchEvent(new Event(Event.DEACTIVATE));
+				}});
+			}
+			else if(event.type == FormEvent.EXTERNAL_SUBMIT)
+			{
+				_form.isSubmit = true;
+				_form.submit();
+			}
+			else if(event.type == Event.COMPLETE)
+			{
+				dispatchEvent(new Event(Event.CLOSE));
+				destroy();
+			}
+			
+			/*
 			if(event.type == Event.COMPLETE)
 			{
 				//trace(" ^ onServerData :" + event.target.data.result);
@@ -73,6 +104,7 @@ package
 				formClip.filters = [new BlurFilter(4,4,1)];
 				formClip.mouseEnabled = false;
 			}
+			*/
 		}
 	}
 }
