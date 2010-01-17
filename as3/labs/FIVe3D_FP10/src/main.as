@@ -4,8 +4,8 @@ package
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Loader;
+	import flash.display.StageAlign;
 	import flash.events.MouseEvent;
 
 	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
@@ -13,6 +13,8 @@ package
 	{
 		public function main()
 		{
+			stage.align = StageAlign.TOP_LEFT;
+			
 			addChild(LoaderUtil.loadAsset("bg.jpg"));
 			addChild(LoaderUtil.load("CandlePage.swf") as Loader);
 			
@@ -26,6 +28,11 @@ package
 			
 			testButton.x = 200;
 			testButton.y = 200;
+			
+			/*
+			x = 1680/2;
+			y = 822/2
+			*/
 		}
 	}
 }
