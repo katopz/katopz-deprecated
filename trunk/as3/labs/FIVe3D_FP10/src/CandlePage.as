@@ -175,13 +175,15 @@ package
 				status = "search";
 			});
 			
+			draw();
+			
 			// resize
 			stage.addEventListener(Event.RESIZE, onResize);
-			draw();
 		}
 		
 		private function draw():void
 		{
+			trace(" ! draw : " + _stageWidth, _stageHeight);
 			//pos
 			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
 			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
@@ -419,8 +421,6 @@ package
 			_ccMouse.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
 			_ccMouse.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
-			_candleButton.x = 1036;
-			_candleButton.y = 590;
 			_candleButton.buttonMode = true;
 			addChild(_candleButton);
 			
@@ -582,6 +582,7 @@ package
 					submitPage.addEventListener(Event.CLOSE, function(event:Event):void
 					{
 						mouseEnabled = true;
+						TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
 						status = "view";
 					});
 					
@@ -928,10 +929,21 @@ package
 			if(_status=="input" || _status=="search")
 				idleNum = 0;
 			
-			title = _status+","+String(idleNum);
+			//title = _status+","+String(idleNum);
 			// mem last position
 			_mouseX = mouseX;
 			_mouseY = mouseY;
+			
+			if(_mapBitmap3D)
+			{
+				var _x:int = int(_mapBitmap3D.mouseX);
+				var _y:int = int(_mapBitmap3D.mouseY);
+	
+				var _ARGB:int = _mapBitmap3D.bitmapData.getPixel32(_x, _y);
+				
+				// debug
+				title = _x +","+ _y + " | " + _ARGB;
+			}
 		}
 		
 		private var _mouseX:Number = 0;
