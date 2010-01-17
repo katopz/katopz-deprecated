@@ -98,7 +98,11 @@ package
 		[Embed(source="assets/ThaiMap.swf",symbol="LightClip")]
 		private var LightClip:Class;
 		private var _lightClip:MovieClip;// = new LightClip as MovieClip;
-
+		
+		[Embed(source="assets/ThaiMap.swf",symbol="MarkerClip")]
+		private var MarkerClip:Class;
+		private var _markerClip:Sprite = new MarkerClip as Sprite;
+		
 		// loader
 		private var _loader:Preloader;
 
@@ -170,7 +174,23 @@ package
 			{
 				status = "search";
 			});
+			
+			// resize
+			stage.addEventListener(Event.RESIZE, onResize);
+			draw();
 		}
+		
+		private function draw():void
+		{
+			_candleButton.x = stage.stageWidth-200;
+			_candleButton.y = stage.stageHeight-200;
+		}
+		
+		private function onResize(event:Event):void
+		{
+			//draw();
+		}
+		
 		private var searchPage:SDSprite;
 
 		private function getData(uri:String, isReload:Boolean=false):void
@@ -284,7 +304,7 @@ package
 					
 					// sprite2D
 					var _sprite2D:Sprite2D = new Sprite2D();
-					_sprite2D.scaled = false;
+//_sprite2D.scaled = false;
 					_sprite2D.name = "candle_"+_candle.id;
 					_sprite2D.x = _candle.x - _mapBitmapData.width/2;
 					_sprite2D.y = _candle.y - _mapBitmapData.height/2;
@@ -413,6 +433,11 @@ package
 			_candleButton.y = 590;
 			_candleButton.buttonMode = true;
 			addChild(_candleButton);
+			
+			_markerClip.x = _stageWidth/2;
+			_markerClip.y = _stageHeight/2;
+			_markerClip.mouseEnabled = false;
+			addChild(_markerClip);
 
 			/*
 			   // add bound
@@ -634,6 +659,11 @@ package
 					}});
 					break;
 				case "search":
+					if(submitPage)
+					{
+						submitPage.destroy();
+					}
+					
 					LoaderUtil.load("SearchPage.swf", function(event:Event):void
 					{
 						if(event.type=="complete")
