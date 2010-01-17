@@ -6,9 +6,12 @@ package com.sleepydesign.events
 	{
 		// _____________________ While Edit _____________________
 
+		// data is complete
+		public static const COMPLETE:String = "cc-form-complete";
+		
 		// data is incomplete
 		public static const INCOMPLETE:String = "cc-form-incomplete";
-
+		
 		// data out is invalid
 		public static const INVALID:String = "cc-form-invalid";
 
@@ -17,6 +20,7 @@ package com.sleepydesign.events
 		
 		// submit
 		public static const SUBMIT:String = "cc-form-submit";
+		public static const EXTERNAL_SUBMIT:String = "cc-external-form-submit";
 
 		// _____________________ Form Data _____________________
 

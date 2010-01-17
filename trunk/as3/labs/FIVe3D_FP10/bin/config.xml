@@ -11,7 +11,7 @@
 				<textinput id="name" src="nameInput" label="ชื่อ" maxlength="50" required="true"/>
 				<textinput id="email" src="emailInput" label="อีเมล์" maxlength="100" required="true" type="!email"/>
 				<textfield id="alert" src="alertText" type="alert"/>
-				<button id="submitButton" src="submitButton" type="submit"/>
+				<button id="submitButton" src="submitButton" type="save"/>
 			</form>
 		</content>
 	</page>

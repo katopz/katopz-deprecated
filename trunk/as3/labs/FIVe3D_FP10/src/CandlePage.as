@@ -5,7 +5,9 @@ package
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.FormEvent;
 	import com.sleepydesign.events.MouseUIEvent;
+	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
 	import com.sleepydesign.ui.MouseUI;
@@ -44,6 +46,11 @@ package
 	   /12. continue load queue 1,000 per request
 	   /13. doing data proxy, get/set while send
 	   /14. particle clipping
+	   
+	   -1. move cam to other angle while idle
+	   2. กรอกข้อความก่อนแล้วค่อยปักเทียน
+	   3. add gp while put candle
+	   4. autosize and move top-bottom right
 	
 	 */
 	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
@@ -420,13 +427,11 @@ package
 
 		private function onCandleButtonClick(event:MouseEvent):void
 		{
-			status = "drag";
+			status = "input";
 		}
 
 		private function onCandleDrop(event:MouseEvent):void
 		{
-			trace("onCandleDrop");
-
 			_dropPoint.x = int(_mapBitmap3D.mouseX);
 			_dropPoint.y = int(_mapBitmap3D.mouseY);
 
@@ -505,7 +510,8 @@ package
 						TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0, onComplete: function():void
 						{
 							// go explore
-							status = "explore";
+							if(_status!="input")
+								status = "explore";
 						}});
 					});
 					
@@ -516,6 +522,11 @@ package
 				case "explore":
 					// click to view
 					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
+					
+					// wait for candle click
+					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
+					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
+					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "drag":
 					Mouse.hide();
@@ -542,15 +553,25 @@ package
 
 					// get position
 					var candleData:CandleData = new CandleData(_id, _dropPoint.x, _dropPoint.y);
-
-					// wait for text input
-					status = "input";
 					
-					// wait for candle click
-					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
-					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);			
-					break;
+					// wait for response
+					mouseEnabled = false;
+					submitPage.addEventListener(Event.CLOSE, function(event:Event):void
+					{
+						mouseEnabled = true;
+						status = "view";
+					});
+					
+					// submit
+					DataProxy.addData("$CANDLE_TIME", new Date().valueOf());
+					DataProxy.addData("$CANDLE_X", _dropPoint.x);
+					DataProxy.addData("$CANDLE_Y", _dropPoint.y);
+					
+					EventManager.dispatchEvent(new FormEvent(FormEvent.EXTERNAL_SUBMIT));
+					
+				break;
 				case "drop-out":
+				/*
 					// drop
 					_candleClip.stopDrag();
 					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
@@ -566,13 +587,9 @@ package
 					// wait for candle click
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
+				*/
 					break;
 				case "input":
-					// add data
-					DataProxy.addData("$CANDLE_TIME", new Date().valueOf());
-					DataProxy.addData("$CANDLE_X", _dropPoint.x);
-					DataProxy.addData("$CANDLE_Y", _dropPoint.y);
-
 					// wait for server response
 					LoaderUtil.load("SubmitPage.swf", function(event:Event):void
 					{
@@ -585,15 +602,19 @@ package
 							
 							// show
 							TweenLite.to(submitPage, 0.5, {autoAlpha: 1});
+							/*
 							TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
 							{
 								_candleClip.parent.removeChild(_candleClip);
 							}});
+							*/
 							
 							// hide
-							submitPage.addEventListener(Event.CLOSE, function(event:Event):void
+							var _onDeactivate:Function;
+							submitPage.addEventListener(Event.DEACTIVATE, _onDeactivate = function(event:Event):void
 							{
-								status = "view";
+								submitPage.removeEventListener(Event.DEACTIVATE, _onDeactivate);
+								status = "drag";
 							});
 						}
 					});

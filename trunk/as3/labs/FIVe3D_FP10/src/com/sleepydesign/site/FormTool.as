@@ -42,6 +42,8 @@ package com.sleepydesign.site
 		
 		public static var useDebug:Boolean = false;
 		
+		public var isSubmit:Boolean = true;
+		
 		private var alertText:TextField;
 		private var _xml:XML;
 
@@ -115,6 +117,8 @@ package com.sleepydesign.site
 
 						switch (String(itemXML.@type))
 						{
+							case "save":
+								isSubmit = false;
 							case "submit":
 								button.removeEventListener(MouseEvent.CLICK, buttonHandler);
 								button.addEventListener(MouseEvent.CLICK, buttonHandler);
@@ -169,10 +173,9 @@ package com.sleepydesign.site
 		{
 			if(useDebug)trace(" ^ " + event.type);
 			_data = validateData();
+			
 			if (_data)
-			{
 				submit();
-			}
 			/*else
 			{
 				var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: _items}); 
@@ -180,7 +183,7 @@ package com.sleepydesign.site
 				_eventHandler(_formEvent);
 			}*/
 		}
-
+		
 		// ____________________________________________ Validate ____________________________________________
 
 		private function validateData():URLVariables
@@ -351,22 +354,29 @@ package com.sleepydesign.site
 
 			if(useDebug)
 			{
-				trace(" * Submit");
 				ObjectUtil.print(_data);
 			}
 			
 			LoaderUtil.SEND_METHOD = method;
 			
-			if(returnType == URLVariables)
-			{
-				_loader = LoaderUtil.requestVars(url, _data, onGetFormData);
-			}else{
-				_loader = LoaderUtil.request(url, _data, onGetFormData);
-			}
-			
-			var _formEvent:FormEvent = new FormEvent(FormEvent.SUBMIT, _data); 
+			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data); 
 			dispatchEvent(_formEvent);
 			_eventHandler(_formEvent);
+				
+			if(isSubmit)
+			{
+				trace(" * Submit");
+				if(returnType == URLVariables)
+				{
+					_loader = LoaderUtil.requestVars(url, _data, onGetFormData);
+				}else{
+					_loader = LoaderUtil.request(url, _data, onGetFormData);
+				}
+				
+				_formEvent = new FormEvent(FormEvent.SUBMIT, _data); 
+				dispatchEvent(_formEvent);
+				_eventHandler(_formEvent);
+			}
 		}
 
 		// ____________________________________________ Server Data ____________________________________________
