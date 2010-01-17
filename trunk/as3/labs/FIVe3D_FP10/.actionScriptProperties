@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="CandlePage.as" version="3">
-<compiler additionalCompilerArguments="-use-network=false -debug=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="10.0.32" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
+<actionScriptProperties mainApplicationPath="TestEffect.as" version="3">
+<compiler additionalCompilerArguments="-use-network=false -debug=false" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="10.0.32" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="libs"/>
 </compilerSourcePath>
@@ -24,6 +24,8 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
+<application path="TestEffect.as"/>
+<application path="TestMovieClip.as"/>
 <application path="SearchPage.as"/>
 <application path="main.as"/>
 <application path="TestComponent.as"/>
