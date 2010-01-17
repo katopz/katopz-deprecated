@@ -16,6 +16,9 @@ package net.badimon.five3D.templates
 		protected var _stageWidth:int;
 		protected var _stageHeight:int;
 		
+		protected var _stageWidth_2:int;
+		protected var _stageHeight_2:int;
+		
 		/** @private */
 		protected function init():void
 		{
@@ -27,8 +30,10 @@ package net.badimon.five3D.templates
 			
 			//init scene
 			_scene = new Scene3D();
-			_scene.x = _stageWidth?_stageWidth/2:stage.stageWidth / 2;
-			_scene.y = _stageHeight?_stageHeight/2:stage.stageHeight / 2;
+			
+			_scene.x = _stageWidth_2;
+			_scene.y = _stageHeight_2;
+			
 			addChild(_scene);
 			
 			//init stats panel
@@ -74,6 +79,12 @@ package net.badimon.five3D.templates
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.quality = StageQuality.MEDIUM;
+			
+			_stageWidth = _stageWidth?_stageWidth:stage.stageWidth;
+			_stageHeight = _stageHeight?_stageHeight:stage.stageHeight;
+			
+			_stageWidth_2 = _stageWidth/2;
+			_stageHeight_2 = _stageHeight/2;
 		}
 		
 		protected function setupLayer():void

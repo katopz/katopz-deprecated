@@ -9,12 +9,12 @@ http://five3D.mathieu-badimon.com  |  http://five3d.mathieu-badimon.com/archives
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package net.badimon.five3D.display {
-	import net.badimon.five3D.utils.InternalUtils;
-
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.geom.Matrix3D;
-	import flash.geom.Rectangle;	
+	import flash.geom.Rectangle;
+	
+	import net.badimon.five3D.utils.InternalUtils;	
 
 	/**
 	 * The Sprite2D class is the equivalent in the FIVe3D package of the Sprite class in the Flash package but contrary to the Sprite3D class, the Sprite2D class always faces the screen.
@@ -217,7 +217,12 @@ package net.badimon.five3D.display {
 			}
 		}
 
+		public var screenX:Number=0;
+		public var screenY:Number=0;
+		
 		private function setPlacement():void {
+			screenX = __vectorOut[0] * __perspective;
+			screenY = __vectorOut[1] * __perspective;
 			super.x = __vectorOut[0] * __perspective;
 			super.y = __vectorOut[1] * __perspective;
 		}
