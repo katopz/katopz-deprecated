@@ -182,12 +182,12 @@ package
 		
 		private function draw():void
 		{
-			_candleButton.x = stage.stageWidth-200;
-			//_candleButton.y = stage.stageHeight-200;
-			/*
-			x = -stage.stageWidth/2;
-			y = -stage.stageHeight/2;
-			*/
+			//pos
+			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
+			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
+			
+			_candleButton.x = _x0 + stage.stageWidth - 200;
+			_candleButton.y = _y0 + stage.stageHeight - 200;
 		}
 		
 		private function onResize(event:Event):void
@@ -377,18 +377,7 @@ package
 			_canvas3D.addChild(_ballonCanvas3D);
 			
 			// -------------------------------------------------------------
-			// try setPixel
-			
-			//var particles:Particles = new Particles(particlesBitmapData = new BitmapData(_stageWidth, _stageWidth));
-			//_canvas3D.addChild(particles);
-			
-			/*
-			i = candles.length;
-			while (i--)
-			{
-				
-			}
-			*/
+
 			_effectLayer.mouseChildren = false;
 			_effectLayer.mouseEnabled = false;
 			addChild(_effectLayer);
@@ -402,9 +391,6 @@ package
 			addChild(stats);
 			addChild(debugText);
 		}
-		
-		//private var particlesBitmapData:BitmapData;
-		//private var particles:Particles;
 		
 		private function setupView():void
 		{
@@ -605,7 +591,6 @@ package
 					DataProxy.addData("$CANDLE_Y", _dropPoint.y);
 					
 					EventManager.dispatchEvent(new FormEvent(FormEvent.EXTERNAL_SUBMIT));
-					
 				break;
 				case "drop-out":
 					/*
@@ -667,7 +652,7 @@ package
 					// go idle
 					TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
 					{
-						status = "explore";
+						status = "idle";
 					}});
 					break;
 				case "search":
@@ -752,7 +737,7 @@ package
 			_sprite2D.visible = false;
 			_sprite2D.alpha = 0;
 			
-			TweenLite.to(_baloon, 1, {autoAlpha: 1, y:-10});
+			TweenLite.to(_baloon, 1, {autoAlpha: 1, y:-20});
 			TweenLite.to(_sprite2D, 1, {autoAlpha: 1});
 					
 			_candleCanvas3D.addChild(_sprite2D);
@@ -835,8 +820,8 @@ package
 
 		override protected function setupLayer():void
 		{
-			_stageWidth = 1680;
-			_stageHeight = 822;
+			//_stageWidth = 1680;
+			//_stageHeight = 822;
 			
 			_matrix = new Matrix(1, 0, 0, 1, _stageWidth * .5, _stageHeight * .5);
 			
@@ -953,16 +938,19 @@ package
 		private var _mouseY:Number = 0;
 		private var idleNum:int = 0;
 		private var IDLE_TIME:int = 3;
+		private var _rect:Rectangle;
+		
 		override protected function onPostRender():void
 		{
 			if (_transformDirty)
 			{
 				if (USE_EFFECT)
 				{
+					_rect = _effectBitmapData.rect;
 					_effectBitmapData.lock();
 					_effectBitmapData.draw(_candleCanvas3D, _matrix);
-					_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, _point, _blurFilter);
-					_effectBitmapData.applyFilter(_effectBitmapData, _effectBitmapData.rect, _point, _colorMatrixFilter);
+					_effectBitmapData.applyFilter(_effectBitmapData, _rect, _point, _blurFilter);
+					_effectBitmapData.applyFilter(_effectBitmapData, _rect, _point, _colorMatrixFilter);
 					_effectBitmapData.unlock();
 					
 					if(!_effectLayer.contains(_effectBitmap))
@@ -978,10 +966,10 @@ package
 					_dirtyNum = 0;
 					
 					if (USE_EFFECT)
-						TweenLite.to(_effectLayer, 3, {autoAlpha: 0, onComplete: function():void
-						{
-							_baseLayer.addChild(_effectBitmap);
-						}});
+					TweenLite.to(_effectLayer, 3, {autoAlpha: 0, onComplete: function():void
+					{
+						_baseLayer.addChild(_effectBitmap);
+					}});
 				}
 			}
 		}
