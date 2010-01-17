@@ -188,8 +188,8 @@ package
 			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
 			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
 			
-			_candleButton.x = _x0 + stage.stageWidth - 200;
-			_candleButton.y = _y0 + stage.stageHeight - 100;
+			_candleButton.x = _x0 + stage.stageWidth - 100;
+			_candleButton.y = _y0 + stage.stageHeight - 200;
 		}
 		
 		private function onResize(event:Event):void
