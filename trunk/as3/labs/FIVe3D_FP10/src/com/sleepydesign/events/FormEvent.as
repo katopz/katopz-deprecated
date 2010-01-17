@@ -21,6 +21,7 @@ package com.sleepydesign.events
 		// submit
 		public static const SUBMIT:String = "cc-form-submit";
 		public static const EXTERNAL_SUBMIT:String = "cc-external-form-submit";
+		public static const DATA_CHANGE:String = "cc-data-change-submit";
 
 		// _____________________ Form Data _____________________
 

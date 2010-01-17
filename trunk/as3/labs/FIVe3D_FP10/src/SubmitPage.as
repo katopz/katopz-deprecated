@@ -54,7 +54,6 @@ package
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "submitForm");
 			FormTool.useDebug = true;
 			_form = new FormTool(formClip, _xml, formHandler);
-			_form.addEventListener(FormEvent.COMPLETE, formHandler);
 			_form.returnType = URLVariables;
 		}
 		
@@ -73,7 +72,7 @@ package
 				
 				TweenLite.to(this, 0.5, {autoAlpha: 0, onComplete: function():void
 				{
-					dispatchEvent(new Event(Event.DEACTIVATE));
+					dispatchEvent(new Event(FormEvent.DATA_CHANGE));
 				}});
 			}
 			else if(event.type == FormEvent.EXTERNAL_SUBMIT)

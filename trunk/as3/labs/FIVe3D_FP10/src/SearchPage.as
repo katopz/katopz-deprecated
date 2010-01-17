@@ -49,6 +49,8 @@ package
 			// cancel
 			SimpleButton(searchClip["closeButton"]).addEventListener(MouseEvent.CLICK, function():void
 			{
+				Search.isGetResult = false;
+				
 				searchClip.filters = null;
 				searchClip.mouseEnabled = true;
 				

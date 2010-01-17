@@ -141,7 +141,7 @@ package
 		
 		override protected function onInit():void
 		{
-			debug = false;
+			//debug = false;
 			
 			visible = false;
 			alpha = 0;
@@ -183,12 +183,16 @@ package
 		private function draw():void
 		{
 			_candleButton.x = stage.stageWidth-200;
-			_candleButton.y = stage.stageHeight-200;
+			//_candleButton.y = stage.stageHeight-200;
+			/*
+			x = -stage.stageWidth/2;
+			y = -stage.stageHeight/2;
+			*/
 		}
 		
 		private function onResize(event:Event):void
 		{
-			//draw();
+			draw();
 		}
 		
 		private var searchPage:SDSprite;
@@ -434,11 +438,6 @@ package
 			_candleButton.buttonMode = true;
 			addChild(_candleButton);
 			
-			_markerClip.x = _stageWidth/2;
-			_markerClip.y = _stageHeight/2;
-			_markerClip.mouseEnabled = false;
-			addChild(_markerClip);
-
 			/*
 			   // add bound
 			   var _boundArea:Sprite = DrawUtil.drawRect(_stageWidth/2, _stageHeight/2, 0xFF0000, .5);
@@ -517,7 +516,8 @@ package
 					break;
 				case "idle":
 					// go default angle
-					//TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+					setDirty();
 					
 					// wait for drag, explore
 					var onExplore:Function;
@@ -535,9 +535,10 @@ package
 						TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0, onComplete: function():void
 						{
 							// go explore
-							if(_status!="input")
+							if(_status!="input" && _status!="search")
 								status = "explore";
 						}});
+						setDirty();
 					});
 					
 					// wait for candle click
@@ -554,7 +555,12 @@ package
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "drag":
-					Mouse.hide();
+					TweenLite.to(_canvas3D, 1, {
+						x:-50, y:0, z:830, 
+						rotationX: 0, rotationY: 0, rotationZ: 0
+					});
+					setDirty();
+					
 					// no more click
 					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					
@@ -562,6 +568,12 @@ package
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 0.25});
 					TweenLite.to(_candleClip, 0.25, {autoAlpha: 1});
 
+					// mouse effct
+					Mouse.hide();
+					_markerClip.mouseEnabled = false;
+					_candleClip.addChild(_markerClip);
+					_candleClip.startDrag(true);
+					
 					addChild(_candleClip);
 					_candleClip.startDrag(true);
 
@@ -596,23 +608,23 @@ package
 					
 				break;
 				case "drop-out":
-				/*
-					// drop
-					_candleClip.stopDrag();
-					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
-					
-					TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
-					{
-						_candleClip.parent.removeChild(_candleClip);
+					/*
+						// drop
+						_candleClip.stopDrag();
+						stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 						
-						// go explore
-						status = "explore";
-					}});
-					
-					// wait for candle click
-					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
-					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
-				*/
+						TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
+						{
+							_candleClip.parent.removeChild(_candleClip);
+							
+							// go explore
+							status = "explore";
+						}});
+						
+						// wait for candle click
+						TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
+						_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
+					*/
 					break;
 				case "input":
 					// wait for server response
@@ -636,9 +648,9 @@ package
 							
 							// hide
 							var _onDeactivate:Function;
-							submitPage.addEventListener(Event.DEACTIVATE, _onDeactivate = function(event:Event):void
+							submitPage.addEventListener(FormEvent.DATA_CHANGE, _onDeactivate = function(event:Event):void
 							{
-								submitPage.removeEventListener(Event.DEACTIVATE, _onDeactivate);
+								submitPage.removeEventListener(FormEvent.DATA_CHANGE, _onDeactivate);
 								status = "drag";
 							});
 						}
@@ -693,13 +705,13 @@ package
 							int(DataProxy.getDataByID("$SEARCH_X")),
 							int(DataProxy.getDataByID("$SEARCH_Y"))
 						);
-					}else{
-						// go idle
-						TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
-						{
-							status = "explore";
-						}});
 					}
+					
+					// go idle
+					TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
+					{
+						status = "explore";
+					}});
 				break;
 			}
 		}
@@ -731,7 +743,7 @@ package
 			_sprite2D.graphics.endFill();
 			
 			_lightClip = new LightClip as MovieClip;
-			_lightClip.y = -17;
+			//_lightClip.y = -17;
 			_lightClip.gotoAndPlay(int(Math.random()*_lightClip.totalFrames));
 			_lightClip.cacheAsBitmap = true;
 			_lightClip.mouseEnabled = false;
@@ -740,7 +752,7 @@ package
 			_sprite2D.visible = false;
 			_sprite2D.alpha = 0;
 			
-			TweenLite.to(_baloon, 1, {autoAlpha: 1, y:-30});
+			TweenLite.to(_baloon, 1, {autoAlpha: 1, y:-10});
 			TweenLite.to(_sprite2D, 1, {autoAlpha: 1});
 					
 			_candleCanvas3D.addChild(_sprite2D);
@@ -927,6 +939,11 @@ package
 				idleNum = 0;
 			}
 			
+			// do not idle while i input or search
+			if(_status=="input" || _status=="search")
+				idleNum = 0;
+			
+			title = _status+","+String(idleNum);
 			// mem last position
 			_mouseX = mouseX;
 			_mouseY = mouseY;
