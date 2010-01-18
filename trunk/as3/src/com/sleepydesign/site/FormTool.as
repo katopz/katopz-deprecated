@@ -400,14 +400,10 @@ package com.sleepydesign.site
 		
 		// ____________________________________________ Gabage Collector ____________________________________________
 		
-		protected var _isDestroyed:Boolean;
-		
-		public function get destroyed():Boolean {
-			return this._isDestroyed;
-		}
-		
-		public function destroy():void
+		override public function destroy():void
 		{
+			super.destroy();
+			
 			_loader = null;
 			_eventHandler = null;
 			_items = null;
