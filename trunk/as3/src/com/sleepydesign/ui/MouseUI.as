@@ -1,13 +1,13 @@
 package com.sleepydesign.ui
 {
 	import com.sleepydesign.events.MouseUIEvent;
-
+	import com.sleepydesign.events.RemovableEventDispatcher;
+	
 	import flash.display.InteractiveObject;
-	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	public class MouseUI extends EventDispatcher
+	public class MouseUI extends RemovableEventDispatcher
 	{
 		private var _target:InteractiveObject;
 		private var _dragTarget:*;

@@ -4,6 +4,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.events.FormEvent;
+	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.ObjectUtil;
@@ -14,15 +15,13 @@ package com.sleepydesign.site
 	import flash.display.SimpleButton;
 	import flash.events.DataEvent;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
-	import flash.filters.BlurFilter;
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 
-	public class FormTool extends EventDispatcher implements IDestroyable
+	public class FormTool extends RemovableEventDispatcher implements IDestroyable
 	{
 		private var _container:DisplayObjectContainer;
 		private var _loader:Object/*URLLoader, Loader*/;
