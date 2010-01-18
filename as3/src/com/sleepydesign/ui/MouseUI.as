@@ -30,14 +30,18 @@ package com.sleepydesign.ui
 			_target.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 
-		public function destroy():void
+		override public function destroy():void
 		{
+			super.destroy();
+			
+			/*
 			_target.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_OUT, onMouseHandler);
 			_target.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 
 			_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
+			*/
 
 			_target = null;
 			_dragTarget = null;
