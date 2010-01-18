@@ -20,6 +20,9 @@ package
 		[Embed(source="assets/ThaiMap.swf", symbol="FormClip")]
 		private var FormClip:Class;
 		public var formClip:Sprite = new FormClip() as Sprite;
+		
+		private var _stageWidth:int;
+		private var _stageHeight:int;
 
 		public function SubmitPage()
 		{
@@ -104,6 +107,29 @@ package
 				formClip.mouseEnabled = false;
 			}
 			*/
+			
+			_stageWidth = 1680;//stage.stageWidth;
+			_stageHeight = 822;//stage.stageHeight;
+			
+			// resize
+			stage.addEventListener(Event.RESIZE, onResize);
+			draw();
+		}
+		
+		private function draw():void
+		{
+			trace(" ! draw2 : " + stage.stageWidth, stage.stageHeight);
+			//pos
+			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
+			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
+			
+			//x = -stage.stageWidth/2;
+			y = _y0;
+		}
+		
+		private function onResize(event:Event):void
+		{
+			draw();
 		}
 	}
 }
