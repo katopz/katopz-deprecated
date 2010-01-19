@@ -13,8 +13,9 @@ package com.sleepydesign.events
 		*/
 		
 		public static const MOUSE_DRAG:String = "cc-mouse-drag";
+		public static const MOUSE_DROP:String = "cc-mouse-drop";
 
-		public var mouseEvent:*;
+		public var mouseEvent:MouseEvent;
 		public var data:*;
 
 		public function MouseUIEvent(type:String, data:* = null, mouseEvent:MouseEvent = null, bubbles:Boolean = false, cancelable:Boolean = false)
