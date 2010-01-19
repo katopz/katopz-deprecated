@@ -17,6 +17,7 @@ package
 	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
 	public class SubmitPage extends SDSprite
 	{
+		//1000*600
 		[Embed(source="assets/ThaiMap.swf", symbol="FormClip")]
 		private var FormClip:Class;
 		public var formClip:Sprite = new FormClip() as Sprite;
@@ -47,6 +48,18 @@ package
 
 			// get external config
 			LoaderUtil.loadXML("config.xml", onGetConfig);
+			
+			addEventListener(Event.ADDED_TO_STAGE, onStage);
+		}
+		
+		private function onStage(evnt:Event):void
+		{
+			_stageWidth = stage.stageWidth;
+			_stageHeight = stage.stageHeight;
+			
+			// resize
+			stage.addEventListener(Event.RESIZE, onResize);
+			draw();
 		}
 
 		private function onGetConfig(event:Event):void
@@ -107,13 +120,6 @@ package
 				formClip.mouseEnabled = false;
 			}
 			*/
-			
-			_stageWidth = 1680;//stage.stageWidth;
-			_stageHeight = 822;//stage.stageHeight;
-			
-			// resize
-			stage.addEventListener(Event.RESIZE, onResize);
-			draw();
 		}
 		
 		private function draw():void
@@ -123,7 +129,9 @@ package
 			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
 			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
 			
-			//x = -stage.stageWidth/2;
+			//x = -stage.stageWidth/2+_stageWidth/2;
+			//y = _y0;
+			x = _x0;//-1680/2;
 			y = _y0;
 		}
 		

@@ -190,6 +190,13 @@ package
 			
 			_candleButton.x = _x0 + stage.stageWidth - 100;
 			_candleButton.y = _y0 + stage.stageHeight - 200;
+			
+			if(submitPage)
+			{
+				//submitPage.x = _x0;// - submitPage.width/2;
+				//submitPage.y = _y0;// - submitPage.height/2;
+			}
+			
 		}
 		
 		private function onResize(event:Event):void
