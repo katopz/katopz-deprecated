@@ -70,6 +70,7 @@ package com.sleepydesign.ui
 					_dragTarget = null;
 
 					_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
+					dispatchEvent(new MouseUIEvent(MouseUIEvent.MOUSE_DROP, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
 					break;
 				case MouseEvent.MOUSE_MOVE:
 					_target["mouseChildren"] = false;
