@@ -1,1 +1,0 @@
-email=x@y.com&msg=normal<b>bold</b><br/>newline
