@@ -1,7 +1,6 @@
 package com.sleepydesign.net
 {
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
@@ -54,6 +53,24 @@ package com.sleepydesign.net
 			LoaderUtil.loaderClip = loaderClip;
 		}
 		*/
+		
+		public static function cancel(loader:*=null):void
+		{
+			if(loaders.length==-1)
+				return;
+			
+			if(!loader)
+				loader = loaders[0].loader;
+				
+			if(loader is Loader)
+				loader = loader.contentLoaderInfo;
+			
+			for each(var _loaderVO:* in loaders)
+			{
+				if(_loaderVO && _loaderVO.loader == loader && _loaderVO.destroy is Function)
+					_loaderVO.destroy();
+			}
+		}
 				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
 		{
@@ -76,12 +93,8 @@ package com.sleepydesign.net
 			request.method = URLRequestMethod.POST;
 			request.data = data;
 			
-			_loader.load(request);
-			
-			loaders.push(_loader);
-			
 			// gc
-			_loader.addEventListener(Event.COMPLETE, function():void
+			var _removeEventListeners:Function = function():void
 			{
 			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
 	            if(loaderClip && hideLoader is Function)
@@ -89,7 +102,14 @@ package com.sleepydesign.net
 	            
 	            // gc
 	            removeItem(loaders, _loader);
-			});
+			}
+			
+			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			
+			// destroy
+			loaders.push({loader:_loader, destroy:_removeEventListeners});
+			
+			_loader.load(request);
 			
 			return _loader;
 		}
@@ -106,10 +126,8 @@ package com.sleepydesign.net
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
 			_loader.loadBytes(byteArray);
 			
-			loaders.push(_loader);
-			
 			// gc
-			_loader.addEventListener(Event.COMPLETE, function():void
+			var _removeEventListeners:Function = function():void
 			{
 			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
 	            if(loaderClip && hideLoader is Function)
@@ -117,8 +135,13 @@ package com.sleepydesign.net
 	            
 	            // gc
 	            removeItem(loaders, _loader);
-			});
-				
+			};
+			
+			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			
+			// destroy
+			loaders.push({loader:_loader, destroy:_removeEventListeners});
+			
 			return _loader;
 		}
 		
@@ -245,9 +268,6 @@ package com.sleepydesign.net
 				_loader = urlLoader;
 			}
 			
-			// prevent gc
-			loaders.push(_loader);
-			
 			// callback
 			if(eventHandler is Function)
 			{
@@ -273,7 +293,7 @@ package com.sleepydesign.net
 		            // gc
 		            removeItem(loaders, _loader);
 				};
-	            
+				
 	            // gc
 				_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
 				
@@ -283,6 +303,12 @@ package com.sleepydesign.net
 					if(useDebug)trace(" ! Not found : "+ uri);
 					_removeEventListeners();
 				});
+				
+				// destroy
+				loaders.push({loader:_loader, destroy:_removeEventListeners});
+			}else{
+				// destroy
+				loaders.push({loader:_loader});
 			}
 			
 			// load
