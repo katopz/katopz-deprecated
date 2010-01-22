@@ -6,11 +6,12 @@ package com.sleepydesign.site
 	import com.sleepydesign.events.FormEvent;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
-
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
 	import flash.events.DataEvent;
@@ -39,16 +40,13 @@ package com.sleepydesign.site
 
 		public var returnType:* = URLVariables;
 
-		public static var useDebug:Boolean = false;
-
 		public var isSubmit:Boolean = true;
 		public var action:String;
 		public var method:String = "GET";
 
 		public function FormTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
-			if (useDebug)
-				trace("\n / [Form] ------------------------------- ");
+			DebugUtil.trace("\n / [Form] ------------------------------- ");
 
 			_container = container;
 			_xml = xml;
@@ -71,8 +69,7 @@ package com.sleepydesign.site
 				var _name:String = String(_itemXML.name()).toLowerCase();
 				var _containerID:String = StringUtil.getDefaultIfNull(_itemXML.@src, String(_itemXML.@id));
 
-				if (useDebug)
-					trace("   + " + _name + "\t: " + _containerID);
+				DebugUtil.trace("   + " + _name + "\t: " + _containerID);
 
 				var _textField:TextField;
 				var item:InputText;
@@ -129,8 +126,7 @@ package com.sleepydesign.site
 						break;
 				}
 			}
-			if (useDebug)
-				trace(" ------------------------------- [Form] /\n");
+			DebugUtil.trace(" ------------------------------- [Form] /\n");
 		}
 
 		// ____________________________________________ Field ____________________________________________
@@ -172,8 +168,7 @@ package com.sleepydesign.site
 
 		private function buttonHandler(event:MouseEvent):void
 		{
-			if (useDebug)
-				trace(" ^ " + event.type);
+			DebugUtil.trace(" ^ " + event.type);
 			_data = validateData();
 
 			if (_data)
@@ -308,8 +303,7 @@ package com.sleepydesign.site
 
 		private function showIncomplete(items:Array):void
 		{
-			if (useDebug)
-				trace(" ! Incomplete");
+			DebugUtil.trace(" ! Incomplete");
 
 			if (_onIncompleteCommand)
 				SystemUtil.doCommand(_onIncompleteCommand, this);
@@ -322,8 +316,7 @@ package com.sleepydesign.site
 
 		private function showInvalid(items:Array):void
 		{
-			if (useDebug)
-				trace(" ! Invalid");
+			DebugUtil.trace(" ! Invalid");
 
 			if (_onInvalidCommand)
 				SystemUtil.doCommand(StringUtil.replace(_onInvalidCommand, "$invalid_list", items.join(",")), this);
@@ -354,10 +347,7 @@ package com.sleepydesign.site
 				_data = ObjectUtil.addValue(_data, _externalPOSTData);
 			}
 
-			if (useDebug)
-			{
-				ObjectUtil.print(_data);
-			}
+			DebugUtil.trace(ObjectUtil.toString(_data));
 
 			LoaderUtil.SEND_METHOD = method;
 

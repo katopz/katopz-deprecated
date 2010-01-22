@@ -2,8 +2,9 @@ package com.sleepydesign.site
 {
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.RemovableEventDispatcher;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.StringUtil;
-
+	
 	import flash.display.DisplayObjectContainer;
 
 	public class SiteTool extends RemovableEventDispatcher implements IDestroyable
@@ -23,8 +24,7 @@ package com.sleepydesign.site
 			_xml = xml;
 			_eventHandler = eventHandler || trace;
 
-			if (useDebug)
-				trace("\n / [Site] ------------------------------- ");
+			DebugUtil.trace("\n / [Site] ------------------------------- ");
 
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
@@ -35,8 +35,7 @@ package com.sleepydesign.site
 				var _name:String = String(_itemXML.name()).toLowerCase();
 				var _containerID:String = StringUtil.getDefaultIfNull(_itemXML.@src, String(_itemXML.@id));
 
-				if (useDebug)
-					trace("   + " + _name + "\t: " + _containerID);
+				DebugUtil.trace("   + " + _name + "\t: " + _containerID);
 
 				switch (_name)
 				{
@@ -46,8 +45,7 @@ package com.sleepydesign.site
 				}
 			}
 
-			if (useDebug)
-				trace(" ------------------------------- [Site] /\n");
+			DebugUtil.trace(" ------------------------------- [Site] /\n");
 		}
 
 		// ____________________________________________ Destroy ____________________________________________
