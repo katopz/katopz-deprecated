@@ -14,6 +14,6 @@
 		<page id="focused-child" label="Focused Child" src="child-swf.swf"/>
 		<page id="not-focused-child" label="Not Focused Child" src="deep-child.swf"/>
 	</page>
-	<page id="Authen" label="Simple Authen" src="Authen.swf"/>
+	<page id="authen" label="Simple Authen" src="authen.swf"/>
 	<page id="background" type="background" src="background.swf"/>
 </site>
