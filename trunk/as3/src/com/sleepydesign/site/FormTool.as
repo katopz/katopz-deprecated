@@ -10,7 +10,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
-	
+
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
 	import flash.events.DataEvent;
@@ -24,39 +24,39 @@ package com.sleepydesign.site
 	public class FormTool extends RemovableEventDispatcher implements IDestroyable
 	{
 		private var _container:DisplayObjectContainer;
-		private var _loader:Object/*URLLoader, Loader*/;
-		private var _data:*;
-		
+		private var _xml:XML;
 		private var _eventHandler:Function;
-		
+
+		private var _loader:Object /*URLLoader, Loader*/;
+		private var _data:Object /*FormData*/;
+
 		private var _items:Dictionary;
-		
+
 		public var action:String;
 		public var method:String = "GET";
-		
+
 		private var onInvalidCommand:String;
 		private var onIncompleteCommand:String;
-		
-		public var returnType:* = URLVariables;
-		
-		public static var useDebug:Boolean = false;
-		
-		public var isSubmit:Boolean = true;
-		
-		private var alertText:TextField;
-		private var _xml:XML;
 
-		public function FormTool(container:DisplayObjectContainer = null, xml:XML = null, eventHandler:Function = null)
+		public var returnType:* = URLVariables;
+
+		public static var useDebug:Boolean = false;
+		public var isSubmit:Boolean = true;
+
+		private var alertText:TextField;
+
+		public function FormTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
-			if(useDebug)trace("\n / [Form] ------------------------------- ");
+			if (useDebug)
+				trace("\n / [Form] ------------------------------- ");
 
 			_container = container;
 			_xml = xml;
 			action = xml.@action;
 			method = xml.@method;
-			onInvalidCommand =  String(xml.@onInvalid);
-			onIncompleteCommand =  String(xml.@onIncomplete);
-			
+			onInvalidCommand = String(xml.@onInvalid);
+			onIncompleteCommand = String(xml.@onIncomplete);
+
 			_eventHandler = eventHandler || trace;
 
 			_items = new Dictionary(true);
@@ -71,8 +71,9 @@ package com.sleepydesign.site
 				// use src as id
 				_containerID = StringUtil.getDefaultIfNull(itemXML.@src, String(itemXML.@id));
 
-				if(useDebug)trace("   + " + name + "\t: " + _containerID);
-				
+				if (useDebug)
+					trace("   + " + name + "\t: " + _containerID);
+
 				var _textField:TextField;
 				var item:InputText;
 
@@ -80,9 +81,9 @@ package com.sleepydesign.site
 				{
 					case "textfield":
 						_textField = _container.getChildByName(_containerID) as TextField;
-						if (String(itemXML.@type)=="alert")
+						if (String(itemXML.@type) == "alert")
 							alertText = _textField;
-					break;
+						break;
 					case "textinput":
 						_textField = _container.getChildByName(_containerID) as TextField;
 						item = new InputText(_textField.text, _textField);
@@ -115,20 +116,21 @@ package com.sleepydesign.site
 						var button:SimpleButton = SimpleButton(_container.getChildByName(_containerID));
 
 						switch (String(itemXML.@type))
-						{
-							case "save":
-								isSubmit = false;
-							case "submit":
-								button.removeEventListener(MouseEvent.CLICK, buttonHandler);
-								button.addEventListener(MouseEvent.CLICK, buttonHandler);
-								break;
-						}
+					{
+						case "save":
+							isSubmit = false;
+						case "submit":
+							button.removeEventListener(MouseEvent.CLICK, buttonHandler);
+							button.addEventListener(MouseEvent.CLICK, buttonHandler);
+							break;
+					}
 
 						button.visible = (String(itemXML.@visible) != "false");
 						break;
 				}
 			}
-			if(useDebug)trace(" ------------------------------- [Form] /\n");
+			if (useDebug)
+				trace(" ------------------------------- [Form] /\n");
 		}
 
 		// ____________________________________________ Field ____________________________________________
@@ -144,12 +146,12 @@ package com.sleepydesign.site
 						item.text = "";
 
 					switch (item.parent.type)
-					{
-						case "password":
-							item.text = "";
-							item.displayAsPassword = true;
-							break;
-					}
+				{
+					case "password":
+						item.text = "";
+						item.displayAsPassword = true;
+						break;
+				}
 					item.parent.setText(item.text);
 					event.currentTarget.addEventListener(FocusEvent.FOCUS_OUT, focusListener);
 					break;
@@ -170,19 +172,20 @@ package com.sleepydesign.site
 
 		private function buttonHandler(event:MouseEvent):void
 		{
-			if(useDebug)trace(" ^ " + event.type);
+			if (useDebug)
+				trace(" ^ " + event.type);
 			_data = validateData();
-			
+
 			if (_data)
 				submit();
-			/*else
-			{
-				var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: _items}); 
-				dispatchEvent(_formEvent);
-				_eventHandler(_formEvent);
-			}*/
+		/*else
+		   {
+		   var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: _items});
+		   dispatchEvent(_formEvent);
+		   _eventHandler(_formEvent);
+		 }*/
 		}
-		
+
 		// ____________________________________________ Validate ____________________________________________
 
 		private function validateData():URLVariables
@@ -192,7 +195,7 @@ package com.sleepydesign.site
 			var isComplete:Boolean = true;
 			var isValid:Boolean = true;
 			var input:*
-			
+
 			var _formEvent:FormEvent;
 			var _inCompleteList:Array = [];
 			var _inValidNameList:Array = [];
@@ -208,8 +211,8 @@ package com.sleepydesign.site
 
 				// only 1 required mean required
 				isRequired = isRequired || input.isRequired;
-				
-				if(!input.isEdit && input.isRequired)
+
+				if (!input.isEdit && input.isRequired)
 					_inCompleteList.push(input);
 			}
 
@@ -218,13 +221,13 @@ package com.sleepydesign.site
 				if (!isComplete)
 				{
 					/*
-					_formEvent = new FormEvent(FormEvent.INCOMPLETE, {items: _items});
-					dispatchEvent(_formEvent);
-					_eventHandler(_formEvent);
-					*/
-					
+					   _formEvent = new FormEvent(FormEvent.INCOMPLETE, {items: _items});
+					   dispatchEvent(_formEvent);
+					   _eventHandler(_formEvent);
+					 */
+
 					showIncomplete(_inCompleteList);
-					
+
 					// no mercy!
 					return null;
 				}
@@ -281,7 +284,7 @@ package com.sleepydesign.site
 							break;
 					}
 				}
-				
+
 				isValid = input.isValid && isValid;
 			}
 
@@ -296,35 +299,35 @@ package com.sleepydesign.site
 				return null;
 			}
 		}
-		
+
 		public function alert(msg:String):void
 		{
-			if(alertText)
+			if (alertText)
 				alertText.htmlText = msg;
 		}
-		
+
 		private function showIncomplete(items:Array):void
 		{
-			if(useDebug)
+			if (useDebug)
 				trace(" ! Incomplete");
-				
-			if(onIncompleteCommand)
+
+			if (onIncompleteCommand)
 				SystemUtil.doCommand(onIncompleteCommand, this);
-				
+
 			var _formEvent:FormEvent = new FormEvent(FormEvent.INCOMPLETE, {items: items});
 			dispatchEvent(_formEvent);
 			_eventHandler(_formEvent);
-			
+
 		}
-		
+
 		private function showInvalid(items:Array):void
 		{
-			if(useDebug)
+			if (useDebug)
 				trace(" ! Invalid");
-			
-			if(onInvalidCommand)
+
+			if (onInvalidCommand)
 				SystemUtil.doCommand(StringUtil.replace(onInvalidCommand, "$invalid_list", items.join(",")), this);
-				
+
 			var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: items});
 			dispatchEvent(_formEvent);
 			_eventHandler(_formEvent);
@@ -335,44 +338,46 @@ package com.sleepydesign.site
 		public function submit():void
 		{
 			var url:String = action;
-			
+
 			//external get data
-			if(!StringUtil.isNull(_xml.@get))
+			if (!StringUtil.isNull(_xml.@get))
 			{
 				var _externalGETData:URLVariables = DataProxy.getDataByVars(_xml.@get);
-				if(url.split("#")[0].indexOf("?")>-1)
-					url += "&"+_externalGETData.toString();
+				if (url.split("#")[0].indexOf("?") > -1)
+					url += "&" + _externalGETData.toString();
 			}
-			
+
 			//external post data
-			if(!StringUtil.isNull(_xml.@post))
+			if (!StringUtil.isNull(_xml.@post))
 			{
 				var _externalPOSTData:URLVariables = DataProxy.getDataByVars(_xml.@post);
 				_data = ObjectUtil.addValue(_data, _externalPOSTData);
 			}
 
-			if(useDebug)
+			if (useDebug)
 			{
 				ObjectUtil.print(_data);
 			}
-			
+
 			LoaderUtil.SEND_METHOD = method;
-			
-			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data); 
+
+			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data);
 			dispatchEvent(_formEvent);
 			_eventHandler(_formEvent);
-				
-			if(isSubmit)
+
+			if (isSubmit)
 			{
 				trace(" * Submit");
-				if(returnType == URLVariables)
+				if (returnType == URLVariables)
 				{
 					_loader = LoaderUtil.requestVars(url, _data, onGetFormData);
-				}else{
+				}
+				else
+				{
 					_loader = LoaderUtil.request(url, _data, onGetFormData);
 				}
-				
-				_formEvent = new FormEvent(FormEvent.SUBMIT, _data); 
+
+				_formEvent = new FormEvent(FormEvent.SUBMIT, _data);
 				dispatchEvent(_formEvent);
 				_eventHandler(_formEvent);
 			}
@@ -391,19 +396,19 @@ package com.sleepydesign.site
 			for each (var input:*in _items)
 				if (input.isReset)
 					input.text = input.defaultText;
-			
+
 			// form data event
 			//var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
 			dispatchEvent(event);
 			_eventHandler(event);
 		}
-		
+
 		// ____________________________________________ Gabage Collector ____________________________________________
-		
+
 		override public function destroy():void
 		{
 			super.destroy();
-			
+
 			_loader = null;
 			_eventHandler = null;
 			_items = null;
