@@ -3,8 +3,8 @@
 	<page id="Authen" label="Simple Authen" src="Authen.swf">
 		<content id="logIn" src="logInClip">
 			<form id="logInForm" action="serverside/authen.php" method="POST">
-				<textfield id="username" src="usernameInput" label="Your user name" maxlength="50" required="true"/>
-				<textfield id="password" src="passwordInput" label="Your password" maxlength="130" required="true"/>
+				<textinput id="username" src="usernameInput" label="Your user name" maxlength="50" required="true"/>
+				<textinput id="password" src="passwordInput" label="Your password" maxlength="130" required="true"/>
 				<button id="submitButton" src="submitButton" type="submit"/>
 			</form>
 		</content>
