@@ -35,43 +35,6 @@ package com.sleepydesign.net
 		
 		public static var loaderClip:DisplayObject;
 		
-		/*
-		public static function addLoaderTo(parent:DisplayObjectContainer, loaderClip:DisplayObject, show:Boolean=true):void
-		{
-			if(show)
-			{
-				if(!loaderClip.parent && parent)
-					parent.addChild(loaderClip);
-				
-				loaderClip.alpha = 1;
-				loaderClip.visible = true;
-			}else{
-				loaderClip.alpha = 0;
-				loaderClip.visible = false;
-			}
-			
-			LoaderUtil.loaderClip = loaderClip;
-		}
-		*/
-		
-		public static function cancel(loader:*=null):void
-		{
-			if(loaders.length==-1)
-				return;
-			
-			if(!loader)
-				loader = loaders[0].loader;
-				
-			if(loader is Loader)
-				loader = loader.contentLoaderInfo;
-			
-			for each(var _loaderVO:* in loaders)
-			{
-				if(_loaderVO && _loaderVO.loader == loader && _loaderVO.destroy is Function)
-					_loaderVO.destroy();
-			}
-		}
-				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
 		{
 			return saveBinary(data, uri, eventHandler, "image/jpeg");
@@ -101,8 +64,17 @@ package com.sleepydesign.net
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loader);
+	            removeItem(loaders, _loaderVO);
+	            
+	            _loaderVO.destroy = null;
+	            _loaderVO.loader = null;
+	            _loaderVO = null;
+	            
+	            _loader = null;
+	            request = null;
 			}
+			
+			var _loaderVO:Object = {loader:_loader, destroy:_removeEventListeners};
 			
 			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
 			
@@ -134,8 +106,16 @@ package com.sleepydesign.net
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loader);
+	            removeItem(loaders, _loaderVO);
+	            
+	            _loaderVO.destroy = null;
+	            _loaderVO.loader = null;
+	            _loaderVO = null;
+	            
+	            _loader = null;
 			};
+			
+			var _loaderVO:Object = {loader:_loader, destroy:_removeEventListeners};
 			
 			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
 			
@@ -277,39 +257,52 @@ package com.sleepydesign.net
 	            _loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
 	            _loader.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
 	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-	            
-	            var _removeEventListeners:Function = function():void
-				{
-				    _loader.removeEventListener(Event.COMPLETE, eventHandler);
-				    _loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
-				    
-				    _loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
-		            _loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
-		            _loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-		            
-		            if(loaderClip && hideLoader is Function)
-						hideLoader();
-		            
-		            // gc
-		            removeItem(loaders, _loader);
-				};
-				
-	            // gc
-				_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
-				
-				// 404
-				_loader.addEventListener(IOErrorEvent.IO_ERROR, function():void
-				{
-					if(useDebug)trace(" ! Not found : "+ uri);
-					_removeEventListeners();
-				});
-				
-				// destroy
-				loaders.push({loader:_loader, destroy:_removeEventListeners});
-			}else{
-				// destroy
-				loaders.push({loader:_loader});
 			}
+			
+			var _removeEventListeners:Function = function():void
+			{
+				_loader.removeEventListener(Event.COMPLETE, _removeEventListeners);
+				
+				if (eventHandler is Function)
+				{
+					_loader.removeEventListener(Event.COMPLETE, eventHandler);
+					_loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
+
+					_loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
+					_loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
+					_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+				}
+	            
+	            if(loaderClip && hideLoader is Function)
+					hideLoader();
+	            
+	            // gc
+	            removeItem(loaders, _loaderVO);
+	            
+	            _loaderVO.destroy = null;
+	            _loaderVO.loader = null;
+	            _loaderVO = null;
+	            
+	            loader = null;
+	            urlLoader = null;
+			};
+			
+			var _loaderVO:Object = {loader:_loader, destroy:_removeEventListeners};
+			
+            // gc
+			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			
+			// 404
+			var _404:Function = function():void
+			{
+				_loader.removeEventListener(IOErrorEvent.IO_ERROR, _404);
+				if(useDebug)trace(" ! Not found : "+ uri);
+				_removeEventListeners();
+			}
+			_loader.addEventListener(IOErrorEvent.IO_ERROR, _404);
+			
+			// destroy
+			loaders.push(_loaderVO);
 			
 			// load
 			try
@@ -392,6 +385,24 @@ package com.sleepydesign.net
 			}
 			
 			return f;
+		}
+		
+		public static function cancel(loader:*=null):void
+		{
+			if(loaders.length==-1)
+				return;
+			
+			if(!loader)
+				loader = loaders[0].loader;
+				
+			if(loader is Loader)
+				loader = loader.contentLoaderInfo;
+			
+			for each(var _loaderVO:* in loaders)
+			{
+				if(_loaderVO && _loaderVO.loader == loader && _loaderVO.destroy is Function)
+					_loaderVO.destroy();
+			}
 		}
 	}
 }

@@ -23,7 +23,6 @@ package com.sleepydesign.site
     import flash.net.URLRequest;
     import flash.system.Capabilities;
     import flash.utils.Timer;
-    import SWFAddressEvent;
 
     /**
      * Dispatched when <code>SWFAddress</code> initializes.

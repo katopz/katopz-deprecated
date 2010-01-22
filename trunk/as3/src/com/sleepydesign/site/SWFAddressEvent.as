@@ -15,7 +15,6 @@ package com.sleepydesign.site
 {
 
     import flash.events.Event;
-    import SWFAddress;
     
     /**
      * Event class for SWFAddress.
