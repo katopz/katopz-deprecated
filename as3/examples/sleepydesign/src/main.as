@@ -29,13 +29,14 @@ package
 			{
 				if (event.type != "complete")
 					return;
-				create(_xml = event.target.data);
+				createSite(_xml = event.target.data);
 			});
 		}
 
-		private function create(xml:XML):void
+		private function createSite(xml:XML):void
 		{
 			var _siteTool:SiteTool = new SiteTool(this, xml);
+			
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
 			
 			var _tree:Tree = new Tree(xml, true, true, true);
