@@ -42,7 +42,6 @@ package
 			if (event.type != "complete")
 				return;
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "searchForm");
-			FormTool.useDebug = true;
 			_form = new FormTool(searchClip, _xml, formHandler);
 			_form.returnType = URLVariables;
 			

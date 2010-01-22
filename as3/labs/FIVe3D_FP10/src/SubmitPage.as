@@ -68,7 +68,6 @@ package
 			if (event.type != "complete")
 				return;
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "submitForm");
-			FormTool.useDebug = true;
 			_form = new FormTool(formClip, _xml, formHandler);
 			_form.returnType = URLVariables;
 		}
