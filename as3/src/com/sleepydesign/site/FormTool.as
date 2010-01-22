@@ -32,18 +32,18 @@ package com.sleepydesign.site
 
 		private var _items:Dictionary;
 
-		public var action:String;
-		public var method:String = "GET";
+		private var _onInvalidCommand:String;
+		private var _onIncompleteCommand:String;
 
-		private var onInvalidCommand:String;
-		private var onIncompleteCommand:String;
+		private var _alertText:TextField;
 
 		public var returnType:* = URLVariables;
 
 		public static var useDebug:Boolean = false;
-		public var isSubmit:Boolean = true;
 
-		private var alertText:TextField;
+		public var isSubmit:Boolean = true;
+		public var action:String;
+		public var method:String = "GET";
 
 		public function FormTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
@@ -54,68 +54,68 @@ package com.sleepydesign.site
 			_xml = xml;
 			action = xml.@action;
 			method = xml.@method;
-			onInvalidCommand = String(xml.@onInvalid);
-			onIncompleteCommand = String(xml.@onIncomplete);
-
+			
 			_eventHandler = eventHandler || trace;
+			
+			_onInvalidCommand = String(xml.@onInvalid);
+			_onIncompleteCommand = String(xml.@onIncomplete);
 
 			_items = new Dictionary(true);
 
-			var xmlList:XMLList = xml.children();
+			var _xmlList:XMLList = xml.children();
+			var _xmlList_length:int = _xmlList.length();
 
-			for (var i:uint = 0; i < xmlList.length(); i++)
+			for (var i:uint = 0; i < _xmlList_length; i++)
 			{
-				var name:String = String(xmlList[i].name()).toLowerCase();
-				var itemXML:XML = xmlList[i];
-				var _containerID:String;
-				// use src as id
-				_containerID = StringUtil.getDefaultIfNull(itemXML.@src, String(itemXML.@id));
+				var _itemXML:XML = _xmlList[i];
+				var _name:String = String(_itemXML.name()).toLowerCase();
+				var _containerID:String = StringUtil.getDefaultIfNull(_itemXML.@src, String(_itemXML.@id));
 
 				if (useDebug)
-					trace("   + " + name + "\t: " + _containerID);
+					trace("   + " + _name + "\t: " + _containerID);
 
 				var _textField:TextField;
 				var item:InputText;
 
-				switch (name)
+				switch (_name)
 				{
 					case "textfield":
 						_textField = _container.getChildByName(_containerID) as TextField;
-						if (String(itemXML.@type) == "alert")
-							alertText = _textField;
+						if (String(_itemXML.@type) == "alert")
+							_alertText = _textField;
 						break;
 					case "textinput":
 						_textField = _container.getChildByName(_containerID) as TextField;
 						item = new InputText(_textField.text, _textField);
 						if (item)
 						{
-							item.defaultText = (String(itemXML.@label) != "") ? String(itemXML.@label) : item.text;
-							item.defaultText = (String(itemXML.text()) != "") ? String(itemXML.text()) : item.defaultText;
+							item.defaultText = (String(_itemXML.@label) != "") ? String(_itemXML.@label) : item.text;
+							item.defaultText = (String(_itemXML.text()) != "") ? String(_itemXML.text()) : item.defaultText;
 							item.text = item.defaultText;
 
-							item.text = (String(itemXML.@value) != "") ? String(itemXML.@value) : item.text;
+							item.text = (String(_itemXML.@value) != "") ? String(_itemXML.@value) : item.text;
 
-							item.id = String(itemXML.@id);
-							item.isRequired = Boolean(String(itemXML.@required) == "true");
-							item.disable = Boolean(String(itemXML.@disable) == "true");
-							item.type = String(itemXML.@type);
+							item.id = String(_itemXML.@id);
+							item.isRequired = Boolean(String(_itemXML.@required) == "true");
+							item.disable = Boolean(String(_itemXML.@disable) == "true");
+							item.type = String(_itemXML.@type);
 
-							item.isReset = Boolean(String(itemXML.@reset) == "true");
+							item.isReset = Boolean(String(_itemXML.@reset) == "true");
 
-							item.maxChars = !StringUtil.isNull(itemXML.@maxlength) ? int(itemXML.@maxlength) : 0;
-							item.restrict = !StringUtil.isNull(itemXML.@restrict) ? String(itemXML.@restrict) : null;
+							item.maxChars = !StringUtil.isNull(_itemXML.@maxlength) ? int(_itemXML.@maxlength) : 0;
+							item.restrict = !StringUtil.isNull(_itemXML.@restrict) ? String(_itemXML.@restrict) : null;
 
 							item.label.removeEventListener(FocusEvent.FOCUS_IN, focusListener);
 							item.label.addEventListener(FocusEvent.FOCUS_IN, focusListener);
 
 							//reg
-							_items[String(itemXML.@id)] = item;
+							_items[String(_itemXML.@id)] = item;
 						}
 						break;
 					case "button":
 						var button:SimpleButton = SimpleButton(_container.getChildByName(_containerID));
 
-						switch (String(itemXML.@type))
+						switch (String(_itemXML.@type))
 					{
 						case "save":
 							isSubmit = false;
@@ -125,7 +125,7 @@ package com.sleepydesign.site
 							break;
 					}
 
-						button.visible = (String(itemXML.@visible) != "false");
+						button.visible = (String(_itemXML.@visible) != "false");
 						break;
 				}
 			}
@@ -302,8 +302,8 @@ package com.sleepydesign.site
 
 		public function alert(msg:String):void
 		{
-			if (alertText)
-				alertText.htmlText = msg;
+			if (_alertText)
+				_alertText.htmlText = msg;
 		}
 
 		private function showIncomplete(items:Array):void
@@ -311,8 +311,8 @@ package com.sleepydesign.site
 			if (useDebug)
 				trace(" ! Incomplete");
 
-			if (onIncompleteCommand)
-				SystemUtil.doCommand(onIncompleteCommand, this);
+			if (_onIncompleteCommand)
+				SystemUtil.doCommand(_onIncompleteCommand, this);
 
 			var _formEvent:FormEvent = new FormEvent(FormEvent.INCOMPLETE, {items: items});
 			dispatchEvent(_formEvent);
@@ -325,8 +325,8 @@ package com.sleepydesign.site
 			if (useDebug)
 				trace(" ! Invalid");
 
-			if (onInvalidCommand)
-				SystemUtil.doCommand(StringUtil.replace(onInvalidCommand, "$invalid_list", items.join(",")), this);
+			if (_onInvalidCommand)
+				SystemUtil.doCommand(StringUtil.replace(_onInvalidCommand, "$invalid_list", items.join(",")), this);
 
 			var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: items});
 			dispatchEvent(_formEvent);
@@ -403,15 +403,22 @@ package com.sleepydesign.site
 			_eventHandler(event);
 		}
 
-		// ____________________________________________ Gabage Collector ____________________________________________
+		// ____________________________________________ Destroy ____________________________________________
 
 		override public function destroy():void
 		{
 			super.destroy();
 
-			_loader = null;
+			_container = null;
+			_xml = null;
 			_eventHandler = null;
+
+			_loader = null;
+			_data = null;
+
 			_items = null;
+
+			_alertText = null;
 		}
 	}
 }

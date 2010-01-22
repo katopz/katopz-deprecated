@@ -6,7 +6,7 @@ package com.sleepydesign.site
 
 	import flash.display.DisplayObjectContainer;
 
-	public class Site extends RemovableEventDispatcher implements IDestroyable
+	public class SiteTool extends RemovableEventDispatcher implements IDestroyable
 	{
 		private var _container:DisplayObjectContainer;
 		private var _xml:XML;
@@ -17,7 +17,7 @@ package com.sleepydesign.site
 
 		// ____________________________________________ Create ____________________________________________
 
-		public function Site(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
+		public function SiteTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
 			_container = container;
 			_xml = xml;
@@ -27,11 +27,12 @@ package com.sleepydesign.site
 				trace("\n / [Site] ------------------------------- ");
 
 			var _xmlList:XMLList = _xml.children();
+			var _xmlList_length:int = _xmlList.length();
 
-			for (var i:uint = 0; i < _xmlList.length(); i++)
+			for (var i:uint = 0; i < _xmlList_length; i++)
 			{
-				var _name:String = String(_xmlList[i].name()).toLowerCase();
 				var _itemXML:XML = _xmlList[i];
+				var _name:String = String(_itemXML.name()).toLowerCase();
 				var _containerID:String = StringUtil.getDefaultIfNull(_itemXML.@src, String(_itemXML.@id));
 
 				if (useDebug)
@@ -40,7 +41,7 @@ package com.sleepydesign.site
 				switch (_name)
 				{
 					case "page":
-
+						
 						break;
 				}
 			}
