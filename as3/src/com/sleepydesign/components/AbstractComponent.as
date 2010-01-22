@@ -7,8 +7,8 @@ package com.sleepydesign.components
 	
 	public class AbstractComponent extends SDSprite
 	{
-		protected var _width:Number = 0;
-		protected var _height:Number = 0;
+		protected var _width:Number = DefaultSkin.SIZE;
+		protected var _height:Number = DefaultSkin.SIZE;
 		
 		public function AbstractComponent():void
 		{
