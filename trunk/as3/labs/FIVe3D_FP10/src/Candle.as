@@ -2,7 +2,7 @@ package
 {
 	import flash.display.BitmapData;
 	
-	import net.badimon.five3D.display.Sprite2D;
+	import net.badimon.five3D.display.*;
 	
 	public final class Candle
 	{
@@ -12,6 +12,7 @@ package
 		
 		public var visible:Boolean = true;
 		public var sprite2D:Sprite2D;
+		public var particle2D:Particle2D;
 		
 		public var currentFrame:uint = 1;
 		public var totalFrames:uint = 1;

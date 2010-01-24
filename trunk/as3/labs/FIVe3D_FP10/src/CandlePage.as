@@ -32,28 +32,10 @@ package
 
 	/*
 	   TODO:
-	   /1. create fake dot data array (1000 x 1000 = 1,000,000)
-	   /2. read data and write to map as set pixel (10,000-100,000)
-	   /3. add view controller move/pan/rotate
-	   /4. add click to view msg (getPixel)
-	   /5. create candle with perlin noise flame (BitmapSprite Clip?)
-	   /6. add button and move to prefer angle view for place candle
-	   /7. add dialog to get user input (name, msg)
-	   /8. send data to server (time, x, y, name, msg)
-	   /9. add blur/glow effect
-10. add LOD setpixel <-> copypixel
-	   /11. add gradient mask
-	   /12. continue load queue 1,000 per request
-	   /13. doing data proxy, get/set while send
-	   /14. particle clipping
-	   
-	   -1. move cam to other angle while idle
-	   2. กรอกข้อความก่อนแล้วค่อยปักเทียน
-	   3. add gp while put candle
-	   4. autosize and move top-bottom right
 	
 	 */
-	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
+	//[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
+	[SWF(width="1132", height="654", frameRate="30", backgroundColor="#000000")]
 	public class CandlePage extends Five3DTemplate
 	{
 		// const
@@ -178,18 +160,18 @@ package
 			draw();
 			
 			// resize
-			stage.addEventListener(Event.RESIZE, onResize);
+			root.stage.addEventListener(Event.RESIZE, onResize);
 		}
 		
 		private function draw():void
 		{
 			trace(" ! draw : " + _stageWidth, _stageHeight);
 			//pos
-			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
-			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
+			var _x0:int = int((_stageWidth-root.stage.stageWidth)/2);
+			var _y0:int = int((_stageHeight-root.stage.stageHeight)/2);
 			
-			_candleButton.x = _x0 + stage.stageWidth - 100;
-			_candleButton.y = _y0 + stage.stageHeight - 200;
+			_candleButton.x = _x0 + root.stage.stageWidth - 100;
+			_candleButton.y = _y0 + root.stage.stageHeight - 200;
 			
 			if(submitPage)
 			{
@@ -360,10 +342,6 @@ package
 			_ballonCanvas3D.singleSided = true;
 			_ballonCanvas3D.mouseEnabled = false;
 
-			_candleCanvas3D = new Sprite3D();
-			_candleCanvas3D.singleSided = true;
-			_candleCanvas3D.mouseEnabled = false;
-			
 			_mapCanvas3D = new Sprite3D();
 			_mapCanvas3D.singleSided = true;
 			_mapCanvas3D.mouseEnabled = false;
@@ -490,6 +468,7 @@ package
 		{
 			trace(" ! Status : " + value);
 			Mouse.show();
+			_candleButton.mouseEnabled = true;
 			
 			_status = value;
 			switch (_status)
@@ -514,12 +493,13 @@ package
 					
 					// wait for drag, explore
 					var onExplore:Function;
-					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExplore = function():void
+					var _stage:Stage = root.stage;
+					root.stage.addEventListener(MouseEvent.MOUSE_DOWN, onExplore = function():void
 					{
 						if(_status=="search" || _status=="input")
 							return;
 						
-						stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExplore);
+						_stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExplore);
 						
 						// move cam to defined position
 						TweenLite.to(_mapCanvas3D, 1, {rotationZ: 0});
@@ -540,7 +520,7 @@ package
 					break;
 				case "explore":
 					// click to view
-					stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
+					root.stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					
 					// wait for candle click
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
@@ -571,12 +551,13 @@ package
 					_candleClip.startDrag(true);
 
 					// wait for drop
-					stage.addEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
+					root.stage.addEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					break;
 				case "drop":
 					// drop
+					_candleClip.removeChild(_markerClip);
 					_candleClip.stopDrag();
-					stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
+					root.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					
 					// get id
 					var _id:String = new Date().valueOf() as String;
@@ -592,7 +573,13 @@ package
 						TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
 						status = "view";
 					});
-					
+					submitPage.addEventListener(Event.CANCEL, function(event:Event):void
+					{
+						mouseEnabled = true;
+						TweenLite.to(_candleButton, 0.25, {autoAlpha: 1});
+						status = "view";
+					});
+
 					// submit
 					DataProxy.addData("$CANDLE_TIME", new Date().valueOf());
 					DataProxy.addData("$CANDLE_X", _dropPoint.x);
@@ -604,7 +591,7 @@ package
 					/*
 						// drop
 						_candleClip.stopDrag();
-						stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
+						root.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 						
 						TweenLite.to(_candleClip, 0.25, {autoAlpha: 0, onComplete: function():void
 						{
@@ -620,6 +607,8 @@ package
 					*/
 					break;
 				case "input":
+					_candleButton.mouseEnabled = false;
+				
 					// wait for server response
 					LoaderUtil.load("SubmitPage.swf", function(event:Event):void
 					{
@@ -736,7 +725,7 @@ package
 			_sprite2D.graphics.endFill();
 			
 			_lightClip = new LightClip as MovieClip;
-			//_lightClip.y = -17;
+			_lightClip.y = -17;
 			_lightClip.gotoAndPlay(int(Math.random()*_lightClip.totalFrames));
 			_lightClip.cacheAsBitmap = true;
 			_lightClip.mouseEnabled = false;
