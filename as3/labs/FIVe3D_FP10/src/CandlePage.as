@@ -85,6 +85,10 @@ package
 		private var MarkerClip:Class;
 		private var _markerClip:Sprite = new MarkerClip as Sprite;
 		
+		[Embed(source="assets/ThaiMap.swf",symbol="MapIconClip")]
+		private var MapIconClip:Class;
+		private var _mapIconClip:Sprite = new MapIconClip() as Sprite;
+		
 		// loader
 		private var _loader:Preloader;
 
@@ -120,6 +124,8 @@ package
 		
 		// modal
 		private var submitPage:SDSprite;
+		private var searchPage:SDSprite;
+		private var _mapPage:Five3DTemplate;
 		
 		override protected function onInit():void
 		{
@@ -165,13 +171,16 @@ package
 		
 		private function draw():void
 		{
-			trace(" ! draw : " + _stageWidth, _stageHeight);
+			//trace(" ! draw : " + _stageWidth, _stageHeight);
 			//pos
 			var _x0:int = int((_stageWidth-root.stage.stageWidth)/2);
 			var _y0:int = int((_stageHeight-root.stage.stageHeight)/2);
 			
 			_candleButton.x = _x0 + root.stage.stageWidth - 100;
 			_candleButton.y = _y0 + root.stage.stageHeight - 200;
+			
+			_mapIconClip.x = _x0 + root.stage.stageWidth - _mapIconClip.width - 20; 
+			_mapIconClip.y = _y0 + 20; 
 			
 			if(submitPage)
 			{
@@ -186,8 +195,6 @@ package
 			draw();
 		}
 		
-		private var searchPage:SDSprite;
-
 		private function getData(uri:String, isReload:Boolean=false):void
 		{
 			trace(" ! getData : " + uri);
@@ -375,8 +382,33 @@ package
 			addChild(_foreGroundClip);
 			*/
 			
+			addChild(_mapIconClip);
+			_mapIconClip.useHandCursor = true;
+			_mapIconClip.buttonMode = true;
+			_mapIconClip.addEventListener(MouseEvent.CLICK, onMiniMapClick);
+			
 			addChild(stats);
 			addChild(debugText);
+		}
+		
+		private function onMiniMapClick(event:MouseEvent):void
+		{
+			if(Map.currentMapID != event.target.name)
+			{
+				Map.currentMapID = event.target.name;
+				hide();
+				TweenLite.to(_mapPage, 0.5, {autoAlpha:1, onComplete:function():void{
+					_mapPage.start();
+				}});
+			}else{
+				if(_mapPage)
+				{
+					hide();
+					TweenLite.to(_mapPage, 0.5, {autoAlpha:1, onComplete:function():void{
+						_mapPage.start();
+					}});
+				}
+			}
 		}
 		
 		private function setupView():void
@@ -392,12 +424,14 @@ package
 
 		public function show():void
 		{
-			TweenLite.to(this, 0.5, {autoAlpha: 1});
+			TweenLite.to(_scene, 0.5, {autoAlpha: 1});
+			start();
 		}
 
 		public function hide():void
 		{
-			TweenLite.to(this, 0.5, {autoAlpha: 0});
+			TweenLite.to(_scene, 0.5, {autoAlpha: 0});
+			stop();
 		}
 
 		private function setupUI():void
@@ -485,6 +519,20 @@ package
 						TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
 						status = "idle";
 					}});
+					
+					//load sub map
+					LoaderUtil.load("MapPage.swf", function(event:Event):void
+					{
+						if(event.type=="complete")
+						{
+							_mapPage = event.target["content"] as Five3DTemplate;
+							_mapPage.visible = false;
+							_mapPage.alpha = 0;
+							_mapPage.stop();
+							addChild(_mapPage);
+						}
+					});
+					
 					break;
 				case "idle":
 					// go default angle
@@ -607,6 +655,16 @@ package
 					*/
 					break;
 				case "input":
+					if(_mapPage)
+					{
+						TweenLite.to(_mapPage,0.5, {autoAlpha: 0, onComplete: function():void
+						{
+							_mapPage.stop();
+							
+						}});
+						TweenLite.to(_scene,0.5, {autoAlpha:1});
+					}
+				
 					_candleButton.mouseEnabled = false;
 				
 					// wait for server response
@@ -842,6 +900,8 @@ package
 		
 		private function onDrag(event:MouseUIEvent):void
 		{
+			if(!_scene.visible)return;
+			
 			if(_status=="search" || _status=="input")
 				return;
 							
@@ -857,6 +917,8 @@ package
 
 		private function onWheel(event:MouseEvent):void
 		{
+			if(!_scene.visible)return;
+			
 			if(_status=="explore" || _status=="drag")
 			{
 				var _x:Number = _canvas3D.x;

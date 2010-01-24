@@ -8,34 +8,31 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	
 	import net.badimon.five3D.display.Bitmap3D;
 	import net.badimon.five3D.display.Sprite3D;
 	import net.badimon.five3D.templates.Five3DTemplate;
+	
 	[SWF(width="1132", height="654", frameRate="30", backgroundColor="#000000")]
 	public class MapPage extends Five3DTemplate
 	{
-		/*
-		// assets
-		[Embed(source="assets/ThaiMap.swf",symbol="ThaiMap")]
-		private static var ThaiMapSWF:Class;
-		private static var _mapSprite:Sprite = new ThaiMapSWF() as Sprite;
-		*/
-		
 		private var _canvas3D:Sprite3D;
 		private var _mapCanvas3D:Sprite3D;
 		
 		private var _mapBitmapData:BitmapData;
 		private var _mapBitmap3D:Bitmap3D;
 		
-		//private var _trafficBitmapData:BitmapData;
 		private var _trafficBitmap3D:Bitmap3D;
 		
 		override protected function onInit():void
 		{
-			setupMap3D();
+			debug = false;
+			
+			// setup canvas
+			_trafficCanvas = new Sprite();
 			
 			_canvas3D = new Sprite3D();
 			_scene.addChild(_canvas3D);
@@ -51,48 +48,27 @@ package
 			_mapCanvas3D.singleSided = true;
 			_mapCanvas3D.mouseEnabled = false;
 			
-			_mapBitmapData = new BitmapData(300, 370, true, 0x00000000);
-			
-			_mapBitmap3D = new Bitmap3D(_roadBitmapData, true);
-			_mapBitmap3D.x = -_mapBitmapData.width/2;
-			_mapBitmap3D.y = -_mapBitmapData.height/2;
-			_mapBitmap3D.singleSided = true;
-			_mapCanvas3D.addChild(_mapBitmap3D);
-			
-			_trafficBitmapData = new BitmapData(300, 370, true, 0x00000000);
-			
-			_trafficBitmap3D = new Bitmap3D(_trafficBitmapData, true);
-			_trafficBitmap3D.x = -_trafficBitmapData.width/2;
-			_trafficBitmap3D.y = -_trafficBitmapData.height/2;
-			_trafficBitmap3D.z = -10;
-			_trafficBitmap3D.singleSided = true;
-			_mapCanvas3D.addChild(_trafficBitmap3D);
-			
 			_canvas3D.addChild(_mapCanvas3D);
 			
-			var _ccMouse:MouseUI = new MouseUI(stage);
-			_ccMouse.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
+			if(!_mouseUI)
+			{
+				_mouseUI = new MouseUI(stage);
+				_mouseUI.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
+			}
 		}
 		
 		private function onDrag(event:MouseUIEvent):void
 		{
-			_mapCanvas3D.rotationZ -= event.data.dx;
+			_mapCanvas3D.rotationZ -= event.data.dx/4;
 		}
 		
+		private var _mouseUI:MouseUI;
 		private var _point0:Point = new Point();
-		override protected function onPreRender():void
-		{
-			if(!MouseUI.isMouseDown)
-				_mapCanvas3D.rotationZ+=0.25;
-		}
 		
-		// data
-		[Embed(source="assets/n.txt", mimeType="application/octet-stream")]
-		private var ThaiSVG:Class;
 		private var pathTagRE:RegExp = /(<path.*?\/>)/sig;
 		private var pathArray:Array;
 		private var svgData:String;
-		private var paths:Array = [];
+		private var _currentMapID:String;
 		
 		// layer
 		private var canvas:Sprite;
@@ -108,74 +84,104 @@ package
 		private var _trafficCanvas:Sprite;
 		
 		// color
-		//private var color:Number = 0xCCFFCC00;
-		private var color:Number = 0xFF333333;
+		private var color:Number = 0xCCCCAA00;
 		
 		public function setupMap3D():void
 		{
-			// setup canvas
-			_roadBitmapData = new BitmapData(300,370, true,0x00000000);
-			//_roadBitmap = new Bitmap(_roadBitmapData);
-			//addChild(_roadBitmap);
+			_mapBitmapData = new BitmapData(300, 370, true, 0x00000000);
 			
-			_trafficBitmapData = new BitmapData(300,370, true,0x00000000);
-			//_trafficBitmap = new Bitmap(_trafficBitmapData);
-			//addChild(_trafficBitmap);
+			if(_mapBitmap3D)
+				_mapCanvas3D.removeChild(_mapBitmap3D);
+				
+			_mapBitmap3D = new Bitmap3D(_roadBitmapData, true);
+			_mapBitmap3D.x = -_mapBitmapData.width/2;
+			_mapBitmap3D.y = -_mapBitmapData.height/2;
+			_mapBitmap3D.singleSided = true;
+			_mapCanvas3D.addChild(_mapBitmap3D);
 			
-			_trafficCanvas = new Sprite();
-			//addChild(_trafficCanvas);
+			_trafficBitmapData = new BitmapData(300, 370, true, 0x00000000);
 			
-			// setup data
-			var _data:ByteArray = new ThaiSVG() as ByteArray;
-			svgData = _data.readUTFBytes(_data.length); 
+			if(_trafficBitmap3D)
+				_mapCanvas3D.removeChild(_trafficBitmap3D);
+				
+			_trafficBitmap3D = new Bitmap3D(_trafficBitmapData, true);
+			_trafficBitmap3D.x = -_trafficBitmapData.width/2;
+			_trafficBitmap3D.y = -_trafficBitmapData.height/2;
+			_trafficBitmap3D.z = -3;
+			_trafficBitmap3D.singleSided = true;
+			_mapCanvas3D.addChild(_trafficBitmap3D);
+		}
+				
+		override protected function onPreRender():void
+		{
+			//Map.currentMapID="_m"
+			if(Map.currentMapID && _currentMapID!= Map.currentMapID)
+			{
+				_currentMapID= Map.currentMapID;
+				
+				var _size:* = MapData[Map.currentMapID+"_size"];
+				_roadBitmapData = new BitmapData(_size.width,_size.height, true,0x00000000);
+				_trafficBitmapData = new BitmapData(_roadBitmapData.width,_roadBitmapData.height, true,0x00000000);
+				
+				setupMap3D();
+				
+				// setup data
+				var _data:ByteArray = MapData[Map.currentMapID];
+				_data.position = 0;
+				svgData = _data.readUTFBytes(_data.length);
+				
+				// storage
+				_vertices = new Vector.<Vertex2D>();
+				pathIndexs = [0];
+				currentIndexs = [0];
+				pixelIndex = 0;
+				pathIndex = 0;
+				
+				// process
+				removeEventListener(Event.ENTER_FRAME, processData);
+				removeEventListener(Event.ENTER_FRAME, drawPath);
+				
+				addEventListener(Event.ENTER_FRAME, processData);
+				addEventListener(Event.ENTER_FRAME, drawPath);
+			}
 			
-			// process
-			_vertices = new Vector.<Vertex2D>();
-			addEventListener(Event.ENTER_FRAME, processData);
-			//addEventListener(Event.ENTER_FRAME, drawData);
-			addEventListener(Event.ENTER_FRAME, drawPath);
-			//addChild(new Stats());
+			if(!MouseUI.isMouseDown)
+				_mapCanvas3D.rotationZ+=0.25;
 		}
 		
 		private function processData(e:Event):void
 		{
 			pathArray = pathTagRE.exec(svgData);
-			if (pathArray)// && pathIndexs.length<10)
+			if (pathArray)
 			{
 				var _path:SvgPath = new SvgPath(pathArray[1]);
 				setPixelSVG(_path, _roadBitmapData);
-				paths.push(_path);
+				
 				// cue point
 				pathIndexs.push(_vertices.length);
 				currentIndexs.push(_vertices.length);
 			}
 			else
 			{
-				removeEventListener(Event.ENTER_FRAME, processData);
-				//removeEventListener(Event.ENTER_FRAME, drawData);
-				_vertices.fixed = true;
-			}
-		}
-		
-		private function drawData(e:Event):void
-		{
-			if(i<_vertices.length)
-			{
-				setPixel(10);
-				i+=10;
-			}else{
-				removeEventListener(Event.ENTER_FRAME, drawData);
+				if(_vertices.length>0)
+				{
+					removeEventListener(Event.ENTER_FRAME, processData);
+					_vertices.fixed = true;
+				}
 			}
 		}
 		
 		private function drawPath(e:Event):void
 		{
+			if(_vertices.length<=0)return;
+			
 			var _size:int = 20*Math.random()+20;
 			
-			if(i<_vertices.length)
+			if(pathIndex<_vertices.length)
 			{
 				setPixel(_size);
-				i+=_size;
+				pathIndex+=_size;
+				pixelIndex+=_size;
 			}
 			
 			var _vertex2D:Vertex2D;
@@ -187,14 +193,13 @@ package
 			_trafficCanvas.graphics.lineStyle(1, 0xFFFFFF);
 			var _pathIndexs_length:int = pathIndexs.length-1;
 			var _index:int;
-			//var _seekIndex:int = (_pathIndexs_length-1>0)?0:_pathIndexs_length-1;
 			
 			for (var k:int=0; k < _pathIndexs_length; k++)
 			{
 				var _beg:int = pathIndexs[k]+currentIndexs[k];
 				
-				_size = (pathIndexs[k]/100)*Math.random()+10;
-				_size = (_size>20)?20:_size;
+				_size = ((pathIndexs[k+1]-pathIndexs[k])/20)*Math.random()+10;
+				_size = (_size>40)?40:_size;
 				
 				//draw _size pixel
 				_length = _beg+_size;
@@ -212,6 +217,7 @@ package
 					do
 					{
 						_index = _beg+_step;
+
 						if(_index<_length)
 						{
 							_vertex2D = _vertices[_index];
@@ -239,9 +245,9 @@ package
 			var _vertex2D:Vertex2D;
 			var _length:int = _vertices.length;
 			do{
-				if(i+step<_length)
+				if(pixelIndex+step<_length)
 				{
-					_vertex2D =_vertices[i+step];
+					_vertex2D =_vertices[pixelIndex+step];
 					_roadBitmapData.setPixel32(_vertex2D.x, _vertex2D.y, color);
 				}
 			}while(step-->0);
@@ -249,7 +255,11 @@ package
 			_roadBitmapData.unlock();
 		}
 		
-		private var i:int = 0;
+		private var _matrix2:Matrix = new Matrix(2,0,0,2,0,0);
+		
+		private var pixelIndex:int = 0;
+		private var pathIndex:int = 0;
+		
 		private var j:int = 0;
 		
 		private var pathIndexs:Array = [0];
