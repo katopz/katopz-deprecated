@@ -6,6 +6,7 @@ package com.sleepydesign.skins
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.events.Event;	
 	
 	public class Preloader extends SDSprite
@@ -16,18 +17,21 @@ package com.sleepydesign.skins
 		private var _bg:Sprite;
 		private var _containter:DisplayObjectContainer;
 		
+		private var _stage:Stage;
+		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
 		public function Preloader(containter:DisplayObjectContainer, width:Number = NaN, height:Number = NaN, type:String = DEFAULT)
 		{
 			_containter = containter;
+			_stage = containter.stage;
 			
 			// auto size
-			if(containter.stage && !width && !height)
+			if(_stage && !width && !height)
 			{
-				_stageWidth = width = containter.stage.stageWidth;
-				_stageHeight = height = containter.stage.stageHeight;
+				_stageWidth = width = _stage.stageWidth;
+				_stageHeight = height = _stage.stageHeight;
 			}
 			containter.addChild(this);
 			
@@ -62,18 +66,18 @@ package com.sleepydesign.skins
 			};
 			
 			// resize
-			containter.stage.addEventListener(Event.RESIZE, onResize);
+			_stage.addEventListener(Event.RESIZE, onResize);
 			draw();
 		}
 		
 		private function draw():void
 		{
-			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
-			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
+			var _x0:int = int((_stageWidth-_stage.stageWidth)/2);
+			var _y0:int = int((_stageHeight-_stage.stageHeight)/2);
 			
 			_bg.graphics.clear();
 			_bg.graphics.beginFill(0x000000, 0.75);
-			_bg.graphics.drawRect(-stage.stageWidth/2, -stage.stageHeight/2, stage.stageWidth, stage.stageHeight);
+			_bg.graphics.drawRect(-_stage.stageWidth/2, -_stage.stageHeight/2, _stage.stageWidth, _stage.stageHeight);
 			_bg.graphics.endFill();
 			//_bg.x = _x0;
 			//_bg.y = _y0;
@@ -86,7 +90,7 @@ package com.sleepydesign.skins
 			
 		override public function destroy():void
 		{
-			_containter.stage.removeEventListener(Event.RESIZE, onResize);
+			_stage.removeEventListener(Event.RESIZE, onResize);
 			
 			if(_loader)
 				_loader.parent.removeChild(_loader);
