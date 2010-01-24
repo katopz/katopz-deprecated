@@ -8,6 +8,7 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
@@ -41,7 +42,7 @@ package
 			
 			_canvas3D.x = 0;
 			_canvas3D.y = 0;
-			_canvas3D.z = -400;//830;
+			_canvas3D.z = -600;//830;
 			_canvas3D.rotationX = -60;
 			
 			_mapCanvas3D = new Sprite3D();
@@ -54,7 +55,31 @@ package
 			{
 				_mouseUI = new MouseUI(stage);
 				_mouseUI.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
+				_mouseUI.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			}
+		}
+		
+		private function onWheel(event:MouseEvent):void
+		{
+			if(!visible)return;
+			
+			var _x:Number = _canvas3D.x;
+			var _y:Number = _canvas3D.y;
+			var _z:Number = _canvas3D.z;
+	
+			//_y = _y + 5 * event.delta * Math.sin(60);
+			_z = _z + 5 * event.delta * Math.cos(60);
+			trace(_z);
+			
+			/*
+			if(_z<-200 && z>200)
+			{
+				_z = _canvas3D.z;
+				//_y = _canvas3D.y;
+			}
+			*/
+				
+			_canvas3D.setPosition(_x, _y, _z);
 		}
 		
 		private function onDrag(event:MouseUIEvent):void

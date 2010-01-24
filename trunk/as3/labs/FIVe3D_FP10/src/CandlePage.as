@@ -436,9 +436,9 @@ package
 
 		private function setupUI():void
 		{
-			var _ccMouse:MouseUI = new MouseUI(stage);
-			_ccMouse.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
-			_ccMouse.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
+			var _mouseUI:MouseUI = new MouseUI(stage);
+			_mouseUI.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
+			_mouseUI.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
 			_candleButton.buttonMode = true;
 			addChild(_candleButton);
@@ -516,7 +516,7 @@ package
 					TweenLite.to(this, 1, {autoAlpha: 1, onComplete: function():void
 					{
 						// go idle
-						TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+						//TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
 						status = "idle";
 					}});
 					
@@ -537,6 +537,7 @@ package
 				case "idle":
 					// go default angle
 					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
+					
 					setDirty();
 					
 					// wait for drag, explore
