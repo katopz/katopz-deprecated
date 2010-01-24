@@ -64,10 +64,14 @@ package com.sleepydesign.net
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loaderVO);
+	            if(_loaderVO)
+	            {
+	            	removeItem(loaders, _loaderVO);
 	            
-	            _loaderVO.destroy = null;
-	            _loaderVO.loader = null;
+	            	_loaderVO.destroy = null;
+	            	_loaderVO.loader = null;
+	            }
+	            
 	            _loaderVO = null;
 	            
 	            _loader = null;
@@ -106,10 +110,14 @@ package com.sleepydesign.net
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loaderVO);
+	            if(_loaderVO)
+	            {
+	            	removeItem(loaders, _loaderVO);
 	            
-	            _loaderVO.destroy = null;
-	            _loaderVO.loader = null;
+	            	_loaderVO.destroy = null;
+	            	_loaderVO.loader = null;
+	            }
+	            
 	            _loaderVO = null;
 	            
 	            _loader = null;
@@ -277,10 +285,14 @@ package com.sleepydesign.net
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loaderVO);
+	            if(_loaderVO)
+	            {
+	            	removeItem(loaders, _loaderVO);
 	            
-	            _loaderVO.destroy = null;
-	            _loaderVO.loader = null;
+	            	_loaderVO.destroy = null;
+	            	_loaderVO.loader = null;
+	            }
+	            
 	            _loaderVO = null;
 	            
 	            loader = null;
@@ -389,7 +401,7 @@ package com.sleepydesign.net
 		
 		public static function cancel(loader:*=null):void
 		{
-			if(loaders.length==-1)
+			if(loaders.length<=0)
 				return;
 			
 			if(!loader)

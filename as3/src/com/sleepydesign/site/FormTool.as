@@ -30,6 +30,11 @@ package com.sleepydesign.site
 
 		private var _loader:Object /*URLLoader, Loader*/;
 		private var _data:Object /*FormData*/;
+		
+		public function get data():*
+		{
+			return _data;
+		}
 
 		private var _items:Dictionary;
 
@@ -110,17 +115,17 @@ package com.sleepydesign.site
 						}
 						break;
 					case "button":
-						var button:SimpleButton = SimpleButton(_container.getChildByName(_containerID));
+						button = SimpleButton(_container.getChildByName(_containerID));
 
 						switch (String(_itemXML.@type))
-					{
-						case "save":
-							isSubmit = false;
-						case "submit":
-							button.removeEventListener(MouseEvent.CLICK, buttonHandler);
-							button.addEventListener(MouseEvent.CLICK, buttonHandler);
-							break;
-					}
+						{
+							case "save":
+								isSubmit = false;
+							case "submit":
+								button.removeEventListener(MouseEvent.CLICK, buttonHandler);
+								button.addEventListener(MouseEvent.CLICK, buttonHandler);
+								break;
+						}
 
 						button.visible = (String(_itemXML.@visible) != "false");
 						break;
@@ -128,6 +133,8 @@ package com.sleepydesign.site
 			}
 			DebugUtil.trace(" ------------------------------- [Form] /\n");
 		}
+		
+		private var button:SimpleButton;
 
 		// ____________________________________________ Field ____________________________________________
 
@@ -328,12 +335,15 @@ package com.sleepydesign.site
 
 		// ____________________________________________ Action ____________________________________________
 
-		public function submit():void
+		public function submit(data:Object=null):void
 		{
+			if(!_data)
+				_data = data;
+			
 			var url:String = action;
 
 			//external get data
-			if (!StringUtil.isNull(_xml.@get))
+			if (_xml && !StringUtil.isNull(_xml.@get))
 			{
 				var _externalGETData:URLVariables = DataProxy.getDataByVars(_xml.@get);
 				if (url.split("#")[0].indexOf("?") > -1)
@@ -341,7 +351,7 @@ package com.sleepydesign.site
 			}
 
 			//external post data
-			if (!StringUtil.isNull(_xml.@post))
+			if (_xml && !StringUtil.isNull(_xml.@post))
 			{
 				var _externalPOSTData:URLVariables = DataProxy.getDataByVars(_xml.@post);
 				_data = ObjectUtil.addValue(_data, _externalPOSTData);
@@ -353,7 +363,8 @@ package com.sleepydesign.site
 
 			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data);
 			dispatchEvent(_formEvent);
-			_eventHandler(_formEvent);
+			if(_eventHandler is Function)
+				_eventHandler(_formEvent);
 
 			if (isSubmit)
 			{
@@ -369,7 +380,8 @@ package com.sleepydesign.site
 
 				_formEvent = new FormEvent(FormEvent.SUBMIT, _data);
 				dispatchEvent(_formEvent);
-				_eventHandler(_formEvent);
+				if(_eventHandler is Function)
+					_eventHandler(_formEvent);
 			}
 		}
 
@@ -390,7 +402,8 @@ package com.sleepydesign.site
 			// form data event
 			//var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
 			dispatchEvent(event);
-			_eventHandler(event);
+			if(_eventHandler is Function)
+				_eventHandler(event);
 		}
 
 		// ____________________________________________ Destroy ____________________________________________
@@ -402,7 +415,11 @@ package com.sleepydesign.site
 			_container = null;
 			_xml = null;
 			_eventHandler = null;
+			
+			if(button)
+				button.removeEventListener(MouseEvent.CLICK, buttonHandler);
 
+			LoaderUtil.cancel(_loader);
 			_loader = null;
 			_data = null;
 
