@@ -60,7 +60,7 @@ package
 		{
 			var _x:int = 0;
 			var _y:int = 0;
-			
+			/*
 			//random start point
 			do{
 				_x = int(Math.random()*_mapBitmapData.width);
@@ -73,6 +73,7 @@ package
 				//if (_mapBitmapData.getPixel32(_candle.x, _candle.y) > 0)
 				_roadBitmapData.setPixel32(_x+Math.random()*2, _y++, 0xFFFFFFFF);
 			}while(i++<100)
+			*/
 			
 			_mapBitmapData.fillRect(_mapBitmapData.rect, 0x000000);
 			_mapBitmapData.copyPixels(_omapBitmapData, _omapBitmapData.rect, _point0,null,null,true);

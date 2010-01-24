@@ -131,11 +131,13 @@ package
 			_bitmapData.unlock();
 			
 			// effect
+			/*
 			_effectBitmapData.lock();
 			_effectBitmapData.copyPixels(_bitmapData, _bmpRectangle, _point0, null, null, true);
 			_effectBitmapData.applyFilter(_effectBitmapData, _bmpRectangle, _point0, _blurFilter);
 			_effectBitmapData.applyFilter(_effectBitmapData, _bmpRectangle, _point0, _colorMatrixFilter);
 			_effectBitmapData.unlock();
+			*/
 		}
 	}
 }

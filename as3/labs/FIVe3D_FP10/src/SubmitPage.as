@@ -11,10 +11,14 @@ package
 	import com.sleepydesign.utils.XMLUtil;
 	
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.net.URLVariables;
 
-	[SWF(width="1680",height="822",frameRate="30",backgroundColor="#000000")]
+	//[SWF(width="1680",height="822",frameRate="30",backgroundColor="#FFFFFF")]
+	[SWF(width="1132", height="654", frameRate="30", backgroundColor="#000000")]
 	public class SubmitPage extends SDSprite
 	{
 		//1000*600
@@ -24,6 +28,10 @@ package
 		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
+		
+		private var _bg:Sprite; 
+		
+		public static var data:Object; 
 
 		public function SubmitPage()
 		{
@@ -37,6 +45,9 @@ package
 			}
 			*/
 			
+			_bg = new Sprite();
+			addChild(_bg);
+			
 			EventManager.addEventListener(FormEvent.EXTERNAL_SUBMIT, formHandler);
 			
 			// asset
@@ -44,7 +55,7 @@ package
 			
 			//loader
 			if(!LoaderUtil.loaderClip)
-				LoaderUtil.loaderClip = new Preloader(this, 1680, 822);
+				LoaderUtil.loaderClip = new Preloader(this);
 
 			// get external config
 			LoaderUtil.loadXML("config.xml", onGetConfig);
@@ -54,14 +65,16 @@ package
 		
 		private function onStage(evnt:Event):void
 		{
-			_stageWidth = stage.stageWidth;
-			_stageHeight = stage.stageHeight;
+			_stageWidth = root.stage.stageWidth;
+			_stageHeight = root.stage.stageHeight;
 			
 			// resize
-			stage.addEventListener(Event.RESIZE, onResize);
+			root.stage.scaleMode = StageScaleMode.NO_SCALE;
+			root.stage.align = StageAlign.TOP_LEFT;
+			root.stage.addEventListener(Event.RESIZE, onResize);
 			draw();
 		}
-
+		
 		private function onGetConfig(event:Event):void
 		{
 			// wait until complete
@@ -70,6 +83,18 @@ package
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "submitForm");
 			_form = new FormTool(formClip, _xml, formHandler);
 			_form.returnType = URLVariables;
+			draw();
+			
+			formClip["closeButton"].addEventListener(MouseEvent.CLICK, onClose);
+		}
+		
+		private function onClose(event:MouseEvent):void
+		{
+			root.stage.removeEventListener(Event.RESIZE, onResize);
+			data = _form.data;
+			_form.destroy();
+			destroy();
+			dispatchEvent(new Event(Event.CANCEL));
 		}
 		
 		private var _form:FormTool;
@@ -85,6 +110,8 @@ package
 				DataProxy.addData("$CANDLE_EMAIL", FormEvent(event).data.email);
 				DataProxy.addData("$CANDLE_MSG", FormEvent(event).data.msg);
 				
+				data = FormEvent(event).data;
+				
 				TweenLite.to(this, 0.5, {autoAlpha: 0, onComplete: function():void
 				{
 					dispatchEvent(new Event(FormEvent.DATA_CHANGE));
@@ -93,11 +120,14 @@ package
 			else if(event.type == FormEvent.EXTERNAL_SUBMIT)
 			{
 				_form.isSubmit = true;
-				_form.submit();
+				_form.submit(data);
 			}
 			else if(event.type == Event.COMPLETE)
 			{
 				dispatchEvent(new Event(Event.CLOSE));
+				if(root.stage)
+					root.stage.removeEventListener(Event.RESIZE, onResize);
+				_form.destroy();
 				destroy();
 			}
 			
@@ -123,15 +153,23 @@ package
 		
 		private function draw():void
 		{
-			trace(" ! draw2 : " + stage.stageWidth, stage.stageHeight);
+			//trace(" ! draw2 : " + root.stage.stageWidth, root.stage.stageHeight);
 			//pos
-			var _x0:int = int((_stageWidth-stage.stageWidth)/2);
-			var _y0:int = int((_stageHeight-stage.stageHeight)/2);
+			var _x0:int = int((_stageWidth-root.stage.stageWidth)/2);
+			var _y0:int = int((_stageHeight-root.stage.stageHeight)/2);
 			
-			//x = -stage.stageWidth/2+_stageWidth/2;
-			//y = _y0;
-			x = _x0;//-1680/2;
-			y = _y0;
+			//x = _x0+root.stage.stageWidth/2-1057/2+50;
+			//y = _y0+root.stage.stageHeight/2-356/2;
+			formClip.x = _x0+root.stage.stageWidth/2-1057/2+45;
+			formClip.y = _y0+root.stage.stageHeight/2-356/2;
+			
+			_bg.x = _x0;
+			_bg.y = _y0;
+			
+			_bg.graphics.clear();
+			_bg.graphics.beginFill(0x000000, 0.75);
+			_bg.graphics.drawRect(-root.stage.stageWidth/2, -root.stage.stageHeight/2, root.stage.stageWidth+root.stage.stageWidth/2, root.stage.stageHeight+root.stage.stageHeight/2);
+			_bg.graphics.endFill();
 		}
 		
 		private function onResize(event:Event):void
