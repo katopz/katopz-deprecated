@@ -13,7 +13,7 @@ package com.sleepydesign.components
 	 * @author katopz
 	 * 
 	 */	
-	public class InputText extends AbstractComponent
+	public class TextInput extends AbstractComponent
 	{
 		public var id:String;
 		
@@ -36,11 +36,17 @@ package com.sleepydesign.components
 		public function get label():TextField{return _tf}
 		public function set label(value:TextField):void
 		{
-			addChildAt(value, 0);
-			create();
+			if(value)
+			{
+				addChildAt(value, 0);
+				create();
+			}else{
+				label.parent.removeChild(label);
+				_tf = null;
+			}
 		}
 		
-		public function InputText(text:String = "" , textField:TextField = null)
+		public function TextInput(text:String = "" , textField:TextField = null)
 		{
 			_text = this.defaultText = text;
 			
@@ -90,6 +96,16 @@ package com.sleepydesign.components
 			
 			_tf.addEventListener(Event.CHANGE, onChange);
 			
+		}
+		
+		override public function destroy():void
+		{
+			_tf.removeEventListener(Event.CHANGE, onChange);
+			if(_tf.parent)
+				_tf.parent.removeChild(_tf);
+			_tf = null;
+			
+			super.destroy();
 		}
 		
 		override public function draw():void

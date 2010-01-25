@@ -1,9 +1,10 @@
 package com.sleepydesign.site
 {
-	import com.sleepydesign.components.InputText;
+	import com.sleepydesign.components.TextInput;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.events.FormEvent;
+	import com.sleepydesign.events.ListenerManager;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
@@ -48,24 +49,29 @@ package com.sleepydesign.site
 		public var isSubmit:Boolean = true;
 		public var action:String;
 		public var method:String = "GET";
-
+		
 		public function FormTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
 			DebugUtil.trace("\n / [Form] ------------------------------- ");
 
 			_container = container;
 			_xml = xml;
-			action = xml.@action;
-			method = xml.@method;
-			
 			_eventHandler = eventHandler || trace;
 			
-			_onInvalidCommand = String(xml.@onInvalid);
-			_onIncompleteCommand = String(xml.@onIncomplete);
+			create();
+		}
+							
+		public function create():void
+		{
+			action = _xml.@action;
+			method = _xml.@method;
+			
+			_onInvalidCommand = String(_xml.@onInvalid);
+			_onIncompleteCommand = String(_xml.@onIncomplete);
 
 			_items = new Dictionary(true);
 
-			var _xmlList:XMLList = xml.children();
+			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
 
 			for (var i:uint = 0; i < _xmlList_length; i++)
@@ -77,7 +83,7 @@ package com.sleepydesign.site
 				DebugUtil.trace("   + " + _name + "\t: " + _containerID);
 
 				var _textField:TextField;
-				var item:InputText;
+				var item:TextInput;
 
 				switch (_name)
 				{
@@ -88,7 +94,7 @@ package com.sleepydesign.site
 						break;
 					case "textinput":
 						_textField = _container.getChildByName(_containerID) as TextField;
-						item = new InputText(_textField.text, _textField);
+						item = new TextInput(_textField.text, _textField);
 						if (item)
 						{
 							item.defaultText = (String(_itemXML.@label) != "") ? String(_itemXML.@label) : item.text;
@@ -115,7 +121,7 @@ package com.sleepydesign.site
 						}
 						break;
 					case "button":
-						button = SimpleButton(_container.getChildByName(_containerID));
+						var button:SimpleButton = SimpleButton(_container.getChildByName(_containerID));
 
 						switch (String(_itemXML.@type))
 						{
@@ -134,8 +140,6 @@ package com.sleepydesign.site
 			DebugUtil.trace(" ------------------------------- [Form] /\n");
 		}
 		
-		private var button:SimpleButton;
-
 		// ____________________________________________ Field ____________________________________________
 
 		private function focusListener(event:FocusEvent):void
@@ -149,14 +153,14 @@ package com.sleepydesign.site
 						item.text = "";
 
 					switch (item.parent.type)
-				{
-					case "password":
-						item.text = "";
-						item.displayAsPassword = true;
-						break;
-				}
+					{
+						case "password":
+							item.text = "";
+							item.displayAsPassword = true;
+							break;
+					}
 					item.parent.setText(item.text);
-					event.currentTarget.addEventListener(FocusEvent.FOCUS_OUT, focusListener);
+					item.addEventListener(FocusEvent.FOCUS_OUT, focusListener);
 					break;
 				case FocusEvent.FOCUS_OUT:
 
@@ -166,7 +170,7 @@ package com.sleepydesign.site
 						item.displayAsPassword = false;
 					}
 					item.parent.setText(item.text);
-					event.currentTarget.removeEventListener(FocusEvent.FOCUS_OUT, focusListener);
+					item.removeEventListener(FocusEvent.FOCUS_OUT, focusListener);
 					break;
 			}
 		}
@@ -410,22 +414,60 @@ package com.sleepydesign.site
 
 		override public function destroy():void
 		{
-			super.destroy();
+			var _xmlList:XMLList = _xml.children();
+			var _xmlList_length:int = _xmlList.length();
 
-			_container = null;
+			for (var i:uint = 0; i < _xmlList_length; i++)
+			{
+				var _itemXML:XML = _xmlList[i];
+				var _name:String = String(_itemXML.name()).toLowerCase();
+				var _containerID:String = StringUtil.getDefaultIfNull(_itemXML.@src, String(_itemXML.@id));
+
+				DebugUtil.trace("   - " + _name + "\t: " + _containerID);
+
+				var _textField:TextField;
+				var _item:TextInput;
+
+				switch (_name)
+				{
+					case "textfield":
+						_textField = _container.getChildByName(_containerID) as TextField;
+						_textField.parent.removeChild(_textField);
+						_alertText = null;
+						break;
+					case "textinput":
+						_textField = _container[_containerID] as TextField;
+						_textField.parent.removeChild(_textField);
+						_item = _items[String(_itemXML.@id)];
+						_item.label.removeEventListener(FocusEvent.FOCUS_IN, focusListener);
+						_item.label.removeEventListener(FocusEvent.FOCUS_OUT, focusListener);
+						_item.destroy();
+						_items[String(_itemXML.@id)] = null;
+						break;
+					case "button":
+						var button:SimpleButton = SimpleButton(_container.getChildByName(_containerID));
+						button.parent.removeChild(button);
+						button.removeEventListener(MouseEvent.CLICK, buttonHandler);
+						button = null;
+						break;
+				}
+			}
+			_textField = null;
+			_item = null;
+			
+			_items = null;
 			_xml = null;
+			_xmlList = null;
+			returnType = null;
+			
+			_container = null;
 			_eventHandler = null;
 			
-			if(button)
-				button.removeEventListener(MouseEvent.CLICK, buttonHandler);
-
 			LoaderUtil.cancel(_loader);
 			_loader = null;
 			_data = null;
-
-			_items = null;
-
-			_alertText = null;
+			
+			super.destroy();
 		}
 	}
 }

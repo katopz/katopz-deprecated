@@ -1,5 +1,7 @@
 package com.sleepydesign.net
 {
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -83,7 +85,7 @@ package com.sleepydesign.net
 			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
 			
 			// destroy
-			loaders.push({loader:_loader, destroy:_removeEventListeners});
+			loaders.push(_loaderVO);
 			
 			_loader.load(request);
 			
@@ -103,6 +105,7 @@ package com.sleepydesign.net
 			_loader.loadBytes(byteArray);
 			
 			// gc
+			var _loaderVO:Object = {loader:null, destroy:null};
 			var _removeEventListeners:Function = function():void
 			{
 			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
@@ -122,13 +125,11 @@ package com.sleepydesign.net
 	            
 	            _loader = null;
 			};
-			
-			var _loaderVO:Object = {loader:_loader, destroy:_removeEventListeners};
+			_loaderVO.loader = _loader;
+			_loaderVO.destroy = _removeEventListeners;
+			loaders.push(_loaderVO);
 			
 			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
-			
-			// destroy
-			loaders.push({loader:_loader, destroy:_removeEventListeners});
 			
 			return _loader;
 		}
@@ -139,14 +140,15 @@ package com.sleepydesign.net
 		 * @param eventHandler
 		 * @return URLLoader
 		 */		
-		public static function loadVars(uri:String, eventHandler:Function):URLLoader
+		public static function loadVars(uri:String, eventHandler:Function=null):URLLoader
 		{
 			return load(uri, function(event:Event):void
 			{
 				if(event.type=="complete")
 					event.target.data = new URLVariables(String(event.target.data));
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
@@ -163,7 +165,8 @@ package com.sleepydesign.net
 				if(event.type=="complete")
 					event.target.data = new XML(event.target.data);
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			} , "xml") as URLLoader;
 		}
 		
@@ -199,7 +202,8 @@ package com.sleepydesign.net
 					ByteArray(event.target.data).uncompress();
 				}
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			} , URLLoaderDataFormat.BINARY) as URLLoader;
 		}
 		
@@ -267,6 +271,7 @@ package com.sleepydesign.net
 	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
 			}
 			
+			var _loaderVO:Object = {loader:null, destroy:null};
 			var _removeEventListeners:Function = function():void
 			{
 				_loader.removeEventListener(Event.COMPLETE, _removeEventListeners);
@@ -298,8 +303,9 @@ package com.sleepydesign.net
 	            loader = null;
 	            urlLoader = null;
 			};
-			
-			var _loaderVO:Object = {loader:_loader, destroy:_removeEventListeners};
+			_loaderVO.loader = _loader;
+			_loaderVO.destroy = _removeEventListeners;
+			loaders.push(_loaderVO);
 			
             // gc
 			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
@@ -313,16 +319,13 @@ package com.sleepydesign.net
 			}
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, _404);
 			
-			// destroy
-			loaders.push(_loaderVO);
-			
 			// load
 			try
 			{
 				urlRequest = urlRequest?urlRequest:new URLRequest(uri);
 				if(type=="asset")
 				{
-					loader.load(urlRequest, new LoaderContext(false, ApplicationDomain.currentDomain));
+					loader.load(new URLRequest(uri), new LoaderContext(false, new ApplicationDomain(ApplicationDomain.currentDomain)));
 					return loader;
 				}else{
 					urlLoader.load(urlRequest);
@@ -344,25 +347,27 @@ package com.sleepydesign.net
 			return load(uri, eventHandler, type, _urlRequest);
 		}
 		
-		public static function requestVars(uri:String, data:*, eventHandler:Function):URLLoader
+		public static function requestVars(uri:String, data:*, eventHandler:Function=null):URLLoader
 		{
 			return request(uri, data,  function(event:Event):void
 			{
 				if(event.type=="complete")
 					event.target.data = new URLVariables(String(event.target.data));
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
-		public static function requestXML(uri:String, data:*, eventHandler:Function):URLLoader
+		public static function requestXML(uri:String, data:*, eventHandler:Function=null):URLLoader
 		{
 			return request(uri, data,  function(event:Event):void
 			{
 				if(event.type=="complete")
 					event.target.data = new XML(String(event.target.data));
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
