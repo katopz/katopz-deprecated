@@ -29,7 +29,7 @@ package
 			container.y = stage.stageHeight/2;
 			addChild(container);
 			
-			var _cp:DisplayObject = container.addChild(LoaderUtil.load("CandlePage.swf") as Loader);
+			var _cp:DisplayObject = container.addChild(LoaderUtil.loadAsset("CandlePage.swf"));
 			_cp.x = -stage.stageWidth/2;
 			_cp.y = -stage.stageHeight/2;
 			

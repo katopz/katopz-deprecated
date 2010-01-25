@@ -432,12 +432,16 @@ package
 		public function show():void
 		{
 			TweenLite.to(_scene, 0.5, {autoAlpha: 1});
+			TweenLite.to(_baseLayer, 0.5, {autoAlpha: 1});
+			TweenLite.to(_effectLayer, 0.5, {autoAlpha: 1});
 			start();
 		}
 
 		public function hide():void
 		{
 			TweenLite.to(_scene, 0.5, {autoAlpha: 0});
+			TweenLite.to(_baseLayer, 0.5, {autoAlpha: 0});
+			TweenLite.to(_effectLayer, 0.5, {autoAlpha: 0});
 			stop();
 		}
 
@@ -517,8 +521,8 @@ package
 					break;
 				case "intro":
 					//hide thai map
-					_canvas3D.visible = false;
-					_canvas3D.alpha = 0;
+					_scene.visible = false;
+					_scene.alpha = 0;
 					stop();
 					
 					// fade in
@@ -552,6 +556,7 @@ package
 					
 					break;
 				case "idle":
+				
 					/*
 					// go default angle
 					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
@@ -754,6 +759,15 @@ package
 						submitPage.destroy();
 					}
 					
+					if(_mapPage)
+					{
+						TweenLite.to(_mapPage,0.5, {autoAlpha: 0, onComplete: function():void
+						{
+							_mapPage.stop();
+						}});
+						TweenLite.to(_scene,0.5, {autoAlpha:1});
+					}
+					
 					LoaderUtil.load("SearchPage.swf", function(event:Event):void
 					{
 						if(event.type=="complete")
@@ -775,6 +789,12 @@ package
 					});
 				break;
 				case "search-done":
+					// go default angle
+					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0 });
+					setDirty();
+					
+					show();
+				
 					// view msg
 					if(Search.isGetResult)
 					{
@@ -801,13 +821,17 @@ package
 		
 		private function loopMap(index:int=-1):void
 		{
+			if(_status!="idle")return;
+			
+			if(_status=="search")return;
+			
 			if(index!=-1)
 				idleIndex=index;
 			
 			if(++idleIndex==IDLE_TIMES.length)
 				idleIndex = 0;
 			
-			trace(" ! loopMap : " + idleIndex);
+			trace(_status, " ! loopMap : " + idleIndex);
 			
 			TweenLite.killTweensOf(idleObject);
 			TweenLite.to(idleObject, IDLE_TIMES[idleIndex], {onComplete:function():void{

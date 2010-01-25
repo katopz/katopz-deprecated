@@ -168,6 +168,8 @@ package
 		
 		private function processData(e:Event):void
 		{
+			if(!isRun)return;
+			
 			pathArray = pathTagRE.exec(svgData);
 			if (pathArray)
 			{
@@ -188,8 +190,24 @@ package
 			}
 		}
 		
+		private var isRun:Boolean = true;
+		override public function start():void
+		{
+			trace("start");
+			super.start();
+			isRun = true;
+		}
+		
+		override  public function stop():void
+		{
+			trace("stop");
+			super.stop();
+			isRun = false;
+		}
+		
 		private function drawPath(e:Event):void
 		{
+			if(!isRun)return;
 			if(_vertices.length<=0)return;
 			
 			var _size:int = 20*Math.random()+20;
@@ -284,7 +302,7 @@ package
 		
 		private var _vertices:Vector.<Vertex2D>;
 		
-		private function setPixelSVG(path:SvgPath, bitmapData:BitmapData, scale :Number = 1, offsetX:Number = 0, offsetY:Number = 0) : void 
+		private function setPixelSVG(path:SvgPath, bitmapData:BitmapData, scale:Number = 1, offsetX:Number = 0, offsetY:Number = 0) : void 
 		{
 			//bitmapData.lock();
 			var _path_d:Array = path.d;
