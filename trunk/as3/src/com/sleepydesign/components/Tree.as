@@ -184,9 +184,20 @@ package com.sleepydesign.components
 			super.draw();
 		}
 		
+		public function setFocusByPath(path:String) : TreeNode
+		{
+			if(!path)
+				return null;
+			
+			var _paths:Array = path.split("/");
+			return setFocusById(_paths.pop());
+		}
+		
 		public function setFocusById(id:String) : TreeNode
 		{
-			if(currentNode && currentNode.id==id)return null;
+			if(currentNode && currentNode.id==id)
+				return currentNode;
+			
 			var node:TreeNode = getNodeById(_root, id);
 			
 			if(node)

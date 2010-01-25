@@ -4,11 +4,11 @@ package com.sleepydesign.site
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.events.FormEvent;
-	import com.sleepydesign.events.ListenerManager;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.system.SystemUtil;
+	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
@@ -466,6 +466,8 @@ package com.sleepydesign.site
 			LoaderUtil.cancel(_loader);
 			_loader = null;
 			_data = null;
+			
+			DisplayObjectUtil.removeChildren(_container, true, true);
 			
 			super.destroy();
 		}
