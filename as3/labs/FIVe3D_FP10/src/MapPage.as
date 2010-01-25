@@ -31,6 +31,7 @@ package
 		override protected function onInit():void
 		{
 			debug = false;
+			mouseEnabled = false;
 			
 			// setup canvas
 			_trafficCanvas = new Sprite();
@@ -67,18 +68,12 @@ package
 			var _y:Number = _canvas3D.y;
 			var _z:Number = _canvas3D.z;
 	
-			//_y = _y + 5 * event.delta * Math.sin(60);
 			_z = _z + 5 * event.delta * Math.cos(60);
-			trace(_z);
-			
-			/*
-			if(_z<-200 && z>200)
+			if(_z<-700)
 			{
 				_z = _canvas3D.z;
-				//_y = _canvas3D.y;
 			}
-			*/
-				
+			
 			_canvas3D.setPosition(_x, _y, _z);
 		}
 		
@@ -113,18 +108,14 @@ package
 		
 		public function setupMap3D():void
 		{
-			_mapBitmapData = new BitmapData(300, 370, true, 0x00000000);
-			
 			if(_mapBitmap3D)
 				_mapCanvas3D.removeChild(_mapBitmap3D);
 				
 			_mapBitmap3D = new Bitmap3D(_roadBitmapData, true);
-			_mapBitmap3D.x = -_mapBitmapData.width/2;
-			_mapBitmap3D.y = -_mapBitmapData.height/2;
+			_mapBitmap3D.x = -_roadBitmapData.width/2;
+			_mapBitmap3D.y = -_roadBitmapData.height/2;
 			_mapBitmap3D.singleSided = true;
 			_mapCanvas3D.addChild(_mapBitmap3D);
-			
-			_trafficBitmapData = new BitmapData(300, 370, true, 0x00000000);
 			
 			if(_trafficBitmap3D)
 				_mapCanvas3D.removeChild(_trafficBitmap3D);
@@ -139,10 +130,11 @@ package
 				
 		override protected function onPreRender():void
 		{
-			//Map.currentMapID="_m"
+			//Map.currentMapID="_m";
+			
 			if(Map.currentMapID && _currentMapID!= Map.currentMapID)
 			{
-				_currentMapID= Map.currentMapID;
+				_currentMapID = Map.currentMapID;
 				
 				var _size:* = MapData[Map.currentMapID+"_size"];
 				_roadBitmapData = new BitmapData(_size.width,_size.height, true,0x00000000);

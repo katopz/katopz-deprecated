@@ -129,7 +129,7 @@ package
 		
 		override protected function onInit():void
 		{
-			debug = false;
+			debug = !false;
 			
 			visible = false;
 			alpha = 0;
@@ -146,6 +146,12 @@ package
 				
 				USE_EFFECT = (XMLUtil.getXMLById(_xmlData, "USE_EFFECT").@value=="true");
 				IDLE_TIME = 30*int(StringUtil.getDefaultIfNull(XMLUtil.getXMLById(_xmlData, "IDLE_TIME").@value, "3"));
+				
+				IDLE_TIMES= [];
+				IDLE_TIMES.push((StringUtil.getDefaultIfNull(XMLUtil.getXMLById(_xmlData, "IDLE_N_TIME").@value, "3")));
+				IDLE_TIMES.push((StringUtil.getDefaultIfNull(XMLUtil.getXMLById(_xmlData, "IDLE_NE_TIME").@value, "3")));
+				IDLE_TIMES.push((StringUtil.getDefaultIfNull(XMLUtil.getXMLById(_xmlData, "IDLE_M_TIME").@value, "3")));
+				IDLE_TIMES.push((StringUtil.getDefaultIfNull(XMLUtil.getXMLById(_xmlData, "IDLE_S_TIME").@value, "3")));
 				
 				getData(XMLUtil.getXMLById(_xmlData, "GET_CANDLES").@src);
 			});
@@ -187,7 +193,6 @@ package
 				//submitPage.x = _x0;// - submitPage.width/2;
 				//submitPage.y = _y0;// - submitPage.height/2;
 			}
-			
 		}
 		
 		private function onResize(event:Event):void
@@ -399,6 +404,7 @@ package
 				hide();
 				TweenLite.to(_mapPage, 0.5, {autoAlpha:1, onComplete:function():void{
 					_mapPage.start();
+					loopMap(MAP_IDS.indexOf(Map.currentMapID));
 				}});
 			}else{
 				if(_mapPage)
@@ -406,6 +412,7 @@ package
 					hide();
 					TweenLite.to(_mapPage, 0.5, {autoAlpha:1, onComplete:function():void{
 						_mapPage.start();
+						loopMap(MAP_IDS.indexOf(Map.currentMapID));
 					}});
 				}
 			}
@@ -440,9 +447,6 @@ package
 			_mouseUI.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
 			_mouseUI.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
-			_candleButton.buttonMode = true;
-			addChild(_candleButton);
-			
 			/*
 			   // add bound
 			   var _boundArea:Sprite = DrawUtil.drawRect(_stageWidth/2, _stageHeight/2, 0xFF0000, .5);
@@ -512,13 +516,18 @@ package
 				case "init":
 					break;
 				case "intro":
+					//hide thai map
+					_canvas3D.visible = false;
+					_canvas3D.alpha = 0;
+					stop();
+					
 					// fade in
-					TweenLite.to(this, 1, {autoAlpha: 1, onComplete: function():void
+					TweenLite.to(this, 1, {autoAlpha: 1});/*, onComplete: function():void
 					{
 						// go idle
 						//TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
 						status = "idle";
-					}});
+					}});*/
 					
 					//load sub map
 					LoaderUtil.load("MapPage.swf", function(event:Event):void
@@ -530,11 +539,20 @@ package
 							_mapPage.alpha = 0;
 							_mapPage.stop();
 							addChild(_mapPage);
+							
+							_candleButton.buttonMode = true;
+							addChild(_candleButton);
+							_candleButton.visible = false;
+							_candleButton.alpha = 0;
+							TweenLite.to(_candleButton, .5, {autoAlpha: 1});
+							
+							status = "idle";
 						}
 					});
 					
 					break;
 				case "idle":
+					/*
 					// go default angle
 					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0});
 					
@@ -562,13 +580,33 @@ package
 						}});
 						setDirty();
 					});
+					*/
+					hide();
+					TweenLite.to(_mapPage, 0.5, {autoAlpha:1, onComplete:function():void{
+						
+						Map.currentMapID = "_n";
+						_mapPage.start();
+						idleIndex = 0;
+						
+						// loop
+						TweenLite.to(_mapPage, idleIndex, {autoAlpha:1, onComplete:function():void{
+							loopMap();
+						}});
+					}});
 					
 					// wait for candle click
 					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "explore":
+					// go default angle
+					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0 });
+					setDirty();
+					
+					show();
+				
 					// click to view
+					root.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					root.stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					
 					// wait for candle click
@@ -577,7 +615,7 @@ package
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "drag":
-					TweenLite.to(_canvas3D, 1, {
+					TweenLite.to(_canvas3D, 1, { autoAlpha:1,
 						x:-50, y:0, z:830, 
 						rotationX: 0, rotationY: 0, rotationZ: 0
 					});
@@ -661,7 +699,6 @@ package
 						TweenLite.to(_mapPage,0.5, {autoAlpha: 0, onComplete: function():void
 						{
 							_mapPage.stop();
-							
 						}});
 						TweenLite.to(_scene,0.5, {autoAlpha:1});
 					}
@@ -705,10 +742,10 @@ package
 						_dropPoint.y
 					);
 					
-					// go idle
+					// go explore
 					TweenLite.to(_candleClip, 1, {autoAlpha: 0, onComplete: function():void
 					{
-						status = "idle";
+						status = "explore";
 					}});
 					break;
 				case "search":
@@ -755,6 +792,28 @@ package
 					}});
 				break;
 			}
+		}
+		
+		private var idleObject:Object={};
+		private var idleIndex:int=0;
+		private var IDLE_TIMES:Array;
+		private var MAP_IDS:Array = ["_n","_ne","_m","_s"];
+		
+		private function loopMap(index:int=-1):void
+		{
+			if(index!=-1)
+				idleIndex=index;
+			
+			if(++idleIndex==IDLE_TIMES.length)
+				idleIndex = 0;
+			
+			trace(" ! loopMap : " + idleIndex);
+			
+			TweenLite.killTweensOf(idleObject);
+			TweenLite.to(idleObject, IDLE_TIMES[idleIndex], {onComplete:function():void{
+				Map.currentMapID = MAP_IDS[idleIndex];
+				loopMap();
+			}});
 		}
 		
 		private var _sprite2D:Sprite2D;
@@ -1001,7 +1060,7 @@ package
 				var _ARGB:int = _mapBitmap3D.bitmapData.getPixel32(_x, _y);
 				
 				// debug
-				title = _x +","+ _y + " | " + _ARGB;
+				title = _x +","+ _y + " | " + idleNum + " | " + _ARGB;
 			}
 		}
 		
