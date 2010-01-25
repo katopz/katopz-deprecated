@@ -1,7 +1,5 @@
 package com.sleepydesign.net
 {
-	import com.sleepydesign.system.DebugUtil;
-	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -208,6 +206,14 @@ package com.sleepydesign.net
 		}
 		
 		public static var loaders:Array = [];
+		
+		public static function loadAssets(uris:Array, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest=null):Array
+		{
+			var _length:int = uris.length;
+			for(var i:int=0;i<uris.length;i++)
+				load(uris[i], eventHandler, type, urlRequest);
+			return loaders;
+		}
 		
 		/**
 		 * Just load
