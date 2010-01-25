@@ -2,6 +2,10 @@
 <site id="site" label="Candle" version="1">
 	<vars id="USE_EFFECT" value="true"/>
 	<vars id="IDLE_TIME" value="5"/>
+	<vars id="IDLE_N_TIME" value="10"/>
+	<vars id="IDLE_NE_TIME" value="10"/>
+	<vars id="IDLE_M_TIME" value="10"/>
+	<vars id="IDLE_S_TIME" value="10"/>
 	<link id="GET_CANDLE" src="serverside/getCandle.php" get="id=$CANDLE_ID"/>
 	<link id="GET_CANDLES" src="serverside/getCandles.php" get="page=$CANDLE_PAGE"/>
 	<page id="SubmitPage" label="SubmitPage" src="SubmitPage.swf">
