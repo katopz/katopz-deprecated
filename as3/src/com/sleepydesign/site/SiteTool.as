@@ -1,16 +1,18 @@
 package com.sleepydesign.site
 {
 	import com.sleepydesign.core.IDestroyable;
+	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
+	import com.sleepydesign.system.SystemUtil;
+	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
+	import com.sleepydesign.utils.XMLUtil;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
-	import flash.display.LoaderInfo;
-	import flash.display.Sprite;
 	import flash.events.Event;
 
 	public class SiteTool extends RemovableEventDispatcher implements IDestroyable
@@ -53,27 +55,21 @@ package com.sleepydesign.site
 
 				DebugUtil.trace("   + " + _name + "\t: " + _id);
 				
-				var _layer:Sprite;
+				var _layer:SDSprite;
 				
 				switch (_name)
 				{
 					case "page":
 					
-						// create layer
-						_layer = container.getChildByName(_layerID) as Sprite;
-						if(!_layer)
-						{
-							_layer = _layer?_layer:new Sprite();
-							_layer.name = _layerID;
-							_container.addChild(_layer);
-						}
+						_layer = createLayer(_layerID);
 						
-						var _loader:Loader;		
+						var _loader:Loader;
 						switch (_layerID)
 						{
 							// normal page
 							case "body":
 								// focus?
+								/*
 								if(_focus==_id)
 								{
 									_loader = LoaderUtil.loadAsset(_src, onLoad); 
@@ -81,6 +77,7 @@ package com.sleepydesign.site
 									_pageURIs.push(_src);
 									_pageLoaders.push(_loader);
 								}
+								*/
 							break;
 							default:
 								_loader = LoaderUtil.loadAsset(_src, onLoad); 
@@ -96,6 +93,20 @@ package com.sleepydesign.site
 			DebugUtil.trace(" ------------------------------- [Site] /\n");
 		}
 		
+		private function createLayer(_layerID:String):SDSprite
+		{
+			// create layer
+			var _layer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
+			if(!_layer)
+			{
+				_layer = _layer?_layer:new SDSprite();
+				_layer.name = _layerID;
+				_container.addChild(_layer);
+			}
+			
+			return _layer;
+		}
+		
 		private function onLoad(event:Event):void
 		{
 			if(event.type=="complete")
@@ -106,6 +117,52 @@ package com.sleepydesign.site
 				
 				if(_loadNum==_pageLoaders.length)
 					DebugUtil.trace("complete");
+			}
+		}
+		
+		public function setFocusByPath(path:String):void
+		{
+			var _layerID:String = "body";
+			
+			// destroy
+			var _bodyLayer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
+			if(_bodyLayer)
+			{
+				DisplayObjectUtil.removeChildren(_bodyLayer, true, true);
+				_bodyLayer.destroy();
+				_bodyLayer = null;
+				
+				SystemUtil.gc();
+			}
+			
+			// create
+			_bodyLayer = createLayer(_layerID);
+			
+			var _layer:SDSprite;
+			var _paths:Array = path.split("/");
+			if(_paths[0]=="")
+				_paths.shift();
+			
+			_pageURIs = [];
+			_pageLoaders = [];
+			
+			for each(var _path:String in _paths)
+			{
+				_layer = createLayer(_path);
+				_bodyLayer.addChild(_layer);
+				
+				var _src:String = XMLUtil.getXMLById(_xml, _path).@src;
+				if(_src)
+				{
+					var _loader:Loader = LoaderUtil.loadAsset(_src, onLoad); 
+					_layer.addChild(_loader);
+					
+					_pageURIs.push(_src);
+					_pageLoaders.push(_loader);
+				}
+				
+				// reparent
+				_bodyLayer = _layer;
 			}
 		}
 
