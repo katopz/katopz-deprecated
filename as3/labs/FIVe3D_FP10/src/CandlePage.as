@@ -129,7 +129,7 @@ package
 		
 		override protected function onInit():void
 		{
-			debug = !false;
+			debug = false;
 			
 			visible = false;
 			alpha = 0;
