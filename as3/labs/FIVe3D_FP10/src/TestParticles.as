@@ -7,16 +7,17 @@ package
 	import flash.display.PixelSnapping;
 	import flash.filters.BlurFilter;
 	import flash.filters.ColorMatrixFilter;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import net.badimon.five3D.display.Sprite2D;
+	import net.badimon.five3D.display.Clip2D;
+	import net.badimon.five3D.display.Particles3D;
 	import net.badimon.five3D.display.Sprite3D;
+	import net.badimon.five3D.materials.ClipMaterial;
 	import net.badimon.five3D.templates.Five3DTemplate;
 
 	[SWF(width="1132", height="654", frameRate="30", backgroundColor="#000000")]
-	public class TestMovieClip extends Five3DTemplate
+	public class TestParticles extends Five3DTemplate
 	{
 		[Embed(source="assets/ThaiMap.swf", symbol="LightClip")]
 		private var LightClip:Class;
@@ -50,31 +51,6 @@ package
 			_canvas3D.z = 830;
 			_canvas3D.rotationX = -60;
 			
-			// create candles
-			var w:int = 10;
-			var h:int = 10;
-			_candles = [];
-
-			var _candle:Candle;
-			for (var i:int = 0; i < 10; i++)
-			{
-				_candles[i] = _candle = new Candle(String(i), Math.random() * 1132/2-Math.random() * 1132/2, Math.random() * 654/2-Math.random() * 654/2);
-				_candle.currentFrame = Math.random() * _lightClip.totalFrames;
-				_candle.totalFrames = _lightClip.totalFrames;
-				_candle.sprite2D = new Sprite2D();
-				
-				/*
-				_candle.sprite2D.graphics.beginFill(0xFF0000);
-				_candle.sprite2D.graphics.drawRect(0,0,10,10);
-				_candle.sprite2D.graphics.endFill();
-				*/
-				
-				_candle.sprite2D.x = _candle.x;
-				_candle.sprite2D.y = _candle.y;
-				
-				_canvas3D.addChild(_candle.sprite2D);
-			}
-
 			// create canvas
 			_bitmapData = new BitmapData(1132, 654, true, 0x00000000);
 			_bitmap = new Bitmap(_bitmapData);
@@ -86,29 +62,30 @@ package
 			addChild(_effectBitmap);
 			
 			addChild(_bitmap);
-
-			// create texture
-			var _clip_width:Number = _lightClip.width;
-			var _clip_height:Number = _lightClip.height;
-			_texture = new BitmapData(_clip_width * _lightClip.totalFrames, _clip_height, true, 0x00FF0000);
-			//_textures = [];
-			_totalFrames = _lightClip.totalFrames;
-			for (i = 0; i < _totalFrames; i++)
-			{
-				_lightClip.gotoAndStop(i + 1);
-				_texture.draw(_lightClip, new Matrix(1, 0, 0, 1, i * _clip_width + _clip_width / 2, _clip_height / 2));
-			}
 			
+			_particles = new Particles3D(_canvas3D, _bitmapData);
+			
+			var _clipMaterial:ClipMaterial = new ClipMaterial(_lightClip);
+			for (var i:int = 0; i < 1000; i++)
+			{
+				_particles.addParticle(new Clip2D(
+					Math.random() * 1132/2-Math.random() * 1132/2, Math.random() * 654/2-Math.random() * 654/2, 0, 
+					_clipMaterial,
+					10, 10
+				));
+			}
+				
 			// debug
 			addChild(new Bitmap(_texture));
 		}
-		
+		private var _particles:Particles3D
 		private var _point0:Point = new Point();
-		private var _hitRect:Rectangle = new Rectangle(0,0,10,10);
 		override protected function onPreRender():void
 		{
 			_canvas3D.rotationZ++;
+			_particles.render(_scene);
 			
+			/*
 			_bitmapData.fillRect(_bitmapData.rect, 0x00000000);
 			
 			_bitmapData.lock();
@@ -122,21 +99,17 @@ package
 					_candle.currentFrame = 1;
 				_rect.x = _candle.currentFrame * _rect.width;
 
+				_candle.particle2D.render(_scene);
+				
 				// position
-				_point.x = _stageWidth_2+_candle.sprite2D.screenX;
-				_point.y = _stageHeight_2+_candle.sprite2D.screenY;
+				_point.x = _stageWidth_2+_candle.particle2D.screenX;
+				_point.y = _stageHeight_2+_candle.particle2D.screenY;
 				
 				// draw
 				_bitmapData.copyPixels(_texture, _rect, _point, null, null, true);
-				
-				// hittest
-				_hitRect.offsetPoint(_point);
-				
-				if(_hitRect.contains(mouseX, mouseY))
-					trace(_hitRect.contains(mouseX, mouseY));
 			}
 			_bitmapData.unlock();
-			
+			*/
 			// effect
 			/*
 			_effectBitmapData.lock();
