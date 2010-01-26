@@ -2,6 +2,6 @@ package
 {
 	public class Map
 	{
-		public static var currentMapID:String;
+		public static var currentMapID:String = "_t";
 	}
 }

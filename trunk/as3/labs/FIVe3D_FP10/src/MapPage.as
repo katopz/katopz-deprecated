@@ -3,7 +3,7 @@ package
 	import com.sleepydesign.events.MouseUIEvent;
 	import com.sleepydesign.ui.MouseUI;
 	import com.zavoo.svg.SvgPath;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -11,8 +11,9 @@ package
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
-
+	
 	import net.badimon.five3D.display.Bitmap3D;
 	import net.badimon.five3D.display.Sprite3D;
 	import net.badimon.five3D.templates.Five3DTemplate;
@@ -27,6 +28,9 @@ package
 		private var _mapBitmap3D:Bitmap3D;
 
 		private var _trafficBitmap3D:Bitmap3D;
+		
+		public var _candleCanvas3D:Sprite3D;
+		public var _ballonCanvas3D:Sprite3D;
 
 		override protected function onInit():void
 		{
@@ -40,17 +44,28 @@ package
 			_scene.addChild(_canvas3D);
 			_canvas3D.singleSided = true;
 			_canvas3D.mouseEnabled = false;
-
-			_canvas3D.x = 0;
-			_canvas3D.y = 0;
-			_canvas3D.z = -600; //830;
-			_canvas3D.rotationX = -60;
+			
+			_candleCanvas3D = new Sprite3D();
+			_candleCanvas3D.singleSided = true;
+			_candleCanvas3D.mouseEnabled = false;
+			
+			_ballonCanvas3D = new Sprite3D();
+			_ballonCanvas3D.singleSided = true;
+			_ballonCanvas3D.mouseEnabled = false;
 
 			_mapCanvas3D = new Sprite3D();
 			_mapCanvas3D.singleSided = true;
 			_mapCanvas3D.mouseEnabled = false;
 
 			_canvas3D.addChild(_mapCanvas3D);
+			
+			_canvas3D.addChild(_candleCanvas3D);
+			_canvas3D.addChild(_ballonCanvas3D);
+			
+			_canvas3D.x = 0;
+			_canvas3D.y = 0;
+			_canvas3D.z = -600; //830;
+			_canvas3D.rotationX = -60;
 
 			if (!_mouseUI)
 			{
@@ -81,6 +96,7 @@ package
 		private function onDrag(event:MouseUIEvent):void
 		{
 			_mapCanvas3D.rotationZ -= event.data.dx / 4;
+			_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
 		}
 
 		private var _mouseUI:MouseUI;
@@ -137,8 +153,8 @@ package
 			{
 				_currentMapID = Map.currentMapID;
 
-				var _size:* = MapData[Map.currentMapID + "_size"];
-				_roadBitmapData = new BitmapData(_size.width, _size.height, true, 0x00000000);
+				var _rect:Rectangle = MapData[Map.currentMapID + "_rect"];
+				_roadBitmapData = new BitmapData(_rect.width, _rect.height, true, 0x00000000);
 				_trafficBitmapData = new BitmapData(_roadBitmapData.width, _roadBitmapData.height, true, 0x00000000);
 
 				setupMap3D();
@@ -164,7 +180,10 @@ package
 			}
 
 			if (!MouseUI.isMouseDown)
+			{
 				_mapCanvas3D.rotationZ += 0.25;
+				_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
+			}
 		}
 
 		private function processData(e:Event):void
