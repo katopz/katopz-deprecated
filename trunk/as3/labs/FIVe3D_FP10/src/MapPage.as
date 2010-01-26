@@ -96,7 +96,7 @@ package
 		private function onDrag(event:MouseUIEvent):void
 		{
 			_mapCanvas3D.rotationZ -= event.data.dx / 4;
-			_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
+			_ballonCanvas3D.rotationZ=_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
 		}
 
 		private var _mouseUI:MouseUI;
@@ -182,7 +182,7 @@ package
 			if (!MouseUI.isMouseDown)
 			{
 				_mapCanvas3D.rotationZ += 0.25;
-				_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
+				_ballonCanvas3D.rotationZ=_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
 			}
 		}
 
