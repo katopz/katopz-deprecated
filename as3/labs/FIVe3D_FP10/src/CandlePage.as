@@ -69,6 +69,7 @@ package
 
 		[Embed(source="assets/ThaiMap.swf",symbol="CandleClip")]
 		private var CandleClip:Class;
+		private var _dragCandleClip:Sprite = new CandleClip() as Sprite;
 		private var _candleClip:Sprite = new CandleClip() as Sprite;
 		
 		/*
@@ -134,6 +135,8 @@ package
 			visible = false;
 			alpha = 0;
 			//show();
+			
+			_dragCandleClip.addChild(_markerClip);
 
 			addChild(systemLayer);
 			LoaderUtil.loaderClip = new Preloader(systemLayer, _stageWidth, _stageHeight);
@@ -232,7 +235,8 @@ package
 				{
 					// delay abit
 					trace(" ! delay : " + event.target.data.delay);
-					TweenLite.to(systemLayer, int(event.target.data.delay) || 10, {onComplete: function reloadData():void
+					TweenLite.killTweensOf(systemLayer);
+					TweenLite.to(systemLayer, int(event.target.data.delay) || 10, {onComplete: function():void
 					{
 						getData(uri.split("?")[0] + "?page=" + event.target.data.next, true);
 						//getData("serverside/getCandles2.php", true);
@@ -255,8 +259,8 @@ package
 				while(_oldLength--)
 				{
 					_sprite2D = Candle(_candles[_oldLength]).sprite2D;
-					if(_sprite2D)
-						_candleCanvas3D.removeChild(_sprite2D);
+					if(_sprite2D && _sprite2D.parent)
+						_sprite2D.parent.removeChild(_sprite2D);
 				}
 			}
 			
@@ -279,12 +283,37 @@ package
 				}else{
 					// restore
 					_candle = candleDict[_id];
-					if(_candle.sprite2D)
-						_candleCanvas3D.addChild(_sprite2D);
+					//if(_candle.sprite2D)
+					//	addCandle(_sprite2D);
 				}
 				
 				// add
 				_candles.push(_candle);
+			}
+		}
+		
+		private function addCandle(candle:Candle):void
+		{
+			var _sprite2D:Sprite2D = candle.sprite2D;
+			var _rect:Rectangle = MapData[Map.currentMapID + "_rect"];
+			
+			_sprite2D.x = candle.x - _rect.x - _rect.width/2;
+			_sprite2D.y = candle.y - _rect.y - _rect.height/2;
+			
+			if(_scene.alpha>0)
+			{
+				_sprite2D.x = candle.x - _mapBitmapData.width/2;
+				_sprite2D.y = candle.y - _mapBitmapData.height/2;
+				_candleCanvas3D.addChild(_sprite2D);
+			}else{
+				
+				var _point:Point = new Point(candle.x, candle.y);
+				
+				if(_rect.containsPoint(_point))
+				{
+					trace(_sprite2D.x, _sprite2D.y, _point);
+					_mapPage["_candleCanvas3D"].addChild(_sprite2D);
+				}
 			}
 		}
 		
@@ -313,8 +342,8 @@ package
 					var _sprite2D:Sprite2D = new Sprite2D();
 //_sprite2D.scaled = false;
 					_sprite2D.name = "candle_"+_candle.id;
-					_sprite2D.x = _candle.x - _mapBitmapData.width/2;
-					_sprite2D.y = _candle.y - _mapBitmapData.height/2;
+//_sprite2D.x = _candle.x - _mapBitmapData.width/2;
+//_sprite2D.y = _candle.y - _mapBitmapData.height/2;
 					_sprite2D.graphics.beginBitmapFill(_candleBitmapData, new Matrix(1,0,0,1,-_candleBitmapData.width/2, -_candleBitmapData.height));
 					_sprite2D.graphics.drawRect(-_candleBitmapData.width/2, -_candleBitmapData.height, _candleBitmapData.width, _candleBitmapData.height);
 					_sprite2D.graphics.endFill();
@@ -331,7 +360,7 @@ package
 					_lightClip.mouseEnabled = false;
 					_sprite2D.addChild(_lightClip);
 					
-					_candleCanvas3D.addChild(_sprite2D);
+					addCandle(_candle);
 				}
 			}
 			_candlesBitmapData.unlock();
@@ -544,6 +573,9 @@ package
 							_mapPage.stop();
 							addChild(_mapPage);
 							
+							Map.currentMapID = "_m";
+							idleIndex = 0;
+							
 							_candleButton.buttonMode = true;
 							addChild(_candleButton);
 							_candleButton.visible = false;
@@ -589,9 +621,7 @@ package
 					hide();
 					TweenLite.to(_mapPage, 0.5, {autoAlpha:1, onComplete:function():void{
 						
-						Map.currentMapID = "_n";
 						_mapPage.start();
-						idleIndex = 0;
 						
 						// loop
 						TweenLite.to(_mapPage, idleIndex, {autoAlpha:1, onComplete:function():void{
@@ -631,24 +661,21 @@ package
 					
 					// draging in bound
 					TweenLite.to(_candleButton, 0.25, {autoAlpha: 0.25});
-					TweenLite.to(_candleClip, 0.25, {autoAlpha: 1});
+					TweenLite.to(_dragCandleClip, 0.25, {autoAlpha: 1});
 
 					// mouse effct
 					Mouse.hide();
 					_markerClip.mouseEnabled = false;
-					_candleClip.addChild(_markerClip);
-					_candleClip.startDrag(true);
+					addChild(_dragCandleClip);
+					_dragCandleClip.startDrag(true);
 					
-					addChild(_candleClip);
-					_candleClip.startDrag(true);
-
 					// wait for drop
 					root.stage.addEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					break;
 				case "drop":
 					// drop
-					_candleClip.removeChild(_markerClip);
-					_candleClip.stopDrag();
+					_dragCandleClip.stopDrag();
+					removeChild(_dragCandleClip);
 					root.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onCandleDrop);
 					
 					// get id
@@ -704,6 +731,7 @@ package
 						TweenLite.to(_mapPage,0.5, {autoAlpha: 0, onComplete: function():void
 						{
 							_mapPage.stop();
+							getData(XMLUtil.getXMLById(_xmlData, "GET_CANDLES").@src, true);
 						}});
 						TweenLite.to(_scene,0.5, {autoAlpha:1});
 					}
@@ -817,7 +845,7 @@ package
 		private var idleObject:Object={};
 		private var idleIndex:int=0;
 		private var IDLE_TIMES:Array;
-		private var MAP_IDS:Array = ["_n","_ne","_m","_s"];
+		private var MAP_IDS:Array = ["_m","_n","_ne","_s"];
 		
 		private function loopMap(index:int=-1):void
 		{
@@ -831,7 +859,10 @@ package
 			if(++idleIndex==IDLE_TIMES.length)
 				idleIndex = 0;
 			
-			trace(_status, " ! loopMap : " + idleIndex);
+			trace(" ! loopMap : " + idleIndex, IDLE_TIMES[idleIndex]);
+			
+			// reload data
+			getData(XMLUtil.getXMLById(_xmlData, "GET_CANDLES").@src, true);
 			
 			TweenLite.killTweensOf(idleObject);
 			TweenLite.to(idleObject, IDLE_TIMES[idleIndex], {onComplete:function():void{
