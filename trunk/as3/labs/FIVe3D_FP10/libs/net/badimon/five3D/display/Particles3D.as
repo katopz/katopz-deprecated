@@ -9,8 +9,10 @@ http://five3D.mathieu-badimon.com  |  http://five3d.mathieu-badimon.com/archives
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package net.badimon.five3D.display {
+	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
 	import flash.geom.Matrix3D;
+	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	
 	import net.badimon.five3D.utils.InternalUtils;	
@@ -21,7 +23,7 @@ package net.badimon.five3D.display {
 	 * @see Sprite3D
 	 * @see http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/display/Sprite.html
 	 */
-	public class Particle2D extends Vector3D implements IObject3D {
+	public class Particles3D extends Vector3D implements IObject3D {
 
 		private var __visible:Boolean = true;
 		private var __x:Number = 0;
@@ -35,30 +37,46 @@ package net.badimon.five3D.display {
 		private var __render:Boolean = true;
 		private var __renderScaling:Boolean = true;
 		private var __scaling:Boolean = false;
-		// Calculation
-		private var __vectorIn:Vector.<Number>;
-		private var __vectorOut:Vector.<Number>;
+		
 		private var __perspective:Number;
+		private var __bitmapData:BitmapData;
+		private var __smoothing:Boolean;
+		
+		private var __verticesIn:Vector.<Number>;
+		private var __verticesOut:Vector.<Number>;
+		private var __verticesProjected:Vector.<Number>;
+		
+		private var _clips:Vector.<Clip2D>;
 		
 		public var parent:DisplayObjectContainer;
 
 		/**
 		 * Creates a new Sprite2D instance.
 		 */
-		public function Particle2D(parent:DisplayObjectContainer,x:Number,y:Number,z:Number=0) {
+		public function Particles3D(parent:DisplayObjectContainer, bitmapData:BitmapData = null, smoothing:Boolean = true) {
 			this.parent = parent;
 			__matrix = new Matrix3D();
 			__concatenatedMatrix = new Matrix3D();
-			initVectors(x,y,z);
+			__bitmapData = bitmapData;
+			__smoothing = smoothing;
+			initVectorsParticles();
 		}
 
-		private function initVectors(x:Number,y:Number,z:Number):void {
-			__vectorIn = Vector.<Number>([x,y,z]);
-			__vectorOut = Vector.<Number>([x,y,z]);
-			__vectorIn.fixed = true;
-			__vectorOut.fixed = true;
+		private function initVectorsParticles():void {
+			__verticesIn = new Vector.<Number>();
+			__verticesOut = new Vector.<Number>();
+			__verticesProjected = new Vector.<Number>();
+			_clips = new Vector.<Clip2D>();
 		}
-
+		
+		public function addParticle(clip2D:Clip2D):Clip2D
+		{
+			__verticesIn.push(clip2D.x, clip2D.y, clip2D.z);
+			_clips.push(clip2D)
+			
+			return clip2D;
+		}
+		
 		//----------------------------------------------------------------------------------------------------
 		// Properties (from normal "Sprite" class)
 		//----------------------------------------------------------------------------------------------------
@@ -153,6 +171,43 @@ package net.badimon.five3D.display {
 			if (__scaled) __renderScaling = true;
 			else super.scaleY = __scaleY;
 		}*/
+		
+		/**
+		 * Indicates the BitmapData object being associated with the Bitmap3D instance.
+		 * 
+		 * * <p>This property has the same behavior than the normal Bitmap <code>bitmapData</code> property.</p>
+		 */
+		/*
+		public function get bitmapData():BitmapData {
+			return __bitmapData;
+		}
+
+		public function set bitmapData(value:BitmapData):void {
+			__bitmapData = value;
+			if (__bitmapData == null) {
+				if (__drawing) removeBitmap();
+			} else {
+				if (__bitmapData.width != __width || __bitmapData.height != __height) {
+					__renderTessellation = true;
+					__renderProjection = true;
+				}
+			}
+			__renderBitmap = true;
+		}
+		*/
+		
+		/**
+		 * Whether or not the Bitmap3D instance is smoothed when scaled.
+		 * If true, the bitmap is smoothed when scaled. If false, the bitmap is not smoothed when scaled.
+		 */
+		public function get smoothing():Boolean {
+			return __smoothing;
+		}
+
+		public function set smoothing(value:Boolean):void {
+			__smoothing = value;
+			////__renderBitmap = true;
+		}
 
 		//----------------------------------------------------------------------------------------------------
 		// Properties (new)
@@ -208,10 +263,10 @@ package net.badimon.five3D.display {
 				if (__visible)
 				{
 					var viewDistance:Number = scene.viewDistance;
-					InternalUtils.setMatrixPosition(__matrix, __x, __y, __z);
+					InternalUtils.setMatrixPosition(__matrix, x, y, x);
 					InternalUtils.setConcatenatedMatrix(__concatenatedMatrix, parent, __matrix);
-					__concatenatedMatrix.transformVectors(__vectorIn, __vectorOut);
-					__perspective = viewDistance / (__vectorOut[2] + viewDistance);
+					__concatenatedMatrix.transformVectors(__verticesIn, __verticesOut);
+					__perspective = viewDistance / (z + viewDistance);
 					setPlacement();
 					//__render = false;
 				}
@@ -227,8 +282,19 @@ package net.badimon.five3D.display {
 		public var screenY:Number=0;
 		
 		private function setPlacement():void {
-			screenX = __vectorOut[0] * __perspective;
-			screenY = __vectorOut[1] * __perspective;
+			screenX = x * __perspective;
+			screenY = y * __perspective;
+			
+			__bitmapData.fillRect(__bitmapData.rect, 0x00000000);
+			
+			//draw
+			var i:int = 0;
+			for each(var _clip:Clip2D in _clips)
+			{
+				__bitmapData.copyPixels(_clip.material.bitmapData, _clip.material.rect, new Point(screenX+__verticesOut[i++], screenY+__verticesOut[i++]), null,null,true);
+				i++;
+			}
+			__render = true;
 		}
 
 		private function applyScaling():void {
