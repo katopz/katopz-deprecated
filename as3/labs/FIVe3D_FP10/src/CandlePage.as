@@ -461,17 +461,17 @@ package
 		public function show():void
 		{
 			TweenLite.to(_scene, 0.5, {autoAlpha: 1});
-			TweenLite.to(_baseLayer, 0.5, {autoAlpha: 1});
-			TweenLite.to(_effectLayer, 0.5, {autoAlpha: 1});
-			start();
+			//TweenLite.to(_baseLayer, 0.5, {autoAlpha: 1});
+			//TweenLite.to(_effectLayer, 0.5, {autoAlpha: 1});
+			//start();
 		}
 
 		public function hide():void
 		{
 			TweenLite.to(_scene, 0.5, {autoAlpha: 0});
-			TweenLite.to(_baseLayer, 0.5, {autoAlpha: 0});
-			TweenLite.to(_effectLayer, 0.5, {autoAlpha: 0});
-			stop();
+			//TweenLite.to(_baseLayer, 0.5, {autoAlpha: 0});
+			//TweenLite.to(_effectLayer, 0.5, {autoAlpha: 0});
+			//stop();
 		}
 
 		private function setupUI():void
@@ -552,7 +552,7 @@ package
 					//hide thai map
 					_scene.visible = false;
 					_scene.alpha = 0;
-					stop();
+//stop();
 					
 					// fade in
 					TweenLite.to(this, 1, {autoAlpha: 1});/*, onComplete: function():void
@@ -632,6 +632,10 @@ package
 					// wait for candle click
 					_candleButton.removeEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
+					
+					// click to view
+					root.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
+					root.stage.addEventListener(MouseEvent.MOUSE_DOWN, onExploreClick);
 					break;
 				case "explore":
 					// go default angle
@@ -849,7 +853,7 @@ package
 		
 		private function loopMap(index:int=-1):void
 		{
-			if(_status!="idle")return;
+			if(_status!="idle" && _status!="explore")return;
 			
 			if(_status=="search")return;
 			
@@ -933,8 +937,8 @@ package
 			{
 				var _balloon2D:Sprite2D = __lastBalloon.parent as Sprite2D;
 				__lastBalloon.destroy();
-				if(_balloon2D)
-					_ballonCanvas3D.removeChild(_balloon2D);
+				if(_balloon2D && _balloon2D.parent)
+					_balloon2D.parent.removeChild(_balloon2D);
 			}});
 		}
 		
@@ -959,7 +963,12 @@ package
 			_balloon2D.scaled = false;
 			_balloon2D.cacheAsBitmap = true;
 			_balloon2D.mouseEnabled = false;
-			_ballonCanvas3D.addChild(_balloon2D);
+			if(_scene.alpha>0)
+			{
+			 	_ballonCanvas3D.addChild(_balloon2D);
+			}else{
+				_mapPage["_ballonCanvas3D"].addChild(_balloon2D);
+			}
 			
 			// load msg
 			LoaderUtil.requestVars(XMLUtil.getXMLById(_xmlData, "GET_CANDLE").@src, new URLVariables("id="+_sprite2D.name), function(event:Event):void
@@ -1015,6 +1024,8 @@ package
 		
 		private function onDrag(event:MouseUIEvent):void
 		{
+			if(_status=="idle")return;
+			if(_scene.alpha<1)return;
 			if(!_scene.visible)return;
 			
 			if(_status=="search" || _status=="input")
@@ -1062,21 +1073,15 @@ package
 
 		override protected function onPreRender():void
 		{
+			/*
 			if (_status == "idle" && _canvas3D)
 			{
-				/*
-				_canvas3D.rotationX = 0;
-				_canvas3D.askRendering()
-				_canvas3D.rotationY++;
-				_canvas3D.askRendering();
-				_canvas3D.rotationX = -DEFAULT_ANGLE;
-				_canvas3D.askRendering();
-				*/
 				_mapCanvas3D.rotationZ++;
 				_candleCanvas3D.rotationZ++;
 				_ballonCanvas3D.rotationZ++;
 				setDirty();
 			}
+			*/
 			
 			// move mouse?
 			if(mouseX==_mouseX && mouseY==_mouseY)
@@ -1133,7 +1138,14 @@ package
 				{
 					_rect = _effectBitmapData.rect;
 					_effectBitmapData.lock();
-					_effectBitmapData.draw(_candleCanvas3D, _matrix);
+					
+					if(_scene.alpha==1)
+					{
+						_effectBitmapData.draw(_candleCanvas3D, _matrix);
+					}else{
+						_effectBitmapData.draw(_mapPage["_candleCanvas3D"], _matrix);
+					}
+					
 					_effectBitmapData.applyFilter(_effectBitmapData, _rect, _point, _blurFilter);
 					_effectBitmapData.applyFilter(_effectBitmapData, _rect, _point, _colorMatrixFilter);
 					_effectBitmapData.unlock();
