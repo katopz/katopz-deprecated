@@ -331,7 +331,7 @@ package com.sleepydesign.net
 				urlRequest = urlRequest?urlRequest:new URLRequest(uri);
 				if(type=="asset")
 				{
-					loader.load(new URLRequest(uri), new LoaderContext(false, ApplicationDomain.currentDomain));
+					loader.load(new URLRequest(uri));//, new LoaderContext(false, ApplicationDomain.currentDomain));
 					return loader;
 				}else{
 					urlLoader.load(urlRequest);
