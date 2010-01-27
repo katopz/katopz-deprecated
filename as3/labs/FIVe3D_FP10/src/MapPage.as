@@ -165,7 +165,7 @@ package
 				svgData = _data.readUTFBytes(_data.length);
 
 				// storage
-				_vertices = new Vector.<Vertex2D>();
+				_vertices = [];
 				pathIndexs = [0];
 				currentIndexs = [0];
 				pixelIndex = 0;
@@ -206,7 +206,7 @@ package
 				if (_vertices.length > 0)
 				{
 					removeEventListener(Event.ENTER_FRAME, processData);
-					_vertices.fixed = true;
+					//_vertices.fixed = true;
 				}
 			}
 		}
@@ -325,7 +325,7 @@ package
 		private var pathIndexs:Array = [0];
 		private var currentIndexs:Array = [0];
 
-		private var _vertices:Vector.<Vertex2D>;
+		private var _vertices:Array = [];
 
 		private function setPixelSVG(path:SvgPath, bitmapData:BitmapData, scale:Number = 1, offsetX:Number = 0, offsetY:Number = 0):void
 		{
