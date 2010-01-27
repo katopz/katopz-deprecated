@@ -495,7 +495,7 @@ package
 		{
 			status = "input";
 		}
-
+		
 		private function onCandleDrop(event:MouseEvent):void
 		{
 			_dropPoint.x = int(_mapBitmap3D.mouseX);
@@ -582,7 +582,8 @@ package
 							_candleButton.alpha = 0;
 							TweenLite.to(_candleButton, .5, {autoAlpha: 1});
 							
-							status = "idle";
+							if(!searchPage)
+								status = "idle";
 						}
 					});
 					
@@ -793,10 +794,11 @@ package
 					
 					if(_mapPage)
 					{
-						TweenLite.to(_mapPage,0.5, {autoAlpha: 0, onComplete: function():void
-						{
-							_mapPage.stop();
-						}});
+						TweenLite.killTweensOf(_mapPage);
+						_mapPage.stop();
+						_mapPage.visible = false;
+						_mapPage.mouseEnabled =false;
+						_mapPage.alpha = 0;
 						TweenLite.to(_scene,0.5, {autoAlpha:1});
 					}
 					
