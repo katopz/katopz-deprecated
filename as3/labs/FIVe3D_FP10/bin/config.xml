@@ -15,6 +15,7 @@
 				<textinput id="name" src="nameInput" label="ชื่อ" maxlength="50" required="true"/>
 				<textinput id="email" src="emailInput" label="อีเมล์" maxlength="100" required="true" type="email"/>
 				<textfield id="alert" src="alertText" type="alert"/>
+				<vars id="MSG_EXAMPLES"><![CDATA[ขอจงทรงพระเจริญ,ฑีฆายุโก โหตุ มหาราชา,ทรงพระเจริญ]]></vars>
 				<button id="submitButton" src="submitButton" type="save"/>
 			</form>
 		</content>

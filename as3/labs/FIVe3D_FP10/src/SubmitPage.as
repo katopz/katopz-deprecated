@@ -2,14 +2,17 @@ package
 {
 	import com.greensock.TweenLite;
 	import com.sleepydesign.data.DataProxy;
+	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.FormEvent;
 	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.site.FormTool;
 	import com.sleepydesign.skins.Preloader;
+	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.utils.XMLUtil;
 	
+	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -86,6 +89,61 @@ package
 			draw();
 			
 			formClip["closeButton"].addEventListener(MouseEvent.CLICK, onClose);
+			
+			var ok:* = _xml.vars
+			_msgs = String(_xml.vars.text()).split(",");
+			_comboButton = formClip["comboButton"];
+			_comboButton.addEventListener(MouseEvent.CLICK, onCombo);
+		}
+		
+		private var _msgs:Array;
+		private var _comboBox:Sprite;
+		private var _comboButton:SimpleButton;
+		
+		private function onCombo(event:MouseEvent):void
+		{
+			if(!_comboBox)
+			{
+				_comboBox = DrawUtil.drawRect(400-2, 20*_msgs.length, 0x000000, .75, 0xCE9F12);
+				_comboBox.alpha = 0;
+				_comboBox.visible = false;
+				for(var i:int=0;i<_msgs.length;i++)
+				{
+					//bg
+					var _comboItem:Sprite = DrawUtil.drawRect(400, 20, 0x111111,.75);
+					_comboItem.tabIndex = i;
+					_comboItem.y = i*20+1;
+					_comboBox.addChild(_comboItem);
+					
+					//text
+					var _label:SDTextField = new SDTextField(_msgs[i]);
+					_label.autoSize = "left";
+					_label.textColor = 0xFFFFFF;
+					_label.y = i*20+1;
+					_comboBox.addChild(_label);
+					
+					_comboItem.buttonMode = true;
+					
+					_comboItem.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void{
+						formClip["msgInput"].text = _msgs[Sprite(event.target).tabIndex];
+						TweenLite.to(_comboBox, .25, {autoAlpha:0});
+					});
+				}
+				
+				addChild(_comboBox);
+				
+				_comboBox.addEventListener(MouseEvent.ROLL_OUT, function(event:MouseEvent):void{
+					TweenLite.to(_comboBox, .25, {autoAlpha:0});
+				});
+			}
+			
+			if(_comboBox.alpha<1)
+				TweenLite.to(_comboBox, .25, {autoAlpha:1});
+			else
+				TweenLite.to(_comboBox, .25, {autoAlpha:0});
+			
+			_comboBox.x = formClip.x+_comboButton.x;
+			_comboBox.y = formClip.y+_comboButton.y+_comboButton.height+20+2;
 		}
 		
 		private function onClose(event:MouseEvent):void
