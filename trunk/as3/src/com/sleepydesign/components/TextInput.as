@@ -135,6 +135,7 @@ package com.sleepydesign.components
 		}
 		public function get text():String
 		{
+			_text = _tf.text
 			return _text;
 		}
 		
