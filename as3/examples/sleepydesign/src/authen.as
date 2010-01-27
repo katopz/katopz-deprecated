@@ -14,9 +14,12 @@ package
 		[Embed(source="assets/simple-authen.swf", symbol="FormClip")]
 		private var FormClip:Class;
 		public var logInClip:Sprite = new FormClip() as Sprite;
+		private var _form:FormTool;
 
 		public function authen()
 		{
+			trace("authen");
+			
 			// asset
 			addChild(logInClip);
 
@@ -30,7 +33,7 @@ package
 			if (event.type != "complete")
 				return;
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "logInForm");
-			var _form:FormTool = new FormTool(logInClip, _xml, formHandler);
+			_form = new FormTool(logInClip, _xml, formHandler);
 			_form.returnType = URLVariables;
 		}
 		
@@ -39,6 +42,18 @@ package
 			trace(" ^ formHandler : "+event);
 			if(event.type ==  Event.COMPLETE)
 				trace(" ^ onServerData :" + event.target.data.msg);
+		}
+		
+		override public function destroy():void
+		{
+			trace(this , "destroy");
+			super.destroy();
+			
+			_form.destroy();
+			_form = null;
+			
+			removeChild(logInClip);
+			logInClip = null;
 		}
 	}
 }

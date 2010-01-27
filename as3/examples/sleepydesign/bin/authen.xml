@@ -2,9 +2,10 @@
 <site id="site" label="Candle" version="1">
 	<page id="Authen" label="Simple Authen" src="Authen.swf">
 		<content id="logIn" src="logInClip">
-			<form id="logInForm" action="serverside/authen.php" method="POST">
-				<textinput id="username" src="usernameInput" label="Your user name" maxlength="50" required="true"/>
+			<form id="logInForm" action="serverside/authen.php" method="POST" post="time=$CANDLE_TIME&x=$CANDLE_X&y=$CANDLE_Y" onIncomplete="as:alert('กรุณากรอกข้อมูลให้ครบ')" onInvalid="as:alert('กรุณากรอก $invalid_list ให้ถูกต้อง')">
+				<textinput id="username" src="usernameInput" label="Your user name" maxlength="50" required="true" type="email"/>
 				<textinput id="password" src="passwordInput" label="Your password" maxlength="130" required="true"/>
+				<textfield id="alert" src="alertText" type="alert"/>
 				<button id="submitButton" src="submitButton" type="submit"/>
 			</form>
 		</content>
