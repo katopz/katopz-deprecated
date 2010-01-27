@@ -69,7 +69,6 @@ package
 
 		[Embed(source="assets/ThaiMap.swf",symbol="CandleClip")]
 		private var CandleClip:Class;
-		private var _dragCandleClip:Sprite = new CandleClip() as Sprite;
 		private var _candleClip:Sprite = new CandleClip() as Sprite;
 		
 		/*
@@ -84,7 +83,7 @@ package
 		
 		[Embed(source="assets/ThaiMap.swf",symbol="MarkerClip")]
 		private var MarkerClip:Class;
-		private var _markerClip:Sprite = new MarkerClip as Sprite;
+		private var _dragCandleClip:Sprite = new MarkerClip() as Sprite;
 		
 		[Embed(source="assets/ThaiMap.swf",symbol="MapIconClip")]
 		private var MapIconClip:Class;
@@ -136,8 +135,6 @@ package
 			alpha = 0;
 			//show();
 			
-			_dragCandleClip.addChild(_markerClip);
-
 			addChild(systemLayer);
 			LoaderUtil.loaderClip = new Preloader(systemLayer, _stageWidth, _stageHeight);
 
@@ -670,7 +667,7 @@ package
 
 					// mouse effct
 					Mouse.hide();
-					_markerClip.mouseEnabled = false;
+					_dragCandleClip.mouseEnabled = false;
 					addChild(_dragCandleClip);
 					_dragCandleClip.startDrag(true);
 					
@@ -1124,6 +1121,9 @@ package
 				// debug
 				title = _x +","+ _y + " | " + idleNum + " | " + _ARGB;
 			}
+			
+			if(_status=="drag" && _dragCandleClip && _dragCandleClip["label"])
+				_dragCandleClip["label"].text = _x +","+ _y;
 		}
 		
 		private var _mouseX:Number = 0;
@@ -1134,7 +1134,7 @@ package
 		
 		override protected function onPostRender():void
 		{
-			if (_transformDirty)
+			if (_transformDirty || _status=="idle" || _status=="explore")
 			{
 				if (USE_EFFECT)
 				{
