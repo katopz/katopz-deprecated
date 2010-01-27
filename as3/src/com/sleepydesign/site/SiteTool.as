@@ -111,7 +111,9 @@ package com.sleepydesign.site
 		{
 			if(event.type=="complete")
 			{
-				event.target.loader.parent.addChild(event.target.content as DisplayObject);
+				if(event.target.loader.parent)
+					event.target.loader.parent.addChild(event.target.content as DisplayObject);
+				
 				if(_pageLoaders.indexOf(event.target.loader)>-1)
 				 _loadNum++;
 				
