@@ -7,39 +7,39 @@ package
 	import com.sleepydesign.site.SWFAddress;
 	import com.sleepydesign.site.SWFAddressEvent;
 	import com.sleepydesign.site.SiteTool;
-	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.StringUtil;
-	import com.sleepydesign.utils.XMLUtil;
 	
 	import flash.display.DisplayObject;
-	import flash.display.Loader;
-	import flash.display.Stage;
 	import flash.events.Event;
 
+	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
 	public class main extends SDSprite
 	{
 		private var _xml:XML;
 		private var _content:DisplayObject;
-		private var _loader:Loader;
+		private var _siteTool:SiteTool
+		private var _tree:Tree;
 		
 		public function main()
 		{
 			// get external config
-			LoaderUtil.loadXML("config.xml", function(event:Event):void
-			{
-				if (event.type != "complete")
-					return;
-				createSite(_xml = event.target.data);
-			});
+			LoaderUtil.loadXML("site.xml", onXMLLoad)
 		}
 
+		private function onXMLLoad(event:Event):void
+		{
+			if (event.type != "complete")
+				return;
+			_xml = new XML(event.target.data);
+			createSite(_xml);
+		}
+		
 		private function createSite(xml:XML):void
 		{
-			var _siteTool:SiteTool = new SiteTool(this, xml);
-			
+			SWFAddress.addEventListener(SWFAddressEvent.INIT, onSWFAddressInit);
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
 			
-			var _tree:Tree = new Tree(xml, true, true, true);
+			_tree = new Tree(xml, true, true, true);
 			addChild(_tree);
 			_tree.x = 100;
 			_tree.y = 100;
@@ -49,8 +49,14 @@ package
 
 		private function onTreeChangeFocus(event:TreeEvent):void
 		{
-			var _path:String = event.node.path.substring(1);
-			SWFAddress.setValue(_path);
+			var _path:String = String("/"+event.node.path).split("/$").join("/");
+			if(SWFAddress.getPath()!=_path)
+				SWFAddress.setValue(_path);
+		}
+		
+		private function onSWFAddressInit(e:SWFAddressEvent):void
+		{
+			_siteTool = new SiteTool(this, _xml);
 		}
 		
 		private function handleSWFAddress(e:SWFAddressEvent):void
@@ -61,32 +67,23 @@ package
 			
 			SWFAddress.setTitle(title);
 			
-			setFocus(e.pathNames[0]);
+			if(e.pathNames[0])
+			{
+				// focus from external
+				setFocus(e.path);
+			}else if(!StringUtil.isNull(_xml.@focus)){
+				// focus from xml
+				SWFAddress.setValue(String(_xml.@focus));
+			}
 		}
 		
 		private function setFocus(path:String):void
 		{
-			var _pageXML:XML = XMLUtil.getXMLById(_xml, path);
+			// tree
+			_tree.setFocusByPath(path.split("/").join("/$"));
 			
-			if(!StringUtil.isNull(_pageXML.@src))
-				_loader = LoaderUtil.loadAsset(_pageXML.@src, onContentLoad);
-		}
-		
-		private function onContentLoad(event:Event):void
-		{
-			if(event.type=="complete")
-			{
-				if(_content)
-				{
-					removeChild(_content);
-					_content = null;
-					_loader = null;
-					SystemUtil.gc();
-				}
-				
-				_content = event.target.content;
-				addChild(_content);
-			}
+			// site
+			_siteTool.setFocusByPath(path);
 		}
 	}
 }
