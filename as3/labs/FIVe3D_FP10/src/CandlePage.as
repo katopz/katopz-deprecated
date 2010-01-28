@@ -1122,10 +1122,34 @@ package
 				title = _x +","+ _y + " | " + idleNum + " | " + _ARGB;
 			}
 			
-			if(_status=="drag" && _dragCandleClip && _dragCandleClip["label"])
-				_dragCandleClip["label"].text = _x +","+ _y;
+			if(_status=="drag" && _dragCandleClip)
+			{
+				if(_dragCandleClip["labelText"])
+					_dragCandleClip["labelText"].text = _x +","+ _y;
+				
+				if(_dragCandleClip["detailText"])
+				{
+					//DATE $YEAR.$MONTH.$DATE,$HOUR.$MIN.$SEC.$MSEC
+					if(!_detailHTMLText)
+						_detailHTMLText = _dragCandleClip["detailText"].htmlText;
+					
+					var _htmlText:String = _detailHTMLText;
+					var _date:Date = new Date();
+					_htmlText = _htmlText.split("$YEAR.$MONTH.$DATE,$HOUR.$MIN.$SEC.$MSEC").join(
+					_date.getFullYear()+"."+
+					(_date.getMonth()+1)+"."+
+					_date.getDate()+", "+
+					_date.getHours()+"."+
+					_date.getMinutes()+"."+
+					_date.getSeconds()+"."+
+					StringUtil.addZero(_date.getMilliseconds(),3)
+					);
+					_dragCandleClip["detailText"].htmlText = _htmlText
+				}
+			}
 		}
 		
+		private var _detailHTMLText:String;
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 		private var idleNum:int = 0;
