@@ -1,8 +1,5 @@
 package com.sleepydesign.playground.data
 {
-	import com.sleepydesign.game.core.Position;
-
-	import flash.display.Scene;
 	import flash.net.registerClassAlias;
 	import flash.utils.IDataInput;
 	import flash.utils.IDataOutput;
