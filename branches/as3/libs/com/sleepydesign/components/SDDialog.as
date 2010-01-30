@@ -35,24 +35,16 @@ package com.sleepydesign.components
 			this.caller = caller;
 			
 			super();
+			
 		}
 		
-		/*
-		override protected function onStage(event:Event=null):void
+		override protected function onStage(event:Event):void
 		{
-			align = "center";
-			this.caller = caller?caller:this.parent;
 			super.onStage(event);
-		}
-		*/
-
-		override protected function init():void
-		{
-			align = "center";
 			this.caller = caller?caller:this.parent;
-			super.init();
 			mouseEnabled = true;
 			mouseChildren = true;
+			align = "center";
 		}
 
 		override public function create(config:Object = null):void
@@ -172,8 +164,8 @@ package com.sleepydesign.components
 			switch(_align)
 			{
 				case "center" :
-					begPoint.x = caller.root.stage.stageWidth/2 - width/2;
-					begPoint.y = caller.root.stage.stageHeight/2 - height/2;
+					//begPoint.x = stage.stageWidth/2 - width/2;
+					//begPoint.y = stage.stageHeight/2 - height/2;
 				break;
 			}
 			setPosition();
