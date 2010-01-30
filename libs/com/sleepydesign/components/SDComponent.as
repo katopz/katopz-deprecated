@@ -18,7 +18,7 @@ package com.sleepydesign.components
 		
 		public function SDComponent():void
 		{
-			//
+			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 		
 		override protected function init():void
@@ -26,6 +26,11 @@ package com.sleepydesign.components
 			super.init();
 			create();
 			draw();
+		}
+		
+		protected function onStage(event:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 		
 		public function setSize(w:Number, h:Number):void
