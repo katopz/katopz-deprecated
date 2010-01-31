@@ -50,6 +50,7 @@
 				factorZ : config.height
 			});
 			addChild(map);
+			map.visible = false;
 			
 			update(config);
 		}

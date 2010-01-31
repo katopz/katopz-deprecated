@@ -172,14 +172,14 @@ package com.sleepydesign.playground.pathfinder
 			return Math.round((-iPosition.z - z0) / zSize);
 		}
 		
-		public function getNodeByPointition(iPosition:*):AStarNode 
+		public function getNodeByPosition(iPosition:*):AStarNode 
 		{
 			trace(" ! try : " + iPosition);
 			
 			var xPoint:int = getXPos(iPosition);
 			var zPoint:int = getZPos(iPosition);
 			
-			trace(" ! getNodeByPointition : " + xPoint,zPoint);
+			trace(" ! getNodeByPosition : " + xPoint,zPoint);
 			
 			if(xPoint<0||zPoint<0||zPoint>nodes.length-1)return null;
 			if(xPoint>nodes[zPoint][0].length-1)return null;
@@ -189,7 +189,7 @@ package com.sleepydesign.playground.pathfinder
 		
 		public function getColorByPosition(iPosition:*):Number 
 		{
-			return getNodeByPointition(iPosition).color;
+			return getNodeByPosition(iPosition).color;
 		}
 		
 		public function getPositionByNode(xPoint:uint, yPoint:uint, zPoint:uint ):Position 
@@ -328,8 +328,8 @@ package com.sleepydesign.playground.pathfinder
 			this.position = position;
 			this.destination = destination;
 			
-			startNode = getNodeByPointition(position);
-			finishNode = getNodeByPointition(destination);
+			startNode = getNodeByPosition(position);
+			finishNode = getNodeByPosition(destination);
 			
 			if(!finishNode || startNode==finishNode || bitmapData.getPixel(finishNode.xPoint, finishNode.zPoint) == 0x000000)
 			{
