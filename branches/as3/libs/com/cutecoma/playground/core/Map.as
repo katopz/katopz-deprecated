@@ -10,6 +10,7 @@ package com.cutecoma.playground.core
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
@@ -77,8 +78,10 @@ package com.cutecoma.playground.core
 			minimap.mouseChildren = false;
 			addChild(minimap);
 			
-			var bitmap:Bitmap = new Bitmap(data.bitmapData);
+			bitmap = new Bitmap(data.bitmapData);
 			minimap.addChild(bitmap);
+			
+			//minimap.addEventListener(MouseEvent.MOUSE_DOWN, onMapClick);
 			
 			line = new Shape();
 			line.name = "line";
@@ -90,6 +93,19 @@ package com.cutecoma.playground.core
 			pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
 			pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
 		}
+		
+		public var bitmap:Bitmap;
+		/*
+		private function onMapClick(event:MouseEvent):void
+		{
+			trace( " ^ onClick:", event.target, event.currentTarget, scaleX);
+			trace(event.localX/scaleX,event.localY/scaleY);
+			trace(data.bitmapData);
+			trace(data.bitmapData.width, data.bitmapData.height);
+			trace(data.bitmapData.getPixel(int(event.localX/scaleX),int(event.localY/scaleY)));
+			data.nodes[0] = 1;
+		}
+		*/
 		
 		// _______________________________________________________ Point
 		
@@ -208,6 +224,9 @@ package com.cutecoma.playground.core
 
 		override public function destroy():void
 		{
+			//bitmap.removeEventListener(MouseEvent.CLICK, onMapClick);
+			bitmap = null;
+			
 			minimap.destroy();
 			minimap = null;
 			

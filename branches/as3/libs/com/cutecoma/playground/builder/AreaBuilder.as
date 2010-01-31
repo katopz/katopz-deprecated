@@ -1,14 +1,13 @@
 ﻿package com.cutecoma.playground.builder
 {
-	import com.sleepydesign.core.SDContainer;
-	import com.sleepydesign.draw.SDSquare;
-	import com.sleepydesign.events.SDKeyboardEvent;
-	import com.sleepydesign.events.SDMouseEvent;
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.Map;
-	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.components.SDInputText;
+	import com.sleepydesign.core.SDContainer;
+	import com.sleepydesign.events.SDKeyboardEvent;
+	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
 	import com.sleepydesign.utils.FileUtil;
@@ -39,12 +38,15 @@
 			
 			bg.setSize(this.width, this.height);
 			*/
-			
+			/*
 			// controller
 			Game.inputController = new InputController(true, true);
 			Game.inputController.mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
+			*/
+			codeText = new SDInputText("1");
+			codeText.width = 100;
 		}
 		
 		public function setupBackground():void
@@ -53,6 +55,7 @@
 			FileUtil.openImageTo(area.background);
 		}
 		
+		public var codeText:SDInputText;
 		public function toggleTerrain(map:Map):void
 		{
 			if(map.scaleX==1)
@@ -66,7 +69,28 @@
 			
 			map.x = stage.stageWidth - map.width;
 			map.y = 0;//stage.stageHeight/2 - map.height/2;
+			
+			if(map.scaleX==5)
+			{
+				codeText.x = map.x;
+				codeText.y = map.y+map.height;
+				
+				addChild(codeText);
+				//map.mouseEnabled = true;
+				//stage.addEventListener(MouseEvent.MOUSE_DOWN, onMapClick);
+			}else{
+				//stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMapClick);
+				//map.mouseEnabled = false;
+				removeChild(codeText);
+			}
 		}
+		
+		/*
+		private function onMapClick(event:MouseEvent):void
+		{
+			trace( " ^ onClick:", event.target, event.currentTarget);
+		}
+		*/
 		
 		/*
 		private function onOpenBackgroundComplete(event:SDEvent):void

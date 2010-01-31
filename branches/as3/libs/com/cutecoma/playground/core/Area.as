@@ -20,8 +20,8 @@
 			background = new BackGround(config);
 			addChild(background);
 			
-			mouseEnabled = false;
-			mouseChildren = false;
+			//mouseEnabled = false;
+			//mouseChildren = false;
 			
 			super("Area");
 			
