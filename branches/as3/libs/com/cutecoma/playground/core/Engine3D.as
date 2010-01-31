@@ -266,9 +266,12 @@ package com.cutecoma.playground.core
 			
 			//init3d(new Event(Event.COMPLETE));
 			
+			/*
 			trace("____________________________________________________");
 			trace("camera:" + camera);
 			trace("____________________________________________________");
+			*/
+			
 			//trace("dolly:" + dolly);
 			//trace("decoy:" + decoy);
 			
@@ -387,7 +390,7 @@ package com.cutecoma.playground.core
 			camera.y+=(dolly.y-camera.y)*camera.extra.speed;
 			camera.z+=(dolly.z-camera.z)*camera.extra.speed;
 			*/
-			
+			/*
 			if(SDMouse.isMouseDown)
 			{
 				//dolly.lookAt(decoy);
@@ -404,6 +407,7 @@ package com.cutecoma.playground.core
 				//trace("zoom:" + camera.zoom);
 				trace("____________________________________________________");
 			}
+			*/
 			
 			
 			//camera.copyTransform(dolly);
