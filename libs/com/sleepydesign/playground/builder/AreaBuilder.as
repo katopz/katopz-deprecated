@@ -7,6 +7,7 @@
 	import com.sleepydesign.game.core.Game;
 	import com.sleepydesign.playground.core.Area;
 	import com.sleepydesign.playground.core.Engine3D;
+	import com.sleepydesign.playground.core.Map;
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
@@ -19,7 +20,7 @@
 	
 	public class AreaBuilder extends SDContainer
 	{		
-		public var log			:SDTextField;
+		//public var log			:SDTextField;
 		private var engine3D	:Engine3D;
 		private var area		:Area;
 		private static const FORWARD:Number3D = new Number3D(0, 0, -1);
@@ -31,14 +32,13 @@
 			this.engine3D = engine3D;
 			this.area = area;
 			
+			/*
 			// log
 			var bg:SDSquare = new SDSquare(this.width, this.height, 0xFF0000);
 			addChild(bg);
 			
-			log = new SDTextField("Edit Mode");
-			addChild(log);
-			
 			bg.setSize(this.width, this.height);
+			*/
 			
 			// controller
 			Game.inputController = new InputController(true, true);
@@ -51,6 +51,21 @@
 		{
 			//SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
 			FileUtil.openImageTo(area.background);
+		}
+		
+		public function toggleTerrain(map:Map):void
+		{
+			if(map.scaleX==1)
+			{
+				map.scaleX = 5;
+				map.scaleY = 5;
+			}else{
+				map.scaleX = 1;
+				map.scaleY = 1;
+			}
+			
+			map.x = stage.stageWidth - map.width;
+			map.y = 0;//stage.stageHeight/2 - map.height/2;
 		}
 		
 		/*
@@ -139,7 +154,7 @@
 			Game.inputController.keyboard.removeEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress);
 			Game.inputController.mouse.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			
-			removeChild(log);
+			//removeChild(log);
 		}
 	}
 }

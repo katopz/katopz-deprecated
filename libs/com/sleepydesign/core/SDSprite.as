@@ -87,7 +87,8 @@ package com.sleepydesign.core
 			// Remove
 			if (child.parent && child != this)
 			{
-				super.removeChild(child);
+				if(super.contains(child))
+					super.removeChild(child);
 
 				// Got own suicide plane
 				if (child is IDestroyable)

@@ -164,8 +164,8 @@ package com.sleepydesign.components
 			switch(_align)
 			{
 				case "center" :
-					//begPoint.x = stage.stageWidth/2 - width/2;
-					//begPoint.y = stage.stageHeight/2 - height/2;
+					begPoint.x = stage.stageWidth/2 - width/2;
+					begPoint.y = stage.stageHeight/2 - height/2;
 				break;
 			}
 			setPosition();

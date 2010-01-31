@@ -70,7 +70,7 @@ package com.sleepydesign.playground.data
 					
 					//warp
 					default	: 
-						_bitmapData.setPixel(i, j, 0xFF0000FF - nodes[k]);
+						_bitmapData.setPixel(i, j, 0xFF000000 + nodes[k]);
 						warpPoint[nodes[k]] = new Point(i*_scaleX,j*_scaleZ);
 						// no spawnPoint?
 						if(!spawnPoint)spawnPoint=warpPoint[nodes[k]];

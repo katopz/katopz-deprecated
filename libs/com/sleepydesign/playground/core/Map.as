@@ -68,15 +68,15 @@ package com.sleepydesign.playground.core
 			var raw:Object;
 			
 			// TODO : load from external source
-			if(sourceURI=="l0r0.dat")
+			if(sourceURI=="88.dat")
 			{
 				raw = {
-					id:3,
+					id:88,
 					nodes:
 					[
-						0, 0, 0, 4, 4, 4, 0,
-						0, 0, 0, 4, 4, 4, 0,
-						0, 0, 0, 4, 4, 4, 0,
+						0, 0, 0, 87, 87, 87, 0,
+						0, 0, 0, 87, 87, 87, 0,
+						0, 0, 0, 87, 87, 87, 0,
 						0, 0, 0, 1, 1, 1, 0,
 						0, 0, 0, 1, 1, 1, 0,
 						2, 1, 1, 1, 1, 1, 0,
@@ -94,11 +94,11 @@ package com.sleepydesign.playground.core
 				
 			}else{
 				raw = {
-					id:4,
+					id:87,
 					nodes:
 					[
-						0, 0, 5, 5, 5, 0, 0,
-						0, 0, 5, 5, 5, 0, 0,
+						0, 0, 86, 86, 86, 0, 0,
+						0, 0, 86, 86, 86, 0, 0,
 						1, 1, 1, 1, 1, 0, 0,
 						1, 1, 1, 1, 1, 0, 0,
 						1, 1, 1, 1, 1, 0, 0,
@@ -106,7 +106,7 @@ package com.sleepydesign.playground.core
 						0, 1, 1, 1, 1, 0, 0,
 						0, 1, 1, 1, 1, 0, 0,
 						0, 0, 1, 1, 1, 0, 0,
-						0, 0, 3, 3, 3, 0, 0,
+						0, 0, 88, 88, 88, 0, 0,
 						0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0,
 					],
@@ -172,7 +172,7 @@ package com.sleepydesign.playground.core
 		{
 			var color:Number = pathFinder.getColorByPosition(position);
 			
-			trace(" ! Color		: "+(255-color));
+			trace(" ! Color		: "+color, color.toString(16));
 			
 			/*
 			// TODO : comfig.color:command
@@ -199,7 +199,7 @@ package com.sleepydesign.playground.core
 			if(color<255)
 			{
 				command = "warp";
-				args = [255-color];
+				args = [color];
 			}else{
 				command = "";
 			}
@@ -263,8 +263,8 @@ package com.sleepydesign.playground.core
 			
 			// _______________________________________________________ MiniMap
 			
-			var bitmap:Bitmap = new Bitmap(this.data.bitmapData)
 			minimap.destroy();
+			var bitmap:Bitmap = new Bitmap(this.data.bitmapData)
 			minimap.addChild(bitmap);
 			
 			line = new Shape();
