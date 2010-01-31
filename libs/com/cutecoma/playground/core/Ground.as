@@ -20,7 +20,7 @@
 		private var plane3D		:Plane3D;
 		private var engine3D	:Engine3D;
 		
-		public function Ground(engine3D:Engine3D, map:Map, mouseEnable:Boolean=true, debug:Boolean=false)
+		public function Ground(engine3D:Engine3D, map:Terrain, mouseEnable:Boolean=true, debug:Boolean=false)
 		{
 			this.engine3D = engine3D;
 			plane3D = new Plane3D(new Number3D(0, 1, 0), Number3D.ZERO);
@@ -78,7 +78,7 @@
 		
 		public function create():void
 		{
-			var map:Map = Map.getInstance();
+			var map:Terrain = Terrain.getInstance();
 				
 			var w:uint=map.data.bitmapData.width;
 			var h:uint=map.data.bitmapData.height;
@@ -94,7 +94,7 @@
 					tileMaterials.addMaterial(new WireframeMaterial(color,1,1), i+"_"+j);
 			}
 			
-			_tileInstance = new TilePlane(tileMaterials, w*Map.factorX, h*Map.factorZ, w,h);
+			_tileInstance = new TilePlane(tileMaterials, w*Terrain.factorX, h*Terrain.factorZ, w,h);
 			engine3D.addChild(_tileInstance);
 		}
 		

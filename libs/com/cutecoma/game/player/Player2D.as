@@ -11,7 +11,7 @@
 	import com.cutecoma.game.core.Position;
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.events.PlayerEvent;
-	import com.cutecoma.playground.core.Map;
+	import com.cutecoma.playground.core.Terrain;
 	//import org.papervision3d.objects.SDObject3D;
 
 	public class Player2D extends SDObject
@@ -131,7 +131,7 @@
 			decoy.copyPosition(data.des);
 			
 			// add player to map
-			map = Map.getInstance();
+			map = Terrain.getInstance();
 			map.addElement(this);
 			
 			if(balloon)
@@ -184,7 +184,7 @@
 		}
 		
 		// TODO : getset
-		public var map:Map;
+		public var map:Terrain;
 		public function walkTo(position:Position):void
 		{
 			if(map)
@@ -218,7 +218,7 @@
 
 				trace(" ! Length : "+ positions.length);
 				
-				var factor:Number = (Map.factorX+Map.factorZ)*.5;
+				var factor:Number = (Terrain.factorX+Terrain.factorZ)*.5;
 				var time:Number= dolly.distanceTo(decoy)/speed/factor;
 				/*
 				if(positions.length==2)

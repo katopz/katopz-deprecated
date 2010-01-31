@@ -7,7 +7,7 @@
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
-	import com.cutecoma.playground.core.Map;
+	import com.cutecoma.playground.core.Terrain;
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
@@ -53,7 +53,7 @@
 			FileUtil.openImageTo(area.background);
 		}
 		
-		public function toggleTerrain(map:Map):void
+		public function toggleTerrain(map:Terrain):void
 		{
 			if(map.scaleX==1)
 			{

@@ -3,8 +3,8 @@ package com.cutecoma.playground.data
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-	import flash.utils.Dictionary;
 	import flash.net.registerClassAlias;
+	import flash.utils.Dictionary;
 	import flash.utils.IDataInput;
 	import flash.utils.IDataOutput;
 	import flash.utils.IExternalizable;
@@ -18,35 +18,40 @@ package com.cutecoma.playground.data
 	 * - Array -> MapData
 	 * - AMF IOMapData -> MapData
 	 */
-	public class MapData implements IExternalizable
+	public class TerrainData implements IExternalizable
 	{
+		registerClassAlias("com.cutecoma.playground.data.TerrainData", TerrainData);
+		
 		public var bitmapData:BitmapData;
 		public var spawnPoint:Point;
 		public var warpPoint:Dictionary = new Dictionary(true);
 
-		private var _scaleX:Number;
-		private var _scaleZ:Number;
+		public var nodes:Array;
+		public var width:uint;
+		
+		public var scaleX:Number;
+		public var scaleZ:Number;
 
-		public function MapData(id:String, data:*, col:uint, scaleX:Number = 2, scaleZ:Number = 2)
+		public function TerrainData(nodes:Array=null, width:uint=100, scaleX:Number = 4, scaleZ:Number = 4)
 		{
-			_scaleX = scaleX;
-			_scaleZ = scaleZ;
-
-			parse({data: data, col: col, scaleX: scaleX, scaleZ: scaleZ});
+			parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
 		}
 
 		// ______________________________ Parse ______________________________
 
-		public function parse(raw:*):MapData
+		public function parse(raw:*):TerrainData
 		{
-			var nodes:Array = raw.data;
-			var col:uint = raw.col;
-
+			nodes = raw.nodes;
+			width = raw.width;
+			
+			scaleX = raw.scaleX;
+			scaleZ = raw.scaleZ;
+			
 			if (!nodes || nodes.length < 1)
 				return null;
 
 			var _length:int = nodes.length;
-			var w:uint = col;
+			var w:uint = width;
 			var h:uint = uint(_length / w);
 
 			var _bitmapData:BitmapData = new BitmapData(w, h, true, 0xFF000000);
@@ -70,13 +75,13 @@ package com.cutecoma.playground.data
 					// spawn
 					case 2:
 						_bitmapData.setPixel(i, j, 0xFF00FF00);
-						spawnPoint = new Point(i * _scaleX, j * _scaleZ);
+						spawnPoint = new Point(i * scaleX, j * scaleZ);
 						break;
 
 					//warp
 					default:
 						_bitmapData.setPixel(i, j, 0xFF000000 + nodes[k]);
-						warpPoint[nodes[k]] = new Point(i * _scaleX, j * _scaleZ);
+						warpPoint[nodes[k]] = new Point(i * scaleX, j * scaleZ);
 						// no spawnPoint?
 						if (!spawnPoint)
 							spawnPoint = warpPoint[nodes[k]];
@@ -88,31 +93,17 @@ package com.cutecoma.playground.data
 
 			if (bitmapData)
 				bitmapData.dispose();
-			bitmapData = new BitmapData(w * _scaleX, h * _scaleZ);
-			bitmapData.draw(_bitmapData, new Matrix(_scaleX, 0, 0, _scaleZ));
+			bitmapData = new BitmapData(w * scaleX, h * scaleZ);
+			bitmapData.draw(_bitmapData, new Matrix(scaleX, 0, 0, scaleZ));
 
 			return this;
 		}
-
-		/*
-		   public function get width(): { return bitmapData.width; }
-
-		   public function set width(value:):void {
-		   bitmapData.width = value;
-		   }
-
-		   public function get height(): { return bitmapData.height; }
-
-		   public function set height(value:):void {
-		   bitmapData.height = value;
-		   }
-		 */
 
 		// _______________________________________________________ external
 
 		public function writeExternal(output:IDataOutput):void
 		{
-			output.writeObject({});
+			output.writeObject({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
 		}
 
 		public function readExternal(input:IDataInput):void

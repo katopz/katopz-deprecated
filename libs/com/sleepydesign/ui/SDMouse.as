@@ -19,10 +19,6 @@ package com.sleepydesign.ui
 		public function SDMouse(target:InteractiveObject)
 		{
 			this.target = target?target:SDApplication.currentStage;
-		}
-		
-		override protected function init():void
-		{
 			create();
 		}
 		
@@ -68,7 +64,8 @@ package com.sleepydesign.ui
 				break;
 				case MouseEvent.MOUSE_MOVE:
 					target["mouseChildren"] = false;
-					if(isMouseDown && event.target == dragTarget &&  event.relatedObject == null)
+					//if(isMouseDown && event.target == dragTarget &&  event.relatedObject == null)
+					if(isMouseDown)// && event.target == dragTarget &&  event.relatedObject == null)
 					{
 						var dx:Number = event.stageX - lastMousePosition.x;
 						var dy:Number = event.stageY - lastMousePosition.y;
