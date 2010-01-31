@@ -27,9 +27,11 @@
 	import com.sleepydesign.playground.data.SceneData;
 	import com.sleepydesign.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.utils.FileUtil;
+	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.ProfilerUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
+	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
@@ -70,16 +72,16 @@
 		"87", "assets/day2.jpg", "87.dat", 40, 40, 
 		new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)));
 
-		private var configs:Dictionary;
+		private var configs:Dictionary = new Dictionary();
 		private var areaDialog:SDDialog;
 		
 		override protected function init():void
 		{
 			// TODO load from external and put to group
-			configs = new Dictionary();
+			//configs = new Dictionary();
 
-			configs[87] = config87;
-			configs[88] = config88;
+			//configs[87] = config87;
+			//configs[88] = config88;
 		//}
 		
 		//protected function onStage(event:Event=null):void
@@ -110,7 +112,8 @@
 			areaDialog.hide();
 			
 			// load config?
-			create(configs[id]);
+			LoaderUtil.load(id+".ara", onAreaLoad);
+			//create(configs[id]);
 		}
 
 		// ______________________________ Create ______________________________
@@ -338,29 +341,40 @@
 					var _config:AreaData = new AreaData().parse(area.data);
 					_config.scene = new SceneData(new CameraData().parse(engine3D.camera));
 
-					//SystemUtil.save(_config, "l0r0.ara");
-					FileUtil.save(_config, "l0r0.ara");
+					FileUtil.save(_config, "00.ara");
 					break;
 				case "Open":
-					system.addEventListener(SDEvent.COMPLETE, onOpenAreaComplete);
-					FileUtil.open(["*.ara"]);
+					FileUtil.open(["*.ara"], onAreaLoad);
 					break;
 			}
 		}
-
-		private function onOpenAreaComplete(event:SDEvent):void
+		
+		private function onAreaLoad(event:Event):void
 		{
-			trace(" openHandler : name = " + event.data);
-			system.removeEventListener(SDEvent.COMPLETE, onOpenAreaComplete);
-
+			if(event.type!="complete")return;
+			
 			var areaData:AreaData = new AreaData();
-			IExternalizable(areaData).readExternal(event.data);
+			IExternalizable(areaData).readExternal(event.target.data);
+			
+			_data = areaData;
 
+			trace(areaData.id);
+			
+			//cache
+			configs[areaData.id] = areaData;
+			
+			if(!game)
+				create(areaData);
+			else
+				gotoArea(areaData);
+			
+			/*
 			destroy();
 			create(areaData);
 
 			// start game?
 			game.start();
+			*/
 		}
 
 		// ______________________________ Update ____________________________
@@ -375,43 +389,55 @@
 				// and command is? 
 				if (data.command == "warp")
 				{
-					//TODO : get config by area id
 					trace(" ! Warp to : " + data.args[0]);
-					this._data = getConfigByAreaID(data.args[0]);
-
-					if (!this._data)
-						return;
-
-					// dirty
-					if (currentRoomID != this._data.id)
-					{
-						// tell everybody i'm exit
-						game.player.exit();
-
-						// update server
-						connector.exitRoom();
-
-						// wait for exit complete?
-
-						connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
-						connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
-						connector.enterRoom(this._data.id);
-
-						// TODO : actually we need to wait for connection success?
-						currentRoomID = this._data.id;
-
-						// destroy
-						game.removeOtherPlayer();
-
-						//update area
-						area.update(this._data);
-						engine3D.update(this._data.scene);
-						game.player.warp(area.map.getWarpPoint());
-					}
+					gotoAreaID(data.args[0])
 				}
 			}
 		}
+		
+		private function gotoAreaID(id:String):void
+		{
+			_data = getConfigByAreaID(id);
 
+			// cache not exist
+			if (!_data)
+			{
+				LoaderUtil.load(id+".ara", onAreaLoad);
+			}else{
+				gotoArea(_data);
+			}
+		}
+		
+		private function gotoArea(areaData:AreaData):void	
+		{
+			// dirty
+			if (currentRoomID != areaData.id)
+			{
+				// tell everybody i'm exit
+				game.player.exit();
+
+				// update server
+				connector.exitRoom();
+
+				// wait for exit complete?
+
+				connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
+				connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
+				connector.enterRoom(areaData.id);
+
+				// TODO : actually we need to wait for connection success?
+				currentRoomID = areaData.id;
+
+				// destroy
+				game.removeOtherPlayer();
+
+				//update area
+				area.update(areaData);
+				engine3D.update(areaData.scene);
+				game.player.warp(area.map.getWarpPoint());
+			}
+		}
+		
 		private function onEnterRoom(event:SDEvent):void
 		{
 			connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
