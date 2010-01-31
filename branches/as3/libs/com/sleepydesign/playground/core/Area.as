@@ -52,13 +52,15 @@
 			addChild(map);
 			map.visible = false;
 			
-			update(config);
+			update(AreaData(config));
 		}
 		
 		// ______________________________ Update ____________________________
 		
-		public function update(data:Object=null):void
+		public function update(data:AreaData):void
 		{
+			this.data = data;
+			
 			id  = data.id;
 			background.update(data);
 			map.update(data);
