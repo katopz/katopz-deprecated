@@ -13,8 +13,8 @@
 	import com.cutecoma.playground.core.Ground;
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.CameraData;
-	import com.cutecoma.playground.data.SceneData;
 	import com.cutecoma.playground.data.MapData;
+	import com.cutecoma.playground.data.SceneData;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.GlowFilterPlugin;
@@ -33,6 +33,7 @@
 	import com.sleepydesign.utils.ProfilerUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
+	import flash.display.Bitmap;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
@@ -304,7 +305,7 @@
 						<Save/>
 						<Edit>
 							<Background/>
-							<TerrainData/>
+							<Map/>
 						</Edit>
 						<Grid/>
 						<Axis/>
@@ -329,9 +330,6 @@
 			var _label:String = SDTreeNode(event.data.node).label;
 			switch (_label)
 			{
-				case "Map":
-					area.map.visible = !area.map.visible;
-					break;
 				case "Debugger":
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
@@ -345,15 +343,24 @@
 					}
 					else
 					{
-						removeChild(areaBuilder);
+						content.removeChild(areaBuilder);
 						areaBuilder = null;
 
 						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
 					}
 					break;
-				case "TerrainData":
-					areaBuilder.toggleTerrain(area.map);
+				case "Map":
+					FileUtil.openImage(onMapLoad, ["*.png"]);
+					//areaBuilder.toggleTerrain(area.map);
 					break;
+				/*
+				case "Walkable":
+					areaBuilder.codeText.text = "1";
+				break;
+				case "Restrict":
+					areaBuilder.codeText.text = "0";
+				break;
+				*/
 				case "Background":
 					areaBuilder.setupBackground();
 					break;
@@ -388,6 +395,25 @@
 			}
 		}
 
+		private function onMapLoad(event:Event):void
+		{
+			if (event.type != "complete")
+				return;
+			
+			var _bitmap:Bitmap = event.target.content as Bitmap;
+			addChild(_bitmap);
+			
+			var _nodes:Array = [];
+			for (var i:uint = 0; i < _bitmap.width; i++)
+			{
+				for (var j:uint = 0; j < _bitmap.height; j++)
+				{
+					_nodes.push(_bitmap.bitmapData.getPixel(i,j));
+				}
+			}
+			area.map.data.nodes = _nodes;
+		}
+		
 		private function onAreaLoad(event:Event):void
 		{
 			if (event.type != "complete")
