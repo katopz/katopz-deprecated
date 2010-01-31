@@ -3,7 +3,7 @@
 	
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.playground.core.Engine3D;
+	import com.cutecoma.playground.core.Engine3D;
 	
 	import org.papervision3d.materials.WireframeMaterial;
 	import org.papervision3d.objects.parsers.DAE;

@@ -3,7 +3,7 @@ package examples
 	
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.playground.core.Engine3D;
+	import com.cutecoma.playground.core.Engine3D;
 	
 	import org.papervision3d.events.InteractiveScene3DEvent;
 	import org.papervision3d.materials.ColorMaterial;

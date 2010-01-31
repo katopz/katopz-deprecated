@@ -1,13 +1,13 @@
 package examples
 {
 	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.game.core.Position;
-	import com.sleepydesign.game.player.Player;
-	import com.sleepydesign.playground.core.Engine3D;
-	import com.sleepydesign.playground.core.Ground;
-	import com.sleepydesign.playground.core.Map;
-	import com.sleepydesign.playground.data.MapData;
-	import com.sleepydesign.playground.pathfinder.AStar3D;
+	import com.cutecoma.game.core.Position;
+	import com.cutecoma.game.player.Player;
+	import com.cutecoma.playground.core.Engine3D;
+	import com.cutecoma.playground.core.Ground;
+	import com.cutecoma.playground.core.Map;
+	import com.cutecoma.playground.data.MapData;
+	import com.cutecoma.playground.pathfinder.AStar3D;
 	
 	import flash.display.Sprite;
 	

@@ -1,5 +1,22 @@
 ﻿package
 {
+	import com.cutecoma.game.core.Characters;
+	import com.cutecoma.game.core.Game;
+	import com.cutecoma.game.core.Position;
+	import com.cutecoma.game.data.CharacterData;
+	import com.cutecoma.game.data.PlayerData;
+	import com.cutecoma.game.events.PlayerEvent;
+	import com.cutecoma.game.player.Player;
+	import com.cutecoma.playground.builder.AreaBuilder;
+	import com.cutecoma.playground.core.Area;
+	import com.cutecoma.playground.core.Engine3D;
+	import com.cutecoma.playground.core.Ground;
+	import com.cutecoma.playground.data.AreaData;
+	import com.cutecoma.playground.data.CameraData;
+	import com.cutecoma.playground.data.SceneData;
+	import com.cutecoma.playground.data.TerrainData;
+	import com.cutecoma.playground.debugger.PlayerDebugger;
+	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.GlowFilterPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.application.core.SDApplication;
@@ -11,21 +28,6 @@
 	import com.sleepydesign.components.SDTreeNode;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.events.SDMouseEvent;
-	import com.sleepydesign.game.core.Characters;
-	import com.sleepydesign.game.core.Game;
-	import com.sleepydesign.game.core.Position;
-	import com.sleepydesign.game.data.CharacterData;
-	import com.sleepydesign.game.data.PlayerData;
-	import com.sleepydesign.game.events.PlayerEvent;
-	import com.sleepydesign.game.player.Player;
-	import com.sleepydesign.playground.builder.AreaBuilder;
-	import com.sleepydesign.playground.core.Area;
-	import com.sleepydesign.playground.core.Engine3D;
-	import com.sleepydesign.playground.core.Ground;
-	import com.sleepydesign.playground.data.AreaData;
-	import com.sleepydesign.playground.data.CameraData;
-	import com.sleepydesign.playground.data.SceneData;
-	import com.sleepydesign.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.ProfilerUtil;
@@ -36,7 +38,7 @@
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
 
-	[SWF(backgroundColor="0xFFFFFF", frameRate = "30", width = "800", height = "480")]
+	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class main extends SDApplication
 	{
 		private var engine3D:Engine3D;
@@ -56,7 +58,7 @@
 
 		public function main()
 		{
-			TweenPlugin.activate([GlowFilterPlugin]);
+			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
 			super("PlayGround", new SDMacPreloader());
 
 			ProfilerUtil.addStat(SDApplication.system);
@@ -64,17 +66,53 @@
 
 		// ______________________________ Initialize ______________________________
 
-		private var config88:AreaData = new AreaData(
-		"88", "assets/day1.jpg", "88.dat", 40, 40, 
-		new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)));
+		private var config88:AreaData = new AreaData
+		(
+			"88", "assets/day1.jpg", "88.dat", 40, 40,
+			new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)),
+			new TerrainData(
+				[
+					0, 0, 0, 87, 87, 87, 0,
+					0, 0, 0, 87, 87, 87, 0,
+					0, 0, 0, 87, 87, 87, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					2, 1, 1, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0
+				],
+				7,3,4
+			));
 
-		private var config87:AreaData = new AreaData(
-		"87", "assets/day2.jpg", "87.dat", 40, 40, 
-		new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)));
+		private var config87:AreaData = new AreaData
+		(
+			"87", "assets/day2.jpg", "87.dat", 40, 40,
+			new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)),
+			new TerrainData(
+				[
+					0, 0, 86, 86, 86, 0, 0,
+					0, 0, 86, 86, 86, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					0, 1, 1, 1, 1, 0, 0,
+					0, 1, 1, 1, 1, 0, 0,
+					0, 0, 1, 1, 1, 0, 0,
+					0, 0, 88, 88, 88, 0, 0,
+					0, 0, 0, 0, 0, 0, 0,
+					0, 0, 0, 0, 0, 0, 0,
+				],
+				7,4,4
+			));
 
 		private var configs:Dictionary = new Dictionary();
 		private var areaDialog:SDDialog;
-		
+
 		override protected function init():void
 		{
 			// TODO load from external and put to group
@@ -82,61 +120,59 @@
 
 			//configs[87] = config87;
 			//configs[88] = config88;
-		//}
-		
-		//protected function onStage(event:Event=null):void
-		//{
+			//}
+
+			//protected function onStage(event:Event=null):void
+			//{
 			// ___________________________________________________________ Area
 
 			//TODO : ask from external call, add user name 
 			areaDialog = new SDDialog(
-				<question>
-					<![CDATA[Welcome!]]>
-					<answer src="as:onUserSelectArea(87)"><![CDATA[select area 87]]></answer>
-					<answer src="as:onUserSelectArea(88)"><![CDATA[select area 88]]></answer>
+				<question><![CDATA[Welcome! Please select Area ID]]>
+					<answer src="as:onUserSelectArea(87)"><![CDATA[Area 87]]></answer>
+					<answer src="as:onUserSelectArea(88)"><![CDATA[Area 88]]></answer>
 				</question>, false, this);
-			
+
 			this.addChild(areaDialog);
-			
+
 			//init();
 		}
-		
+
 		public function getConfigByAreaID(id:String):AreaData
 		{
 			return configs[id];
 		}
 
-		public function onUserSelectArea(id:int):void
+		public function onUserSelectArea(id:String):void
 		{
 			// hide dialog
 			areaDialog.hide();
-			
+
 			// load config?
-			LoaderUtil.load(id+".ara", onAreaLoad);
+			gotoAreaID(id);
+			//LoaderUtil.load(id+".ara", onAreaLoad);
 			//create(configs[id]);
 		}
 
 		// ______________________________ Create ______________________________
 
-		override public function create(config:Object = null):void
+		public function createArea(areaData:AreaData):void
 		{
-			super.create(config);
-			
 			// ___________________________________________________________ 2D Layer
 
 			// game
 			game = new Game();
 
-			area = new Area(_config);
+			area = new Area(areaData);
 			content.addChild(area);
 
-			area.map.x = stage.stageWidth - area.map.width;
-			//area.map.visible = false;
+			area.terrain.x = stage.stageWidth - area.terrain.width;
+			//area.terrain.visible = false;
 
 			// ___________________________________________________________ 3D Layer
 
 			// 3D engine
-			engine3D = new Engine3D(content, _config.scene);
+			engine3D = new Engine3D(content, areaData.scene);
 			//engine3D.axis = true;
 			//engine3D.grid = true;
 			//engine3D.compass = true;
@@ -145,7 +181,7 @@
 			game.engine = engine3D;
 
 			// Ground
-			area.ground = new Ground(engine3D, area.map, true, !true);
+			area.ground = new Ground(engine3D, area.terrain, true, !true);
 			area.ground.addEventListener(SDMouseEvent.MOUSE_DOWN, onGroundClick);
 
 			// ___________________________________________________________ Char
@@ -166,15 +202,15 @@
 
 			// ___________________________________________________________ Player
 
-			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), 
-			["man1", "man2", "woman1", "woman2"][0*int(4 * Math.random())], "stand", 3));
+			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.terrain.getSpawnPoint(),
+				["man1", "man2", "woman1", "woman2"][0 * int(4 * Math.random())], "stand", 3));
 
 			// read map
-			game.player.map = area.map;
+			game.player.map = area.terrain;
 
 			game.addPlayer(game.player);
 			game.player.talk(VERSION);
-			
+
 			// ___________________________________________________________ System Layer
 
 			SystemUtil.addContext(this, "Option", toggleOption);
@@ -248,32 +284,35 @@
 			catch (e:*)
 			{
 				trace(e)
-			};
+			}
+			;
 		}
 
 		// _______________________________________________________ System
 
 		private var tree:SDTree;
+
 		private function toggleOption(event:*):void
 		{
 			// Engine Explorer
-			if(!tree)
+			if (!tree)
 			{
-				tree = new SDTree(
+				tree = new SDTree
+				(
 					<Option>
 						<Open/>
 						<Save/>
-						<AreaData>
-							<ID/>
+						<Edit>
 							<Background/>
 							<TerrainData/>
-						</AreaData>
+						</Edit>
 						<Grid/>
 						<Axis/>
 						<Debugger/>
 						<Ground/>
-					</Option>, true);
-	
+					</Option>
+				, true);
+
 				tree.x = 10;
 				tree.y = 100;
 				tree.filters = [new GlowFilter(0xFFFFFF, 1, 2, 2)]
@@ -291,29 +330,29 @@
 			switch (_label)
 			{
 				case "Map":
-					area.map.visible = !area.map.visible;
+					area.terrain.visible = !area.terrain.visible;
 					break;
 				case "Debugger":
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
-				case "AreaData":
+				case "Edit":
 					if (!areaBuilder)
 					{
 						areaBuilder = new AreaBuilder(engine3D, area);
 						content.addChild(areaBuilder);
-						
-						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
+
+						area.terrain.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
 					}
 					else
 					{
 						removeChild(areaBuilder);
 						areaBuilder = null;
-						
-						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
+
+						area.terrain.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
 					}
 					break;
 				case "TerrainData":
-					areaBuilder.toggleTerrain(area.map);
+					areaBuilder.toggleTerrain(area.terrain);
 					break;
 				case "Background":
 					areaBuilder.setupBackground();
@@ -331,50 +370,48 @@
 				case "man2":
 				case "woman1":
 				case "woman2":
-					var fakeData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), _label, "walk", 1.5);
+					var fakeData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), area.terrain.getSpawnPoint(), _label, "walk", 1.5);
 					fakeData.des = new Position(200 * Math.random() - 200 * Math.random(), 0, 200 * Math.random() - 200 * Math.random());
 					fakeData.msg = "Walk to : " + fakeData.des;
 					game.update(fakeData)
 					break;
 				case "Save":
 					// TODO : new area id input box here
-					var _config:AreaData = new AreaData().parse(area.data);
-					_config.scene = new SceneData(new CameraData().parse(engine3D.camera));
+					var _saveAreaData:AreaData = new AreaData().parse(area.data);
+					_saveAreaData.scene = new SceneData(new CameraData().parse(engine3D.camera));
 
-					FileUtil.save(_config, "00.ara");
+					FileUtil.save(_saveAreaData, "00.ara");
 					break;
 				case "Open":
 					FileUtil.open(["*.ara"], onAreaLoad);
 					break;
 			}
 		}
-		
+
 		private function onAreaLoad(event:Event):void
 		{
-			if(event.type!="complete")return;
-			
+			if (event.type != "complete")
+				return;
+
 			var areaData:AreaData = new AreaData();
 			IExternalizable(areaData).readExternal(event.target.data);
-			
+
 			_data = areaData;
 
 			trace(areaData.id);
-			
+
 			//cache
 			configs[areaData.id] = areaData;
-			
-			if(!game)
-				create(areaData);
-			else
-				gotoArea(areaData);
-			
-			/*
-			destroy();
-			create(areaData);
 
-			// start game?
-			game.start();
-			*/
+			gotoArea(areaData);
+
+		/*
+		   destroy();
+		   create(areaData);
+
+		   // start game?
+		   game.start();
+		 */
 		}
 
 		// ______________________________ Update ____________________________
@@ -394,7 +431,7 @@
 				}
 			}
 		}
-		
+
 		private function gotoAreaID(id:String):void
 		{
 			_data = getConfigByAreaID(id);
@@ -402,14 +439,22 @@
 			// cache not exist
 			if (!_data)
 			{
-				LoaderUtil.load(id+".ara", onAreaLoad);
-			}else{
+				LoaderUtil.load(id + ".ara", onAreaLoad);
+			}
+			else
+			{
 				gotoArea(_data);
 			}
 		}
-		
-		private function gotoArea(areaData:AreaData):void	
+
+		private function gotoArea(areaData:AreaData):void
 		{
+			if (!area)
+			{
+				createArea(areaData);
+				return;
+			}
+
 			// dirty
 			if (currentRoomID != areaData.id)
 			{
@@ -434,10 +479,10 @@
 				//update area
 				area.update(areaData);
 				engine3D.update(areaData.scene);
-				game.player.warp(area.map.getWarpPoint());
+				game.player.warp(area.terrain.getWarpPoint());
 			}
 		}
-		
+
 		private function onEnterRoom(event:SDEvent):void
 		{
 			connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
