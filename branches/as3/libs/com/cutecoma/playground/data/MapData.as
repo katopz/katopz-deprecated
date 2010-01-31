@@ -18,9 +18,9 @@ package com.cutecoma.playground.data
 	 * - Array -> MapData
 	 * - AMF IOMapData -> MapData
 	 */
-	public class TerrainData implements IExternalizable
+	public class MapData implements IExternalizable
 	{
-		registerClassAlias("com.cutecoma.playground.data.TerrainData", TerrainData);
+		registerClassAlias("com.cutecoma.playground.data.TerrainData", MapData);
 		
 		public var bitmapData:BitmapData;
 		public var spawnPoint:Point;
@@ -32,14 +32,14 @@ package com.cutecoma.playground.data
 		public var scaleX:Number;
 		public var scaleZ:Number;
 
-		public function TerrainData(nodes:Array=null, width:uint=100, scaleX:Number = 4, scaleZ:Number = 4)
+		public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 4, scaleZ:Number = 4)
 		{
 			parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
 		}
 
 		// ______________________________ Parse ______________________________
 
-		public function parse(raw:*):TerrainData
+		public function parse(raw:*):MapData
 		{
 			nodes = raw.nodes;
 			width = raw.width;

@@ -14,9 +14,9 @@ package com.cutecoma.playground.data
 		public var width:Number;
 		public var height:Number;
 		public var scene:SceneData;
-		public var terrain:TerrainData;
+		public var map:MapData;
 
-		public function AreaData(id:String=null, background:String=null, src:String=null, width:Number=0, height:Number=0, scene:SceneData=null, terrain:TerrainData=null)
+		public function AreaData(id:String=null, background:String=null, src:String=null, width:Number=0, height:Number=0, scene:SceneData=null, map:MapData=null)
 		{
 			if(!id)return;
 			
@@ -25,7 +25,7 @@ package com.cutecoma.playground.data
 			this.width = width;
 			this.height = height;
 			this.scene = scene;
-			this.terrain = terrain;
+			this.map = map;
 		}
 
 		// _______________________________________________________internal
@@ -37,7 +37,7 @@ package com.cutecoma.playground.data
 			width = raw.width ? Number(raw.width) : width;
 			height = raw.height ? Number(raw.height) : height;
 			scene = raw.scene ? SceneData(raw.scene) : scene;
-			terrain = raw.terrain ? TerrainData(raw.terrain) : terrain;
+			map = raw.map ? MapData(raw.map) : map;
 			
 			return this;
 		}
@@ -46,7 +46,7 @@ package com.cutecoma.playground.data
 
 		public function writeExternal(output:IDataOutput):void
 		{
-			output.writeObject({id: id, background: background, width: width, height: height, scene: scene, terrain:terrain});
+			output.writeObject({id: id, background: background, width: width, height: height, scene: scene, map:map});
 		}
 
 		public function readExternal(input:IDataInput):void
