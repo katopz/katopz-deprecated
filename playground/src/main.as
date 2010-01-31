@@ -28,6 +28,7 @@
 	import com.sleepydesign.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.ProfilerUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
@@ -42,7 +43,7 @@
 
 		private var areaBuilder:AreaBuilder;
 
-		private const VERSION:String = "PlayGround 2.1";
+		private const VERSION:String = "PlayGround 2.2";
 
 		private var area:Area;
 		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
@@ -61,13 +62,13 @@
 
 		// ______________________________ Initialize ______________________________
 
-		private var config1:AreaData = new AreaData(
-		"l0r0", 
-		"assets/day1.jpg", 
-		"l0r0.dat", 
-		40, 40, new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)));
+		private var config88:AreaData = new AreaData(
+		"88", "assets/day1.jpg", "88.dat", 40, 40, 
+		new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)));
 
-		private var config2:AreaData = new AreaData("l0r1", "assets/day2.jpg", "l0r1.dat", 40, 40, new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)));
+		private var config87:AreaData = new AreaData(
+		"87", "assets/day2.jpg", "87.dat", 40, 40, 
+		new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)));
 
 		private var configs:Dictionary;
 		private var areaDialog:SDDialog;
@@ -77,8 +78,8 @@
 			// TODO load from external and put to group
 			configs = new Dictionary();
 
-			configs[3] = config1;
-			configs[4] = config2;
+			configs[87] = config87;
+			configs[88] = config88;
 		//}
 		
 		//protected function onStage(event:Event=null):void
@@ -89,8 +90,8 @@
 			areaDialog = new SDDialog(
 				<question>
 					<![CDATA[Welcome!]]>
-					<answer src="as:onUserSelectArea(3)"><![CDATA[select area 3]]></answer>
-					<answer src="as:onUserSelectArea(4)"><![CDATA[select area 4]]></answer>
+					<answer src="as:onUserSelectArea(87)"><![CDATA[select area 87]]></answer>
+					<answer src="as:onUserSelectArea(88)"><![CDATA[select area 88]]></answer>
 				</question>, false, this);
 			
 			this.addChild(areaDialog);
@@ -98,6 +99,11 @@
 			//init();
 		}
 		
+		public function getConfigByAreaID(id:String):AreaData
+		{
+			return configs[id];
+		}
+
 		public function onUserSelectArea(id:int):void
 		{
 			// hide dialog
@@ -168,7 +174,7 @@
 			
 			// ___________________________________________________________ System Layer
 
-			createExplorer();
+			SystemUtil.addContext(this, "Option", toggleOption);
 			createConnector(area.id);
 			createChatBox();
 
@@ -244,35 +250,35 @@
 
 		// _______________________________________________________ System
 
-		private function createExplorer():void
+		private var tree:SDTree;
+		private function toggleOption(event:*):void
 		{
 			// Engine Explorer
-			var tree:SDTree = new SDTree(
-				<Option>
-					<Editor>
-						<Background/>
-						<MapData/>
-						<Grid/>
-						<Axis/>
+			if(!tree)
+			{
+				tree = new SDTree(
+					<Option>
 						<Open/>
 						<Save/>
-					</Editor>
-					<Map/>
-					<Debugger/>
-					<Player>
-						<man1/>
-						<man2/>
-						<woman1/>
-						<woman2/>
-					</Player>
-					<Ground/>
-				</Option>)
-
-			tree.x = 10;
-			tree.y = 100;
-			tree.filters = [new GlowFilter(0xFFFFFF, 1, 2, 2)]
-			system.addChild(tree);
-			tree.addEventListener(SDMouseEvent.CLICK, onExplorer);
+						<AreaData>
+							<ID/>
+							<Background/>
+							<TerrainData/>
+						</AreaData>
+						<Grid/>
+						<Axis/>
+						<Debugger/>
+						<Ground/>
+					</Option>, true);
+	
+				tree.x = 10;
+				tree.y = 100;
+				tree.filters = [new GlowFilter(0xFFFFFF, 1, 2, 2)]
+				system.addChild(tree);
+				tree.addEventListener(SDMouseEvent.CLICK, onExplorer);
+				tree.visible = false;
+			}
+			tree.visible = !tree.visible;
 		}
 
 		private function onExplorer(event:SDEvent):void
@@ -287,17 +293,24 @@
 				case "Debugger":
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
-				case "Editor":
+				case "AreaData":
 					if (!areaBuilder)
 					{
 						areaBuilder = new AreaBuilder(engine3D, area);
 						content.addChild(areaBuilder);
+						
+						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
 					}
 					else
 					{
 						removeChild(areaBuilder);
 						areaBuilder = null;
+						
+						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
 					}
+					break;
+				case "TerrainData":
+					areaBuilder.toggleTerrain(area.map);
 					break;
 				case "Background":
 					areaBuilder.setupBackground();
@@ -364,7 +377,7 @@
 				{
 					//TODO : get config by area id
 					trace(" ! Warp to : " + data.args[0]);
-					this._data = configs[data.args[0]];
+					this._data = getConfigByAreaID(data.args[0]);
 
 					if (!this._data)
 						return;
