@@ -14,7 +14,7 @@
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.CameraData;
 	import com.cutecoma.playground.data.SceneData;
-	import com.cutecoma.playground.data.TerrainData;
+	import com.cutecoma.playground.data.MapData;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.GlowFilterPlugin;
@@ -70,7 +70,7 @@
 		(
 			"88", "assets/day1.jpg", "88.dat", 40, 40,
 			new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)),
-			new TerrainData(
+			new MapData(
 				[
 					0, 0, 0, 87, 87, 87, 0,
 					0, 0, 0, 87, 87, 87, 0,
@@ -92,7 +92,7 @@
 		(
 			"87", "assets/day2.jpg", "87.dat", 40, 40,
 			new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)),
-			new TerrainData(
+			new MapData(
 				[
 					0, 0, 86, 86, 86, 0, 0,
 					0, 0, 86, 86, 86, 0, 0,
@@ -166,8 +166,8 @@
 			area = new Area(areaData);
 			content.addChild(area);
 
-			area.terrain.x = stage.stageWidth - area.terrain.width;
-			//area.terrain.visible = false;
+			area.map.x = stage.stageWidth - area.map.width;
+			//area.map.visible = false;
 
 			// ___________________________________________________________ 3D Layer
 
@@ -181,7 +181,7 @@
 			game.engine = engine3D;
 
 			// Ground
-			area.ground = new Ground(engine3D, area.terrain, true, !true);
+			area.ground = new Ground(engine3D, area.map, true, !true);
 			area.ground.addEventListener(SDMouseEvent.MOUSE_DOWN, onGroundClick);
 
 			// ___________________________________________________________ Char
@@ -202,11 +202,11 @@
 
 			// ___________________________________________________________ Player
 
-			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.terrain.getSpawnPoint(),
+			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(),
 				["man1", "man2", "woman1", "woman2"][0 * int(4 * Math.random())], "stand", 3));
 
 			// read map
-			game.player.map = area.terrain;
+			game.player.map = area.map;
 
 			game.addPlayer(game.player);
 			game.player.talk(VERSION);
@@ -330,7 +330,7 @@
 			switch (_label)
 			{
 				case "Map":
-					area.terrain.visible = !area.terrain.visible;
+					area.map.visible = !area.map.visible;
 					break;
 				case "Debugger":
 					PlayerDebugger.toggle(engine3D, game.player);
@@ -341,18 +341,18 @@
 						areaBuilder = new AreaBuilder(engine3D, area);
 						content.addChild(areaBuilder);
 
-						area.terrain.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
+						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
 					}
 					else
 					{
 						removeChild(areaBuilder);
 						areaBuilder = null;
 
-						area.terrain.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
+						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
 					}
 					break;
 				case "TerrainData":
-					areaBuilder.toggleTerrain(area.terrain);
+					areaBuilder.toggleTerrain(area.map);
 					break;
 				case "Background":
 					areaBuilder.setupBackground();
@@ -370,7 +370,7 @@
 				case "man2":
 				case "woman1":
 				case "woman2":
-					var fakeData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), area.terrain.getSpawnPoint(), _label, "walk", 1.5);
+					var fakeData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), _label, "walk", 1.5);
 					fakeData.des = new Position(200 * Math.random() - 200 * Math.random(), 0, 200 * Math.random() - 200 * Math.random());
 					fakeData.msg = "Walk to : " + fakeData.des;
 					game.update(fakeData)
@@ -479,7 +479,7 @@
 				//update area
 				area.update(areaData);
 				engine3D.update(areaData.scene);
-				game.player.warp(area.terrain.getWarpPoint());
+				game.player.warp(area.map.getWarpPoint());
 			}
 		}
 
