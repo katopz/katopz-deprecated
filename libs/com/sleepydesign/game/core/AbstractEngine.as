@@ -18,6 +18,8 @@
         public function start() : void
 		{
 			if(!container)container = new Sprite();
+			
+			container.removeEventListener(Event.ENTER_FRAME, run);
 			container.addEventListener(Event.ENTER_FRAME, run);
 		}
 		
