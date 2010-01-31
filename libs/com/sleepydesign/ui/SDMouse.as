@@ -63,10 +63,10 @@ package com.sleepydesign.ui
 					target.removeEventListener(MouseEvent.MOUSE_MOVE, onInnerMouse);
 				break;
 				case MouseEvent.MOUSE_MOVE:
-					target["mouseChildren"] = false;
 					//if(isMouseDown && event.target == dragTarget &&  event.relatedObject == null)
 					if(isMouseDown)// && event.target == dragTarget &&  event.relatedObject == null)
 					{
+						target["mouseChildren"] = false;
 						var dx:Number = event.stageX - lastMousePosition.x;
 						var dy:Number = event.stageY - lastMousePosition.y;
 						var distance:Number = Point.distance(new Point(event.stageX, event.stageY), lastMousePosition);
@@ -75,6 +75,8 @@ package com.sleepydesign.ui
 						
 						lastMousePosition.x = event.stageX;
 						lastMousePosition.y = event.stageY;
+					}else{
+						target["mouseChildren"] = true;
 					}
 					
 					/*

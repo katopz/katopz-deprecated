@@ -104,9 +104,9 @@ package com.sleepydesign.utils
 		 * @param eventHandler
 		 * @return FileReference
 		 */		
-		public static function openImage(eventHandler:Function):FileReference
+		public static function openImage(eventHandler:Function, filters:Array = null):FileReference
 		{
-			return open(["*.jpg", "*.jpeg", "*.gif", "*.png"], function(event:Event):void
+			return open(filters || ["*.jpg", "*.jpeg", "*.gif", "*.png"], function(event:Event):void
 			{
 				if (event.type == Event.COMPLETE || event.type == DataEvent.UPLOAD_COMPLETE_DATA)
 				{
