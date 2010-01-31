@@ -2,7 +2,7 @@ package com.cutecoma.playground.core
 {
 	import com.cutecoma.game.core.Position;
 	import com.cutecoma.playground.data.AreaData;
-	import com.cutecoma.playground.data.TerrainData;
+	import com.cutecoma.playground.data.MapData;
 	import com.cutecoma.playground.pathfinder.AStar3D;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDSprite;
@@ -13,7 +13,7 @@ package com.cutecoma.playground.core
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
-	public class Terrain extends SDContainer
+	public class Map extends SDContainer
 	{
 		private var pathFinder:AStar3D;
 		
@@ -25,21 +25,21 @@ package com.cutecoma.playground.core
 		
 		private var routes:Array = [];
 		
-		public var data:TerrainData;
+		public var data:MapData;
 		
 		public static const commands : Dictionary = new Dictionary(true);
 		
 		//public var pathData:MapData
 		
 		// Singleton
-		public static var instance : Terrain;
-        public static function getInstance() : Terrain
+		public static var instance : Map;
+        public static function getInstance() : Map
         {
-            if ( instance == null ) instance = new Terrain();//null, factorX, factorZ);
-            return instance as Terrain;
+            if ( instance == null ) instance = new Map();//null, factorX, factorZ);
+            return instance as Map;
         }
         
-		public function Terrain(config:AreaData=null)//source:*=null, factorX:Number=1, factorZ:Number=1)
+		public function Map(config:AreaData=null)//source:*=null, factorX:Number=1, factorZ:Number=1)
 		{
 			instance = this;
 			super(config.id);
@@ -53,8 +53,8 @@ package com.cutecoma.playground.core
 		{
 			if(!raw)return;
 			
-			Terrain.factorX = raw.width;
-			Terrain.factorZ = raw.height;
+			Map.factorX = raw.width;
+			Map.factorZ = raw.height;
 
 			create(raw);
 		}
@@ -67,7 +67,7 @@ package com.cutecoma.playground.core
 			
 			var _areaData:AreaData = config as AreaData;
 			
-			data = new TerrainData(_areaData.terrain.nodes, _areaData.terrain.width, _areaData.terrain.scaleX, _areaData.terrain.scaleZ);
+			data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
 			routes.push(_areaData.id);
 			
 			// _______________________________________________________ MiniMap
@@ -96,8 +96,8 @@ package com.cutecoma.playground.core
 		//TODO : public function getSpawnPointById(position:Position):void
 		public function getSpawnPoint():Position
 		{
-			trace(" ! getSpawnPoint : " + TerrainData(data).spawnPoint.x, 0, TerrainData(data).spawnPoint.y);
-			return pathFinder.getPositionByNode(TerrainData(data).spawnPoint.x, 0, TerrainData(data).spawnPoint.y)
+			trace(" ! getSpawnPoint : " + MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y);
+			return pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
 		}
 		
 		public function getWarpPoint():Position
@@ -106,7 +106,7 @@ package com.cutecoma.playground.core
 			//return pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
 			var key :int = int(routes[routes.length-2]);
 			trace(" ! getWarpPoint : " + key);
-			var warpPoint:Point = TerrainData(data).warpPoint[key];
+			var warpPoint:Point = MapData(data).warpPoint[key];
 			return pathFinder.getPositionByNode(warpPoint.x, 0, warpPoint.y);
 		}
 		
@@ -174,10 +174,10 @@ package com.cutecoma.playground.core
 		
 		public function update(_areaData:AreaData):void
 		{
-			Terrain.factorX = _areaData.width;
-			Terrain.factorZ = _areaData.height;
+			Map.factorX = _areaData.width;
+			Map.factorZ = _areaData.height;
 			
-			data = new TerrainData(_areaData.terrain.nodes, _areaData.terrain.width, _areaData.terrain.scaleX, _areaData.terrain.scaleZ);
+			data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
 			routes.push(_areaData.id);
 			
 			// _______________________________________________________ MiniMap

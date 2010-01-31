@@ -7,7 +7,7 @@
 	public class Area extends SDContainer
 	{
 		public var background:BackGround;
-		public var terrain:Terrain;
+		public var map:Map;
 		public var ground:Ground;
 
 		public var data:AreaData;
@@ -43,12 +43,12 @@
 		{
 			super.create(config);
 				
-			// terrain
-			if(!terrain)
+			// map
+			if(!map)
 			{
-				terrain = new Terrain(AreaData(config));
-				addChild(terrain);
-				terrain.visible = false;
+				map = new Map(AreaData(config));
+				addChild(map);
+				map.visible = false;
 			}
 			
 			update(AreaData(config));
@@ -62,7 +62,7 @@
 			
 			id  = data.id;
 			background.update(data);
-			terrain.update(data);
+			map.update(data);
 			
 			if(ground)
 				ground.update(data);
@@ -74,7 +74,7 @@
 		{
 			id = null;
 			background.destroy();
-			terrain.destroy();
+			map.destroy();
 			ground.destroy();
 		}
 		

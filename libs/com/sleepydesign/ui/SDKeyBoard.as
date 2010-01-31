@@ -91,7 +91,7 @@ package com.sleepydesign.ui
 			isSHIFT = event.shiftKey;
 			isSPACE = (event.keyCode == Keyboard.SPACE);
 			
-			trace("event.ctrlKey:"+event.ctrlKey)
+			//trace("event.ctrlKey:"+event.ctrlKey)
 			
 			switch(event.type) 
 			{
