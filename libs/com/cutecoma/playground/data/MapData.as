@@ -3,7 +3,9 @@ package com.cutecoma.playground.data
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.net.registerClassAlias;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.IDataInput;
 	import flash.utils.IDataOutput;
@@ -32,7 +34,7 @@ package com.cutecoma.playground.data
 		public var scaleX:Number;
 		public var scaleZ:Number;
 
-		public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 4, scaleZ:Number = 4)
+		public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 1, scaleZ:Number = 1)
 		{
 			parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
 		}
@@ -77,7 +79,6 @@ package com.cutecoma.playground.data
 						_bitmapData.setPixel(i, j, 0xFF00FF00);
 						spawnPoint = new Point(i * scaleX, j * scaleZ);
 						break;
-
 					//warp
 					default:
 						_bitmapData.setPixel(i, j, 0xFF000000 + nodes[k]);
@@ -103,12 +104,27 @@ package com.cutecoma.playground.data
 
 		public function writeExternal(output:IDataOutput):void
 		{
-			output.writeObject({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
+			var _bytes:ByteArray = bitmapData.getPixels(bitmapData.rect);
+			//_png.compress();
+			output.writeObject({width:bitmapData.width, height:bitmapData.height, bytes:_bytes});
+			//output.writeBytes(_png);
+			//var _png:ByteArray = new PNGEncoder().encode(bitmapData);
+			//output.writeBytes(_png, 0, _png.length);
 		}
 
 		public function readExternal(input:IDataInput):void
 		{
-			parse(input.readObject());
+			//parse(input.readObject());
+			var _obj:Object = input.readObject();
+			
+			var _rect:Rectangle = new Rectangle(0,0,_obj.width,_obj.height);
+			var _bytes:ByteArray = ByteArray(_obj.bytes);
+			_bytes.position = 0;
+			bitmapData = new BitmapData(_rect.width, _rect.height, true, 0xFF000000);
+			bitmapData.setPixels(_rect, _bytes);
+			
+			var spawnRect:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFFFF, 0xFF00FF00);
+			spawnPoint = spawnRect.topLeft; 
 		}
 	}
 }
