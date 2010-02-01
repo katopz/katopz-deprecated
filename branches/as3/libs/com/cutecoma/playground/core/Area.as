@@ -42,15 +42,6 @@
 		override public function create(config:Object=null):void
 		{
 			super.create(config);
-				
-			// map
-			if(!map)
-			{
-				map = new Map(AreaData(config));
-				addChild(map);
-				map.visible = false;
-			}
-			
 			update(AreaData(config));
 		}
 		
@@ -62,7 +53,16 @@
 			
 			id  = data.id;
 			background.update(data);
-			map.update(data);
+			
+			// map
+			if(!map)
+			{
+				map = new Map(data);
+				addChild(map);
+				//map.visible = false;
+			}else{
+				map.update(data);
+			}
 			
 			if(ground)
 				ground.update(data);

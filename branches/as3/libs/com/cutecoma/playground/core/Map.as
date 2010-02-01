@@ -10,7 +10,6 @@ package com.cutecoma.playground.core
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
-	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
@@ -68,7 +67,11 @@ package com.cutecoma.playground.core
 			
 			var _areaData:AreaData = config as AreaData;
 			
-			data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
+			if(!_areaData.map)
+				data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
+			else
+				data = _areaData.map;
+			
 			routes.push(_areaData.id);
 			
 			// _______________________________________________________ MiniMap
@@ -150,7 +153,9 @@ package com.cutecoma.playground.core
 		public function findPath(id:String, startPosition:Position, finishPosition:Position):void
 		{
 			//var player:Player = Player(this.getElementById(id));
-			pathFinder.findPath(startPosition, finishPosition, id);
+			try{
+				pathFinder.findPath(startPosition, finishPosition, id);
+			}catch(e:*){}
 		}
 		
 		private function onPathError(event:SDEvent):void
@@ -193,7 +198,11 @@ package com.cutecoma.playground.core
 			Map.factorX = _areaData.width;
 			Map.factorZ = _areaData.height;
 			
-			data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
+			if(!_areaData.map)
+				data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
+			else
+				data = _areaData.map;
+				
 			routes.push(_areaData.id);
 			
 			// _______________________________________________________ MiniMap
