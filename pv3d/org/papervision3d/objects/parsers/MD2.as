@@ -1,6 +1,6 @@
 package org.papervision3d.objects.parsers {
 	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.game.core.IClip3D;
+	import com.cutecoma.game.core.IClip3D;
 	
 	import flash.events.Event;
 	import flash.events.ProgressEvent;

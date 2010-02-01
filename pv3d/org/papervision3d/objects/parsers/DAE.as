@@ -1,6 +1,6 @@
 package org.papervision3d.objects.parsers
 {
- 	import com.sleepydesign.game.core.IClip3D;
+ 	import com.cutecoma.game.core.IClip3D;
  	
  	import flash.events.Event;
  	import flash.events.IOErrorEvent;
@@ -1822,6 +1822,7 @@ package org.papervision3d.objects.parsers
 			
 			//PaperLogger.info( "animations COMPLETE (#channels: " + _channels.length + " #frames: " + _totalFrames + ", startTime: " + _startTime + " endTime: " + _endTime+ ")");
 			
+			trace("animations COMPLETE");
 			dispatchEvent(new FileLoadEvent(FileLoadEvent.ANIMATIONS_COMPLETE, this.filename));
 			
 			createLabel();
