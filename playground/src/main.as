@@ -229,7 +229,12 @@
 
 		private function onGroundClick(event:SDMouseEvent):void
 		{
-			game.player.walkTo(Position.parse(event.data.position));
+			if (!areaBuilder)
+			{
+				game.player.walkTo(Position.parse(event.data.position));
+			}else{
+				trace(event);
+			}
 		}
 
 		// _______________________________________________________ Connector
@@ -307,6 +312,7 @@
 							<Background/>
 							<Map/>
 						</Edit>
+						<MiniMap/>
 						<Grid/>
 						<Axis/>
 						<Debugger/>
@@ -330,6 +336,9 @@
 			var _label:String = SDTreeNode(event.data.node).label;
 			switch (_label)
 			{
+				case "MiniMap":
+						area.map.visible = !area.map.visible;
+					break;
 				case "Debugger":
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
