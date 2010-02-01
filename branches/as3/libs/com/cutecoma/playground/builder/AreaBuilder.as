@@ -56,7 +56,7 @@
 		}
 		
 		public var codeText:SDInputText;
-		public function toggleTerrain(map:Map):void
+		public function toggleMap(map:Map):void
 		{
 			if(map.scaleX==1)
 			{

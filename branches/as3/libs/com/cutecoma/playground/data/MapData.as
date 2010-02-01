@@ -20,7 +20,7 @@ package com.cutecoma.playground.data
 	 */
 	public class MapData implements IExternalizable
 	{
-		registerClassAlias("com.cutecoma.playground.data.TerrainData", MapData);
+		registerClassAlias("com.cutecoma.playground.data.MapData", MapData);
 		
 		public var bitmapData:BitmapData;
 		public var spawnPoint:Point;
