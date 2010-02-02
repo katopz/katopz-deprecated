@@ -1,8 +1,15 @@
 package com.sleepydesign.styles
 {
+	import com.greensock.plugins.AutoAlphaPlugin;
+	import com.greensock.plugins.GlowFilterPlugin;
+	import com.greensock.plugins.TweenPlugin;
+	
 	public class SDStyle
 	{
+		public static const _effect:Boolean = TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
+		
 		public static var BACKGROUND:uint = 0x000000;
+		public static var BACKGROUND_ALPHA:uint = 1;
 		
 		public static var BUTTON_COLOR:uint 		= 0xFFFFFF;
 		public static var BUTTON_ALPHA:uint			= 1;

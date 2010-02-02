@@ -8,9 +8,9 @@ package com.sleepydesign.draw
 	 */
 	public class SDGrid extends Shape
 	{
-		public function SDGrid(col:Number=4, row:Number=4, colSpan:int=100, rowSpan:int=100, cols:Array=null, rows:Array=null, lineColor:uint=0x000000, thickness:Number=0.25)
+		public function SDGrid(col:Number=4, row:Number=4, colSpan:int=100, rowSpan:int=100, cols:Array=null, rows:Array=null, lineColor:uint=0x000000, thickness:Number=0.25, bgColor:uint=0xFFFFFF, bgAlpha:int=0)
 		{
-			this.graphics.beginFill(0xFFFFFF, 0);
+			this.graphics.beginFill(bgColor, bgAlpha);
 			this.graphics.lineStyle(thickness, lineColor);
 			
 			//col
@@ -53,6 +53,8 @@ package com.sleepydesign.draw
 				this.graphics.lineTo(currentX,currentY);
 				currentY+=pos;
 			}
+			
+			this.graphics.drawRect(0,0,width,height);
 			
 			this.graphics.endFill();
 		}

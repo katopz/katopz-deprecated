@@ -30,7 +30,7 @@ package com.sleepydesign.components
 			super.init();
 			buttonMode = true;
 			useHandCursor = true;
-			setSize(64, 18);
+			setSize(48, 18);
 		}
 
 		override public function create(config:Object = null):void

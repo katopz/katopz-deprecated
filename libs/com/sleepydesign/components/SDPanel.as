@@ -21,7 +21,7 @@ package com.sleepydesign.components
 		
 		override protected function init():void
 		{
-			super.init(raw);
+			super.init();
 			setSize(100, 100);
 		}
 		
@@ -51,7 +51,7 @@ package com.sleepydesign.components
 		{
 			_back.graphics.clear();
 			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true );
-			_back.graphics.beginFill(SDStyle.BACKGROUND);
+			_back.graphics.beginFill(SDStyle.BACKGROUND, SDStyle.BACKGROUND_ALPHA);
 			
 			_back.graphics.drawRect(0, 0, _width, _height);
 			_back.graphics.endFill();
@@ -72,6 +72,15 @@ package com.sleepydesign.components
 		public function get contentRectangle():Rectangle
 		{
 			return content.getRect(content.parent);
+		}
+		
+		public function set align(value:String):void
+		{
+			if(value=="center")
+			{
+				x = stage.stageWidth/2 - width/2;
+				y = stage.stageHeight/2 - height/2;
+			}
 		}
 	}
 }
