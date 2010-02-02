@@ -44,9 +44,11 @@ package com.cutecoma.playground.core
 			instance = this;
 			super(config.id);
 			
-			parse(config);
+			if(!config)
+				update(config);
+			//parse(config);
 		}
-		
+		/*
         // ______________________________ Initialize ______________________________
         
 		public function parse(raw:AreaData):void
@@ -96,6 +98,7 @@ package com.cutecoma.playground.core
 			pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
 			pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
 		}
+		*/
 		
 		public var bitmap:Bitmap;
 		/*
@@ -155,7 +158,7 @@ package com.cutecoma.playground.core
 			//var player:Player = Player(this.getElementById(id));
 			try{
 				pathFinder.findPath(startPosition, finishPosition, id);
-			}catch(e:*){}
+			}catch(e:*){trace(e)};
 		}
 		
 		private function onPathError(event:SDEvent):void
@@ -207,13 +210,27 @@ package com.cutecoma.playground.core
 			
 			// _______________________________________________________ MiniMap
 			
-			minimap.destroy();
-			var bitmap:Bitmap = new Bitmap(this.data.bitmapData)
-			minimap.addChild(bitmap);
+			//if(minimap)
+				//minimap.destroy();
 			
+			if(!minimap)
+			{	
+				minimap = new SDSprite();
+				minimap.mouseEnabled = false;
+				minimap.mouseChildren = false;
+				addChild(minimap);
+			
+				bitmap = new Bitmap(data.bitmapData);
+				minimap.addChild(bitmap);
+			}else{
+				bitmap.bitmapData = data.bitmapData;
+			}
+			
+			/*
 			line = new Shape();
 			line.name = "line";
 			minimap.addChild(line);
+			*/
 			
 			// AStar3D
 			if(pathFinder)

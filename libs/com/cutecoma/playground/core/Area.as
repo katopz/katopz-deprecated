@@ -18,7 +18,7 @@
 			//init({engine3D:engine3D, game:game});
 			// background
 			background = new BackGround(config);
-			addChild(background);
+//DEV//addChild(background);
 			
 			//mouseEnabled = false;
 			//mouseChildren = false;
@@ -60,12 +60,12 @@
 				map = new Map(data);
 				addChild(map);
 				//map.visible = false;
-			}else{
-				map.update(data);
 			}
 			
+			map.update(data);
+			
 			if(ground)
-				ground.update(data);
+				ground.update();
 		}
 		
 		// ______________________________ Destroy ______________________________

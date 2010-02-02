@@ -1,9 +1,9 @@
 ﻿package com.cutecoma.playground.core
 {
-	import com.sleepydesign.events.SDMouseEvent;
 	import com.cutecoma.game.core.Position;
+	import com.cutecoma.playground.events.GroundEvent;
+	import com.sleepydesign.events.SDMouseEvent;
 	
-	import flash.display.Stage;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	
@@ -11,7 +11,8 @@
 	import org.papervision3d.core.geom.renderables.Vertex3D;
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.core.math.Plane3D;
-	import org.papervision3d.materials.WireframeMaterial;
+	import org.papervision3d.events.InteractiveScene3DEvent;
+	import org.papervision3d.materials.WireColorMaterial;
 	import org.papervision3d.materials.utils.MaterialsList;
 	import org.papervision3d.objects.primitives.TilePlane;
 	
@@ -61,13 +62,15 @@
 			_debug = value; 
 			if(_debug)
 			{
+				engine3D.viewport.interactive = true;
 				create();
 			}else{
+				engine3D.viewport.interactive = false;
 				destroy();
 			}
 		}
 		
-		public function update(data:Object=null):void
+		public function update():void
 		{
 			if(_debug)
 			{
@@ -90,12 +93,23 @@
 				var j:uint 			= uint(k/w);
 				var color:Number 	= map.data.bitmapData.getPixel(i,j);
 				
-				if(color!=0x000000)
-					tileMaterials.addMaterial(new WireframeMaterial(color,1,1), i+"_"+j);
+				//if(color!=0x000000)
+				var _wireColorMaterial:WireColorMaterial = new WireColorMaterial(color, 1, true);
+				_wireColorMaterial.name = i + "_" + j;
+				tileMaterials.addMaterial(_wireColorMaterial);
 			}
 			
 			_tileInstance = new TilePlane(tileMaterials, w*Map.factorX, h*Map.factorZ, w,h);
 			engine3D.addChild(_tileInstance);
+			
+			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
+			_tileInstance.addEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
+		}
+		
+		public function onClick(event:InteractiveScene3DEvent):void
+		{
+			var _x_y:Array = event.renderHitData.material.name.split("_");
+			dispatchEvent(new GroundEvent(GroundEvent.MOUSE_DOWN, _x_y[0], _x_y[1]));
 		}
 		
 		public function destroy():void
