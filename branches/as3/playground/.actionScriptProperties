@@ -25,9 +25,8 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
-<application path="TestByte.as"/>
-<application path="model.as"/>
 <application path="main.as"/>
+<application path="model.as"/>
 </applications>
 <modules/>
 <buildCSSFiles/>

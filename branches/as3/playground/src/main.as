@@ -11,11 +11,13 @@
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.Ground;
+	import com.cutecoma.playground.core.Map;
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.CameraData;
 	import com.cutecoma.playground.data.MapData;
 	import com.cutecoma.playground.data.SceneData;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
+	import com.cutecoma.playground.events.GroundEvent;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.GlowFilterPlugin;
 	import com.greensock.plugins.TweenPlugin;
@@ -34,10 +36,13 @@
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
+	
+	import org.papervision3d.events.InteractiveScene3DEvent;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class main extends SDApplication
@@ -51,6 +56,9 @@
 		private const VERSION:String = "PlayGround 2.2";
 
 		private var area:Area;
+		//private const SERVER_URI:String = "http://www.amaraka.tv/livebroadcast/Red5/webapps/SOSample/";
+		//private const SERVER_URI:String = "http://www.thomassmart.com/Sandbox/red5/SOSample/";
+		//private const SERVER_URI:String = "http://www.scratch.co.nz/red5/red5_dist/webapps/SOSample/";
 		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
 		//rtmp://203.150.230.224/oflaDemo
 		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
@@ -182,7 +190,7 @@
 			game.engine = engine3D;
 
 			// Ground
-			area.ground = new Ground(engine3D, area.map, true, !true);
+			area.ground = new Ground(engine3D, area.map, true);
 			area.ground.addEventListener(SDMouseEvent.MOUSE_DOWN, onGroundClick);
 
 			// ___________________________________________________________ Char
@@ -233,7 +241,20 @@
 			{
 				game.player.walkTo(Position.parse(event.data.position));
 			}else{
-				trace(event);
+				/*
+				trace(Position.parse(event.data.position));
+				var _bitmapData:BitmapData = area.map.data.bitmapData;
+				
+				trace(_bitmapData.width, _bitmapData.height);
+				trace(Map.factorX, Map.factorZ);
+				
+				for(var i:int=0;i<_bitmapData.width;i++)
+					for(var j:int=0;j<_bitmapData.height;j++)
+					{
+						_bitmapData.setPixel32(i, j, 0xFFFFFFFF * Math.random());
+					}
+				area.ground.update();
+				*/
 			}
 		}
 
@@ -290,8 +311,7 @@
 			catch (e:*)
 			{
 				trace(e)
-			}
-			;
+			};
 		}
 
 		// _______________________________________________________ System
@@ -349,13 +369,17 @@
 						content.addChild(areaBuilder);
 
 						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
+						
+						area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
 					}
 					else
 					{
+						area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+						
+						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
+						
 						content.removeChild(areaBuilder);
 						areaBuilder = null;
-
-						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
 					}
 					break;
 				case "Map":
@@ -404,6 +428,15 @@
 			}
 		}
 
+		public function onTileClick(event:GroundEvent):void
+		{
+			trace("TilePlane:"+event, event.bitmapX, event.bitmapZ);
+			
+			var _bitmapData:BitmapData = area.map.data.bitmapData;
+			_bitmapData.setPixel32(event.bitmapX, event.bitmapZ , 0xFF000000);
+			area.ground.update();
+		}
+		
 		private function onMapLoad(event:Event):void
 		{
 			if (event.type != "complete")
