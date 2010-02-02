@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="main.as" version="3">
+<actionScriptProperties mainApplicationPath="AreaPanel.as" version="3">
 <compiler additionalCompilerArguments="-debug=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d"/>
@@ -25,6 +25,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
+<application path="AreaPanel.as"/>
 <application path="main.as"/>
 <application path="model.as"/>
 </applications>
