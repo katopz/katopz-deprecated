@@ -75,7 +75,7 @@ package com.cutecoma.game.core
 			addElement(_player, _player.id);
 			
 			// plug to 3d Engine
-			engine.addChild(_player.instance);
+			//DEV//engine.addChild(_player.instance);
 		}
 		
 		public function removePlayer(_player:Player=null):void

@@ -48,7 +48,7 @@
 			//loader.load(data.background);
 			//loader.addEventListener(SDEvent.COMPLETE, onBackground);
 			
-			LoaderUtil.loadAsset(data.background, onBackgroundComplete);
+			//DEV//LoaderUtil.loadAsset(data.background, onBackgroundComplete);
 			
 			// TODO : BackGroundData
 			this._data = data;
