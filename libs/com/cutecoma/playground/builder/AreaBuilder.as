@@ -4,11 +4,11 @@
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.Map;
+	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDInputText;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDKeyboardEvent;
 	import com.sleepydesign.events.SDMouseEvent;
-	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
 	import com.sleepydesign.utils.FileUtil;
 	
@@ -45,8 +45,36 @@
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
 			*/
-			codeText = new SDInputText("1");
+			
+			codeText = new SDInputText("0");
 			codeText.width = 100;
+			
+			_buildToolDialog = new SDDialog(
+				<question><![CDATA[Select type]]>
+					<answer src="as:onSelectType('0')"><![CDATA[No entry]]></answer>
+					<answer src="as:onSelectType('1')"><![CDATA[Walkable]]></answer>
+					<answer src="as:onSelectType('87')"><![CDATA[Warp point]]></answer>
+					<textinput width="100"/>
+				</question>, false, this);
+
+			addChild(_buildToolDialog);
+		}
+		
+		private var _buildToolDialog:SDDialog;
+		private var codeText:SDInputText;
+		
+		public function onSelectType(colorID:String):void
+		{
+			switch(colorID)
+			{
+				case "0":
+				case "1":
+					trace("TODO:assign paint color");
+				break;
+				default :
+					trace("TODO:call area table -> assign paint color");
+				break;
+			}
 		}
 		
 		public function setupBackground():void
@@ -55,7 +83,6 @@
 			FileUtil.openImageTo(area.background);
 		}
 		
-		public var codeText:SDInputText;
 		public function toggleMap(map:Map):void
 		{
 			if(map.scaleX==1)
@@ -69,20 +96,6 @@
 			
 			map.x = stage.stageWidth - map.width;
 			map.y = 0;//stage.stageHeight/2 - map.height/2;
-			
-			if(map.scaleX==5)
-			{
-				codeText.x = map.x;
-				codeText.y = map.y+map.height;
-				
-				addChild(codeText);
-				//map.mouseEnabled = true;
-				//stage.addEventListener(MouseEvent.MOUSE_DOWN, onMapClick);
-			}else{
-				//stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMapClick);
-				//map.mouseEnabled = false;
-				removeChild(codeText);
-			}
 		}
 		
 		/*
