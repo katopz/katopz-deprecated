@@ -11,10 +11,8 @@
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.Ground;
-	import com.cutecoma.playground.core.Map;
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.CameraData;
-	import com.cutecoma.playground.data.MapData;
 	import com.cutecoma.playground.data.SceneData;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.cutecoma.playground.events.GroundEvent;
@@ -41,8 +39,6 @@
 	import flash.filters.GlowFilter;
 	import flash.utils.Dictionary;
 	import flash.utils.IExternalizable;
-	
-	import org.papervision3d.events.InteractiveScene3DEvent;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class main extends SDApplication
@@ -75,6 +71,7 @@
 
 		// ______________________________ Initialize ______________________________
 
+		/*
 		private var config88:AreaData = new AreaData
 		(
 			"88", "assets/day1.jpg", "88.dat", 40, 40,
@@ -119,7 +116,11 @@
 				7,4,4
 			));
 
+		
+		*/
+		
 		private var configs:Dictionary = new Dictionary();
+		
 		private var areaDialog:SDDialog;
 
 		override protected function init():void
@@ -136,6 +137,7 @@
 			// ___________________________________________________________ Area
 
 			//TODO : ask from external call, add user name 
+			/*
 			areaDialog = new SDDialog(
 				<question><![CDATA[Welcome! Please select Area ID]]>
 					<answer src="as:onUserSelectArea(87)"><![CDATA[Area 87]]></answer>
@@ -143,8 +145,9 @@
 				</question>, false, this);
 
 			this.addChild(areaDialog);
-
-			//init();
+			*/
+			
+			addChild(LoaderUtil.loadAsset("AreaPanel.swf"));
 		}
 
 		public function getConfigByAreaID(id:String):AreaData
