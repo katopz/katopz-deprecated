@@ -52,6 +52,7 @@ public class WireColorMaterial extends TriangleMaterial implements ITriangleDraw
 		graphics.lineTo( x2, y2 );
 		graphics.lineTo( x0, y0 );
 		graphics.endFill();
+		graphics.lineStyle();
 		
 		renderSessionData.renderStatistics.triangles++;
 	}
