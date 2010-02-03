@@ -1,46 +1,36 @@
 ﻿package
 {
-	import com.cutecoma.game.core.Characters;
-	import com.cutecoma.game.core.Game;
-	import com.cutecoma.game.core.Position;
-	import com.cutecoma.game.data.CharacterData;
-	import com.cutecoma.game.data.PlayerData;
+	import com.cutecoma.game.core.*;
+	import com.cutecoma.game.data.*;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.builder.AreaBuilder;
-	import com.cutecoma.playground.core.Area;
-	import com.cutecoma.playground.core.Engine3D;
-	import com.cutecoma.playground.core.Ground;
-	import com.cutecoma.playground.data.AreaData;
-	import com.cutecoma.playground.data.CameraData;
-	import com.cutecoma.playground.data.SceneData;
+	import com.cutecoma.playground.core.*;
+	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.cutecoma.playground.events.GroundEvent;
-	import com.greensock.plugins.AutoAlphaPlugin;
-	import com.greensock.plugins.GlowFilterPlugin;
-	import com.greensock.plugins.TweenPlugin;
+	import com.greensock.plugins.*;
 	import com.sleepydesign.application.core.SDApplication;
-	import com.sleepydesign.components.SDChatBox;
-	import com.sleepydesign.components.SDConnector;
-	import com.sleepydesign.components.SDDialog;
-	import com.sleepydesign.components.SDMacPreloader;
-	import com.sleepydesign.components.SDTree;
-	import com.sleepydesign.components.SDTreeNode;
-	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.events.SDMouseEvent;
-	import com.sleepydesign.utils.FileUtil;
-	import com.sleepydesign.utils.LoaderUtil;
-	import com.sleepydesign.utils.ProfilerUtil;
-	import com.sleepydesign.utils.SystemUtil;
+	import com.sleepydesign.components.*;
+	import com.sleepydesign.events.*;
+	import com.sleepydesign.utils.*;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.events.Event;
-	import flash.filters.GlowFilter;
-	import flash.utils.Dictionary;
-	import flash.utils.IExternalizable;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.filters.*;
+	import flash.utils.*;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
+	
+	/*
+	
+	[User]
+	Select Charactor -> Select Area -> Play
+	
+	[Admin]
+	Edit Charactor -> Edit Area -> View
+	
+	*/
 	public class main extends SDApplication
 	{
 		private var engine3D:Engine3D;
@@ -60,7 +50,11 @@
 		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 
 		private var currentRoomID:String = "";
+		
+		private var configs:Dictionary = new Dictionary();
 
+		private var areaDialog:SDDialog;
+		
 		public function main()
 		{
 			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
@@ -70,58 +64,6 @@
 		}
 
 		// ______________________________ Initialize ______________________________
-
-		/*
-		private var config88:AreaData = new AreaData
-		(
-			"88", "assets/day1.jpg", "88.dat", 40, 40,
-			new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)),
-			new MapData(
-				[
-					0, 0, 0, 87, 87, 87, 0,
-					0, 0, 0, 87, 87, 87, 0,
-					0, 0, 0, 87, 87, 87, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					2, 1, 1, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0
-				],
-				7,3,4
-			));
-
-		private var config87:AreaData = new AreaData
-		(
-			"87", "assets/day2.jpg", "87.dat", 40, 40,
-			new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)),
-			new MapData(
-				[
-					0, 0, 86, 86, 86, 0, 0,
-					0, 0, 86, 86, 86, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					0, 1, 1, 1, 1, 0, 0,
-					0, 1, 1, 1, 1, 0, 0,
-					0, 0, 1, 1, 1, 0, 0,
-					0, 0, 88, 88, 88, 0, 0,
-					0, 0, 0, 0, 0, 0, 0,
-					0, 0, 0, 0, 0, 0, 0,
-				],
-				7,4,4
-			));
-
-		
-		*/
-		
-		private var configs:Dictionary = new Dictionary();
-		
-		private var areaDialog:SDDialog;
 
 		override protected function init():void
 		{
@@ -157,13 +99,8 @@
 
 		public function onUserSelectArea(id:String):void
 		{
-			// hide dialog
-			areaDialog.hide();
-
 			// load config?
 			gotoAreaID(id);
-			//LoaderUtil.load(id+".ara", onAreaLoad);
-			//create(configs[id]);
 		}
 
 		// ______________________________ Create ______________________________
@@ -177,17 +114,12 @@
 
 			area = new Area(areaData);
 			content.addChild(area);
-
 			area.map.x = stage.stageWidth - area.map.width;
-			//area.map.visible = false;
 
 			// ___________________________________________________________ 3D Layer
 
 			// 3D engine
 			engine3D = new Engine3D(content, areaData.scene);
-			//engine3D.axis = true;
-			//engine3D.grid = true;
-			//engine3D.compass = true;
 
 			// bind
 			game.engine = engine3D;
@@ -207,8 +139,6 @@
 			chars.addCharacter(new CharacterData("man2", "assets/man2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
 
 			chars.addCharacter(new CharacterData("woman2", "assets/woman2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
-
-			//char.addEventListener(SDEvent.COMPLETE, onCharactorComplete);
 
 			//TODO : wait for user select char and add player 
 
@@ -240,25 +170,7 @@
 
 		private function onGroundClick(event:SDMouseEvent):void
 		{
-			if (!areaBuilder)
-			{
-				game.player.walkTo(Position.parse(event.data.position));
-			}else{
-				/*
-				trace(Position.parse(event.data.position));
-				var _bitmapData:BitmapData = area.map.data.bitmapData;
-				
-				trace(_bitmapData.width, _bitmapData.height);
-				trace(Map.factorX, Map.factorZ);
-				
-				for(var i:int=0;i<_bitmapData.width;i++)
-					for(var j:int=0;j<_bitmapData.height;j++)
-					{
-						_bitmapData.setPixel32(i, j, 0xFFFFFFFF * Math.random());
-					}
-				area.ground.update();
-				*/
-			}
+			game.player.walkTo(Position.parse(event.data.position));
 		}
 
 		// _______________________________________________________ Connector
@@ -276,11 +188,6 @@
 			connector.addEventListener(SDEvent.UPDATE, onUpdate);
 		}
 
-		private function destroyConnector():void
-		{
-			connector.destroy();
-		}
-
 		// _______________________________________________________ Chat
 
 		private function createChatBox():void
@@ -289,7 +196,6 @@
 			chatBox.x = 100;
 			chatBox.y = 40;
 			system.addChild(chatBox);
-			//chatBox.visible = false;
 
 			// bind chat -> player
 			chatBox.addEventListener(SDEvent.UPDATE, onTalk);
@@ -385,18 +291,12 @@
 						areaBuilder = null;
 					}
 					break;
+					/*
 				case "Map":
 					FileUtil.openImage(onMapLoad, ["*.png"]);
 					//areaBuilder.toggleTerrain(area.map);
 					break;
-				/*
-				case "Walkable":
-					areaBuilder.codeText.text = "1";
-				break;
-				case "Restrict":
-					areaBuilder.codeText.text = "0";
-				break;
-				*/
+					*/
 				case "Background":
 					areaBuilder.setupBackground();
 					break;
@@ -440,25 +340,6 @@
 			area.ground.update();
 		}
 		
-		private function onMapLoad(event:Event):void
-		{
-			if (event.type != "complete")
-				return;
-			
-			var _bitmap:Bitmap = event.target.content as Bitmap;
-			addChild(_bitmap);
-			
-			var _nodes:Array = [];
-			for (var i:uint = 0; i < _bitmap.width; i++)
-			{
-				for (var j:uint = 0; j < _bitmap.height; j++)
-				{
-					_nodes.push(_bitmap.bitmapData.getPixel(i,j));
-				}
-			}
-			area.map.data.nodes = _nodes;
-		}
-		
 		private function onAreaLoad(event:Event):void
 		{
 			if (event.type != "complete")
@@ -475,14 +356,6 @@
 			configs[areaData.id] = areaData;
 
 			gotoArea(areaData);
-
-		/*
-		   destroy();
-		   create(areaData);
-
-		   // start game?
-		   game.start();
-		 */
 		}
 
 		// ______________________________ Update ____________________________
