@@ -19,6 +19,11 @@ package com.sleepydesign.core
 	 */
 	public class SDSprite extends Sprite implements IEventDispatcher, IDestroyable
 	{
+		protected var _isDestroyed:Boolean;
+		public function get destroyed():Boolean {
+			return this._isDestroyed;
+		}
+		
 		public function SDSprite():void
 		{
 			//

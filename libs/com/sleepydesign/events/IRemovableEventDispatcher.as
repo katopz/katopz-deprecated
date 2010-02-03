@@ -29,27 +29,32 @@
 	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 	POSSIBILITY OF SUCH DAMAGE.
 */
-package com.sleepydesign.core {
-	
+package com.sleepydesign.events {
+	import flash.events.IEventDispatcher;
 	
 	/**
-		Interface for objects that are destroyable.
-		
 		@author Aaron Clinger
-		@version 03/16/09
+		@version 10/27/08
 	*/
-	public interface IDestroyable {
+	public interface IRemovableEventDispatcher extends IEventDispatcher {
 		
 		/**
-			Removes any event listeners and stops all internal processes to help allow for prompt garbage collection.
+			Removes all events of a specific type.
 			
-			<strong>Always call <code>destroy()</code> before deleting last object pointer.</strong>
+			@param type: The type of event.
 		*/
-		function destroy():void;
+		function removeEventsForType(type:String):void;
 		
 		/**
-			Determines if the object has been destroyed <code>true</code>, or is still available for use <code>false</code>.
+			Removes all events that report to the specified listener.
+			
+			@param listener: The listener function that processes the event.
 		*/
-		function get destroyed():Boolean;
+		function removeEventsForListener(listener:Function):void;
+		
+		/**
+			Removes all event listeners.
+		*/
+		function removeEventListeners():void;
 	}
 }

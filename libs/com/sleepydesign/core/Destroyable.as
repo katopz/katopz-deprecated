@@ -30,26 +30,32 @@
 	POSSIBILITY OF SUCH DAMAGE.
 */
 package com.sleepydesign.core {
+	import com.sleepydesign.core.IDestroyable;
 	
 	
 	/**
-		Interface for objects that are destroyable.
+		Base class for objects that are destroyable.
 		
 		@author Aaron Clinger
-		@version 03/16/09
+		@version 10/27/08
 	*/
-	public interface IDestroyable {
+	public class Destroyable implements IDestroyable {
+		protected var _isDestroyed:Boolean;
+		
 		
 		/**
-			Removes any event listeners and stops all internal processes to help allow for prompt garbage collection.
-			
-			<strong>Always call <code>destroy()</code> before deleting last object pointer.</strong>
+			Creates a new Destroyable object.
 		*/
-		function destroy():void;
+		public function Destroyable() {
+			super();
+		}
 		
-		/**
-			Determines if the object has been destroyed <code>true</code>, or is still available for use <code>false</code>.
-		*/
-		function get destroyed():Boolean;
+		public function get destroyed():Boolean {
+			return this._isDestroyed;
+		}
+		
+		public function destroy():void {
+			this._isDestroyed = true;
+		}
 	}
 }
