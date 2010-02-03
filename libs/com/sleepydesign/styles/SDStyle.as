@@ -8,7 +8,7 @@ package com.sleepydesign.styles
 	{
 		public static const _effect:Boolean = TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
 		
-		public static var BACKGROUND:uint = 0x000000;
+		public static var BACKGROUND:uint = 0xEEEEEE;
 		public static var BACKGROUND_ALPHA:uint = 1;
 		
 		public static var BUTTON_COLOR:uint 		= 0xFFFFFF;
