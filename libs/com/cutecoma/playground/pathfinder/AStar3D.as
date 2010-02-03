@@ -563,9 +563,10 @@ package com.cutecoma.playground.pathfinder
 		
 		public function destroy():void
 		{
+			//trace(this+".destroy");
 			nodes = null;
-			bitmapData.dispose();
-			bitmapData = null;
+			//bitmapData.dispose();
+			//bitmapData = null;
 		}
 	}
 }
