@@ -11,8 +11,8 @@ package examples
 	
 	import flash.display.Sprite;
 	
-	import gs.TweenMax;
-	import gs.easing.Linear;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Linear;
 	
 	import org.papervision3d.core.math.Matrix3D;
 	import org.papervision3d.events.InteractiveScene3DEvent;

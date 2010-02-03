@@ -26,7 +26,7 @@ package examples
 		
         // ______________________________ Initialize ______________________________
         
-		override public function init(raw:Object=null):void
+		override protected function init():void
 		{
 			// load config?
 			

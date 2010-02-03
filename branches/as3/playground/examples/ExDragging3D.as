@@ -13,7 +13,7 @@ package examples
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	
-	import gs.TweenLite;
+	import com.greensock.TweenLite;
 	
 	import org.papervision3d.cameras.CameraType;
 	import org.papervision3d.core.geom.Lines3D;
