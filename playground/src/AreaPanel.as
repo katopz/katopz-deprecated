@@ -5,7 +5,7 @@ package
 	import com.sleepydesign.components.SDPanel;
 	import com.sleepydesign.draw.SDGrid;
 	import com.sleepydesign.draw.SDSquare;
-	import com.sleepydesign.styles.SDStyle;
+	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.utils.LoaderUtil;
 	
@@ -17,6 +17,8 @@ package
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class AreaPanel extends Sprite
 	{
+		private const HEX_STRING:String = "0123456789ABCDEF";
+		
 		private var _areaID:String;
 		private var _cellWidth:int = 16;
 		private var _cellHeight:int = 16;
@@ -25,7 +27,7 @@ package
 
 		private var _marker:SDSquare;
 
-		private const HEX_STRING:String = "0123456789ABCDEF";
+		private var _okButton:SDButton
 
 		public function AreaPanel()
 		{
@@ -91,13 +93,14 @@ package
 			}
 
 			// marker
-			_marker = new SDSquare(_cellWidth, _cellHeight, 0x00CC00, .5, 1, 0x00CC00);
+			_marker = new SDSquare(_cellWidth, _cellHeight, 0xFFFF00, .5, 1, 0xFF9900);
 			_panel.addChild(_marker);
 			_marker.x = _grid.x;
 			_marker.y = _grid.y;
+			_marker.visible = false;
 
 			// text
-			_tfColor = new SDTextField("Area : 00");
+			_tfColor = new SDTextField("Please select area...");
 			_panel.addChild(_tfColor);
 			_tfColor.x = 18;
 			_tfColor.y = _panel.height - _tfColor.height - 6;
@@ -108,7 +111,7 @@ package
 			_cancelButton.x = _panel.width - _cancelButton.width - 20;
 			_cancelButton.y = _panel.height - _cancelButton.height - 6;
 
-			var _okButton:SDButton = new SDButton("ok");
+			_okButton = new SDButton("ok");
 			_panel.addChild(_okButton);
 			_okButton.x = _cancelButton.x - _okButton.width - 4;
 			_okButton.y = _cancelButton.y;
@@ -116,12 +119,15 @@ package
 			// event
 			_panel.addEventListener(MouseEvent.CLICK, onGridClick);
 
-			_okButton.addEventListener(MouseEvent.CLICK, onOK);
 			_cancelButton.addEventListener(MouseEvent.CLICK, onCancel);
 		}
 		
 		private function onGridClick(event:MouseEvent):void
 		{
+			// OB
+			if(_grid.mouseX > _grid.width || _grid.mouseY > _grid.height)
+				return;
+			
 			var _point:Point = new Point(int(_grid.mouseX / _cellWidth), int(_grid.mouseY / _cellHeight));
 
 			_marker.x = _grid.x + _point.x * _cellWidth;
@@ -129,18 +135,23 @@ package
 
 			_areaID = HEX_STRING.charAt(_point.x) + HEX_STRING.charAt(_point.y);
 			_tfColor.text = "Area : " + _areaID;
+			
+			_marker.visible = true;
+			
+			_okButton.removeEventListener(MouseEvent.CLICK, onOK);
+			_okButton.addEventListener(MouseEvent.CLICK, onOK);
 		}
 
 		private function onOK(event:MouseEvent):void
 		{
 			visible = false;
-			dispatchEvent(new AreaBuilderEvent(AreaBuilderEvent.AREA_ID_CHANGE, _areaID));
+			EventManager.dispatchEvent(new AreaBuilderEvent(AreaBuilderEvent.AREA_ID_CHANGE, _areaID));
 		}
 
 		private function onCancel(event:MouseEvent):void
 		{
 			visible = false;
-			dispatchEvent(new Event(Event.CLOSE));
+			EventManager.dispatchEvent(new Event(Event.CLOSE));
 		}
 	}
 }

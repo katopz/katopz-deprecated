@@ -8,11 +8,13 @@
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
+	import com.cutecoma.playground.events.AreaBuilderEvent;
 	import com.cutecoma.playground.events.GroundEvent;
 	import com.greensock.plugins.*;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
+	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.utils.*;
 	
 	import flash.display.*;
@@ -27,7 +29,7 @@
 	[User]
 	Select Charactor -> Select Area -> Play
 	
-	[Admin]
+	[Editor]
 	Edit Charactor -> Edit Area -> View
 	
 	*/
@@ -55,6 +57,50 @@
 
 		private var areaDialog:SDDialog;
 		
+		private var _areaPath:String;
+		
+		private var config87:AreaData = new AreaData
+		(
+			"87", "areas/87_bg.swf", 40, 40,
+			new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)),
+			new MapData(
+				[
+					0, 0, 86, 86, 86, 0, 0,
+					0, 0, 86, 86, 86, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					1, 1, 1, 1, 1, 0, 0,
+					0, 1, 1, 1, 1, 0, 0,
+					0, 2, 1, 1, 1, 0, 0,
+					0, 0, 1, 1, 1, 0, 0,
+					0, 0, 88, 88, 88, 0, 0,
+					0, 0, 0, 0, 0, 0, 0,
+					0, 0, 0, 0, 0, 0, 0,
+				],
+				7,4,4
+			));
+		private var config88:AreaData = new AreaData
+		(
+			"88", "areas/88_bg.swf", 40, 40,
+			new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)),
+			new MapData(
+				[
+					0, 0, 0, 87, 87, 87, 0,
+					0, 0, 0, 87, 87, 87, 0,
+					0, 0, 0, 87, 87, 87, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					2, 1, 1, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0,
+					0, 0, 0, 1, 1, 1, 0
+				],
+				7,3,4
+			));
 		public function main()
 		{
 			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
@@ -62,11 +108,22 @@
 
 			ProfilerUtil.addStat(SDApplication.system);
 		}
-
+		
 		// ______________________________ Initialize ______________________________
-
+		
 		override protected function init():void
 		{
+			LoaderUtil.loadXML("config.xml", onXML);
+		}
+
+		private function onXML(event:Event):void
+		{
+			if (event.type != "complete")
+				return;
+
+			var _xml:XML = event.target.data;
+			_areaPath = String(_xml.world.area.@path);
+
 			// TODO load from external and put to group
 			//configs = new Dictionary();
 
@@ -79,17 +136,13 @@
 			// ___________________________________________________________ Area
 
 			//TODO : ask from external call, add user name 
-			/*
 			areaDialog = new SDDialog(
-				<question><![CDATA[Welcome! Please select Area ID]]>
-					<answer src="as:onUserSelectArea(87)"><![CDATA[Area 87]]></answer>
-					<answer src="as:onUserSelectArea(88)"><![CDATA[Area 88]]></answer>
+				<question><![CDATA[Welcome! Please select...]]>
+					<answer src="as:onUserSelect('play')"><![CDATA[I want to play.]]></answer>
+					<answer src="as:onUserSelect('edit')"><![CDATA[I want to edit.]]></answer>
 				</question>, false, this);
 
 			this.addChild(areaDialog);
-			*/
-			
-			addChild(LoaderUtil.loadAsset("AreaPanel.swf"));
 		}
 
 		public function getConfigByAreaID(id:String):AreaData
@@ -97,10 +150,18 @@
 			return configs[id];
 		}
 
-		public function onUserSelectArea(id:String):void
+		public function onUserSelect(action:String):void
 		{
 			// load config?
-			gotoAreaID(id);
+			//gotoAreaID(id);
+			EventManager.addEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
+			addChild(LoaderUtil.loadAsset("AreaPanel.swf"));
+		}
+		
+		private function onAreaIDChange(event:AreaBuilderEvent):void
+		{
+			areaDialog.visible = false;
+			gotoAreaID(event.areaID);
 		}
 
 		// ______________________________ Create ______________________________
@@ -383,7 +444,7 @@
 			// cache not exist
 			if (!_data)
 			{
-				LoaderUtil.load(id + ".ara", onAreaLoad);
+				LoaderUtil.load(_areaPath + id + ".ara", onAreaLoad);
 			}
 			else
 			{
@@ -396,6 +457,7 @@
 			if (!area)
 			{
 				createArea(areaData);
+				currentRoomID = areaData.id;
 				return;
 			}
 
@@ -409,13 +471,9 @@
 				connector.exitRoom();
 
 				// wait for exit complete?
-
 				connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
 				connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
 				connector.enterRoom(areaData.id);
-
-				// TODO : actually we need to wait for connection success?
-				currentRoomID = areaData.id;
 
 				// destroy
 				game.removeOtherPlayer();
@@ -423,7 +481,10 @@
 				//update area
 				area.update(areaData);
 				engine3D.update(areaData.scene);
-				game.player.warp(area.map.getWarpPoint());
+				game.player.warp(area.map.getWarpPoint(currentRoomID));
+				
+				// TODO : actually we need to wait for connection success?
+				currentRoomID = areaData.id;
 			}
 		}
 
