@@ -1,7 +1,6 @@
 package com.sleepydesign.utils
 {
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
@@ -29,27 +28,13 @@ package com.sleepydesign.utils
 	public class LoaderUtil
 	{
 		public static var SEND_METHOD:String = URLRequestMethod.POST;
+		public static var useDebug:Boolean = true;
 		
 		public static var showLoader:Function;
 		public static var hideLoader:Function;
 		
 		public static var loaderClip:DisplayObject;
 		
-		public static function addLoaderTo(parent:DisplayObjectContainer, loaderClip:DisplayObject, show:Boolean=true):void
-		{
-			if(show)
-			{
-				if(!loaderClip.parent && parent)
-					parent.addChild(loaderClip);
-				
-				loaderClip.visible = true;
-			}else{
-				loaderClip.visible = false;
-			}
-			
-			LoaderUtil.loaderClip = loaderClip;
-		}
-				
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
 		{
 			return saveBinary(data, uri, eventHandler, "image/jpeg");
@@ -71,20 +56,36 @@ package com.sleepydesign.utils
 			request.method = URLRequestMethod.POST;
 			request.data = data;
 			
-			_loader.load(request);
-			
-			loaders.push(_loader);
-			
 			// gc
-			_loader.addEventListener(Event.COMPLETE, function():void
+			var _removeEventListeners:Function = function():void
 			{
 			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
 	            if(loaderClip && hideLoader is Function)
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loader);
-			});
+	            if(_loaderVO)
+	            {
+	            	removeItem(loaders, _loaderVO);
+	            
+	            	_loaderVO.destroy = null;
+	            	_loaderVO.loader = null;
+	            }
+	            
+	            _loaderVO = null;
+	            
+	            _loader = null;
+	            request = null;
+			}
+			
+			var _loaderVO:Object = {loader:_loader, destroy:_removeEventListeners};
+			
+			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			
+			// destroy
+			loaders.push(_loaderVO);
+			
+			_loader.load(request);
 			
 			return _loader;
 		}
@@ -101,19 +102,33 @@ package com.sleepydesign.utils
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
 			_loader.loadBytes(byteArray);
 			
-			loaders.push(_loader);
-			
 			// gc
-			_loader.addEventListener(Event.COMPLETE, function():void
+			var _loaderVO:Object = {loader:null, destroy:null};
+			var _removeEventListeners:Function = function():void
 			{
 			    _loader.removeEventListener(Event.COMPLETE, eventHandler);
 	            if(loaderClip && hideLoader is Function)
 					hideLoader();
 	            
 	            // gc
-	            removeItem(loaders, _loader);
-			});
-				
+	            if(_loaderVO)
+	            {
+	            	removeItem(loaders, _loaderVO);
+	            
+	            	_loaderVO.destroy = null;
+	            	_loaderVO.loader = null;
+	            }
+	            
+	            _loaderVO = null;
+	            
+	            _loader = null;
+			};
+			_loaderVO.loader = _loader;
+			_loaderVO.destroy = _removeEventListeners;
+			loaders.push(_loaderVO);
+			
+			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			
 			return _loader;
 		}
 		
@@ -123,14 +138,15 @@ package com.sleepydesign.utils
 		 * @param eventHandler
 		 * @return URLLoader
 		 */		
-		public static function loadVars(uri:String, eventHandler:Function):URLLoader
+		public static function loadVars(uri:String, eventHandler:Function=null):URLLoader
 		{
 			return load(uri, function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new URLVariables(String(event.target["data"]));
+					event.target.data = new URLVariables(String(event.target.data));
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
@@ -145,9 +161,10 @@ package com.sleepydesign.utils
 			return load(uri, function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new XML(event.target["data"]);
+					event.target.data = new XML(event.target.data);
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			} , "xml") as URLLoader;
 		}
 		
@@ -179,15 +196,24 @@ package com.sleepydesign.utils
 			{
 				if(event.type=="complete")
 				{
-					event.target["data"] = ByteArray(event.target["data"]);
-					ByteArray(event.target["data"]).uncompress();
+					event.target.data = ByteArray(event.target.data);
+					ByteArray(event.target.data).uncompress();
 				}
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			} , URLLoaderDataFormat.BINARY) as URLLoader;
 		}
 		
 		public static var loaders:Array = [];
+		
+		public static function loadAssets(uris:Array, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest=null):Array
+		{
+			var _length:int = uris.length;
+			for(var i:int=0;i<uris.length;i++)
+				load(uris[i], eventHandler, type, urlRequest);
+			return loaders;
+		}
 		
 		/**
 		 * Just load
@@ -223,7 +249,7 @@ package com.sleepydesign.utils
 				break;
 			}
 			
-			trace(" ! Load ["+type+"] : "+ uri);
+			if(useDebug)trace(" ! Load ["+type+"] : "+ uri);
 			
 			// select loader
 			var _loader:*;
@@ -240,9 +266,6 @@ package com.sleepydesign.utils
 				_loader = urlLoader;
 			}
 			
-			// prevent gc
-			loaders.push(_loader);
-			
 			// callback
 			if(eventHandler is Function)
 			{
@@ -252,24 +275,55 @@ package com.sleepydesign.utils
 	            _loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
 	            _loader.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
 	            _loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-            
-	            // gc
-				_loader.addEventListener(Event.COMPLETE, function():void
-				{
-				    _loader.removeEventListener(Event.COMPLETE, eventHandler);
-				    _loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
-				    
-				    _loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
-		            _loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
-		            _loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-		            
-		            if(loaderClip && hideLoader is Function)
-						hideLoader();
-		            
-		            // gc
-		            removeItem(loaders, _loader);
-				});
 			}
+			
+			var _loaderVO:Object = {loader:null, destroy:null};
+			var _removeEventListeners:Function = function():void
+			{
+				_loader.removeEventListener(Event.COMPLETE, _removeEventListeners);
+				
+				if (eventHandler is Function)
+				{
+					_loader.removeEventListener(Event.COMPLETE, eventHandler);
+					_loader.removeEventListener(ProgressEvent.PROGRESS, eventHandler);
+
+					_loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
+					_loader.removeEventListener(IOErrorEvent.IO_ERROR, eventHandler);
+					_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+				}
+	            
+	            if(loaderClip && hideLoader is Function)
+					hideLoader();
+	            
+	            // gc
+	            if(_loaderVO)
+	            {
+	            	removeItem(loaders, _loaderVO);
+	            
+	            	_loaderVO.destroy = null;
+	            	_loaderVO.loader = null;
+	            }
+	            
+	            _loaderVO = null;
+	            
+	            loader = null;
+	            urlLoader = null;
+			};
+			_loaderVO.loader = _loader;
+			_loaderVO.destroy = _removeEventListeners;
+			loaders.push(_loaderVO);
+			
+            // gc
+			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			
+			// 404
+			var _404:Function = function():void
+			{
+				_loader.removeEventListener(IOErrorEvent.IO_ERROR, _404);
+				if(useDebug)trace(" ! Not found : "+ uri);
+				_removeEventListeners();
+			}
+			_loader.addEventListener(IOErrorEvent.IO_ERROR, _404);
 			
 			// load
 			try
@@ -277,7 +331,7 @@ package com.sleepydesign.utils
 				urlRequest = urlRequest?urlRequest:new URLRequest(uri);
 				if(type=="asset")
 				{
-					loader.load(urlRequest, new LoaderContext(false, ApplicationDomain.currentDomain));
+					loader.load(new URLRequest(uri));//, new LoaderContext(false, ApplicationDomain.currentDomain));
 					return loader;
 				}else{
 					urlLoader.load(urlRequest);
@@ -285,7 +339,7 @@ package com.sleepydesign.utils
 				}
 			}catch (e:Error)
 			{
-				trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
+				if(useDebug)trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
 			return null;
 		}
@@ -296,30 +350,30 @@ package com.sleepydesign.utils
 			_urlRequest.method = SEND_METHOD;
 			_urlRequest.data = data;
 			
-			ObjectUtil.print(_urlRequest.data);
-			
 			return load(uri, eventHandler, type, _urlRequest);
 		}
 		
-		public static function requestVars(uri:String, data:*, eventHandler:Function):URLLoader
+		public static function requestVars(uri:String, data:*, eventHandler:Function=null):URLLoader
 		{
 			return request(uri, data,  function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new URLVariables(String(event.target["data"]));
+					event.target.data = new URLVariables(String(event.target.data));
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
-		public static function requestXML(uri:String, data:*, eventHandler:Function):URLLoader
+		public static function requestXML(uri:String, data:*, eventHandler:Function=null):URLLoader
 		{
 			return request(uri, data,  function(event:Event):void
 			{
 				if(event.type=="complete")
-					event.target["data"] = new XML(String(event.target["data"]));
+					event.target.data = new XML(String(event.target.data));
 				
-				eventHandler(event);
+				if(eventHandler is Function)
+					eventHandler(event);
 			}, URLLoaderDataFormat.TEXT) as URLLoader;
 		}
 		
@@ -354,6 +408,24 @@ package com.sleepydesign.utils
 			}
 			
 			return f;
+		}
+		
+		public static function cancel(loader:*=null):void
+		{
+			if(loaders.length<=0)
+				return;
+			
+			if(!loader)
+				loader = loaders[0].loader;
+				
+			if(loader is Loader)
+				loader = loader.contentLoaderInfo;
+			
+			for each(var _loaderVO:* in loaders)
+			{
+				if(_loaderVO && _loaderVO.loader == loader && _loaderVO.destroy is Function)
+					_loaderVO.destroy();
+			}
 		}
 	}
 }

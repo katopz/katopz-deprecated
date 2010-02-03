@@ -115,7 +115,7 @@ package com.sleepydesign.application.core
 						TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:0});
 					};
 					
-					LoaderUtil.addLoaderTo(this, loaderObject);
+					addChild(loaderObject);
 				}
 			}
 		}

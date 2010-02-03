@@ -118,8 +118,11 @@ package com.sleepydesign.net
 			
 			//create
 			so = SharedObject.getRemote(room, nc.uri, false);
+			so.removeEventListener(SyncEvent.SYNC, onServerUpdate);
 			so.addEventListener(SyncEvent.SYNC, onServerUpdate, false, 0, true);
-			so.connect(nc);
+			try{
+				so.connect(nc);
+			}catch(e:*){trace(e);}
 		}
 		
 		// _______________________________________________________ SharedObjectHandler
