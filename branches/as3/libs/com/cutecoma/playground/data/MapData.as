@@ -76,12 +76,12 @@ package com.cutecoma.playground.data
 
 					// spawn
 					case 2:
-						_bitmapData.setPixel(i, j, 0xFF00FF00);
+						_bitmapData.setPixel(i, j, 0xFF0000FF);
 						spawnPoint = new Point(i * scaleX, j * scaleZ);
 						break;
 					//warp
 					default:
-						_bitmapData.setPixel(i, j, 0xFF000000 + nodes[k]);
+						_bitmapData.setPixel(i, j, Number("0xFF00FF"+ nodes[k]));
 						warpPoint[nodes[k]] = new Point(i * scaleX, j * scaleZ);
 						// no spawnPoint?
 						if (!spawnPoint)
@@ -123,7 +123,7 @@ package com.cutecoma.playground.data
 			bitmapData = new BitmapData(_rect.width, _rect.height, true, 0xFF000000);
 			bitmapData.setPixels(_rect, _bytes);
 			
-			var spawnRect:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFFFF, 0xFF00FF00);
+			var spawnRect:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFFFF, 0xFF0000FF);
 			spawnPoint = spawnRect.topLeft; 
 		}
 	}

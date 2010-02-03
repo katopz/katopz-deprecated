@@ -16,7 +16,7 @@ package com.cutecoma.playground.data
 		public var scene:SceneData;
 		public var map:MapData;
 
-		public function AreaData(id:String=null, background:String=null, src:String=null, width:Number=0, height:Number=0, scene:SceneData=null, map:MapData=null)
+		public function AreaData(id:String=null, background:String=null, width:Number=0, height:Number=0, scene:SceneData=null, map:MapData=null)
 		{
 			if(!id)return;
 			

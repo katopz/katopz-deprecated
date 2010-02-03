@@ -11,6 +11,7 @@ package com.cutecoma.playground.core
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	public class Map extends SDContainer
@@ -22,8 +23,6 @@ package com.cutecoma.playground.core
 		
 		public static var factorX: Number=1;
 		public static var factorZ: Number=1;
-		
-		private var routes:Array = [];
 		
 		public var data:MapData;
 		
@@ -122,13 +121,14 @@ package com.cutecoma.playground.core
 			return pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
 		}
 		
-		public function getWarpPoint():Position
+		public function getWarpPoint(areaID:String):Position
 		{
 			//trace(" ! getWarpPoint : " + MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y);
 			//return pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
-			var key :int = int(routes[routes.length-2]);
-			trace(" ! getWarpPoint : " + key);
-			var warpPoint:Point = MapData(data).warpPoint[key];
+			trace(" ! getWarpPoint : " + areaID);
+			//var warpPoint:Point = MapData(data).warpPoint[areaID];
+			var warpRect:Rectangle = MapData(data).bitmapData.getColorBoundsRect(0xFFFFFFFF, Number("0xFF00FF"+areaID));
+			var warpPoint:Point = warpRect.topLeft; 
 			return pathFinder.getPositionByNode(warpPoint.x, 0, warpPoint.y);
 		}
 		
@@ -141,10 +141,10 @@ package com.cutecoma.playground.core
 			var command:String;
 			var args:Array;
 			
-			if(color<255)
+			if(color>=0xFF00)
 			{
 				command = "warp";
-				args = [color];
+				args = [Number(color-0xFF00).toString(16).toUpperCase()];
 			}else{
 				command = "";
 			}
@@ -206,8 +206,6 @@ package com.cutecoma.playground.core
 			else
 				data = _areaData.map;
 				
-			routes.push(_areaData.id);
-			
 			// _______________________________________________________ MiniMap
 			
 			//if(minimap)
@@ -264,8 +262,6 @@ package com.cutecoma.playground.core
 			factorX=1;
 			factorZ=1;
 		
-			routes = [];
-			
 			super.destroy();
 		}
 	}
