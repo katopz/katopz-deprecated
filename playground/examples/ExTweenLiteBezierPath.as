@@ -4,7 +4,7 @@ package examples
 	
 	import flash.display.Sprite;
 	
-	import gs.TweenLite;
+	import com.greensock.TweenLite;
 	
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	public class ExTweenLiteBezierPath extends Sprite
