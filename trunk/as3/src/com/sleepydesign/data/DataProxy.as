@@ -24,8 +24,15 @@ package com.sleepydesign.data
 
 			delete _datas[id];
 			_datas[id] = null;
+			
+			// rebuild for gc
+			var __datas:Dictionary = new Dictionary();
+			for (var _item:* in _datas)
+				if (_datas[_item])
+					__datas[_item] = _datas[_item];
+			_datas = __datas;
 		}
-
+				
 		public static function getDataByID(id:String):*
 		{
 			if (_datas)
@@ -54,6 +61,8 @@ package com.sleepydesign.data
 				delete _datas[id];
 				_datas[id] = null;
 			}
+			
+			_datas = new Dictionary(true);
 		}
 		
 		public static function getDataByVars(varsString:String):URLVariables
