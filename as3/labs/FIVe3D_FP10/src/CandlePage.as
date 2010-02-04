@@ -65,7 +65,7 @@ package
 
 		[Embed(source="assets/ThaiMap.swf",symbol="CandleButton")]
 		private var CandleButton:Class;
-		private var _candleButton:Sprite = new CandleButton() as Sprite;
+		private var _candleButton:SimpleButton = new CandleButton() as SimpleButton;
 
 		[Embed(source="assets/ThaiMap.swf",symbol="CandleClip")]
 		private var CandleClip:Class;
@@ -337,7 +337,7 @@ package
 					
 					// sprite2D
 					var _sprite2D:Sprite2D = new Sprite2D();
-//_sprite2D.scaled = false;
+_sprite2D.scaled = false;
 					_sprite2D.name = "candle_"+_candle.id;
 //_sprite2D.x = _candle.x - _mapBitmapData.width/2;
 //_sprite2D.y = _candle.y - _mapBitmapData.height/2;
@@ -573,7 +573,6 @@ package
 							Map.currentMapID = "_m";
 							idleIndex = 0;
 							
-							_candleButton.buttonMode = true;
 							addChild(_candleButton);
 							_candleButton.visible = false;
 							_candleButton.alpha = 0;
@@ -765,6 +764,12 @@ package
 							{
 								submitPage.removeEventListener(FormEvent.DATA_CHANGE, _onDeactivate);
 								status = "drag";
+							});
+							
+							// hide
+							submitPage.addEventListener(Event.CANCEL, function(event:Event):void
+							{
+								status = "idle";
 							});
 						}
 					});
