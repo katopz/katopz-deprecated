@@ -4,14 +4,18 @@
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.Map;
+	import com.cutecoma.playground.events.AreaBuilderEvent;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDInputText;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.events.SDKeyboardEvent;
 	import com.sleepydesign.events.SDMouseEvent;
+	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.ui.SDKeyBoard;
 	import com.sleepydesign.utils.FileUtil;
+	import com.sleepydesign.utils.LoaderUtil;
 	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import org.papervision3d.core.math.Matrix3D;
@@ -53,7 +57,7 @@
 				<question><![CDATA[Select type]]>
 					<answer src="as:onSelectType('0')"><![CDATA[No entry]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable]]></answer>
-					<answer src="as:onSelectType('87')"><![CDATA[Warp point]]></answer>
+					<answer src="as:onSelectType('warp')"><![CDATA[Warp point]]></answer>
 					<textinput width="100"/>
 				</question>, false, this);
 
@@ -63,6 +67,8 @@
 		private var _buildToolDialog:SDDialog;
 		private var codeText:SDInputText;
 		
+		private var areaPanel:AreaPanel;
+		
 		public function onSelectType(colorID:String):void
 		{
 			switch(colorID)
@@ -70,11 +76,25 @@
 				case "0":
 				case "1":
 					trace("TODO:assign paint color");
+					
 				break;
 				default :
-					trace("TODO:call area table -> assign paint color");
+					// wait for user select area
+					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
 				break;
 			}
+		}
+		
+		private function onAreaPanelLoad(event:Event):void
+		{
+			areaPanel = event.target.content as AreaPanel;
+			EventManager.addEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
+		}
+		
+		private function onAreaIDChange(event:AreaBuilderEvent):void
+		{
+			EventManager.removeEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
+			areaPanel.visible = false;
 		}
 		
 		public function setupBackground():void
