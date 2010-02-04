@@ -122,6 +122,7 @@
 		
 		private function onAreaIDChange(event:AreaBuilderEvent):void
 		{
+			EventManager.removeEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
 			areaDialog.visible = false;
 			gotoAreaID(event.areaID);
 		}
