@@ -130,9 +130,9 @@ package flars
 		public function setCamera(w:Number, h:Number, fps:int):Camera
 		{
 			this.w = w;
-			// 1st case : MAC use 2nd cam
+			// 1st case : MAC use last cam
 			if (!_webcam && Capabilities.os.indexOf("Mac")>-1)
-				_webcam = Camera.getCamera("2");
+				_webcam = Camera.getCamera(String(Camera.names.length-1));//_webcam = Camera.getCamera("2");
 
 			// 2nd case : default cam
 			if(!_webcam)
