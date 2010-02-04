@@ -108,7 +108,7 @@ package
 			//Oishi.USE_DEDUG = true;
 			//Oishi.ALWAYS_RESET = false;
 			
-			//Oishi.USE_CAMERA = false;
+			Oishi.USE_CAMERA = false;
 			
 			// base
 			base = new Sprite();
