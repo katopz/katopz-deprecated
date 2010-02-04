@@ -4,12 +4,11 @@
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
-	import com.cutecoma.playground.builder.AreaBuilder;
+	import com.cutecoma.playground.builder.WorldBuilder;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.cutecoma.playground.events.AreaBuilderEvent;
-	import com.cutecoma.playground.events.GroundEvent;
 	import com.greensock.plugins.*;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
@@ -20,6 +19,7 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
+	import flash.net.registerClassAlias;
 	import flash.utils.*;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
@@ -35,20 +35,22 @@
 	*/
 	public class main extends SDApplication
 	{
+		registerClassAlias("com.cutecoma.playground.data.AreaData", AreaData);
+		registerClassAlias("com.cutecoma.playground.data.MapData", MapData);
+		registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
+		registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
+		
 		private var engine3D:Engine3D;
 		private var game:Game;
 		private var connector:SDConnector;
 
-		private var areaBuilder:AreaBuilder;
+		private var _isEdit:Boolean = false;
+		private var worldBuilder:WorldBuilder;
 
 		private const VERSION:String = "PlayGround 2.2";
 
 		private var area:Area;
-		//private const SERVER_URI:String = "http://www.amaraka.tv/livebroadcast/Red5/webapps/SOSample/";
-		//private const SERVER_URI:String = "http://www.thomassmart.com/Sandbox/red5/SOSample/";
-		//private const SERVER_URI:String = "http://www.scratch.co.nz/red5/red5_dist/webapps/SOSample/";
 		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
-		//rtmp://203.150.230.224/oflaDemo
 		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 
 		private var currentRoomID:String = "";
@@ -59,77 +61,6 @@
 		
 		private var _areaPath:String;
 		
-		private var _isEdit:Boolean = false;
-		private function get isEdit():Boolean
-		{
-			return _isEdit
-		}
-		private function set isEdit(value:Boolean):void
-		{
-			_isEdit = value;
-			
-			if (_isEdit)
-			{
-				areaBuilder = new AreaBuilder(engine3D, area);
-				content.addChild(areaBuilder);
-
-				area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
-				
-				area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
-			}
-			else
-			{
-				area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
-				
-				area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
-				
-				content.removeChild(areaBuilder);
-				areaBuilder = null;
-			}
-		}
-		
-		private var config87:AreaData = new AreaData
-		(
-			"87", "areas/87_bg.swf", 40, 40,
-			new SceneData(new CameraData(190.43, 188.76, -1073.33, -0.05, -7.55, -0.55, 43.02, 8.70, 70.00)),
-			new MapData(
-				[
-					0, 0, 86, 86, 86, 0, 0,
-					0, 0, 86, 86, 86, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					1, 1, 1, 1, 1, 0, 0,
-					0, 1, 1, 1, 1, 0, 0,
-					0, 2, 1, 1, 1, 0, 0,
-					0, 0, 1, 1, 1, 0, 0,
-					0, 0, 88, 88, 88, 0, 0,
-					0, 0, 0, 0, 0, 0, 0,
-					0, 0, 0, 0, 0, 0, 0,
-				],
-				7,4,4
-			));
-		private var config88:AreaData = new AreaData
-		(
-			"88", "areas/88_bg.swf", 40, 40,
-			new SceneData(new CameraData(338.61, 116.50, -801.01, -2.21, -26.09, -0.11, 39.42, 8.70, 77.00)),
-			new MapData(
-				[
-					0, 0, 0, 87, 87, 87, 0,
-					0, 0, 0, 87, 87, 87, 0,
-					0, 0, 0, 87, 87, 87, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					2, 1, 1, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0,
-					0, 0, 0, 1, 1, 1, 0
-				],
-				7,3,4
-			));
 		public function main()
 		{
 			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
@@ -182,7 +113,7 @@
 		public function onUserSelect(action:String):void
 		{
 			if(action=="edit")
-				isEdit = true;
+				_isEdit = true;
 			
 			// wait for user select area
 			EventManager.addEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
@@ -244,7 +175,15 @@
 
 			// ___________________________________________________________ System Layer
 
-			SystemUtil.addContext(this, "Option", toggleOption);
+			if(_isEdit)
+			{
+				SystemUtil.addContext(this, "Option", toggleOption);
+				worldBuilder = new WorldBuilder(engine3D, area);
+				system.addChild(worldBuilder);
+				worldBuilder.activate();
+			}
+			
+			
 			createConnector(area.id);
 			createChatBox();
 
@@ -259,7 +198,8 @@
 
 		private function onGroundClick(event:SDMouseEvent):void
 		{
-			game.player.walkTo(Position.parse(event.data.position));
+			if(!worldBuilder.isActivate)
+				game.player.walkTo(Position.parse(event.data.position));
 		}
 
 		// _______________________________________________________ Connector
@@ -361,7 +301,10 @@
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
 				case "Edit":
-						isEdit = !isEdit;
+						if(worldBuilder.isActivate)
+							worldBuilder.activate();
+						else
+							worldBuilder.deactivate();
 					break;
 					/*
 				case "Map":
@@ -370,7 +313,7 @@
 					break;
 					*/
 				case "Background":
-					areaBuilder.setupBackground();
+					worldBuilder.areaBuilder.setupBackground();
 					break;
 				case "Grid":
 					engine3D.grid = !engine3D.grid;
@@ -403,15 +346,6 @@
 			}
 		}
 
-		public function onTileClick(event:GroundEvent):void
-		{
-			trace("TilePlane:"+event, event.bitmapX, event.bitmapZ);
-			
-			var _bitmapData:BitmapData = area.map.data.bitmapData;
-			_bitmapData.setPixel32(event.bitmapX, event.bitmapZ , 0xFF000000);
-			area.ground.update();
-		}
-		
 		private function onAreaLoad(event:Event):void
 		{
 			if (event.type != "complete")
