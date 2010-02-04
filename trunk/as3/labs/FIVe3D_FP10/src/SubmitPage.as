@@ -151,8 +151,10 @@ package
 			root.stage.removeEventListener(Event.RESIZE, onResize);
 			data = _form.data;
 			_form.destroy();
-			destroy();
+			
 			dispatchEvent(new Event(Event.CANCEL));
+			
+			destroy();
 		}
 		
 		private var _form:FormTool;
