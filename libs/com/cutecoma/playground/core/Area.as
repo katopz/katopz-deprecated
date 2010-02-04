@@ -12,29 +12,22 @@
 
 		public var data:AreaData;
 		
-		public function Area(config:*)
+		public function Area(areaData:AreaData)
 		{
 			//super();
 			//init({engine3D:engine3D, game:game});
 			// background
-			background = new BackGround(config);
-//DEV//addChild(background);
+			background = new BackGround(areaData);
+			addChild(background);
 			
 			//mouseEnabled = false;
 			//mouseChildren = false;
 			
 			super("Area");
 			
-			parse(config);
-		}
-		
-        // ______________________________ Initialize ______________________________
-        
-		public function parse(raw:Object=null):void
-		{
-			id  = raw.id;
-			data = AreaData(raw);
-			create(raw);
+			id  = areaData.id;
+			data = areaData;
+			create(areaData);
 		}
 		
 		// ______________________________ Create ______________________________
