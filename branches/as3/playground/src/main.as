@@ -59,6 +59,35 @@
 		
 		private var _areaPath:String;
 		
+		private var _isEdit:Boolean = false;
+		private function get isEdit():Boolean
+		{
+			return _isEdit
+		}
+		private function set isEdit(value:Boolean):void
+		{
+			_isEdit = value;
+			
+			if (_isEdit)
+			{
+				areaBuilder = new AreaBuilder(engine3D, area);
+				content.addChild(areaBuilder);
+
+				area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
+				
+				area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+			}
+			else
+			{
+				area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+				
+				area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
+				
+				content.removeChild(areaBuilder);
+				areaBuilder = null;
+			}
+		}
+		
 		private var config87:AreaData = new AreaData
 		(
 			"87", "areas/87_bg.swf", 40, 40,
@@ -152,8 +181,10 @@
 
 		public function onUserSelect(action:String):void
 		{
-			// load config?
-			//gotoAreaID(id);
+			if(action=="edit")
+				isEdit = true;
+			
+			// wait for user select area
 			EventManager.addEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
 			addChild(LoaderUtil.loadAsset("AreaPanel.swf"));
 		}
@@ -194,11 +225,8 @@
 			var chars:Characters = new Characters();
 
 			chars.addCharacter(new CharacterData("man1", "assets/man1/model.swf", 1, 100, 24, ["stand", "walk", "sit"]));
-
 			chars.addCharacter(new CharacterData("woman1", "assets/woman1/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
-
 			chars.addCharacter(new CharacterData("man2", "assets/man2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
-
 			chars.addCharacter(new CharacterData("woman2", "assets/woman2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
 
 			//TODO : wait for user select char and add player 
@@ -288,7 +316,7 @@
 
 		private var tree:SDTree;
 
-		private function toggleOption(event:*):void
+		private function toggleOption(event:Event=null):void
 		{
 			// Engine Explorer
 			if (!tree)
@@ -333,24 +361,7 @@
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
 				case "Edit":
-					if (!areaBuilder)
-					{
-						areaBuilder = new AreaBuilder(engine3D, area);
-						content.addChild(areaBuilder);
-
-						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
-						
-						area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
-					}
-					else
-					{
-						area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
-						
-						area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
-						
-						content.removeChild(areaBuilder);
-						areaBuilder = null;
-					}
+						isEdit = !isEdit;
 					break;
 					/*
 				case "Map":
@@ -428,11 +439,11 @@
 			// it's my command?
 			if (_player == game.player)
 			{
-				// and command is? 
+				// and command is?
 				if (data.command == "warp")
 				{
 					trace(" ! Warp to : " + data.args[0]);
-					gotoAreaID(data.args[0])
+					gotoAreaID(data.args[0]);
 				}
 			}
 		}
