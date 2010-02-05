@@ -4,10 +4,10 @@
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
-	import com.cutecoma.playground.editors.WorldEditor;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
+	import com.cutecoma.playground.editors.WorldEditor;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.greensock.plugins.*;
 	import com.sleepydesign.application.core.SDApplication;
@@ -131,6 +131,8 @@
 		
 		private function onAreaIDChange(event:AreaEditorEvent):void
 		{
+			_selectAreaID = event.areaID;
+			
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			areaDialog.visible = false;
 			gotoAreaID(event.areaID);
@@ -358,18 +360,29 @@
 
 		private function onAreaLoad(event:Event):void
 		{
-			if (event.type != "complete")
-				return;
-
-			var areaData:AreaData = new AreaData();
-			IExternalizable(areaData).readExternal(event.target.data);
-
-			_data = areaData;
-
-			//cache
-			configs[areaData.id] = areaData;
-
-			gotoArea(areaData);
+			var areaData:AreaData
+			if (event.type == "complete")
+			{
+				// exist area
+				areaData = new AreaData();
+				IExternalizable(areaData).readExternal(event.target.data);
+	
+				_data = areaData;
+	
+				//cache
+				configs[areaData.id] = areaData;
+	
+				gotoArea(areaData);
+			}
+			else if (event.type == IOErrorEvent.IO_ERROR && _isEdit)
+			{
+				// new area
+				areaData = new AreaData(_selectAreaID, _areaPath + _selectAreaID + "_bg.swf", 40, 40, 
+				PixelLiving.DEFAULT_SCENE_DATA, PixelLiving.DEFAULT_MAP_DATA);
+				
+				_data = areaData;
+				gotoArea(areaData);
+			}
 		}
 
 		// ______________________________ Update ____________________________
@@ -389,7 +402,9 @@
 				}
 			}
 		}
-
+		
+		private var _selectAreaID:String;
+		
 		private function gotoAreaID(id:String):void
 		{
 			_data = getConfigByAreaID(id);

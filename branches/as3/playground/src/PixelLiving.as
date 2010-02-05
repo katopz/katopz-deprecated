@@ -8,14 +8,16 @@ package
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
 	import com.sleepydesign.utils.*;
-
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
+	import flash.geom.Point;
 	import flash.utils.*;
 	
 	public class PixelLiving
 	{
+		/*
 		public static var config87:AreaData = new AreaData
 		(
 			"87", "areas/87_bg.swf", 40, 40,
@@ -61,7 +63,10 @@ package
 				7,3,4
 			)
 		);
+		*/
 
 		public static var DEFAULT_SCENE_DATA:SceneData = new SceneData(new CameraData(500, 100, -500));
+		
+		public static var DEFAULT_MAP_DATA:MapData = new MapData(new BitmapData(40, 40, true, 0xFF000000), new Point(20,20));
 	}
 }
