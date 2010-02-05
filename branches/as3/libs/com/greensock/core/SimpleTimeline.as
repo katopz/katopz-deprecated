@@ -1,6 +1,6 @@
-/**
- * VERSION: 1.11
- * DATE: 11/19/2009
+﻿/**
+ * VERSION: 1.133
+ * DATE: 1/18/2010
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -10,7 +10,7 @@ package com.greensock.core {
  * most basic timeline functionality and is used for the root timelines in TweenLite. It is meant
  * to be very fast and lightweight. <br /><br />
  * 
- * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -45,9 +45,12 @@ package com.greensock.core {
 		
 		/** @private **/
 		public function remove(tween:TweenCore, skipDisable:Boolean=false):void {
-			if (!tween.gc && !skipDisable) {
+			if (tween.gc) {
+				return; //already removed!
+			} else if (!skipDisable) {
 				tween.setEnabled(false, true);
 			}
+			
 			if (tween.nextNode) {
 				tween.nextNode.prevNode = tween.prevNode;
 			} else if (_lastChild == tween) {

@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.12
- * DATE: 11/21/2009
+ * VERSION: 1.13
+ * DATE: 12/28/2009
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/timelinemax/
  **/
@@ -142,13 +142,13 @@ package com.greensock {
  * 	<li> TimelineMax adds about 4.8k to your SWF (not including OverwriteManager).</li>
  * </ul>
  * 
- * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  **/
 	public class TimelineMax extends TimelineLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.12;
+		public static const version:Number = 1.13;
 		
 		/** @private **/
 		protected var _repeat:int;
@@ -282,7 +282,10 @@ package com.greensock {
 		}
 		
 		/**
-		 * If you want a function to be called at a particular time or label, use addCallback.
+		 * If you want a function to be called at a particular time or label, use addCallback. When you add
+		 * a callback, it is technically considered a zero-duration tween, so if you getChildren() there will be
+		 * a tween returned for each callback. You can discern a callback from other tweens by the fact that
+		 * their target is a function and the duration is zero. 
 		 * 
 		 * @param function the function to be called
 		 * @param timeOrLabel the time in seconds (or frames for frames-based timelines) or label at which the callback should be inserted. For example, myTimeline.addCallback(myFunction, 3) would call myFunction() 3-seconds into the timeline, and myTimeline.addCallback(myFunction, "myLabel") would call it at the "myLabel" label.
@@ -365,7 +368,7 @@ package com.greensock {
 				varsCopy.currentTime = Number(timeOrLabel);
 			}
 			this.paused = true;
-			return new TweenLite(this, Math.abs(Number(varsCopy.currentTime) - this.cachedTime), varsCopy);
+			return new TweenLite(this, Math.abs(Number(varsCopy.currentTime) - this.cachedTime) / this.cachedTimeScale, varsCopy);
 		}
 		
 		/** @private **/
@@ -583,9 +586,10 @@ package com.greensock {
 		public function getActive(nested:Boolean=true, tweens:Boolean=true, timelines:Boolean=false):Array {
 			var a:Array = [], all:Array = getChildren(nested, tweens, timelines), i:int;
 			var l:uint = all.length;
+			var cnt:uint = 0;
 			for (i = 0; i < l; i++) {
 				if (TweenCore(all[i]).active) {
-					a[a.length] = all[i];
+					a[cnt++] = all[i];
 				}
 			}
 			return a;

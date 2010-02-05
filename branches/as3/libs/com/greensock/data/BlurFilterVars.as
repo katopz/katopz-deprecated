@@ -24,7 +24,7 @@ NOTES:
 	  data typed) syntax, like TweenMax.to(my_mc, 1, {blurFilter:{blurX:"-5", blurY:"3"}});
 
 AUTHOR: Jack Doyle, jack@greensock.com
-Copyright 2009, GreenSock. All rights reserved. This work is subject to the terms in http://www.greensock.com/terms_of_use.html or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+Copyright 2010, GreenSock. All rights reserved. This work is subject to the terms in http://www.greensock.com/terms_of_use.html or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
 */
 
 
