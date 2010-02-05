@@ -1,10 +1,8 @@
 package com.sleepydesign.core
 {
-    import com.sleepydesign.events.SDEvent;
+    import com.sleepydesign.events.RemovableEventDispatcher;
     
-    import flash.events.EventDispatcher;
-    
-	public class SDObject extends EventDispatcher
+	public class SDObject extends RemovableEventDispatcher
 	{
 		// for create pharse
 		protected var _config : *;
@@ -40,9 +38,10 @@ package com.sleepydesign.core
 		
 		// ______________________________ Destroy ______________________________
 		
-		public function destroy():void
+		override public function destroy():void
 		{
 			// elements -> garbage
+			super.destroy();
 		}
 		
 		// ______________________________ Update ____________________________

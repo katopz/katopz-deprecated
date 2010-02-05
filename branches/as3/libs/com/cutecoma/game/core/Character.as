@@ -28,7 +28,7 @@ package com.cutecoma.game.core
 		{
 			// try get character.model from object pool
 			model = Characters.getInstance().getModel(config.src);
-			instance.addChild(model.instance);
+//DEV//instance.addChild(model.instance);
 			model.instance.addEventListener(SDEvent.COMPLETE, onModelComplete);
 			model.instance.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 		}
