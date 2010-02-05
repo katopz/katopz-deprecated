@@ -13,6 +13,7 @@
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
@@ -37,8 +38,7 @@
 		{
 			_paintColor = vaule;
 			_codeText.borderColor = _paintColor;
-			if(_paintColor==0xFF000000 || _paintColor==0xFFFFFFFF)
-				_codeText.text = StringUtil.hex(_paintColor);
+			_codeText.text = StringUtil.hex(_paintColor);
 		}
 		
 		public function AreaEditor(engine3D:Engine3D, area:Area)
@@ -53,13 +53,12 @@
 			
 			bg.setSize(this.width, this.height);
 			*/
-			/*
+			
 			// controller
 			Game.inputController = new InputController(true, true);
 			Game.inputController.mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
-			*/
 			
 			_codeText = new SDTextField("0xFF000000");
 			_codeText.autoSize= "left";

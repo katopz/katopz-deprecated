@@ -64,7 +64,7 @@ package com.sleepydesign.ui
 				break;
 				case MouseEvent.MOUSE_MOVE:
 					//if(isMouseDown && event.target == dragTarget &&  event.relatedObject == null)
-					if(isMouseDown)// && event.target == dragTarget &&  event.relatedObject == null)
+					if(isMouseDown && event.relatedObject == null)// && event.target == dragTarget &&  event.relatedObject == null)
 					{
 						target["mouseChildren"] = false;
 						var dx:Number = event.stageX - lastMousePosition.x;
