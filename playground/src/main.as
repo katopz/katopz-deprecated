@@ -4,11 +4,11 @@
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
-	import com.cutecoma.playground.builder.WorldBuilder;
+	import com.cutecoma.playground.editors.WorldEditor;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
-	import com.cutecoma.playground.events.AreaBuilderEvent;
+	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.greensock.plugins.*;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
@@ -45,7 +45,7 @@
 		private var connector:SDConnector;
 
 		private var _isEdit:Boolean = false;
-		private var worldBuilder:WorldBuilder;
+		private var worldEditor:WorldEditor;
 
 		private const VERSION:String = "PlayGround 2.2";
 
@@ -63,6 +63,7 @@
 		
 		public function main()
 		{
+			alpha = .1
 			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
 			super("PlayGround", new SDMacPreloader());
 
@@ -116,13 +117,13 @@
 				_isEdit = true;
 			
 			// wait for user select area
-			EventManager.addEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
+			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			addChild(LoaderUtil.loadAsset("AreaPanel.swf"));
 		}
 		
-		private function onAreaIDChange(event:AreaBuilderEvent):void
+		private function onAreaIDChange(event:AreaEditorEvent):void
 		{
-			EventManager.removeEventListener(AreaBuilderEvent.AREA_ID_CHANGE, onAreaIDChange);
+			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			areaDialog.visible = false;
 			gotoAreaID(event.areaID);
 		}
@@ -179,9 +180,9 @@
 			if(_isEdit)
 			{
 				SystemUtil.addContext(this, "Option", toggleOption);
-				worldBuilder = new WorldBuilder(engine3D, area);
-				system.addChild(worldBuilder);
-				worldBuilder.activate();
+				worldEditor = new WorldEditor(engine3D, area);
+				system.addChild(worldEditor);
+				worldEditor.activate();
 			}
 			
 			
@@ -199,7 +200,7 @@
 
 		private function onGroundClick(event:SDMouseEvent):void
 		{
-			if(!worldBuilder.isActivate)
+			if(!worldEditor.isActivate)
 				game.player.walkTo(Position.parse(event.data.position));
 		}
 
@@ -302,19 +303,19 @@
 					PlayerDebugger.toggle(engine3D, game.player);
 					break;
 				case "Edit":
-						if(worldBuilder.isActivate)
-							worldBuilder.activate();
+						if(worldEditor.isActivate)
+							worldEditor.activate();
 						else
-							worldBuilder.deactivate();
+							worldEditor.deactivate();
 					break;
 					/*
 				case "Map":
 					FileUtil.openImage(onMapLoad, ["*.png"]);
-					//areaBuilder.toggleTerrain(area.map);
+					//areaEditor.toggleTerrain(area.map);
 					break;
 					*/
 				case "Background":
-					worldBuilder.areaBuilder.setupBackground();
+					worldEditor.areaEditor.setupBackground();
 					break;
 				case "Grid":
 					engine3D.grid = !engine3D.grid;
@@ -356,8 +357,6 @@
 			IExternalizable(areaData).readExternal(event.target.data);
 
 			_data = areaData;
-
-			trace(areaData.id);
 
 			//cache
 			configs[areaData.id] = areaData;

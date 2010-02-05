@@ -1,6 +1,6 @@
 package
 {
-	import com.cutecoma.playground.events.AreaBuilderEvent;
+	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDPanel;
 	import com.sleepydesign.draw.SDGrid;
@@ -145,7 +145,7 @@ package
 		private function onOK(event:MouseEvent):void
 		{
 			visible = false;
-			EventManager.dispatchEvent(new AreaBuilderEvent(AreaBuilderEvent.AREA_ID_CHANGE, _areaID));
+			EventManager.dispatchEvent(new AreaEditorEvent(AreaEditorEvent.AREA_ID_CHANGE, _areaID));
 		}
 
 		private function onCancel(event:MouseEvent):void
