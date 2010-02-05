@@ -9,6 +9,7 @@ package com.sleepydesign.application.core
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
@@ -115,7 +116,7 @@ package com.sleepydesign.application.core
 						TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:0});
 					};
 					
-					addChild(loaderObject);
+					super.addChild(loaderObject);
 				}
 			}
 		}
@@ -124,7 +125,17 @@ package com.sleepydesign.application.core
 		{
 			
 		}
-		
+		/*
+        override public function addChild(displayObject:DisplayObject):DisplayObject
+        {
+        	return content.addChild(displayObject);
+        }
+        
+        override public function removeChild(displayObject:DisplayObject):DisplayObject
+        {
+        	return content.removeChild(displayObject);
+        }
+        */
 		/*
 		public static function getContainerById(id:String):SDContainer
 		{

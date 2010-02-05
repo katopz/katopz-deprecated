@@ -15,7 +15,7 @@ package com.cutecoma.game.core
 		private var lists:SDGroup;
 		//public static var models:SDGroup;
 		
-		public static var instance:Characters;
+		private static var instance:Characters;
 		public static function getInstance():Characters
 		{
 			if (instance == null)
@@ -23,7 +23,7 @@ package com.cutecoma.game.core
 			return instance as Characters;
 		}
 		
-		public function Characters(modelURI:String=null)
+		public function Characters()
 		{
 			instance = this;
 			super();

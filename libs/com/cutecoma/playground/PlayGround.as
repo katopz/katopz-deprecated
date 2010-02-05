@@ -85,11 +85,10 @@
 		- PlayerEvent
 		- NPCEvent
 		
-	+ Editors
-		- PlayerEditor
-		- DialogEditor
-		+ GroundEditor
-			- PreviewLayer
-			- EditorLayer
-	
+	+ Editor
+		+ WorldEditor
+			- BuildTools (Menu)
+			+ MapEditor (Area top view)
+			+ AreaEditor
+				- Ground : APainter
 */
