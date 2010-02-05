@@ -1,6 +1,6 @@
-/**
- * VERSION: 1.13
- * DATE: 12/8/2009
+﻿/**
+ * VERSION: 1.142
+ * DATE: 1/18/2010
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/timelinelite/
  **/
@@ -111,13 +111,13 @@ package com.greensock {
  * 	<li> TimelineLite adds about 2.5k to your SWF (3.3kb including OverwriteManager).</li>
  * </ul>
  * 
- * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  **/
 	public class TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static const version:Number = 1.13;
+		public static const version:Number = 1.142;
 		/** @private **/
 		private static var _overwriteMode:int = (OverwriteManager.enabled) ? OverwriteManager.mode : OverwriteManager.init(2); //Ensures that TweenLite instances don't overwrite each other before being put into the timeline/sequence.
 		/** @private **/
@@ -278,7 +278,9 @@ package com.greensock {
 		 * @param skipDisable If false (the default), the TweenLite/Max/TimelineLite/Max instance is disabled. This is primarily used internally - there's really no reason to set it to true. 
 		 */
 		override public function remove(tween:TweenCore, skipDisable:Boolean=false):void {
-			if (!tween.gc && !skipDisable) {
+			if (tween.gc) {
+				return; //already removed!
+			} else if (!skipDisable) {
 				tween.setEnabled(false, true);
 			}
 			
@@ -425,6 +427,18 @@ package com.greensock {
 		 */
 		public function addLabel(label:String, time:Number):void {
 			_labels[label] = time;
+		}
+		
+		/**
+		 * Removes a label from the timeline and returns the time of that label.
+		 * 
+		 * @param label The name of the label to remove
+		 * @return Time associated with the label that was removed
+		 */
+		public function removeLabel(label:String):Number {
+			var n:Number = _labels[label];
+			delete _labels[label];
+			return n;
 		}
 		
 		/**

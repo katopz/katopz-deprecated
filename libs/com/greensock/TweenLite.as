@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.13
- * DATE: 12/8/2009
+ * VERSION: 11.133
+ * DATE: 1/18/2010
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -150,7 +150,7 @@ package com.greensock {
  * 	  to members. Learn more at <a href="http://blog.greensock.com/club/">http://blog.greensock.com/club/</a></li>
  * </ul>
  * 
- * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	 
@@ -221,7 +221,7 @@ package com.greensock {
 		}
 		
 		/** @private **/
-		public static const version:Number = 11.13;
+		public static const version:Number = 11.133;
 		/** @private When plugins are activated, the class is added (named based on the special property) to this object so that we can quickly look it up in the initTweenVals() method.**/
 		public static var plugins:Object = {}; 
 		/** @private **/
@@ -395,9 +395,6 @@ package com.greensock {
 		/** @private **/
 		override public function renderTime(time:Number, suppressEvents:Boolean=false, force:Boolean=false):void {
 			var isComplete:Boolean, prevTime:Number = this.cachedTime;
-			if (!this.active && !this.cachedPaused) {
-				this.active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
-			}
 			if (time >= this.cachedDuration) {
 				this.cachedTotalTime = this.cachedTime = this.cachedDuration;
 				this.ratio = 1;
@@ -437,6 +434,9 @@ package com.greensock {
 				if (!isComplete && this.cachedTime) { //_ease is initially set to defaultEase, so now that init() has run, _ease is set properly and we need to recalculate the ratio. Overall this is faster than using conditional logic earlier in the method to avoid having to set ratio twice because we only init() once but renderTime() gets called VERY frequently.
 					this.ratio = _ease(this.cachedTime, 0, 1, this.cachedDuration);
 				}
+			}
+			if (!this.active && !this.cachedPaused) {
+				this.active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
 			if (prevTime == 0 && this.vars.onStart && this.cachedTime != 0 && !suppressEvents) {
 				this.vars.onStart.apply(null, this.vars.onStartParams);

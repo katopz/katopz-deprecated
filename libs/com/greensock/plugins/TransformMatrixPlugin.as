@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.95
- * DATE: 8/22/2009
+ * VERSION: 0.96
+ * DATE: 1/9/2010
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
@@ -13,6 +13,7 @@ package com.greensock.plugins {
 /**
  * TransformMatrixPlugin allows you to tween a DisplayObject's transform.matrix values directly 
  * (<code>a, b, c, d, tx, and ty</code>) or use common properties like <code>x, y, scaleX, scaleY, skewX, skewY,</code> and <code>rotation</code>.
+ * To skew without adjusting scale visually, use skewX2 and skewY2 instead of skewX and skewY. 
  * <br /><br />
  * 
  * <b>USAGE:</b><br /><br />
@@ -30,7 +31,7 @@ package com.greensock.plugins {
  * 
  * </code>
  * 
- * <b>Copyright 2009, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
@@ -49,33 +50,35 @@ package com.greensock.plugins {
 		/** @private **/
 		protected var _txStart:Number;
 		/** @private **/
-		protected var _txChange:Number = 0;
+		protected var _txChange:Number;
 		/** @private **/
 		protected var _tyStart:Number;
 		/** @private **/
-		protected var _tyChange:Number = 0;
+		protected var _tyChange:Number;
 		/** @private **/
 		protected var _aStart:Number;
 		/** @private **/
-		protected var _aChange:Number = 0;
+		protected var _aChange:Number;
 		/** @private **/
 		protected var _bStart:Number;
 		/** @private **/
-		protected var _bChange:Number = 0;
+		protected var _bChange:Number;
 		/** @private **/
 		protected var _cStart:Number;
 		/** @private **/
-		protected var _cChange:Number = 0;
+		protected var _cChange:Number;
 		/** @private **/
 		protected var _dStart:Number;
 		/** @private **/
-		protected var _dChange:Number = 0;
+		protected var _dChange:Number;
+		/** @private **/
+		protected var _angleChange:Number = 0;
 		
 		/** @private **/
 		public function TransformMatrixPlugin() {
 			super();
 			this.propName = "transformMatrix";
-			this.overwriteProps = ["x","y","scaleX","scaleY","transformMatrix","transformAroundPoint","transformAroundCenter"];
+			this.overwriteProps = ["x","y","scaleX","scaleY","rotation","transformMatrix","transformAroundPoint","transformAroundCenter"];
 		}
 		
 		/** @private **/
@@ -94,24 +97,20 @@ package com.greensock.plugins {
 				_txChange = (typeof(value.x) == "number") ? value.x - _txStart : Number(value.x);
 			} else if ("tx" in value) {
 				_txChange = value.tx - _txStart;
+			} else {
+				_txChange = 0;
 			}
 			if ("y" in value) {
 				_tyChange = (typeof(value.y) == "number") ? value.y - _tyStart : Number(value.y);
 			} else if ("ty" in value) {
 				_tyChange = value.ty - _tyStart;
+			} else {
+				_tyChange = 0;
 			}
-			if ("a" in value) {
-				_aChange = value.a - _aStart;
-			}
-			if ("b" in value) {
-				_bChange = value.b - _bStart;
-			}
-			if ("c" in value) {
-				_cChange = value.c - _cStart;
-			}
-			if ("d" in value) {
-				_dChange = value.d - _dStart;
-			}
+			_aChange = ("a" in value) ? value.a - _aStart : 0;
+			_bChange = ("b" in value) ? value.b - _bStart : 0;
+			_cChange = ("c" in value) ? value.c - _cStart : 0;
+			_dChange = ("d" in value) ? value.d - _dStart : 0;
 			
 			if (("rotation" in value) || ("scale" in value) || ("scaleX" in value) || ("scaleY" in value) || ("skewX" in value) || ("skewY" in value) || ("skewX2" in value) || ("skewY2" in value)) {
 				var ratioX:Number, ratioY:Number;
@@ -139,9 +138,12 @@ package com.greensock.plugins {
 				}
 				
 				if (finalAngle != angle) {
-					matrix.tx = 0;
-					matrix.ty = 0;
-					matrix.rotate(finalAngle - angle);
+					if ("rotation" in value) {
+						_angleChange = finalAngle - angle;
+						finalAngle = angle; //to correctly affect the skewX calculations below
+					} else {
+						matrix.rotate(finalAngle - angle);
+					}
 				}
 				
 				if ("scale" in value) {
@@ -206,24 +208,15 @@ package com.greensock.plugins {
 		
 		/** @private **/
 		override public function set changeFactor(n:Number):void {
-			if (_aChange) {
-				_matrix.a = _aStart + (n * _aChange);
+			_matrix.a = _aStart + (n * _aChange);
+			_matrix.b = _bStart + (n * _bChange);
+			_matrix.c = _cStart + (n * _cChange);
+			_matrix.d = _dStart + (n * _dChange);
+			if (_angleChange) {
+				_matrix.rotate(_angleChange * n);
 			}
-			if (_bChange) {
-				_matrix.b = _bStart + (n * _bChange);
-			}
-			if (_cChange) {
-				_matrix.c = _cStart + (n * _cChange);
-			}
-			if (_dChange) {
-				_matrix.d = _dStart + (n * _dChange);
-			}
-			if (_txChange) {
-				_matrix.tx = _txStart + (n * _txChange);
-			}
-			if (_tyChange) {
-				_matrix.ty = _tyStart + (n * _tyChange);
-			}
+			_matrix.tx = _txStart + (n * _txChange);
+			_matrix.ty = _tyStart + (n * _tyChange);
 			_transform.matrix = _matrix;
 		}
 
