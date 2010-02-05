@@ -201,9 +201,9 @@ package com.cutecoma.playground.core
 			Map.factorX = _areaData.width;
 			Map.factorZ = _areaData.height;
 			
-			if(!_areaData.map)
-				data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
-			else
+			//if(!_areaData.map)
+			//	data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
+			//else
 				data = _areaData.map;
 				
 			// _______________________________________________________ MiniMap

@@ -34,13 +34,17 @@ package com.cutecoma.playground.data
 		public var scaleX:Number;
 		public var scaleZ:Number;
 
-		public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 1, scaleZ:Number = 1)
+		//public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 1, scaleZ:Number = 1)
+		public function MapData(bitmapData:BitmapData, spawnPoint:Point)
 		{
-			parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
+			//parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
+			this.bitmapData = bitmapData;
+			this.spawnPoint = spawnPoint;
 		}
 
 		// ______________________________ Parse ______________________________
 
+		/*
 		public function parse(raw:*):MapData
 		{
 			nodes = raw.nodes;
@@ -99,6 +103,7 @@ package com.cutecoma.playground.data
 
 			return this;
 		}
+		*/
 
 		// _______________________________________________________ external
 
