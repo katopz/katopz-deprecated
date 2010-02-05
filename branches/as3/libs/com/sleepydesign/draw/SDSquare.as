@@ -1,8 +1,8 @@
 package com.sleepydesign.draw
 {
 	import flash.display.Sprite;
-	
-    /**
+
+	/**
 	 * SleepyDesign Square
 	 * @author katopz
 	 */
@@ -15,6 +15,11 @@ package com.sleepydesign.draw
 		private var _thickness:Number;
 		private var _lineColor:uint;
 		private var _align:String;
+		
+		public function get color():uint
+		{
+			return _color;
+		}
 		
 		public function SDSquare(width:Number=10, height:Number=10, color:uint=0x000000,alpha:Number=1, thickness:Number=0, lineColor:uint=0x000000, align:String = "tl")
 		{
