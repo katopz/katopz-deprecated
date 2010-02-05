@@ -17,7 +17,6 @@
 	import com.sleepydesign.ui.SDKeyBoard;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
-	import com.sleepydesign.utils.StringUtil;
 	
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -33,12 +32,12 @@
 		private var area		:Area;
 		private static const FORWARD:Number3D = new Number3D(0, 0, -1);
 		
-		private var _paintColor:Number = 0;
-		public function set paintColor(vaule:Number):void
+		private var _paintColor:String;
+		public function set paintColor(vaule:String):void
 		{
 			_paintColor = vaule;
-			_codeText.borderColor = _paintColor;
-			_codeText.text = StringUtil.hex(_paintColor);
+			_codeText.borderColor = Number(_paintColor);
+			_codeText.text = _paintColor;//StringUtil.hex(_paintColor).split("0x").join("0xFF");
 		}
 		
 		public function AreaEditor(engine3D:Engine3D, area:Area)
@@ -92,10 +91,10 @@
 			switch(colorID)
 			{
 				case "0":
-					paintColor = 0xFF000000;
+					paintColor = "0xFF000000";
 				break;
 				case "1":
-					paintColor = 0xFFFFFFFF;
+					paintColor = "0xFFFFFFFF";
 				break;
 				default :
 					// wait for user select area
@@ -116,7 +115,7 @@
 		{
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			areaPanel.visible = false;
-			paintColor = Number("0xFF00FF"+event.areaID);
+			paintColor = "0xFF00FF"+event.areaID;
 		}
 		
 		public function setupBackground():void
@@ -241,7 +240,7 @@
 			trace("TilePlane:", event.bitmapX, event.bitmapZ, _paintColor);
 			
 			var _bitmapData:BitmapData = area.map.data.bitmapData;
-			_bitmapData.setPixel32(event.bitmapX, event.bitmapZ , _paintColor);
+			_bitmapData.setPixel32(event.bitmapX, event.bitmapZ , Number(_paintColor));
 			area.ground.update();
 		}
 		
