@@ -27,7 +27,9 @@ package
 
 		private var _marker:SDSquare;
 
-		private var _okButton:SDButton
+		private var _okButton:SDButton;
+		
+		public var isEdit:Boolean = true;
 
 		public function AreaPanel()
 		{
@@ -85,7 +87,7 @@ package
 			for each (var _areaID:String in areaLists)
 			{
 				var _point:Point = new Point(int(HEX_STRING.indexOf(_areaID.charAt(0))), int(HEX_STRING.indexOf(_areaID.charAt(1))));
-				var _color:Number = Number("0x00FF"+_areaID);
+				var _color:Number = Number("0xFF00FF"+_areaID);
 				var _areaCell:SDSquare = new SDSquare(_cellWidth, _cellHeight, _color, .5, 1, _color);
 				_panel.addChild(_areaCell);
 				_areaCell.x = _grid.x + _point.x * _cellWidth;
@@ -115,6 +117,7 @@ package
 			_panel.addChild(_okButton);
 			_okButton.x = _cancelButton.x - _okButton.width - 4;
 			_okButton.y = _cancelButton.y;
+			_okButton.alpha = .25;
 
 			// event
 			_panel.addEventListener(MouseEvent.CLICK, onGridClick);
@@ -138,8 +141,16 @@ package
 			
 			_marker.visible = true;
 			
-			_okButton.removeEventListener(MouseEvent.CLICK, onOK);
-			_okButton.addEventListener(MouseEvent.CLICK, onOK);
+			// edit mode or click avaliable area
+			if(isEdit || event.target is SDSquare)
+			{
+				_okButton.removeEventListener(MouseEvent.CLICK, onOK);
+				_okButton.addEventListener(MouseEvent.CLICK, onOK);
+				_okButton.alpha = 1;
+			}else{
+				_okButton.removeEventListener(MouseEvent.CLICK, onOK);
+				_okButton.alpha = .25;
+			}
 		}
 
 		private function onOK(event:MouseEvent):void

@@ -8,7 +8,7 @@ package
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
 	import com.sleepydesign.utils.*;
-	
+
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
@@ -36,7 +36,9 @@ package
 					0, 0, 0, 0, 0, 0, 0,
 				],
 				7,4,4
-			));
+			)
+		);
+		
 		public static var config88:AreaData = new AreaData
 		(
 			"88", "areas/88_bg.swf", 40, 40,
@@ -57,6 +59,9 @@ package
 					0, 0, 0, 1, 1, 1, 0
 				],
 				7,3,4
-			));
+			)
+		);
+
+		public static var DEFAULT_SCENE_DATA:SceneData = new SceneData(new CameraData(500, 100, -500));
 	}
 }

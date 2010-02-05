@@ -61,9 +61,10 @@
 		
 		private var _areaPath:String;
 		
+		private var areaPanel:AreaPanel;
+		
 		public function main()
 		{
-			alpha = .1
 			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
 			super("PlayGround", new SDMacPreloader());
 
@@ -113,12 +114,19 @@
 
 		public function onUserSelect(action:String):void
 		{
+			areaDialog.visible = false;
 			if(action=="edit")
 				_isEdit = true;
-			
-			// wait for user select area
+			LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
+		}
+		
+		private function onAreaPanelLoad(event:Event):void
+		{
+			if(event.type!="complete")return;
+			areaPanel = event.target.content as AreaPanel;
+			areaPanel.isEdit = _isEdit;
+			SDApplication.system.addChild(areaPanel);
 			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
-			addChild(LoaderUtil.loadAsset("AreaPanel.swf"));
 		}
 		
 		private function onAreaIDChange(event:AreaEditorEvent):void
