@@ -24,7 +24,7 @@ NOTES:
 	  data typed) syntax, like TweenMax.to(my_mc, 1, {colorMatrixFilter:{contrast:0.5, relative:true}});
 
 AUTHOR: Jack Doyle, jack@greensock.com
-Copyright 2009, GreenSock. All rights reserved. This work is subject to the terms in http://www.greensock.com/terms_of_use.html or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+Copyright 2010, GreenSock. All rights reserved. This work is subject to the terms in http://www.greensock.com/terms_of_use.html or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
 */
 
 
