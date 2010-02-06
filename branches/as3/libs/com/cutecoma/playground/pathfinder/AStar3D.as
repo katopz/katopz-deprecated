@@ -7,8 +7,9 @@
  */
 package com.cutecoma.playground.pathfinder
 {
-	import com.sleepydesign.events.SDEvent;
 	import com.cutecoma.game.core.Position;
+	import com.sleepydesign.events.SDEvent;
+	import com.sleepydesign.utils.DebugUtil;
 	
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -66,7 +67,7 @@ package com.cutecoma.playground.pathfinder
 		public function AStar3D(scene:*=null)
 		{
 			if (nodes) {
-				trace(" ! Already 've AStar3D : " + nodes.length,xSize);
+				DebugUtil.trace(" ! Already 've AStar3D : " + nodes.length,xSize);
 				return;
 			}
 			if (scene)
@@ -101,15 +102,7 @@ package com.cutecoma.playground.pathfinder
 			xDepth = uint(width / xSize);
 			zDepth = uint(height / zSize);
 			
-			trace(" * AStar3D	: " + width,height,xDepth, zDepth, xSize, zSize);
-			/*
-			trace("width	:"+width);
-			trace("height	:"+height);
-			trace("xDepth	:"+xDepth);
-			trace("zDepth	:"+zDepth);
-			trace("xSize	:"+xSize);
-			trace("zSize	:"+zSize);
-			*/
+			DebugUtil.trace(" * AStar3D	: " + width,height,xDepth, zDepth, xSize, zSize);
 			
 			nodes = [];
 			
@@ -174,12 +167,12 @@ package com.cutecoma.playground.pathfinder
 		
 		public function getNodeByPosition(iPosition:*):AStarNode 
 		{
-			trace(" ! try : " + iPosition);
+			DebugUtil.trace(" ! try : " + iPosition);
 			
 			var xPoint:int = getXPos(iPosition);
 			var zPoint:int = getZPos(iPosition);
 			
-			trace(" ! getNodeByPosition : " + xPoint,zPoint);
+			DebugUtil.trace(" ! getNodeByPosition : " + xPoint,zPoint);
 			
 			if(xPoint<0||zPoint<0||zPoint>nodes.length-1)return null;
 			if(xPoint>nodes[zPoint][0].length-1)return null;
@@ -194,8 +187,8 @@ package com.cutecoma.playground.pathfinder
 		
 		public function getPositionByNode(xPoint:uint, yPoint:uint, zPoint:uint ):Position 
 		{
-			trace(" ! getPositionByNode : " + xPoint,zPoint);
-			trace(" ! got : " + Position(nodes[zPoint][yPoint][xPoint]));
+			DebugUtil.trace(" ! getPositionByNode : " + xPoint,zPoint);
+			DebugUtil.trace(" ! got : " + Position(nodes[zPoint][yPoint][xPoint]));
 			
 			return Position(nodes[zPoint][0][xPoint]);
 		}
@@ -223,8 +216,8 @@ package com.cutecoma.playground.pathfinder
 			
 			hitBitmapData.copyPixels(bitmapData, bitmapData.rect, pt, pathBitmapData, pt);
 			
-			trace("++"+hitBitmapData.getColorBoundsRect(0xFF000000, 0xFF000000, true))
-			trace("++"+(!hitBitmapData.getColorBoundsRect(0xFF000000, 0xFF000000, true).isEmpty()))
+			DebugUtil.trace("++"+hitBitmapData.getColorBoundsRect(0xFF000000, 0xFF000000, true))
+			DebugUtil.trace("++"+(!hitBitmapData.getColorBoundsRect(0xFF000000, 0xFF000000, true).isEmpty()))
 			
 			return !hitBitmapData.getColorBoundsRect(0xFF000000, 0xFF000000, true).isEmpty();
 		}
@@ -281,7 +274,7 @@ package com.cutecoma.playground.pathfinder
 			var _length:int = positions.length;
 			if(_length>2)
 			{
-				trace(" * Optimize Path : " + positions.length)
+				DebugUtil.trace(" * Optimize Path : " + positions.length)
 				
 				var goodpositions:Array = [];
 				
@@ -314,12 +307,12 @@ package com.cutecoma.playground.pathfinder
 		
 		public function findPath(position:Position, destination:Position, id:String=""): void
 		{
-			//trace(" >> FindPath : [AStarNode true,0,0,0 - -350,0,-250] -> [AStarNode true,5,0,5 - 150,0,250]")
+			//DebugUtil.trace(" >> FindPath : [AStarNode true,0,0,0 - -350,0,-250] -> [AStarNode true,5,0,5 - 150,0,250]")
 			/*
 			startNode = nodes[0][0][0];
 			finishNode = nodes[0][0][7];
 			
-			trace(" > Find Path : " + startNode + " -> " + finishNode);
+			DebugUtil.trace(" > Find Path : " + startNode + " -> " + finishNode);
 			*/
 
 			//position = Position.parse(iPosition);
@@ -337,7 +330,7 @@ package com.cutecoma.playground.pathfinder
 				return;	
 			}
 			
-			trace(" > Find Path : " + startNode + " -> " + finishNode);
+			DebugUtil.trace(" > Find Path : " + startNode + " -> " + finishNode);
 			
 			positions = [];
 			open = [];
@@ -346,10 +339,10 @@ package com.cutecoma.playground.pathfinder
 			var isHit:Boolean = isPathHit(startNode, finishNode);
 			
 			if (!isHit) {
-				trace(" ! Way is clear")
+				DebugUtil.trace(" ! Way is clear")
 				onDone(id);
 			}else {
-				trace(" ! Find Path")
+				DebugUtil.trace(" ! Find Path")
 				look(startNode, id);
 			}
 			/*
@@ -388,7 +381,7 @@ package com.cutecoma.playground.pathfinder
 			}
 			*/
 			
-			trace(" * Found Path : " + positions.length)
+			DebugUtil.trace(" * Found Path : " + positions.length)
 			
 			if (positions.length > 2)
 			{
@@ -401,7 +394,7 @@ package com.cutecoma.playground.pathfinder
 				/*
 				//3 pass
 				positions = optimize(positions);
-				trace(" * Optimize Path : " + positions.length)
+				DebugUtil.trace(" * Optimize Path : " + positions.length)
 				*/
 			}
 			
@@ -415,7 +408,7 @@ package com.cutecoma.playground.pathfinder
 		
 		private function onError(id:String):void
 		{
-			trace(" * Error Occur");
+			DebugUtil.trace(" * Error Occur");
 			dispatchEvent(new SDEvent(SDEvent.ERROR, {id:id}));
 		}
 		
@@ -563,7 +556,7 @@ package com.cutecoma.playground.pathfinder
 		
 		public function destroy():void
 		{
-			//trace(this+".destroy");
+			//DebugUtil.trace(this+".destroy");
 			nodes = null;
 			//bitmapData.dispose();
 			//bitmapData = null;

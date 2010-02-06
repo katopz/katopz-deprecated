@@ -139,7 +139,7 @@ package com.cutecoma.game.core
 		
 		private function onModelComplete(event:*):void
 		{
-			trace("onModelComplete");
+			//trace("onModelComplete");
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
 		}
 		
@@ -147,7 +147,7 @@ package com.cutecoma.game.core
 		{
 			//trace("onAnimationComplete#1");
 			//dispatchEvent(new PlayerEvent(PlayerEvent.ANIMATIONS_COMPLETE, event.file));
-			trace("onAnimationComplete#1");
+			//trace("onAnimationComplete#1");
 			dispatchEvent(event.clone());
 		}
 		

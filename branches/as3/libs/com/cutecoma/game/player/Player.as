@@ -143,6 +143,7 @@
 				balloonClip.y = char.height;
 			
 			// hide 1st
+			instance.alpha = 0;
 			instance.visible = false;
 			
 			// ready to roll
@@ -155,12 +156,12 @@
 			if(balloonClip)
 				balloonClip.y = char.height;
 
-			trace("onCharacterComplete");
+			//trace("onCharacterComplete");
 		}
 		
 		private function onAnimationComplete(event:*):void
 		{
-			trace("onAnimationComplete#3");
+			//trace("onAnimationComplete#3");
 			//balloonClip.y = 70;
 			TweenLite.to(instance, 1, {autoAlpha:1});
 			dispatchEvent(event.clone());

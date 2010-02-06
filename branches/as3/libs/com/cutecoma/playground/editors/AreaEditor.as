@@ -202,27 +202,21 @@
 		{
 			if(SDKeyBoard.isSHIFT)
 			{
-				var nextFOV:Number = engine3D.camera.fov + event.delta
+				var nextFOV:Number = engine3D.camera.fov + event.delta/5;
 				if((nextFOV>0)&&(nextFOV<500))
-				{
-					engine3D.camera.fov = nextFOV;
-				}
+					engine3D.camera.fov += (nextFOV - engine3D.camera.fov)/2;
 			}
 			else if(SDKeyBoard.isCTRL)
 			{
-				var nextFocus:Number = engine3D.camera.focus + event.delta
+				var nextFocus:Number = engine3D.camera.focus + event.delta/5;
 				if((nextFocus>0)&&(nextFocus<100))
-				{
 					engine3D.camera.focus = nextFocus;
-				}
 			}
 			else
 			{
-				var nextZoom:Number = engine3D.camera.zoom + event.delta
+				var nextZoom:Number = engine3D.camera.zoom + event.delta/10;
 				if((nextZoom>0)&&(nextZoom<100))
-				{
-					engine3D.camera.zoom = nextZoom;
-				}
+					engine3D.camera.zoom += (nextZoom - engine3D.camera.zoom)/4;
 			}
 		}
 		

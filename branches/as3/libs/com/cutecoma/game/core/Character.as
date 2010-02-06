@@ -42,7 +42,7 @@ package com.cutecoma.game.core
 		
 		private function onAnimationComplete(event:*):void
 		{
-			trace("onAnimationComplete#2");
+			//trace("onAnimationComplete#2");
 			dispatchEvent(event.clone());
 		}
 	}
