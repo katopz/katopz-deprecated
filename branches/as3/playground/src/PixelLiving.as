@@ -65,8 +65,8 @@ package
 		);
 		*/
 
-		public static var DEFAULT_SCENE_DATA:SceneData = new SceneData(new CameraData(500, 100, -500));
+		public static var DEFAULT_SCENE_DATA:SceneData = new SceneData(new CameraData(0, 100, -700));
 		
-		public static var DEFAULT_MAP_DATA:MapData = new MapData(new BitmapData(40, 40, true, 0xFF000000), new Point(20,20));
+		public static var DEFAULT_MAP_DATA:MapData = new MapData(new BitmapData(10, 10, false, 0x000000), new Point(5,5));
 	}
 }

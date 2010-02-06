@@ -210,7 +210,7 @@
 
 		private function onGroundClick(event:SDMouseEvent):void
 		{
-			if(!worldEditor.isActivate)
+			if(!_isEdit)
 				game.player.walkTo(Position.parse(event.data.position));
 		}
 
