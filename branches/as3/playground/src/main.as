@@ -21,6 +21,8 @@
 	import flash.filters.*;
 	import flash.net.registerClassAlias;
 	import flash.utils.*;
+	
+	import net.hires.debug.Stats;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	
@@ -47,7 +49,7 @@
 		private var _isEdit:Boolean = false;
 		private var worldEditor:WorldEditor;
 
-		private const VERSION:String = "PlayGround 2.2";
+		private const VERSION:String = "PlayGround 2.3";
 
 		private var area:Area;
 		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
@@ -65,10 +67,7 @@
 		
 		public function main()
 		{
-			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
-			super("PlayGround", new SDMacPreloader());
-
-			ProfilerUtil.addStat(SDApplication.system);
+			super("PlayGround");
 		}
 		
 		// ______________________________ Initialize ______________________________
