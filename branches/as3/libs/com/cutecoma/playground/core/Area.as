@@ -18,7 +18,8 @@
 			//init({engine3D:engine3D, game:game});
 			// background
 			background = new BackGround(areaData);
-			//DEV//addChild(background);
+			//DEV//
+			addChild(background);
 			
 			//mouseEnabled = false;
 			//mouseChildren = false;

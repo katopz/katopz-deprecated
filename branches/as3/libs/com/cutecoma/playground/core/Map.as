@@ -127,7 +127,7 @@ package com.cutecoma.playground.core
 			//return pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
 			trace(" ! getWarpPoint : " + areaID);
 			//var warpPoint:Point = MapData(data).warpPoint[areaID];
-			var warpRect:Rectangle = MapData(data).bitmapData.getColorBoundsRect(0xFFFFFFFF, Number("0xFF00FF"+areaID));
+			var warpRect:Rectangle = MapData(data).bitmapData.getColorBoundsRect(0xFFFFFF, Number("0x00FF"+areaID));
 			var warpPoint:Point = warpRect.topLeft; 
 			return pathFinder.getPositionByNode(warpPoint.x, 0, warpPoint.y);
 		}
@@ -141,7 +141,8 @@ package com.cutecoma.playground.core
 			var command:String;
 			var args:Array;
 			
-			if(color>=0xFF00)
+			// warp color zone
+			if(color>=0xFF00 && color<=0xFFFF)
 			{
 				command = "warp";
 				args = [Number(color-0xFF00).toString(16).toUpperCase()];

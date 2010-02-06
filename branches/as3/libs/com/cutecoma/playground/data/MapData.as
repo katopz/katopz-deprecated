@@ -1,7 +1,6 @@
 package com.cutecoma.playground.data
 {
 	import flash.display.BitmapData;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.registerClassAlias;
@@ -35,11 +34,11 @@ package com.cutecoma.playground.data
 		public var scaleZ:Number;
 
 		//public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 1, scaleZ:Number = 1)
-		public function MapData(bitmapData:BitmapData, spawnPoint:Point)
+		public function MapData(bitmapData:BitmapData=null, spawnPoint:Point=null)
 		{
 			//parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
-			this.bitmapData = bitmapData;
-			this.spawnPoint = spawnPoint;
+			this.bitmapData = bitmapData||new BitmapData(10, 10, false, 0x000000);
+			this.spawnPoint = spawnPoint||new Point();
 		}
 
 		// ______________________________ Parse ______________________________
@@ -125,10 +124,10 @@ package com.cutecoma.playground.data
 			var _rect:Rectangle = new Rectangle(0,0,_obj.width,_obj.height);
 			var _bytes:ByteArray = ByteArray(_obj.bytes);
 			_bytes.position = 0;
-			bitmapData = new BitmapData(_rect.width, _rect.height, true, 0xFF000000);
+			bitmapData = new BitmapData(_rect.width, _rect.height, false, 0x000000);
 			bitmapData.setPixels(_rect, _bytes);
 			
-			var spawnRect:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFFFF, 0xFF0000FF);
+			var spawnRect:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFF, 0x0000FF);
 			spawnPoint = spawnRect.topLeft; 
 		}
 	}
