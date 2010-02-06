@@ -2,17 +2,20 @@ package com.sleepydesign.application.core
 {
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
+	import com.greensock.plugins.GlowFilterPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDSprite;
+	import com.sleepydesign.skins.Preloader;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	import com.sleepydesign.utils.URLUtil;
 	
-	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
+	
+	import net.hires.debug.Stats;
 	
     /**
 	 * SleepyDesign Application : External | System | Group | Container | Element
@@ -25,6 +28,9 @@ package com.sleepydesign.application.core
 	 */
 	public class SDApplication extends SDContainer
 	{
+ 		protected var _stageWidth:Number = stage?stage.stageWidth:NaN;
+		protected var _stageHeight:Number = stage?stage.stageHeight:NaN;
+		
  		public static var flashVars:Object;
 		
 		public static var VERSION:String = "0";
@@ -53,6 +59,8 @@ package com.sleepydesign.application.core
         
         public function SDApplication(id:String="application", loaderObject:DisplayObjectContainer=null, configURI:String="config.xml")
 		{
+			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
+			
 			super(id);
 			
 			if(!instance)
@@ -102,18 +110,19 @@ package com.sleepydesign.application.core
 				
 				//system.parse({instance:this});
 				
+				SDApplication.system.addChild(new Stats());
+				LoaderUtil.loaderClip = new Preloader(system, _stageWidth, _stageHeight);
+				
 				if(loaderObject)
 				{
-					TweenPlugin.activate([AutoAlphaPlugin]);
-					
 					LoaderUtil.showLoader = function():void
 					{
-						TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:1});
+						TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.5, autoAlpha:1});
 					};
 					
 					LoaderUtil.hideLoader = function():void
 					{
-						TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:0});
+						TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.5, autoAlpha:0});
 					};
 					
 					super.addChild(loaderObject);
