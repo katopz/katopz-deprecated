@@ -87,7 +87,7 @@ package
 			for each (var _areaID:String in areaLists)
 			{
 				var _point:Point = new Point(int(HEX_STRING.indexOf(_areaID.charAt(0))), int(HEX_STRING.indexOf(_areaID.charAt(1))));
-				var _color:Number = Number("0xFF00FF"+_areaID);
+				var _color:Number = Number("0x00FF"+_areaID);
 				var _areaCell:SDSquare = new SDSquare(_cellWidth, _cellHeight, _color, .5, 1, _color);
 				_panel.addChild(_areaCell);
 				_areaCell.x = _grid.x + _point.x * _cellWidth;
