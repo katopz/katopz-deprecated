@@ -59,7 +59,7 @@
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
 			
-			_codeText = new SDTextField("0xFF000000");
+			_codeText = new SDTextField("0x000000");
 			_codeText.autoSize= "left";
 			_codeText.background = true;
 			_codeText.backgroundColor = 0xDDDDDD;
@@ -91,10 +91,10 @@
 			switch(colorID)
 			{
 				case "0":
-					paintColor = "0xFF000000";
+					paintColor = "0x000000";
 				break;
 				case "1":
-					paintColor = "0xFFFFFFFF";
+					paintColor = "0xFFFFFF";
 				break;
 				default :
 					// wait for user select area
@@ -115,7 +115,7 @@
 		{
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			areaPanel.visible = false;
-			paintColor = "0xFF00FF"+event.areaID;
+			paintColor = "0x00FF"+event.areaID;
 		}
 		
 		public function setupBackground():void
