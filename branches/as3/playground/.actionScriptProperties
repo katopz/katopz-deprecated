@@ -4,6 +4,7 @@
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d"/>
 <compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs"/>
+<compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/Framework/casa/code"/>
 </compilerSourcePath>
 <libraryPath defaultLinkType="1">
 <libraryPathEntry kind="4" path="">
