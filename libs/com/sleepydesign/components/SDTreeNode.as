@@ -86,7 +86,7 @@ package com.sleepydesign.components
 			}
 				
 			_label.x = _width + 2;
-			_label.y = - _label.height*.5;
+			_label.y = - _label.height*.25;
 			_label.text = _labelText;
 			
 			if (parentNode) 

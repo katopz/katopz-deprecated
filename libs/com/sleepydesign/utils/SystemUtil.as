@@ -57,7 +57,7 @@ package com.sleepydesign.utils
 			return Number((System.totalMemory*.0000009765625).toFixed(3));
 		}
         	
-		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function=null):void
+		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function=null, separatorBefore:Boolean = false):void
 		{
 			var _oldItems:Array = container.contextMenu?container.contextMenu.customItems.concat():[];
 			var _contextMenu:ContextMenu = container.contextMenu = new ContextMenu();
@@ -65,7 +65,7 @@ package com.sleepydesign.utils
 			
 			_contextMenu.customItems = _contextMenu.customItems.concat(_oldItems);
 			
-			var item:ContextMenuItem = new ContextMenuItem(label);
+			var item:ContextMenuItem = new ContextMenuItem(label, separatorBefore);
             _contextMenu.customItems.push(item);
             
             if(eventHandler is Function)

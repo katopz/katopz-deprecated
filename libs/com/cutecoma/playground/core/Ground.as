@@ -107,12 +107,21 @@
 			
 			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
 			_tileInstance.addEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
+			
+			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
+			_tileInstance.addEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
 		}
 		
 		public function onClick(event:InteractiveScene3DEvent):void
 		{
 			var _x_y:Array = event.renderHitData.material.name.split("_");
-			dispatchEvent(new GroundEvent(GroundEvent.MOUSE_DOWN, _x_y[0], _x_y[1]));
+			dispatchEvent(new GroundEvent(GroundEvent.MOUSE_DOWN, _x_y[0], _x_y[1], event.renderHitData.material.fillColor));
+		}
+		
+		public function onMouseMove(event:InteractiveScene3DEvent):void
+		{
+			var _x_y:Array = event.renderHitData.material.name.split("_");
+			dispatchEvent(new GroundEvent(GroundEvent.MOUSE_MOVE, _x_y[0], _x_y[1], event.renderHitData.material.fillColor));
 		}
 		
 		public function destroy():void

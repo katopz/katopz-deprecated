@@ -1,6 +1,5 @@
 package com.sleepydesign.application.core
 {
-	import com.greensock.TweenLite;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.GlowFilterPlugin;
 	import com.greensock.plugins.TweenPlugin;
@@ -57,6 +56,8 @@ package com.sleepydesign.application.core
         
         public static var currentStage : Stage;
         
+        public var stats:Stats;
+        
         public function SDApplication(id:String="application", loaderObject:DisplayObjectContainer=null, configURI:String="config.xml")
 		{
 			TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin]);
@@ -110,7 +111,6 @@ package com.sleepydesign.application.core
 				
 				//system.parse({instance:this});
 				
-				SDApplication.system.addChild(new Stats());
 				LoaderUtil.loaderClip = new Preloader(system, _stageWidth, _stageHeight);
 				/*
 				if(loaderObject)

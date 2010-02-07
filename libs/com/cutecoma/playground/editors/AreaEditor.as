@@ -3,7 +3,6 @@
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
-	import com.cutecoma.playground.core.Map;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
 	import com.sleepydesign.application.core.SDApplication;
@@ -15,8 +14,8 @@
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDKeyBoard;
-	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
+	import com.sleepydesign.utils.StringUtil;
 	
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -33,11 +32,18 @@
 		private static const FORWARD:Number3D = new Number3D(0, 0, -1);
 		
 		private var _paintColor:String;
-		public function set paintColor(vaule:String):void
+		private var _rollOverColor:String;
+		
+		public function set paintColor(value:String):void
 		{
-			_paintColor = vaule;
+			_paintColor = value;
 			_codeText.borderColor = Number(_paintColor);
 			_codeText.text = _paintColor;//StringUtil.hex(_paintColor).split("0x").join("0xFF");
+			
+			if(_rollOverColor)
+				_codeText.text = _paintColor + ", " + _rollOverColor;
+			else
+				_codeText.text = _paintColor;
 		}
 		
 		public function AreaEditor(engine3D:Engine3D, area:Area)
@@ -66,8 +72,10 @@
 			_codeText.border = true;
 			_codeText.borderColor = 0x000000;
 			
+			paintColor = "0x000000";
+			
 			_buildToolDialog = new SDDialog(
-				<question><![CDATA[Use WASD CV QE to move view.<br/>Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
+				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
 					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
@@ -81,7 +89,19 @@
 			SDApplication.system.addChild(_codeText);
 			
 			area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+			area.ground.addEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
 			area.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+		
+		public function editMap():void
+		{
+			var _bitmapData:BitmapData = area.map.data.bitmapData;
+			for(var i:int=0;i<_bitmapData.width*_bitmapData.height;i++)
+			{
+				_bitmapData.setPixel32(Math.random()*20, Math.random()*20, 0xFF0000);
+			}
+			
+			area.ground.update();
 		}
 		
 		private var _buildToolDialog:SDDialog;
@@ -127,9 +147,10 @@
 		public function setupBackground():void
 		{
 			//SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-			FileUtil.openImageTo(area.background);
+			area.background.open();
 		}
 		
+		/*
 		public function toggleMap(map:Map):void
 		{
 			if(map.scaleX==1)
@@ -144,6 +165,7 @@
 			map.x = area.stage.stageWidth - map.width;
 			map.y = 0;//stage.stageHeight/2 - map.height/2;
 		}
+		*/
 		
 		/*
 		private function onMapClick(event:MouseEvent):void
@@ -254,6 +276,17 @@
 			}
 		}
 		
+		public function onTileMouseMove(event:GroundEvent):void
+		{
+			//trace("onTileMouseMove:"+event.color);
+			_rollOverColor = StringUtil.hex(event.color);
+			
+			if(_rollOverColor)
+				_codeText.text = _paintColor + ", " + _rollOverColor;
+			else
+				_codeText.text = _paintColor;
+		}
+		
 		public function onTileClick(event:GroundEvent):void
 		{
 	        // void while select area
@@ -274,6 +307,7 @@
 			Game.inputController.mouse.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			
 			area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+			area.ground.removeEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
 			//area.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			
 			//removeChild(log);

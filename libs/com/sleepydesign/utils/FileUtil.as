@@ -1,6 +1,5 @@
 package com.sleepydesign.utils
 {
-	import flash.display.Bitmap;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.DataEvent;
 	import flash.events.Event;
@@ -29,6 +28,8 @@ package com.sleepydesign.utils
 		 * Your upload path
 		 */
 		public static var UPLOAD_URL:String = "http://127.0.0.1/serverside/upload.php";
+		
+		public static const DEFAULT_ASSETS:Array = ["*.jpg", "*.jpeg", "*.gif", "*.png"];
 		
 		/**
 		 * Limit your upload size
@@ -90,13 +91,14 @@ package com.sleepydesign.utils
 		 * @param container
 		 * @return FileReference
 		 */		
-		public static function openImageTo(container:DisplayObjectContainer):FileReference
+		public static function openAssetTo(container:DisplayObjectContainer, filters:Array = null):FileReference
 		{
-			return openImage(function onGetImage(event:Event):void
+			return openAsset(function onGetImage(event:Event):void
 			{
-				if(event.type == Event.COMPLETE)
-					container.addChild(event.target["content"] as Bitmap);
-			});
+				if(event.type != Event.COMPLETE)
+					return;
+				container.addChild(event.target["content"]);
+			}, filters);
 		}
 
 		/**
@@ -104,9 +106,9 @@ package com.sleepydesign.utils
 		 * @param eventHandler
 		 * @return FileReference
 		 */		
-		public static function openImage(eventHandler:Function, filters:Array = null):FileReference
+		public static function openAsset(eventHandler:Function, filters:Array = null):FileReference
 		{
-			return open(filters || ["*.jpg", "*.jpeg", "*.gif", "*.png"], function(event:Event):void
+			return open(filters || DEFAULT_ASSETS, function(event:Event):void
 			{
 				if (event.type == Event.COMPLETE || event.type == DataEvent.UPLOAD_COMPLETE_DATA)
 				{
