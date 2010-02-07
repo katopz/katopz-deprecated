@@ -135,9 +135,9 @@
 			dolly.copyPosition(data.pos);
 			decoy.copyPosition(data.des);
 			
-			// add player to map
-			map = Map.getInstance();
-			map.addElement(this);
+			//DEP//// add player to map
+			//DEP//map = Map.getInstance();
+			//DEP////map.addElement(this);
 			
 			if(balloonClip)
 				balloonClip.y = char.height;

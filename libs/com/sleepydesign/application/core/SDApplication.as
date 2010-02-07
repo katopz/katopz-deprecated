@@ -112,21 +112,21 @@ package com.sleepydesign.application.core
 				
 				SDApplication.system.addChild(new Stats());
 				LoaderUtil.loaderClip = new Preloader(system, _stageWidth, _stageHeight);
-				
+				/*
 				if(loaderObject)
 				{
 					LoaderUtil.showLoader = function():void
 					{
-						TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.5, autoAlpha:1});
+						TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.25, autoAlpha:1});
 					};
 					
 					LoaderUtil.hideLoader = function():void
 					{
-						TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.5, autoAlpha:0});
+						TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.25, autoAlpha:0});
 					};
-					
-					super.addChild(loaderObject);
 				}
+				*/
+				
 			}
 		}
 		

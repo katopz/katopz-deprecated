@@ -21,7 +21,7 @@ package com.cutecoma.playground.data
 		public var focus:Number;
 		public var zoom:Number;
 
-		public function CameraData(x:Number = 0, y:Number = 0, z:Number = -500, rotationX:Number = 0, rotationY:Number = 0, rotationZ:Number = 0, fov:Number = 50, focus:Number = 500, zoom:Number = 2)
+		public function CameraData(x:Number = 0, y:Number = 0, z:Number = -500, rotationX:Number = 0, rotationY:Number = 0, rotationZ:Number = 0, fov:Number = 30, focus:Number = 500, zoom:Number = 2)
 		{
 			this.x = x;
 			this.y = y;

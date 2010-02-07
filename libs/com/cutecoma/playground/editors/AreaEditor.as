@@ -67,13 +67,16 @@
 			_codeText.borderColor = 0x000000;
 			
 			_buildToolDialog = new SDDialog(
-				<question><![CDATA[Select type]]>
-					<answer src="as:onSelectType('0')"><![CDATA[No entry]]></answer>
-					<answer src="as:onSelectType('1')"><![CDATA[Walkable]]></answer>
+				<question><![CDATA[Use WASD CV QE to move view.<br/>Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
+					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
+					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
+					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
 					<answer src="as:onSelectType('warp')"><![CDATA[Warp point]]></answer>
 					<textinput width="100"/>
-				</question>, false, this);
+				</question>, this);
 
+			_buildToolDialog.alpha = .9;
+			
 			SDApplication.system.addChild(_buildToolDialog);
 			SDApplication.system.addChild(_codeText);
 			
@@ -95,6 +98,9 @@
 				break;
 				case "1":
 					paintColor = "0xFFFFFF";
+				break;
+				case "2":
+					paintColor = "0x0000FF";
 				break;
 				default :
 					// wait for user select area
@@ -167,6 +173,10 @@
 		
 		private function onKeyIsPress(event:SDKeyboardEvent):void
 		{
+			// void while select area
+	        if(areaPanel && areaPanel.visible)
+	        	return;
+	        	
 			engine3D.dolly.moveForward(event.data.dz*5);
 			engine3D.dolly.moveRight(event.data.dx*5);
 			engine3D.dolly.moveUp(event.data.dy*5);
@@ -176,6 +186,13 @@
 		
 	    private function onMouseIsDrag(event:SDMouseEvent):void
 	    {  
+	        // void while select area
+	        if(areaPanel && areaPanel.visible)
+	        	return;
+	        
+	        if(!SDKeyBoard.isCTRL)
+	        	return;
+	        
 	        var target:* = engine3D.dolly;
 			var vector:Number3D = new Number3D(event.data.dx, event.data.dy, 0);
 			
@@ -200,6 +217,10 @@
 		
 		private function onMouseWheel( event:MouseEvent ):void
 		{
+	        // void while select area
+	        if(areaPanel && areaPanel.visible)
+	        	return;
+			
 			if(SDKeyBoard.isSHIFT)
 			{
 				var nextFOV:Number = engine3D.camera.fov + event.delta/5;
@@ -222,6 +243,10 @@
 		
 		private function onMouseMove( event:MouseEvent ):void
 		{
+	        // void while select area
+	        if(areaPanel && areaPanel.visible)
+	        	return;
+			
 			if(!event.relatedObject)
 			{
 				_codeText.x = 20+event.stageX;
@@ -231,7 +256,11 @@
 		
 		public function onTileClick(event:GroundEvent):void
 		{
-			trace("TilePlane:", event.bitmapX, event.bitmapZ, _paintColor);
+	        // void while select area
+	        if(areaPanel && areaPanel.visible)
+	        	return;
+	        	
+			trace(" ! TilePlane :", event.bitmapX, event.bitmapZ, _paintColor);
 			
 			var _bitmapData:BitmapData = area.map.data.bitmapData;
 			_bitmapData.setPixel32(event.bitmapX, event.bitmapZ , Number(_paintColor));

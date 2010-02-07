@@ -1,12 +1,12 @@
 package com.sleepydesign.components
 {
+	import com.greensock.TweenLite;
 	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.styles.SDStyle;
-
+	
 	import flash.display.Shape;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
-
-	import com.greensock.TweenLite;
 
 	public class SDButton extends SDComponent
 	{
@@ -40,6 +40,7 @@ package com.sleepydesign.components
 
 			_label = new SDLabel(_labelText);
 			addChild(_label);
+			//_label.textField.addEventListener(Event.CHANGE, draw);
 			
 			_label.autoSize = "center";
 
@@ -49,12 +50,6 @@ package com.sleepydesign.components
 
 		override public function draw():void
 		{
-			_back.graphics.clear();
-			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true);
-			_back.graphics.beginFill(SDStyle.BUTTON_COLOR, SDStyle.BUTTON_ALPHA);
-			_back.graphics.drawRoundRect(0, 0, _width, _height, SDStyle.SIZE * .75, SDStyle.SIZE * .75);
-			_back.graphics.endFill();
-
 			_label.autoSize = "center";
 			_label.text = _labelText;
 			if (_label.width > _width - 4)
@@ -67,8 +62,17 @@ package com.sleepydesign.components
 				_label.autoSize = "center";
 			}
 			_label.draw();
-			_label.x = _width / 2 - _label.width / 2
-
+			_label.x = _width / 2 - _label.width / 2;
+			
+			//trace(_labelText, _label.width, _label.height);
+			//trace(_label.textField.width, _label.textField.height);
+			
+			_back.graphics.clear();
+			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true);
+			_back.graphics.beginFill(SDStyle.BUTTON_COLOR, SDStyle.BUTTON_ALPHA);
+			_back.graphics.drawRoundRect(0, 0, _width, _height, SDStyle.SIZE * .75, SDStyle.SIZE * .75);
+			_back.graphics.endFill();
+			
 			super.draw();
 		}
 

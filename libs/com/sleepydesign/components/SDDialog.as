@@ -6,8 +6,10 @@ package com.sleepydesign.components
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
@@ -15,6 +17,7 @@ package com.sleepydesign.components
 
 	public class SDDialog extends SDComponent
 	{
+		private var _header:Sprite;
 		private var _back:Shape;
 		private var content:Object;
 		private var label:SDTextField;
@@ -27,7 +30,7 @@ package com.sleepydesign.components
 		
 		private var caller:Object
 
-		public function SDDialog(iText:* = "", isTail:Boolean = true, caller:Object=null)
+		public function SDDialog(iText:* = "", caller:Object=null)
 		{
 			this.iText = iText;
 			this.isTail = isTail;
@@ -35,7 +38,6 @@ package com.sleepydesign.components
 			this.caller = caller;
 			
 			super();
-			
 		}
 		
 		override protected function onStage(event:Event):void
@@ -44,6 +46,7 @@ package com.sleepydesign.components
 			this.caller = caller?caller:this.parent;
 			mouseEnabled = true;
 			mouseChildren = true;
+			dragEnabled = true;
 			align = "center";
 		}
 
@@ -65,13 +68,17 @@ package com.sleepydesign.components
 
 			content = new XMLDocument();
 			content.parseXML(String(iText));
-
-			htmlText = iText;
-
+			
+			// drag
+			_header = new Sprite();
+			
 			addChild(_back);
 			addChild(label);
+			addChild(_header);
 
 			cacheAsBitmap = true;
+			
+			htmlText = iText;
 		}
 
 		private function onComplete(event:Event):void
@@ -98,12 +105,20 @@ package com.sleepydesign.components
 			_back.graphics.beginFill(_config.color);
 			_back.graphics.drawRoundRect(-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, h + pad * .5, pad, pad);
 			
+			/*
 			if(isTail)
 			{
 				_back.graphics.moveTo(0, 0);
 				_back.graphics.lineTo(-4, -length - pad * .5);
 				_back.graphics.lineTo(4, -length - pad * .5);
 			}
+			*/
+			
+			_back.graphics.endFill();
+			
+			_header.graphics.beginFill(0xFF00FF, 0);
+			_header.graphics.drawRoundRect(-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, 20, pad, pad);
+			_header.graphics.endFill();
 
 			dispatchEvent(new Event(Event.CHANGE));
 		}
@@ -261,6 +276,28 @@ package com.sleepydesign.components
 		private function linkHandler(e:TextEvent):void
 		{
 			SystemUtil.link(e.text, caller);
+		}
+		
+		private function set dragEnabled(value:Boolean):void
+		{
+			if(value)
+				_header.addEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+			else
+				_header.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+		}
+		
+		private function onDrag(event:MouseEvent):void
+		{
+			startDrag(false);//, root.scrollRect);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
+			stage.addEventListener(Event.MOUSE_LEAVE, onDrop);
+		}
+		
+		private function onDrop(event:MouseEvent):void
+		{
+			stopDrag();
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
+			stage.removeEventListener(Event.MOUSE_LEAVE, onDrop);
 		}
 	}
 }
