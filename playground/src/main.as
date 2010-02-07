@@ -6,11 +6,9 @@
 	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
-	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.cutecoma.playground.editors.WorldEditor;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.greensock.plugins.*;
-	//import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
@@ -22,6 +20,8 @@
 	import flash.filters.*;
 	import flash.net.registerClassAlias;
 	import flash.utils.*;
+	
+	import net.hires.debug.Stats;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	
@@ -51,8 +51,8 @@
 		private const VERSION:String = "PlayGround 2.3";
 
 		private var area:Area;
-		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
-		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
+		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
+		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 
 		private var currentRoomID:String = "";
 		
@@ -60,15 +60,28 @@
 
 		private var areaDialog:SDDialog;
 		
-		private var _areaPath:String;
-		
 		private var areaPanel:AreaPanel;
+		
+		private var _selectAreaID:String = "00";
 		
 		public function main()
 		{
 			//SleepyDesign.stage = stage;
 			super("PlayGround");
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
+			
+			SystemUtil.addContext(this, "Show stats", toggleStat);
+		}
+		
+		protected function toggleStat(event:Event):void
+		{
+			if(!stats)
+				system.addChild(stats = new Stats());
+			else
+			{
+				system.removeChild(stats);
+				stats = null;
+			}
 		}
 		
 		protected function onStage(event:Event):void
@@ -83,7 +96,7 @@
 				return;
 
 			var _xml:XML = event.target.data;
-			_areaPath = String(_xml.world.area.@path);
+			PixelLiving.areaPath = String(_xml.world.area.@path);
 
 			// TODO load from external and put to group
 			//configs = new Dictionary();
@@ -187,7 +200,6 @@
 
 			if(_isEdit)
 			{
-				SystemUtil.addContext(this, "Option", toggleOption);
 				worldEditor = new WorldEditor(engine3D, area);
 				system.addChild(worldEditor);
 				worldEditor.activate();
@@ -264,98 +276,6 @@
 
 		// _______________________________________________________ System
 
-		private var tree:SDTree;
-
-		private function toggleOption(event:Event=null):void
-		{
-			// Engine Explorer
-			if (!tree)
-			{
-				tree = new SDTree
-				(
-					<Option>
-						<Open/>
-						<Save/>
-						<Edit>
-							<Background/>
-							<Map/>
-						</Edit>
-						<MiniMap/>
-						<Grid/>
-						<Axis/>
-						<Debugger/>
-						<Ground/>
-					</Option>
-				, true);
-
-				tree.x = 10;
-				tree.y = 100;
-				tree.filters = [new GlowFilter(0xFFFFFF, 1, 2, 2)]
-				system.addChild(tree);
-				tree.addEventListener(SDMouseEvent.CLICK, onExplorer);
-				tree.visible = false;
-			}
-			tree.visible = !tree.visible;
-		}
-
-		private function onExplorer(event:SDEvent):void
-		{
-			trace(" ^ onExplorer : " + SDTreeNode(event.data.node).label);
-			var _label:String = SDTreeNode(event.data.node).label;
-			switch (_label)
-			{
-				case "MiniMap":
-						area.map.visible = !area.map.visible;
-					break;
-				case "Debugger":
-					PlayerDebugger.toggle(engine3D, game.player);
-					break;
-				case "Edit":
-						if(worldEditor.isActivate)
-							worldEditor.activate();
-						else
-							worldEditor.deactivate();
-					break;
-					/*
-				case "Map":
-					FileUtil.openImage(onMapLoad, ["*.png"]);
-					//areaEditor.toggleTerrain(area.map);
-					break;
-					*/
-				case "Background":
-					worldEditor.areaEditor.setupBackground();
-					break;
-				case "Grid":
-					engine3D.grid = !engine3D.grid;
-					break;
-				case "Ground":
-					area.ground.debug = !area.ground.debug;
-					break;
-				case "Axis":
-					engine3D.axis = !engine3D.axis;
-					break;
-				case "man1":
-				case "man2":
-				case "woman1":
-				case "woman2":
-					var fakeData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), _label, "walk", 1.5);
-					fakeData.des = new Position(200 * Math.random() - 200 * Math.random(), 0, 200 * Math.random() - 200 * Math.random());
-					fakeData.msg = "Walk to : " + fakeData.des;
-					game.update(fakeData)
-					break;
-				case "Save":
-					// TODO : new area id input box here
-					var _saveAreaData:AreaData = new AreaData().parse(area.data);
-					_saveAreaData.scene = new SceneData(new CameraData().parse(engine3D.camera));
-
-					FileUtil.save(_saveAreaData, _selectAreaID + ".ara");
-					break;
-				case "Open":
-					FileUtil.open(["*.ara"], onAreaLoad);
-					break;
-			}
-		}
-
 		private function onAreaLoad(event:Event):void
 		{
 			var areaData:AreaData
@@ -364,22 +284,17 @@
 				// exist area
 				areaData = new AreaData();
 				IExternalizable(areaData).readExternal(event.target.data);
-	
-				_data = areaData;
-	
+				
 				//cache
 				configs[areaData.id] = areaData;
-	
-				gotoArea(areaData);
+				
+				SDApplication.getInstance()["gotoArea"](areaData);
 			}
 			else if (event.type == IOErrorEvent.IO_ERROR && _isEdit)
 			{
 				// new area
-				areaData = new AreaData(_selectAreaID, _areaPath + _selectAreaID + "_bg.swf", 40, 40, 
-				PixelLiving.DEFAULT_SCENE_DATA, PixelLiving.DEFAULT_MAP_DATA);
-				
-				_data = areaData;
-				gotoArea(areaData);
+				areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
+				SDApplication.getInstance()["gotoArea"](areaData);
 			}
 		}
 
@@ -401,7 +316,7 @@
 			}
 		}
 		
-		private var _selectAreaID:String = "00";
+		//private var _selectAreaID:String = "00";
 		
 		private function gotoAreaID(id:String):void
 		{
@@ -409,16 +324,12 @@
 
 			// cache not exist
 			if (!_data)
-			{
-				LoaderUtil.load(_areaPath + id + ".ara", onAreaLoad);
-			}
+				LoaderUtil.load(PixelLiving.areaPath + id + ".ara", onAreaLoad);
 			else
-			{
 				gotoArea(_data);
-			}
 		}
 
-		private function gotoArea(areaData:AreaData):void
+		public function gotoArea(areaData:AreaData):void
 		{
 			if (!area)
 			{
