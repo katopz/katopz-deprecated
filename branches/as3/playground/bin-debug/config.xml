@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
 	<world>
-		<area path="areas/">86,87,88</area>
+		<area path="areas/">87,88</area>
 	</world>
 </config>

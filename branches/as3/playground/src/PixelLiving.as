@@ -64,9 +64,11 @@ package
 			)
 		);
 		*/
-
-		public static var DEFAULT_SCENE_DATA:SceneData = new SceneData(new CameraData(0, 100, -700));
 		
-		public static var DEFAULT_MAP_DATA:MapData = new MapData(new BitmapData(10, 10, false, 0x000000), new Point(5,5));
+		public static var areaPath:String;
+		
+		//public static const DEFAULT_SCENE_DATA:SceneData = new SceneData(new CameraData(0, 100, -1000));
+		
+		//public static const DEFAULT_MAP_DATA:MapData = new MapData(new BitmapData(20, 20, false, 0x000000), new Point(10,10));
 	}
 }
