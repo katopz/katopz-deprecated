@@ -10,6 +10,7 @@
 	import com.cutecoma.playground.editors.WorldEditor;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.greensock.plugins.*;
+	//import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
@@ -21,8 +22,6 @@
 	import flash.filters.*;
 	import flash.net.registerClassAlias;
 	import flash.utils.*;
-	
-	import net.hires.debug.Stats;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 	
@@ -67,13 +66,14 @@
 		
 		public function main()
 		{
+			//SleepyDesign.stage = stage;
 			super("PlayGround");
+			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 		
-		// ______________________________ Initialize ______________________________
-		
-		override protected function init():void
+		protected function onStage(event:Event):void
 		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			LoaderUtil.loadXML("config.xml", onXML);
 		}
 
@@ -101,7 +101,7 @@
 				<question><![CDATA[Welcome! Please select...]]>
 					<answer src="as:onUserSelect('play')"><![CDATA[I want to play.]]></answer>
 					<answer src="as:onUserSelect('edit')"><![CDATA[I want to edit.]]></answer>
-				</question>, false, this);
+				</question>, this);
 
 			this.addChild(areaDialog);
 		}
@@ -148,7 +148,6 @@
 
 			area = new Area(areaData);
 			content.addChild(area);
-			area.map.x = stage.stageWidth - area.map.width;
 
 			// ___________________________________________________________ 3D Layer
 
@@ -349,7 +348,7 @@
 					var _saveAreaData:AreaData = new AreaData().parse(area.data);
 					_saveAreaData.scene = new SceneData(new CameraData().parse(engine3D.camera));
 
-					FileUtil.save(_saveAreaData, "00.ara");
+					FileUtil.save(_saveAreaData, _selectAreaID + ".ara");
 					break;
 				case "Open":
 					FileUtil.open(["*.ara"], onAreaLoad);
@@ -402,7 +401,7 @@
 			}
 		}
 		
-		private var _selectAreaID:String;
+		private var _selectAreaID:String = "00";
 		
 		private function gotoAreaID(id:String):void
 		{
