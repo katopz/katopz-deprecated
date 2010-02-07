@@ -51,7 +51,7 @@
 			// map
 			if(!map)
 			{
-				map = new Map(data);
+				map = new Map();
 				addChild(map);
 				//map.visible = false;
 			}

@@ -11,6 +11,10 @@ package com.sleepydesign.components
 	{
 		private var _text:String = "";
 		private var _tf:TextField;
+		public function get textField():TextField
+		{
+			return _tf;
+		}
 		
 		public function SDLabel(text:String = "")
 		{
@@ -70,6 +74,16 @@ package com.sleepydesign.components
 		public function get autoSize():String
 		{
 			return _tf.autoSize;
+		}
+		
+		override public function get width():Number
+		{
+			return _tf.width;
+		}
+		
+		override public function get height():Number
+		{
+			return _tf.height;
 		}
 	}
 }

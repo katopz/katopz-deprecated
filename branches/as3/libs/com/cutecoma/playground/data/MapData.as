@@ -27,18 +27,18 @@ package com.cutecoma.playground.data
 		public var spawnPoint:Point;
 		public var warpPoint:Dictionary = new Dictionary(true);
 
-		public var nodes:Array;
-		public var width:uint;
+		//public var nodes:Array;
+		//public var width:uint;
 		
-		public var scaleX:Number;
-		public var scaleZ:Number;
+		//public var scaleX:Number;
+		//public var scaleZ:Number;
 
 		//public function MapData(nodes:Array=null, width:uint=100, scaleX:Number = 1, scaleZ:Number = 1)
 		public function MapData(bitmapData:BitmapData=null, spawnPoint:Point=null)
 		{
 			//parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
 			this.bitmapData = bitmapData||new BitmapData(10, 10, false, 0x000000);
-			this.spawnPoint = spawnPoint||new Point();
+			this.spawnPoint = spawnPoint||new Point(5,5);
 		}
 
 		// ______________________________ Parse ______________________________
@@ -128,7 +128,10 @@ package com.cutecoma.playground.data
 			bitmapData.setPixels(_rect, _bytes);
 			
 			var spawnRect:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFF, 0x0000FF);
-			spawnPoint = spawnRect.topLeft; 
+			if(spawnRect.size.length>0)
+				spawnPoint = spawnRect.topLeft;
+			else
+				spawnPoint = new Point(int(_rect.width/2), int(_rect.height/2));
 		}
 	}
 }

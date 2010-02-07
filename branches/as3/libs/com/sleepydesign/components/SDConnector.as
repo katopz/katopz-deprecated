@@ -39,6 +39,7 @@ package com.sleepydesign.components
 			
 			// TODO : Toggle Button
 			connectButton = new SDButton("Connect");
+			connectButton.setSize(64, connectButton.height);
 			connectButton.x = serverInputText.width;
 			addChild(connectButton);
 			connectButton.addEventListener(SDMouseEvent.CLICK, onClick);

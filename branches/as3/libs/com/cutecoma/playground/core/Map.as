@@ -4,17 +4,17 @@ package com.cutecoma.playground.core
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.MapData;
 	import com.cutecoma.playground.pathfinder.AStar3D;
-	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.core.SDSprite;
 	import com.sleepydesign.events.SDEvent;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
+	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	public class Map extends SDContainer
+	public class Map extends SDSprite
 	{
 		private var pathFinder:AStar3D;
 		
@@ -38,15 +38,23 @@ package com.cutecoma.playground.core
             return instance as Map;
         }
         
-		public function Map(config:AreaData=null)//source:*=null, factorX:Number=1, factorZ:Number=1)
+		public function Map()//source:*=null, factorX:Number=1, factorZ:Number=1)
 		{
 			instance = this;
-			super(config.id);
+			super();
 			
-			if(!config)
-				update(config);
+			//if(!config)
+			//	update(config);
 			//parse(config);
+			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
+		
+		protected function onStage(event:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			draw();
+		}
+		
 		/*
         // ______________________________ Initialize ______________________________
         
@@ -225,6 +233,8 @@ package com.cutecoma.playground.core
 				bitmap.bitmapData = data.bitmapData;
 			}
 			
+			draw();
+			
 			/*
 			line = new Shape();
 			line.name = "line";
@@ -243,6 +253,12 @@ package com.cutecoma.playground.core
 			pathFinder.create(this.data.bitmapData, factorX, 0, factorZ, 1, 0, 1);
 			pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
 			pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
+		}
+		
+		public function draw():void
+		{
+			if(stage && minimap)
+				minimap.x = stage.stageWidth - minimap.width;
 		}
 		
 		// ______________________________ Destroy ______________________________

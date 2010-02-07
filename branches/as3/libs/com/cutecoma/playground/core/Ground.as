@@ -4,6 +4,7 @@
 	import com.cutecoma.playground.events.GroundEvent;
 	import com.sleepydesign.events.SDMouseEvent;
 	
+	import flash.display.BlendMode;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	
@@ -94,12 +95,14 @@
 				var color:Number 	= map.data.bitmapData.getPixel(i,j);
 				
 				//if(color!=0x000000)
-				var _wireColorMaterial:WireColorMaterial = new WireColorMaterial(color, 1, true);
+				var _wireColorMaterial:WireColorMaterial = new WireColorMaterial(color, .5, true);
 				_wireColorMaterial.name = i + "_" + j;
 				tileMaterials.addMaterial(_wireColorMaterial);
 			}
 			
 			_tileInstance = new TilePlane(tileMaterials, w*Map.factorX, h*Map.factorZ, w,h);
+			//_tileInstance.useOwnContainer = true;
+			//_tileInstance.blendMode = BlendMode.MULTIPLY;
 			engine3D.addChild(_tileInstance);
 			
 			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
