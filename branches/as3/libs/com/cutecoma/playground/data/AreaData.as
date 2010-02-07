@@ -24,8 +24,8 @@ package com.cutecoma.playground.data
 			this.background = background;
 			this.width = width;
 			this.height = height;
-			this.scene = scene;
-			this.map = map;
+			this.scene = scene || new SceneData();
+			this.map = map || new MapData();
 		}
 
 		// _______________________________________________________internal

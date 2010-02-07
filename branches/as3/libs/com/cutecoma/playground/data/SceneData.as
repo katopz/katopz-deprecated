@@ -21,7 +21,13 @@ package com.cutecoma.playground.data
 
 		public function SceneData(camera:CameraData = null)
 		{
-			this.camera = camera;
+			if(camera)
+			{
+				this.camera = camera;
+			}else{
+				this.camera = new CameraData(0, 200, -1000);
+				this.camera.rotationX = 7.5;	
+			}
 		}
 
 		// _______________________________________________________internal

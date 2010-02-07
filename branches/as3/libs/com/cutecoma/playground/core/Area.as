@@ -1,8 +1,10 @@
 ﻿package com.cutecoma.playground.core
 {
-	import com.sleepydesign.core.SDContainer;
 	import com.cutecoma.game.core.BackGround;
 	import com.cutecoma.playground.data.AreaData;
+	import com.sleepydesign.core.SDContainer;
+	
+	import flash.events.Event;
 	
 	public class Area extends SDContainer
 	{
@@ -17,9 +19,11 @@
 			//super();
 			//init({engine3D:engine3D, game:game});
 			// background
-			background = new BackGround(areaData);
+			background = new BackGround(areaData.background);
 			//DEV//
 			addChild(background);
+			
+			//background.addEventListener(Event.CHANGE);
 			
 			//mouseEnabled = false;
 			//mouseChildren = false;

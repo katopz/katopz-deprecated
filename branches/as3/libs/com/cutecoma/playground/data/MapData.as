@@ -37,8 +37,8 @@ package com.cutecoma.playground.data
 		public function MapData(bitmapData:BitmapData=null, spawnPoint:Point=null)
 		{
 			//parse({nodes:nodes, width: width, scaleX: scaleX, scaleZ: scaleZ});
-			this.bitmapData = bitmapData||new BitmapData(10, 10, false, 0x000000);
-			this.spawnPoint = spawnPoint||new Point(5,5);
+			this.bitmapData = bitmapData||new BitmapData(20, 20, false, 0xFFFFFF);
+			this.spawnPoint = spawnPoint||new Point(10,10);
 		}
 
 		// ______________________________ Parse ______________________________
