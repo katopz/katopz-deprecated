@@ -1,8 +1,19 @@
 package com.sleepydesign.components
 {
-	public class DefaultSkin
+	import com.greensock.plugins.AutoAlphaPlugin;
+	import com.greensock.plugins.BlurFilterPlugin;
+	import com.greensock.plugins.GlowFilterPlugin;
+	import com.greensock.plugins.TweenPlugin;
+	
+	public class SDStyle
 	{
-		public static var BACKGROUND:uint = 0x000000;
+		private static const _effect:Boolean = TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin, BlurFilterPlugin]);
+		
+		public static var INPUT_BG_COLOR:uint = 0xFFFFFF;
+		public static var INPUT_BG_ALPHA:uint = 1;
+		
+		public static var BACKGROUND:uint = 0xEEEEEE;
+		public static var BACKGROUND_ALPHA:uint = 1;
 		
 		public static var BUTTON_COLOR:uint 		= 0xFFFFFF;
 		public static var BUTTON_ALPHA:uint			= 1;

@@ -2,21 +2,17 @@ package com.sleepydesign.components
 {
 	import com.sleepydesign.text.SDTextField;
 	
+	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
 	
-	/**
-	 * 
-	 * InputText Component can be export from Flash MovieClip
-	 * @author katopz
-	 * 
-	 */	
-	public class TextInput extends AbstractComponent
+	public class SDTextInput extends SDComponent
 	{
 		public var id:String;
 		
+		private var _back:Shape;
 		private var _password:Boolean 		= false;
 		private var _text:String 			= "";
 		private var _tf:TextField;
@@ -46,7 +42,7 @@ package com.sleepydesign.components
 			}
 		}
 		
-		public function TextInput(text:String = "" , textField:TextField = null)
+		public function SDTextInput(text:String = "" , textField:TextField = null)
 		{
 			_text = this.defaultText = text;
 			
@@ -55,6 +51,9 @@ package com.sleepydesign.components
 				textField.parent.addChild(this);
 				label = textField;
 			}
+			
+			create();
+			draw();
 		}
 		
 		protected function create():void
@@ -74,18 +73,19 @@ package com.sleepydesign.components
 				}
 				
 				if(_tf.displayAsPassword)
-				{
 					type = "password";
-				}
 			}
 			catch(e:*)
 			{
 				// Pure AS3
 				_isFlash = false;
+				
+				_back = new Shape();
+				addChild(_back);
+				
 				_tf = new SDTextField(_text);
 	    		_tf.selectable = true;
 	    		_tf.mouseEnabled = true;
-	    		_tf.background = true;
 	    		_tf.type = TextFieldType.INPUT;
 	    		_tf.autoSize = TextFieldAutoSize.NONE;
 	    		_tf.styleSheet = null;
@@ -95,7 +95,6 @@ package com.sleepydesign.components
 			}
 			
 			_tf.addEventListener(Event.CHANGE, onChange);
-			
 		}
 		
 		override public function destroy():void
@@ -117,9 +116,15 @@ package com.sleepydesign.components
 			
 			if(!_isFlash)
 			{
+				_back.graphics.clear();
+				_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true );
+				_back.graphics.beginFill(SDStyle.INPUT_BG_COLOR, SDStyle.INPUT_BG_COLOR);
+				_back.graphics.drawRect(0, 0, _width, _height);
+				
 				_tf.width = _width;
 				_tf.height = _height;
 			}
+			
 			super.draw();
 		}		
 		

@@ -11,9 +11,11 @@
  * @author Matthew J Tretter <http://www.exanimo.com>
  * @author Piotr Zema <http://felixz.marknaegeli.com>
  */
-package com.sleepydesign.site
+package com.sleepydesign.events
 {
 
+    import com.sleepydesign.site.SWFAddress;
+    
     import flash.events.Event;
     
     /**

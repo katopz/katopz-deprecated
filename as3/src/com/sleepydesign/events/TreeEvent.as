@@ -1,6 +1,6 @@
 package com.sleepydesign.events
 {
-	import com.sleepydesign.components.TreeNode;
+	import com.sleepydesign.components.SDTreeNode;
 
 	import flash.events.Event;
 
@@ -8,7 +8,7 @@ package com.sleepydesign.events
 	{
 		public static const CHANGE_NODE_FOCUS:String = "change-node-focus";
 
-		public var node:TreeNode;
+		public var node:SDTreeNode;
 
 		public function TreeEvent(type:String, node:* = null, bubbles:Boolean = false, cancelable:Boolean = false)
 		{

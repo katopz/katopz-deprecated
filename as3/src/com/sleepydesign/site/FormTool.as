@@ -1,6 +1,6 @@
 package com.sleepydesign.site
 {
-	import com.sleepydesign.components.TextInput;
+	import com.sleepydesign.components.SDTextInput;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.events.FormEvent;
@@ -83,7 +83,7 @@ package com.sleepydesign.site
 				DebugUtil.trace("   + " + _name + "\t: " + _containerID);
 
 				var _textField:TextField;
-				var item:TextInput;
+				var item:SDTextInput;
 
 				switch (_name)
 				{
@@ -94,7 +94,7 @@ package com.sleepydesign.site
 						break;
 					case "textinput":
 						_textField = _container.getChildByName(_containerID) as TextField;
-						item = new TextInput(_textField.text, _textField);
+						item = new SDTextInput(_textField.text, _textField);
 						if (item)
 						{
 							item.defaultText = (String(_itemXML.@label) != "") ? String(_itemXML.@label) : item.text;
@@ -426,7 +426,7 @@ package com.sleepydesign.site
 				DebugUtil.trace("   - " + _name + "\t: " + _containerID);
 
 				var _textField:TextField;
-				var _item:TextInput;
+				var _item:SDTextInput;
 
 				switch (_name)
 				{

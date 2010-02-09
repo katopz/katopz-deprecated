@@ -1,7 +1,6 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.events.TreeEvent;
-	import com.sleepydesign.text.SDTextField;
 	
 	import flash.events.MouseEvent;
 
@@ -25,24 +24,23 @@ package com.sleepydesign.components
 	 * @author katopz
 	 *
 	 */
-	public class Tree extends AbstractComponent
+	public class SDTree extends SDComponent
 	{
 		private var _xml:XML;
-		private var _tf:SDTextField;
-		private var _root:TreeNode;
+		private var _root:SDTreeNode;
 		
-		public var currentNode:TreeNode;
+		public var currentNode:SDTreeNode;
 		
 		public static var rowCount:int = 1;
-		
-		public static var nodeWidth:int = DefaultSkin.SIZE+DefaultSkin.SIZE*.5;
-		public static var nodeHeight:int = DefaultSkin.SIZE+DefaultSkin.SIZE*.5;
+
+		public static var nodeWidth:int = SDStyle.SIZE + SDStyle.SIZE * .5;
+		public static var nodeHeight:int = SDStyle.SIZE + SDStyle.SIZE * .5;
 		
 		private var _needLabel:Boolean;
 		private var _isRadio:Boolean;
 		private var _isOpen:Boolean;
 		
-		public function Tree(xml:XML = null, isOpen:Boolean = false, needLabel:Boolean = true, isRadio:Boolean = false)
+		public function SDTree(xml:XML = null, isOpen:Boolean = false, needLabel:Boolean = true, isRadio:Boolean = false)
 		{
 			_xml = xml;
 			_needLabel = needLabel;
@@ -66,15 +64,15 @@ package com.sleepydesign.components
 		
 		private function onClick(event:MouseEvent):void
 		{
-			if(event.target is TreeNode)
+			if(event.target is SDTreeNode)
 			{
-				var node:TreeNode = event.target as TreeNode;
+				var node:SDTreeNode = event.target as SDTreeNode;
 				node.selected = !node.selected;
 				setFocus(node);
 			}
 		}
 		
-		private function parseXMLNode(xml:XML, node:TreeNode = null) : TreeNode
+		private function parseXMLNode(xml:XML, node:SDTreeNode = null) : SDTreeNode
 		{
 			var _x:Number = (node)?node.x:-nodeWidth;
 			var _y:Number = nodeHeight * rowCount++;
@@ -102,7 +100,7 @@ package com.sleepydesign.components
 				}
 			}
 			
-			var _node:TreeNode = new TreeNode(_name);
+			var _node:SDTreeNode = new SDTreeNode(_name);
 			_node.x = nodeWidth + _x;
 			_node.parentNode = node?node:null;
 			_node.id = _id;
@@ -123,7 +121,7 @@ package com.sleepydesign.components
 				var childs:Array = [];
 				for each (var child:XML in xml.children()) 
 				{
-					var _nextNode:TreeNode = parseXMLNode(child, _node);
+					var _nextNode:SDTreeNode = parseXMLNode(child, _node);
 					if(_nextNode)
 					{
 						childs.push(_nextNode);
@@ -138,26 +136,26 @@ package com.sleepydesign.components
 			return _node;
 		}
 		
-		private function drawNode(node:TreeNode = null) : void
+		private function drawNode(node:SDTreeNode = null) : void
 		{
 			if(node)
 			{
 				node.draw();
-				for each (var child:TreeNode in node.childs) 
+				for each (var child:SDTreeNode in node.childs) 
 				{
 					drawNode(child);
 				}
 			}
 		}
 		
-		private function setNode(node:TreeNode = null, isOpen:Boolean = true) : void
+		private function setNode(node:SDTreeNode = null, isOpen:Boolean = true) : void
 		{
 			if(!node)return;
 			
 			//trace(node.id, ":", isOpen);
 			
 			node.isOpen = isOpen;
-			for each (var child:TreeNode in node.childs)
+			for each (var child:SDTreeNode in node.childs)
 			{
 				if(_isRadio)
 				{
@@ -181,10 +179,11 @@ package com.sleepydesign.components
 		{
 			rowCount = 1;
 			drawNode(_root);
+			
 			super.draw();
 		}
 		
-		public function setFocusByPath(path:String) : TreeNode
+		public function setFocusByPath(path:String) : SDTreeNode
 		{
 			if(!path)
 				return null;
@@ -193,12 +192,12 @@ package com.sleepydesign.components
 			return setFocusById(_paths.pop());
 		}
 		
-		public function setFocusById(id:String) : TreeNode
+		public function setFocusById(id:String) : SDTreeNode
 		{
 			if(currentNode && currentNode.id==id)
 				return currentNode;
 			
-			var node:TreeNode = getNodeById(_root, id);
+			var node:SDTreeNode = getNodeById(_root, id);
 			
 			if(node)
 				setFocus(node);
@@ -206,7 +205,7 @@ package com.sleepydesign.components
 			return node;
 		}
 
-		public function setFocus(node:TreeNode) : TreeNode
+		public function setFocus(node:SDTreeNode) : SDTreeNode
 		{
 			if(_isRadio)
 			{
@@ -227,6 +226,7 @@ package com.sleepydesign.components
 			}
 			
 			// reset
+			
 			setNode(_root);
 			currentNode = node;
 			
@@ -240,16 +240,16 @@ package com.sleepydesign.components
 		
         public function getPathById(id:String) : String
         {
-        	var node:TreeNode = getNodeById(_root, id);
+        	var node:SDTreeNode = getNodeById(_root, id);
         	return node?node.path:"";
         }
         
-        public function getNodeById(node:TreeNode, id:String) : TreeNode
+        public function getNodeById(node:SDTreeNode, id:String) : SDTreeNode
         {	
 			if(!node)return null;
 			if(!node.childs)return null;
 			var index:int = node.childs.length;
-			var foundNode:TreeNode;
+			var foundNode:SDTreeNode;
 			while(!foundNode && --index>=0)
 			{
 				if(node.childs[index].id==id)

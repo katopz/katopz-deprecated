@@ -3,9 +3,9 @@ package com.sleepydesign.components
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
 	
-	import flash.events.MouseEvent;
+	import flash.display.LineScaleMode;
 	
-	public class TreeNode extends AbstractComponent
+	public class SDTreeNode extends SDComponent
 	{
 		public var id:String;
 		
@@ -14,10 +14,10 @@ package com.sleepydesign.components
 		protected var _label:SDTextField;
 		protected var _labelText:String = "";
 		protected var _selected:Boolean = false;
-		private var _selectedNode:TreeNode;
+		private var _selectedNode:SDTreeNode;
 		
 		public var childs:Array;
-		public var parentNode:TreeNode;
+		public var parentNode:SDTreeNode;
 		public var isOpen:Boolean = true;
 		
 		public var path:String;
@@ -26,7 +26,7 @@ package com.sleepydesign.components
 		
 		public var data:XML;
 		
-		public function TreeNode(label:String = "")
+		public function SDTreeNode(label:String = "")
 		{
 			_labelText = label;
 			
@@ -40,7 +40,8 @@ package com.sleepydesign.components
 			_button.visible = false;
 			addChild(_button);
 			
-			_label = new SDTextField();
+			_label = new SDTextField(_labelText);
+			_label.autoSize = "left";
 			addChild(_label);
 			
 			draw();
@@ -48,30 +49,41 @@ package com.sleepydesign.components
 		
 		override public function draw():void
 		{
+			var _size:int = 6;
+			
 			if (childs)
 			{
 				// folder
 				_back.graphics.clear();
-				_back.graphics.beginFill(DefaultSkin.BACKGROUND);
-				_back.graphics.drawRect(0, 0, _width, _height);
+				_back.graphics.lineStyle(0.25, 0x000000, 1, true, LineScaleMode.NONE);
+				_back.graphics.moveTo(0, _size/2);
+				_back.graphics.lineTo(_size, _size/2);
+				_back.graphics.moveTo(_size/2, 0);
+				_back.graphics.lineTo(_size/2, _size);
 				_back.graphics.endFill();
 				
+				/*
 				_button.graphics.clear();
-				_button.graphics.beginFill(DefaultSkin.BUTTON_COLOR);
+				_button.graphics.beginFill(SDStyle.BUTTON_COLOR);
 				_button.graphics.drawRect(2, 2, _width - 4, _height - 4);
 				_button.graphics.endFill();
-				
+				*/
 			}else {
 				// file
 				_back.graphics.clear();
-				_back.graphics.beginFill(DefaultSkin.BACKGROUND);
-				_back.graphics.drawCircle(_width*.5, _width*.5, _width*.5);
+				_back.graphics.lineStyle(0.25, 0x000000, 1, true, LineScaleMode.NONE);
+				_back.graphics.moveTo(0, _size/2);
+				_back.graphics.lineTo(_size, _size/2);
+				//_back.graphics.moveTo(8/2, 0);
+				//_back.graphics.lineTo(8/2, 8);
 				_back.graphics.endFill();
 				
+				/*
 				_button.graphics.clear();
-				_button.graphics.beginFill(DefaultSkin.BUTTON_COLOR);
-				_button.graphics.drawCircle(_width * .5, _width * .5, _width * .3);
+				_button.graphics.beginFill(SDStyle.BUTTON_COLOR);
+				_button.graphics.drawRect(2, 2, _width - 4, _height - 4);
 				_button.graphics.endFill();
+				*/
 			}
 				
 			_label.x = _width + 2;
@@ -82,13 +94,14 @@ package com.sleepydesign.components
 			{
 				if (parentNode.isOpen&&parentNode.selected) 
 				{
-					y = Tree.nodeHeight * Tree.rowCount++;
+					y = SDTree.nodeHeight * SDTree.rowCount++;
 					visible = true
 				}else {
 					y = parentNode.y;
 					visible = false
 				}
 			}
+			
 			super.draw();
 		}
 
@@ -148,12 +161,12 @@ package com.sleepydesign.components
 			return _selected;
 		}
 		
-		public function set selectedNode(node:TreeNode):void
+		public function set selectedNode(node:SDTreeNode):void
 		{
 			_selectedNode = node;
 		}
 		
-		public function get selectedNode():TreeNode
+		public function get selectedNode():SDTreeNode
 		{
 			return _selectedNode;
 		}
