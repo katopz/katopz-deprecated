@@ -2,10 +2,10 @@ package
 {
 	import com.sleepydesign.components.Tree;
 	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.SWFAddressEvent;
 	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.site.SWFAddress;
-	import com.sleepydesign.site.SWFAddressEvent;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 	
@@ -41,8 +41,8 @@ package
 			
 			_tree = new Tree(xml, true, true, true);
 			addChild(_tree);
-			_tree.x = 100;
-			_tree.y = 100;
+			_tree.x = 10;
+			_tree.y = 10;
 			
 			_tree.addEventListener(TreeEvent.CHANGE_NODE_FOCUS, onTreeChangeFocus);
 		}
