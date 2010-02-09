@@ -1,7 +1,7 @@
 package
 {
 	import com.sleepydesign.events.MouseUIEvent;
-	import com.sleepydesign.ui.MouseUI;
+	import com.sleepydesign.ui.SDMouse;
 	import com.zavoo.svg.SvgPath;
 	
 	import flash.display.Bitmap;
@@ -69,7 +69,7 @@ package
 
 			if (!_mouseUI)
 			{
-				_mouseUI = new MouseUI(stage);
+				_mouseUI = new SDMouse(stage);
 				_mouseUI.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
 				_mouseUI.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			}
@@ -99,7 +99,7 @@ package
 			_ballonCanvas3D.rotationZ=_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;
 		}
 
-		private var _mouseUI:MouseUI;
+		private var _mouseUI:SDMouse;
 		private var _point0:Point = new Point();
 
 		private var pathTagRE:RegExp = /(<path.*?\/>)/sig;
@@ -179,7 +179,7 @@ package
 				addEventListener(Event.ENTER_FRAME, drawPath);
 			}
 
-			if (!MouseUI.isMouseDown)
+			if (!SDMouse.isMouseDown)
 			{
 				_mapCanvas3D.rotationZ += 0.25;
 				_ballonCanvas3D.rotationZ=_candleCanvas3D.rotationZ=_mapCanvas3D.rotationZ;

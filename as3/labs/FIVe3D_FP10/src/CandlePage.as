@@ -1,7 +1,7 @@
 package
 {
 	import com.greensock.TweenLite;
-	import com.sleepydesign.components.DialogBalloon;
+	import com.sleepydesign.components.SDSpeechBalloon;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
@@ -10,7 +10,7 @@ package
 	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
-	import com.sleepydesign.ui.MouseUI;
+	import com.sleepydesign.ui.SDMouse;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
 	
@@ -424,6 +424,12 @@ _sprite2D.scaled = false;
 		
 		private function onMiniMapClick(event:MouseEvent):void
 		{
+			if(event.target.name=="_t")
+			{
+				status = "thai";
+				return;
+			}
+			
 			if(Map.currentMapID != event.target.name)
 			{
 				Map.currentMapID = event.target.name;
@@ -473,7 +479,7 @@ _sprite2D.scaled = false;
 
 		private function setupUI():void
 		{
-			var _mouseUI:MouseUI = new MouseUI(stage);
+			var _mouseUI:SDMouse = new SDMouse(stage);
 			_mouseUI.addEventListener(MouseUIEvent.MOUSE_DRAG, onDrag);
 			_mouseUI.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
@@ -651,6 +657,10 @@ _sprite2D.scaled = false;
 					_candleButton.addEventListener(MouseEvent.CLICK, onCandleButtonClick);
 					break;
 				case "drag":
+					TweenLite.to(_mapCanvas3D, 1, {rotationZ: 0});
+					TweenLite.to(_candleCanvas3D, 1, {rotationZ: 0});
+					TweenLite.to(_ballonCanvas3D, 1, {rotationZ: 0});
+					
 					TweenLite.to(_canvas3D, 1, { autoAlpha:1,
 						x:-50, y:0, z:830, 
 						rotationX: 0, rotationY: 0, rotationZ: 0
@@ -824,6 +834,29 @@ _sprite2D.scaled = false;
 						}
 					});
 				break;
+				case "thai":
+					if(_mapPage)
+					{
+						TweenLite.killTweensOf(_mapPage);
+						_mapPage.stop();
+						_mapPage.visible = false;
+						_mapPage.mouseEnabled =false;
+						_mapPage.alpha = 0;
+						//TweenLite.to(_scene,0.5, {autoAlpha:1});
+					}
+					
+					getData(XMLUtil.getXMLById(_xmlData, "GET_CANDLES").@src, true);
+					
+					TweenLite.to(_scene,0.5, {autoAlpha:1});
+					
+					// go default angle
+					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0 });
+					setDirty();
+					
+					show();
+					
+					TweenLite.to(_candleClip, 1, {autoAlpha: 1});
+				break;
 				case "search-done":
 					// go default angle
 					TweenLite.to(_canvas3D, 1, {x:DEFAULT_X, y:DEFAULT_Y, z:DEFAULT_Z, rotationX: -DEFAULT_ANGLE, rotationY: 0, rotationZ: 0 });
@@ -883,7 +916,7 @@ _sprite2D.scaled = false;
 		private function setupUserBalloon(msg:String, x:Number, y:Number):void
 		{
 			// msg
-			var _baloon:DialogBalloon = new DialogBalloon
+			var _baloon:SDSpeechBalloon = new SDSpeechBalloon
 			(
 				msg,
 				new TextFormat("Tahoma", 12, 0xF4B800), 0x000000, 0xFFFFFF,4,8
@@ -930,13 +963,13 @@ _sprite2D.scaled = false;
 			_ballonCanvas3D.addChild(_balloon2D);
 		}
 		
-		private var _lastBalloon:DialogBalloon;
+		private var _lastBalloon:SDSpeechBalloon;
 		
 		private function disposeBalloon():void
 		{
 			if(!_lastBalloon)return;
 			
-			var __lastBalloon:DialogBalloon = _lastBalloon;
+			var __lastBalloon:SDSpeechBalloon = _lastBalloon;
 			TweenLite.to(__lastBalloon, 1, {autoAlpha: 0, onComplete: function():void
 			{
 				var _balloon2D:Sprite2D = __lastBalloon.parent as Sprite2D;
@@ -953,7 +986,7 @@ _sprite2D.scaled = false;
 				disposeBalloon();
 			
 			// msg
-			var _baloon:DialogBalloon = new DialogBalloon(
+			var _baloon:SDSpeechBalloon = new SDSpeechBalloon(
 				"loading...",
 				new TextFormat("Tahoma", 12, 0xF4B800), 0x000000, 0xFFFFFF,4,8
 			);
@@ -1077,15 +1110,13 @@ _sprite2D.scaled = false;
 
 		override protected function onPreRender():void
 		{
-			/*
-			if (_status == "idle" && _canvas3D)
+			if (_status == "thai" && _canvas3D)
 			{
 				_mapCanvas3D.rotationZ++;
 				_candleCanvas3D.rotationZ++;
 				_ballonCanvas3D.rotationZ++;
 				setDirty();
 			}
-			*/
 			
 			// move mouse?
 			if(mouseX==_mouseX && mouseY==_mouseY)
@@ -1163,7 +1194,7 @@ _sprite2D.scaled = false;
 		
 		override protected function onPostRender():void
 		{
-			if (_transformDirty || _status=="idle" || _status=="explore")
+			if (_transformDirty || _status=="idle" || _status=="explore" || _status=="thai")
 			{
 				if (USE_EFFECT)
 				{

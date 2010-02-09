@@ -1,6 +1,6 @@
 package
 {
-	import com.sleepydesign.components.DialogBalloon;
+	import com.sleepydesign.components.SDSpeechBalloon;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	
@@ -33,7 +33,7 @@ package
 			_cp.x = -stage.stageWidth/2;
 			_cp.y = -stage.stageHeight/2;
 			
-			var testButton:DialogBalloon = addChild(new DialogBalloon("click me for search!")) as DialogBalloon;
+			var testButton:SDSpeechBalloon = addChild(new SDSpeechBalloon("click me for search!")) as SDSpeechBalloon;
 			testButton.mouseEnabled = true;
 			testButton.buttonMode = true;
 			testButton.addEventListener(MouseEvent.CLICK, function():void
