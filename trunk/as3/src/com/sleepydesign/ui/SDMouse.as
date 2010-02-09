@@ -7,7 +7,7 @@ package com.sleepydesign.ui
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	public class MouseUI extends RemovableEventDispatcher
+	public class SDMouse extends RemovableEventDispatcher
 	{
 		private var _target:InteractiveObject;
 		private var _dragTarget:*;
@@ -17,7 +17,7 @@ package com.sleepydesign.ui
 		public static var isMouseDown:Boolean = false;
 		public static var distance:Number = 0;
 		 
-		public function MouseUI(target:InteractiveObject)
+		public function SDMouse(target:InteractiveObject)
 		{
 			_target = target;
 			create();
