@@ -2,8 +2,8 @@ package
 {
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDScrollPane;
-	import com.sleepydesign.components.SpeechBalloon;
-	import com.sleepydesign.components.TextInput;
+	import com.sleepydesign.components.SDSpeechBalloon;
+	import com.sleepydesign.components.SDTextInput;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
 	
@@ -37,7 +37,7 @@ package
 			//content.addChild(_SDSquare);
 
 			// TextInput
-			var _TextInput:TextInput = new TextInput("<b>t</b>estttttttttttttttttttttttttttttttttty");
+			var _TextInput:SDTextInput = new SDTextInput("<b>t</b>estttttttttttttttttttttttttttttttttty");
 			//_TextInput.label.autoSize = "left";
 			_TextInput.width = 250;
 			_TextInput.y = 10;
@@ -50,9 +50,9 @@ package
 			content.addChild(_SDButton);
 
 			// SDBalloon
-			var _SDBalloon:SpeechBalloon = new SpeechBalloon("DialogBalloon test");
+			var _SDBalloon:SDSpeechBalloon = new SDSpeechBalloon("DialogBalloon test");
 			_SDBalloon.float = "center";
-			_SDBalloon.x = 100;
+			_SDBalloon.x = 110;
 			_SDBalloon.y = 100;
 			addChild(_SDBalloon);
 
