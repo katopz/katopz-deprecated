@@ -25,8 +25,17 @@ package
 
 			// get external config
 			LoaderUtil.loadXML("authen.xml", onGetConfig);
+			
+			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 
+		private function onStage(event:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			logInClip.x = stage.stageWidth/2 - logInClip.width/2;
+			logInClip.y = stage.stageHeight/2 - logInClip.height/2;
+		}
+		
 		private function onGetConfig(event:Event):void
 		{
 			// wait until complete
