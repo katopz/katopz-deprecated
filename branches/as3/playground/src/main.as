@@ -4,6 +4,8 @@
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
+	import com.cutecoma.playground.components.SDChatBox;
+	import com.cutecoma.playground.components.SDConnector;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.editors.WorldEditor;
