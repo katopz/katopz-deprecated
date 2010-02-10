@@ -1,9 +1,12 @@
-package com.sleepydesign.components
+package com.cutecoma.playground.components
 {
+    import com.cutecoma.playground.net.SharedObjectConnector;
+    import com.sleepydesign.components.SDButton;
+    import com.sleepydesign.components.SDComponent;
+    import com.sleepydesign.components.SDInputText;
+    import com.sleepydesign.events.NetEvent;
     import com.sleepydesign.events.SDEvent;
     import com.sleepydesign.events.SDMouseEvent;
-    import com.sleepydesign.net.Red5Connector;
-    import com.sleepydesign.net.events.NetEvent;
 	
 	public class SDConnector extends SDComponent
 	{
@@ -11,9 +14,9 @@ package com.sleepydesign.components
 		private var room:String;
 		private var currentRoom:String="";
 		
-		private var connector:Red5Connector;
+		private var connector:SharedObjectConnector;
 		
-		private var serverInputText:SDInputText
+		private var serverInputText:SDInputText;
 		private var connectButton:SDButton;
 		
 		private var isConnect:Boolean = false;
@@ -64,7 +67,7 @@ package com.sleepydesign.components
 			}
 		}
 		
-		public function connect(uri:String, room:String = "lobby"):Red5Connector
+		public function connect(uri:String, room:String = "lobby"):SharedObjectConnector
 		{
 			trace( " * Connect		: "+uri, room);
 			this.uri = uri;
@@ -77,7 +80,7 @@ package com.sleepydesign.components
 			if(connector)disconnect();
 			
 			// new
-			connector = new Red5Connector(uri);
+			connector = new SharedObjectConnector(uri);
 			connector.addEventListener(NetEvent.CONNECT, onConnect);
 			connector.addEventListener(NetEvent.DISCONNECT, onDisConnect);
 			connector.connect();
