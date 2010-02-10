@@ -11,8 +11,8 @@ package graphics
 
     public class Thumbnail extends Object3DContainer
     {
-        private var _Back:Sprite3D;
-        private var _Front:Sprite3D = null;
+        private var _back:Sprite3D;
+        private var _front:Sprite3D;
         
         [Embed(source="assets/image4.jpg")]
 		private var ASSET_TEXTURE_BACK : Class;
@@ -23,34 +23,30 @@ package graphics
 
         public function Thumbnail(param1:String)
         {
-            _Back = new Sprite3D();
+            _back = new Sprite3D();
             super(null, new Sprite());
-            _Back.scale = new Vector3D(1.5, 1.5, 1);
-            _Back.position.y = 0.5;
-            _Back.material = new Material(Color.WHITE, Color.WHITE);
-            _Back.rotation.x = Math.PI;
-            _Back.texture = TEXTURE_BACK;
-            _Front = new Sprite3D();
-            _Front.scale = _Back.scale;
-            _Front.position = _Back.position;
-            _Front.texture = Texture.fromFile(param1);
-            children.push(_Back, _Front);
+            _back.scale = new Vector3D(1.5, 1.5, 1);
+            _back.position.y = 0.5;
+            _back.material = new Material(Color.WHITE, Color.WHITE);
+            _back.rotation.x = Math.PI;
+            _back.texture = TEXTURE_BACK;
+            _front = new Sprite3D();
+            _front.scale = _back.scale;
+            _front.position = _back.position;
+            _front.texture = Texture.fromFile(param1);
+            children.push(_back, _front);
             sprite.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverHandler);
             sprite.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutHandler);
-            
         }
 
         private function mouseOverHandler(event:Event) : void
         {
             sprite.filters = [GLOW];
-            
         }
 
         private function mouseOutHandler(event:Event) : void
         {
             sprite.filters = [];
-            
         }
-
     }
 }

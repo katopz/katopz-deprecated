@@ -10,12 +10,12 @@ package com.cutecoma.engine3d.engine.camera
         protected var COS:Function;
         protected var SIN:Function;
         protected var TAN:Function;
-        private var _Position:Vector3D;
-        private var _Direction:Vector3D;
-        private var _Rotation:Vector3D;
-        private var _ViewMatrix:Matrix3D;
+        private var _position:Vector3D;
+        private var _direction:Vector3D;
+        private var _rotation:Vector3D;
+        private var _viewMatrix:Matrix3D;
         private var _Distance:Number = 1;
-        private var _MustUpdate:Boolean = true;
+        private var _dirty:Boolean = true;
 
         public function AbstractCamera()
         {
@@ -24,43 +24,43 @@ package com.cutecoma.engine3d.engine.camera
             this.COS = Math.cos;
             this.SIN = Math.sin;
             this.TAN = Math.tan;
-            _Position = new Vector3D();
-            _Direction = new Vector3D();
-            _Rotation = new Vector3D();
-            _ViewMatrix = new Matrix3D();
-            _MustUpdate = true;
             
+            _position = new Vector3D();
+            _direction = new Vector3D();
+            _rotation = new Vector3D();
+            _viewMatrix = new Matrix3D();
+            _dirty = true;
         }
 
         public function get position() : Vector3D
         {
-            _MustUpdate = true;
-            return _Position;
+            _dirty = true;
+            return _position;
         }
 
         public function get direction() : Vector3D
         {
-            _MustUpdate = true;
-            return _Direction;
+            _dirty = true;
+            return _direction;
         }
 
         public function get viewMatrix() : Matrix3D
         {
-            if (_MustUpdate)
+            if (_dirty)
             {
                 this.updateMatrix();
             }
-            return _ViewMatrix;
+            return _viewMatrix;
         }
 
         public function get yaw() : Number
         {
-            return _Rotation.y;
+            return _rotation.y;
         }
 
         public function get pitch() : Number
         {
-            return _Rotation.x;
+            return _rotation.x;
         }
 
         public function get distance() : Number
@@ -70,35 +70,31 @@ package com.cutecoma.engine3d.engine.camera
 
         public function get rotation() : Vector3D
         {
-            return _Rotation;
+            return _rotation;
         }
 
         public function set viewMatrix(value:Matrix3D) : void
         {
-            _MustUpdate = false;
-            _ViewMatrix = value;
-            
+            _dirty = false;
+            _viewMatrix = value;
         }
 
         public function set position(value:Vector3D) : void
         {
-            _Position = value;
-            _MustUpdate = true;
-            
+            _position = value;
+            _dirty = true;
         }
 
         public function set direction(value:Vector3D) : void
         {
-            _Direction = value;
-            _MustUpdate = true;
-            
+            _direction = value;
+            _dirty = true;
         }
 
         public function set yaw(value:Number) : void
         {
-            _Rotation.y = value % (Math.PI * 2);
-            _MustUpdate = true;
-            
+            _rotation.y = value % (Math.PI * 2);
+            _dirty = true;
         }
 
         public function set pitch(param1:Number) : void
@@ -111,30 +107,25 @@ package com.cutecoma.engine3d.engine.camera
             {
                 param1 = (-Math.PI) / 2 + 0.0001;
             }
-            _Rotation.x = param1;
-            _MustUpdate = true;
-            
+            _rotation.x = param1;
+            _dirty = true;
         }
 
         public function set distance(value:Number) : void
         {
             _Distance = value;
-            _MustUpdate = true;
-            
+            _dirty = true;
         }
 
         public function set rotation(value:Vector3D) : void
         {
-            _Rotation = value;
-            _MustUpdate = true;
-            
+            _rotation = value;
+            _dirty = true;
         }
 
         protected function updateMatrix() : void
         {
-            _MustUpdate = false;
-            
+            _dirty = false;
         }
-
     }
 }

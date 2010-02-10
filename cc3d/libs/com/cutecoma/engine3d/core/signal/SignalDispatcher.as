@@ -3,38 +3,27 @@ package com.cutecoma.engine3d.core.signal
 
     public class SignalDispatcher extends Object
     {
-        private var _Signals:Object;
+        private var _signals:Object;
 
         public function SignalDispatcher()
         {
-            _Signals = new Object();
-            
+            _signals = new Object();
         }
 
-        protected function dispatchSignal(param1:Signal) : void
+        protected function dispatchSignal(signal:Signal) : void
         {
-            var _loc_3:Function = null;
-            var _loc_2:* = _Signals[param1.id];
+            var _loc_3:Function;
+            var _loc_2:* = _signals[signal.id];
             if (_loc_2 && _loc_2.length)
-            {
                 for each (_loc_3 in _loc_2)
-                {
-                    
-                    _loc_3(param1);
-                }
-            }
-            
+                    _loc_3(signal);
         }
 
-        public function addSignalListener(param1:String, param2:Function) : void
+        public function addSignalListener(id:String, func:Function) : void
         {
-            if (!_Signals[param1])
-            {
-                _Signals[param1] = new Vector.<Function>;
-            }
-            _Signals[param1].push(param2);
-            
+            if (!_signals[id])
+                _signals[id] = new Vector.<Function>;
+            _signals[id].push(func);
         }
-
     }
 }

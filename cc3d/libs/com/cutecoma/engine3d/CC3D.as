@@ -6,7 +6,7 @@ package com.cutecoma.engine3d
 
     public class CC3D extends Object
     {
-        public static const MAX_LIGHTS:Number = 8;
+        public static const MAX_lIGHTS:Number = 8;
         public static const VERSION:String = "1";
     }
 }

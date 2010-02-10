@@ -5,8 +5,8 @@ package com.cutecoma.engine3d.api.light
     public class DirectionalLight extends Light
     {
         private var _MustUpdate:Boolean = true;
-        private var _Direction:Vector3D = null;
-        private var _Matrix:Matrix3D = null;
+        private var _Direction:Vector3D;
+        private var _Matrix:Matrix3D;
 
         public function DirectionalLight(param1:Vector3D = null)
         {

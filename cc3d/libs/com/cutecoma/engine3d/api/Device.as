@@ -1,10 +1,5 @@
 package com.cutecoma.engine3d.api
 {
-	import flash.display.*;
-	import flash.events.*;
-	import flash.geom.*;
-	import flash.utils.*;
-
 	import com.cutecoma.engine3d.*;
 	import com.cutecoma.engine3d.api.light.*;
 	import com.cutecoma.engine3d.api.material.*;
@@ -16,141 +11,140 @@ package com.cutecoma.engine3d.api
 	import com.cutecoma.engine3d.core.render.*;
 	import com.cutecoma.engine3d.core.transform.*;
 
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import flash.utils.*;
+
 	public class Device extends Object
 	{
 		private var MATRIX_FACTORY:Matrix3DFactory;
-		private const USE_PSTREAM_CACHE:Boolean = true;//DEV//
-		private var _Handler:DisplayObjectContainer = null;
-		private var _Pipeline:Pipeline = null;
-		private var _PStreamCache:Dictionary = null;
-		private var _Viewport:Viewport = null;
-		private var _Initialized:Boolean = false;
-		private var _NbPrimitives:int = 0;
+		private const USE_PSTREAM_CACHE:Boolean = true; //DEV//
+		private var _handler:DisplayObjectContainer;
+		private var _pipeline:Pipeline;
+		private var _pStreamCache:Dictionary;
+		private var _viewport:Viewport;
+		private var _initialized:Boolean = false;
+		private var _nbPrimitives:int = 0;
 
-		public function Device(param1:DisplayObjectContainer, param2:Viewport)
+		public function Device(handler:DisplayObjectContainer, viewport:Viewport)
 		{
 			this.MATRIX_FACTORY = Matrix3DFactory.instance;
-			_Handler = param1;
-			_Viewport = param2;
-			this.initialize();
+			_handler = handler;
+			_viewport = viewport;
 			
+			initialize();
 		}
 
 		public function set material(value:Material):void
 		{
-			_Pipeline.ambient = value.ambient.toInt();
-			_Pipeline.diffuse = value.diffuse.toInt();
-			
+			_pipeline.ambient = value.ambient.toInt();
+			_pipeline.diffuse = value.diffuse.toInt();
 		}
 
 		public function set texture(value:Texture):void
 		{
 			if (value == null)
 			{
-				_Pipeline.bitmap = null;
+				_pipeline.bitmap = null;
 			}
 			else
 			{
-				_Pipeline.bitmap = value.bitmap;
-				_Pipeline.textureRepeat = value.repeat;
+				_pipeline.bitmap = value.bitmap;
+				_pipeline.textureRepeat = value.repeat;
 			}
-			
 		}
 
 		public function set viewport(value:Viewport):void
 		{
-			_Viewport = value;
+			_viewport = value;
 			this.reset();
-			
 		}
 
 		public function get transform():TransformProxy
 		{
-			return _Pipeline.transform;
+			return _pipeline.transform;
 		}
 
 		public function get renderStates():RenderStateProxy
 		{
-			return _Pipeline.renderStates;
+			return _pipeline.renderStates;
 		}
 
 		public function get lights():Vector.<DirectionalLight>
 		{
-			return _Pipeline.lights;
+			return _pipeline.lights;
 		}
 
 		public function get nbPrimitives():int
 		{
-			return _NbPrimitives;
+			return _nbPrimitives;
 		}
 
 		public function get viewport():Viewport
 		{
-			return _Viewport;
+			return _viewport;
 		}
 
 		private function initialize():void
 		{
-			_Pipeline = new Pipeline(_Handler);
-			_Pipeline.lights.push(new DirectionalLight(new Vector3D(0, 1, 0)));
-			_PStreamCache = new Dictionary(true);
-			this.transform.view = this.MATRIX_FACTORY.lookAtLH(new Vector3D(), new Vector3D(0, 0, 1), Vector3D.Y_AXIS);
-			this.transform.world = new Matrix3D();
-			_Initialized = true;
-			this.reset();
+			_pipeline = new Pipeline(_handler);
+			_pipeline.lights.push(new DirectionalLight(new Vector3D(0, 1, 0)));
+			_pStreamCache = new Dictionary(true);
 			
+			transform.view = this.MATRIX_FACTORY.lookAtLH(new Vector3D(), new Vector3D(0, 0, 1), Vector3D.Y_AXIS);
+			transform.world = new Matrix3D();
+			
+			_initialized = true;
+			reset();
 		}
 
 		private function reset():void
 		{
-			_Handler.scrollRect = new Rectangle((-_Viewport.width) / 2, (-_Viewport.height) / 2, _Viewport.width, _Viewport.height);
-			this.transform.viewportWidth = _Viewport.width;
-			this.transform.viewportHeight = _Viewport.height;
-			this.transform.projection = this.MATRIX_FACTORY.perspectiveFovLH(Math.PI / 4, _Viewport.width / _Viewport.height, 0.01, 100);
-			
+			_handler.scrollRect = new Rectangle((-_viewport.width) / 2, (-_viewport.height) / 2, _viewport.width, _viewport.height);
+			this.transform.viewportWidth = _viewport.width;
+			this.transform.viewportHeight = _viewport.height;
+			this.transform.projection = this.MATRIX_FACTORY.perspectiveFovLH(Math.PI / 4, _viewport.width / _viewport.height, 0.01, 100);
 		}
 
 		public function beginScene():void
 		{
-			
+
 		}
 
 		public function endScene():void
 		{
-			
+
 		}
 
 		public function present():void
 		{
-			_Pipeline.present();
-			
+			_pipeline.present();
 		}
 
 		public function clear():void
 		{
-			_Pipeline.clear();
-			_NbPrimitives = 0;
-			
+			_pipeline.clear();
+			_nbPrimitives = 0;
 		}
 
-		public function drawPrimitive(param1:uint, param2:Vector.<Vertex>, param3:Vector.<int> = null, param4:Class = null, param5:Sprite = null):void
+		public function drawPrimitive(primitiveType:uint, vertices:Vector.<Vertex>, param3:Vector.<int> = null, bspTree:Class = null, param5:Sprite = null):void
 		{
-			var _loc_6:PrimitiveStream = null;
-			var _loc_7:* = param3 ? (param3) : (param2);
-			if (!_Initialized)
+			var _loc_6:PrimitiveStream;
+			var _loc_7:* = param3 ? (param3) : (vertices);
+			if (!_initialized)
 			{
 				return;
 			}
-			_loc_6 = _PStreamCache[_loc_7];
+			_loc_6 = _pStreamCache[_loc_7];
 			if (!this.USE_PSTREAM_CACHE || _loc_6 == null)
 			{
-				param4 = BspTree;
-				_loc_6 = new PrimitiveStream(param1, param2, param3, param4);
-				_PStreamCache[_loc_7] = _loc_6;
+				bspTree = BspTree;
+				_loc_6 = new PrimitiveStream(primitiveType, vertices, param3, bspTree);
+				_pStreamCache[_loc_7] = _loc_6;
 			}
-			_NbPrimitives = _NbPrimitives + _loc_6.indices.length / 3;
-			_Pipeline.accept(_loc_6, param5);
-			
+			_nbPrimitives = _nbPrimitives + _loc_6.indices.length / 3;
+			_pipeline.accept(_loc_6, param5);
 		}
 	}
 }

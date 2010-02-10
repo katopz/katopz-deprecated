@@ -8,6 +8,6 @@ package com.cutecoma.engine3d.core
 	{
 		public function ZSortable();
 
-		function zSort(param1:Vector3D, param2:Frustum):Vector.<int>;
+		function zSort(param1:Vector3D, frustum:Frustum):Vector.<int>;
 	}
 }

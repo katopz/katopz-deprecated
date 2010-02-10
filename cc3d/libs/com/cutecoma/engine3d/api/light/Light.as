@@ -6,18 +6,18 @@ package com.cutecoma.engine3d.api.light
     {
         protected var _Enabled:Boolean = false;
         protected var _Diffuse:Color;
-        protected var _Ambient:Color;
+        protected var _ambient:Color;
 
         public function Light()
         {
             _Diffuse = Color.WHITE;
-            _Ambient = Color.WHITE;
+            _ambient = Color.WHITE;
             
         }
 
         public function get ambient() : Color
         {
-            return _Ambient;
+            return _ambient;
         }
 
         public function get diffuse() : Color
@@ -32,7 +32,7 @@ package com.cutecoma.engine3d.api.light
 
         public function set ambient(value:Color) : void
         {
-            _Ambient = value;
+            _ambient = value;
             
         }
 

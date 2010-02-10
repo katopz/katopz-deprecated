@@ -7,7 +7,7 @@ package map
 
 	public class Map extends EventDispatcher
 	{
-		private var _Markers:Vector.<Marker> = null;
+		private var _Markers:Vector.<Marker>;
 
 		public function Map(param1:String = null)
 		{
@@ -17,7 +17,7 @@ package map
 
 		public function loadXML(param1:XML):void
 		{
-			var _loc_3:XML = null;
+			var _loc_3:XML;
 			var _loc_2:* = param1..marker;
 			_Markers = new Vector.<Marker>;
 			for each (_loc_3 in _loc_2)

@@ -65,7 +65,7 @@ package com.cutecoma.engine3d.api.mesh
 
 		public function draw(device:Device, sprite:Sprite = null):void
 		{
-			var _loc_3:Vector.<int> = null;
+			var _loc_3:Vector.<int>;
 			if (!_vertexBuffer || !_vertexBuffer.length)
 				return;
 
@@ -82,8 +82,8 @@ package com.cutecoma.engine3d.api.mesh
 
 		public function clone():IClonable
 		{
-			var _loc_3:Vertex = null;
-			var _loc_4:Vector.<int> = null;
+			var _loc_3:Vertex;
+			var _loc_4:Vector.<int>;
 			var _loc_1:* = new BaseMesh(new Vector.<Vertex>(_vertexBuffer.length, true));
 			var _loc_2:int = 0;
 			for each (_loc_3 in _vertexBuffer)

@@ -7,8 +7,9 @@ package com.cutecoma.engine3d.core.frustum
 
     public class FrustumClipping extends Object
     {
-        private var _Frustum:Frustum = null;
-        private var _NearPlane:Plane;
+        private var _frustum:Frustum;
+        private var _nearPlane:Plane;
+        
         public static const POLYGON_COINCIDING:int = Plane.POLYGON_COINCIDING;
         public static const POLYGON_BEHIND:int = Plane.POLYGON_BEHIND;
         public static const POLYGON_INFRONT:int = Plane.POLYGON_INFRONT;
@@ -24,9 +25,8 @@ package com.cutecoma.engine3d.core.frustum
 
         public function FrustumClipping(param1:Frustum)
         {
-            _NearPlane = new Plane();
-            _Frustum = param1;
-            
+            _nearPlane = new Plane();
+            _frustum = param1;
         }
 
         public function clipVertices(param1:Vector.<Number>, param2:Vector.<int>, param3:Vector.<Number>, param4:int) : Vector.<int>
@@ -42,7 +42,7 @@ package com.cutecoma.engine3d.core.frustum
             var _loc_20:Number = NaN;
             var _loc_21:int = 0;
             var _loc_22:int = 0;
-            var _loc_5:* = _Frustum.nearPlane;
+            var _loc_5:* = _frustum.nearPlane;
             var _loc_6:* = param2.length;
             var _loc_7:int = 0;
             var _loc_8:* = new Vector.<int>;
@@ -51,7 +51,6 @@ package com.cutecoma.engine3d.core.frustum
             var _loc_11:* = new Vertex();
             while (_loc_7 < _loc_6)
             {
-                
                 _loc_12 = param2[_loc_7] * 3;
                 _loc_13 = param2[int(_loc_7 + 1)] * 3;
                 _loc_14 = param2[int(_loc_7 + 2)] * 3;
@@ -170,6 +169,5 @@ package com.cutecoma.engine3d.core.frustum
             }
             return _loc_8;
         }
-
     }
 }

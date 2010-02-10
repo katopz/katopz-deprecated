@@ -7,40 +7,40 @@ package com.cutecoma.engine3d.ui
 
     public class MouseInput extends Object
     {
-        private var _Layer:Sprite = null;
-        private var _Position:Point;
-        private var _GFX:GraphicsEngine = null;
+        private var _layer:Sprite;
+        private var _position:Point;
+        private var _gFX:GraphicsEngine;
 
         public function MouseInput(param1:Sprite, param2:GraphicsEngine)
         {
-            _Position = new Point();
-            _Layer = param1;
-            _GFX = param2;
+            _position = new Point();
+            _layer = param1;
+            _gFX = param2;
             this.enable();
             
         }
 
         public function enable() : void
         {
-            _Layer.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-            _Layer.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-            _Layer.addEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+            _layer.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+            _layer.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+            _layer.addEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
             
         }
 
         protected function mouseWheelHandler(event:MouseEvent) : void
         {
-            _GFX.cameraSpeed.z = _GFX.cameraSpeed.z - 1e-005 * _GFX.elapsedTime * event.delta;
+            _gFX.cameraSpeed.z = _gFX.cameraSpeed.z - 1e-005 * _gFX.elapsedTime * event.delta;
             
         }
 
         protected function mouseDownHandler(event:MouseEvent) : void
         {
-            _Position.x = event.stageX;
-            _Position.y = event.stageY;
-            _GFX.cameraSpeed.x = 0;
-            _GFX.cameraSpeed.y = 0;
-            _GFX.cameraSpeed.z = 0;
+            _position.x = event.stageX;
+            _position.y = event.stageY;
+            _gFX.cameraSpeed.x = 0;
+            _gFX.cameraSpeed.y = 0;
+            _gFX.cameraSpeed.z = 0;
             
         }
 
@@ -50,21 +50,21 @@ package com.cutecoma.engine3d.ui
             var _loc_3:int = 0;
             if (event.buttonDown)
             {
-                _loc_2 = event.stageX - _Position.x;
-                _loc_3 = event.stageY - _Position.y;
-                _GFX.cameraSpeed.x = _GFX.cameraSpeed.x - 5e-005 * _loc_3;
-                _GFX.cameraSpeed.y = _GFX.cameraSpeed.y - 5e-005 * _loc_2;
-                _Position.x = event.stageX;
-                _Position.y = event.stageY;
+                _loc_2 = event.stageX - _position.x;
+                _loc_3 = event.stageY - _position.y;
+                _gFX.cameraSpeed.x = _gFX.cameraSpeed.x - 5e-005 * _loc_3;
+                _gFX.cameraSpeed.y = _gFX.cameraSpeed.y - 5e-005 * _loc_2;
+                _position.x = event.stageX;
+                _position.y = event.stageY;
             }
             
         }
 
         public function disable() : void
         {
-            _Layer.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-            _Layer.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-            _Layer.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+            _layer.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+            _layer.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+            _layer.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
             
         }
 

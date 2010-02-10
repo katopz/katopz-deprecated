@@ -6,29 +6,29 @@ package graphics
 
     public class Marker extends EventDispatcher
     {
-        private var _Position:Vector3D = null;
-        private var _Latitude:Number = 0;
-        private var _Thumbnail:Thumbnail = null;
-        private var _Longitude:Number = 0;
-        private var _Rotation:Vector3D = null;
-        private static const DEG_TO_RAD:Number = 0.0174533;
+        private var _position:Vector3D;
+        private var _latitude:Number = 0;
+        private var _thumbnail:Thumbnail;
+        private var _longitude:Number = 0;
+        private var _rotation:Vector3D;
+        private static const DEG_tO_rAD:Number = 0.0174533;
 
         public function Marker(param1:String, param2:Number = 0, param3:Number = 0)
         {
-            var _loc_4:* = param3 * DEG_TO_RAD + Math.PI;
-            _Thumbnail = new Thumbnail(param1);
-            _Longitude = param3 * DEG_TO_RAD;
-            _Latitude = param2 * DEG_TO_RAD;
-            _Thumbnail.rotation.y = -_Longitude + Math.PI / 2;
-            _Thumbnail.rotation.x = _Latitude - Math.PI / 2;
-            _Thumbnail.position.x = Math.cos(_loc_4) * Math.cos(_Latitude);
-            _Thumbnail.position.y = Math.sin(_Latitude);
-            _Thumbnail.position.z = Math.sin(_loc_4) * Math.cos(_Latitude);
-            _Position = _Thumbnail.position.clone();
-            _Rotation = _Thumbnail.rotation.clone();
-            _Thumbnail.scale.scaleBy(0.2);
-            TweenLite.from(_Thumbnail.position, 2, {x:_Thumbnail.position.x * 5, y:_Thumbnail.position.y * 5, z:_Thumbnail.position.z * 5});
-            _Thumbnail.sprite.addEventListener(MouseEvent.CLICK, this.mouseClickHandler);
+            var _loc_4:* = param3 * DEG_tO_rAD + Math.PI;
+            _thumbnail = new Thumbnail(param1);
+            _longitude = param3 * DEG_tO_rAD;
+            _latitude = param2 * DEG_tO_rAD;
+            _thumbnail.rotation.y = -_longitude + Math.PI / 2;
+            _thumbnail.rotation.x = _latitude - Math.PI / 2;
+            _thumbnail.position.x = Math.cos(_loc_4) * Math.cos(_latitude);
+            _thumbnail.position.y = Math.sin(_latitude);
+            _thumbnail.position.z = Math.sin(_loc_4) * Math.cos(_latitude);
+            _position = _thumbnail.position.clone();
+            _rotation = _thumbnail.rotation.clone();
+            _thumbnail.scale.scaleBy(0.2);
+            TweenLite.from(_thumbnail.position, 2, {x:_thumbnail.position.x * 5, y:_thumbnail.position.y * 5, z:_thumbnail.position.z * 5});
+            _thumbnail.sprite.addEventListener(MouseEvent.CLICK, this.mouseClickHandler);
             
         }
 
@@ -40,27 +40,27 @@ package graphics
 
         public function get position() : Vector3D
         {
-            return _Position;
+            return _position;
         }
 
         public function get thumbnail() : Thumbnail
         {
-            return _Thumbnail;
+            return _thumbnail;
         }
 
         public function get longitude() : Number
         {
-            return _Longitude;
+            return _longitude;
         }
 
         public function get latitude() : Number
         {
-            return _Latitude;
+            return _latitude;
         }
 
         public function get rotation() : Vector3D
         {
-            return _Rotation;
+            return _rotation;
         }
 
     }

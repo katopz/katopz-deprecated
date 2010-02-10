@@ -10,8 +10,8 @@ package com.cutecoma.engine3d.templates
 
 	public class CCTemplate extends Sprite
 	{
-		private var _Mouse:MouseInput = null;
-		private var _GFX:CCEngine = null;
+		private var _Mouse:MouseInput;
+		private var _gFX:CCEngine;
 
 		public function CCTemplate()
 		{
@@ -20,10 +20,10 @@ package com.cutecoma.engine3d.templates
 			stage.addEventListener(Event.RESIZE, stageResizeHandler);
 			stage.showDefaultContextMenu = false;
 
-			_GFX = new CCEngine(new Viewport(stage.stageWidth, stage.stageHeight));
-			addChild(_GFX);
+			_gFX = new CCEngine(new Viewport(stage.stageWidth, stage.stageHeight));
+			addChild(_gFX);
 
-			_Mouse = new MouseInput(this, _GFX);
+			_Mouse = new MouseInput(this, _gFX);
 
 			initialize();
 
@@ -48,17 +48,17 @@ package com.cutecoma.engine3d.templates
 		private function enterFrameHandler(event:Event = null):void
 		{
 			draw();
-			_GFX.renderFrame();
+			_gFX.renderFrame();
 		}
 
 		public function get gfx():CCEngine
 		{
-			return _GFX;
+			return _gFX;
 		}
 
 		private function stageResizeHandler(event:Event):void
 		{
-			_GFX.viewport = new Viewport(stage.stageWidth, stage.stageHeight);
+			_gFX.viewport = new Viewport(stage.stageWidth, stage.stageHeight);
 		}
 	}
 }
