@@ -5,16 +5,13 @@ package com.cutecoma.engine3d.common.math
     public class Matrix3DFactory extends Object
     {
         protected var TAN:Function;
-        public static var _Instance:Matrix3DFactory = null;
+        public static var _instance:Matrix3DFactory;
 
         public function Matrix3DFactory()
         {
             this.TAN = Math.tan;
-            if (_Instance != null)
-            {
+            if (_instance != null)
                 throw new Error("Matrix3DFactory is a singleton : it can not be instantiated. Use Matrix3DFactory.INSTANCE instead.");
-            }
-            
         }
 
         public function perspectiveFovLH(param1:Number, param2:Number, param3:Number, param4:Number) : Matrix3D
@@ -38,8 +35,8 @@ package com.cutecoma.engine3d.common.math
         public function lookAtLH(param1:Vector3D, param2:Vector3D, param3:Vector3D) : Matrix3D
         {
             var _loc_4:* = param2.subtract(param1);
-            var _loc_5:Vector3D = null;
-            var _loc_6:Vector3D = null;
+            var _loc_5:Vector3D;
+            var _loc_6:Vector3D;
             var _loc_7:Number = 0;
             var _loc_8:Number = 0;
             var _loc_9:Number = 0;
@@ -57,8 +54,8 @@ package com.cutecoma.engine3d.common.math
         public function lookAtRH(param1:Vector3D, param2:Vector3D, param3:Vector3D) : Matrix3D
         {
             var _loc_4:* = param1.subtract(param2);
-            var _loc_5:Vector3D = null;
-            var _loc_6:Vector3D = null;
+            var _loc_5:Vector3D;
+            var _loc_6:Vector3D;
             var _loc_7:Number = 0;
             var _loc_8:Number = 0;
             var _loc_9:Number = 0;
@@ -75,12 +72,9 @@ package com.cutecoma.engine3d.common.math
 
         public static function get instance() : Matrix3DFactory
         {
-            if (_Instance == null)
-            {
-                _Instance = new Matrix3DFactory;
-            }
-            return _Instance;
+            if (_instance == null)
+                _instance = new Matrix3DFactory;
+            return _instance;
         }
-
     }
 }

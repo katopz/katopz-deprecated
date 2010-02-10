@@ -10,7 +10,7 @@ package
 	import com.cutecoma.engine3d.templates.*;
 	import com.cutecoma.engine3d.engine.*;
 
-	[SWF(width=720, height=400, backgroundColor=0x666666, frameRate=30)]
+	[SWF(width=800, height=600, backgroundColor=0x666666, frameRate=30)]
 	public class Skybox extends CCTemplate
 	{
 		[Embed(source="assets/image10.jpg")]
@@ -89,10 +89,10 @@ package
 
 		override public function draw():void
 		{
-			var _loc_1:Sprite3D = null;
+			var _sprite3D:Sprite3D;
 			super.draw();
-			for each (_loc_1 in _SkyBox)
-				gfx.draw(_loc_1, GraphicsEngine.DRAW_STATIC);
+			for each (_sprite3D in _SkyBox)
+				gfx.draw(_sprite3D, GraphicsEngine.DRAW_STATIC);
 		}
 
 		private function keyDownHandler(event:KeyboardEvent):void

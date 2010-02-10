@@ -7,43 +7,43 @@ package com.cutecoma.engine3d.api.texture
 
 	public class Texture extends EventDispatcher
 	{
-		protected var _Bitmap:Bitmap = null;
-		protected var _Repeat:Boolean = false;
+		protected var _bitmap:Bitmap;
+		protected var _repeat:Boolean = false;
 
 		public function Texture(bitmapData:BitmapData = null)
 		{
-			_Bitmap = new Bitmap(bitmapData);
+			_bitmap = new Bitmap(bitmapData);
 		}
 
 		public function get bitmap():Bitmap
 		{
-			return _Bitmap;
+			return _bitmap;
 		}
 
 		public function get bitmapData():BitmapData
 		{
-			return _Bitmap.bitmapData;
+			return _bitmap.bitmapData;
 		}
 
 		public function get repeat():Boolean
 		{
-			return _Repeat;
+			return _repeat;
 		}
 
 		public function set bitmapData(value:BitmapData):void
 		{
-			_Bitmap.bitmapData = value;
+			_bitmap.bitmapData = value;
 
 		}
 
 		public function set repeat(value:Boolean):void
 		{
-			_Repeat = value;
+			_repeat = value;
 		}
 
 		public function loadBitmapData(bitmapData:BitmapData):void
 		{
-			_Bitmap.bitmapData = bitmapData;
+			_bitmap.bitmapData = bitmapData;
 
 		}
 
@@ -68,7 +68,7 @@ package com.cutecoma.engine3d.api.texture
 		public static function fromAsset(param1:Class):Texture
 		{
 			var _loc_2:* = new param1 as DisplayObject;
-			var _loc_3:Texture = null;
+			var _loc_3:Texture;
 			if (_loc_2 is BitmapAsset)
 			{
 				_loc_3 = new Texture((_loc_2 as Bitmap).bitmapData);

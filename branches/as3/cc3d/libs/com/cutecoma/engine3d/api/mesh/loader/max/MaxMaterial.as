@@ -3,8 +3,8 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
     public class MaxMaterial extends AbstractMaxParser
     {
-        protected var _Name:String = null;
-        protected var _TextureFilename:String = null;
+        protected var _name:String;
+        protected var _textureFilename:String;
 
         function MaxMaterial(param1:Chunk)
         {
@@ -14,33 +14,33 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         public function get name() : String
         {
-            return _Name;
+            return _name;
         }
 
         public function get textureFilename() : String
         {
-            return _TextureFilename;
+            return _textureFilename;
         }
 
         override protected function initialize() : void
         {
             super.initialize();
-            _AFunctions[Chunk.MATERIAL] = enterChunk;
-            _AFunctions[Chunk.MATERIAL_NAME] = this.parseName;
-            _AFunctions[Chunk.MATERIAL_TEXMAP] = enterChunk;
-            _AFunctions[Chunk.MATERIAL_MAPNAME] = this.parseTextureFilename;
+            _aFunctions[Chunk.MATERIAL] = enterChunk;
+            _aFunctions[Chunk.MATERIAL_nAME] = this.parseName;
+            _aFunctions[Chunk.MATERIAL_tEXMAP] = enterChunk;
+            _aFunctions[Chunk.MATERIAL_MAPNAME] = this.parseTextureFilename;
             
         }
 
         protected function parseName(param1:Chunk) : void
         {
-            _Name = param1.readString();
+            _name = param1.readString();
             
         }
 
         protected function parseTextureFilename(param1:Chunk) : void
         {
-            _TextureFilename = param1.readString();
+            _textureFilename = param1.readString();
             
         }
 

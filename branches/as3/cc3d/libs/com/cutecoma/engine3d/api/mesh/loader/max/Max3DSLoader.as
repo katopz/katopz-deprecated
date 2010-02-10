@@ -6,12 +6,12 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
     public class Max3DSLoader extends EventDispatcher
     {
-        protected var _TextureFolder:String = null;
-        protected var _Max3DS:Max3DS = null;
+        protected var _textureFolder:String;
+        protected var _Max3DS:Max3DS;
 
         public function Max3DSLoader(param1:String = null)
         {
-            _TextureFolder = param1;
+            _textureFolder = param1;
             
         }
 
@@ -37,13 +37,13 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         public function loadByteArray(param1:ByteArray) : void
         {
-            _Max3DS = new Max3DS(_TextureFolder, param1);
+            _Max3DS = new Max3DS(_textureFolder, param1);
             
         }
 
         private function complteHandler(event:Event) : void
         {
-            _Max3DS = new Max3DS(_TextureFolder, event.target.data as ByteArray);
+            _Max3DS = new Max3DS(_textureFolder, event.target.data as ByteArray);
             dispatchEvent(new Event(Event.COMPLETE));
             
         }

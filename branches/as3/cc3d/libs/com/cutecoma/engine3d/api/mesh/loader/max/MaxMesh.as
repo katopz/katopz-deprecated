@@ -5,10 +5,10 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
 	public class MaxMesh extends MaxObject
 	{
-		protected var _vertices:Vector.<Vertex> = null;
-		protected var _indices:Vector.<int> = null;
-		protected var _materialName:String = null;
-		protected var _mappedFaces:Vector.<int> = null;
+		protected var _vertices:Vector.<Vertex>;
+		protected var _indices:Vector.<int>;
+		protected var _materialName:String;
+		protected var _mappedFaces:Vector.<int>;
 
 		public function MaxMesh(chunk:Chunk)
 		{
@@ -39,11 +39,11 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 		{
 			super.initialize();
 
-			_AFunctions[Chunk.MESH] = enterChunk;
-			_AFunctions[Chunk.MESH_VERTICES] = this.parseVertices;
-			_AFunctions[Chunk.MESH_INDICES] = this.parseIndices;
-			_AFunctions[Chunk.MESH_MAPPING] = this.parseMapping;
-			_AFunctions[Chunk.MESH_MATERIAL] = this.parseMaterial;
+			_aFunctions[Chunk.MESH] = enterChunk;
+			_aFunctions[Chunk.MESH_vERTICES] = this.parseVertices;
+			_aFunctions[Chunk.MESH_iNDICES] = this.parseIndices;
+			_aFunctions[Chunk.MESH_MAPPING] = this.parseMapping;
+			_aFunctions[Chunk.MESH_MATERIAL] = this.parseMaterial;
 		}
 
 		protected function parseVertices(chunk:Chunk):void
@@ -51,7 +51,7 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 			var _loc_5:Number;
 			var _loc_6:Number;
 			var _loc_7:Number;
-			var _loc_8:Vector3D = null;
+			var _loc_8:Vector3D;
 			var _loc_2:* = chunk.data;
 			var _loc_3:* = _loc_2.readUnsignedShort();
 			_vertices = new Vector.<Vertex>(_loc_3, true);
@@ -116,14 +116,14 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
 		override protected function finalize():void
 		{
-			var _loc_2:Vertex = null;
+			var _loc_2:Vertex;
 			var _loc_3:int = 0;
 			var _loc_4:int = 0;
 			var _loc_5:int = 0;
-			var _loc_6:Vertex = null;
-			var _loc_7:Vertex = null;
-			var _loc_8:Vertex = null;
-			var _loc_9:Vector3D = null;
+			var _loc_6:Vertex;
+			var _loc_7:Vertex;
+			var _loc_8:Vertex;
+			var _loc_9:Vector3D;
 			super.finalize();
 			var _loc_1:int = 0;
 			while (_loc_1 < _indices.length)

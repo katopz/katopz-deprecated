@@ -1,27 +1,24 @@
 package com.cutecoma.engine3d.api
 {
-
     public class Viewport extends Object
     {
-        private var _Width:int = 0;
-        private var _Height:int = 0;
+        private var _width:int = 0;
+        private var _height:int = 0;
 
-        public function Viewport(param1:int, param2:int)
+        public function Viewport(width:int, height:int)
         {
-            _Width = param1;
-            _Height = param2;
-            
+            _width = width;
+            _height = height;
         }
 
         public function get width() : int
         {
-            return _Width;
+            return _width;
         }
 
         public function get height() : int
         {
-            return _Height;
+            return _height;
         }
-
     }
 }

@@ -4,7 +4,7 @@ package com.cutecoma.engine3d.common.math
 
     final public class Plane extends Vector3D
     {
-        private var _Normal:Vector3D = null;
+        private var _normal:Vector3D;
         public static const POINT_INFRONT:int = 1;
         public static const POINT_COINCIDING:int = 2;
         public static const POINT_BEHIND:int = 4;
@@ -20,21 +20,21 @@ package com.cutecoma.engine3d.common.math
         public static const LINE_INFRONT:int = POINT_INFRONT << 8 | POINT_INFRONT;
         public static const LINE_BEHIND:int = POINT_BEHIND << 8 | POINT_BEHIND;
         public static const LINE_ENTERING:int = POINT_INFRONT << 8 | POINT_BEHIND;
-        public static const LINE_LEAVING:int = POINT_BEHIND << 8 | POINT_INFRONT;
+        public static const LINE_lEAVING:int = POINT_BEHIND << 8 | POINT_INFRONT;
         public static const OPPOSITE:int = 1 << 24;
         public static const COLINEAR:int = 2 << 24;
 
         public function Plane(param1:Number = 0, param2:Number = 0, param3:Number = 0, param4:Number = 0)
         {
             super(param1, param2, param3, param4);
-            _Normal = new Vector3D(param1, param2, param3);
-            _Normal.normalize();
+            _normal = new Vector3D(param1, param2, param3);
+            _normal.normalize();
             
         }
 
         public function get normal() : Vector3D
         {
-            return _Normal;
+            return _normal;
         }
 
         public function classifyPoint(param1:Vector3D) : int

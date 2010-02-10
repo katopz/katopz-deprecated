@@ -6,23 +6,22 @@ package com.cutecoma.engine3d.core.bsp
 
     public class ZSortingBspVisitor extends Object
     {
-        private var _VIndices:Vector.<int> = null;
-        private var _CIndices:int = 0;
+        private var _vIndices:Vector.<int>;
+        private var _cIndices:int = 0;
+        
         private static const INFRONT:int = Plane.POINT_INFRONT;
         private static const COINCIDING:int = Plane.POINT_COINCIDING;
         private static const BEHIND:int = Plane.POINT_BEHIND;
 
         public function ZSortingBspVisitor()
         {
-            _VIndices = new Vector.<int>;
-            
+            _vIndices = new Vector.<int>;
         }
 
         public function reset() : void
         {
-            _CIndices = 0;
-            _VIndices.length = 0;
-            
+            _cIndices = 0;
+            _vIndices.length = 0;
         }
 
         public function visit(param1:BspTree, param2:Vector3D) : Vector.<int>
@@ -42,8 +41,8 @@ package com.cutecoma.engine3d.core.bsp
                 {
                     
                     _loc_9 = this;
-                    _loc_9._CIndices = _CIndices++;
-                    _VIndices[int(_CIndices++)] = _loc_3;
+                    _loc_9._cIndices = _cIndices++;
+                    _vIndices[int(_cIndices++)] = _loc_3;
                 }
                 if (_loc_6)
                 {
@@ -58,10 +57,9 @@ package com.cutecoma.engine3d.core.bsp
                 }
                 for each (_loc_3 in param1.opposite)
                 {
-                    
                     _loc_9 = this;
-                    _loc_9._CIndices = _CIndices++;
-                    _VIndices[int(_CIndices++)] = _loc_3;
+                    _loc_9._cIndices = _cIndices++;
+                    _vIndices[int(_cIndices++)] = _loc_3;
                 }
                 if (_loc_5)
                 {
@@ -79,8 +77,7 @@ package com.cutecoma.engine3d.core.bsp
                     this.visit(_loc_6, param2);
                 }
             }
-            return _VIndices;
+            return _vIndices;
         }
-
     }
 }

@@ -1,61 +1,61 @@
 package com.cutecoma.engine3d.core.primitive
 {
     
-    
     import com.cutecoma.engine3d.common.vertex.Vertex;
     import com.cutecoma.engine3d.core.*;
 
     public class PrimitiveStream extends Object
     {
-        private var _PrimitiveType:uint = 0;
-        private var _indices:Vector.<int> = null;
-        private var _vertices:Vector.<Number> = null;
-        private var _Normals:Vector.<Number> = null;
-        private var _UvData:Vector.<Number> = null;
-        private var _ZSorter:ZSortable = null;
+        private var _primitiveType:uint = 0;
+        private var _indices:Vector.<int>;
+        private var _vertices:Vector.<Number>;
+        private var _normals:Vector.<Number>;
+        private var _uvData:Vector.<Number>;
+        private var _zSorter:ZSortable;
 
-        public function PrimitiveStream(param1:uint, param2:Vector.<Vertex>, param3:Vector.<int>, param4:Class)
+        public function PrimitiveStream(primitiveType:uint, vertices:Vector.<Vertex>, param3:Vector.<int>, bspTree:Class)
         {
-            var _loc_7:Vertex = null;
-            var _loc_5:* = param2.length;
-            var _loc_6:int = 0;
-            _PrimitiveType = param1;
+            var _vertex:Vertex;
+            var _vertices_length:int = vertices.length;
+            var _index:int = 0;
+            _primitiveType = primitiveType;
+            
             if (param3 == null)
             {
-                param3 = new Vector.<int>(_loc_5);
-                while (_loc_6 < _loc_5)
-                {
-                    
-                    param3[_loc_6] = _loc_6++;
-                }
-            }
-            _indices = param3;
-            _loc_6 = 0;
-            _ZSorter = new param4(_PrimitiveType, param2, _indices);
-            _loc_5 = param2.length;
-            _Normals = new Vector.<Number>(_loc_5 * 3);
-            _UvData = new Vector.<Number>(_loc_5 * 3);
-            _vertices = new Vector.<Number>(_loc_5 * 3);
-            for each (_loc_7 in param2)
-            {
-                
-                _vertices[_loc_6] = _loc_7.x;
-                _vertices[int(_loc_6 + 1)] = _loc_7.y;
-                _vertices[int(_loc_6 + 2)] = _loc_7.z;
-                _UvData[_loc_6] = _loc_7.u;
-                _UvData[int(_loc_6 + 1)] = _loc_7.v;
-                _UvData[int(_loc_6 + 2)] = 0;
-                _Normals[_loc_6] = _loc_7.nx;
-                _Normals[int(_loc_6 + 1)] = _loc_7.ny;
-                _Normals[int(_loc_6 + 2)] = _loc_7.nz;
-                _loc_6 = _loc_6 + 3;
+                param3 = new Vector.<int>(_vertices_length);
+                while (_index < _vertices_length)
+                    param3[_index] = _index++;
             }
             
+            _indices = param3;
+            _index = 0;
+            _zSorter = new bspTree(_primitiveType, vertices, _indices);
+            _vertices_length = vertices.length;
+            _normals = new Vector.<Number>(_vertices_length * 3);
+            _uvData = new Vector.<Number>(_vertices_length * 3);
+            _vertices = new Vector.<Number>(_vertices_length * 3);
+            
+            for each (_vertex in vertices)
+            {
+                _vertices[_index] = _vertex.x;
+                _vertices[int(_index + 1)] = _vertex.y;
+                _vertices[int(_index + 2)] = _vertex.z;
+                
+                _uvData[_index] = _vertex.u;
+                _uvData[int(_index + 1)] = _vertex.v;
+                _uvData[int(_index + 2)] = 0;
+                
+                _normals[_index] = _vertex.nx;
+                _normals[int(_index + 1)] = _vertex.ny;
+                _normals[int(_index + 2)] = _vertex.nz;
+                
+                _index = _index + 3;
+            }
         }
 
         public function get primitiveType() : int
         {
-            return _PrimitiveType;
+            return _primitiveType;
         }
 
         public function get indices() : Vector.<int>
@@ -70,18 +70,17 @@ package com.cutecoma.engine3d.core.primitive
 
         public function get normals() : Vector.<Number>
         {
-            return _Normals;
+            return _normals;
         }
 
         public function get uvData() : Vector.<Number>
         {
-            return _UvData;
+            return _uvData;
         }
 
         public function get zSorter() : ZSortable
         {
-            return _ZSorter;
+            return _zSorter;
         }
-
     }
 }

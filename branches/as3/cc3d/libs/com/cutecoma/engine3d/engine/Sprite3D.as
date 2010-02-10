@@ -5,12 +5,10 @@ package com.cutecoma.engine3d.engine
 
     public class Sprite3D extends Object3D
     {
-
-        public function Sprite3D(param1:Sprite = null)
+        public function Sprite3D(sprite:Sprite = null)
         {
-            super(Mesh.SQUARE, param1);
+            super(Mesh.SQUARE, sprite);
             
         }
-
     }
 }

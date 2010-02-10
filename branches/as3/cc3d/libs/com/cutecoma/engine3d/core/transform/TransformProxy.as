@@ -5,133 +5,133 @@ package com.cutecoma.engine3d.core.transform
 
     final public class TransformProxy extends SignalDispatcher
     {
-        private const TRANSFORMTYPE_PROJECTION:int = 1;
-        private const TRANSFORMTYPE_VIEW:int = 2;
+        private const TRANSFORMTYPE_pROJECTION:int = 1;
+        private const TRANSFORMTYPE_vIEW:int = 2;
         private const TRANSFORMTYPE_WORLD:int = 4;
         private const UPDATE_WORLD:int = 1;
-        private const UPDATE_VIEW:int = 2;
-        private const UPDATE_PROJECTION:int = 4;
-        private const UPDATE_CAMERA:int = 8;
-        private const UPDATE_OBJECT:int = 16;
+        private const UPDATE_vIEW:int = 2;
+        private const UPDATE_pROJECTION:int = 4;
+        private const UPDATE_cAMERA:int = 8;
+        private const UPDATE_oBJECT:int = 16;
         private const UPDATE_WORLDVIEW:int = 32;
-        private const UPDATE_VIEWPROJECTION:int = 64;
-        private var _ViewportWidth:uint = 0;
-        private var _ViewportHeight:uint = 0;
-        private var _MProjection:Matrix3D;
-        private var _MView:Matrix3D;
-        private var _MWorld:Matrix3D;
-        private var _MViewProjection:Matrix3D;
-        private var _MWorldView:Matrix3D;
-        private var _MObject:Matrix3D;
-        private var _UpdateFlags:int = 0;
-        private var _CameraPosition:Vector3D;
+        private const UPDATE_vIEWPROJECTION:int = 64;
+        private var _viewportWidth:uint = 0;
+        private var _viewportHeight:uint = 0;
+        private var _projectionMatrix3D:Matrix3D;
+        private var _viewMatrix3D:Matrix3D;
+        private var _worldMatrix3D:Matrix3D;
+        private var _viewMatrix3DProjection:Matrix3D;
+        private var _worldMatrix3DView:Matrix3D;
+        private var _objectMatrix3D:Matrix3D;
+        private var _updateFlags:int = 0;
+        private var _cameraPosition:Vector3D;
 
         public function TransformProxy()
         {
-            _MProjection = new Matrix3D();
-            _MView = new Matrix3D();
-            _MWorld = new Matrix3D();
-            _MViewProjection = new Matrix3D();
-            _MWorldView = new Matrix3D();
-            _MObject = new Matrix3D();
-            _CameraPosition = new Vector3D();
+            _projectionMatrix3D = new Matrix3D();
+            _viewMatrix3D = new Matrix3D();
+            _worldMatrix3D = new Matrix3D();
+            _viewMatrix3DProjection = new Matrix3D();
+            _worldMatrix3DView = new Matrix3D();
+            _objectMatrix3D = new Matrix3D();
+            _cameraPosition = new Vector3D();
         }
 
         public function get cameraPosition() : Vector3D
         {
-            var _loc_1:Matrix3D = null;
-            if (_UpdateFlags & this.UPDATE_CAMERA)
+            var _matrix3D:Matrix3D;
+            if (_updateFlags & UPDATE_cAMERA)
             {
-                _loc_1 = _MView.clone();
-                _loc_1.invert();
-                _CameraPosition = _loc_1.transformVector(new Vector3D());
-                _UpdateFlags = _UpdateFlags - this.UPDATE_CAMERA;
+                _matrix3D = _viewMatrix3D.clone();
+                _matrix3D.invert();
+                _cameraPosition = _matrix3D.transformVector(new Vector3D());
+                _updateFlags = _updateFlags - UPDATE_cAMERA;
             }
-            return _CameraPosition;
+            return _cameraPosition;
         }
 
         public function get projection() : Matrix3D
         {
-            if (_UpdateFlags & this.UPDATE_PROJECTION)
+            if (_updateFlags & UPDATE_pROJECTION)
             {
-                _MProjection.appendScale(_ViewportWidth / 2, (-_ViewportHeight) / 2, 1);
-                _UpdateFlags = _UpdateFlags - this.UPDATE_PROJECTION;
+                _projectionMatrix3D.appendScale(_viewportWidth / 2, (-_viewportHeight) / 2, 1);
+                _updateFlags = _updateFlags - UPDATE_pROJECTION;
             }
-            return _MProjection;
+            return _projectionMatrix3D;
         }
 
         public function get view() : Matrix3D
         {
-            return _MView;
+            return _viewMatrix3D;
         }
 
         public function get world() : Matrix3D
         {
-            return _MWorld;
+            return _worldMatrix3D;
         }
 
         public function get worldView() : Matrix3D
         {
-            if (_UpdateFlags & this.UPDATE_WORLDVIEW)
+            if (_updateFlags & UPDATE_WORLDVIEW)
             {
-                _MWorldView = _MWorld.clone();
-                _MWorldView.append(_MView);
-                _UpdateFlags = _UpdateFlags - this.UPDATE_WORLDVIEW;
+                _worldMatrix3DView = _worldMatrix3D.clone();
+                _worldMatrix3DView.append(_viewMatrix3D);
+                _updateFlags = _updateFlags - UPDATE_WORLDVIEW;
             }
-            return _MWorldView;
+            return _worldMatrix3DView;
         }
 
         public function get viewProjection() : Matrix3D
         {
-            if (_UpdateFlags & this.UPDATE_VIEWPROJECTION)
+            if (_updateFlags & UPDATE_vIEWPROJECTION)
             {
-                _MViewProjection = _MView.clone();
-                _MViewProjection.append(_MProjection);
-                _UpdateFlags = _UpdateFlags - this.UPDATE_VIEWPROJECTION;
+                _viewMatrix3DProjection = _viewMatrix3D.clone();
+                _viewMatrix3DProjection.append(_projectionMatrix3D);
+                _updateFlags = _updateFlags - UPDATE_vIEWPROJECTION;
             }
-            return _MViewProjection;
+            return _viewMatrix3DProjection;
         }
 
         public function get object() : Matrix3D
         {
-            if (_UpdateFlags & this.UPDATE_OBJECT)
+            if (_updateFlags & UPDATE_oBJECT)
             {
-                _MObject.rawData = _MWorld.rawData;
-                _MObject.invert();
-                _UpdateFlags = _UpdateFlags - this.UPDATE_WORLD;
+                _objectMatrix3D.rawData = _worldMatrix3D.rawData;
+                _objectMatrix3D.invert();
+                _updateFlags = _updateFlags - UPDATE_WORLD;
             }
-            return _MObject;
+            return _objectMatrix3D;
         }
 
         public function set projection(value:Matrix3D) : void
         {
-            _MProjection = value;
-            _UpdateFlags = _UpdateFlags | (this.UPDATE_PROJECTION | this.UPDATE_VIEWPROJECTION);
-            dispatchSignal(new TransformSignal(TransformSignal.PROJECTION_UPDATE, _MProjection));
+            _projectionMatrix3D = value;
+            _updateFlags = _updateFlags | (UPDATE_pROJECTION | UPDATE_vIEWPROJECTION);
+            dispatchSignal(new TransformSignal(TransformSignal.PROJECTION_UPDATE, _projectionMatrix3D));
         }
 
         public function set view(value:Matrix3D) : void
         {
-            _MView = value;
-            _UpdateFlags = _UpdateFlags | (this.UPDATE_VIEW | this.UPDATE_CAMERA | this.UPDATE_WORLDVIEW | this.UPDATE_VIEWPROJECTION);
-            dispatchSignal(new TransformSignal(TransformSignal.VIEW_UPDATE, _MView));
+            _viewMatrix3D = value;
+            _updateFlags = _updateFlags | (UPDATE_vIEW | UPDATE_cAMERA | UPDATE_WORLDVIEW | UPDATE_vIEWPROJECTION);
+            dispatchSignal(new TransformSignal(TransformSignal.VIEW_UPDATE, _viewMatrix3D));
         }
 
         public function set world(value:Matrix3D) : void
         {
-            _MWorld = value;
-            _UpdateFlags = _UpdateFlags | (this.UPDATE_WORLD | this.UPDATE_OBJECT | this.UPDATE_WORLDVIEW);
-            dispatchSignal(new TransformSignal(TransformSignal.WORLD_UPDATE, _MWorld));
+            _worldMatrix3D = value;
+            _updateFlags = _updateFlags | (UPDATE_WORLD | UPDATE_oBJECT | UPDATE_WORLDVIEW);
+            dispatchSignal(new TransformSignal(TransformSignal.WORLD_UPDATE, _worldMatrix3D));
         }
 
         public function set viewportWidth(value:Number) : void
         {
-            _ViewportWidth = value;
+            _viewportWidth = value;
         }
 
         public function set viewportHeight(value:Number) : void
         {
-            _ViewportHeight = value;
+            _viewportHeight = value;
         }
     }
 }
