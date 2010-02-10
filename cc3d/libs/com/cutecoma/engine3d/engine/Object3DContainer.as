@@ -14,64 +14,62 @@ package com.cutecoma.engine3d.engine
         private var _Scale:Vector3D;
         private var _MWorld:Matrix3D;
 
-        public function Object3DContainer(param1:Vector.<Object3D> = null, param2:Sprite = null)
+        public function Object3DContainer(param1:Vector.<Object3D> = null, sprite:Sprite = null)
         {
-            this._Position = new Vector3D();
-            this._Rotation = new Vector3D();
-            this._Scale = new Vector3D(1, 1, 1);
-            this._MWorld = new Matrix3D();
-            this._Children = param1 ? (param1) : (new Vector.<Object3D>);
-            this._Sprite = param2;
+            _Position = new Vector3D();
+            _Rotation = new Vector3D();
+            _Scale = new Vector3D(1, 1, 1);
+            _MWorld = new Matrix3D();
+            _Children = param1 ? (param1) : (new Vector.<Object3D>);
+            _Sprite = sprite;
             
         }
 
         public function get children() : Vector.<Object3D>
         {
-            return this._Children;
+            return _Children;
         }
 
         public function get sprite() : Sprite
         {
-            return this._Sprite;
+            return _Sprite;
         }
 
         public function get position() : Vector3D
         {
-            return this._Position;
+            return _Position;
         }
 
         public function get rotation() : Vector3D
         {
-            return this._Rotation;
+            return _Rotation;
         }
 
         public function get scale() : Vector3D
         {
-            return this._Scale;
+            return _Scale;
         }
 
-        public function set sprite(param1:Sprite) : void
+        public function set sprite(value:Sprite) : void
         {
-            this._Sprite = param1;
+            _Sprite = value;
             
         }
 
-        public function draw(param1:Device, param2:Sprite = null) : void
+        public function draw(device:Device, sprite:Sprite = null) : void
         {
             var _loc_3:Object3D = null;
-            if (!this._Children.length)
+            if (!_Children.length)
             {
                 return;
             }
-            this._MWorld.recompose(Vector.<Vector3D>([this._Position, this._Rotation, this._Scale]));
-            for each (_loc_3 in this._Children)
+            _MWorld.recompose(Vector.<Vector3D>([_Position, _Rotation, _Scale]));
+            for each (_loc_3 in _Children)
             {
                 
-                _loc_3.transform = this._MWorld;
-                _loc_3.draw(param1, param2 != null ? (param2) : (this._Sprite));
+                _loc_3.transform = _MWorld;
+                _loc_3.draw(device, sprite != null ? (sprite) : (_Sprite));
             }
-            
         }
-
     }
 }

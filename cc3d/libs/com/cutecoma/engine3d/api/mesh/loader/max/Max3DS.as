@@ -20,7 +20,7 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         function Max3DS(param1:String, param2:ByteArray)
         {
-            this._TextureFolder = param1;
+            _TextureFolder = param1;
             param2.endian = Endian.LITTLE_ENDIAN;
             super(new Chunk(param2));
             
@@ -28,12 +28,12 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         public function get mesh() : Mesh
         {
-            return this._Mesh;
+            return _Mesh;
         }
 
         public function get texture() : Texture
         {
-            return this._Texture;
+            return _Texture;
         }
 
         override protected function initialize() : void
@@ -52,8 +52,8 @@ package com.cutecoma.engine3d.api.mesh.loader.max
             {
                 throw new Error(this.ERROR_WRONG_FILE_FORMAT);
             }
-            this._HMaterial = new Object();
-            this._VObjects = new Vector.<MaxObject>;
+            _HMaterial = new Object();
+            _VObjects = new Vector.<MaxObject>;
             
         }
 
@@ -71,14 +71,14 @@ package com.cutecoma.engine3d.api.mesh.loader.max
             {
                 param1.skip();
             }
-            this._VObjects.push(_loc_3);
+            _VObjects.push(_loc_3);
             
         }
 
         protected function parseMaterial(param1:Chunk) : void
         {
             var _loc_2:* = new MaxMaterial(param1);
-            this._HMaterial[_loc_2.name] = _loc_2;
+            _HMaterial[_loc_2.name] = _loc_2;
             
         }
 
@@ -101,12 +101,12 @@ package com.cutecoma.engine3d.api.mesh.loader.max
             var _loc_5:* = new Array();
             var _loc_6:* = new Vector3D();
             var _loc_7:* = new Vector3D();
-            for each (_loc_8 in this._HMaterial)
+            for each (_loc_8 in _HMaterial)
             {
                 
                 _loc_4++;
             }
-            for each (_loc_9 in this._VObjects)
+            for each (_loc_9 in _VObjects)
             {
                 
                 if (!(_loc_9 is MaxMesh))
@@ -118,15 +118,15 @@ package com.cutecoma.engine3d.api.mesh.loader.max
                 _loc_12 = _loc_10.indices;
                 _loc_13 = _loc_10.materialName;
                 _loc_14 = 0;
-                if (_loc_13 && this._HMaterial[_loc_13])
+                if (_loc_13 && _HMaterial[_loc_13])
                 {
-                    _loc_16 = this._HMaterial[_loc_13] as MaxMaterial;
+                    _loc_16 = _HMaterial[_loc_13] as MaxMaterial;
                     for each (_loc_17 in _loc_11)
                     {
                         
                         _loc_17.u = (_loc_14 + _loc_17.u) / _loc_4;
                     }
-                    _loc_5[_loc_14] = this._TextureFolder + "/" + _loc_16.textureFilename;
+                    _loc_5[_loc_14] = _TextureFolder + "/" + _loc_16.textureFilename;
                 }
                 _loc_15 = 0;
                 while (_loc_15 < _loc_12.length)
@@ -167,12 +167,12 @@ package com.cutecoma.engine3d.api.mesh.loader.max
                 }
                 _loc_3 = _loc_1.length;
             }
-            if (this._TextureFolder)
+            if (_TextureFolder)
             {
-                this._Texture = new TexturePool(_loc_5);
+                _Texture = new TexturePool(_loc_5);
             }
-            this._Mesh = new Mesh(_loc_1, Vector.<Vector.<int>>([_loc_2]));
-            this._Mesh.boundingSphere = new BoundingSphere(_loc_6, _loc_7);
+            _Mesh = new Mesh(_loc_1, Vector.<Vector.<int>>([_loc_2]));
+            _Mesh.boundingSphere = new BoundingSphere(_loc_6, _loc_7);
             
         }
 

@@ -23,18 +23,18 @@ package graphics
 
         public function Thumbnail(param1:String)
         {
-            this._Back = new Sprite3D();
+            _Back = new Sprite3D();
             super(null, new Sprite());
-            this._Back.scale = new Vector3D(1.5, 1.5, 1);
-            this._Back.position.y = 0.5;
-            this._Back.material = new Material(Color.WHITE, Color.WHITE);
-            this._Back.rotation.x = Math.PI;
-            this._Back.texture = TEXTURE_BACK;
-            this._Front = new Sprite3D();
-            this._Front.scale = this._Back.scale;
-            this._Front.position = this._Back.position;
-            this._Front.texture = Texture.fromFile(param1);
-            children.push(this._Back, this._Front);
+            _Back.scale = new Vector3D(1.5, 1.5, 1);
+            _Back.position.y = 0.5;
+            _Back.material = new Material(Color.WHITE, Color.WHITE);
+            _Back.rotation.x = Math.PI;
+            _Back.texture = TEXTURE_BACK;
+            _Front = new Sprite3D();
+            _Front.scale = _Back.scale;
+            _Front.position = _Back.position;
+            _Front.texture = Texture.fromFile(param1);
+            children.push(_Back, _Front);
             sprite.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverHandler);
             sprite.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutHandler);
             

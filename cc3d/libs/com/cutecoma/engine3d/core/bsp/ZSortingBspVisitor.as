@@ -14,14 +14,14 @@ package com.cutecoma.engine3d.core.bsp
 
         public function ZSortingBspVisitor()
         {
-            this._VIndices = new Vector.<int>;
+            _VIndices = new Vector.<int>;
             
         }
 
         public function reset() : void
         {
-            this._CIndices = 0;
-            this._VIndices.length = 0;
+            _CIndices = 0;
+            _VIndices.length = 0;
             
         }
 
@@ -42,8 +42,8 @@ package com.cutecoma.engine3d.core.bsp
                 {
                     
                     _loc_9 = this;
-                    _loc_9._CIndices = this._CIndices++;
-                    this._VIndices[int(this._CIndices++)] = _loc_3;
+                    _loc_9._CIndices = _CIndices++;
+                    _VIndices[int(_CIndices++)] = _loc_3;
                 }
                 if (_loc_6)
                 {
@@ -60,8 +60,8 @@ package com.cutecoma.engine3d.core.bsp
                 {
                     
                     _loc_9 = this;
-                    _loc_9._CIndices = this._CIndices++;
-                    this._VIndices[int(this._CIndices++)] = _loc_3;
+                    _loc_9._CIndices = _CIndices++;
+                    _VIndices[int(_CIndices++)] = _loc_3;
                 }
                 if (_loc_5)
                 {
@@ -79,7 +79,7 @@ package com.cutecoma.engine3d.core.bsp
                     this.visit(_loc_6, param2);
                 }
             }
-            return this._VIndices;
+            return _VIndices;
         }
 
     }

@@ -21,158 +21,145 @@ package com.cutecoma.engine3d.engine
         protected var _Transform:Matrix3D = null;
         private var _Visible:Boolean = true;
 
-        public function Object3D(param1:BaseMesh = null, param2:Sprite = null)
+        public function Object3D(param1:BaseMesh = null, sprite:Sprite = null)
         {
-            this._Material = new Material();
-            this._Position = new Vector3D(0, 0, 0);
-            this._Rotation = new Vector3D(0, 0, 0);
-            this._Scale = new Vector3D(1, 1, 1);
-            this._MWorld = new Matrix3D();
-            this._Mesh = param1;
-            this._Sprite = param2;
-            
+            _Material = new Material();
+            _Position = new Vector3D(0, 0, 0);
+            _Rotation = new Vector3D(0, 0, 0);
+            _Scale = new Vector3D(1, 1, 1);
+            _MWorld = new Matrix3D();
+            _Mesh = param1;
+            _Sprite = sprite;
         }
 
         public function get position() : Vector3D
         {
-            return this._Position;
+            return _Position;
         }
 
         public function get rotation() : Vector3D
         {
-            return this._Rotation;
+            return _Rotation;
         }
 
         public function get scale() : Vector3D
         {
-            return this._Scale;
+            return _Scale;
         }
 
         public function get material() : Material
         {
-            return this._Material;
+            return _Material;
         }
 
         public function get sprite() : Sprite
         {
-            return this._Sprite;
+            return _Sprite;
         }
 
         public function get mesh() : BaseMesh
         {
-            return this._Mesh;
+            return _Mesh;
         }
 
         public function get texture() : Texture
         {
-            return this._Texture;
+            return _Texture;
         }
 
         public function get visible() : Boolean
         {
-            return this._Visible;
+            return _Visible;
         }
 
-        public function set position(param1:Vector3D) : void
+        public function set position(value:Vector3D) : void
         {
-            this._Position = param1;
-            
+            _Position = value;
         }
 
-        public function set rotation(param1:Vector3D) : void
+        public function set rotation(value:Vector3D) : void
         {
-            this._Rotation = param1;
-            
+            _Rotation = value;
         }
 
-        public function set scale(param1:Vector3D) : void
+        public function set scale(value:Vector3D) : void
         {
-            this._Scale = param1;
-            
+            _Scale = value;
         }
 
-        public function set material(param1:Material) : void
+        public function set material(value:Material) : void
         {
-            this._Material = param1;
-            
+            _Material = value;
         }
 
-        public function set mesh(param1:BaseMesh) : void
+        public function set mesh(value:BaseMesh) : void
         {
-            this._Mesh = param1;
-            
+            _Mesh = value;
         }
 
-        public function set texture(param1:Texture) : void
+        public function set texture(value:Texture) : void
         {
-            this._Texture = param1;
-            
+            _Texture = value;
         }
 
-        public function set visible(param1:Boolean) : void
+        public function set visible(value:Boolean) : void
         {
-            this._Visible = param1;
-            
+            _Visible = value;
         }
 
-        public function set sprite(param1:Sprite) : void
+        public function set sprite(value:Sprite) : void
         {
-            this._Sprite = param1;
-            
+            _Sprite = value;
         }
 
-        public function set transform(param1:Matrix3D) : void
+        public function set transform(value:Matrix3D) : void
         {
-            this._Transform = param1;
-            
+            _Transform = value;
         }
 
-        public function set doubleSided(param1:Boolean) : void
+        public function set doubleSided(value:Boolean) : void
         {
-            this.mesh.subsets[1] = param1 ? (this.mesh.subsets[0].concat().reverse()) : (null);
-            
+            this.mesh.subsets[1] = value ? (this.mesh.subsets[0].concat().reverse()) : (null);
         }
 
-        protected function updateWorldMatrix(param1:Device) : void
+        protected function updateWorldMatrix(device:Device) : void
         {
-            this._MWorld.recompose(Vector.<Vector3D>([this._Position, this._Rotation, this._Scale]));
-            
+            _MWorld.recompose(Vector.<Vector3D>([_Position, _Rotation, _Scale]));
         }
 
-        public function draw(param1:Device, param2:Sprite = null) : void
+        public function draw(device:Device, sprite:Sprite = null) : void
         {
             var _loc_3:Matrix3D = null;
-            if (!this._Visible || this._Mesh == null)
+            if (!_Visible || _Mesh == null)
             {
                 return;
             }
-            this.updateWorldMatrix(param1);
-            param1.material = this._Material;
-            param1.texture = this._Texture;
-            if (this._Transform)
+            this.updateWorldMatrix(device);
+            device.material = _Material;
+            device.texture = _Texture;
+            if (_Transform)
             {
-                _loc_3 = this._MWorld.clone();
-                _loc_3.append(this._Transform);
+                _loc_3 = _MWorld.clone();
+                _loc_3.append(_Transform);
             }
             else
             {
-                _loc_3 = this._MWorld;
+                _loc_3 = _MWorld;
             }
-            param1.transform.world = _loc_3;
-            this._Mesh.draw(param1, param2 ? (param2) : (this._Sprite));
+            device.transform.world = _loc_3;
+            _Mesh.draw(device, sprite ? (sprite) : (_Sprite));
             
         }
 
         public function clone() : IClonable
         {
-            var _loc_1:* = new Object3D(this._Mesh, this._Sprite);
-            _loc_1.position = this._Position.clone();
-            _loc_1.rotation = this._Rotation.clone();
-            _loc_1.scale = this._Scale.clone();
-            _loc_1.texture = this._Texture;
-            _loc_1.material = this._Material.clone() as Material;
+            var _loc_1:* = new Object3D(_Mesh, _Sprite);
+            _loc_1.position = _Position.clone();
+            _loc_1.rotation = _Rotation.clone();
+            _loc_1.scale = _Scale.clone();
+            _loc_1.texture = _Texture;
+            _loc_1.material = _Material.clone() as Material;
             return _loc_1;
         }
-
     }
 }

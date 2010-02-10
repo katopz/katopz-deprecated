@@ -34,46 +34,46 @@ package com.cutecoma.engine3d.core.bsp
 
         public function BspTree(param1:uint, param2:Vector.<Vertex>, param3:Vector.<int>)
         {
-            this._Colinear = new Vector.<int>;
-            this._Opposite = new Vector.<int>;
-            this._Visitor = new ZSortingBspVisitor();
+            _Colinear = new Vector.<int>;
+            _Opposite = new Vector.<int>;
+            _Visitor = new ZSortingBspVisitor();
             this.build(param1, param2, param3);
             
         }
 
         public function get partition() : Plane
         {
-            return this._Partition;
+            return _Partition;
         }
 
         public function get colinear() : Vector.<int>
         {
-            return this._Colinear;
+            return _Colinear;
         }
 
         public function get opposite() : Vector.<int>
         {
-            return this._Opposite;
+            return _Opposite;
         }
 
         public function get front() : BspTree
         {
-            return this._Front;
+            return _Front;
         }
 
         public function get back() : BspTree
         {
-            return this._Back;
+            return _Back;
         }
 
         public function get parent() : BspTree
         {
-            return this._Parent;
+            return _Parent;
         }
 
         public function get boudingSphere() : BoundingSphere
         {
-            return this._BoundingSphere;
+            return _BoundingSphere;
         }
 
         private function build(param1:uint, param2:Vector.<Vertex>, param3:Vector.<int>) : void
@@ -112,23 +112,23 @@ package com.cutecoma.engine3d.core.bsp
                 _loc_15 = param2[_loc_12];
                 _loc_16 = param2[_loc_13];
                 _loc_4 = _loc_4 + 3;
-                if (!this._Partition)
+                if (!_Partition)
                 {
-                    this._Partition = Plane.fromPolygon(_loc_14, _loc_15, _loc_16);
-                    this._Colinear.push(_loc_11, _loc_12, _loc_13);
+                    _Partition = Plane.fromPolygon(_loc_14, _loc_15, _loc_16);
+                    _Colinear.push(_loc_11, _loc_12, _loc_13);
                     continue;
                 }
-                _loc_17 = this._Partition.classifyPolygon(_loc_14, _loc_15, _loc_16);
+                _loc_17 = _Partition.classifyPolygon(_loc_14, _loc_15, _loc_16);
                 _loc_18 = _loc_17 & 16777215;
                 if (_loc_18 == POLYGON_COINCIDING)
                 {
                     if (_loc_17 & COLINEAR)
                     {
-                        this._Colinear.push(_loc_11, _loc_12, _loc_13);
+                        _Colinear.push(_loc_11, _loc_12, _loc_13);
                     }
                     else
                     {
-                        this._Opposite.push(_loc_11, _loc_12, _loc_13);
+                        _Opposite.push(_loc_11, _loc_12, _loc_13);
                     }
                     continue;
                 }
@@ -147,19 +147,19 @@ package com.cutecoma.engine3d.core.bsp
             }
             if (_loc_6.length)
             {
-                this._Front = new BspTree(param1, param2, _loc_6);
+                _Front = new BspTree(param1, param2, _loc_6);
             }
             if (_loc_7.length)
             {
-                this._Back = new BspTree(param1, param2, _loc_7);
+                _Back = new BspTree(param1, param2, _loc_7);
             }
             
         }
 
         public function zSort(param1:Vector3D, param2:Frustum) : Vector.<int>
         {
-            this._Visitor.reset();
-            return this._Visitor.visit(this, param1);
+            _Visitor.reset();
+            return _Visitor.visit(this, param1);
         }
 
         public function choosePartition(param1:Vector.<Vertex>, param2:Vector.<int>) : Plane

@@ -24,80 +24,80 @@ package com.cutecoma.engine3d.engine.camera
             this.COS = Math.cos;
             this.SIN = Math.sin;
             this.TAN = Math.tan;
-            this._Position = new Vector3D();
-            this._Direction = new Vector3D();
-            this._Rotation = new Vector3D();
-            this._ViewMatrix = new Matrix3D();
-            this._MustUpdate = true;
+            _Position = new Vector3D();
+            _Direction = new Vector3D();
+            _Rotation = new Vector3D();
+            _ViewMatrix = new Matrix3D();
+            _MustUpdate = true;
             
         }
 
         public function get position() : Vector3D
         {
-            this._MustUpdate = true;
-            return this._Position;
+            _MustUpdate = true;
+            return _Position;
         }
 
         public function get direction() : Vector3D
         {
-            this._MustUpdate = true;
-            return this._Direction;
+            _MustUpdate = true;
+            return _Direction;
         }
 
         public function get viewMatrix() : Matrix3D
         {
-            if (this._MustUpdate)
+            if (_MustUpdate)
             {
                 this.updateMatrix();
             }
-            return this._ViewMatrix;
+            return _ViewMatrix;
         }
 
         public function get yaw() : Number
         {
-            return this._Rotation.y;
+            return _Rotation.y;
         }
 
         public function get pitch() : Number
         {
-            return this._Rotation.x;
+            return _Rotation.x;
         }
 
         public function get distance() : Number
         {
-            return this._Distance;
+            return _Distance;
         }
 
         public function get rotation() : Vector3D
         {
-            return this._Rotation;
+            return _Rotation;
         }
 
-        public function set viewMatrix(param1:Matrix3D) : void
+        public function set viewMatrix(value:Matrix3D) : void
         {
-            this._MustUpdate = false;
-            this._ViewMatrix = param1;
+            _MustUpdate = false;
+            _ViewMatrix = value;
             
         }
 
-        public function set position(param1:Vector3D) : void
+        public function set position(value:Vector3D) : void
         {
-            this._Position = param1;
-            this._MustUpdate = true;
+            _Position = value;
+            _MustUpdate = true;
             
         }
 
-        public function set direction(param1:Vector3D) : void
+        public function set direction(value:Vector3D) : void
         {
-            this._Direction = param1;
-            this._MustUpdate = true;
+            _Direction = value;
+            _MustUpdate = true;
             
         }
 
-        public function set yaw(param1:Number) : void
+        public function set yaw(value:Number) : void
         {
-            this._Rotation.y = param1 % (Math.PI * 2);
-            this._MustUpdate = true;
+            _Rotation.y = value % (Math.PI * 2);
+            _MustUpdate = true;
             
         }
 
@@ -111,28 +111,28 @@ package com.cutecoma.engine3d.engine.camera
             {
                 param1 = (-Math.PI) / 2 + 0.0001;
             }
-            this._Rotation.x = param1;
-            this._MustUpdate = true;
+            _Rotation.x = param1;
+            _MustUpdate = true;
             
         }
 
-        public function set distance(param1:Number) : void
+        public function set distance(value:Number) : void
         {
-            this._Distance = param1;
-            this._MustUpdate = true;
+            _Distance = value;
+            _MustUpdate = true;
             
         }
 
-        public function set rotation(param1:Vector3D) : void
+        public function set rotation(value:Vector3D) : void
         {
-            this._Rotation = param1;
-            this._MustUpdate = true;
+            _Rotation = value;
+            _MustUpdate = true;
             
         }
 
         protected function updateMatrix() : void
         {
-            this._MustUpdate = false;
+            _MustUpdate = false;
             
         }
 

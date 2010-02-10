@@ -20,27 +20,24 @@ package graphics
 
         public function SkyBox()
         {
-            this._Sun = new Sprite3D();
+            _Sun = new Sprite3D();
             super(Mesh.CUBE.clone() as BaseMesh);
             mesh.vertexBuffer.reverse();
             scale.scaleBy(90);
             texture = Texture.fromAsset(ASSET_TEXTURE_SKY);
-            this._Sun.texture = Texture.fromAsset(ASSET_TEXTURE_SUN);
-            this._Sun.position.x = scale.x / 2;
-            this._Sun.rotation.z = Math.PI / 2;
-            this._Sun.rotation.y = Math.PI / 2;
-            this._Sun.scale.scaleBy(10);
-            
+            _Sun.texture = Texture.fromAsset(ASSET_TEXTURE_SUN);
+            _Sun.position.x = scale.x / 2;
+            _Sun.rotation.z = Math.PI / 2;
+            _Sun.rotation.y = Math.PI / 2;
+            _Sun.scale.scaleBy(10);
         }
 
-        override public function draw(param1:Device, param2:Sprite = null) : void
+        override public function draw(device:Device, sprite:Sprite = null) : void
         {
-            param1.renderStates.clipping = Clipping.ZNEAR;
-            super.draw(param1, param2);
-            this._Sun.draw(param1, param2);
-            param1.renderStates.clipping = Clipping.IGNORE;
-            
+            device.renderStates.clipping = Clipping.ZNEAR;
+            super.draw(device, sprite);
+            _Sun.draw(device, sprite);
+            device.renderStates.clipping = Clipping.IGNORE;
         }
-
     }
 }

@@ -8,19 +8,19 @@ package com.cutecoma.engine3d.api
 
         public function Viewport(param1:int, param2:int)
         {
-            this._Width = param1;
-            this._Height = param2;
+            _Width = param1;
+            _Height = param2;
             
         }
 
         public function get width() : int
         {
-            return this._Width;
+            return _Width;
         }
 
         public function get height() : int
         {
-            return this._Height;
+            return _Height;
         }
 
     }

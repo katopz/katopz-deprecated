@@ -9,7 +9,7 @@ package com.cutecoma.engine3d.engine
 
         public function IDrawable3D();
 
-        function draw(param1:Device, param2:Sprite = null) : void;
+        function draw(device:Device, sprite:Sprite = null) : void;
 
         function get position() : Vector3D;
 

@@ -12,13 +12,13 @@ package com.cutecoma.engine3d.core.signal
         public function TransformSignal(param1:String, param2:Matrix3D)
         {
             super(param1);
-            this._Transform = param2;
+            _Transform = param2;
             
         }
 
         public function get transform() : Matrix3D
         {
-            return this._Transform;
+            return _Transform;
         }
 
     }

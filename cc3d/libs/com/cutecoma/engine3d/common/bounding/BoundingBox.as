@@ -9,19 +9,19 @@ package com.cutecoma.engine3d.common.bounding
 
         public function BoundingBox(param1:Vector3D, param2:Vector3D)
         {
-            this._Min = param1;
-            this._Max = param2;
+            _Min = param1;
+            _Max = param2;
             
         }
 
         public function get min() : Vector3D
         {
-            return this._Min;
+            return _Min;
         }
 
         public function get max() : Vector3D
         {
-            return this._Max;
+            return _Max;
         }
 
     }

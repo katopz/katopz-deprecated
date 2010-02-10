@@ -8,8 +8,8 @@ package com.cutecoma.engine3d.core.primitive
     public class PrimitiveStream extends Object
     {
         private var _PrimitiveType:uint = 0;
-        private var _Indices:Vector.<int> = null;
-        private var _Vertices:Vector.<Number> = null;
+        private var _indices:Vector.<int> = null;
+        private var _vertices:Vector.<Number> = null;
         private var _Normals:Vector.<Number> = null;
         private var _UvData:Vector.<Number> = null;
         private var _ZSorter:ZSortable = null;
@@ -19,7 +19,7 @@ package com.cutecoma.engine3d.core.primitive
             var _loc_7:Vertex = null;
             var _loc_5:* = param2.length;
             var _loc_6:int = 0;
-            this._PrimitiveType = param1;
+            _PrimitiveType = param1;
             if (param3 == null)
             {
                 param3 = new Vector.<int>(_loc_5);
@@ -29,25 +29,25 @@ package com.cutecoma.engine3d.core.primitive
                     param3[_loc_6] = _loc_6++;
                 }
             }
-            this._Indices = param3;
+            _indices = param3;
             _loc_6 = 0;
-            this._ZSorter = new param4(this._PrimitiveType, param2, this._Indices);
+            _ZSorter = new param4(_PrimitiveType, param2, _indices);
             _loc_5 = param2.length;
-            this._Normals = new Vector.<Number>(_loc_5 * 3);
-            this._UvData = new Vector.<Number>(_loc_5 * 3);
-            this._Vertices = new Vector.<Number>(_loc_5 * 3);
+            _Normals = new Vector.<Number>(_loc_5 * 3);
+            _UvData = new Vector.<Number>(_loc_5 * 3);
+            _vertices = new Vector.<Number>(_loc_5 * 3);
             for each (_loc_7 in param2)
             {
                 
-                this._Vertices[_loc_6] = _loc_7.x;
-                this._Vertices[int(_loc_6 + 1)] = _loc_7.y;
-                this._Vertices[int(_loc_6 + 2)] = _loc_7.z;
-                this._UvData[_loc_6] = _loc_7.u;
-                this._UvData[int(_loc_6 + 1)] = _loc_7.v;
-                this._UvData[int(_loc_6 + 2)] = 0;
-                this._Normals[_loc_6] = _loc_7.nx;
-                this._Normals[int(_loc_6 + 1)] = _loc_7.ny;
-                this._Normals[int(_loc_6 + 2)] = _loc_7.nz;
+                _vertices[_loc_6] = _loc_7.x;
+                _vertices[int(_loc_6 + 1)] = _loc_7.y;
+                _vertices[int(_loc_6 + 2)] = _loc_7.z;
+                _UvData[_loc_6] = _loc_7.u;
+                _UvData[int(_loc_6 + 1)] = _loc_7.v;
+                _UvData[int(_loc_6 + 2)] = 0;
+                _Normals[_loc_6] = _loc_7.nx;
+                _Normals[int(_loc_6 + 1)] = _loc_7.ny;
+                _Normals[int(_loc_6 + 2)] = _loc_7.nz;
                 _loc_6 = _loc_6 + 3;
             }
             
@@ -55,32 +55,32 @@ package com.cutecoma.engine3d.core.primitive
 
         public function get primitiveType() : int
         {
-            return this._PrimitiveType;
+            return _PrimitiveType;
         }
 
         public function get indices() : Vector.<int>
         {
-            return this._Indices;
+            return _indices;
         }
 
         public function get vertices() : Vector.<Number>
         {
-            return this._Vertices;
+            return _vertices;
         }
 
         public function get normals() : Vector.<Number>
         {
-            return this._Normals;
+            return _Normals;
         }
 
         public function get uvData() : Vector.<Number>
         {
-            return this._UvData;
+            return _UvData;
         }
 
         public function get zSorter() : ZSortable
         {
-            return this._ZSorter;
+            return _ZSorter;
         }
 
     }

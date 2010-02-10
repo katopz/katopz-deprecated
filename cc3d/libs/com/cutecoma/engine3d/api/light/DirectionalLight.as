@@ -10,31 +10,31 @@ package com.cutecoma.engine3d.api.light
 
         public function DirectionalLight(param1:Vector3D = null)
         {
-            this._Direction = param1;
+            _Direction = param1;
             
         }
 
         public function get direction() : Vector3D
         {
-            this._MustUpdate = true;
-            return this._Direction;
+            _MustUpdate = true;
+            return _Direction;
         }
 
         public function get matrix() : Matrix3D
         {
-            if (this._MustUpdate)
+            if (_MustUpdate)
             {
-                this._MustUpdate = false;
-                this._Direction.normalize();
-                this._Matrix = new Matrix3D(Vector.<Number>([-this._Direction.x, 0, 0, 0, -this._Direction.y, 0, 0, 0, -this._Direction.z, 0, 0, 0, 0, 0, 0, 0]));
+                _MustUpdate = false;
+                _Direction.normalize();
+                _Matrix = new Matrix3D(Vector.<Number>([-_Direction.x, 0, 0, 0, -_Direction.y, 0, 0, 0, -_Direction.z, 0, 0, 0, 0, 0, 0, 0]));
             }
-            return this._Matrix;
+            return _Matrix;
         }
 
-        public function set direction(param1:Vector3D) : void
+        public function set direction(value:Vector3D) : void
         {
-            this._Direction = param1;
-            this._MustUpdate = true;
+            _Direction = value;
+            _MustUpdate = true;
             
         }
 
