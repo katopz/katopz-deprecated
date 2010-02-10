@@ -16,58 +16,52 @@ package com.cutecoma.engine3d.core.render
 
         public function get fillMode() : int
         {
-            return this._FillMode;
+            return _FillMode;
         }
 
         public function get textureSmoothing() : Boolean
         {
-            return this._TextureSmoothing;
+            return _TextureSmoothing;
         }
 
         public function get clipping() : int
         {
-            return this._Clipping;
+            return _Clipping;
         }
 
         public function get zSorting() : int
         {
-            return this._ZSorting;
+            return _ZSorting;
         }
 
         public function get triangleCulling() : String
         {
-            return this._TriangleCulling;
+            return _TriangleCulling;
         }
 
-        public function set fillMode(param1:int) : void
+        public function set fillMode(value:int) : void
         {
-            this._FillMode = param1;
-            
+            _FillMode = value;
         }
 
-        public function set textureSmoothing(param1:Boolean) : void
+        public function set textureSmoothing(value:Boolean) : void
         {
-            this._TextureSmoothing = param1;
-            
+            _TextureSmoothing = value;
         }
 
-        public function set clipping(param1:int) : void
+        public function set clipping(value:int) : void
         {
-            this._Clipping = param1;
-            
+            _Clipping = value;
         }
 
-        public function set zSorting(param1:int) : void
+        public function set zSorting(value:int) : void
         {
-            this._ZSorting = param1;
-            
+            _ZSorting = value;
         }
 
-        public function set triangleCulling(param1:String) : void
+        public function set triangleCulling(value:String) : void
         {
-            this._TriangleCulling = param1;
-            
+            _TriangleCulling = value;
         }
-
     }
 }

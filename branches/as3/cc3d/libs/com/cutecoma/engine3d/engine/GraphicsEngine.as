@@ -29,54 +29,54 @@ package com.cutecoma.engine3d.engine
 
         public function GraphicsEngine(param1:Viewport)
         {
-            this._Static = new Vector.<IDrawable3D>;
-            this._Dynamic = new Vector.<IDrawable3D>;
-            this._Camera = new AbstractCamera();
-            this._CameraSpeed = new Vector3D();
-            this._Device = new Device(this, param1);
-            this._IsRunning = true;
+            _Static = new Vector.<IDrawable3D>;
+            _Dynamic = new Vector.<IDrawable3D>;
+            _Camera = new AbstractCamera();
+            _CameraSpeed = new Vector3D();
+            _Device = new Device(this, param1);
+            _IsRunning = true;
             
         }
 
         protected function get device() : Device
         {
-            return this._Device;
+            return _Device;
         }
 
         public function get elapsedTime() : int
         {
-            return this._ElapsedTime;
+            return _ElapsedTime;
         }
 
         public function get camera() : AbstractCamera
         {
-            return this._Camera;
+            return _Camera;
         }
 
         public function get cameraSpeed() : Vector3D
         {
-            return this._CameraSpeed;
+            return _CameraSpeed;
         }
 
         public function get framerate() : int
         {
-            return this._Framerate;
+            return _Framerate;
         }
 
         public function get lights() : Vector.<DirectionalLight>
         {
-            return this._Device.lights;
+            return _Device.lights;
         }
 
-        public function set camera(param1:AbstractCamera) : void
+        public function set camera(value:AbstractCamera) : void
         {
-            this._Camera = param1;
+            _Camera = value;
             
         }
 
-        public function set viewport(param1:Viewport) : void
+        public function set viewport(value:Viewport) : void
         {
-            this._Device.viewport = param1;
+            _Device.viewport = value;
             
         }
 
@@ -84,35 +84,35 @@ package com.cutecoma.engine3d.engine
         {
             var _loc_1:int = 0;
             var _loc_2:IDrawable3D = null;
-            if (!this._IsRunning || !this._Static.length && !this._Dynamic.length)
+            if (!_IsRunning || !_Static.length && !_Dynamic.length)
             {
                 return;
             }
             this.updateCamera();
-            this._Device.transform.view = this._Camera.viewMatrix;
-            this._Device.clear();
-            this._Device.beginScene();
-            this._Device.renderStates.clipping = Clipping.ZNEAR;
-            for each (_loc_2 in this._Static)
+            _Device.transform.view = _Camera.viewMatrix;
+            _Device.clear();
+            _Device.beginScene();
+            _Device.renderStates.clipping = Clipping.ZNEAR;
+            for each (_loc_2 in _Static)
             {
                 
-                _loc_2.draw(this._Device);
+                _loc_2.draw(_Device);
             }
-            this._Device.renderStates.clipping = Clipping.IGNORE;
-            this._Dynamic = this._Dynamic.sort(this.zSort);
-            for each (_loc_2 in this._Dynamic)
+            _Device.renderStates.clipping = Clipping.IGNORE;
+            _Dynamic = _Dynamic.sort(this.zSort);
+            for each (_loc_2 in _Dynamic)
             {
                 
-                _loc_2.draw(this._Device);
+                _loc_2.draw(_Device);
             }
-            this._Device.endScene();
-            this._Device.present();
-            this._Dynamic.length = 0;
-            this._Static.length = 0;
+            _Device.endScene();
+            _Device.present();
+            _Dynamic.length = 0;
+            _Static.length = 0;
             _loc_1 = getTimer();
-            this._ElapsedTime = _loc_1 - this._Time;
-            this._Time = _loc_1;
-            this._Framerate = 1000 / this._ElapsedTime;
+            _ElapsedTime = _loc_1 - _Time;
+            _Time = _loc_1;
+            _Framerate = 1000 / _ElapsedTime;
             
         }
 
@@ -120,34 +120,34 @@ package com.cutecoma.engine3d.engine
         {
             if (param2 & DRAW_DYNAMIC)
             {
-                this._Dynamic.push(param1);
+                _Dynamic.push(param1);
             }
             else
             {
-                this._Static.push(param1);
+                _Static.push(param1);
             }
             
         }
 
         protected function cameraUpdateHandler(param1:TransformSignal) : void
         {
-            this._Device.transform.view = param1.transform;
+            _Device.transform.view = param1.transform;
             
         }
 
         protected function updateCamera() : void
         {
-            if (this._CameraSpeed.x > -CAMERASPEED_LIMIT && this._CameraSpeed.x < CAMERASPEED_LIMIT)
+            if (_CameraSpeed.x > -CAMERASPEED_LIMIT && _CameraSpeed.x < CAMERASPEED_LIMIT)
             {
-                this._CameraSpeed.x = 0;
+                _CameraSpeed.x = 0;
             }
-            if (this._CameraSpeed.y > -CAMERASPEED_LIMIT && this._CameraSpeed.y < CAMERASPEED_LIMIT)
+            if (_CameraSpeed.y > -CAMERASPEED_LIMIT && _CameraSpeed.y < CAMERASPEED_LIMIT)
             {
-                this._CameraSpeed.y = 0;
+                _CameraSpeed.y = 0;
             }
-            if (this._CameraSpeed.z > -CAMERASPEED_LIMIT && this._CameraSpeed.z < CAMERASPEED_LIMIT)
+            if (_CameraSpeed.z > -CAMERASPEED_LIMIT && _CameraSpeed.z < CAMERASPEED_LIMIT)
             {
-                this._CameraSpeed.z = 0;
+                _CameraSpeed.z = 0;
             }
             
         }

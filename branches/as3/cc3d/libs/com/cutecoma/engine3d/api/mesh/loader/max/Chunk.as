@@ -23,37 +23,37 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         function Chunk(param1:ByteArray)
         {
-            this._Data = param1;
-            this._EndOffset = this._Data.position;
-            this._Identifier = this._Data.readUnsignedShort();
-            this._Length = this._Data.readUnsignedInt();
-            this._EndOffset = this._EndOffset + this._Length;
+            _Data = param1;
+            _EndOffset = _Data.position;
+            _Identifier = _Data.readUnsignedShort();
+            _Length = _Data.readUnsignedInt();
+            _EndOffset = _EndOffset + _Length;
             
         }
 
         public function get identifier() : int
         {
-            return this._Identifier;
+            return _Identifier;
         }
 
         public function get length() : int
         {
-            return this._Length;
+            return _Length;
         }
 
         public function get data() : ByteArray
         {
-            return this._Data;
+            return _Data;
         }
 
         public function get bytesAvailable() : int
         {
-            return this._EndOffset > this._Data.position ? (this._EndOffset - this._Data.position) : (0);
+            return _EndOffset > _Data.position ? (_EndOffset - _Data.position) : (0);
         }
 
         public function skip() : void
         {
-            this._Data.position = this._Data.position + (this._Length - 6);
+            _Data.position = _Data.position + (_Length - 6);
             
         }
 
@@ -65,8 +65,8 @@ package com.cutecoma.engine3d.api.mesh.loader.max
             {
                 
                 _loc_1 = _loc_1 + String.fromCharCode(_loc_2);
-                var _loc_3:* = this._Data.readByte();
-                _loc_2 = this._Data.readByte();
+                var _loc_3:* = _Data.readByte();
+                _loc_2 = _Data.readByte();
             }while (_loc_3 != 0)
             return _loc_1;
         }

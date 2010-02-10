@@ -19,13 +19,13 @@ package graphics
 			texture = Texture.fromAsset(ASSET_TEXTURE_EARTH);
 		}
 
-		override public function draw(param1:Device, param2:Sprite = null):void
+		override public function draw(device:Device, sprite:Sprite = null):void
 		{
-			param1.renderStates.clipping = Clipping.NONE;
-			param1.renderStates.textureSmoothing = true;
-			super.draw(param1, param2);
-			param1.renderStates.textureSmoothing = false;
-			param1.renderStates.clipping = Clipping.IGNORE;
+			device.renderStates.clipping = Clipping.NONE;
+			device.renderStates.textureSmoothing = true;
+			super.draw(device, sprite);
+			device.renderStates.textureSmoothing = false;
+			device.renderStates.clipping = Clipping.IGNORE;
 		}
 	}
 }

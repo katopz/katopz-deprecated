@@ -19,7 +19,7 @@ package com.cutecoma.engine3d.api
 	public class Device extends Object
 	{
 		private var MATRIX_FACTORY:Matrix3DFactory;
-		private const USE_PSTREAM_CACHE:Boolean = !true;
+		private const USE_PSTREAM_CACHE:Boolean = true;//DEV//
 		private var _Handler:DisplayObjectContainer = null;
 		private var _Pipeline:Pipeline = null;
 		private var _PStreamCache:Dictionary = null;
@@ -30,83 +30,83 @@ package com.cutecoma.engine3d.api
 		public function Device(param1:DisplayObjectContainer, param2:Viewport)
 		{
 			this.MATRIX_FACTORY = Matrix3DFactory.instance;
-			this._Handler = param1;
-			this._Viewport = param2;
+			_Handler = param1;
+			_Viewport = param2;
 			this.initialize();
 			
 		}
 
-		public function set material(param1:Material):void
+		public function set material(value:Material):void
 		{
-			this._Pipeline.ambient = param1.ambient.toInt();
-			this._Pipeline.diffuse = param1.diffuse.toInt();
+			_Pipeline.ambient = value.ambient.toInt();
+			_Pipeline.diffuse = value.diffuse.toInt();
 			
 		}
 
-		public function set texture(param1:Texture):void
+		public function set texture(value:Texture):void
 		{
-			if (param1 == null)
+			if (value == null)
 			{
-				this._Pipeline.bitmap = null;
+				_Pipeline.bitmap = null;
 			}
 			else
 			{
-				this._Pipeline.bitmap = param1.bitmap;
-				this._Pipeline.textureRepeat = param1.repeat;
+				_Pipeline.bitmap = value.bitmap;
+				_Pipeline.textureRepeat = value.repeat;
 			}
 			
 		}
 
-		public function set viewport(param1:Viewport):void
+		public function set viewport(value:Viewport):void
 		{
-			this._Viewport = param1;
+			_Viewport = value;
 			this.reset();
 			
 		}
 
 		public function get transform():TransformProxy
 		{
-			return this._Pipeline.transform;
+			return _Pipeline.transform;
 		}
 
 		public function get renderStates():RenderStateProxy
 		{
-			return this._Pipeline.renderStates;
+			return _Pipeline.renderStates;
 		}
 
 		public function get lights():Vector.<DirectionalLight>
 		{
-			return this._Pipeline.lights;
+			return _Pipeline.lights;
 		}
 
 		public function get nbPrimitives():int
 		{
-			return this._NbPrimitives;
+			return _NbPrimitives;
 		}
 
 		public function get viewport():Viewport
 		{
-			return this._Viewport;
+			return _Viewport;
 		}
 
 		private function initialize():void
 		{
-			this._Pipeline = new Pipeline(this._Handler);
-			this._Pipeline.lights.push(new DirectionalLight(new Vector3D(0, 1, 0)));
-			this._PStreamCache = new Dictionary(true);
+			_Pipeline = new Pipeline(_Handler);
+			_Pipeline.lights.push(new DirectionalLight(new Vector3D(0, 1, 0)));
+			_PStreamCache = new Dictionary(true);
 			this.transform.view = this.MATRIX_FACTORY.lookAtLH(new Vector3D(), new Vector3D(0, 0, 1), Vector3D.Y_AXIS);
 			this.transform.world = new Matrix3D();
-			this._Initialized = true;
+			_Initialized = true;
 			this.reset();
 			
 		}
 
 		private function reset():void
 		{
-			this._Handler.scrollRect = new Rectangle((-this._Viewport.width) / 2, (-this._Viewport.height) / 2, this._Viewport.width, this._Viewport.height);
-			this.transform.viewportWidth = this._Viewport.width;
-			this.transform.viewportHeight = this._Viewport.height;
-			this.transform.projection = this.MATRIX_FACTORY.perspectiveFovLH(Math.PI / 4, this._Viewport.width / this._Viewport.height, 0.01, 100);
+			_Handler.scrollRect = new Rectangle((-_Viewport.width) / 2, (-_Viewport.height) / 2, _Viewport.width, _Viewport.height);
+			this.transform.viewportWidth = _Viewport.width;
+			this.transform.viewportHeight = _Viewport.height;
+			this.transform.projection = this.MATRIX_FACTORY.perspectiveFovLH(Math.PI / 4, _Viewport.width / _Viewport.height, 0.01, 100);
 			
 		}
 
@@ -122,14 +122,14 @@ package com.cutecoma.engine3d.api
 
 		public function present():void
 		{
-			this._Pipeline.present();
+			_Pipeline.present();
 			
 		}
 
 		public function clear():void
 		{
-			this._Pipeline.clear();
-			this._NbPrimitives = 0;
+			_Pipeline.clear();
+			_NbPrimitives = 0;
 			
 		}
 
@@ -137,19 +137,19 @@ package com.cutecoma.engine3d.api
 		{
 			var _loc_6:PrimitiveStream = null;
 			var _loc_7:* = param3 ? (param3) : (param2);
-			if (!this._Initialized)
+			if (!_Initialized)
 			{
 				return;
 			}
-			_loc_6 = this._PStreamCache[_loc_7];
+			_loc_6 = _PStreamCache[_loc_7];
 			if (!this.USE_PSTREAM_CACHE || _loc_6 == null)
 			{
 				param4 = BspTree;
 				_loc_6 = new PrimitiveStream(param1, param2, param3, param4);
-				this._PStreamCache[_loc_7] = _loc_6;
+				_PStreamCache[_loc_7] = _loc_6;
 			}
-			this._NbPrimitives = this._NbPrimitives + _loc_6.indices.length / 3;
-			this._Pipeline.accept(_loc_6, param5);
+			_NbPrimitives = _NbPrimitives + _loc_6.indices.length / 3;
+			_Pipeline.accept(_loc_6, param5);
 			
 		}
 	}

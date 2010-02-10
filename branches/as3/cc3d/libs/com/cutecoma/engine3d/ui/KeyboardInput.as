@@ -12,21 +12,21 @@ package com.cutecoma.engine3d.ui
 
         public function KeyboardInput(param1:Sprite, param2:GraphicsEngine)
         {
-            this._Gfx = param2;
-            this._Layer = param1;
+            _Gfx = param2;
+            _Layer = param1;
             this.enable();
             
         }
 
         public function enable() : void
         {
-            this._Layer.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
+            _Layer.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
             
         }
 
         public function disable() : void
         {
-            this._Layer.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
+            _Layer.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
             
         }
 
@@ -37,27 +37,27 @@ package com.cutecoma.engine3d.ui
             var _loc_4:* = String.fromCharCode(event.charCode);
             if (_loc_3 == Keyboard.UP)
             {
-                this._Gfx.cameraSpeed.x = this._Gfx.cameraSpeed.x - 0.001;
+                _Gfx.cameraSpeed.x = _Gfx.cameraSpeed.x - 0.001;
             }
             if (_loc_3 == Keyboard.DOWN)
             {
-                this._Gfx.cameraSpeed.x = this._Gfx.cameraSpeed.x + 0.001;
+                _Gfx.cameraSpeed.x = _Gfx.cameraSpeed.x + 0.001;
             }
             else if (_loc_3 == Keyboard.RIGHT)
             {
-                this._Gfx.cameraSpeed.y = this._Gfx.cameraSpeed.y + 0.001;
+                _Gfx.cameraSpeed.y = _Gfx.cameraSpeed.y + 0.001;
             }
             else if (_loc_3 == Keyboard.LEFT)
             {
-                this._Gfx.cameraSpeed.y = this._Gfx.cameraSpeed.y - 0.001;
+                _Gfx.cameraSpeed.y = _Gfx.cameraSpeed.y - 0.001;
             }
             else if (_loc_3 == Keyboard.PAGE_UP)
             {
-                this._Gfx.cameraSpeed.z = this._Gfx.cameraSpeed.z - 0.001;
+                _Gfx.cameraSpeed.z = _Gfx.cameraSpeed.z - 0.001;
             }
             else if (_loc_3 == Keyboard.PAGE_DOWN)
             {
-                this._Gfx.cameraSpeed.z = this._Gfx.cameraSpeed.z + 0.001;
+                _Gfx.cameraSpeed.z = _Gfx.cameraSpeed.z + 0.001;
             }
             
         }

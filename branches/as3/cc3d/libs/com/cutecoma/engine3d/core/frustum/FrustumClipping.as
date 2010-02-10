@@ -24,8 +24,8 @@ package com.cutecoma.engine3d.core.frustum
 
         public function FrustumClipping(param1:Frustum)
         {
-            this._NearPlane = new Plane();
-            this._Frustum = param1;
+            _NearPlane = new Plane();
+            _Frustum = param1;
             
         }
 
@@ -42,7 +42,7 @@ package com.cutecoma.engine3d.core.frustum
             var _loc_20:Number = NaN;
             var _loc_21:int = 0;
             var _loc_22:int = 0;
-            var _loc_5:* = this._Frustum.nearPlane;
+            var _loc_5:* = _Frustum.nearPlane;
             var _loc_6:* = param2.length;
             var _loc_7:int = 0;
             var _loc_8:* = new Vector.<int>;

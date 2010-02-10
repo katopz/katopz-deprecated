@@ -11,23 +11,23 @@ package com.cutecoma.engine3d.core.frustum
 
         public function Frustum(param1:TransformProxy)
         {
-            this._PNear = new Plane();
+            _PNear = new Plane();
             param1.addSignalListener(TransformSignal.PROJECTION_UPDATE, this.projectionUpdateHandler);
             
         }
 
         public function get nearPlane() : Plane
         {
-            return this._PNear;
+            return _PNear;
         }
 
         private function projectionUpdateHandler(param1:TransformSignal) : void
         {
             var _loc_2:* = param1.transform.rawData;
-            this._PNear.x = _loc_2[2];
-            this._PNear.y = _loc_2[6];
-            this._PNear.z = _loc_2[10];
-            this._PNear.w = _loc_2[14];
+            _PNear.x = _loc_2[2];
+            _PNear.y = _loc_2[6];
+            _PNear.z = _loc_2[10];
+            _PNear.w = _loc_2[14];
             
         }
 

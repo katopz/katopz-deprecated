@@ -19,9 +19,9 @@ package map
 		{
 			var _loc_3:XML = null;
 			var _loc_2:* = param1..marker;
-			this._Markers = new Vector.<Marker>;
+			_Markers = new Vector.<Marker>;
 			for each (_loc_3 in _loc_2)
-				this._Markers.push(new Marker(_loc_3.@photo, _loc_3.@latitude, _loc_3.@longitude));
+				_Markers.push(new Marker(_loc_3.@photo, _loc_3.@latitude, _loc_3.@longitude));
 		}
 
 		public function loadFile(param1:String):void
@@ -34,7 +34,7 @@ package map
 
 		public function get markers():Vector.<Marker>
 		{
-			return this._Markers;
+			return _Markers;
 		}
 
 		private function loadCompleteHandler(event:Event):void

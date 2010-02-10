@@ -16,8 +16,6 @@ package
 	
 	import gs.*;
 	
-	import input.*;
-	
 	import map.*;
 
 	[SWF(width=720, height=400, backgroundColor=0x666666, frameRate=30)]

@@ -8,13 +8,13 @@ package com.cutecoma.engine3d.core.signal
 
         public function Signal(param1:String)
         {
-            this._Id = param1;
+            _Id = param1;
             
         }
 
         public function get id() : String
         {
-            return this._Id;
+            return _Id;
         }
 
     }

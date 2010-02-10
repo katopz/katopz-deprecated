@@ -13,34 +13,34 @@ package com.cutecoma.engine3d.ui
 
         public function MouseInput(param1:Sprite, param2:GraphicsEngine)
         {
-            this._Position = new Point();
-            this._Layer = param1;
-            this._GFX = param2;
+            _Position = new Point();
+            _Layer = param1;
+            _GFX = param2;
             this.enable();
             
         }
 
         public function enable() : void
         {
-            this._Layer.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-            this._Layer.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-            this._Layer.addEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+            _Layer.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+            _Layer.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+            _Layer.addEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
             
         }
 
         protected function mouseWheelHandler(event:MouseEvent) : void
         {
-            this._GFX.cameraSpeed.z = this._GFX.cameraSpeed.z - 1e-005 * this._GFX.elapsedTime * event.delta;
+            _GFX.cameraSpeed.z = _GFX.cameraSpeed.z - 1e-005 * _GFX.elapsedTime * event.delta;
             
         }
 
         protected function mouseDownHandler(event:MouseEvent) : void
         {
-            this._Position.x = event.stageX;
-            this._Position.y = event.stageY;
-            this._GFX.cameraSpeed.x = 0;
-            this._GFX.cameraSpeed.y = 0;
-            this._GFX.cameraSpeed.z = 0;
+            _Position.x = event.stageX;
+            _Position.y = event.stageY;
+            _GFX.cameraSpeed.x = 0;
+            _GFX.cameraSpeed.y = 0;
+            _GFX.cameraSpeed.z = 0;
             
         }
 
@@ -50,21 +50,21 @@ package com.cutecoma.engine3d.ui
             var _loc_3:int = 0;
             if (event.buttonDown)
             {
-                _loc_2 = event.stageX - this._Position.x;
-                _loc_3 = event.stageY - this._Position.y;
-                this._GFX.cameraSpeed.x = this._GFX.cameraSpeed.x - 5e-005 * _loc_3;
-                this._GFX.cameraSpeed.y = this._GFX.cameraSpeed.y - 5e-005 * _loc_2;
-                this._Position.x = event.stageX;
-                this._Position.y = event.stageY;
+                _loc_2 = event.stageX - _Position.x;
+                _loc_3 = event.stageY - _Position.y;
+                _GFX.cameraSpeed.x = _GFX.cameraSpeed.x - 5e-005 * _loc_3;
+                _GFX.cameraSpeed.y = _GFX.cameraSpeed.y - 5e-005 * _loc_2;
+                _Position.x = event.stageX;
+                _Position.y = event.stageY;
             }
             
         }
 
         public function disable() : void
         {
-            this._Layer.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-            this._Layer.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-            this._Layer.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+            _Layer.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+            _Layer.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+            _Layer.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
             
         }
 

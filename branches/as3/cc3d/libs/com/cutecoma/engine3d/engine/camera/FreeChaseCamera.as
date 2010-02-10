@@ -10,15 +10,15 @@ package com.cutecoma.engine3d.engine.camera
             
         }
 
-        override public function set distance(param1:Number) : void
+        override public function set distance(value:Number) : void
         {
-            if (param1 < 0)
+            if (value < 0)
             {
                 super.distance = 0;
             }
             else
             {
-                super.distance = param1;
+                super.distance = value;
             }
             
         }

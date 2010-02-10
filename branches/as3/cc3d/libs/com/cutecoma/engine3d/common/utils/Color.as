@@ -24,60 +24,60 @@ package com.cutecoma.engine3d.common.utils
 
         public function Color(param1:int)
         {
-            this._A = param1 >> 24 & 255;
-            this._R = param1 >> 16 & 255;
-            this._G = param1 >> 8 & 255;
-            this._B = param1 & 255;
+            _A = param1 >> 24 & 255;
+            _R = param1 >> 16 & 255;
+            _G = param1 >> 8 & 255;
+            _B = param1 & 255;
             
         }
 
         public function get a() : int
         {
-            return this._A;
+            return _A;
         }
 
         public function get r() : int
         {
-            return this._R;
+            return _R;
         }
 
         public function get g() : int
         {
-            return this._G;
+            return _G;
         }
 
         public function get b() : int
         {
-            return this._B;
+            return _B;
         }
 
-        public function set a(param1:int) : void
+        public function set a(value:int) : void
         {
-            this._A = param1 & 255;
+            _A = value & 255;
             
         }
 
-        public function set r(param1:int) : void
+        public function set r(value:int) : void
         {
-            this._R = param1 & 255;
+            _R = value & 255;
             
         }
 
-        public function set g(param1:int) : void
+        public function set g(value:int) : void
         {
-            this._G = param1 & 255;
+            _G = value & 255;
             
         }
 
-        public function set b(param1:int) : void
+        public function set b(value:int) : void
         {
-            this._B = param1 & 255;
+            _B = value & 255;
             
         }
 
         public function toInt() : int
         {
-            return (this._A << 24) + (this._R << 16) + (this._G << 8) + this._B;
+            return (_A << 24) + (_R << 16) + (_G << 8) + _B;
         }
 
         public static function fromArgb(param1:int, param2:int, param3:int, param4:int) : Color

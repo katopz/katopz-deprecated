@@ -27,14 +27,14 @@ package com.cutecoma.engine3d.common.math
         public function Plane(param1:Number = 0, param2:Number = 0, param3:Number = 0, param4:Number = 0)
         {
             super(param1, param2, param3, param4);
-            this._Normal = new Vector3D(param1, param2, param3);
-            this._Normal.normalize();
+            _Normal = new Vector3D(param1, param2, param3);
+            _Normal.normalize();
             
         }
 
         public function get normal() : Vector3D
         {
-            return this._Normal;
+            return _Normal;
         }
 
         public function classifyPoint(param1:Vector3D) : int

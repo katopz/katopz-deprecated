@@ -14,12 +14,12 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         public function get name() : String
         {
-            return this._Name;
+            return _Name;
         }
 
         public function get textureFilename() : String
         {
-            return this._TextureFilename;
+            return _TextureFilename;
         }
 
         override protected function initialize() : void
@@ -34,13 +34,13 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         protected function parseName(param1:Chunk) : void
         {
-            this._Name = param1.readString();
+            _Name = param1.readString();
             
         }
 
         protected function parseTextureFilename(param1:Chunk) : void
         {
-            this._TextureFilename = param1.readString();
+            _TextureFilename = param1.readString();
             
         }
 

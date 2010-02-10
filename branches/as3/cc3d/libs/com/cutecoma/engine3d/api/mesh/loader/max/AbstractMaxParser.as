@@ -15,7 +15,7 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         protected function initialize() : void
         {
-            this._AFunctions = new Array();
+            _AFunctions = new Array();
             
         }
 
@@ -26,7 +26,7 @@ package com.cutecoma.engine3d.api.mesh.loader.max
 
         final protected function parseChunk(param1:Chunk) : void
         {
-            var _loc_2:* = this._AFunctions[param1.identifier];
+            var _loc_2:* = _AFunctions[param1.identifier];
             if (_loc_2 == null)
             {
                 param1.skip();
@@ -45,7 +45,7 @@ package com.cutecoma.engine3d.api.mesh.loader.max
             {
                 
                 _loc_2 = new Chunk(param1.data);
-                _loc_3 = this._AFunctions[_loc_2.identifier];
+                _loc_3 = _AFunctions[_loc_2.identifier];
                 if (_loc_3 == null)
                 {
                     _loc_2.skip();
