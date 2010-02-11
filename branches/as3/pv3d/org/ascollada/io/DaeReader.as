@@ -32,6 +32,7 @@ package org.ascollada.io {
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.TimerEvent;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
@@ -73,9 +74,16 @@ package org.ascollada.io {
 			if( _animTimer.running )
 				_animTimer.stop();
 			
-			var loader:Loader = new Loader();
-			addListenersToLoader(loader);
-			loader.load( new URLRequest(filename) );
+			if(filename.indexOf(".dae")==-1)
+			{
+				var loader:Loader = new Loader();
+				addListenersToLoader(loader.contentLoaderInfo);
+				loader.load( new URLRequest(filename) );
+			}else{
+				var urlLoader:URLLoader = new URLLoader();
+				addListenersToLoader(urlLoader);
+				urlLoader.load( new URLRequest(filename) );
+			}
 		}
 		
 		/**
@@ -136,20 +144,25 @@ package org.ascollada.io {
 		 */
 		private function completeHandler( event:Event ):void
 		{
-			var loader:Loader = event.target.loader as Loader;
-			
-			Logger.log( "complete!" );
-			removeListenersFromLoader(loader);
-			
-			//var _Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition("model_Model") as Class;
-			
-			var _className:String = URLUtil.getFileName(event.target.url)+"_Model";
-			var _Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(_className) as Class;
-			
-			var model:ByteArray = new _Class();
-		    loadDocument(model);
-
-			//loadDocument( loader.data );
+			if(event.target is Loader)
+			{
+				// SWF
+				var loader:Loader = event.target.loader as Loader;
+				
+				Logger.log( "complete!" );
+				removeListenersFromLoader(loader);
+				
+				//var _Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition("model_Model") as Class;
+				
+				var _className:String = URLUtil.getFileName(event.target.url)+"_Model";
+				var _Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(_className) as Class;
+				
+				var model:ByteArray = new _Class();
+			    loadDocument(model);
+			 }else{
+			 	// DAE
+				loadDocument( event.target.data );
+			}
 		}
 		
 		private function progressHandler( event:ProgressEvent ):void
@@ -209,18 +222,18 @@ package org.ascollada.io {
 		
 		// added by harveysimon
 		
-		private function addListenersToLoader(loader:Loader):void
+		private function addListenersToLoader(loader:*):void
 		{
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, completeHandler );
-			loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, progressHandler );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, handleIOError );
+			loader.addEventListener( Event.COMPLETE, completeHandler );
+			loader.addEventListener( ProgressEvent.PROGRESS, progressHandler );
+			loader.addEventListener( IOErrorEvent.IO_ERROR, handleIOError );
 		}
 		
 		private function removeListenersFromLoader(loader:*):void
 		{
-			loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, completeHandler );
-			loader.contentLoaderInfo.removeEventListener( ProgressEvent.PROGRESS, progressHandler );
-			loader.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, handleIOError );
+			loader.removeEventListener( Event.COMPLETE, completeHandler );
+			loader.removeEventListener( ProgressEvent.PROGRESS, progressHandler );
+			loader.removeEventListener( IOErrorEvent.IO_ERROR, handleIOError );
 		}
 		
 		private var _numAnimations:uint; 
