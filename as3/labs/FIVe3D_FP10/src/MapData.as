@@ -5,6 +5,14 @@ package
 
 	public class MapData
 	{
+		public static var MAP_NAME:Object = 
+		{
+			_n:"Thailand : North",
+			_ne:"Thailand : North East",
+			_m:"Thailand : Middle",
+			_s:"Thailand : South"
+		}
+		
 		public static var _n_rect:Rectangle = new Rectangle(0, 0, 300, 370);
 		public static var _ne_rect:Rectangle = new Rectangle(255, 119, 320, 300);
 		public static var _m_rect:Rectangle = new Rectangle(65, 310, 330, 340);
