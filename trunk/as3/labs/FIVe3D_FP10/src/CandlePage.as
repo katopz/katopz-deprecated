@@ -239,8 +239,56 @@ package
 						//getData("serverside/getCandles2.php", true);
 					}});
 				}
+				
+				_total = event.target.data.total || "";
 			});
 		} 
+		
+		private var _dateHTMLText:String;
+		private var _locationHTMLText:String;
+		private var _totalHTMLText:String;
+		
+		private var _total:String = "";
+		
+		private function updateScreen():void
+		{
+			// init
+			if(!_dateHTMLText)
+			{
+				_dateHTMLText = _mapIconClip["dateText"].htmlText;
+				_locationHTMLText = _mapIconClip["locationText"].htmlText;
+				_totalHTMLText = _mapIconClip["totalText"].htmlText;
+				
+				_mapIconClip["dateText"].autoSize = "right";
+				_mapIconClip["locationText"].autoSize = "right";
+				_mapIconClip["totalText"].autoSize = "right";
+			}
+			
+			var _htmlText:String = _dateHTMLText;
+			var _date:Date = new Date();
+			_htmlText = _htmlText.split("$YEAR.$MONTH.$DATE $HOUR.$MIN.$SEC.$MSEC").join(
+			_date.getFullYear()+"."+
+			(_date.getMonth()+1)+"."+
+			_date.getDate()+" "+
+			_date.getHours()+"."+
+			_date.getMinutes()+"."+
+			_date.getSeconds()+"."+
+			StringUtil.addZero(_date.getMilliseconds(),3)
+			);
+			
+			// draw
+			_mapIconClip["dateText"].htmlText = _htmlText;
+			
+			if(_mapPage && _mapPage.alpha>0)
+			{
+				var s:*=Map.currentMapID;
+				s = MapData.MAP_NAME[Map.currentMapID]
+				_mapIconClip["locationText"].htmlText = _locationHTMLText.split("$PART").join(MapData.MAP_NAME[Map.currentMapID]);
+			}else{
+				_mapIconClip["locationText"].htmlText = _locationHTMLText.split("$PART").join("Thailand");
+			}
+			_mapIconClip["totalText"].htmlText =  _totalHTMLText.split("$TOTAL").join(_total);
+		}
 		
 		private var candleDict:Dictionary = new Dictionary(true);
 		
@@ -1194,6 +1242,8 @@ _sprite2D.scaled = false;
 		
 		override protected function onPostRender():void
 		{
+			updateScreen();
+			
 			if (_transformDirty || _status=="idle" || _status=="explore" || _status=="thai")
 			{
 				if (USE_EFFECT)
