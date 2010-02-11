@@ -47,7 +47,7 @@
 		private var game:Game;
 		private var connector:SDConnector;
 
-		private var _isEdit:Boolean = false;
+		private var _isEditArea:Boolean = false;
 		private var worldEditor:WorldEditor;
 
 		private const VERSION:String = "PlayGround 2.3";
@@ -60,7 +60,7 @@
 		
 		private var configs:Dictionary = new Dictionary();
 
-		private var areaDialog:SDDialog;
+		private var dialog:SDDialog;
 		
 		private var areaPanel:AreaPanel;
 		
@@ -89,38 +89,33 @@
 		protected function onStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			LoaderUtil.loadXML("config.xml", onXML);
+			LoaderUtil.loadXML("config.xml", onGetConfig);
 		}
 
-		private function onXML(event:Event):void
+		private function onGetConfig(event:Event):void
 		{
 			if (event.type != "complete")
 				return;
 
 			var _xml:XML = event.target.data;
 			PixelLiving.areaPath = String(_xml.world.area.@path);
-
-			// TODO load from external and put to group
-			//configs = new Dictionary();
-
-			//configs[87] = config87;
-			//configs[88] = config88;
-			//}
-
-			//protected function onStage(event:Event=null):void
-			//{
-			// ___________________________________________________________ Area
-
-			//TODO : ask from external call, add user name 
-			areaDialog = new SDDialog(
-				<question><![CDATA[Welcome! Please select...]]>
-					<answer src="as:onUserSelect('play')"><![CDATA[I want to play.]]></answer>
-					<answer src="as:onUserSelect('edit')"><![CDATA[I want to edit.]]></answer>
-				</question>, this);
-
-			this.addChild(areaDialog);
+			
+			setupMenu();
 		}
-
+		
+		private function setupMenu():void
+		{
+			dialog = new SDDialog(
+			<question><![CDATA[Welcome! Please select...]]>
+				<answer src="as:onUserSelect('play-area')"><![CDATA[I want to go to Area.]]></answer>
+				<answer src="as:onUserSelect('edit-area')"><![CDATA[I want to edit Area.]]></answer>
+				<answer src="as:onUserSelect('play-character')"><![CDATA[I want to select character.]]></answer>
+				<answer src="as:onUserSelect('edit-character')"><![CDATA[I want to edit character.]]></answer>
+			</question>, this);
+			
+			this.addChild(dialog);
+		}
+		
 		public function getConfigByAreaID(id:String):AreaData
 		{
 			return configs[id];
@@ -128,17 +123,28 @@
 
 		public function onUserSelect(action:String):void
 		{
-			areaDialog.visible = false;
-			if(action=="edit")
-				_isEdit = true;
-			LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
+			dialog.destroy();
+			
+			switch(action)
+			{
+				case "edit-area":
+					_isEditArea = true;
+				case "play-area":
+					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
+				break;
+				case "edit-character":
+				case "play-character":
+					
+				break;
+				break;
+			}
 		}
 		
 		private function onAreaPanelLoad(event:Event):void
 		{
 			if(event.type!="complete")return;
 			areaPanel = event.target.content as AreaPanel;
-			areaPanel.isEdit = _isEdit;
+			areaPanel.isEdit = _isEditArea;
 			SDApplication.system.addChild(areaPanel);
 			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 		}
@@ -148,7 +154,7 @@
 			_selectAreaID = event.areaID;
 			
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
-			areaDialog.visible = false;
+			dialog.destroy();
 			gotoAreaID(event.areaID);
 		}
 
@@ -190,7 +196,7 @@
 			// ___________________________________________________________ Player
 
 			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(),
-				["man1", "man2", "woman1", "woman2"][0 * int(4 * Math.random())], "stand", 3));
+				"woman1", "stand", 3));
 
 			// read map
 			game.player.map = area.map;
@@ -200,7 +206,7 @@
 
 			// ___________________________________________________________ System Layer
 
-			if(_isEdit)
+			if(_isEditArea)
 			{
 				worldEditor = new WorldEditor(engine3D, area);
 				system.addChild(worldEditor);
@@ -222,7 +228,7 @@
 
 		private function onGroundClick(event:SDMouseEvent):void
 		{
-			if(!_isEdit)
+			if(!_isEditArea)
 				game.player.walkTo(Position.parse(event.data.position));
 		}
 
@@ -292,7 +298,7 @@
 				
 				SDApplication.getInstance()["gotoArea"](areaData);
 			}
-			else if (event.type == IOErrorEvent.IO_ERROR && _isEdit)
+			else if (event.type == IOErrorEvent.IO_ERROR && _isEditArea)
 			{
 				// new area
 				areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
