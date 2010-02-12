@@ -106,11 +106,10 @@
 		private function setupMenu():void
 		{
 			dialog = new SDDialog(
-			<question><![CDATA[Welcome! Please select...]]>
-				<answer src="as:onUserSelect('play-area')"><![CDATA[I want to go to Area.]]></answer>
-				<answer src="as:onUserSelect('edit-area')"><![CDATA[I want to edit Area.]]></answer>
-				<answer src="as:onUserSelect('play-character')"><![CDATA[I want to select character.]]></answer>
-				<answer src="as:onUserSelect('edit-character')"><![CDATA[I want to edit character.]]></answer>
+			<question><![CDATA[Welcome! What you want to do?]]>
+				<answer src="as:onUserSelect('edit-character')"><![CDATA[Customize Character.]]></answer>
+				<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter World]]></answer>
+				<answer src="as:onUserSelect('edit-area')"><![CDATA[Customize World]]></answer>
 			</question>, this);
 			
 			this.addChild(dialog);
@@ -129,13 +128,11 @@
 			{
 				case "edit-area":
 					_isEditArea = true;
-				case "play-area":
+				case "enter-area":
 					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
 				break;
 				case "edit-character":
-				case "play-character":
 					
-				break;
 				break;
 			}
 		}
