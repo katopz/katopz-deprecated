@@ -25,10 +25,9 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
-<application path="TestComponents.as"/>
+<application path="model.as"/>
 <application path="AreaPanel.as"/>
 <application path="main.as"/>
-<application path="model.as"/>
 </applications>
 <modules/>
 <buildCSSFiles/>
