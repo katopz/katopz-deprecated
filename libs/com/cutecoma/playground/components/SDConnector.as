@@ -182,7 +182,7 @@ package com.cutecoma.playground.components
 		// Client
 		public function onClientUpdate(event:SDEvent):void
 		{
-			trace( " ^ onClientUpdate : "+ event.data);
+			trace( " ^ onClientUpdate : "+ event.data, event.data.act);
 			if(connector)
 			{
 				var domain:String = String(stage.loaderInfo.applicationDomain.parentDomain);

@@ -1,10 +1,11 @@
 package com.cutecoma.game.core
 {
-	import com.sleepydesign.application.core.SDApplication;
-	import com.sleepydesign.core.SDContainer;
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.player.Player;
+	import com.sleepydesign.application.core.SDApplication;
+	import com.sleepydesign.core.SDContainer;
 	import com.sleepydesign.ui.InputController;
+	import com.sleepydesign.utils.ObjectUtil;
 	
 	import flash.events.Event;
 	
@@ -128,8 +129,8 @@ package com.cutecoma.game.core
 		{
 			// void null
 			if(!data)return;
-			
-			trace("\n * Game.update");
+			trace("\n * Game.update", data.act);
+			ObjectUtil.print(data);
 			
 			/*
 			// parse player data
@@ -143,7 +144,6 @@ package com.cutecoma.game.core
 				addPlayer(player);
 			}
 			*/
-			
 			var playerData:PlayerData = new PlayerData();
 			playerData.parse(data);
 			
@@ -157,6 +157,9 @@ package com.cutecoma.game.core
 					// new guy! not in list
 					_player = new Player(playerData);
 					addPlayer(_player);
+					
+					//plug to current map
+					_player.map = player.map;
 				}
 				
 				switch(playerData.act)
@@ -164,6 +167,7 @@ package com.cutecoma.game.core
 					// someone enter
 					case "enter":
 						// do something?
+						trace("enter");
 					break;
 					// he's gone!
 					case "exit":
