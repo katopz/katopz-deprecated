@@ -27,6 +27,7 @@ package org.ascollada.io {
 	import com.sleepydesign.utils.URLUtil;
 	
 	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -144,7 +145,7 @@ package org.ascollada.io {
 		 */
 		private function completeHandler( event:Event ):void
 		{
-			if(event.target is Loader)
+			if(event.target is LoaderInfo)
 			{
 				// SWF
 				var loader:Loader = event.target.loader as Loader;
