@@ -79,6 +79,7 @@
 		public function set dirty(value:Boolean):void
 		{
 			if(!value)return;
+			if(data.act==PlayerEvent.STAND)return;
 			
 			// update position
 			data.pos = Position.parse(dolly).toObject();
@@ -213,6 +214,7 @@
 		public var map:Map;
 		public function walkTo(position:Position):void
 		{
+			trace(" ! walkTo : "+position);
 			if(map)
 			{
 				// Mr. map please find path for "me"
@@ -236,6 +238,8 @@
 		public function walk(positions:Array):void
 		{
 			this.positions = positions;
+			
+			trace(" ! positions : "+positions);
 			
 			if (positions.length>1)
 			{
@@ -332,7 +336,7 @@
 			dolly.copyPosition(instance);
 			act(PlayerEvent.STAND);
 			
-			dirty = true;
+			//dirty = true;
 			
 			// drop command point?
 			var commandData:* = map.getCommand(dolly.position);

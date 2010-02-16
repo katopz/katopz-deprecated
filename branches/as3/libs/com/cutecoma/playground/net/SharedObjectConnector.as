@@ -4,6 +4,7 @@ package com.cutecoma.playground.net
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.events.SDEvent;
 	import com.sleepydesign.utils.DebugUtil;
+	import com.sleepydesign.utils.ObjectUtil;
 	
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
@@ -129,6 +130,7 @@ package com.cutecoma.playground.net
 			if (data != undefined)
 			{
 				DebugUtil.trace(" ! ServerUpdate		: " + data);
+				ObjectUtil.print(data);
 				dispatchEvent(new SDEvent(SDEvent.UPDATE, data));
 			}
 			else
