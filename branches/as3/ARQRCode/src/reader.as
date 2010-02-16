@@ -250,9 +250,9 @@ package
 				SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
 				SystemUtil.addContext(this, "Toggle Debug", function ():void{toggleDebug()});
 				
-				SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openImage(onImageReady)});
+				SystemUtil.addContext(this, "Open QRCode", function ():void{FileUtil.openAsset(onImageReady)});
 				SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
-				SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openImage(onTextureReady)});
+				SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openAsset(onTextureReady)});
 				
 				
 				SystemUtil.addContext(this, "Open Model (Compress)", function ():void
