@@ -14,7 +14,7 @@ package
 		public static var AR_RESET_NUM:int = 1;
 		
 		public static var USE_CAMERA:Boolean = true;
-		public static var USE_CONTEXT:Boolean = true;
+		public static var USE_CONTEXT:Boolean = false;
 		public static var USE_DEDUG:Boolean = false;
 		
 		public static var USE_LOCK_Z_AXIS:Boolean = true;
