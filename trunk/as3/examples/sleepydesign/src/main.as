@@ -22,6 +22,17 @@ package
 
 		public function main()
 		{
+			addEventListener(Event.ADDED_TO_STAGE, onStage);
+		}
+
+		private function onStage(event:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			init();
+		}
+
+		private function init():void
+		{
 			// get external config
 			LoaderUtil.loadXML("site.xml", onXMLLoad);
 		}
