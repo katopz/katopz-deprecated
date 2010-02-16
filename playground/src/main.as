@@ -108,9 +108,9 @@
 		{
 			dialog = new SDDialog(
 				<question><![CDATA[Welcome! What you want to do?]]>
-					<!--<answer src="as:onUserSelect('edit-character')"><![CDATA[Customize Character.]]></answer>-->
-					<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter World]]></answer>
-					<answer src="as:onUserSelect('edit-area')"><![CDATA[Customize World]]>
+					<!--<answer src="as:onUserSelect('edit-character')"><![CDATA[Select Character.]]></answer>-->
+					<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter Area]]></answer>
+					<answer src="as:onUserSelect('edit-area')"><![CDATA[Edit Area]]>
 				</answer></question>, this);
 
 			this.addChild(dialog);
