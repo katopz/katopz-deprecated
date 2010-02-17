@@ -21,7 +21,12 @@
 			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d</location>
 		</link>
 		<link>
-			<name>[source path] libs</name>
+			<name>[source path] lite-libs</name>
+			<type>2</type>
+			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/branches/lite/libs</location>
+		</link>
+		<link>
+			<name>[source path] as3-libs</name>
 			<type>2</type>
 			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
 		</link>
