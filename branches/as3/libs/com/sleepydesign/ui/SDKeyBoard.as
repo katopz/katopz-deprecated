@@ -198,6 +198,8 @@ package com.sleepydesign.ui
 						target.removeEventListener(Event.ENTER_FRAME, onKey);
 				break;
 			}
+			
+			dispatchEvent(event.clone());
 		}
 	}
 }

@@ -19,7 +19,10 @@
 	
 	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	
 	import org.papervision3d.core.math.Matrix3D;
 	import org.papervision3d.core.math.Number3D;
@@ -64,6 +67,8 @@
 			Game.inputController.mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
+			
+			Game.inputController.keyboard.addEventListener(KeyboardEvent.KEY_DOWN, onKeyIsDown, false, 0 ,true);
 			
 			_codeText = new SDTextField("0x000000");
 			_codeText.autoSize= "left";
@@ -192,6 +197,52 @@
 			area.background.addChild(loader);
 		}
 		*/
+		
+		private function onKeyIsDown(event:KeyboardEvent):void
+		{
+			var _bitmapData:BitmapData = area.map.data.bitmapData.clone();
+			var _rect:Rectangle = _bitmapData.rect; 
+			
+			// NUM 1 -> 9
+			// 97 -> 105
+			switch(event.keyCode-96)
+			{
+				case 8:
+					if(event.ctrlKey)
+						_rect.y++;
+					else
+						_rect.y--;
+				break;
+				case 2:
+					if(event.ctrlKey)
+						_rect.height--;
+					else
+						_rect.height++;
+				break;
+				case 4:
+					if(event.ctrlKey)
+						_rect.x++;
+					else
+						_rect.x--;
+				break;
+				case 6:
+					if(event.ctrlKey)
+						_rect.width--;
+					else
+						_rect.width++;
+				break;
+			}
+			
+			var _width:int = -_rect.x+_rect.width;
+			var _height:int = -_rect.y+_rect.height;
+			
+			_width = _width>0?_width:1;
+			_height = _height>0?_height:1;
+			
+			area.map.bitmap.bitmapData = area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
+			area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
+			area.ground.update();
+		}
 		
 		private function onKeyIsPress(event:SDKeyboardEvent):void
 		{
