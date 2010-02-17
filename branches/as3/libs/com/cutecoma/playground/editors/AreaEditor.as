@@ -80,7 +80,7 @@
 			paintColor = "0x000000";
 			
 			_buildToolDialog = new SDDialog(
-				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
+				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to increase/decrease map size.<br/>4. Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
 					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
