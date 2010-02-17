@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionScriptProperties mainApplicationPath="main.as" version="3">
-<compiler additionalCompilerArguments="-use-network=false -debug=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
+<compiler additionalCompilerArguments="-use-network=false -debug=false" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d"/>
 <compilerSourcePathEntry kind="1" linkType="1" path="C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs"/>
