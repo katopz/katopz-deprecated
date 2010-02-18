@@ -1,5 +1,7 @@
 package
 {
+	import __AS3__.vec.Vector;
+	
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.bones.Bone;
 	import away3dlite.cameras.*;
@@ -9,10 +11,12 @@ package
 	import away3dlite.core.utils.*;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.*;
-	import away3dlite.loaders.data.MaterialData;
 	import away3dlite.materials.*;
 	import away3dlite.primitives.*;
 	import away3dlite.templates.BasicTemplate;
+	
+	import com.sleepydesign.utils.FileUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -47,9 +51,10 @@ package
 	 */
 	public class CharactorEditor extends BasicTemplate
 	{
-		private var collada:Collada;
-		private var loader:Loader3D;
+		private var _collada:Collada;
+		private var _loader:Loader3D;
 		private var model:Object3D;
+		private var canvas:ObjectContainer3D;
 		
 		private var collada2:Collada;
 		private var loader2:Loader3D;
@@ -60,8 +65,9 @@ package
 		
 		private function onSuccess(event:Loader3DEvent):void
 		{
-			model = loader.handle;
+			model = _loader.handle;
 			model.rotationY = 180;
+			canvas.addChild(model);
 			
 			skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 			
@@ -76,12 +82,12 @@ package
 			_bone = ObjectContainer3D(model).getBoneByName("HP_Head");
 			*/
 			
-			var _head:Mesh = ObjectContainer3D(model).getChildByName("Head_01") as Mesh;
-			var _hair:Mesh = ObjectContainer3D(model).getChildByName("Hair_01") as Mesh;
+////var _head:Mesh = ObjectContainer3D(model).getChildByName("Head_01") as Mesh;
+////var _hair:Mesh = ObjectContainer3D(model).getChildByName("Hair_01") as Mesh;
 			
 			//var mat:Material = Mesh(_head1).material//.materialLibrary.currentMaterialData;//.getMaterial("MapFBXASC032FBXASC035117");
-			var targetMaterial:MaterialData = model.materialLibrary.getMaterial("Hair_01_ncl1_2");
-			targetMaterial.material = new BitmapFileMaterial("man/Hair_1_Color_4.png");
+////var targetMaterial:MaterialData = model.materialLibrary.getMaterial("Hair_01_ncl1_2");
+////targetMaterial.material = new BitmapFileMaterial("man/Hair_1_Color_4.png");
 		}
 		
 		private var _head1:Mesh;
@@ -105,41 +111,100 @@ package
 			
 			Debug.active = true;
 			
-			collada = new Collada();
-			collada.bothsides = false;
-			collada.scaling = 5;
+			/*
+			_collada = new Collada();
+			_collada.bothsides = false;
+			_collada.scaling = 5;
 			
-			loader = new Loader3D();
-			loader.loadGeometry("man/man1.dae", collada);
-			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			scene.addChild(loader);
+			_loader = new Loader3D();
+			_loader.loadGeometry("man/man1.dae", collada);
+			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			scene.addChild(_loader);
+			*/
 			
 			camera.y = -100;
+			
+			canvas = new ObjectContainer3D();
+			scene.addChild(canvas);
 
 			// axis
 			var _size:int = 500;
-			var _lines:Array = [];
-			_lines.push(new LineSegment(new WireframeMaterial(0xFF0000), new Vector3D(0, 0, 0), new Vector3D(_size, 0, 0)));
-			_lines.push(new LineSegment(new WireframeMaterial(0x00FF00), new Vector3D(0, 0, 0), new Vector3D(0, _size, 0)));
-			_lines.push(new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, _size)));
+			var _lines:Vector.<LineSegment> = new Vector.<LineSegment>(3, true);
+			_lines[0] = new LineSegment(new WireframeMaterial(0xFF0000), new Vector3D(0, 0, 0), new Vector3D(_size, 0, 0));
+			_lines[1] = new LineSegment(new WireframeMaterial(0x00FF00), new Vector3D(0, 0, 0), new Vector3D(0, _size, 0));
+			_lines[2] = new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, _size));
 			
 			for each(var _line:LineSegment in _lines)
 				scene.addChild(_line);
+				
+			// menu
+			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
+			SystemUtil.addContext(this, "Open Texture", function ():void{FileUtil.openAsset(function onTextureReady(event:Event):void
+			{
+				if(event.type == Event.COMPLETE)
+					setTexture(event.target.content);
+			})});
+			
+			
+			SystemUtil.addContext(this, "Open Model (Compress)", function ():void
+			{
+				FileUtil.openCompress(onOpenModel)
+			});
+			SystemUtil.addContext(this, "Save Model (Compress)", function ():void
+			{
+				if(_currentXML)
+				{
+					var _srcURLs:Array = _currentURI.split("/");
+					var _fileName:String = _srcURLs.pop();
+					FileUtil.saveCompress(_currentXML.toXMLString(), _fileName.split(".")[0]+".bin");
+				}
+			});
+			
+			alpha = .25;
+		}
+		/* for later use, chking before save */
+		private var _currentXML:XML;
+		/* for later use, save ???.bin */
+		private var _currentURI:String;
+		/* path for texture */
+		private const _texturePath:String = "man/";
+		
+		private function onOpenModel(event:Event):void
+		{
+			if(event.type == Event.COMPLETE)
+			{
+				parse(new XML(event["data"]));
+			} else if(event.type == Event.SELECT){
+				_currentURI = event.target["name"];
+			}
 		}
 		
-		//public var ok:int=0
+		public function setTexture(bitmap:Bitmap):void
+		{
+			trace(" * setTexture");
+			//_model.materialLibrary.currentMaterialData.material = new BitmapMaterial(bitmap.bitmapData);
+		}
+		
+		public function parse(xml:XML):void
+		{
+			trace(" * Parse");
+			
+			_currentXML = xml;
+			
+			_collada = new Collada();
+			_collada.bothsides = false;
+			_collada.scaling = 5;
+			
+			_loader = new Loader3D();
+			_loader.loadXML(xml, _collada, _texturePath);
+			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			addChild(_loader);
+		}
+		
 		override protected function onPreRender():void
 		{
 			if(skinAnimation)
-			{
 				skinAnimation.update(getTimer()/1000);
-				//skinAnimation = null;
-			}
-			
-			//scene.rotationY++;
-			
-			//if(_head1 && _head2)
-			//	_head2.transform.matrix3D = _head1.transform.matrix3D.clone();
 		}
 	}
 }
