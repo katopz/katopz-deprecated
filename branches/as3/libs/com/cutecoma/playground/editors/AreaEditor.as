@@ -16,6 +16,7 @@
 	import com.sleepydesign.ui.SDKeyBoard;
 	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.StringUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -200,8 +201,7 @@
 		
 		private function onKeyIsDown(event:KeyboardEvent):void
 		{
-			var _bitmapData:BitmapData = area.map.data.bitmapData.clone();
-			var _rect:Rectangle = _bitmapData.rect; 
+			var _rect:Rectangle = area.map.data.bitmapData.rect; 
 			
 			// NUM 1 -> 9
 			// 97 -> 105
@@ -231,6 +231,9 @@
 					else
 						_rect.width++;
 				break;
+				default : 
+					return;
+				break;
 			}
 			
 			var _width:int = -_rect.x+_rect.width;
@@ -239,9 +242,17 @@
 			_width = _width>0?_width:1;
 			_height = _height>0?_height:1;
 			
+			var _bitmapData:BitmapData = area.map.data.bitmapData.clone();
+			area.map.bitmap.bitmapData.dispose();
+			area.map.data.bitmapData.dispose();
+			
 			area.map.bitmap.bitmapData = area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
 			area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
 			area.ground.update();
+			
+			// gc
+			_bitmapData.dispose();
+			SystemUtil.gc();
 		}
 		
 		private function onKeyIsPress(event:SDKeyboardEvent):void

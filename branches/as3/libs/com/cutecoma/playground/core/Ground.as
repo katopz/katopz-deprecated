@@ -4,7 +4,6 @@
 	import com.cutecoma.playground.events.GroundEvent;
 	import com.sleepydesign.events.SDMouseEvent;
 	
-	import flash.display.BlendMode;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	
@@ -21,6 +20,11 @@
 	{
 		private var plane3D		:Plane3D;
 		private var engine3D	:Engine3D;
+		
+		// tile
+		private var _debug			: Boolean = false;
+		private var _tileInstance	: TilePlane;
+		private var _tileMaterials	:MaterialsList;
 		
 		public function Ground(engine3D:Engine3D, map:Map, mouseEnable:Boolean=true, debug:Boolean=false)
 		{
@@ -49,9 +53,6 @@
 		}
 		
 		//____________________________________________________________ TilePlane
-		
-		private var _debug			: Boolean = false;
-		private var _tileInstance	: TilePlane;
 		
 		public function get debug():Boolean
 		{
@@ -87,20 +88,21 @@
 			var w:uint=map.data.bitmapData.width;
 			var h:uint=map.data.bitmapData.height;
 			
-			var tileMaterials	:MaterialsList = new MaterialsList();
+			_tileMaterials = new MaterialsList();
+			var _getPixel:Function = map.data.bitmapData.getPixel;
 			for(var k :uint= 0; k < w*h; k++)
 			{
-				var i:uint 			= k%w;
-				var j:uint 			= uint(k/w);
-				var color:Number 	= map.data.bitmapData.getPixel(i,j);
+				var i:int 			= int(k%w);
+				var j:int 			= int(k/w);
+				var color:Number 	= _getPixel(i,j);
 				
 				//if(color!=0x000000)
 				var _wireColorMaterial:WireColorMaterial = new WireColorMaterial(color, .5, true);
 				_wireColorMaterial.name = i + "_" + j;
-				tileMaterials.addMaterial(_wireColorMaterial);
+				_tileMaterials.addMaterial(_wireColorMaterial);
 			}
 			
-			_tileInstance = new TilePlane(tileMaterials, w*Map.factorX, h*Map.factorZ, w,h);
+			_tileInstance = new TilePlane(_tileMaterials, w*Map.factorX, h*Map.factorZ, w,h);
 			//_tileInstance.useOwnContainer = true;
 			//_tileInstance.blendMode = BlendMode.MULTIPLY;
 			engine3D.addChild(_tileInstance);
@@ -126,6 +128,15 @@
 		
 		public function destroy():void
 		{
+			// event
+			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
+			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
+			
+			// self
+			_tileMaterials.destroy();
+			_tileMaterials = null;
+			
+			// parent
 			engine3D.removeChild(_tileInstance);
 			_tileInstance = null;
 		}
