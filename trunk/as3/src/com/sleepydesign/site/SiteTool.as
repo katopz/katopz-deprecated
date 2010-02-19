@@ -151,6 +151,10 @@ package com.sleepydesign.site
 			for each(var _path:String in _paths)
 			{
 				_layer = createLayer(_path);
+				
+				if(_bodyLayer == _layer)
+					continue;
+				
 				_bodyLayer.addChild(_layer);
 				
 				var _src:String = XMLUtil.getXMLById(_xml, _path).@src;
