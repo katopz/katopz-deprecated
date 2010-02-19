@@ -81,7 +81,7 @@
 			paintColor = "0x000000";
 			
 			_buildToolDialog = new SDDialog(
-				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to increase/decrease map size.<br/>4. Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
+				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
 					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
@@ -201,7 +201,8 @@
 		
 		private function onKeyIsDown(event:KeyboardEvent):void
 		{
-			var _rect:Rectangle = area.map.data.bitmapData.rect; 
+			var _bitmapData:BitmapData = area.map.data.bitmapData.clone();
+			var _rect:Rectangle = _bitmapData.rect; 
 			
 			// NUM 1 -> 9
 			// 97 -> 105
@@ -242,16 +243,9 @@
 			_width = _width>0?_width:1;
 			_height = _height>0?_height:1;
 			
-			var _bitmapData:BitmapData = area.map.data.bitmapData.clone();
-			area.map.bitmap.bitmapData.dispose();
-			area.map.data.bitmapData.dispose();
-			
 			area.map.bitmap.bitmapData = area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
 			area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
 			area.ground.update();
-			
-			// gc
-			_bitmapData.dispose();
 			SystemUtil.gc();
 		}
 		
@@ -358,7 +352,7 @@
 			trace(" ! TilePlane :", event.bitmapX, event.bitmapZ, _paintColor);
 			
 			var _bitmapData:BitmapData = area.map.data.bitmapData;
-			_bitmapData.setPixel32(event.bitmapX, event.bitmapZ , Number(_paintColor));
+			_bitmapData.setPixel(event.bitmapX, event.bitmapZ , Number(_paintColor));
 			area.ground.update();
 		}
 		
