@@ -81,7 +81,7 @@
 			paintColor = "0x000000";
 			
 			_buildToolDialog = new SDDialog(
-				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>And select type below to draw Area]]>
+				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom<br/>And select type below to draw Area]]>
 					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
@@ -208,6 +208,14 @@
 			// 97 -> 105
 			switch(event.keyCode-96)
 			{
+				//-
+				case 13:
+					zoom(-1+(event.shiftKey?-10:0));
+				break;
+				//+
+				case 11:
+					zoom(1+(event.shiftKey?10:0));
+				break;
 				case 8:
 					if(event.ctrlKey)
 						_rect.y++;
@@ -298,22 +306,27 @@
 	        // void while select area
 	        if(areaPanel && areaPanel.visible)
 	        	return;
-			
+	        	
+	        zoom(event.delta);
+		}
+		
+		private function zoom(delta:Number):void
+		{
 			if(SDKeyBoard.isSHIFT)
 			{
-				var nextFOV:Number = engine3D.camera.fov + event.delta/5;
+				var nextFOV:Number = engine3D.camera.fov + delta/5;
 				if((nextFOV>0)&&(nextFOV<500))
 					engine3D.camera.fov += (nextFOV - engine3D.camera.fov)/2;
 			}
 			else if(SDKeyBoard.isCTRL)
 			{
-				var nextFocus:Number = engine3D.camera.focus + event.delta/5;
+				var nextFocus:Number = engine3D.camera.focus + delta/5;
 				if((nextFocus>0)&&(nextFocus<100))
 					engine3D.camera.focus = nextFocus;
 			}
 			else
 			{
-				var nextZoom:Number = engine3D.camera.zoom + event.delta/10;
+				var nextZoom:Number = engine3D.camera.zoom + delta/10;
 				if((nextZoom>0)&&(nextZoom<100))
 					engine3D.camera.zoom += (nextZoom - engine3D.camera.zoom)/4;
 			}
