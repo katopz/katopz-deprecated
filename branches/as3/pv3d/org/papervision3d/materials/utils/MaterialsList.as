@@ -152,5 +152,15 @@
 	
 			return list;
 		}
+		
+		public function destroy():void
+		{
+			for( var name:String in _materials )
+				this.removeMaterialByName(name);
+				
+			_materials = null;
+			materialsByName = null;
+			_materialsTotal = 0;
+		}
 	}
 }
