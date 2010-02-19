@@ -159,8 +159,6 @@ package
 					FileUtil.saveCompress(_currentXML.toXMLString(), _fileName.split(".")[0]+".bin");
 				}
 			});
-			
-			alpha = .25;
 		}
 		/* for later use, chking before save */
 		private var _currentXML:XML;
