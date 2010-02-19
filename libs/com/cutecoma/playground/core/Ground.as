@@ -129,15 +129,22 @@
 		public function destroy():void
 		{
 			// event
-			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
-			_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
+			if(_tileInstance)
+			{
+				_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onClick);
+				_tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
+			}
 			
 			// self
-			_tileMaterials.destroy();
-			_tileMaterials = null;
+			if(_tileMaterials)
+			{
+				_tileMaterials.destroy();
+				_tileMaterials = null;
+			}
 			
 			// parent
-			engine3D.removeChild(_tileInstance);
+			if(_tileInstance)
+				engine3D.removeChild(_tileInstance);
 			_tileInstance = null;
 		}
 	}
