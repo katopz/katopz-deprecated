@@ -79,14 +79,21 @@
 			_codeText.borderColor = 0x000000;
 			
 			paintColor = "0x000000";
+			_helpToolDialog = new SDDialog(
+			<question>
+				<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom]]>
+			</question>, this);
+			SDApplication.system.addChild(_helpToolDialog);
+
+			_helpToolDialog.alpha = .9;
+			_helpToolDialog.align = "tl";
 			
 			_buildToolDialog = new SDDialog(
-				<question><![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom<br/>And select type below to draw Area]]>
+				<question><![CDATA[Select type to draw Area.]]>
 					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
 					<answer src="as:onSelectType('warp')"><![CDATA[Warp point]]></answer>
-					<textinput width="100"/>
 				</question>, this);
 
 			_buildToolDialog.alpha = .9;
@@ -110,6 +117,7 @@
 			area.ground.update();
 		}
 		
+		private var _helpToolDialog:SDDialog;
 		private var _buildToolDialog:SDDialog;
 		private var _codeText:SDTextField;
 		
@@ -210,11 +218,11 @@
 			{
 				//-
 				case 13:
-					zoom(-1+(event.shiftKey?-10:0));
+					zoom(event.shiftKey?-5:-1);
 				break;
 				//+
 				case 11:
-					zoom(1+(event.shiftKey?10:0));
+					zoom(event.shiftKey?5:1);
 				break;
 				case 8:
 					if(event.ctrlKey)
@@ -307,28 +315,28 @@
 	        if(areaPanel && areaPanel.visible)
 	        	return;
 	        	
-	        zoom(event.delta);
+	        zoom(event.delta*(event.shiftKey?10:1)/5);
 		}
 		
 		private function zoom(delta:Number):void
 		{
-			if(SDKeyBoard.isSHIFT)
+			if(SDKeyBoard.isCTRL)
 			{
-				var nextFOV:Number = engine3D.camera.fov + delta/5;
-				if((nextFOV>0)&&(nextFOV<500))
+				var nextFOV:Number = engine3D.camera.fov + delta;
+				if((nextFOV>0)&&(nextFOV<2000))
 					engine3D.camera.fov += (nextFOV - engine3D.camera.fov)/2;
 			}
-			else if(SDKeyBoard.isCTRL)
+			else if(SDKeyBoard.isSPACE)
 			{
-				var nextFocus:Number = engine3D.camera.focus + delta/5;
+				var nextFocus:Number = engine3D.camera.focus + delta;
 				if((nextFocus>0)&&(nextFocus<100))
-					engine3D.camera.focus = nextFocus;
+					engine3D.camera.focus = (nextFocus - engine3D.camera.focus)/2;
 			}
 			else
 			{
 				var nextZoom:Number = engine3D.camera.zoom + delta/10;
 				if((nextZoom>0)&&(nextZoom<100))
-					engine3D.camera.zoom += (nextZoom - engine3D.camera.zoom)/4;
+					engine3D.camera.zoom += (nextZoom - engine3D.camera.zoom)/2;
 			}
 		}
 		
@@ -378,6 +386,12 @@
 			area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
 			area.ground.removeEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
 			//area.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			
+			SDApplication.system.removeChild(_helpToolDialog);
+			_helpToolDialog.destroy();
+			
+			SDApplication.system.removeChild(_buildToolDialog);
+			_buildToolDialog.destroy();
 			
 			//removeChild(log);
 			super.destroy();
