@@ -26,6 +26,10 @@ package com.sleepydesign.ui
 		public static var isSPACE		:Boolean = false;
 		public static var isCAPLOCK		:Boolean = false;
 		
+		private var fx :Number = 0;
+		private var fy :Number = 0;
+		private var fz :Number = 0;
+			
 		private var target:InteractiveObject;
 		
 		public function SDKeyBoard(target:InteractiveObject)
@@ -54,33 +58,40 @@ package com.sleepydesign.ui
 			var dz :int = 0;
 			var dr :int = 0;
 			
+			var factor:Number = isSHIFT?10:1;
+			
 			//up,down
 			if( keyForward ){
-				dz=1;
+				dz=factor;
 			}else if ( keyBackward ){
-				dz=-1;
+				dz=-factor;
 			}
 			
 			//left,right
 			if( keyRight ){
-				dx=1;
+				dx=factor;
 			}else if ( keyLeft ){
-				dx=-1;
+				dx=-factor;
 			}
 			
 			//up,down
 			if( keyUp ){
-				dy=1
+				dy=factor;
 			}else if ( keyDown ){
-				dy=-1;
+				dy=-factor;
 			}
 			
 			//peek left, peek right
 			if( keyPeekLeft ){
-				dr=-1
+				dr=-factor
 			}else if ( keyPeekRight ){
-				dr=1;
+				dr=factor;
 			}			
+			
+			fx += dx/2;
+			fy += dy/2;
+			fz += dz/2;
+			
 			dispatchEvent(new SDKeyboardEvent(SDKeyboardEvent.KEY_PRESS,{dx:dx, dy:dy, dz:dz, dr:dr}))
 		}
 		

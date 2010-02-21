@@ -23,7 +23,6 @@ package com.sleepydesign.components
 		private var label:SDTextField;
 		private var pad:Number = 8;
 		private var length:Number = 8;
-		private var begPoint:Point = new Point(0, 0);
 
 		private var iText:*;
 		private var isTail:Boolean;
@@ -47,7 +46,7 @@ package com.sleepydesign.components
 			mouseEnabled = true;
 			mouseChildren = true;
 			dragEnabled = true;
-			align = "center";
+			align = "c";
 		}
 
 		override public function create(config:Object = null):void
@@ -98,12 +97,12 @@ package com.sleepydesign.components
 			var w:Number = (label.width > pad) ? label.width : pad;
 			var h:Number = (label.height > pad) ? label.height : pad;
 
-			label.x = int(-w * .5);
-			label.y = int(-pad - length - h + pad * .25 - 1);
+			label.x = int(pad);//int(-w * .5);
+			label.y = int(pad);//int(-pad - length - h + pad * .25 - 1);
 
 			_back.graphics.clear();
 			_back.graphics.beginFill(_config.color);
-			_back.graphics.drawRoundRect(-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, h + pad * .5, pad, pad);
+			_back.graphics.drawRoundRect(0,0,w+pad*2,h+pad*2, pad, pad);
 			
 			/*
 			if(isTail)
@@ -117,23 +116,28 @@ package com.sleepydesign.components
 			_back.graphics.endFill();
 			
 			_header.graphics.beginFill(0xFF00FF, 0);
-			_header.graphics.drawRoundRect(-w * .5 - pad * .5 + pad * .25, -h - pad - length, w + pad * .5, 20, pad, pad);
+			_header.graphics.drawRoundRect(0,0,w+pad*2,20, pad, pad);
 			_header.graphics.endFill();
 
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 
-		public function setPosition(iX:Number=0, iY:Number=0):void
+		public function setPosition(x:int, y:int):void
 		{
-			x = begPoint.x + ((iX>0)?iX:x);
-			y = begPoint.y + ((iY>0)?iY:y);
+			this.x = x;//+(width+pad)/2;
+			this.y = y;//+(height+pad)/2;
 		}
 
-		public function copyPosition(iTarget:DisplayObject):void
+		override public function get width():Number
 		{
-			setPosition(iTarget.x, iTarget.y);
+			return _back.width;
 		}
-
+		
+		override public function get height():Number
+		{
+			return _back.height;
+		}
+		
 		public function get text():String
 		{
 			return label.text;
@@ -178,12 +182,13 @@ package com.sleepydesign.components
 			_align = value;
 			switch(_align)
 			{
-				case "center" :
-					begPoint.x = stage.stageWidth/2 - width/2;
-					begPoint.y = stage.stageHeight/2 - height/2;
+				case "tl" :
+					setPosition(0,0);
+				break;
+				case "c" :
+					setPosition(stage.stageWidth/2 - width/2, stage.stageHeight/2 - height/2);
 				break;
 			}
-			setPosition();
 		}
 
 		public function parseCSS(iCSSText:String = null):void
