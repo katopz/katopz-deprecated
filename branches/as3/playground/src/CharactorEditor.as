@@ -122,8 +122,6 @@ package
 			scene.addChild(_loader);
 			*/
 			
-			camera.y = -100;
-			
 			canvas = new ObjectContainer3D();
 			scene.addChild(canvas);
 

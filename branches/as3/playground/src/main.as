@@ -210,14 +210,12 @@
 				worldEditor = new WorldEditor(engine3D, area);
 				system.addChild(worldEditor);
 				worldEditor.activate();
+			}else{
+				createConnector(area.id);
+				createChatBox();
+				// bind player -> connector
+				game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
 			}
-
-
-			createConnector(area.id);
-			createChatBox();
-
-			// bind player -> connector
-			game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
 
 			// start
 			game.start();
@@ -248,9 +246,11 @@
 
 		// _______________________________________________________ Chat
 
+		private var chatBox:SDChatBox;
+		
 		private function createChatBox():void
 		{
-			var chatBox:SDChatBox = new SDChatBox();
+			chatBox = new SDChatBox();
 			chatBox.x = 100;
 			chatBox.y = 40;
 			system.addChild(chatBox);
