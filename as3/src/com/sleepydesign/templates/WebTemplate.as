@@ -58,8 +58,11 @@ package com.sleepydesign.templates
 		{
 			SWFAddress.addEventListener(SWFAddressEvent.INIT, onSWFAddressInit);
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
-
-			_tree = new SDTree(xml, true, true, true);
+		}
+		
+		private function createSiteMap():void
+		{
+			_tree = new SDTree(_xml, true, true, true);
 			_systemLayer.addChild(_tree);
 			_tree.x = 10;
 			_tree.y = 10;
@@ -101,7 +104,8 @@ package com.sleepydesign.templates
 		private function setFocus(path:String):void
 		{
 			// tree
-			_tree.setFocusByPath(path.split("/").join("/$"));
+			if(_tree)
+				_tree.setFocusByPath(path.split("/").join("/$"));
 
 			// site
 			_siteTool.setFocusByPath(path);
