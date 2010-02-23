@@ -80,7 +80,7 @@ package com.sleepydesign.site
 							 */
 							break;
 						default:
-							_loader = LoaderUtil.loadAsset(_src, onLoad);
+							_loader = LoaderUtil.queue(_src, onLoad, "asset");
 							_layer.addChild(_loader);
 							_pageURIs.push(_src);
 							_pageLoaders.push(_loader);
@@ -174,7 +174,7 @@ package com.sleepydesign.site
 				var _src:String = XMLUtil.getXMLById(_xml, _path).@src;
 				if (_src)
 				{
-					var _loader:Loader = LoaderUtil.loadAsset(_src, onLoad);
+					var _loader:Loader = LoaderUtil.queue(_src, onLoad, "asset");
 					_layer.addChild(_loader);
 
 					_pageURIs.push(_src);
@@ -184,6 +184,8 @@ package com.sleepydesign.site
 				// reparent
 				_bodyLayer = _layer;
 			}
+			
+			LoaderUtil.start();
 		}
 
 		// ____________________________________________ Destroy ____________________________________________
