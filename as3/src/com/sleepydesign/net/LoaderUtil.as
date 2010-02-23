@@ -377,7 +377,7 @@ package com.sleepydesign.net
 			return load(uri, eventHandler, type, _urlRequest);
 		}
 
-		public static function requestVars(uri:String, data:*, eventHandler:Function = null):URLLoader
+		public static function requestVars(uri:String, data:*, eventHandler:Function = null, method:String = URLRequestMethod.POST):URLLoader
 		{
 			return request(uri, data, function(event:Event):void
 				{
@@ -386,10 +386,10 @@ package com.sleepydesign.net
 
 					if (eventHandler is Function)
 						eventHandler(event);
-				}, URLLoaderDataFormat.TEXT) as URLLoader;
+				}, URLLoaderDataFormat.TEXT, method) as URLLoader;
 		}
 
-		public static function requestXML(uri:String, data:*, eventHandler:Function = null):URLLoader
+		public static function requestXML(uri:String, data:*, eventHandler:Function = null, method:String = URLRequestMethod.POST):URLLoader
 		{
 			return request(uri, data, function(event:Event):void
 				{
@@ -398,7 +398,7 @@ package com.sleepydesign.net
 
 					if (eventHandler is Function)
 						eventHandler(event);
-				}, URLLoaderDataFormat.TEXT) as URLLoader;
+				}, URLLoaderDataFormat.TEXT, method) as URLLoader;
 		}
 
 		/**

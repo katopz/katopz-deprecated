@@ -19,6 +19,7 @@ package com.sleepydesign.site
 	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
+	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
@@ -48,7 +49,7 @@ package com.sleepydesign.site
 
 		public var isSubmit:Boolean = true;
 		public var action:String;
-		public var method:String = "GET";
+		public var method:String = "POST";
 		
 		public function FormTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
@@ -363,8 +364,6 @@ package com.sleepydesign.site
 
 			DebugUtil.trace(ObjectUtil.toString(_data));
 
-			LoaderUtil.SEND_METHOD = method;
-
 			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data);
 			dispatchEvent(_formEvent);
 			if(_eventHandler is Function)
@@ -375,11 +374,11 @@ package com.sleepydesign.site
 				trace(" * Submit");
 				if (returnType == URLVariables)
 				{
-					_loader = LoaderUtil.requestVars(url, _data, onGetFormData);
+					_loader = LoaderUtil.requestVars(url, _data, onGetFormData, URLRequestMethod.GET);
 				}
 				else
 				{
-					_loader = LoaderUtil.request(url, _data, onGetFormData);
+					_loader = LoaderUtil.request(url, _data, onGetFormData, URLRequestMethod.GET);
 				}
 
 				_formEvent = new FormEvent(FormEvent.SUBMIT, _data);
