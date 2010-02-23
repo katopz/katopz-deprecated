@@ -29,8 +29,8 @@ package com.sleepydesign.templates
 		public function WebTemplate()
 		{
 			//layer
-			addChild(_contentLayer = new SDSprite);
-			addChild(_systemLayer = new SDSprite);
+			addChild(_contentLayer = new SDSprite).name = "$content";
+			addChild(_systemLayer = new SDSprite).name = "$system";
 
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
