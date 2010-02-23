@@ -98,9 +98,11 @@ package com.sleepydesign.site
 			// create layer
 			var _layer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
 			
+			/*
 			var i:int = _container.numChildren;
 			while(i--)
 				trace(_container.getChildAt(i).name)
+			*/
 			
 			if(!_layer)
 			{
@@ -129,7 +131,7 @@ package com.sleepydesign.site
 					_loadNum++;
 				
 				if(_loadNum==_pageLoaders.length)
-					DebugUtil.trace("complete");
+					DebugUtil.trace(" ! complete");
 			}
 		}
 		
