@@ -1,11 +1,11 @@
 package com.sleepydesign.templates
 {
+	import com.asual.SWFAddress;
+	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.events.SWFAddressEvent;
 	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.site.SWFAddress;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 	
@@ -16,21 +16,22 @@ package com.sleepydesign.templates
 	{
 		protected var _title:String = "";
 		protected var _configURI:String = "site.xml";
-		
+
 		private var _xml:XML;
-		
+
 		private var _systemLayer:SDSprite;
 		private var _contentLayer:SDSprite;
-		
+
 		private var _siteTool:SiteTool;
 		private var _tree:SDTree;
+		protected var isSiteMap:Boolean;
 
 		public function WebTemplate()
 		{
 			//layer
 			addChild(_contentLayer = new SDSprite);
 			addChild(_systemLayer = new SDSprite);
-			
+
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 
@@ -58,8 +59,11 @@ package com.sleepydesign.templates
 		{
 			SWFAddress.addEventListener(SWFAddressEvent.INIT, onSWFAddressInit);
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
+			
+			if(isSiteMap)
+				createSiteMap();
 		}
-		
+
 		private function createSiteMap():void
 		{
 			_tree = new SDTree(_xml, true, true, true);
@@ -104,13 +108,13 @@ package com.sleepydesign.templates
 		private function setFocus(path:String):void
 		{
 			// tree
-			if(_tree)
+			if (_tree)
 				_tree.setFocusByPath(path.split("/").join("/$"));
 
 			// site
 			_siteTool.setFocusByPath(path);
 		}
-		
+
 		// TODO:destroy
 	}
 }
