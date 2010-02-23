@@ -93,17 +93,24 @@ package com.sleepydesign.site
 			DebugUtil.trace(" ------------------------------- [Site] /\n");
 		}
 		
-		private function createLayer(_layerID:String):SDSprite
+		private function createLayer(_layerID:String, _index:int=-1):SDSprite
 		{
 			// create layer
 			var _layer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
+			
+			var i:int = _container.numChildren;
+			while(i--)
+				trace(_container.getChildAt(i).name)
+			
 			if(!_layer)
 			{
 				_layer = _layer?_layer:new SDSprite();
 				_layer.name = _layerID;
-				_container.addChild(_layer);
+				if(_index!=-1)
+					_container.addChildAt(_layer, _index);
+				else
+					_container.addChild(_layer);
 			}
-			
 			return _layer;
 		}
 		
@@ -111,11 +118,15 @@ package com.sleepydesign.site
 		{
 			if(event.type=="complete")
 			{
-				if(event.target.loader.parent)
-					event.target.loader.parent.addChild(event.target.content as DisplayObject);
+				var _parent:DisplayObjectContainer = event.target.loader.parent;
+				if(_parent)
+				{
+					_parent.addChild(event.target.content as DisplayObject);
+					_parent.removeChild(event.target.loader);
+				}
 				
 				if(_pageLoaders.indexOf(event.target.loader)>-1)
-				 _loadNum++;
+					_loadNum++;
 				
 				if(_loadNum==_pageLoaders.length)
 					DebugUtil.trace("complete");
@@ -128,6 +139,7 @@ package com.sleepydesign.site
 			
 			// destroy
 			var _bodyLayer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
+			var _index:int = _container.getChildIndex(_bodyLayer);
 			if(_bodyLayer)
 			{
 				DisplayObjectUtil.removeChildren(_bodyLayer, true, true);
@@ -138,7 +150,7 @@ package com.sleepydesign.site
 			}
 			
 			// create
-			_bodyLayer = createLayer(_layerID);
+			_bodyLayer = createLayer(_layerID, _index);
 			
 			var _layer:SDSprite;
 			var _paths:Array = path.split("/");
