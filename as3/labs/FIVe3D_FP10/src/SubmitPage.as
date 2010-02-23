@@ -18,6 +18,7 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 
 	//[SWF(width="1680",height="822",frameRate="30",backgroundColor="#FFFFFF")]
@@ -86,6 +87,7 @@ package
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "submitForm");
 			_form = new FormTool(formClip, _xml, formHandler);
 			_form.returnType = URLVariables;
+			_form.method = URLRequestMethod.GET;
 			draw();
 			
 			formClip["closeButton"].addEventListener(MouseEvent.CLICK, onClose);

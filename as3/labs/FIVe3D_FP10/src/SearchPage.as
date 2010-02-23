@@ -11,26 +11,14 @@ package
 	
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.filters.BlurFilter;
-	import flash.net.URLVariables;
-	import com.greensock.TweenLite;
-	import com.sleepydesign.data.DataProxy;
-	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.events.FormEvent;
-	import com.sleepydesign.managers.EventManager;
-	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.site.FormTool;
-	import com.sleepydesign.skins.Preloader;
-	import com.sleepydesign.utils.XMLUtil;
-	
-	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.filters.BlurFilter;
+	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
+
 	
 	//[SWF(width="1680",height="822",frameRate="30",backgroundColor="#FFFFFF")]
 	[SWF(width="1132", height="654", frameRate="30", backgroundColor="#000000")]
@@ -83,6 +71,7 @@ package
 			var _xml:XML = XMLUtil.getXMLById(event.target.data, "searchForm");
 			_form = new FormTool(searchClip, _xml, formHandler);
 			_form.returnType = URLVariables;
+			_form.method = URLRequestMethod.GET;
 			
 			// cancel
 			SimpleButton(searchClip["closeButton"]).addEventListener(MouseEvent.CLICK, function():void
