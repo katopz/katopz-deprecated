@@ -3,59 +3,25 @@ package com.sleepydesign.templates
 	import com.asual.SWFAddress;
 	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.components.SDTree;
-	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TreeEvent;
-	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 	
 	import flash.events.Event;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
-	public class WebTemplate extends SDSprite
+	public class WebTemplate extends ApplicationTemplate
 	{
-		protected var _title:String = "";
-		protected var _configURI:String = "site.xml";
-
-		private var _xml:XML;
-
-		private var _systemLayer:SDSprite;
-		private var _contentLayer:SDSprite;
-
-		private var _siteTool:SiteTool;
-		private var _tree:SDTree;
+		protected var _siteTool:SiteTool;
+		protected var _tree:SDTree;
 		protected var isSiteMap:Boolean;
-
+		
 		public function WebTemplate()
 		{
-			//layer
-			addChild(_contentLayer = new SDSprite).name = "$content";
-			addChild(_systemLayer = new SDSprite).name = "$system";
-
-			addEventListener(Event.ADDED_TO_STAGE, onStage);
+			
 		}
 
-		private function onStage(event:Event):void
-		{
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			init();
-		}
-
-		private function init():void
-		{
-			// get external config
-			LoaderUtil.loadXML(_configURI, onXMLLoad);
-		}
-
-		private function onXMLLoad(event:Event):void
-		{
-			if (event.type != "complete")
-				return;
-			_xml = new XML(event.target.data);
-			createSite(_xml);
-		}
-
-		private function createSite(xml:XML):void
+		override protected function onInitXML():void
 		{
 			SWFAddress.addEventListener(SWFAddressEvent.INIT, onSWFAddressInit);
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
