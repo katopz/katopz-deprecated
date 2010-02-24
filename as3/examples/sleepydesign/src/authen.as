@@ -18,8 +18,6 @@ package
 
 		public function authen()
 		{
-			trace("authen");
-			
 			// asset
 			addChild(logInClip);
 
