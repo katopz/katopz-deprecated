@@ -51,10 +51,13 @@ package com.sleepydesign.site
 				switch (_name)
 				{
 					case "page":
-						//_page = createPage(_pageID);
-						var _page:Page = new Page();
-						_page.name = _pageID;
-						_container.addChild(_page);
+						// unique page name
+						if(!_container.getChildByName(_pageID))
+						{
+							var _page:Page = new Page();
+							_page.name = _pageID;
+							_container.addChild(_page);
+						}
 						
 						switch (_pageID)
 						{
