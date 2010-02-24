@@ -13,7 +13,7 @@ package com.sleepydesign.utils
 			return !isNull(newValue) ? newValue : defaultValue;
 		}
 		
-		public static function addZero(source:*, length:Number = 2):String
+		public static function leadingZero(source:*, length:Number = 2):String
 		{
 			if (isNaN(Number(source)))
 				return source;

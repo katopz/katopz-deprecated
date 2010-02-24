@@ -24,7 +24,6 @@ package com.sleepydesign.site
 		private var _loader:Object /*URLLoader, Loader*/;
 		private var _data:Object /*SiteData*/;
 
-		private var _pageURIs:Array /*URI*/;
 		private var _pageLoaders:Array /*loaderVO*/;
 		private var _loadNum:int = 0;
 
@@ -42,7 +41,6 @@ package com.sleepydesign.site
 			var _xmlList_length:int = _xmlList.length();
 			var _focus:String = String(_xml.@focus);
 
-			_pageURIs = [];
 			_pageLoaders = [];
 
 			for (var i:int = _xmlList_length - 1; i >= 0; i--)
@@ -50,7 +48,7 @@ package com.sleepydesign.site
 				var _itemXML:XML = _xmlList[i];
 				var _name:String = String(_itemXML.name()).toLowerCase();
 				var _id:String = String(_itemXML.@id);
-				var _layerID:String = StringUtil.getDefaultIfNull(_itemXML.@layer, "body");
+				var _layerID:String = StringUtil.getDefaultIfNull(_itemXML.@layer, "$body");
 				var _src:String = String(_itemXML.@src);
 
 				DebugUtil.trace("   + " + _name + "\t: " + _id);
@@ -67,7 +65,7 @@ package com.sleepydesign.site
 						switch (_layerID)
 					{
 						// normal page
-						case "body":
+						case "$body":
 							// focus?
 							/*
 							   if(_focus==_id)
@@ -82,7 +80,6 @@ package com.sleepydesign.site
 						default:
 							_loader = LoaderUtil.queue(_src, onLoad, "asset");
 							_layer.addChild(_loader);
-							_pageURIs.push(_src);
 							_pageLoaders.push(_loader);
 							break;
 					}
@@ -130,14 +127,19 @@ package com.sleepydesign.site
 				if (_pageLoaders.indexOf(event.target.loader) > -1)
 					_loadNum++;
 
+				DebugUtil.trace(" ! onLoad [" + _loadNum + "/" + _pageLoaders.length + "] : " + event.target.url.split("/").pop());
+
 				if (_loadNum == _pageLoaders.length)
-					DebugUtil.trace(" ! Complete");
+				{
+					DebugUtil.trace(" ! Complete : " + _loadNum + "/" + _pageLoaders.length);
+					_pageLoaders = [];
+				}
 			}
 		}
 
 		public function setFocusByPath(path:String):void
 		{
-			var _layerID:String = "body";
+			var _layerID:String = "$body";
 
 			// destroy
 			var _bodyLayer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
@@ -159,9 +161,6 @@ package com.sleepydesign.site
 			if (_paths[0] == "")
 				_paths.shift();
 
-			_pageURIs = [];
-			_pageLoaders = [];
-
 			for each (var _path:String in _paths)
 			{
 				_layer = createLayer(_path);
@@ -177,14 +176,13 @@ package com.sleepydesign.site
 					var _loader:Loader = LoaderUtil.queue(_src, onLoad, "asset");
 					_layer.addChild(_loader);
 
-					_pageURIs.push(_src);
 					_pageLoaders.push(_loader);
 				}
 
 				// reparent
 				_bodyLayer = _layer;
 			}
-			
+
 			LoaderUtil.start();
 		}
 
