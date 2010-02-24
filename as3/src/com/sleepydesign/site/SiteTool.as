@@ -9,7 +9,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -26,6 +26,7 @@ package com.sleepydesign.site
 
 		private var _pageLoaders:Array /*loaderVO*/;
 		private var _totalLoaded:int = 0;
+		private var _currentPaths:Array = [];
 
 		// ____________________________________________ Create ____________________________________________
 
@@ -94,15 +95,16 @@ package com.sleepydesign.site
 		{
 			// create layer
 			var _layer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
-
-			/*
-			   var i:int = _container.numChildren;
-			   while(i--)
-			   trace(_container.getChildAt(i).name)
-			 */
-
+			
 			if (!_layer)
 			{
+				/*
+				trace("createLayer : "+_layerID);
+				var i:int = _container.numChildren;
+				while (i--)
+					trace(_container.getChildAt(i).name);
+				*/
+				
 				_layer = _layer ? _layer : new SDSprite();
 				_layer.name = _layerID;
 				if (_index != -1)
@@ -132,7 +134,7 @@ package com.sleepydesign.site
 				if (_totalLoaded == _pageLoaders.length)
 				{
 					DebugUtil.trace(" ! Complete : " + _totalLoaded + "/" + _pageLoaders.length);
-					
+
 					// reset
 					_totalLoaded = 0;
 					_pageLoaders = [];
@@ -147,48 +149,65 @@ package com.sleepydesign.site
 			// destroy
 			var _bodyLayer:SDSprite = _container.getChildByName(_layerID) as SDSprite;
 			var _index:int = _container.getChildIndex(_bodyLayer);
-			if (_bodyLayer)
-			{
-				DisplayObjectUtil.removeChildren(_bodyLayer, true, true);
-				_bodyLayer.destroy();
-				_bodyLayer = null;
-
-				SystemUtil.gc();
-			}
-
-			// create
-			_bodyLayer = createLayer(_layerID, _index);
-
-			var _layer:SDSprite;
+			
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
 				_paths.shift();
 
-			for each (var _path:String in _paths)
+			var _page:SDSprite;
+			var _basePage:SDSprite = _bodyLayer;
+			
+			for(var i:int=0;i<_paths.length;i++)
 			{
-				_layer = createLayer(_path);
-
-				if (_bodyLayer == _layer)
-					continue;
-
-				_bodyLayer.addChild(_layer);
-
-				var _src:String = XMLUtil.getXMLById(_xml, _path).@src;
-				if (_src)
+				var _pathID:String = _paths[i];
+				_page = _basePage.getChildByName(_pathID) as SDSprite;
+				
+				// destroy last page if diff with old pages sequence
+				if(_currentPaths.length>0 && _currentPaths[i] && _paths[i] != _currentPaths[i])
 				{
-					var _loader:Loader = LoaderUtil.queue(_src, onLoad, "asset");
-					_layer.addChild(_loader);
-
-					_pageLoaders.push(_loader);
+					/*
+					var j:int = _basePage.numChildren;
+					while (j--)
+						trace(_basePage.getChildAt(j).name);
+					*/
+					var _oldPage:SDSprite = _basePage.getChildByName(_currentPaths[i]) as SDSprite;
+					DisplayObjectUtil.removeChildren(_oldPage, true, true);
+					_oldPage.destroy();
+					_oldPage = null;
+					
+					SystemUtil.gc();
 				}
+				
+				if(!_page)
+				{
+					// new page
+					_page = new SDSprite();
+					_page.name = _pathID;
+					_basePage.addChild(_page);
+					
+					//trace(" add page: "+_pathID);
 
+					var _src:String = XMLUtil.getXMLById(_xml, _pathID).@src;
+					if (_src)
+					{
+						var _loader:Loader = LoaderUtil.queue(_src, onLoad, "asset");
+						_loader.name = _pathID+"-loader";
+						_page.addChild(_loader);
+	
+						_pageLoaders.push(_loader);
+					}
+				}
+				
 				// reparent
-				_bodyLayer = _layer;
+				_basePage = _page;
 			}
+			
+			// keep for destroy chain later
+			_currentPaths = _paths.slice();
 
 			LoaderUtil.start();
 		}
-
+		
 		// ____________________________________________ Destroy ____________________________________________
 
 		override public function destroy():void
