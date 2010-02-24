@@ -25,7 +25,7 @@ package com.sleepydesign.site
 		private var _data:Object /*SiteData*/;
 
 		private var _pageLoaders:Array /*loaderVO*/;
-		private var _loadNum:int = 0;
+		private var _totalLoaded:int = 0;
 
 		// ____________________________________________ Create ____________________________________________
 
@@ -125,13 +125,16 @@ package com.sleepydesign.site
 				}
 
 				if (_pageLoaders.indexOf(event.target.loader) > -1)
-					_loadNum++;
+					_totalLoaded++;
 
-				DebugUtil.trace(" ! onLoad [" + _loadNum + "/" + _pageLoaders.length + "] : " + event.target.url.split("/").pop());
+				DebugUtil.trace(" ! onLoad [" + _totalLoaded + "/" + _pageLoaders.length + "] : " + event.target.url.split("/").pop());
 
-				if (_loadNum == _pageLoaders.length)
+				if (_totalLoaded == _pageLoaders.length)
 				{
-					DebugUtil.trace(" ! Complete : " + _loadNum + "/" + _pageLoaders.length);
+					DebugUtil.trace(" ! Complete : " + _totalLoaded + "/" + _pageLoaders.length);
+					
+					// reset
+					_totalLoaded = 0;
 					_pageLoaders = [];
 				}
 			}
