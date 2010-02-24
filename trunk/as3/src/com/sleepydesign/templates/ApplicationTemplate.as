@@ -1,11 +1,9 @@
 package com.sleepydesign.templates
 {
-	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.skins.Preloader;
-
+	
 	import flash.events.Event;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
