@@ -1,41 +1,40 @@
 package com.sleepydesign.site
 {
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.StringUtil;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	import flash.display.Loader;
 
 	public class Page extends SDSprite
 	{
 		public var content:DisplayObject;
 
 		protected var _xml:XML;
-		protected var _eventHandler:Function;
 		protected var _container:DisplayObjectContainer;
 		protected var _pageLoaders:Array; /*loaderVO*/
 
-		public function Page(container:DisplayObjectContainer = null, xml:XML = null, eventHandler:Function = null)
+		public function Page(container:DisplayObjectContainer = null, xml:XML = null)
 		{
 			_container = container;
 			_xml = xml;
-			_eventHandler = eventHandler;
-
+			
 			if (_container)
+			{
+				_container.addChild(this);
 				parseXML(_xml);
+			}
 		}
 
-		protected function parseXML(_xml:XML = null):void
+		public function parseXML(_xml:XML):void
 		{
+			if(!_xml || _xml.children().length()<= 0)
+				return;
+				
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
 			var _focus:String = String(_xml.@focus);
-
-			if (_xmlList_length <= 0)
-				return;
 
 			DebugUtil.trace("\n / [Page] ------------------------------- ");
 
@@ -62,7 +61,6 @@ package com.sleepydesign.site
 			super.destroy();
 
 			_container = null;
-			_eventHandler = null;
 			_xml = null;
 		}
 	}
