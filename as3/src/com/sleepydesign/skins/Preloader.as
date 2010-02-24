@@ -58,14 +58,14 @@ package com.sleepydesign.skins
 			{
 				mouseEnabled = true;
 				draw();
-				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:1});
+				TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.5, autoAlpha:1});
 			};
 			
 			LoaderUtil.hideLoader = function():void
 			{
 				mouseEnabled = false;
 				draw();
-				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha:0});
+				TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay:0.5, autoAlpha:0});
 			};
 			
 			// resize

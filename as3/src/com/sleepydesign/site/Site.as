@@ -20,12 +20,12 @@ package com.sleepydesign.site
 		private var _totalLoaded:int = 0;
 		private var _currentPaths:Array = [];
 
-		public function Site(container:DisplayObjectContainer = null, xml:XML = null, eventHandler:Function = null)
+		public function Site(container:DisplayObjectContainer = null, xml:XML = null)
 		{
-			super(container, xml, eventHandler);
+			super(container, xml);
 		}
 		
-		override protected function parseXML(_xml:XML = null):void
+		override public function parseXML(_xml:XML):void
 		{
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
@@ -46,17 +46,16 @@ package com.sleepydesign.site
 				var _pageID:String = StringUtil.getDefaultIfNull(_itemXML.@layer, "$body");
 				var _src:String = String(_itemXML.@src);
 
-				DebugUtil.trace("   + " + _name + "\t: " + _id);
-
 				switch (_name)
 				{
 					case "page":
 						// unique page name
-						if(!_container.getChildByName(_pageID))
+						if(!this.getChildByName(_pageID))
 						{
+							DebugUtil.trace("   + " + _name + "\t: " + _pageID);
 							var _page:Page = new Page();
 							_page.name = _pageID;
-							_container.addChild(_page);
+							this.addChild(_page);
 						}
 						
 						switch (_pageID)
@@ -64,8 +63,8 @@ package com.sleepydesign.site
 							case "$body":
 								//
 							break;
-							// fg, bg
 							default:
+								// fg, bg
 								var _loader:Loader = LoaderUtil.queue(_src, onLoad, "asset");
 								_page.addChild(_loader);
 								_pageLoaders.push(_loader);
@@ -113,8 +112,8 @@ package com.sleepydesign.site
 			var _pageID:String = "$body";
 
 			// destroy
-			var _basePage:Page = _container.getChildByName(_pageID) as Page;
-			var _index:int = _container.getChildIndex(_basePage);
+			var _basePage:Page = this.getChildByName(_pageID) as Page;
+			var _index:int = this.getChildIndex(_basePage);
 			
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
@@ -146,9 +145,9 @@ package com.sleepydesign.site
 					// new page
 					var _itemXML:XML = XMLUtil.getXMLById(_xml, _pathID);
 					
-					_page = new Page(_basePage, _itemXML);
+					_page = new Page(_basePage);
 					_page.name = _pathID;
-					_basePage.addChild(_page);
+					_page.parseXML(_itemXML);
 					
 					//trace(" add page: "+_pathID);
 
