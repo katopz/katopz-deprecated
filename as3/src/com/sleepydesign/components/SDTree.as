@@ -255,7 +255,7 @@ package com.sleepydesign.components
 				if(node.childs[index].id==id)
 				{
 					foundNode = node.childs[index];
-					trace( " ! Found : "+foundNode.id);
+					//trace( " ! Found : "+foundNode.id);
 					return foundNode;
 				}else {
 					foundNode = getNodeById(node.childs[index], id);
