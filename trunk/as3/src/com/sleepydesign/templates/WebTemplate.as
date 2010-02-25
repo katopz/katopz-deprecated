@@ -4,13 +4,13 @@ package com.sleepydesign.templates
 	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.events.TreeEvent;
-	import com.sleepydesign.site.Site;
+	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
 	public class WebTemplate extends ApplicationTemplate
 	{
-		protected var _site:Site;
+		protected var _site:SiteTool;
 		protected var _tree:SDTree;
 		protected var isSiteMap:Boolean;
 
@@ -47,7 +47,7 @@ package com.sleepydesign.templates
 
 		private function onSWFAddressInit(e:SWFAddressEvent):void
 		{
-			_site = new Site(_contentLayer, _xml);
+			_site = new SiteTool(_contentLayer, _xml);
 		}
 
 		private function handleSWFAddress(e:SWFAddressEvent):void

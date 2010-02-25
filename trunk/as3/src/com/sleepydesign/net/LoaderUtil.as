@@ -449,6 +449,8 @@ package com.sleepydesign.net
 				if (_loaderVO && _loaderVO.info == loader && _loaderVO.destroy is Function)
 					_loaderVO.destroy();
 			}
+			
+			hideLoader();
 		}
 	}
 }
