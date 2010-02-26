@@ -8,7 +8,6 @@ package com.sleepydesign.display
 	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
-	import flash.filters.BlurFilter;
 	import flash.geom.Rectangle;
 
 	public class PopupUtil
@@ -35,6 +34,9 @@ package com.sleepydesign.display
 		
 		public static function popup(container:DisplayObjectContainer, popupObject:DisplayObjectContainer):void
 		{
+			if(currentPopup == popupObject)
+				return;
+			
 			//down
 			dispose();
 			
@@ -44,6 +46,7 @@ package com.sleepydesign.display
 				_rect = container.stage.scrollRect;
 			else
 				_rect = container.stage.getRect(container.stage);
+			
 			bitmap = new SDBitmap(new BitmapData(_rect.width, _rect.height, true, 0x00000000));
 			bitmap.bitmapData.draw(container.stage);
 			TweenLite.to(bitmap, .5, {blurFilter:{blurX:8, blurY:8}});
@@ -57,6 +60,7 @@ package com.sleepydesign.display
 			
 			TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
 			popupObject.alpha = 0;
+			TweenLite.killTweensOf(popupObject);
 			TweenLite.to(popupObject, .5, {autoAlpha:1});
 			
 			popupObject.mouseEnabled = true;
@@ -103,13 +107,15 @@ package com.sleepydesign.display
 			
 			currentPopup = null;
 			
-			if(bitmap && bitmap.parent.contains(bitmap))
+			if(bitmap && bitmap.parent && bitmap.parent.contains(bitmap))
 			{
+				TweenLite.killTweensOf(bitmap);
 				TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
-				TweenLite.to(bitmap, .5, {autoAlpha:0, blurFilter:{blurX:0, blurY:0}, onComplete:function():void{
-					bitmap.parent.removeChild(bitmap);
-					bitmap.destroy();
-					bitmap = null;
+				var _bitmap:SDBitmap = bitmap;
+				TweenLite.to(_bitmap, .5, {autoAlpha:0, blurFilter:{blurX:0, blurY:0}, onComplete:function():void{
+					_bitmap.parent.removeChild(_bitmap);
+					_bitmap.destroy();
+					_bitmap = null;
 				}});
 			}
 		}
