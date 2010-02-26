@@ -5,6 +5,7 @@ package com.sleepydesign.templates
 	import com.sleepydesign.skins.Preloader;
 	
 	import flash.events.Event;
+	import flash.geom.Rectangle;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
 	public class ApplicationTemplate extends SDSprite
@@ -36,6 +37,11 @@ package com.sleepydesign.templates
 			initSystem();
 		}
 
+		protected function initStage():void
+		{
+			stage.scrollRect = new Rectangle(0,0,_customWidth || _stageWidth, _customHeight || _stageHeight);
+		}
+		
 		protected function initLayer():void
 		{
 			addChild(_contentLayer = new SDSprite).name = "$content";

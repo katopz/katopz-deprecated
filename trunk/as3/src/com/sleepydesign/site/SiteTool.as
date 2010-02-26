@@ -3,6 +3,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.XMLUtil;
@@ -19,7 +20,7 @@ package com.sleepydesign.site
 		private var _currentPaths:Array = [];
 		
 		private var _pageLoaders:Array; /*loaderVO*/
-		private var _site:Page
+		private var _page:Page
 
 		public function SiteTool(container:DisplayObjectContainer = null, xml:XML = null)
 		{
@@ -27,8 +28,8 @@ package com.sleepydesign.site
 			_xml = xml;
 			
 			// root page
-			_site = new Page(_container, _xml);
-			_site.name= "site";
+			_page = new Page(_container, _xml);
+			_page.name= "site";
 		}
 		
 		public function setFocusByPath(path:String):void
@@ -37,12 +38,14 @@ package com.sleepydesign.site
 			if (_paths[0] == "")
 				_paths.shift();
 
-			var _basePage:Page = _site;//.getChildByName("$body") as Page;
+			var _basePage:Page = _page;
 			
-			//_pathID = "$body";
+			/*
 			var j:int = _basePage.numChildren;
 			while (j--)
 				trace("*"+_basePage.getChildAt(j).name);
+			*/
+			DebugUtil.trace(_basePage);
 				
 			// not dirty yet
 			Page.preferPaths = Page.offerPaths = _paths.slice();
