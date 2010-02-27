@@ -143,6 +143,7 @@ package flars
 				_webcam.setMode(w, h, fps);
 				_video = new Video(w, h);
 				_video.attachCamera(_webcam);
+				_webcam.addEventListener(StatusEvent.STATUS, statusHandler);
 			}else{
 				trace("[ERROR] : No web cam detected! : " + Camera.names.length);
 			}
@@ -152,6 +153,20 @@ package flars
 			return _webcam;
 		};
 		
+		private function statusHandler(event:StatusEvent):void
+		{
+		    switch(event.code)
+		    {
+		        case "Camera.Muted":
+		            trace(" ! User clicked Deny.");
+		            _container["hide"]();
+		            break;
+		        case "Camera.Unmuted":
+		            trace(" ! User clicked Accept.");
+		            break;
+		    }
+		}
+
 		private var n:Number;
 		public function getDetectNumber(target:DisplayObject, isFlip:Boolean = false):Number
 		{

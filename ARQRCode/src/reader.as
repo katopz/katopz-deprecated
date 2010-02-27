@@ -105,10 +105,12 @@ package
 			Oishi.SCALE_Z = -1;
 			*/
 			
-			//Oishi.USE_DEDUG = true;
-			//Oishi.ALWAYS_RESET = false;
-			
-			//Oishi.USE_CAMERA = false;
+			/*
+			Oishi.USE_DEDUG = true;
+			Oishi.ALWAYS_RESET = false;
+			Oishi.USE_CONTEXT = true;
+			Oishi.USE_CAMERA = false;
+			*/
 			
 			// base
 			base = new Sprite();
@@ -246,7 +248,7 @@ package
 			// menu
 			if(Oishi.USE_CONTEXT)
 			{
-				SystemUtil.addContext(this, "ARQRCode version 1.5");
+				SystemUtil.addContext(this, "ARQRCode version 1.6");
 				SystemUtil.addContext(this, "Toggle Camera", function ():void{toggleCamera()});
 				SystemUtil.addContext(this, "Toggle Debug", function ():void{toggleDebug()});
 				
