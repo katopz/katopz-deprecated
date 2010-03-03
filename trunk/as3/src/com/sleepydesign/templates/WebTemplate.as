@@ -4,6 +4,7 @@ package com.sleepydesign.templates
 	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.events.TreeEvent;
+	import com.sleepydesign.site.NavigationTool;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 
@@ -48,6 +49,7 @@ package com.sleepydesign.templates
 		private function onSWFAddressInit(e:SWFAddressEvent):void
 		{
 			_site = new SiteTool(_contentLayer, _xml);
+			NavigationTool.signal.add(setFocus);
 		}
 
 		private function handleSWFAddress(e:SWFAddressEvent):void
