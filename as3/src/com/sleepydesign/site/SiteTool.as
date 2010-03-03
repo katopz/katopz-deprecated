@@ -19,7 +19,7 @@ package com.sleepydesign.site
 		
 		private var _currentPaths:Array = [];
 		
-		private var _pageLoaders:Array; /*loaderVO*/
+		//private var _pageLoaders:Array; /*loaderVO*/
 		private var _page:Page
 
 		public function SiteTool(container:DisplayObjectContainer = null, xml:XML = null)
@@ -28,12 +28,14 @@ package com.sleepydesign.site
 			_xml = xml;
 			
 			// root page
-			_page = new Page(_container, _xml);
+			_page = new Page(_container, _xml, _xml.@focus);
 			_page.name= "site";
 		}
 		
 		public function setFocusByPath(path:String):void
 		{
+			DebugUtil.trace(" ! setFocusByPath : " + path);
+			
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
 				_paths.shift();
@@ -45,7 +47,6 @@ package com.sleepydesign.site
 			while (j--)
 				trace("*"+_basePage.getChildAt(j).name);
 			*/
-			DebugUtil.trace(_basePage);
 				
 			// not dirty yet
 			Page.preferPaths = Page.offerPaths = _paths.slice();
@@ -59,6 +60,8 @@ package com.sleepydesign.site
 				if(Page.preferPaths != Page.offerPaths)
 					continue;
 				
+				var _childIndex:int;
+				
 				// destroy last page if diff with old pages sequence
 				if(_currentPaths.length>0 && _currentPaths[i] && _paths[i] != _currentPaths[i])
 				{
@@ -67,9 +70,11 @@ package com.sleepydesign.site
 					while (j--)
 						trace(_basePage.getChildAt(j).name);
 					*/
-					trace(" + remove Page : "+_pathID);
+					trace(" - remove Page : "+_currentPaths[i]);
 					
 					var _oldPage:Page = _basePage.getChildByName(_currentPaths[i]) as Page;
+					_childIndex = _oldPage.parent.getChildIndex(_oldPage);
+					
 					DisplayObjectUtil.removeChildren(_oldPage, true, true);
 					_oldPage.destroy();
 					_oldPage = null;
@@ -84,8 +89,14 @@ package com.sleepydesign.site
 					// new page
 					var _itemXML:XML = XMLUtil.getXMLById(_xml, _pathID);
 					
-					_subPage = new Page(_basePage, _itemXML);
+					_subPage = new Page(_basePage, _itemXML, _paths.slice(1).join("/"));
 					_subPage.name = _pathID;
+					
+					if(_childIndex>=0)
+					{
+						_basePage.removeChild(_subPage);
+						_basePage.addChildAt(_subPage, _childIndex);
+					}
 				}
 				
 				// reparent
@@ -94,7 +105,7 @@ package com.sleepydesign.site
 			
 			// keep for destroy chain later
 			_currentPaths = _paths.slice();
-			trace(_currentPaths);
+			trace(" ! _currentPaths : " + _currentPaths);
 
 			// wait for next turn if someone make it dirty
 			if(Page.preferPaths == Page.offerPaths)
@@ -110,6 +121,7 @@ package com.sleepydesign.site
 			super.destroy();
 
 			_currentPaths = null;
+			_page = null;
 		}
 	}
 }
