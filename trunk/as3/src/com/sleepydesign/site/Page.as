@@ -16,6 +16,7 @@ package com.sleepydesign.site
 
 		protected var _xml:XML;
 		protected var _container:DisplayObjectContainer;
+		protected var _focus:String;
 		
 		public static var _pageLoaders:Array = []; /*loaderVO*/
 		public static var _totalLoaded:int = 0;
@@ -23,11 +24,12 @@ package com.sleepydesign.site
 		//path dirty occur by focus or restrict redirect
 		public static var offerPaths:Array;
 		public static var preferPaths:Array;
-
-		public function Page(container:DisplayObjectContainer = null, xml:XML = null)
+		
+		public function Page(container:DisplayObjectContainer = null, xml:XML = null, focus:String = "")
 		{
 			_container = container;
 			_xml = xml;
+			_focus = focus;
 
 			if (_container)
 				_container.addChild(this);
@@ -44,18 +46,24 @@ package com.sleepydesign.site
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
 			//var _focus:String = StringUtil.getDefaultIfNull(_xml.@focus, "");
-			var _focus:String = StringUtil.getDefaultIfNull(_xml.@focus, _xmlList_length>0?_xmlList[0].@id:"");
+			var _xmlFocus:String = StringUtil.getDefaultIfNull(_xml.@focus, _xmlList_length>0?_xmlList[0].@id:"");
+			
 			
 			var _pageData:PageData = new PageData(_xml);
 			
-			DebugUtil.trace("\n / [Page:" + _pageData.id + "] ------------------------------- ");
+			DebugUtil.trace("\n / [Page:" + _pageData.id + "]["+ _xmlFocus +"]["+ _focus +"]------------------------------- ");
 
 			if (_pageData.src)
 			{
-				var _loader:Loader = LoaderUtil.queue(_pageData.src, onLoad, "asset");
-				_loader.name = name + "-loader";
-				addChild(_loader);
-				_pageLoaders.push(_loader);
+				if(_pageData.layer != "" && !getChildByName(_pageData.layer) || _pageData.id == _focus.split("/")[0])
+				{
+					var _loader:Loader = LoaderUtil.queue(_pageData.src, onLoad, "asset");
+					_loader.name = name + "-loader";
+					addChild(_loader);
+					
+					_pageLoaders.push(_loader);
+					DebugUtil.trace(" + loader : " + _loader.name);
+				}
 			}
 			
 			// got child? 
@@ -84,15 +92,27 @@ package com.sleepydesign.site
 			for (var i:int = _xmlList_length - 1; i >= 0; i--)
 			{
 				var _subPageData:PageData = new PageData(_xmlList[i]);
+				var _focuses:Array = _focus.split("/");
 
 				// unique page name
 				if (!getChildByName(_pageData.id))
 				{
-					if (_focus.split("/")[0] == _subPageData.id || _subPageData.layer != "") // || _pageData.pageID!="$body")
+					var _page:Page;
+					var _subFocus:String = (_focuses[0] == _subPageData.id)?_focuses[_focuses.length-1]:"";
+						
+					if (_focuses[0] == _subPageData.id)// || _subPageData.layer != "") // || _pageData.pageID!="$body")
 					{
+						// it's got focus
 						DebugUtil.trace("   + " + _subPageData.id);
-						var _page:Page = new Page(this, _subPageData.xml);
+						_page = new Page(this, _subPageData.xml, _subFocus);
 						_page.name = _subPageData.id;
+					}
+					else if(_subPageData.layer != "" && !getChildByName(_subPageData.layer))
+					{
+						// layer
+						DebugUtil.trace("   + " + _subPageData.id);
+						_page = new Page(this, _subPageData.xml, _subFocus);
+						_page.name = _subPageData.layer;
 					}
 				}
 
@@ -111,10 +131,8 @@ package com.sleepydesign.site
 			}
 
 			DebugUtil.trace(" ------------------------------- [Page] /\n");
-
-
 		}
-
+		
 		protected function onLoad(event:Event):void
 		{
 			if (event.type == "complete")
@@ -151,6 +169,7 @@ package com.sleepydesign.site
 		{
 			super.destroy();
 
+			content = null;
 			_container = null;
 			_xml = null;
 			
