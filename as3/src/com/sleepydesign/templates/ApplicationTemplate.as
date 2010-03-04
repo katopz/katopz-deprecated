@@ -3,7 +3,8 @@ package com.sleepydesign.templates
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
-	
+
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 
@@ -33,19 +34,20 @@ package com.sleepydesign.templates
 		protected function onStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			initStage();
 			initLayer();
 			initSystem();
 		}
 
-		protected function initStage():void
-		{
-			stage.scrollRect = new Rectangle(0,0,_customWidth || _stageWidth, _customHeight || _stageHeight);
-		}
-		
 		protected function initLayer():void
 		{
 			addChild(_contentLayer = new SDSprite).name = "$content";
 			addChild(_systemLayer = new SDSprite).name = "$system";
+		}
+
+		protected function initStage():void
+		{
+			stage.scaleMode = StageScaleMode.NO_SCALE;
 		}
 
 		protected function initSystem():void
