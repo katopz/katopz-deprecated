@@ -7,8 +7,9 @@ package com.sleepydesign.site
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.DisplayObjectUtil;
+	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
-
+	
 	import flash.display.DisplayObjectContainer;
 
 
@@ -119,10 +120,16 @@ package com.sleepydesign.site
 
 				if (!_subPage)
 				{
-					trace(" + add Page : ", _childIndex, _pathID);
-
 					// new page
 					var _itemXML:XML = XMLUtil.getXMLById(_xml, _pathID);
+					
+					if(StringUtil.isNull(_itemXML))
+					{
+						_basePage.focus = _pathID;
+						continue;
+					}
+						
+					trace(" + add Page : ", _childIndex, _pathID);
 
 					_subPage = new Page(_basePage, _itemXML, _paths.slice(1).join("/"));
 					_subPage.name = _pathID;
@@ -139,7 +146,8 @@ package com.sleepydesign.site
 				}
 
 				// reparent
-				_basePage = _subPage;
+				if(_subPage)
+					_basePage = _subPage;
 
 				// for destroy later
 				_currentPageID = _pathID;

@@ -16,7 +16,13 @@ package com.sleepydesign.site
 
 		protected var _xml:XML;
 		protected var _container:DisplayObjectContainer;
+		
 		protected var _focus:String;
+		public function set focus(value:String):void
+		{
+			_focus = value;
+		}
+		
 		
 		public static var _pageLoaders:Array = []; /*loaderVO*/
 		public static var _totalLoaded:int = 0;
