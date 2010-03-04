@@ -40,13 +40,9 @@ package com.sleepydesign.components
 			addChild(_handle);
 			
 			if(_orientation == HORIZONTAL)
-			{
 				setSize(100, _scrollSize);
-			}
 			else
-			{
 				setSize(_scrollSize, 100);
-			}
 		}
 		
 		protected function drawTrack():void
@@ -69,13 +65,10 @@ package com.sleepydesign.components
 			_handle.graphics.beginFill(SDStyle.BUTTON_COLOR);
 			
 			if(_orientation == HORIZONTAL)
-			{
 				_handle.graphics.drawRect(0, 0, _scrollSize, _height);
-			}
 			else
-			{
 				_handle.graphics.drawRect(0, 0, _width, _scrollSize);
-			}
+			
 			_handle.graphics.endFill();
 			positionHandle();
 		}
@@ -142,9 +135,7 @@ package com.sleepydesign.components
 			positionHandle();
 			
 			if(_value != oldValue)
-			{
 				dispatchEvent(new Event(Event.CHANGE));
-			}
 		}
 		
 		protected function onDrag(event:MouseEvent):void
@@ -188,9 +179,7 @@ package com.sleepydesign.components
 			positionHandle();
 			
 			if(_value != oldValue)
-			{
 				dispatchEvent(new Event(Event.CHANGE));
-			}
 		}
 		
 		public function set value(v:Number):void
