@@ -90,10 +90,10 @@ package com.sleepydesign.components
 
 		override protected function positionHandle():void
 		{			
+			super.positionHandle();
+			
 			if (!_scrollTarget || !_scrollTarget.scrollRect)
 				return;
-				
-			super.positionHandle();
 			
 			var gap:Number;
 			var _content:DisplayObject = _scrollTarget["content"] || _scrollTarget;
@@ -118,9 +118,6 @@ package com.sleepydesign.components
 
 		public function set scrollTarget(value:DisplayObject):void
 		{
-			if(_scrollTarget == value)
-				return;
-				
 			// Remove event
 			value.removeEventListener(TransformEvent.RESIZE, _onResize);
 			value.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
