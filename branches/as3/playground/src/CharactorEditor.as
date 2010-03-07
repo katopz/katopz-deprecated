@@ -163,7 +163,7 @@ package
 		/* for later use, save ???.bin */
 		private var _currentURI:String;
 		/* path for texture */
-		private const _texturePath:String = "man/";
+		private const _texturePath:String = "chars/man/2/";
 		
 		private function onOpenModel(event:Event):void
 		{
