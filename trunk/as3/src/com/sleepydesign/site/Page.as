@@ -75,13 +75,13 @@ package com.sleepydesign.site
 			// got child? 
 			if(_xmlList_length>0)
 			{
-				//_focus = _focus || String(_xmlList[0].@id)
+				_focus = _focus || _xmlFocus;
 				
 				// not in offer list
-				if(offerPaths && offerPaths.indexOf(_focus)==-1)
+				if(offerPaths && offerPaths.join("/").indexOf(_focus)==-1)
 				{
 					preferPaths = offerPaths.slice();
-					preferPaths.push(_xmlList[0].@id);
+					preferPaths.push(_xmlFocus);
 					
 					// reset
 					//LoaderUtil.cancel();
@@ -146,11 +146,21 @@ package com.sleepydesign.site
 				var _parent:Page = event.target.loader.parent as Page;
 				if (_parent)
 				{
+					// reparent
 					_parent.addChild(event.target.content as DisplayObject);
 					_parent.removeChild(event.target.loader);
 
 					// bind
 					_parent.content = event.target.content;
+					
+					// inherit from content
+					try{
+						_parent.mouseEnabled = _parent.content["mouseEnabled"];
+					}catch(e:*){}
+					
+					try{
+						_parent.mouseChildren = _parent.content["mouseChildren"];
+					}catch(e:*){}
 				}
 
 				if (_pageLoaders.indexOf(event.target.loader) > -1)

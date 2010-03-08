@@ -131,7 +131,7 @@ package com.sleepydesign.site
 						
 					trace(" + add Page : ", _childIndex, _pathID);
 
-					_subPage = new Page(_basePage, _itemXML, _paths.slice(1).join("/"));
+					_subPage = new Page(_basePage, _itemXML, _paths.slice(i).join("/"));
 					_subPage.name = _pathID;
 
 					if (_childIndex >= 0)
@@ -139,10 +139,8 @@ package com.sleepydesign.site
 						_basePage.removeChild(_subPage);
 						_basePage.addChildAt(_subPage, _childIndex);
 					}
-					else
-					{
-						_basePage.addChild(_subPage);
-					}
+
+					trace(" to : "+ _basePage.name );
 				}
 
 				// reparent
