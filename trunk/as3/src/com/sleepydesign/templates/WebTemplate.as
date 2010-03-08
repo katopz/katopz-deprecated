@@ -57,7 +57,7 @@ package com.sleepydesign.templates
 			for (var i:int = 0; i < e.pathNames.length; i++)
 				_title += ' / ' + e.pathNames[i].substr(0, 1).toUpperCase() + e.pathNames[i].substr(1);
 
-			SWFAddress.setTitle(_title);
+			//SWFAddress.setTitle(_title);
 
 			if (e.pathNames[0])
 			{
