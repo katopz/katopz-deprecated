@@ -20,6 +20,8 @@ package
 			
 			for each(var _line:LineSegment in _lines)
 				scene.addChild(_line);
+				
+			// add menu open, save, compress
 		}
 	}
 }
