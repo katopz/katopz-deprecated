@@ -1,29 +1,24 @@
 package
 {
-	import __AS3__.vec.Vector;
-	
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.bones.Bone;
-	import away3dlite.cameras.*;
-	import away3dlite.containers.*;
+	import away3dlite.containers.ObjectContainer3D;
 	import away3dlite.core.base.Mesh;
 	import away3dlite.core.base.Object3D;
-	import away3dlite.core.utils.*;
+	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
-	import away3dlite.loaders.*;
-	import away3dlite.materials.*;
-	import away3dlite.primitives.*;
+	import away3dlite.loaders.Collada;
+	import away3dlite.loaders.Loader3D;
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.SystemUtil;
 	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.geom.Vector3D;
+	import flash.display.Bitmap;
+	import flash.events.Event;
 	import flash.utils.*;
 	
-	[SWF(backgroundColor="#000000", frameRate="30", quality="MEDIUM", width="800", height="600")]
+	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
 	/**
 	 * TODO
 	 * 1. load 5 prototype compressed model
@@ -122,18 +117,8 @@ package
 			scene.addChild(_loader);
 			*/
 			
-			canvas = new ObjectContainer3D();
-			scene.addChild(canvas);
-
-			// axis
-			var _size:int = 500;
-			var _lines:Vector.<LineSegment> = new Vector.<LineSegment>(3, true);
-			_lines[0] = new LineSegment(new WireframeMaterial(0xFF0000), new Vector3D(0, 0, 0), new Vector3D(_size, 0, 0));
-			_lines[1] = new LineSegment(new WireframeMaterial(0x00FF00), new Vector3D(0, 0, 0), new Vector3D(0, _size, 0));
-			_lines[2] = new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, _size));
-			
-			for each(var _line:LineSegment in _lines)
-				scene.addChild(_line);
+			// EditorTool
+			_EditorTool = new EditorTool(scene);
 				
 			// menu
 			SystemUtil.addContext(this, "Open Model", function ():void{FileUtil.openXML(onOpenModel)});
@@ -142,7 +127,6 @@ package
 				if(event.type == Event.COMPLETE)
 					setTexture(event.target.content);
 			})});
-			
 			
 			SystemUtil.addContext(this, "Open Model (Compress)", function ():void
 			{
@@ -164,6 +148,7 @@ package
 		private var _currentURI:String;
 		/* path for texture */
 		private const _texturePath:String = "chars/man/2/";
+		private var _EditorTool:EditorTool;
 		
 		private function onOpenModel(event:Event):void
 		{
