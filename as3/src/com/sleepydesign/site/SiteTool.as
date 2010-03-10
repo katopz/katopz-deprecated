@@ -57,10 +57,10 @@ package com.sleepydesign.site
 			var _basePage:Page = _page;
 
 			/*
-			   var j:int = _basePage.numChildren;
-			   while (j--)
-			   trace("*"+_basePage.getChildAt(j).name);
-			 */
+			var j:int = _basePage.numChildren;
+			while (j--)
+				DebugUtil.trace("*"+_basePage.getChildAt(j).name);
+			*/
 
 			// not dirty yet
 			Page.preferPaths = Page.offerPaths = _paths.slice();
@@ -74,7 +74,7 @@ package com.sleepydesign.site
 				{
 					URLUtil.getURL(_focusXML.@src, _focusXML.@target);
 					_currentPaths = _paths.slice();
-					trace(" ! _currentPaths : " + _currentPaths);
+					DebugUtil.trace(" ! _currentPaths : " + _currentPaths);
 				}
 				return;
 			}
@@ -97,17 +97,18 @@ package com.sleepydesign.site
 				if (_currentPaths.length > 0 && _currentPaths[i] && _paths[i] != _currentPaths[i])
 				{
 					/*
-					   var j:int = _basePage.numChildren;
-					   while (j--)
-					   trace(_basePage.getChildAt(j).name);
-					 */
-					trace(" - remove Page : " + _currentPaths[i]);
+					var j:int = _basePage.numChildren;
+					while (j--)
+				   		DebugUtil.trace(_basePage.getChildAt(j).name);
+				   	*/
+					   
+					DebugUtil.trace(" - remove Page : " + _currentPaths[i]);
 
 					var _oldPage:Page = _basePage.getChildByName(_currentPaths[i]) as Page;
 
 					if (!_oldPage)
 					{
-						trace(" - remove Page : " + _prevPageID);
+						DebugUtil.trace(" - remove Page : " + _prevPageID);
 						_oldPage = _basePage.getChildByName(_prevPageID) as Page;
 					}
 
@@ -129,8 +130,8 @@ package com.sleepydesign.site
 						_basePage.focus = _pathID;
 						continue;
 					}
-						
-					trace(" + add Page : ", _childIndex, _pathID);
+					
+					DebugUtil.trace(" + add Page : ", _childIndex, _pathID);
 
 					_subPage = new Page(_basePage, _itemXML, _paths.slice(i+1).join("/"));
 					_subPage.name = _pathID;
@@ -141,7 +142,7 @@ package com.sleepydesign.site
 						_basePage.addChildAt(_subPage, _childIndex);
 					}
 
-					trace(" to : "+ _basePage.name );
+					DebugUtil.trace(" to : "+ _basePage.name );
 				}
 
 				// reparent
