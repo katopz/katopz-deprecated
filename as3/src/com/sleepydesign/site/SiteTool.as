@@ -48,7 +48,8 @@ package com.sleepydesign.site
 		public function setFocusByPath(path:String):void
 		{
 			DebugUtil.trace(" ! setFocusByPath : " + path);
-
+			DebugUtil.trace(" ! _currentPaths : " + _currentPaths);
+			
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
 				_paths.shift();
@@ -131,7 +132,7 @@ package com.sleepydesign.site
 						
 					trace(" + add Page : ", _childIndex, _pathID);
 
-					_subPage = new Page(_basePage, _itemXML, _paths.slice(i).join("/"));
+					_subPage = new Page(_basePage, _itemXML, _paths.slice(i+1).join("/"));
 					_subPage.name = _pathID;
 
 					if (_childIndex >= 0)
