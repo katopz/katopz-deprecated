@@ -21,7 +21,7 @@ package com.sleepydesign.site
 			this.name = String(xml.name()).toLowerCase();
 			this.src = String(xml.@src);
 			
-			this.layer = StringUtil.getDefaultIfNull(xml.@layer, "");
+			this.layer = StringUtil.getDefaultIfNull(xml.@layer, "$layer");
 		}
 	}
 }
