@@ -41,9 +41,11 @@ package com.sleepydesign.components
 			this.caller = caller;
 			
 			super();
+			
+			init();
 		}
 		
-		override protected function init():void
+		protected function init():void
 		{
 			create();
 			
@@ -54,7 +56,7 @@ package com.sleepydesign.components
 			align = "center";
 		}
 
-		override protected function create():void
+		protected function create():void
 		{
 			//default
 			if (!_config)
@@ -169,6 +171,7 @@ package com.sleepydesign.components
 			htmlText = XML(iText);
 		}
 		
+		/*
 		private var _align:String = "center";
 		public function get align():String
 		{
@@ -187,6 +190,7 @@ package com.sleepydesign.components
 			}
 			setPosition();
 		}
+		*/
 
 		public function parseCSS(iCSSText:String = null):void
 		{
