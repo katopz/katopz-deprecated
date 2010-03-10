@@ -51,7 +51,7 @@ package com.sleepydesign.site
 
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
-			var _xmlFocus:String = StringUtil.getDefaultIfNull(_xml.@focus, _xmlList_length > 0 ? _xmlList[0].@id : "");
+			var _xmlFocus:String = StringUtil.getDefaultIfNull(_xml.@focus, (_xmlList_length > 0) ? _xmlList[0].@id : "");
 
 			var _pageData:PageData = new PageData(_xml);
 
@@ -66,7 +66,7 @@ package com.sleepydesign.site
 					var _loader:Loader = LoaderUtil.queue(_pageData.src, onLoad, "asset");
 					_loader.name = name + "-loader";
 					addChild(_loader);
-
+					
 					_pageLoaders.push(_loader);
 					DebugUtil.trace(" + loader : " + _loader.name);
 				}
@@ -128,8 +128,8 @@ package com.sleepydesign.site
 				if (_parent)
 				{
 					// reparent
-					_parent.addChild(event.target.content as DisplayObject);
-					_parent.removeChild(event.target.loader);
+					//_parent.addChild(event.target.content as DisplayObject);
+					//_parent.removeChild(event.target.loader);
 
 					// bind
 					_parent.content = event.target.content;
