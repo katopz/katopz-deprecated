@@ -1,6 +1,7 @@
 package
 {
 	import away3dlite.core.base.Object3D;
+	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
@@ -10,11 +11,16 @@ package
 	
 	import flash.events.Event;
 	import flash.utils.*;
+	
+	import org.osflash.signals.Signal;
 
 	public class ModelPool extends RemovableEventDispatcher
 	{
 		private var _loadedModel:int = 0;
 		private var _totalModel:int;
+		
+		// complete
+		public static var signal:Signal = new Signal(String);
 		
 		public function ModelPool():void
 		{
@@ -43,22 +49,24 @@ package
 
 		private function loadModel(_path:String, _src:String):void
 		{
-			LoaderUtil.loadXML(_path + _src, function(event:Event):void
-			{
-				if (event.type == "complete")
-					pool(event.target.data, _path)
-			});
+			LoaderUtil.loadXML(_path + _src, onLoadXML);
 		}
 		
-		private function pool(xml:XML, texturePath:String):void
+		private function onLoadXML(event:Event):void
 		{
-			trace("pool:" + texturePath);
+			if (event.type == "complete")
+				parseXML(event.target.data);
+		}
+		
+		private function parseXML(xml:XML):void
+		{
+			//trace("pool:" + texturePath);
 
 			var _collada:Collada = new Collada();
 			_collada.bothsides = false;
-
+			
 			var _loader:Loader3D = new Loader3D();
-			_loader.loadXML(xml, _collada, texturePath);
+			_loader.loadXML(xml, _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -68,7 +76,10 @@ package
 			trace("model:" + model);
 			
 			if(++_loadedModel==_totalModel)
-				trace("all done");
+			{
+				trace("complete!");
+				signal.dispatch("complete");
+			}
 		}
 	}
 }

@@ -42,12 +42,12 @@
 		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
 		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 		//private const SERVER_URI:String = "rtmp://localhost/SOSample";
-		
+
 		registerClassAlias("com.cutecoma.playground.data.AreaData", AreaData);
 		registerClassAlias("com.cutecoma.playground.data.MapData", MapData);
 		registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
 		registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
-		
+
 		private var engine3D:Engine3D;
 		private var game:Game;
 		private var connector:SDConnector;
@@ -106,12 +106,11 @@
 
 		private function setupMenu():void
 		{
-			dialog = new SDDialog(
-				<question><![CDATA[Welcome! What you want to do?]]>
+			dialog = new SDDialog(<question><![CDATA[Welcome! What you want to do?]]>
 					<!--<answer src="as:onUserSelect('edit-character')"><![CDATA[Select Character.]]></answer>-->
 					<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter Area]]></answer>
 					<answer src="as:onUserSelect('edit-area')"><![CDATA[Edit Area]]>
-				</answer></question>, this);
+					</answer></question>, this);
 
 			this.addChild(dialog);
 		}
@@ -194,8 +193,7 @@
 
 			// ___________________________________________________________ Player
 
-			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(),
-				"man1", "stand", 3));
+			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
 
 			// read map
 			game.player.map = area.map;
@@ -210,7 +208,9 @@
 				worldEditor = new WorldEditor(engine3D, area);
 				system.addChild(worldEditor);
 				worldEditor.activate();
-			}else{
+			}
+			else
+			{
 				createConnector(area.id);
 				createChatBox();
 				// bind player -> connector
@@ -247,7 +247,7 @@
 		// _______________________________________________________ Chat
 
 		private var chatBox:SDChatBox;
-		
+
 		private function createChatBox():void
 		{
 			chatBox = new SDChatBox();

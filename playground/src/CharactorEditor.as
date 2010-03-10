@@ -24,14 +24,14 @@ package
 			var _EditorTool:EditorTool = new EditorTool(scene);
 			
 			// ModelPooling
+			//ModelPool.signal.add(setMenu);
 			var _modelPool:ModelPool = new ModelPool();
 			_modelPool.initXML("chars.xml");
-			_modelPool
 		}
 			
-		public function setTexture(bitmap:Bitmap):void
+		public function setMenu(detail:String):void
 		{
-			
+			trace("detail")
 		}
 	}
 }
