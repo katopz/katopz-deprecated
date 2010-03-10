@@ -3,12 +3,12 @@ package com.sleepydesign.templates
 	import com.asual.SWFAddress;
 	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.components.SDTree;
+	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.site.NavigationTool;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 
-	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
 	public class WebTemplate extends ApplicationTemplate
 	{
 		protected var _site:SiteTool;
@@ -17,7 +17,7 @@ package com.sleepydesign.templates
 
 		public function WebTemplate()
 		{
-
+			//
 		}
 
 		override protected function onInitXML():void

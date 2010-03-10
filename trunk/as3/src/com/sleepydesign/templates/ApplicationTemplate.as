@@ -3,12 +3,11 @@ package com.sleepydesign.templates
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
-
+	
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 
-	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="600")]
 	public class ApplicationTemplate extends SDSprite
 	{
 		protected var _title:String = "";
@@ -23,11 +22,13 @@ package com.sleepydesign.templates
 		protected var _stageWidth:Number = stage ? stage.stageWidth : NaN;
 		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
 
-		protected var _customWidth:Number;
-		protected var _customHeight:Number;
-
+		protected var _customSize:Rectangle;
+		
 		public function ApplicationTemplate()
 		{
+			super();
+			
+			//scrollRect = new Rectangle(0, 0, _customWidth || _stageWidth, _customHeight || _stageHeight);
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 
@@ -53,7 +54,7 @@ package com.sleepydesign.templates
 		protected function initSystem():void
 		{
 			// skin loader
-			LoaderUtil.loaderClip = new Preloader(_systemLayer, _stageWidth, _stageHeight);
+			LoaderUtil.loaderClip = new Preloader(_systemLayer, _customSize);
 
 			// get external config
 			LoaderUtil.loadXML(_configURI, onXMLLoad);
