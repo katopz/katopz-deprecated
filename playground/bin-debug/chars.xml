@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <chars>
-	<man id="man_1" path="chars/mans/1/" src="model.dae"/>
-	<man id="man_2" path="chars/mans/2/" src="model.dae"/>
+	<man id="man_1" path="chars/man/1/" src="model.dae"/>
+	<man id="man_2" path="chars/man/2/" src="model.dae"/>
 </chars>
