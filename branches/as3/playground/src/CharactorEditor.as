@@ -21,17 +21,15 @@ package
 			view.mouseEnabled3D = false;
 			
 			// EditorTool
-			var _EditorTool:EditorTool = new EditorTool(scene);
+			var _EditorTool:EditorTool = new EditorTool(this);
+			_EditorTool.initXML("config.xml");
 			
 			// ModelPooling
-			//ModelPool.signal.add(setMenu);
 			var _modelPool:ModelPool = new ModelPool();
 			_modelPool.initXML("chars.xml");
-		}
 			
-		public function setMenu(detail:String):void
-		{
-			trace("detail")
+			// binding
+			ModelPool.signal.add(_EditorTool.activate);
 		}
 	}
 }
