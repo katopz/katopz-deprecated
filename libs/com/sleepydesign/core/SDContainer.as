@@ -28,21 +28,21 @@
         
         public function addElement(element:*, id:String=null):*
         {
-        	if(!elements)elements = new SDGroup(_id+"_Elements");
-        	elements.insert(element, id);
+        	if(!elements)elements = new SDGroup();//_id+"_Elements");
+        	elements.addItem(element, id);
         	return element;
         }
         
         public function removeElement(element:*, id:String=null):void
         {
         	if(!elements)return;
-        	elements.remove(element, id);
+        	elements.removeItem(element, id);
         }
         
 		public function getElementById(id:String=null):*
         {
         	if(!elements)return;
-        	return elements.findBy(id);
+        	return elements.getItemByID(id);
         }
         
 		public function get id():String
