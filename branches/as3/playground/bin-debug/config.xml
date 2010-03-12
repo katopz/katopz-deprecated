@@ -3,4 +3,11 @@
 	<world>
 		<area path="areas/">87,88</area>
 	</world>
+	<charactor_editor>
+		<hair total="2"/>
+		<head total="2"/>
+		<shirt total="2"/>
+		<pant total="2"/>
+		<shoe total="2"/>
+	</charactor_editor>
 </config>
