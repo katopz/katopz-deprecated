@@ -1,116 +1,146 @@
 package com.sleepydesign.core
 {
-    import flash.utils.Dictionary;
-    
-    /**
-	 * _____________________________________________________
-	 * 
-	 * SleepyDesign Group
-	 * _____________________________________________________
-	 * 
-	 * - It's a group
-	 * - Can switch between child
-	 * - Show multiple or single instance view
-	 * - Automatic call cross fade transition
-	 * 
-	 * @author katopz
-	 */
-	public class SDGroup
+	import flash.utils.Dictionary;
+
+	public class SDGroup implements IDestroyable
 	{
-		private var _childs : Dictionary;
-		public function get childs():Dictionary
+		private var _isDestroyed:Boolean;
+
+		public var items:Dictionary = new Dictionary(true);
+		private var _length:int = 0;
+
+
+		public function SDGroup()
 		{
-			return _childs;
+
 		}
-		
-		public function SDGroup(id:String=null)
+
+		public function get length():int
 		{
-			_childs = new Dictionary(true);
+			return _length;
 		}
-		
-		public function insert(object:*, key:*=null):void
+
+		public function addItem(item:*, key:* = null):void
 		{
-			if(!object)return;
-			if(!_childs)_childs = new Dictionary(true);
-			if(key)
-			{
-				//trace(" + Insert	: [" +key + "]");
-				_childs[key]=object;
-			}else{
-				//trace(" + Insert	: [" + object + "]");
-				_childs[object]=object;
-			}
+			if (!item)
+				return;
+
+			if (key)
+				items[key] = item;
+			else
+				items[_length] = item;
+
+			_length++;
 		}
-		
-		public function find(object:*):*
+
+		public function getItemByValue(value:* = null):*
 		{
-			if(!_childs)return null;
-			return _childs[object];
-		}
-		
-		public function findBy(str:String, arg:String="id"):*
-		{
-			if(!_childs)return null;
-			for each(var object:* in _childs)
-			{
-				try
-				{
-					if (object[arg] == str)
-					{
-						return object;
-					}
-				}
-				catch(e:*){}
-			}
+			for (var _item:* in items)
+				if (items[_item] == value)
+					return _item;
+
 			return null;
 		}
-		
-		public function print():void
+
+		public function getItem(key:*):*
 		{
-			if(!_childs)return;
-			for (var object:* in _childs)
+			if (!items)
+				return null;
+
+			return items[key];
+		}
+
+		public function getItemByID(id:String):*
+		{
+			return getItemBy(id, "id");
+		}
+
+		public function getItemBy(key:*, arg:String = "id"):*
+		{
+			for each (var _item:* in items)
+				if (_item[arg] == key)
+					return _item;
+
+			return null;
+		}
+
+		public function removeItem(item:*, key:* = null):void
+		{
+			if (key)
 			{
-				trace(object + "\t: " + XML(_childs[object]).toXMLString());
+				removeItemBy(key);
+			}
+			else if (items[item])
+			{
+				var _items:Dictionary = new Dictionary();
+				_length = 0;
+				for (var _item:* in items)
+					if (_item != item)
+					{
+						_items[_item] = items[_item];
+						_length++;
+					}
+
+				items = _items;
 			}
 		}
-		
+
+		public function removeItemByValue(value:* = null):void
+		{
+			var _items:Dictionary = new Dictionary();
+			_length = 0;
+			for (var _item:* in items)
+				if (items[_item] != value)
+				{
+					_items[_item] = items[_item];
+					_length++;
+				}
+
+			items = _items;
+		}
+
+		public function removeItemByID(id:String):void
+		{
+			removeItemBy(id, "id");
+		}
+
+		public function removeItemBy(item:*, arg:String = "id"):void
+		{
+			if (!items)
+				return;
+
+			var _items:Dictionary = new Dictionary();
+			_length = 0;
+			for (var _item:* in items)
+				if (items[_item][arg] != item)
+				{
+					_items[_item] = items[_item];
+					_length++;
+				}
+
+			items = _items;
+		}
+
+		public function removeAll():void
+		{
+			for each (var _item:* in items)
+				removeItemBy(_item);
+
+			items = null;
+			_length = 0;
+		}
+
+		public function get destroyed():Boolean
+		{
+			return this._isDestroyed;
+		}
+
 		public function destroy():void
 		{
-			for each(var object:* in _childs)
-			{
-				remove(object);
-			}
-			_childs = null;
+			this._isDestroyed = true;
+
+			items = null;
+			_length = 0;
 		}
-		
-		public function remove(object:*=null, key:*=null):void
-		{
-			if(!_childs)return;
-			if(key)
-			{
-				removeBy(key);
-			}else if(_childs[object]){
-				delete _childs[object];
-				_childs[object] = null;
-			}
-		}
-		
-		public function removeBy(str:String, arg:String="id"):void
-		{
-			//trace(" * remove	: " + arg);
-			if(!_childs)return;
-			var __childs:Dictionary = new Dictionary();
-			for (var object:* in _childs)
-			{
-				if (_childs[object][arg] != str)
-				{
-					__childs[object] = _childs[object];
-				}else {
-					delete _childs[object];
-					//_childs[object] = null;
-				}
-			}
-			_childs = __childs;
-		}
-	}	
+	}
 }
