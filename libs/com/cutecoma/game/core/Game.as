@@ -98,14 +98,14 @@ package com.cutecoma.game.core
 			else
 			{
 				// remove all player
-				for each(var __player:Player in elements.childs)
+				for each(var __player:Player in elements.items)
 					removePlayer(__player);
 			}
 		}
 		
 		public function removeOtherPlayer():void
 		{
-			for each(var _player:Player in elements.childs)
+			for each(var _player:Player in elements.items)
 			{
 				if(_player!=player)
 					removePlayer(_player);

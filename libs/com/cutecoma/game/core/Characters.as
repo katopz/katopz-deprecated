@@ -31,15 +31,15 @@ package com.cutecoma.game.core
 
 		public function addCharacter(data:CharacterData):void
 		{
-			if(!lists)lists = new SDGroup("Characters");
-			lists.insert(data, data.id);
+			if(!lists)lists = new SDGroup();
+			lists.addItem(data, data.id);
 		}
 		
 		public function getModel(id:String=null):SDModel
 		{
 			//var charactor:Character = new Character(id);
 			var model:SDModel = new SDModel();
-			var data:CharacterData = lists.findBy(id);
+			var data:CharacterData = lists.getItemByID(id);
 			data.model = model;
 			
 			/*
