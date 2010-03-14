@@ -946,7 +946,7 @@
   </library_animations>
   <library_images>
     <image id="Head_Texture" name="Head_Texture">
-      <init_from>./head_1.png</init_from>
+      <init_from>./texture_1/head_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -955,7 +955,7 @@
       </extra>
     </image>
     <image id="Shirt_Texture" name="Shirt_Texture">
-      <init_from>./shirt_1.png</init_from>
+      <init_from>./texture_1/shirt_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -964,7 +964,7 @@
       </extra>
     </image>
     <image id="Shoes_Texture" name="Shoes_Texture">
-      <init_from>./shoes_1.png</init_from>
+      <init_from>./texture_1/shoes_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -973,7 +973,7 @@
       </extra>
     </image>
     <image id="Pant_Texture" name="Pant_Texture">
-      <init_from>./pant_1.png</init_from>
+      <init_from>./texture_1/pant_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -982,7 +982,7 @@
       </extra>
     </image>
     <image id="Hair_Texture" name="Hair_Texture">
-      <init_from>./hair_1.png</init_from>
+      <init_from>./texture_1/hair_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
