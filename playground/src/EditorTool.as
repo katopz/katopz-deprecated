@@ -1,11 +1,13 @@
 package
 {
+	import away3dlite.animators.BonesAnimator;
+	import away3dlite.core.base.Object3D;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.LineSegment;
-	import away3dlite.primitives.Sphere;
 	import away3dlite.templates.BasicTemplate;
 	import away3dlite.templates.Template;
 	
+	import com.cutecoma.playground.data.ModelData;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.utils.LoaderUtil;
@@ -13,11 +15,12 @@ package
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.utils.*;
-	import com.cutecoma.playground.data.ModelData;
 
 	public class EditorTool extends RemovableEventDispatcher
 	{
 		private var _container:Template;
+		public var currentModel:Object3D;
+		public var skinAnimation:BonesAnimator;
 
 		public function EditorTool(container:BasicTemplate, size:int = 500)
 		{
@@ -40,7 +43,7 @@ package
 			LoaderUtil.loadXML(src, function(event:Event):void
 				{
 					if (event.type == "complete")
-						buildFromXML(event.target.data)
+						buildFromXML(event.target.data);
 				});
 		}
 
@@ -54,7 +57,10 @@ package
 		{
 			// data ready let's bring editor out
 			trace("activate");
-			_container.scene.addChild(modelData.model);
+			currentModel = modelData.model;
+			_container.scene.addChild(currentModel);
+			
+			skinAnimation = currentModel.animationLibrary.getAnimation("default").animation as BonesAnimator;
 		}
 	}
 }
