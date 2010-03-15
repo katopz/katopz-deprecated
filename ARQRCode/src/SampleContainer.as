@@ -55,9 +55,10 @@ package
 			Oishi.POSITION_Y = 320;
 			Oishi.POSITION_Z = -100;
 			
-			Oishi.USE_DEDUG = false;
-			Oishi.USE_CAMERA = true;
-			Oishi.USE_CONTEXT = false;
+			Oishi.USE_DEDUG = true;
+			Oishi.USE_CAMERA = false;
+			Oishi.USE_CONTEXT = true;
+			Oishi.ALWAYS_RESET = false;
 			Oishi.MODEL_DATA_URL = "serverside/modelData.xml";
 			
 			Oishi.MATRIX3D_INTERPOLATE = .25;
