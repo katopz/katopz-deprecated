@@ -9,7 +9,7 @@ package
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.templates.BasicTemplate;
-	
+
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.utils.*;
@@ -43,13 +43,13 @@ package
 			loaded = true;
 			model = loader.handle;
 			model.x = 100;
-			
+
 			skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
-			
+
 			var _md2Exporter:MD2Exporter = new MD2Exporter(model);
 			_md2Exporter.addEventListener(Loader3DEvent.LOAD_SUCCESS, onConvertComplete);
 		}
-		
+
 		private function onConvertComplete(event:Loader3DEvent):void
 		{
 			var model:MovieMesh = event.loader.handle as MovieMesh;
