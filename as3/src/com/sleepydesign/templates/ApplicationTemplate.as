@@ -22,13 +22,16 @@ package com.sleepydesign.templates
 		protected var _stageWidth:Number = stage ? stage.stageWidth : NaN;
 		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
 
-		protected var _customSize:Rectangle;
+		protected var _screenRectangle:Rectangle;
 		
 		public function ApplicationTemplate()
 		{
 			super();
 			
-			//scrollRect = new Rectangle(0, 0, _customWidth || _stageWidth, _customHeight || _stageHeight);
+			if(!_screenRectangle)
+				_screenRectangle = new Rectangle(_stageWidth, _stageHeight);
+			
+			scrollRect = new Rectangle(0, 0, _screenRectangle.width, _screenRectangle.height);
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 
@@ -54,7 +57,7 @@ package com.sleepydesign.templates
 		protected function initSystem():void
 		{
 			// skin loader
-			LoaderUtil.loaderClip = new Preloader(_systemLayer, _customSize);
+			LoaderUtil.loaderClip = new Preloader(_systemLayer, _screenRectangle);
 
 			// get external config
 			LoaderUtil.loadXML(_configURI, onXMLLoad);
