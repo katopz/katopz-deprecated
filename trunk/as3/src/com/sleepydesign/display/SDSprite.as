@@ -134,8 +134,10 @@ package com.sleepydesign.display
 			
 			this._isDestroyed = true;
 			
-			if (this.parent != null)
-				this.parent.removeChild(this);
+			try{
+				if (this.parent != null)
+					this.parent.removeChild(this);
+			}catch(e:*){}
 		}
 	}
 }

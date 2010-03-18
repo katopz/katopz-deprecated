@@ -114,6 +114,7 @@ package com.sleepydesign.site
 
 					_childIndex = _oldPage.parent.getChildIndex(_oldPage);
 					DisplayObjectUtil.removeChildren(_oldPage, true, true);
+					
 					_oldPage.destroy();
 					_oldPage = null;
 

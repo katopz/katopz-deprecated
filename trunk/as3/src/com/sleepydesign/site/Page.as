@@ -1,10 +1,11 @@
 package com.sleepydesign.site
 {
+	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.StringUtil;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -161,6 +162,9 @@ package com.sleepydesign.site
 		{
 			super.destroy();
 
+			if(content is IDestroyable)
+				IDestroyable(content).destroy();
+			
 			content = null;
 			_container = null;
 			_xml = null;
