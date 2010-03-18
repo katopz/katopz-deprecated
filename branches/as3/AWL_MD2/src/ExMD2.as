@@ -32,6 +32,7 @@ package
 		{
 			var model:MovieMesh = event.loader.handle as MovieMesh;
 			model.rotationY = 180;
+			model.bothsides = true;
 			//model.play("walk");
 		}
 		

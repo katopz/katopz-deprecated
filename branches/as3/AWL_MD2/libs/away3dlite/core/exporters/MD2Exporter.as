@@ -24,7 +24,7 @@ package away3dlite.core.exporters
 		{
 			md2 = new MD2Builder();
 			md2.scaling = 5;
-			md2.material = new BitmapFileMaterial("assets/pg.png");
+			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
 			md2.convert(object3D);
 
 			var loader3D:Loader3D = new Loader3D();
@@ -37,6 +37,8 @@ package away3dlite.core.exporters
 			dispatchEvent(new Loader3DEvent(Loader3DEvent.LOAD_SUCCESS, event.target as Loader3D));
 			
 			trace("export...");
+			
+			//md2.convert(event.target.handle);
 			
 			var _data:ByteArray = md2.export();
 			FileUtil.save(_data);

@@ -36,6 +36,8 @@ package
 			loader.loadGeometry("assets/30_box_smooth_translate.dae", collada);
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			scene.addChild(loader);
+			
+			alpha = 0.01;
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
@@ -54,7 +56,7 @@ package
 		{
 			var model:MovieMesh = event.loader.handle as MovieMesh;
 			scene.addChild(model);
-			model.play("walk");
+			//model.play("walk");
 		}
 
 		override protected function onPreRender():void
