@@ -19,7 +19,7 @@ package
 	{
 		private var collada:Collada;
 		private var loader:Loader3D;
-		private var loaded:Boolean = false;
+		
 		private var model:Object3D;
 		private var skinAnimation:BonesAnimator;
 
@@ -36,13 +36,10 @@ package
 			loader.loadGeometry("assets/30_box_smooth_translate.dae", collada);
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			scene.addChild(loader);
-			
-			alpha = 0.01;
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
 		{
-			loaded = true;
 			model = loader.handle;
 			model.x = 100;
 
