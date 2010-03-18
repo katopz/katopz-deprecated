@@ -3,10 +3,12 @@ package com.sleepydesign.templates
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
+	import com.sleepydesign.system.SystemUtil;
 	
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 
 	public class ApplicationTemplate extends SDSprite
 	{
@@ -60,7 +62,7 @@ package com.sleepydesign.templates
 			LoaderUtil.loaderClip = new Preloader(_systemLayer, _screenRectangle);
 
 			// get external config
-			LoaderUtil.loadXML(_configURI, onXMLLoad);
+			LoaderUtil.loadXML(SystemUtil.isBrowser()?_configURI + "?cache=" + getTimer():_configURI, onXMLLoad);
 		}
 
 		protected function onXMLLoad(event:Event):void
