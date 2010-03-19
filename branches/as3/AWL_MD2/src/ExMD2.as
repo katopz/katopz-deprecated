@@ -9,7 +9,7 @@ package
 	
 	import flash.display.*;
 
-	[SWF(backgroundColor="#FFFFFF", frameRate="30", quality="MEDIUM", width="800", height="600")]
+	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="600")]
 
 	/**
 	 * MD2 example.
@@ -24,7 +24,7 @@ package
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader.loadGeometry("assets/tri.md2", md2);
+			loader.loadGeometry("assets/tri0.md2", md2);
 			scene.addChild(loader);
 		}
 		
@@ -38,7 +38,7 @@ package
 		
 		override protected function onPreRender():void
 		{
-			//scene.rotationY++;
+			scene.rotationY++;
 		}
 	}
 }

@@ -29,7 +29,7 @@ package away3dlite.core.exporters
 
 			var loader3D:Loader3D = new Loader3D();
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader3D.loadGeometry("assets/tri.md2", md2);
+			loader3D.loadGeometry("assets/cube.md2", md2);
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
