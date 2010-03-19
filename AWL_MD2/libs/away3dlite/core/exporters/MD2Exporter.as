@@ -1,5 +1,6 @@
 package away3dlite.core.exporters
 {
+	import away3dlite.animators.MovieMesh;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Loader3D;
@@ -38,6 +39,7 @@ package away3dlite.core.exporters
 			
 			trace("export...");
 			
+			MovieMesh(event.target.handle).bothsides = true;
 			//md2.convert(event.target.handle);
 			
 			var _data:ByteArray = md2.export();

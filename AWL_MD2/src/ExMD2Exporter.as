@@ -37,7 +37,7 @@ package
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			scene.addChild(loader);
 			
-			alpha = 0;
+			//alpha = 0;
 		}
 
 		private function onSuccess(event:Loader3DEvent):void

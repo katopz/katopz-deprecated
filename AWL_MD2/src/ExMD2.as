@@ -24,7 +24,7 @@ package
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader.loadGeometry("assets/tri0.md2", md2);
+			loader.loadGeometry("assets/test.md2", md2);
 			scene.addChild(loader);
 		}
 		
