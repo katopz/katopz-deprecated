@@ -25,7 +25,7 @@ package
 
 		override protected function onInit():void
 		{
-			Debug.active = true;
+			Debug.active = false;
 			camera.y = -500;
 			camera.lookAt(new Vector3D());
 
