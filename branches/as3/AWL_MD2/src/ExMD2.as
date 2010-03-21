@@ -5,6 +5,7 @@ package
 	import away3dlite.events.*;
 	import away3dlite.loaders.*;
 	import away3dlite.materials.BitmapFileMaterial;
+	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.templates.*;
 	
 	import flash.display.*;
@@ -21,6 +22,7 @@ package
 			var md2:MD2 = new MD2();
 			md2.scaling = 5;
 			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
+			//md2.material = new WireColorMaterial();
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);

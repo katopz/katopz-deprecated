@@ -8,9 +8,10 @@ package
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
+	import away3dlite.loaders.MD2;
+	import away3dlite.materials.BitmapFileMaterial;
 	import away3dlite.templates.BasicTemplate;
-
-	import flash.events.Event;
+	
 	import flash.geom.Vector3D;
 	import flash.utils.*;
 
@@ -18,7 +19,7 @@ package
 	public class ExMD2Exporter extends BasicTemplate
 	{
 		private var collada:Collada;
-		private var loader:Loader3D;
+		private var loader3D:Loader3D;
 		
 		private var model:Object3D;
 		private var skinAnimation:BonesAnimator;
@@ -30,30 +31,40 @@ package
 			camera.lookAt(new Vector3D());
 
 			collada = new Collada();
-			collada.scaling = 10;
+			collada.scaling = 5;
 
-			loader = new Loader3D();
-			loader.loadGeometry("assets/30_box_smooth_translate.dae", collada);
-			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			scene.addChild(loader);
+			loader3D = new Loader3D();
+			loader3D.loadGeometry("assets/30_box_smooth_translate.dae", collada);
+			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			scene.addChild(loader3D);
+			
+			/*
+			var md2:MD2 = new MD2();
+			md2.scaling = 5;
+			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
+			loader3D = new Loader3D();
+			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			loader3D.loadGeometry("assets/tri.md2", md2);
+			scene.addChild(loader3D);
+			*/
 			
 			//alpha = 0;
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
 		{
-			model = loader.handle;
+			model = loader3D.handle;
 			model.x = 100;
 
-			skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			//skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 
-			var _md2Exporter:MD2Exporter = new MD2Exporter(model);
-			_md2Exporter.addEventListener(Loader3DEvent.LOAD_SUCCESS, onConvertComplete);
+			var _md2Exporter:MD2Exporter = new MD2Exporter(model, onConvertComplete);
+			//_md2Exporter.addEventListener(Loader3DEvent.LOAD_SUCCESS, onConvertComplete);
 		}
 
-		private function onConvertComplete(event:Loader3DEvent):void
+		private function onConvertComplete(model:MovieMesh):void
 		{
-			var model:MovieMesh = event.loader.handle as MovieMesh;
+			//var model:MovieMesh = event.loader.handle as MovieMesh;
 			scene.addChild(model);
 			//model.play("walk");
 		}

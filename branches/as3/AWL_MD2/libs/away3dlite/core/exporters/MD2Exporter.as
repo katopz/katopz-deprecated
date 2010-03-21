@@ -9,15 +9,19 @@ package away3dlite.core.exporters
 	
 	import com.sleepydesign.net.FileUtil;
 	
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.ByteArray;
 
 	public class MD2Exporter extends EventDispatcher
 	{
 		private var md2:MD2Builder;
+		private var _callback:Function;
 		
-		public function MD2Exporter(object3D:Object3D)
+		public function MD2Exporter(object3D:Object3D, callback:Function)
 		{
+			_callback = callback;
+			
 			parse(object3D);
 		}
 
@@ -26,11 +30,15 @@ package away3dlite.core.exporters
 			md2 = new MD2Builder();
 			md2.scaling = 5;
 			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
-			md2.convert(object3D);
-
+			_callback(md2.convert(object3D));
+			/*
 			var loader3D:Loader3D = new Loader3D();
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader3D.loadGeometry("assets/cube_uv.md2", md2);
+			loader3D.loadGeometry("assets/tri.md2", md2);
+			*/
+			var _data:ByteArray = md2.export();
+			FileUtil.save(_data);
+			
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
