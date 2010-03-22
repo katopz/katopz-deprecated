@@ -48,7 +48,7 @@ package
 			scene.addChild(loader3D);
 			*/
 			
-			//alpha = 0;
+			alpha = 0;
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
