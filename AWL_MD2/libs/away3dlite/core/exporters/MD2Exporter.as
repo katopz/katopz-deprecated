@@ -15,7 +15,7 @@ package away3dlite.core.exporters
 
 	public class MD2Exporter extends EventDispatcher
 	{
-		private var md2:MD2Builder;
+		private var _md2Builder:MD2Builder;
 		private var _callback:Function;
 		
 		public function MD2Exporter(object3D:Object3D, callback:Function)
@@ -27,16 +27,16 @@ package away3dlite.core.exporters
 
 		private function parse(object3D:Object3D):void
 		{
-			md2 = new MD2Builder();
-			md2.scaling = 5;
-			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
-			_callback(md2.convert(object3D));
+			_md2Builder = new MD2Builder();
+			_md2Builder.scaling = 5;
+			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
+			_callback(_md2Builder.convert(object3D));
 			/*
 			var loader3D:Loader3D = new Loader3D();
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 			loader3D.loadGeometry("assets/tri.md2", md2);
 			*/
-			var _data:ByteArray = md2.export();
+			var _data:ByteArray = _md2Builder.export();
 			FileUtil.save(_data);
 			
 		}
@@ -50,7 +50,7 @@ package away3dlite.core.exporters
 			MovieMesh(event.target.handle).bothsides = true;
 			//md2.convert(event.target.handle);
 			
-			var _data:ByteArray = md2.export();
+			var _data:ByteArray = _md2Builder.export();
 			FileUtil.save(_data);
 		}
 	}
