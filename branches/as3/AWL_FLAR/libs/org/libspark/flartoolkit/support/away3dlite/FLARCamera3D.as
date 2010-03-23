@@ -66,7 +66,7 @@ package org.libspark.flartoolkit.support.away3dlite {
 					fm.m00*viewportToSourceWidthRatio,	fm.m01,	0,	fm.m03,
 					fm.m10,	fm.m11*viewportToSourceWidthRatio,	0,	fm.m13,
 					fm.m20,	fm.m21,	fm.m22,	1,
-					0,		0,		0,		0
+					0,		0,		0,		1
 				]));
 			
 			// TODO: once Away3DLite main branch is using lenses, uncomment this and remove projectionMatrix3D() override.
