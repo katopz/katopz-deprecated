@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ingredients>
-	<ingredient>
-		<code>OOOOOO</code>
-		<name><![CDATA[cat]]></name>
-		<src>assets/cat.dae</src>
-	</ingredient>
-</ingredients>
