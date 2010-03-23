@@ -182,7 +182,7 @@ package com.squidder.flar.detector {
 						ev.codeId = i;
 						ev.codeIndex = j;
 						
-						trace( "SYMBOL REMOVED", ev.codeId , ev.codeIndex );	
+						//trace( "SYMBOL REMOVED", ev.codeId , ev.codeIndex );	
 						dispatchEvent( ev );
 					}
 
@@ -192,7 +192,7 @@ package com.squidder.flar.detector {
 					ev.codeId = i;
 					ev.codeIndex = 0;
 					
-					trace( "SYMBOL ADDED" , ev.codeId );
+					//trace( "SYMBOL ADDED" , ev.codeId );
 					dispatchEvent( ev );
 					
 				} else if ( newResults[ i ].length > _resultsArray[ i ].length ) {
@@ -207,7 +207,7 @@ package com.squidder.flar.detector {
 							ev.codeId = i;
 							ev.codeIndex = j;
 							
-							trace( "SYMBOL ADDED", ev.codeId,ev.codeIndex );
+							//trace( "SYMBOL ADDED", ev.codeId,ev.codeIndex );
 							
 							dispatchEvent( ev );					
 							continue;
