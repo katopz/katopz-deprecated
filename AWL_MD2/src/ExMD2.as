@@ -22,7 +22,6 @@ package
 			var md2:MD2 = new MD2();
 			md2.scaling = 5;
 			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
-			//md2.material = new WireColorMaterial();
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
@@ -35,7 +34,7 @@ package
 			var model:MovieMesh = event.loader.handle as MovieMesh;
 			model.rotationY = 180;
 			model.bothsides = true;
-			model.play("frame");
+			model.play("right");
 		}
 		
 		override protected function onPreRender():void
