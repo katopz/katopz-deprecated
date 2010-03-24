@@ -9,21 +9,27 @@ package com.sleepydesign.skins
 
 	public class MacLoadingClip extends SDSprite
 	{
-		private var timer:Timer;
-		private var slices:int;
-		private var radius:int;
-		private var colorValue:Number;
+		protected var timer:Timer;
+		protected var slices:int;
+		protected var radius:int;
+		protected var colorValue:Number;
+		
+		protected var _canvas:SDSprite;
 
 		public function MacLoadingClip(colorValue:Number = 0x666666, slices:int = 12, radius:int = 6)
 		{
 			this.slices = slices;
 			this.radius = radius;
 			this.colorValue = colorValue;
+			
+			_canvas = new SDSprite();
+			addChild(_canvas);
+			
 			draw();
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
-		private function onAddedToStage(event:Event):void
+		protected function onAddedToStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
@@ -32,7 +38,7 @@ package com.sleepydesign.skins
 			timer.start();
 		}
 
-		private function onRemovedFromStage(event:Event):void
+		protected function onRemovedFromStage(event:Event):void
 		{
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -41,12 +47,12 @@ package com.sleepydesign.skins
 			timer = null;
 		}
 
-		private function onTimer(event:TimerEvent):void
+		protected function onTimer(event:TimerEvent):void
 		{
-			rotation = (rotation + (360 / slices)) % 360;
+			_canvas.rotation = (_canvas.rotation + (360 / slices)) % 360;
 		}
 
-		private function draw():void
+		protected function draw():void
 		{
 			var i:int = slices;
 			var degrees:int = 360 / slices;
@@ -58,11 +64,11 @@ package com.sleepydesign.skins
 				slice.rotation = -degrees * i;
 				slice.x = Math.sin(radianAngle) * radius;
 				slice.y = Math.cos(radianAngle) * radius;
-				addChild(slice);
+				_canvas.addChild(slice);
 			}
 		}
 
-		private function getSlice():Shape
+		protected function getSlice():Shape
 		{
 			var slice:Shape = new Shape();
 			slice.graphics.beginFill(colorValue);

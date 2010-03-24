@@ -6,6 +6,7 @@ package com.sleepydesign.skins
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -14,8 +15,6 @@ package com.sleepydesign.skins
 
 	public class Preloader extends SDSprite
 	{
-		public static const DEFAULT:String = "default";
-
 		private var _loader:Sprite;
 		private var _bg:Sprite;
 		private var _containter:DisplayObjectContainer;
@@ -24,7 +23,7 @@ package com.sleepydesign.skins
 
 		protected var _customSize:Rectangle;
 
-		public function Preloader(containter:DisplayObjectContainer, customSize:Rectangle = null, type:String = DEFAULT)
+		public function Preloader(containter:DisplayObjectContainer, customSize:Rectangle = null, loaderClip:DisplayObject = null)
 		{
 			_containter = containter;
 			_stage = containter.stage;
@@ -38,7 +37,7 @@ package com.sleepydesign.skins
 			addChild(_bg);
 
 			// loader
-			_loader = addChild(new MacLoadingClip()) as Sprite;
+			LoaderUtil.loaderClip = _loader = addChild(loaderClip || new MacLoadingClip()) as Sprite;
 			_loader.x = _customSize.width / 2;
 			_loader.y = _customSize.height / 2;
 

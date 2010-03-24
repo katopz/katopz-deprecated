@@ -47,8 +47,8 @@ package com.sleepydesign.site
 
 		public function setFocusByPath(path:String):void
 		{
-			DebugUtil.trace(" ! setFocusByPath : " + path);
-			DebugUtil.trace(" ! _currentPaths : " + _currentPaths);
+			DebugUtil.print(" ! setFocusByPath : " + path);
+			DebugUtil.print(" ! _currentPaths : " + _currentPaths);
 			
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
@@ -59,7 +59,7 @@ package com.sleepydesign.site
 			/*
 			var j:int = _basePage.numChildren;
 			while (j--)
-				DebugUtil.trace("*"+_basePage.getChildAt(j).name);
+				DebugUtil.print("*"+_basePage.getChildAt(j).name);
 			*/
 
 			// not dirty yet
@@ -74,7 +74,7 @@ package com.sleepydesign.site
 				{
 					URLUtil.getURL(_focusXML.@src, _focusXML.@target);
 					_currentPaths = _paths.slice();
-					DebugUtil.trace(" ! _currentPaths : " + _currentPaths);
+					DebugUtil.print(" ! _currentPaths : " + _currentPaths);
 				}
 				return;
 			}
@@ -99,16 +99,16 @@ package com.sleepydesign.site
 					/*
 					var j:int = _basePage.numChildren;
 					while (j--)
-				   		DebugUtil.trace(_basePage.getChildAt(j).name);
+				   		DebugUtil.print(_basePage.getChildAt(j).name);
 				   	*/
 					   
-					DebugUtil.trace(" - remove Page : " + _currentPaths[i]);
+					DebugUtil.print(" - remove Page : " + _currentPaths[i]);
 
 					var _oldPage:Page = _basePage.getChildByName(_currentPaths[i]) as Page;
 
 					if (!_oldPage)
 					{
-						DebugUtil.trace(" - remove Page : " + _prevPageID);
+						DebugUtil.print(" - remove Page : " + _prevPageID);
 						_oldPage = _basePage.getChildByName(_prevPageID) as Page;
 					}
 
@@ -132,7 +132,7 @@ package com.sleepydesign.site
 						continue;
 					}
 					
-					DebugUtil.trace(" + add Page : ", _childIndex, _pathID);
+					DebugUtil.print(" + add Page : ", _childIndex, _pathID);
 
 					_subPage = new Page(_basePage, _itemXML, _paths.slice(i+1).join("/"));
 					_subPage.name = _pathID;
@@ -143,7 +143,7 @@ package com.sleepydesign.site
 						_basePage.addChildAt(_subPage, _childIndex);
 					}
 
-					DebugUtil.trace(" to : "+ _basePage.name );
+					DebugUtil.print(" to : "+ _basePage.name );
 				}
 
 				// reparent
