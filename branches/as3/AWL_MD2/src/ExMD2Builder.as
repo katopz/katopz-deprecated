@@ -36,7 +36,7 @@ package
 			var collada:Collada = new Collada();
 			collada.scaling = 5;
 
-			// load our target model
+			// load target model
 			var loader3D:Loader3D = new Loader3D();
 			loader3D.loadGeometry("assets/30_box_smooth_translate.dae", collada);
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
