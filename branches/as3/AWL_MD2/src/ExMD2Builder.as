@@ -1,23 +1,27 @@
 package
 {
-	import com.sleepydesign.net.FileUtil;
-	import flash.geom.Vector3D;
-	import flash.utils.*;
 	import away3dlite.animators.BonesAnimator;
+	import away3dlite.animators.MovieMesh;
+	import away3dlite.builders.MD2Builder;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
-	import away3dlite.loaders.MD2Builder;
 	import away3dlite.materials.BitmapFileMaterial;
 	import away3dlite.templates.BasicTemplate;
+	
+	import com.sleepydesign.net.FileUtil;
+	
+	import flash.geom.Vector3D;
+	import flash.utils.*;
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	public class ExMD2Builder extends BasicTemplate
 	{
 		private var _skinAnimation:BonesAnimator;
 		private var _md2Builder:MD2Builder;
+		private var _md2MovieMesh:MovieMesh;
 
 		override protected function onInit():void
 		{
@@ -52,10 +56,13 @@ package
 			_md2Builder = new MD2Builder();
 			_md2Builder.scaling = 5;
 			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
-			scene.addChild(_md2Builder.convert(model));
+			
+			// bring it on
+			_md2MovieMesh = _md2Builder.convert(model);
+			scene.addChild(_md2MovieMesh);
 
-			// save as File
-			var _data:ByteArray = _md2Builder.export();
+			// save as file
+			var _data:ByteArray = _md2Builder.getMD2();
 			FileUtil.save(_data);
 		}
 
@@ -64,6 +71,9 @@ package
 			// update the collada animation
 			if (_skinAnimation)
 				_skinAnimation.update(getTimer() / 1000);
+				
+			if(_md2MovieMesh)
+				_md2MovieMesh.play();
 
 			// show time
 			scene.rotationY++;
