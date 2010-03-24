@@ -134,7 +134,7 @@ package away3dlite.animators
 		/**
 		 * Plays a pre-defined labelled sequence of animation frames.
 		 */
-		public function play(label:String = ""):void
+		public function play(label:String = "frame"):void
 		{
 			if (!_labels)
 				return;
