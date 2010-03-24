@@ -42,6 +42,7 @@ package com.sleepydesign.templates
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			initStage();
 			initLayer();
+			initLoader();
 			initSystem();
 		}
 
@@ -56,11 +57,14 @@ package com.sleepydesign.templates
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 		}
 
-		protected function initSystem():void
+		protected function initLoader():void
 		{
 			// skin loader
 			LoaderUtil.loaderClip = new Preloader(_systemLayer, _screenRectangle);
-
+		}
+		
+		protected function initSystem():void
+		{
 			// get external config
 			LoaderUtil.loadXML(SystemUtil.isBrowser()?_configURI + "?cache=" + getTimer():_configURI, onXMLLoad);
 		}
