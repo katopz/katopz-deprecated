@@ -4,11 +4,10 @@ package com.sleepydesign.templates
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
 	import com.sleepydesign.system.SystemUtil;
-
+	
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
 
 	public class ApplicationTemplate extends SDSprite
 	{
@@ -68,7 +67,7 @@ package com.sleepydesign.templates
 		protected function initSystem():void
 		{
 			// get external config
-			LoaderUtil.loadXML(SystemUtil.isBrowser() ? _configURI + "?cache=" + getTimer() : _configURI, onXMLLoad);
+			LoaderUtil.loadXML(SystemUtil.isBrowser() ? _configURI + "?cache=" + new Date().valueOf() : _configURI, onXMLLoad);
 		}
 
 		protected function onXMLLoad(event:Event):void
