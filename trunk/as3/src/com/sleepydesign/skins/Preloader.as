@@ -51,6 +51,7 @@ package com.sleepydesign.skins
 			{
 				mouseEnabled = true;
 				draw();
+				TweenLite.killTweensOf(LoaderUtil.loaderClip);
 				TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay: 0.5, autoAlpha: 1});
 			};
 
@@ -58,6 +59,7 @@ package com.sleepydesign.skins
 			{
 				mouseEnabled = false;
 				draw();
+				TweenLite.killTweensOf(LoaderUtil.loaderClip);
 				TweenLite.to(LoaderUtil.loaderClip, 0.5, {delay: 0.5, autoAlpha: 0});
 			};
 
