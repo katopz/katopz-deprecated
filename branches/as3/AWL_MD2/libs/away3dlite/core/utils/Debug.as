@@ -61,5 +61,5 @@ package away3dlite.core.utils
  */
 function doTrace(...agrs):void
 {
-    trace(agrs);
+    trace.apply(this, agrs);
 }
