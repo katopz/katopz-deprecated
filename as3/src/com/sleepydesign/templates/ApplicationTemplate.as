@@ -4,7 +4,7 @@ package com.sleepydesign.templates
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.skins.Preloader;
 	import com.sleepydesign.system.SystemUtil;
-	
+
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -25,14 +25,14 @@ package com.sleepydesign.templates
 		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
 
 		protected var _screenRectangle:Rectangle;
-		
+
 		public function ApplicationTemplate()
 		{
 			super();
-			
-			if(!_screenRectangle)
-				_screenRectangle = new Rectangle(_stageWidth, _stageHeight);
-			
+
+			if (!_screenRectangle)
+				_screenRectangle = new Rectangle(0, 0, _stageWidth, _stageHeight);
+
 			scrollRect = new Rectangle(0, 0, _screenRectangle.width, _screenRectangle.height);
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
@@ -62,11 +62,11 @@ package com.sleepydesign.templates
 			// skin loader
 			LoaderUtil.loaderClip = new Preloader(_systemLayer, _screenRectangle);
 		}
-		
+
 		protected function initSystem():void
 		{
 			// get external config
-			LoaderUtil.loadXML(SystemUtil.isBrowser()?_configURI + "?cache=" + getTimer():_configURI, onXMLLoad);
+			LoaderUtil.loadXML(SystemUtil.isBrowser() ? _configURI + "?cache=" + getTimer() : _configURI, onXMLLoad);
 		}
 
 		protected function onXMLLoad(event:Event):void
