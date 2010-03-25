@@ -56,7 +56,7 @@ package
 			scene.addChild(_md2MovieMesh);
 
 			// save as file
-			new FileReference().save(_md2Builder.getMD2(), "untitle.md2");
+			new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
 		}
 
 		override protected function onPreRender():void
