@@ -29,17 +29,19 @@ package com.sleepydesign.templates
 		public function ApplicationTemplate()
 		{
 			super();
-
+			
 			if (!_screenRectangle)
 				_screenRectangle = new Rectangle(0, 0, _stageWidth, _stageHeight);
-
-			scrollRect = new Rectangle(0, 0, _screenRectangle.width, _screenRectangle.height);
+			else
+				scrollRect = new Rectangle(0, 0, _screenRectangle.width, _screenRectangle.height);
+			
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 
 		protected function onStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			
 			initStage();
 			initLayer();
 			initLoader();
@@ -60,7 +62,7 @@ package com.sleepydesign.templates
 		protected function initLoader():void
 		{
 			// skin loader
-			LoaderUtil.loaderClip = new Preloader(_systemLayer, _screenRectangle);
+			LoaderUtil.loaderClip = new Preloader(_systemLayer);
 		}
 
 		protected function initSystem():void
