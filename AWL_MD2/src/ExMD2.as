@@ -20,8 +20,8 @@ package
 		override protected function onInit():void
 		{
 			var md2:MD2 = new MD2();
-			md2.scaling = 5;
-			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
+			md2.scaling = 2;
+			md2.material = new BitmapFileMaterial("nemuvine/body.png");
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
@@ -34,7 +34,7 @@ package
 			var model:MovieMesh = event.loader.handle as MovieMesh;
 			model.rotationY = 180;
 			model.bothsides = true;
-			model.play("right");
+			model.play();
 		}
 		
 		override protected function onPreRender():void
