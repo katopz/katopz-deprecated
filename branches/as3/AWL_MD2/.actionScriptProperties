@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties mainApplicationPath="ExMD2Builder.as" projectUUID="fd442e1b-8724-4eb5-ab15-0bba759eac05" version="6">
+<actionScriptProperties mainApplicationPath="ExMD2AnimationBuilder.as" projectUUID="fd442e1b-8724-4eb5-ab15-0bba759eac05" version="6">
   <compiler additionalCompilerArguments="-debug=true" autoRSLOrdering="true" copyDependentFiles="false" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="libs"/>
@@ -25,6 +25,7 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="ExMD2AnimationBuilder.as"/>
     <application path="ExMD2Builder.as"/>
     <application path="ExMD2.as"/>
   </applications>
