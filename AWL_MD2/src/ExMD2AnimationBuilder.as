@@ -73,7 +73,7 @@ package
 			_animationDatas[1].end = 65;
 			
 			// bring it on
-			_md2MovieMesh = _md2Builder.convert(model, _animationDatas);
+			_md2MovieMesh = _md2Builder.convert(model, _animationDatas)[0];
 			scene.addChild(_md2MovieMesh);
 
 			// save as file

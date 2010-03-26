@@ -20,7 +20,7 @@ package
 	{
 		private var _skinAnimation:BonesAnimator;
 		private var _md2Builder:MD2Builder;
-		private var _md2MovieMesh:MovieMesh;
+		private var _meshes:Vector.<MovieMesh>
 
 		override protected function onInit():void
 		{
@@ -57,11 +57,12 @@ package
 			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
 			
 			// bring it on
-			_md2MovieMesh = _md2Builder.convert(model);
-			scene.addChild(_md2MovieMesh);
+			var _meshes:Vector.<MovieMesh> = _md2Builder.convert(model);
+			for each(var _mesh:MovieMesh in _meshes)
+				scene.addChild(_mesh);
 
 			// save as file
-			new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
+			//new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
 		}
 
 		override protected function onPreRender():void
@@ -70,9 +71,10 @@ package
 			if (_skinAnimation)
 				_skinAnimation.update(getTimer() / 1000);
 
-			// play only right animation
-			if (_md2MovieMesh)
-				_md2MovieMesh.play();
+			// play animation
+			if (_meshes)
+				for each(var _mesh:MovieMesh in _meshes)
+					_mesh.play();
 
 			// show time
 			scene.rotationY++;
