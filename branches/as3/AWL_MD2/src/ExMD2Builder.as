@@ -52,8 +52,7 @@ package
 			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
 
 			// bring it on
-			_md2MovieMesh = _md2Builder.convert(model);
-			scene.addChild(_md2MovieMesh);
+			scene.addChild(_md2Builder.convert(model)[0]);
 
 			// save as file
 			new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
