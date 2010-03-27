@@ -3,6 +3,7 @@ package
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.builders.MD2Builder;
+	import away3dlite.core.base.Mesh;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
@@ -33,11 +34,14 @@ package
 
 			// some collada with animation
 			var collada:Collada = new Collada();
-			collada.scaling = 25;
+			collada.scaling = 20;
+			collada.bothsides = false;
 
 			// load target model
 			var loader3D:Loader3D = new Loader3D();
 			loader3D.loadGeometry("nemuvine/nemuvine.dae", collada);
+			//loader3D.loadGeometry("assets/10_box_still.dae", collada);
+			//loader3D.loadGeometry("assets/30_box_smooth_translate.dae", collada);
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -49,20 +53,27 @@ package
 			model.x = 100;
 
 			// test animation
-			_skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
-
+			try{
+				_skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			}catch(e:*){}
+			
 			// build as MD2
 			_md2Builder = new MD2Builder();
 			_md2Builder.scaling = 1;
 			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
 			
-			// bring it on
-			var _meshes:Vector.<MovieMesh> = _md2Builder.convert(model);
-			for each(var _mesh:MovieMesh in _meshes)
+			// convert to meshes
+			_meshes = _md2Builder.convert(model);
+			
+			// preview and save
+			for each(var _mesh:Mesh in _meshes)
+			{
+				// bring it on
 				scene.addChild(_mesh);
-
-			// save as file
-			//new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
+				
+				// save as file
+				new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
+			}
 		}
 
 		override protected function onPreRender():void
