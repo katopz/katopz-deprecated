@@ -66,14 +66,14 @@ package
 			_meshes = _md2Builder.convert(model);
 			
 			// preview and save
-			for each(var _mesh:Mesh in _meshes)
+			for each(var _mesh:MovieMesh in _meshes)
 			{
 				// bring it on
 				scene.addChild(_mesh);
-				
-				// save as file
-				new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
 			}
+			
+			// save as file
+			new FileReference().save(_md2Builder.getMD2(_meshes[1]), _meshes[1].name + ".md2");
 		}
 
 		override protected function onPreRender():void
