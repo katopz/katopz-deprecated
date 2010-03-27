@@ -11,21 +11,21 @@ package
 	import flash.display.*;
 
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="600")]
-
 	/**
-	 * MD2 example.
-	 */
+	 * Example : MD2
+	 * @author katopz
+	 */	
 	public class ExMD2 extends BasicTemplate
 	{
 		override protected function onInit():void
 		{
 			var md2:MD2 = new MD2();
 			md2.scaling = 2;
-			md2.material = new BitmapFileMaterial("nemuvine/body.png");
+			md2.material = new BitmapFileMaterial("nemuvine/chair.png");
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader.loadGeometry("assets/test.md2", md2);
+			loader.loadGeometry("nemuvine/table.md2", md2);
 			scene.addChild(loader);
 		}
 		
@@ -33,7 +33,7 @@ package
 		{
 			var model:MovieMesh = event.loader.handle as MovieMesh;
 			model.rotationY = 180;
-			model.bothsides = true;
+			model.bothsides = false;
 			model.play();
 		}
 		

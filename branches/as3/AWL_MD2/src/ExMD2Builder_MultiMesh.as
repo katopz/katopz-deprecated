@@ -1,7 +1,9 @@
 package
 {
+	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.builders.MD2Builder;
+	import away3dlite.core.base.Mesh;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
@@ -16,12 +18,14 @@ package
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	/**
-	 * Example : MD2Builder
+	 * Example : MD2Builder with multi mesh
 	 * @author katopz
 	 */	
-	public class ExMD2Builder extends BasicTemplate
+	public class ExMD2Builder_MultiMesh extends BasicTemplate
 	{
+		private var _skinAnimation:BonesAnimator;
 		private var _md2Builder:MD2Builder;
+		private var _meshes:Vector.<MovieMesh>;
 
 		override protected function onInit():void
 		{
@@ -34,11 +38,12 @@ package
 
 			// some collada with animation
 			var collada:Collada = new Collada();
-			collada.scaling = 5;
+			collada.scaling = 20;
+			collada.bothsides = false;
 
 			// load target model
 			var loader3D:Loader3D = new Loader3D();
-			loader3D.loadGeometry("assets/10_box_still.dae", collada);
+			loader3D.loadGeometry("nemuvine/nemuvine.dae", collada);
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -49,20 +54,38 @@ package
 			scene.addChild(model);
 			model.x = 100;
 
+			// test animation
+			try{
+				_skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			}catch (e:*){}
+
 			// build as MD2
 			_md2Builder = new MD2Builder();
-			_md2Builder.scaling = 5;
+			_md2Builder.scaling = 1;
 			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
 
-			// bring it on
-			scene.addChild(_md2Builder.convert(model)[0]);
+			// convert to meshes
+			_meshes = _md2Builder.convert(model);
 
-			// save as file
-			new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
+			// bring it on one by one
+			for each (var _mesh:MovieMesh in _meshes)
+				scene.addChild(_mesh);
+
+			// save the 1st one as .md2 file
+			new FileReference().save(_md2Builder.getMD2(_meshes[0]), _meshes[0].name + ".md2");
 		}
 
 		override protected function onPreRender():void
 		{
+			// update the collada animation
+			if (_skinAnimation)
+				_skinAnimation.update(getTimer() / 1000);
+
+			// play animation
+			if (_meshes)
+				for each (var _mesh:MovieMesh in _meshes)
+					_mesh.play();
+
 			// show time
 			scene.rotationY++;
 		}

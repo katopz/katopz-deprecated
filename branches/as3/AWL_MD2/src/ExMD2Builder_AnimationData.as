@@ -17,7 +17,11 @@ package
 	import flash.utils.*;
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
-	public class ExMD2AnimationBuilder extends BasicTemplate
+	/**
+	 * Example : MD2Builder with AnimationData
+	 * @author katopz
+	 */	
+	public class ExMD2Builder_AnimationData extends BasicTemplate
 	{
 		private var _bonesAnimator:BonesAnimator;
 		private var _md2Builder:MD2Builder;

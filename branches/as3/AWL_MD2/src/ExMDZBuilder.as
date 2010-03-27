@@ -3,7 +3,7 @@ package
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.builders.MD2Builder;
-	import away3dlite.core.base.Mesh;
+	import away3dlite.builders.MDZBuilder;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
@@ -17,11 +17,11 @@ package
 	import flash.utils.*;
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
-	public class ExMultiMD2AnimationBuilder extends BasicTemplate
+	public class ExMDZBuilder extends BasicTemplate
 	{
 		private var _skinAnimation:BonesAnimator;
-		private var _md2Builder:MD2Builder;
-		private var _meshes:Vector.<MovieMesh>
+		private var _mdzBuilder:MDZBuilder;
+		private var _meshes:Vector.<MovieMesh>;
 
 		override protected function onInit():void
 		{
@@ -40,8 +40,6 @@ package
 			// load target model
 			var loader3D:Loader3D = new Loader3D();
 			loader3D.loadGeometry("nemuvine/nemuvine.dae", collada);
-			//loader3D.loadGeometry("assets/10_box_still.dae", collada);
-			//loader3D.loadGeometry("assets/30_box_smooth_translate.dae", collada);
 			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -55,25 +53,21 @@ package
 			// test animation
 			try{
 				_skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
-			}catch(e:*){}
-			
+			}catch (e:*){}
+
 			// build as MD2
-			_md2Builder = new MD2Builder();
-			_md2Builder.scaling = 1;
-			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
-			
+			_mdzBuilder = new MDZBuilder();
+			_mdzBuilder.material = new BitmapFileMaterial("assets/yellow.jpg");
+
 			// convert to meshes
-			_meshes = _md2Builder.convert(model);
-			
-			// preview and save
-			for each(var _mesh:MovieMesh in _meshes)
-			{
-				// bring it on
+			_meshes = _mdzBuilder.convert(model);
+
+			// bring it on one by one
+			for each (var _mesh:MovieMesh in _meshes)
 				scene.addChild(_mesh);
-			}
-			
-			// save as file
-			new FileReference().save(_md2Builder.getMD2(_meshes[1]), _meshes[1].name + ".md2");
+
+			// save the 1st one as .mds file
+			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "nemuvine.zip");
 		}
 
 		override protected function onPreRender():void
@@ -84,7 +78,7 @@ package
 
 			// play animation
 			if (_meshes)
-				for each(var _mesh:MovieMesh in _meshes)
+				for each (var _mesh:MovieMesh in _meshes)
 					_mesh.play();
 
 			// show time

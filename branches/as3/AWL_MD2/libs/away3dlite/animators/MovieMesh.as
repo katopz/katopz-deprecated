@@ -150,7 +150,7 @@ package away3dlite.animators
 					var _begin:int = 0;
 					var _end:int = 0;
 					
-					for(var i:* in _labels)
+					for(var i:Object in _labels)
 					{
 						_begin = (_labels[i].begin < _begin)?_labels[i].begin:_begin;
 						_end = (_labels[i].end > _end)?_labels[i].end:_end;
