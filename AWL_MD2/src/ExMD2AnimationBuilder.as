@@ -19,7 +19,7 @@ package
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	public class ExMD2AnimationBuilder extends BasicTemplate
 	{
-		private var _skinAnimation:BonesAnimator;
+		private var _bonesAnimator:BonesAnimator;
 		private var _md2Builder:MD2Builder;
 		private var _md2MovieMesh:MovieMesh;
 
@@ -50,7 +50,7 @@ package
 			model.x = 100;
 
 			// test animation
-			_skinAnimation = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			_bonesAnimator = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
 
 			// build as MD2
 			_md2Builder = new MD2Builder();
@@ -83,8 +83,8 @@ package
 		override protected function onPreRender():void
 		{
 			// update the collada animation
-			if (_skinAnimation)
-				_skinAnimation.update(getTimer() / 1000);
+			if (_bonesAnimator)
+				_bonesAnimator.update(getTimer() / 1000);
 
 			// play only right animation
 			if (_md2MovieMesh)
