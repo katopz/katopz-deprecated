@@ -67,7 +67,7 @@ package
 				scene.addChild(_mesh);
 
 			// save the 1st one as .mds file
-			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "nemuvine.zip");
+			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "nemuvine.mdz");
 		}
 
 		override protected function onPreRender():void
