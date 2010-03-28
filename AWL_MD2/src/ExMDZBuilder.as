@@ -57,7 +57,6 @@ package
 
 			// build as MD2
 			_mdzBuilder = new MDZBuilder();
-			_mdzBuilder.material = new BitmapFileMaterial("assets/yellow.jpg");
 
 			// convert to meshes
 			_meshes = _mdzBuilder.convert(_model);
