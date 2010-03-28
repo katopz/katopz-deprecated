@@ -33,21 +33,21 @@ package
 			camera.lookAt(new Vector3D());
 
 			// some collada with animation
-			var collada:Collada = new Collada();
-			collada.scaling = 5;
+			var _collada:Collada = new Collada();
+			_collada.scaling = 5;
 
 			// load target model
-			var loader3D:Loader3D = new Loader3D();
-			loader3D.loadGeometry("assets/10_box_still.dae", collada);
-			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			var _loader3D:Loader3D = new Loader3D();
+			_loader3D.loadGeometry("assets/10_box_still.dae", _collada);
+			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
 		{
 			// preview
-			var model:Object3D = event.target.handle;
-			scene.addChild(model);
-			model.x = 100;
+			var _model:Object3D = event.target.handle;
+			scene.addChild(_model);
+			_model.x = 100;
 
 			// build as MD2
 			_md2Builder = new MD2Builder();
@@ -55,7 +55,7 @@ package
 			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
 
 			// bring it on
-			scene.addChild(_md2Builder.convert(model)[0]);
+			scene.addChild(_md2Builder.convert(_model)[0]);
 
 			// save as file
 			new FileReference().save(_md2Builder.getMD2(), "10_box_still.md2");
