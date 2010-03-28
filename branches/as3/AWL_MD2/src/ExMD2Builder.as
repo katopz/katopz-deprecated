@@ -16,7 +16,7 @@ package
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	/**
-	 * Example : MD2Builder
+	 * Example : MD2 Builder for stay still model no animation.
 	 * @author katopz
 	 */	
 	public class ExMD2Builder extends BasicTemplate

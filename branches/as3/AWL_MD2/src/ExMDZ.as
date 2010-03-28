@@ -13,6 +13,10 @@ package
 	import flash.utils.*;
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
+	/**
+	 * Example : MDZ load and play.
+	 * @author katopz
+	 */	
 	public class ExMDZ extends BasicTemplate
 	{
 		private var _meshes:MovieMeshContainer3D;

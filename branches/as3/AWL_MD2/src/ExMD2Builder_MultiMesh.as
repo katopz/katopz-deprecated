@@ -18,7 +18,7 @@ package
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	/**
-	 * Example : MD2Builder with multi mesh
+	 * Example : MD2Builder with multi mesh, in this case is Collada :)
 	 * @author katopz
 	 */	
 	public class ExMD2Builder_MultiMesh extends BasicTemplate

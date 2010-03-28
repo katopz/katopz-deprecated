@@ -12,7 +12,6 @@ exportNormals=0;exportTexCoords=1;
 exportVertexColors=0;exportVertexColorsAnimation=0;exportTangents=0;
 exportTexTangents=0;exportConstraints=0;exportPhysics=0;exportXRefs=1;
 dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
-      <source_data>file:///C:/inetpub/wwwroot/Classes/katopz/branches/as3/AWL_MD2/bin/nemuvine/omake.mb</source_data>
     </contributor>
     <created>2010-03-28T12:05:12Z</created>
     <modified>2010-03-28T12:05:13Z</modified>
