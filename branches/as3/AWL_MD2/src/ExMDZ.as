@@ -24,8 +24,6 @@ package
 			camera.lookAt(new Vector3D());
 			
 			var _mdz:MDZ = new MDZ();
-			//_mdz.scaling = 2;
-			//_mdz.material = new BitmapFileMaterial("nemuvine/chair.png");
 
 			var _loader3D:Loader3D = new Loader3D();
 			_loader3D.loadGeometry("nemuvine/nemuvine.mdz", _mdz);

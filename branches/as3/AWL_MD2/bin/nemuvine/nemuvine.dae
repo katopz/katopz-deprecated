@@ -14,8 +14,8 @@ exportTexTangents=0;exportConstraints=0;exportPhysics=0;exportXRefs=1;
 dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
       <source_data>file:///C:/inetpub/wwwroot/Classes/katopz/branches/as3/AWL_MD2/bin/nemuvine/omake.mb</source_data>
     </contributor>
-    <created>2010-03-27T14:30:46Z</created>
-    <modified>2010-03-27T14:30:46Z</modified>
+    <created>2010-03-28T12:05:12Z</created>
+    <modified>2010-03-28T12:05:13Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -150,30 +150,30 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
     </image>
   </library_images>
   <library_materials>
-    <material id="body_129" name="body_129">
-      <instance_effect url="#body_129-fx"/>
+    <material id="bodyMat" name="bodyMat">
+      <instance_effect url="#bodyMat-fx"/>
     </material>
-    <material id="mat14" name="mat14">
-      <instance_effect url="#mat14-fx"/>
+    <material id="faceMat" name="faceMat">
+      <instance_effect url="#faceMat-fx"/>
     </material>
-    <material id="cloth_128" name="cloth_128">
-      <instance_effect url="#cloth_128-fx"/>
+    <material id="clothMat" name="clothMat">
+      <instance_effect url="#clothMat-fx"/>
     </material>
-    <material id="mat17" name="mat17">
-      <instance_effect url="#mat17-fx"/>
+    <material id="bookMat" name="bookMat">
+      <instance_effect url="#bookMat-fx"/>
     </material>
-    <material id="mat16" name="mat16">
-      <instance_effect url="#mat16-fx"/>
+    <material id="chairMat" name="chairMat">
+      <instance_effect url="#chairMat-fx"/>
     </material>
-    <material id="mat15" name="mat15">
-      <instance_effect url="#mat15-fx"/>
+    <material id="tableMat" name="tableMat">
+      <instance_effect url="#tableMat-fx"/>
     </material>
     <material id="lambert1" name="lambert1">
       <instance_effect url="#lambert1-fx"/>
     </material>
   </library_materials>
   <library_effects>
-    <effect id="body_129-fx">
+    <effect id="bodyMat-fx">
       <profile_COMMON>
         <newparam sid="file1-surface">
           <surface type="2D">
@@ -251,7 +251,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         </technique>
       </profile_COMMON>
     </effect>
-    <effect id="mat14-fx">
+    <effect id="faceMat-fx">
       <profile_COMMON>
         <newparam sid="file3-surface">
           <surface type="2D">
@@ -329,7 +329,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         </technique>
       </profile_COMMON>
     </effect>
-    <effect id="cloth_128-fx">
+    <effect id="clothMat-fx">
       <profile_COMMON>
         <newparam sid="file2-surface">
           <surface type="2D">
@@ -407,7 +407,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         </technique>
       </profile_COMMON>
     </effect>
-    <effect id="mat17-fx">
+    <effect id="bookMat-fx">
       <profile_COMMON>
         <newparam sid="file6-surface">
           <surface type="2D">
@@ -485,7 +485,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         </technique>
       </profile_COMMON>
     </effect>
-    <effect id="mat16-fx">
+    <effect id="chairMat-fx">
       <profile_COMMON>
         <newparam sid="file5-surface">
           <surface type="2D">
@@ -563,7 +563,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         </technique>
       </profile_COMMON>
     </effect>
-    <effect id="mat15-fx">
+    <effect id="tableMat-fx">
       <profile_COMMON>
         <newparam sid="file4-surface">
           <surface type="2D">
@@ -774,6 +774,12 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
       <extra>
         <technique profile="MAYA">
           <double_sided>0</double_sided>
+          <dynamic_attributes>
+            <miShadingSamplesOverride short_name="mso" type="bool">0</miShadingSamplesOverride>
+            <miShadingSamples short_name="msh" type="float">0</miShadingSamples>
+            <miMaxDisplaceOverride short_name="mdo" type="bool">0</miMaxDisplaceOverride>
+            <miMaxDisplace short_name="mmd" type="float">0</miMaxDisplace>
+          </dynamic_attributes>
         </technique>
       </extra>
     </geometry>
@@ -1343,7 +1349,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#obookShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat17" target="#mat17">
+              <instance_material symbol="mat17" target="#bookMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1355,7 +1361,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#chairShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat16" target="#mat16">
+              <instance_material symbol="mat16" target="#chairMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1367,7 +1373,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#tableShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat15" target="#mat15">
+              <instance_material symbol="mat15" target="#tableMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1379,7 +1385,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#book_o1Shape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat17" target="#mat17">
+              <instance_material symbol="mat17" target="#bookMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1391,7 +1397,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#book_o2Shape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat17" target="#mat17">
+              <instance_material symbol="mat17" target="#bookMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1403,7 +1409,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#book_o3Shape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat17" target="#mat17">
+              <instance_material symbol="mat17" target="#bookMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1415,7 +1421,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#book_o4Shape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat17" target="#mat17">
+              <instance_material symbol="mat17" target="#bookMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1428,10 +1434,10 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
           <skeleton>#root</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="body_128" target="#body_129">
+              <instance_material symbol="body_128" target="#bodyMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
-              <instance_material symbol="mat14" target="#mat14">
+              <instance_material symbol="mat14" target="#faceMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1444,7 +1450,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
           <skeleton>#root</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="body_128" target="#body_129">
+              <instance_material symbol="body_128" target="#bodyMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1456,7 +1462,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#rhShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="body_128" target="#body_129">
+              <instance_material symbol="body_128" target="#bodyMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1468,7 +1474,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#llShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="body_128" target="#body_129">
+              <instance_material symbol="body_128" target="#bodyMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1480,7 +1486,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#rlShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="body_128" target="#body_129">
+              <instance_material symbol="body_128" target="#bodyMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1519,7 +1525,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#neckShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="cloth_128" target="#cloth_128">
+              <instance_material symbol="cloth_128" target="#clothMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1531,7 +1537,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#clothShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="cloth_128" target="#cloth_128">
+              <instance_material symbol="cloth_128" target="#clothMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1544,7 +1550,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
           <bind_material>
             <technique_common>
               <instance_material symbol="initialShadingGroup" target="#lambert1"/>
-              <instance_material symbol="body_128" target="#body_129">
+              <instance_material symbol="body_128" target="#bodyMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -1556,7 +1562,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
         <instance_geometry url="#bookShape">
           <bind_material>
             <technique_common>
-              <instance_material symbol="mat17" target="#mat17">
+              <instance_material symbol="mat17" target="#bookMat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>

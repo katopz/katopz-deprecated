@@ -61,8 +61,6 @@ package
 
 			// build as MD2
 			_md2Builder = new MD2Builder();
-			_md2Builder.scaling = 1;
-			_md2Builder.material = new BitmapFileMaterial("assets/yellow.jpg");
 
 			// convert to meshes
 			_meshes = _md2Builder.convert(_model);

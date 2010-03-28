@@ -30,7 +30,7 @@ package
 			
 			var _loader3D:Loader3D = new Loader3D();
 			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			_loader3D.loadGeometry("assets/10_box_still.md2", _md2);
+			_loader3D.loadGeometry("assets/plane_uv2.md2", _md2);
 			
 			scene.addChild(_loader3D);
 		}
