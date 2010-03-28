@@ -17,6 +17,10 @@ package
 	import flash.utils.*;
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
+	/**
+	 * Example : MDZ build from DAE and save as MDZ.
+	 * @author katopz
+	 */	
 	public class ExMDZBuilder extends BasicTemplate
 	{
 		private var _skinAnimation:BonesAnimator;

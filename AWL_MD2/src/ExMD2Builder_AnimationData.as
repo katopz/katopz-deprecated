@@ -18,7 +18,7 @@ package
 
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	/**
-	 * Example : MD2Builder with AnimationData
+	 * Example : MD2Builder with custom AnimationData
 	 * @author katopz
 	 */	
 	public class ExMD2Builder_AnimationData extends BasicTemplate
