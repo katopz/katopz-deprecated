@@ -15,7 +15,6 @@ package
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
 	public class ExMDZ extends BasicTemplate
 	{
-		private var model:MovieMesh;
 		private var _meshes:MovieMeshContainer3D;
 
 		override protected function onInit():void
@@ -28,9 +27,9 @@ package
 			//_mdz.scaling = 2;
 			//_mdz.material = new BitmapFileMaterial("nemuvine/chair.png");
 
-			var _loader:Loader3D = new Loader3D();
-			_loader.loadGeometry("nemuvine/nemuvine.mdz", _mdz);
-			scene.addChild(_loader);
+			var _loader3D:Loader3D = new Loader3D();
+			_loader3D.loadGeometry("nemuvine/nemuvine.mdz", _mdz);
+			scene.addChild(_loader3D);
 		}
 
 		override protected function onPreRender():void

@@ -24,22 +24,23 @@ package
 			camera.y = -500;
 			camera.lookAt(new Vector3D());
 			
-			var md2:MD2 = new MD2();
-			md2.scaling = 2;
-			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
+			var _md2:MD2 = new MD2();
+			_md2.scaling = 2;
+			_md2.material = new BitmapFileMaterial("assets/yellow.jpg");
 			
-			var loader:Loader3D = new Loader3D();
-			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader.loadGeometry("assets/10_box_still.md2", md2);
-			scene.addChild(loader);
+			var _loader3D:Loader3D = new Loader3D();
+			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			_loader3D.loadGeometry("assets/10_box_still.md2", _md2);
+			
+			scene.addChild(_loader3D);
 		}
 		
 		private function onSuccess(event:Loader3DEvent):void
 		{
-			var model:MovieMesh = event.loader.handle as MovieMesh;
-			model.rotationY = 180;
-			model.bothsides = false;
-			model.play();
+			var _model:MovieMesh = event.loader.handle as MovieMesh;
+			_model.rotationY = 180;
+			_model.bothsides = false;
+			_model.play();
 		}
 		
 		override protected function onPreRender():void

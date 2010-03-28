@@ -37,24 +37,26 @@ package
 			camera.lookAt(new Vector3D());
 
 			// some collada with animation
-			var collada:Collada = new Collada();
-			collada.scaling = 5;
+			var _collada:Collada = new Collada();
+			_collada.scaling = 5;
 
 			// load target model
-			var loader3D:Loader3D = new Loader3D();
-			loader3D.loadGeometry("assets/30_box_smooth_translate.dae", collada);
-			loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			var _loader3D:Loader3D = new Loader3D();
+			_loader3D.loadGeometry("assets/30_box_smooth_translate.dae", _collada);
+			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
 		{
 			// preview
-			var model:Object3D = event.target.handle;
-			scene.addChild(model);
-			model.x = 100;
+			var _model:Object3D = event.target.handle;
+			scene.addChild(_model);
+			_model.x = 100;
 
 			// test animation
-			_bonesAnimator = model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			try{
+				_bonesAnimator = _model.animationLibrary.getAnimation("default").animation as BonesAnimator;
+			}catch (e:*){}
 
 			// build as MD2
 			_md2Builder = new MD2Builder();
@@ -77,7 +79,7 @@ package
 			_animationDatas[1].end = 65;
 			
 			// bring it on
-			_md2MovieMesh = _md2Builder.convert(model, _animationDatas)[0];
+			_md2MovieMesh = _md2Builder.convert(_model, _animationDatas)[0];
 			scene.addChild(_md2MovieMesh);
 
 			// save as file
