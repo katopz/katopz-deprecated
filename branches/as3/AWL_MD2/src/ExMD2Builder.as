@@ -58,7 +58,7 @@ package
 			scene.addChild(_md2Builder.convert(model)[0]);
 
 			// save as file
-			new FileReference().save(_md2Builder.getMD2(), "untitled.md2");
+			new FileReference().save(_md2Builder.getMD2(), "10_box_still.md2");
 		}
 
 		override protected function onPreRender():void

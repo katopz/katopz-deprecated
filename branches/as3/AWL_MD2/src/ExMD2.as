@@ -9,6 +9,7 @@ package
 	import away3dlite.templates.*;
 	
 	import flash.display.*;
+	import flash.geom.Vector3D;
 
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="600")]
 	/**
@@ -19,13 +20,17 @@ package
 	{
 		override protected function onInit():void
 		{
+			// better view angle
+			camera.y = -500;
+			camera.lookAt(new Vector3D());
+			
 			var md2:MD2 = new MD2();
 			md2.scaling = 2;
-			md2.material = new BitmapFileMaterial("nemuvine/chair.png");
+			md2.material = new BitmapFileMaterial("assets/yellow.jpg");
 			
 			var loader:Loader3D = new Loader3D();
 			loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-			loader.loadGeometry("nemuvine/table.md2", md2);
+			loader.loadGeometry("assets/10_box_still.md2", md2);
 			scene.addChild(loader);
 		}
 		
