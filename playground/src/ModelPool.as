@@ -139,7 +139,7 @@ package
 				_collada.scaling = 10;
 
 				var _loader3D:Loader3D = new Loader3D();
-				_loader3D.loadXML(_test, _collada, _currentPath);
+				_loader3D.parseXML(_test, _collada, _currentPath);
 				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 
 				return _loader3D;
