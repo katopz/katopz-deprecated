@@ -83,8 +83,8 @@ package com.cutecoma.playground.components
 					target.x -= event.data.dx;
 				break;
 				case "ROTATE":
-					target.rotationY -= event.data.*.25;
-					target.rotationX += event.data.*.25;
+					target.rotationY -= event.data.dy*.25;
+					target.rotationX += event.data.dx*.25;
 				break;
 			}
 		}
