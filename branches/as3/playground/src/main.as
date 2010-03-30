@@ -16,14 +16,16 @@
 	import com.sleepydesign.events.*;
 	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.utils.*;
-
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
 	import flash.net.registerClassAlias;
 	import flash.utils.*;
-
+	
 	import net.hires.debug.Stats;
+	
+	import org.papervision3d.objects.parsers.MDZ;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 
@@ -172,6 +174,8 @@
 
 			// 3D engine
 			engine3D = new Engine3D(content, areaData.scene);
+			
+			var _mdz:MDZ = new MDZ();
 
 			// bind
 			game.engine = engine3D;
