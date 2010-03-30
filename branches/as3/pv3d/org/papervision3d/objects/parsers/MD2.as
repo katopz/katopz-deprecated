@@ -429,6 +429,15 @@ package org.papervision3d.objects.parsers {
 			offset_frames = data.readInt();
 			offset_glcmds = data.readInt();
 			offset_end = data.readInt();
+			
+			// texture
+			data.position = 0x44;
+			textureName = "";
+			do{
+				var charCode:uint = data.readUnsignedByte();
+				if(charCode != 0x00)
+					textureName+=String.fromCharCode(charCode);
+			}while(charCode != 0x00)
 		}
 
 		/**
@@ -457,5 +466,8 @@ package org.papervision3d.objects.parsers {
 		protected var _isPlaying:Boolean = false;
 		protected var _currentChannel:AbstractChannel3D;
 		protected var _currentTime:Number = 0;
+		
+		// texture file name
+		public var textureName:String;
 	}
 }
