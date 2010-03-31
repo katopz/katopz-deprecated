@@ -6,6 +6,7 @@ package
 	import net.hires.debug.Stats;
 	
 	import org.papervision3d.cameras.*;
+	import org.papervision3d.core.proto.DisplayObjectContainer3D;
 	import org.papervision3d.materials.*;
 	import org.papervision3d.materials.utils.*;
 	import org.papervision3d.objects.*;
@@ -54,11 +55,11 @@ package
 
 			onInit();
 		}
-		
 		private function onInit():void
 		{
 			_mdz = new MDZ();
 			_mdz.load("nemuvine.mdz", null, 30, 4);
+			
 			scene.addChild(_mdz);
 		}
 		
