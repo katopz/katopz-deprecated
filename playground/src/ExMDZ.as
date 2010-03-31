@@ -3,6 +3,8 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	
+	import net.hires.debug.Stats;
+	
 	import org.papervision3d.cameras.*;
 	import org.papervision3d.materials.*;
 	import org.papervision3d.materials.utils.*;
@@ -20,6 +22,8 @@ package
 		public var scene:Scene3D;
 		public var camera:Camera3D;
 		public var renderer:BasicRenderEngine;
+		
+		private var _mdz:MDZ;
 
 		public function ExMDZ()
 		{
@@ -28,35 +32,39 @@ package
 
 		private function onStage(event:Event):void
 		{
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);	
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			init();
 		}
-		
+
 		private function init():void
 		{
 			viewport = new Viewport3D(800, 600);
 			addChild(viewport);
+			
+			addChild(new Stats);
 
 			renderer = new BasicRenderEngine();
 			scene = new Scene3D();
 			camera = new Camera3D();
-			
+			camera.y = 500;
+			camera.z = -1000;
+			camera.lookAt(new DisplayObject3D());
+
 			addEventListener(Event.ENTER_FRAME, loop);
-			
+
 			onInit();
 		}
 		
 		private function onInit():void
 		{
-			scene.addChild(new Sphere);
-			
-			var _mdz:MDZ = new MDZ();
-			_mdz.load("nemuvine.mdz");
+			_mdz = new MDZ();
+			_mdz.load("nemuvine.mdz", null, 30, 4);
 			scene.addChild(_mdz);
 		}
-
+		
 		private function loop(event:Event):void
 		{
+			_mdz.rotationY++;
 			renderer.renderScene(scene, camera, viewport);
 		}
 	}

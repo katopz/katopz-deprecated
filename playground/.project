@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>PlayGround</name>
+	<name>playground</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,9 +16,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] pv3d</name>
+			<name>[source path] as3-libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d</location>
+			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
 		</link>
 		<link>
 			<name>[source path] lite-libs</name>
@@ -26,9 +26,14 @@
 			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/branches/lite/libs</location>
 		</link>
 		<link>
-			<name>[source path] as3-libs</name>
+			<name>[source path] lite_builder-libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
+			<location>C:/Inetpub/wwwroot/Classes/3D/Away3D/branches/lite_builder/libs</location>
+		</link>
+		<link>
+			<name>[source path] pv3d</name>
+			<type>2</type>
+			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/pv3d</location>
 		</link>
 	</linkedResources>
 </projectDescription>
