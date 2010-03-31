@@ -8,10 +8,10 @@ package org.papervision3d.materials
 	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
-	//import org.papervision3d.core.log.PaperLogger;
 	import org.papervision3d.core.proto.MaterialObject3D;
 	import org.papervision3d.core.render.command.RenderTriangle;
 	import org.papervision3d.core.render.data.RenderSessionData;
@@ -84,6 +84,20 @@ package org.papervision3d.materials
 			
 			bitmap   = createBitmapFromURL( String(asset) );
 			_texture = asset;
+		}
+		
+		public function loadBytes(byteArray:ByteArray):Loader
+		{
+			var _loader:Loader = new Loader();
+			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+			_loader.loadBytes(byteArray);
+			
+			return _loader;
+		}
+		
+		private function onComplete(event:Event):void
+		{
+			bitmap = super.createBitmap( Bitmap(event.target.content).bitmapData );
 		}
 		
 		/**

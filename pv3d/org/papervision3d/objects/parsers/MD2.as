@@ -20,7 +20,7 @@ package org.papervision3d.objects.parsers {
 	import org.papervision3d.core.render.data.RenderSessionData;
 	import org.papervision3d.events.FileLoadEvent;
 	import org.papervision3d.objects.DisplayObject3D;	
-
+	
 	/**
 	 * Loads Quake 2 MD2 file with animation!
 	 * </p>Please feel free to use, but please mention me!</p>
@@ -97,6 +97,12 @@ package org.papervision3d.objects.parsers {
 		 * Stops the animation.
 		 */ 
 		public function stop():void
+		{
+			_isPlaying = false;
+			_currentTime = 0;
+		}
+		
+		public function pause():void
 		{
 			_isPlaying = false;
 		}
@@ -183,7 +189,7 @@ package org.papervision3d.objects.parsers {
 				
 				try
 				{
-		            loader.load(new URLRequest(this.file));
+					loader.load(new URLRequest(this.file));
 				}
 				catch(e:Error)
 				{
@@ -242,12 +248,12 @@ package org.papervision3d.objects.parsers {
 			readMd2Header(data);
 			if (ident != 844121161 || version != 8)
 				throw new Error("error loading MD2 file (" + file + "): Not a valid MD2 file/bad version");
-				
+			
 			//---Vertice setup
 			// be sure to allocate memory for the vertices to the object
 			for (i = 0; i < num_vertices; i++)
 				geometry.vertices.push(new Vertex3D());
-
+			
 			//---UV coordinates
 			data.position = offset_st;
 			for (i = 0; i < num_st; i++)
@@ -257,7 +263,7 @@ package org.papervision3d.objects.parsers {
 				uv.v = 1 - uv.v;
 				uvs.push(uv);
 			}
-
+			
 			//---Frame animation data
 			data.position = offset_frames;
 			readFrames(data);
@@ -268,7 +274,7 @@ package org.papervision3d.objects.parsers {
 			for (i = 0; i < num_tris; i++)
 			{
 				metaface = {a: data.readUnsignedShort(), b: data.readUnsignedShort(), c: data.readUnsignedShort(),
-					        ta: data.readUnsignedShort(), tb: data.readUnsignedShort(), tc: data.readUnsignedShort()};
+					ta: data.readUnsignedShort(), tb: data.readUnsignedShort(), tc: data.readUnsignedShort()};
 				
 				var v0:Vertex3D = geometry.vertices[metaface.a];
 				var v1:Vertex3D = geometry.vertices[metaface.b];
@@ -277,24 +283,24 @@ package org.papervision3d.objects.parsers {
 				var uv0:NumberUV = uvs[metaface.ta];
 				var uv1:NumberUV = uvs[metaface.tb];
 				var uv2:NumberUV = uvs[metaface.tc];
-
+				
 				geometry.faces.push(new Triangle3D(this, [v2, v1, v0], material, [uv2, uv1, uv0]));
 			}
 			
 			geometry.ready = true;
-	
+			
 			visible = true;
-						
+			
 			/*PaperLogger.info("Parsed MD2: " + file + "\n vertices:" + 
-							  geometry.vertices.length + "\n texture vertices:" + uvs.length +
-							  "\n faces:" + geometry.faces.length + "\n frames: " + num_frames);*/
-
+			geometry.vertices.length + "\n texture vertices:" + uvs.length +
+			"\n faces:" + geometry.faces.length + "\n frames: " + num_frames);*/
+			
 			dispatchEvent(new FileLoadEvent(FileLoadEvent.LOAD_COMPLETE, this.file));
 			dispatchEvent(new FileLoadEvent(FileLoadEvent.ANIMATIONS_COMPLETE, this.file));
 			
 			if(_autoPlay)
 				play();
-				
+			
 			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
 		}
 		
@@ -346,7 +352,7 @@ package org.papervision3d.objects.parsers {
 				
 				if(curName != shortName)
 				{
-					trace(" ! Label : "+shortName);
+					//trace(" ! Label : "+shortName);
 					
 					if(clip)
 					{
@@ -360,7 +366,7 @@ package org.papervision3d.objects.parsers {
 				}
 				
 				var vertices:Array = [];
-
+				
 				// Note, the extra data.position++ in the for loop is there 
 				// to skip over a byte that holds the "vertex normal index"
 				for (j = 0; j < num_vertices; j++, data.position++)
@@ -439,7 +445,7 @@ package org.papervision3d.objects.parsers {
 					textureName+=String.fromCharCode(charCode);
 			}while(charCode != 0x00)
 		}
-
+		
 		/**
 		 * 
 		 */ 

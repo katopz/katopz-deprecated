@@ -200,7 +200,7 @@
 				mapping.tx = m.tx;
 				mapping.ty = m.ty;
 			}
-			else trace( "MaterialObject3D: transformUV() material.bitmap not found!" );
+			//else trace( "MaterialObject3D: transformUV() material.bitmap not found!" );
 
 			return mapping;
 		}
@@ -260,7 +260,7 @@
 				mapping.tx = m.tx;
 				mapping.ty = m.ty;
 			}
-			else trace( "MaterialObject3D: transformUV() material.bitmap not found!" );
+			//else trace( "MaterialObject3D: transformUV() material.bitmap not found!" );
 
 			return mapping;
 		}
