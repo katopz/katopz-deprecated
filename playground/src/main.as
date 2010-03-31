@@ -175,8 +175,6 @@
 			// 3D engine
 			engine3D = new Engine3D(content, areaData.scene);
 			
-			var _mdz:MDZ = new MDZ();
-
 			// bind
 			game.engine = engine3D;
 
