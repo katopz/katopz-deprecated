@@ -57,10 +57,17 @@ package
 		}
 		private function onInit():void
 		{
-			_mdz = new MDZ();
-			_mdz.load("nemuvine.mdz", null, 30, 4);
+			_mdz = new MDZ(false);
+			_mdz.addEventListener(Event.COMPLETE, onComplete);
+			_mdz.load("man1.mdz", null, 24, 10);
 			
 			scene.addChild(_mdz);
+		}
+		
+		private function onComplete(event:Event):void
+		{
+			_mdz.removeEventListener(Event.COMPLETE, onComplete);
+			_mdz.play("walk");
 		}
 		
 		private function loop(event:Event):void
