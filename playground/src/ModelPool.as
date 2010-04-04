@@ -4,16 +4,17 @@ package
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
 	import away3dlite.loaders.Loader3D;
-
+	import away3dlite.loaders.MDZ;
+	
 	import com.cutecoma.playground.data.ModelData;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.utils.LoaderUtil;
-
+	
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.utils.*;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class ModelPool extends RemovableEventDispatcher
@@ -41,10 +42,40 @@ package
 			LoaderUtil.loadXML(src, function(event:Event):void
 				{
 					if (event.type == "complete")
-						buildFromXML(event.target.data)
+						buildFromXML2(event.target.data)
 				});
 		}
+		
+		private function buildFromXML2(xmlData:XML):void
+		{
+			//
+			_loaders = new SDGroup();
+			_xmls = new SDGroup();
+			_models = new SDGroup();
 
+			// get total 
+			_totalModel = xmlData.man.length();
+			_loadedModel = 0;
+
+			for each (var _node:XML in xmlData.man)
+			{
+				var _id:String = _node.@id.toString();
+				var _path:String = _node.@path.toString();
+				var _src:String = _node.@src.toString();
+
+				var _mdz:MDZ = new MDZ();
+				_mdz.autoPlay = false;
+				_mdz.scaling = 5;
+				
+				var _loader3D:Loader3D = new Loader3D();
+				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+				_loader3D.loadGeometry(_path + _src, _mdz);
+				
+				_models.addItem(new ModelData(_id, _loader3D, _currentPath), _loader3D);
+			}
+		}
+		
+		/*
 		private var collada:XML;
 
 		private function buildFromXML(xmlData:XML):void
@@ -99,6 +130,7 @@ package
 			}
 		}
 
+		/*
 		private function parseXML(colladaXML:XML, id:String):Loader3D
 		{
 			collada = colladaXML;
@@ -124,14 +156,6 @@ package
 				var _images2:XMLList = _xml2.library_images.image;
 				
 				_images1[3] = _images2[3];
-
-				// replace controller
-				/*
-				var _controller1:XMLList = _test.library_controllers.controller;
-				var _controller2:XMLList = _xml2.library_controllers.controller;
-				
-				_controller1[3] = _controller2[3];
-				*/
 				
 				// try parse collada
 				var _collada:Collada = new Collada();
@@ -149,6 +173,7 @@ package
 				return null;
 			}
 		}
+		*/
 
 		private function onSuccess(event:Loader3DEvent):void
 		{
@@ -156,10 +181,11 @@ package
 
 			var _modelData:ModelData = _models.getItem(_loader3D);
 			_modelData.model = _loader3D.handle;
-
+			
 			if (++_loadedModel == _totalModel)
 			{
-
+				trace(" ! All Complete!");
+				signal.dispatch(_modelData);
 			}
 			else
 			{

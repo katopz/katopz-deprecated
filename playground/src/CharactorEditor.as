@@ -38,8 +38,8 @@ package
 			camera.y = -200;
 			
 			//
-			if (_EditorTool.skinAnimation)
-				_EditorTool.skinAnimation.update(getTimer() * 2 / 1000);
+			//if (_EditorTool.skinAnimation)
+			//	_EditorTool.skinAnimation.update(getTimer() * 2 / 1000);
 			
 			scene.rotationY++;
 		}
