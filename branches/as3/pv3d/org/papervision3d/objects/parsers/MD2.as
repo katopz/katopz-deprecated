@@ -1,6 +1,6 @@
 package org.papervision3d.objects.parsers {
-	import com.sleepydesign.events.SDEvent;
 	import com.cutecoma.game.core.IClip3D;
+	import com.sleepydesign.events.SDEvent;
 	
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
@@ -93,6 +93,29 @@ package org.papervision3d.objects.parsers {
 			//_isPlaying = true;
 		}
 		
+		public function playByTime(clip:String=null, currentTime:Number=NaN):void
+		{
+			if(clip && _channelByName && _channelByName[clip])
+			{
+				_currentChannel = _channelByName[clip];
+				_isPlaying = true;
+			}
+			else if(_channels && _channels.length)
+			{
+				_currentChannel = _channels[0];
+				_isPlaying = true;
+			}
+			else
+			{
+				_isPlaying = false;
+				//PaperLogger.error("[MD2 ERROR] Can't find a animation channel to play!");
+				return;
+			}
+			
+			_currentTime = currentTime || getTimer();
+			//_isPlaying = true;
+		}
+		
 		/**
 		 * Stops the animation.
 		 */ 
@@ -166,7 +189,7 @@ package org.papervision3d.objects.parsers {
 		 * @param	fps		Frames per second
 		 * @param	scale	Scale
 		 */
-		public function load(asset:*, material:MaterialObject3D = null, fps:int = 6, scale:Number = 1):void
+		public function load(asset:*, material:MaterialObject3D = null, fps:int = 30, scale:Number = 1):void
 		{
 			this.loadScale = scale;
 			this._fps = fps;
@@ -208,15 +231,16 @@ package org.papervision3d.objects.parsers {
 		 */ 
 		public override function project(parent:DisplayObject3D, renderSessionData:RenderSessionData):Number
 		{
+			var _getTimer:Number = isNaN(groupTimer)?getTimer():groupTimer;
 			if(_isPlaying && _currentChannel)
 			{
 				var secs:Number = _currentTime / 1000;
 				var duration:Number = _currentChannel.duration;
-				var elapsed:Number = (getTimer()/1000) - secs;
+				var elapsed:Number = (_getTimer/1000) - secs;
 				
 				if(elapsed > duration)
 				{
-					_currentTime = getTimer();
+					_currentTime = _getTimer;
 					secs = _currentTime / 1000;
 					elapsed = 0;
 				}
@@ -227,6 +251,8 @@ package org.papervision3d.objects.parsers {
 			
 			return super.project(parent, renderSessionData);
 		}
+		
+		public var groupTimer:Number;
 		
 		/**
 		 * <p>Parses the MD2 file. This is actually pretty straight forward.
@@ -251,8 +277,9 @@ package org.papervision3d.objects.parsers {
 			
 			//---Vertice setup
 			// be sure to allocate memory for the vertices to the object
+			var _geometry_vertices:Array = geometry.vertices;
 			for (i = 0; i < num_vertices; i++)
-				geometry.vertices.push(new Vertex3D());
+				_geometry_vertices.push(new Vertex3D());
 			
 			//---UV coordinates
 			data.position = offset_st;
@@ -271,20 +298,21 @@ package org.papervision3d.objects.parsers {
 			//---Faces
 			// make sure to push the faces with allocated vertices to the object!
 			data.position = offset_tris;
+			var _geometry_faces:Array = geometry.faces;
 			for (i = 0; i < num_tris; i++)
 			{
 				metaface = {a: data.readUnsignedShort(), b: data.readUnsignedShort(), c: data.readUnsignedShort(),
 					ta: data.readUnsignedShort(), tb: data.readUnsignedShort(), tc: data.readUnsignedShort()};
 				
-				var v0:Vertex3D = geometry.vertices[metaface.a];
-				var v1:Vertex3D = geometry.vertices[metaface.b];
-				var v2:Vertex3D = geometry.vertices[metaface.c];
+				var v0:Vertex3D = _geometry_vertices[metaface.a];
+				var v1:Vertex3D = _geometry_vertices[metaface.b];
+				var v2:Vertex3D = _geometry_vertices[metaface.c];
 				
 				var uv0:NumberUV = uvs[metaface.ta];
 				var uv1:NumberUV = uvs[metaface.tb];
 				var uv2:NumberUV = uvs[metaface.tc];
 				
-				geometry.faces.push(new Triangle3D(this, [v2, v1, v0], material, [uv2, uv1, uv0]));
+				_geometry_faces.push(new Triangle3D(this, [v2, v1, v0], material, [uv2, uv1, uv0]));
 			}
 			
 			geometry.ready = true;
