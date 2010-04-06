@@ -20,8 +20,6 @@ package
 			
 			camera.y = 500;
 			camera.lookAt(_mdz);
-			
-			alpha = 0.05
 		}
 		
 		private function onComplete(event:Event):void

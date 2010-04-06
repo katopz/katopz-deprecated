@@ -63,12 +63,16 @@ package
 			var _menuPart:SDDialog = new SDDialog(<question><![CDATA[Select Part]]>
 					<answer src="as:onUserSelect('Hair_1')"><![CDATA[Hair_1]]></answer>
 					<answer src="as:onUserSelect('Hair_2')"><![CDATA[Hair_2]]></answer>
+					<answer src="as:onUserSelect('Hair_3')"><![CDATA[Hair_3]]></answer>
 					<answer src="as:onUserSelect('Head_1')"><![CDATA[Head_1]]></answer>
 					<answer src="as:onUserSelect('Head_2')"><![CDATA[Head_2]]></answer>
+					<answer src="as:onUserSelect('Head_3')"><![CDATA[Head_3]]></answer>
 					<answer src="as:onUserSelect('Shirt_1')"><![CDATA[Shirt_1]]></answer>
 					<answer src="as:onUserSelect('Shirt_2')"><![CDATA[Shirt_2]]></answer>
+					<answer src="as:onUserSelect('Shirt_3')"><![CDATA[Shirt_3]]></answer>
 					<answer src="as:onUserSelect('Pant_1')"><![CDATA[Pant_1]]></answer>
 					<answer src="as:onUserSelect('Pant_2')"><![CDATA[Pant_2]]></answer>
+					<answer src="as:onUserSelect('Pant_3')"><![CDATA[Pant_3]]></answer>
 					<answer src="as:onUserSelect('Shoes_1')"><![CDATA[Shoes_1]]></answer>
 					<answer src="as:onUserSelect('Shoes_2')"><![CDATA[Shoes_2]]></answer>
 					</question>, this);
@@ -95,56 +99,61 @@ package
 		
 		public function onUserSelect(action:String):void
 		{
-			var _mesh:MovieMeshContainer3D;
+			var _meshContainer:MovieMeshContainer3D;
 			
 			// hold
-			for each(_mesh in _meshes)
-				_mesh.stop();
+			for each(_meshContainer in _meshes)
+				_meshContainer.stop();
 			
 			var _type:String = action.split("_")[0];
 			var _id:int = int(action.split("_")[1])-1;
 			
 			// reset
-			for each(_mesh in _meshes)
-				_mesh.getChildByName(_type).visible = false;
+			for each(_meshContainer in _meshes)
+				_meshContainer.getChildByName(_type).visible = false;
 			
 			// pick one
 			_meshes[_id].getChildByName(_type).visible = true;
 			
 			// resume
-			for each(_mesh in _meshes)
-				_mesh.play(_mesh.currentLabel);
+			for each(_meshContainer in _meshes)
+				_meshContainer.play(_meshContainer.currentLabel);
 		}
 		
 		public function onUserSelectAction(action:String):void
 		{
-			_meshes[0].stop();
-			_meshes[1].stop();
+			var _meshContainer:MovieMeshContainer3D
+			for each(_meshContainer in _meshes)
+				_meshContainer.stop();
 			
-			_meshes[0].play(action);
-			_meshes[1].play(action);
+			for each(_meshContainer in _meshes)
+				_meshContainer.play(action);
 		}
 		
-		private var _totalModel:int = 0;
+		private var _loadedModel:int = 0;
+		private var _totalModel:int = 3;
+		
 		private var _meshes:Vector.<MovieMeshContainer3D> = new Vector.<MovieMeshContainer3D>(); 
+		
 		public function activate(modelData:ModelData):void
 		{
-			_totalModel++;
+			_loadedModel++;
 			
 			var _prototype:MovieMeshContainer3D = modelData.model as MovieMeshContainer3D;
 			_container.scene.addChild(_prototype);
 			
 			_meshes.push(_prototype);
 			
-			if(_totalModel==2)
+			if(_loadedModel==_totalModel)
 			{
 				trace("Done");
-				_meshes[0].play("talk");
-				_meshes[1].play("talk");
 				
-				for each(var _mesh:MovieMesh in _meshes[1].children)
+				for each(var _meshContainer:MovieMeshContainer3D in _meshes)
 				{
-					_mesh.visible = false;
+					_meshContainer.play("walk");
+					if(_meshContainer!=_meshes[0])
+						for each(var _mesh:MovieMesh in _meshContainer.children)
+							_mesh.visible = false;
 				}
 			}
 			

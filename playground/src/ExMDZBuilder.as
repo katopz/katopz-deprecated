@@ -42,7 +42,7 @@ package
 
 			// load target model
 			var _loader3D:Loader3D = new Loader3D();
-			_loader3D.loadGeometry("chars/man/model_2.dae", _collada);
+			_loader3D.loadGeometry("chars/man/model_1.dae", _collada);
 			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -79,7 +79,7 @@ package
 			_animationDatas[1].end = 89;
 
 			// convert to meshes
-			_meshes = _mdzBuilder.convert(_model, _animationDatas);
+			_meshes = _mdzBuilder.convert(_model, _animationDatas, 24);
 
 			// bring it on one by one
 			for each (var _mesh:MovieMesh in _meshes)
@@ -98,7 +98,7 @@ package
 		private function onClick(event:MouseEvent):void
 		{
 			// save all as .mdz file
-			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "man2.mdz");
+			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "man_1.mdz");
 		}
 
 		override protected function onPreRender():void
