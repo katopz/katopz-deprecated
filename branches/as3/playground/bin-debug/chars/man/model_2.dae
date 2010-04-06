@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
-    <created>2010-03-07T17:34:20Z</created>
-    <modified>2010-03-07T17:34:21Z</modified>
+    <created>2010-04-06T17:57:40Z</created>
+    <modified>2010-04-06T17:57:40Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -945,7 +945,7 @@
     </animation>
   </library_animations>
   <library_images>
-    <image id="Head_Texture" name="Head_Texture">
+    <image id="Head_File" name="Head_File">
       <init_from>./texture_2/head_1.png</init_from>
       <extra>
         <technique profile="MAYA">
@@ -954,7 +954,7 @@
         </technique>
       </extra>
     </image>
-    <image id="Shirt_Texture" name="Shirt_Texture">
+    <image id="Shirt_File" name="Shirt_File">
       <init_from>./texture_2/shirt_1.png</init_from>
       <extra>
         <technique profile="MAYA">
@@ -963,7 +963,7 @@
         </technique>
       </extra>
     </image>
-    <image id="Shoes_Texture" name="Shoes_Texture">
+    <image id="Shoes_File" name="Shoes_File">
       <init_from>./texture_2/shoes_1.png</init_from>
       <extra>
         <technique profile="MAYA">
@@ -972,7 +972,7 @@
         </technique>
       </extra>
     </image>
-    <image id="Pant_Texture" name="Pant_Texture">
+    <image id="Pant_File" name="Pant_File">
       <init_from>./texture_2/pant_1.png</init_from>
       <extra>
         <technique profile="MAYA">
@@ -981,7 +981,7 @@
         </technique>
       </extra>
     </image>
-    <image id="Hair_Texture" name="Hair_Texture">
+    <image id="Hair_File" name="Hair_File">
       <init_from>./texture_2/hair_1.png</init_from>
       <extra>
         <technique profile="MAYA">
@@ -1011,15 +1011,15 @@
   <library_effects>
     <effect id="Head_Mat-fx">
       <profile_COMMON>
-        <newparam sid="Head_Texture-surface">
+        <newparam sid="Head_File-surface">
           <surface type="2D">
-            <init_from>Head_Texture</init_from>
+            <init_from>Head_File</init_from>
             <format>A8R8G8B8</format>
           </surface>
         </newparam>
-        <newparam sid="Head_Texture-sampler">
+        <newparam sid="Head_File-sampler">
           <sampler2D>
-            <source>Head_Texture-surface</source>
+            <source>Head_File-surface</source>
             <wrap_s>WRAP</wrap_s>
             <wrap_t>WRAP</wrap_t>
             <minfilter>NONE</minfilter>
@@ -1036,7 +1036,7 @@
               <color>0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="Head_Texture-sampler" texcoord="TEX0">
+              <texture texture="Head_File-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="MAYA">
                     <wrapU>1</wrapU>
@@ -1089,15 +1089,15 @@
     </effect>
     <effect id="Shirt_Mat-fx">
       <profile_COMMON>
-        <newparam sid="Shirt_Texture-surface">
+        <newparam sid="Shirt_File-surface">
           <surface type="2D">
-            <init_from>Shirt_Texture</init_from>
+            <init_from>Shirt_File</init_from>
             <format>A8R8G8B8</format>
           </surface>
         </newparam>
-        <newparam sid="Shirt_Texture-sampler">
+        <newparam sid="Shirt_File-sampler">
           <sampler2D>
-            <source>Shirt_Texture-surface</source>
+            <source>Shirt_File-surface</source>
             <wrap_s>WRAP</wrap_s>
             <wrap_t>WRAP</wrap_t>
             <minfilter>NONE</minfilter>
@@ -1114,7 +1114,7 @@
               <color>0.588 0.588 0.588 1</color>
             </ambient>
             <diffuse>
-              <texture texture="Shirt_Texture-sampler" texcoord="TEX0">
+              <texture texture="Shirt_File-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="MAYA">
                     <wrapU>1</wrapU>
@@ -1167,15 +1167,15 @@
     </effect>
     <effect id="Shoes_Mat-fx">
       <profile_COMMON>
-        <newparam sid="Shoes_Texture-surface">
+        <newparam sid="Shoes_File-surface">
           <surface type="2D">
-            <init_from>Shoes_Texture</init_from>
+            <init_from>Shoes_File</init_from>
             <format>A8R8G8B8</format>
           </surface>
         </newparam>
-        <newparam sid="Shoes_Texture-sampler">
+        <newparam sid="Shoes_File-sampler">
           <sampler2D>
-            <source>Shoes_Texture-surface</source>
+            <source>Shoes_File-surface</source>
             <wrap_s>WRAP</wrap_s>
             <wrap_t>WRAP</wrap_t>
             <minfilter>NONE</minfilter>
@@ -1192,7 +1192,7 @@
               <color>0.588 0.588 0.588 1</color>
             </ambient>
             <diffuse>
-              <texture texture="Shoes_Texture-sampler" texcoord="TEX0">
+              <texture texture="Shoes_File-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="MAYA">
                     <wrapU>1</wrapU>
@@ -1245,15 +1245,15 @@
     </effect>
     <effect id="Pant_Mat-fx">
       <profile_COMMON>
-        <newparam sid="Pant_Texture-surface">
+        <newparam sid="Pant_File-surface">
           <surface type="2D">
-            <init_from>Pant_Texture</init_from>
+            <init_from>Pant_File</init_from>
             <format>A8R8G8B8</format>
           </surface>
         </newparam>
-        <newparam sid="Pant_Texture-sampler">
+        <newparam sid="Pant_File-sampler">
           <sampler2D>
-            <source>Pant_Texture-surface</source>
+            <source>Pant_File-surface</source>
             <wrap_s>WRAP</wrap_s>
             <wrap_t>WRAP</wrap_t>
             <minfilter>NONE</minfilter>
@@ -1270,7 +1270,7 @@
               <color>0.588 0.588 0.588 1</color>
             </ambient>
             <diffuse>
-              <texture texture="Pant_Texture-sampler" texcoord="TEX0">
+              <texture texture="Pant_File-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="MAYA">
                     <wrapU>1</wrapU>
@@ -1323,15 +1323,15 @@
     </effect>
     <effect id="Hair_Mat-fx">
       <profile_COMMON>
-        <newparam sid="Hair_Texture-surface">
+        <newparam sid="Hair_File-surface">
           <surface type="2D">
-            <init_from>Hair_Texture</init_from>
+            <init_from>Hair_File</init_from>
             <format>A8R8G8B8</format>
           </surface>
         </newparam>
-        <newparam sid="Hair_Texture-sampler">
+        <newparam sid="Hair_File-sampler">
           <sampler2D>
-            <source>Hair_Texture-surface</source>
+            <source>Hair_File-surface</source>
             <wrap_s>WRAP</wrap_s>
             <wrap_t>WRAP</wrap_t>
             <minfilter>NONE</minfilter>
@@ -1348,7 +1348,7 @@
               <color>0.588 0.588 0.588 1</color>
             </ambient>
             <diffuse>
-              <texture texture="Hair_Texture-sampler" texcoord="TEX0">
+              <texture texture="Hair_File-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="MAYA">
                     <wrapU>1</wrapU>
@@ -1434,6 +1434,12 @@
       <extra>
         <technique profile="MAYA">
           <double_sided>1</double_sided>
+          <dynamic_attributes>
+            <miShadingSamplesOverride short_name="mso" type="bool">0</miShadingSamplesOverride>
+            <miShadingSamples short_name="msh" type="float">0</miShadingSamples>
+            <miMaxDisplaceOverride short_name="mdo" type="bool">0</miMaxDisplaceOverride>
+            <miMaxDisplace short_name="mmd" type="float">0</miMaxDisplace>
+          </dynamic_attributes>
         </technique>
       </extra>
     </geometry>
@@ -1583,7 +1589,7 @@
     </geometry>
   </library_geometries>
   <library_controllers>
-    <controller id="HeadShape-skin" name="skinClusterHead">
+    <controller id="HeadShape-skin" name="skinCluster2">
       <skin source="#HeadShape">
         <bind_shape_matrix>0.393701 0 0 0 0 0.393701 0 0 0 0 0.393701 0 0 0 0 1</bind_shape_matrix>
         <source id="HeadShape-skin-joints">
@@ -1622,7 +1628,7 @@
         </vertex_weights>
       </skin>
     </controller>
-    <controller id="ShirtShape-skin" name="skinClusterShirt">
+    <controller id="ShirtShape-skin" name="skinCluster4">
       <skin source="#ShirtShape">
         <bind_shape_matrix>0.393701 0 0 0 0 0.393701 0 0 0 0 0.393701 0 0 0 0 1</bind_shape_matrix>
         <source id="ShirtShape-skin-joints">
@@ -1661,7 +1667,7 @@
         </vertex_weights>
       </skin>
     </controller>
-    <controller id="ShoesShape-skin" name="skinClusterShoes">
+    <controller id="ShoesShape-skin" name="skinCluster5">
       <skin source="#ShoesShape">
         <bind_shape_matrix>0.393701 0 0 0 0 0.393701 0 0 0 0 0.393701 0 0 0 0 1</bind_shape_matrix>
         <source id="ShoesShape-skin-joints">
@@ -1700,7 +1706,7 @@
         </vertex_weights>
       </skin>
     </controller>
-    <controller id="PantShape-skin" name="skinClusterPant">
+    <controller id="PantShape-skin" name="skinCluster11">
       <skin source="#PantShape">
         <bind_shape_matrix>0.393701 0 0 0 0 0.393701 0 0 0 0 0.393701 0 0 0 0 1</bind_shape_matrix>
         <source id="PantShape-skin-joints">
@@ -1739,7 +1745,7 @@
         </vertex_weights>
       </skin>
     </controller>
-    <controller id="HairShape-skin" name="skinClusterHair">
+    <controller id="HairShape-skin" name="skinCluster14">
       <skin source="#HairShape">
         <bind_shape_matrix>1 0 0 0 0 0 1 0 0 -1 0 0 0 0 0 1</bind_shape_matrix>
         <source id="HairShape-skin-joints">
@@ -1780,7 +1786,7 @@
     </controller>
   </library_controllers>
   <library_visual_scenes>
-    <visual_scene id="VisualSceneNode" name="model">
+    <visual_scene id="VisualSceneNode" name="model_2">
       <node id="Head" name="Head" type="NODE">
         <matrix sid="transform">0.999999 0 0 0 0 0.999999 0 0 0 0 0.999999 0 0 0 0 1</matrix>
         <instance_controller url="#HeadShape-skin">
@@ -1788,19 +1794,6 @@
           <bind_material>
             <technique_common>
               <instance_material symbol="Head_SG" target="#Head_Mat">
-                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
-            </technique_common>
-          </bind_material>
-        </instance_controller>
-      </node>
-      <node id="Shirt" name="Shirt" type="NODE">
-        <matrix sid="transform">0.999999 0 0 0 0 0.999999 0 0 0 0 0.999999 0 0 0 0 1</matrix>
-        <instance_controller url="#ShirtShape-skin">
-          <skeleton>#joint_Back_1</skeleton>
-          <bind_material>
-            <technique_common>
-              <instance_material symbol="Shirt_SG" target="#Shirt_Mat">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -2057,6 +2050,19 @@
             <segment_scale_compensate>0</segment_scale_compensate>
           </technique>
         </extra>
+      </node>
+      <node id="Shirt" name="Shirt" type="NODE">
+        <matrix sid="transform">0.999999 0 0 0 0 0.999999 0 0 0 0 0.999999 0 0 0 0 1</matrix>
+        <instance_controller url="#ShirtShape-skin">
+          <skeleton>#joint_Back_1</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Shirt_SG" target="#Shirt_Mat">
+                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
       </node>
       <node id="Shoes" name="Shoes" type="NODE">
         <matrix sid="transform">0.999999 0 0 0 0 0.999999 0 0 0 0 0.999999 0 0 0 0 1</matrix>
