@@ -53,12 +53,28 @@ package
 
 		private function buildFromXML(xml:XML):void
 		{
-			var _menu:SDDialog = new SDDialog(<question><![CDATA[Select Pant]]>
-					<answer src="as:onUserSelect('pant_1')"><![CDATA[pant_1]]></answer>
-					<answer src="as:onUserSelect('pant_2')"><![CDATA[pant_2]]></answer>
+			var _menu:SDDialog = new SDDialog(<question><![CDATA[Menu]]>
+					<answer src="as:onUserSelectMenu('Save')"><![CDATA[Save]]></answer>
 					</question>, this);
 			_container.addChild(_menu);
 			_menu.x = 10;
+			_menu.y = 150;
+			
+			var _menuPart:SDDialog = new SDDialog(<question><![CDATA[Select Part]]>
+					<answer src="as:onUserSelect('Hair_1')"><![CDATA[Hair_1]]></answer>
+					<answer src="as:onUserSelect('Hair_2')"><![CDATA[Hair_2]]></answer>
+					<answer src="as:onUserSelect('Head_1')"><![CDATA[Head_1]]></answer>
+					<answer src="as:onUserSelect('Head_2')"><![CDATA[Head_2]]></answer>
+					<answer src="as:onUserSelect('Shirt_1')"><![CDATA[Shirt_1]]></answer>
+					<answer src="as:onUserSelect('Shirt_2')"><![CDATA[Shirt_2]]></answer>
+					<answer src="as:onUserSelect('Pant_1')"><![CDATA[Pant_1]]></answer>
+					<answer src="as:onUserSelect('Pant_2')"><![CDATA[Pant_2]]></answer>
+					<answer src="as:onUserSelect('Shoes_1')"><![CDATA[Shoes_1]]></answer>
+					<answer src="as:onUserSelect('Shoes_2')"><![CDATA[Shoes_2]]></answer>
+					</question>, this);
+			_container.addChild(_menuPart);
+			_menuPart.x = 10;
+			_menuPart.y = _menu.y + _menu.height + 10;
 			
 			var _menuAction:SDDialog = new SDDialog(<question><![CDATA[Select Action]]>
 					<answer src="as:onUserSelectAction('talk')"><![CDATA[Talk]]></answer>
@@ -66,26 +82,38 @@ package
 					</question>, this);
 			_container.addChild(_menuAction);
 			_menuAction.x = 10;
-			_menuAction.y = _menu.y + _menu.height + 10;
+			_menuAction.y = _menuPart.y + _menuPart.height + 10;
 		}
 			
+		public function onUserSelectMenu(action:String):void
+		{
+			// collect mesh from visibility
+			
+			// pack and save
+			
+		}
+		
 		public function onUserSelect(action:String):void
 		{
-			_meshes[0].stop();
-			_meshes[1].stop();
-			switch (action)
-			{
-				case "pant_1":
-					_meshes[0].getChildByName("Pant").visible = true;
-					_meshes[1].getChildByName("Pant").visible = false;
-				break;
-				case "pant_2":
-					_meshes[0].getChildByName("Pant").visible = false;
-					_meshes[1].getChildByName("Pant").visible = true;
-				break;
-			}
-			_meshes[0].play(_meshes[0].currentLabel);
-			_meshes[1].play(_meshes[1].currentLabel);
+			var _mesh:MovieMeshContainer3D;
+			
+			// hold
+			for each(_mesh in _meshes)
+				_mesh.stop();
+			
+			var _type:String = action.split("_")[0];
+			var _id:int = int(action.split("_")[1])-1;
+			
+			// reset
+			for each(_mesh in _meshes)
+				_mesh.getChildByName(_type).visible = false;
+			
+			// pick one
+			_meshes[_id].getChildByName(_type).visible = true;
+			
+			// resume
+			for each(_mesh in _meshes)
+				_mesh.play(_mesh.currentLabel);
 		}
 		
 		public function onUserSelectAction(action:String):void
