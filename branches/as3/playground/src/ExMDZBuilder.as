@@ -42,7 +42,7 @@ package
 
 			// load target model
 			var _loader3D:Loader3D = new Loader3D();
-			_loader3D.loadGeometry("chars/man/model_1.dae", _collada);
+			_loader3D.loadGeometry("chars/man/model_4.dae", _collada);
 			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -98,7 +98,7 @@ package
 		private function onClick(event:MouseEvent):void
 		{
 			// save all as .mdz file
-			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "man_1.mdz");
+			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "man_4.mdz");
 		}
 
 		override protected function onPreRender():void
