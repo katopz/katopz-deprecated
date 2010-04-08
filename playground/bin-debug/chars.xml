@@ -3,4 +3,5 @@
 	<man id="man_1" path="chars/" src="man_1.mdz"/>
 	<man id="man_2" path="chars/" src="man_2.mdz"/>
 	<man id="man_3" path="chars/" src="man_3.mdz"/>
+	<man id="man_4" path="chars/" src="man_4.mdz"/>
 </chars>

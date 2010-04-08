@@ -64,12 +64,12 @@ package
 					<answer src="as:onUserSelect('Hair_1')"><![CDATA[Hair_1]]></answer>
 					<answer src="as:onUserSelect('Hair_2')"><![CDATA[Hair_2]]></answer>
 					<answer src="as:onUserSelect('Hair_3')"><![CDATA[Hair_3]]></answer>
+					<answer src="as:onUserSelect('Hair_4')"><![CDATA[Hair_4]]></answer>
 					<answer src="as:onUserSelect('Head_1')"><![CDATA[Head_1]]></answer>
-					<answer src="as:onUserSelect('Head_2')"><![CDATA[Head_2]]></answer>
-					<answer src="as:onUserSelect('Head_3')"><![CDATA[Head_3]]></answer>
 					<answer src="as:onUserSelect('Shirt_1')"><![CDATA[Shirt_1]]></answer>
 					<answer src="as:onUserSelect('Shirt_2')"><![CDATA[Shirt_2]]></answer>
 					<answer src="as:onUserSelect('Shirt_3')"><![CDATA[Shirt_3]]></answer>
+					<answer src="as:onUserSelect('Shirt_4')"><![CDATA[Shirt_4]]></answer>
 					<answer src="as:onUserSelect('Pant_1')"><![CDATA[Pant_1]]></answer>
 					<answer src="as:onUserSelect('Pant_2')"><![CDATA[Pant_2]]></answer>
 					<answer src="as:onUserSelect('Pant_3')"><![CDATA[Pant_3]]></answer>
@@ -131,7 +131,7 @@ package
 		}
 		
 		private var _loadedModel:int = 0;
-		private var _totalModel:int = 3;
+		private var _totalModel:int = 4;
 		
 		private var _meshes:Vector.<MovieMeshContainer3D> = new Vector.<MovieMeshContainer3D>(); 
 		
@@ -146,8 +146,6 @@ package
 			
 			if(_loadedModel==_totalModel)
 			{
-				trace("Done");
-				
 				for each(var _meshContainer:MovieMeshContainer3D in _meshes)
 				{
 					_meshContainer.play("walk");
