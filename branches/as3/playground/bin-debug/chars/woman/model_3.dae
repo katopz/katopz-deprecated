@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
-    <contributor>
-      <author>katopz</author>
-      <authoring_tool>Maya2009 x64 | ColladaMaya v3.05B</authoring_tool>
-      <comments>ColladaMaya export options: bakeTransforms=1;exportPolygonMeshes=1;bakeLighting=0;isSampling=0;
-curveConstrainSampling=0;removeStaticCurves=1;exportCameraAsLookat=0;
-exportLights=0;exportCameras=0;exportJointsAndSkin=1;
-exportAnimations=1;exportTriangles=1;exportInvisibleNodes=0;
-exportNormals=0;exportTexCoords=1;
-exportVertexColors=0;exportVertexColorsAnimation=0;exportTangents=0;
-exportTexTangents=0;exportConstraints=0;exportPhysics=0;exportXRefs=1;
-dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
-      <source_data>file:///C:/inetpub/wwwroot/Classes/katopz/branches/as3/playground/bin-debug/chars/woman/model_3.mb</source_data>
-    </contributor>
     <created>2010-04-10T08:10:07Z</created>
     <modified>2010-04-10T08:10:08Z</modified>
     <unit meter="0.01" name="centimeter"/>
