@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <chars>
-	<man id="man_1" path="chars/" src="man_1.mdz"/>
-	<man id="man_2" path="chars/" src="man_2.mdz"/>
-	<man id="man_3" path="chars/" src="man_3.mdz"/>
-	<man id="man_4" path="chars/" src="man_4.mdz"/>
+	<man id="man_1" path="chars/man/" src="model_1.mdz"/>
+	<man id="man_2" path="chars/man/" src="model_2.mdz"/>
+	<man id="man_3" path="chars/man/" src="model_3.mdz"/>
+	<man id="man_4" path="chars/man/" src="model_4.mdz"/>
 </chars>
