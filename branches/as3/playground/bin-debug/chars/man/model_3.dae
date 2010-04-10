@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
-    <created>2010-04-06T17:40:25Z</created>
-    <modified>2010-04-06T17:40:26Z</modified>
+    <created>2010-04-10T07:47:35Z</created>
+    <modified>2010-04-10T07:47:36Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -973,7 +973,7 @@
       </extra>
     </image>
     <image id="Shoes_File" name="Shoes_File">
-      <init_from>./texture_3/shoes_1.png</init_from>
+      <init_from>./texture_2/shoes_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>
@@ -1820,9 +1820,9 @@
         </instance_controller>
       </node>
       <node id="joint_CenterMass" name="joint_CenterMass" type="JOINT">
-        <matrix sid="transform">-0.147157 0.989111 -0.001932 0 -0.040035 -0.004004 0.99919 35.2679 0.988303 0.147115 0.040188 0 0 0 0 1</matrix>
+        <matrix sid="transform">-0.144658 0.989482 -0.00056 0 -0.056725 -0.007727 0.99836 35.2679 0.987854 0.144453 0.057246 0 0 0 0 1</matrix>
         <node id="CT" name="CT" type="JOINT">
-          <matrix sid="transform">-0.147157 -0.988303 -0.040035 1.39447 0.989111 -0.147115 -0.004004 0.139465 -0.001932 -0.040188 0.99919 -34.8027 0 0 0 1</matrix>
+          <matrix sid="transform">-0.144658 -0.987854 -0.056725 1.97403 0.989481 -0.144453 -0.007727 0.268903 -0.00056 -0.057246 0.99836 -34.7429 0 0 0 1</matrix>
           <extra>
             <technique profile="MAYA">
               <dynamic_attributes>
@@ -1833,17 +1833,17 @@
           </extra>
         </node>
         <node id="joint_Pelvis" name="joint_Pelvis" sid="bone3" type="JOINT">
-          <matrix sid="transform">0 1 -0.000001 0 -0.02271 0.000001 0.999742 0 0.999742 0 0.02271 0 0 0 0 1</matrix>
+          <matrix sid="transform">0 1 -0.000001 0 -0.022586 0.000001 0.999745 0 0.999745 0 0.022586 0 0 0 0 1</matrix>
           <node id="joint_Back_1" name="joint_Back_1" sid="bone0" type="JOINT">
-            <matrix sid="transform">0.998922 0.018758 -0.042458 3.88409 -0.022063 0.99665 -0.078756 -1.15401 0.040839 0.079608 0.995989 0.087854 0 0 0 1</matrix>
+            <matrix sid="transform">0.997378 0.030219 -0.065751 3.88404 -0.034138 0.997656 -0.05931 -1.15402 0.063805 0.061399 0.996072 0.087459 0 0 0 1</matrix>
             <node id="joint_Back_2" name="joint_Back_2" sid="bone11" type="JOINT">
-              <matrix sid="transform">0.996445 0.013255 0.083197 6.08333 -0.008627 0.998408 -0.055744 -0.004836 -0.083804 0.054828 0.994973 -0.000265 0 0 0 1</matrix>
+              <matrix sid="transform">0.997596 0.019501 0.066489 6.0833 -0.016738 0.998983 -0.041871 -0.004838 -0.067238 0.040657 0.996908 -0.000196 0 0 0 1</matrix>
               <node id="joint_Back_3" name="joint_Back_3" sid="bone12" type="JOINT">
-                <matrix sid="transform">0.999564 0.024198 0.016912 6.08328 -0.023267 0.998312 -0.053206 -0.004836 -0.018171 0.052789 0.99844 -0.000255 0 0 0 1</matrix>
+                <matrix sid="transform">0.999456 0.032849 -0.003056 6.08324 -0.032938 0.998797 -0.036341 -0.004838 0.001859 0.036421 0.999335 -0.000176 0 0 0 1</matrix>
                 <node id="joint_Neck" name="joint_Neck" sid="bone9" type="JOINT">
-                  <matrix sid="transform">0.986065 -0.166359 -0.000000 7.7249 0.166359 0.986065 0 -0.430604 0.000000 0 1 0 0 0 0 1</matrix>
+                  <matrix sid="transform">0.986065 -0.166359 -0.000000 7.72491 0.166359 0.986065 0 -0.430604 0.000000 0 1 -0.000000 0 0 0 1</matrix>
                   <node id="joint_Head" name="joint_Head" sid="bone10" type="JOINT">
-                    <matrix sid="transform">0.975296 0.214331 -0.053475 4.06996 -0.206557 0.97065 0.123176 0.000000 0.078306 -0.109087 0.990943 0 0 0 0 1</matrix>
+                    <matrix sid="transform">0.984143 0.177247 -0.006776 4.06996 -0.176797 0.983299 0.043203 -0.000000 0.01432 -0.04132 0.999043 0 0 0 0 1</matrix>
                     <node id="HP_Head" name="HP_Head" type="JOINT">
                       <matrix sid="transform">1 0 0 9.96796 0 1 0 -0.000000 0 0 1 0 0 0 0 1</matrix>
                       <extra>
@@ -1859,15 +1859,15 @@
                     </extra>
                   </node>
                   <node id="joint_L_Shoulder" name="joint_L_Shoulder" sid="bone13" type="JOINT">
-                    <matrix sid="transform">-0.130677 -0.166923 0.977272 -1.90292 0.074775 -0.984576 -0.158172 0.518585 0.988601 0.052406 0.141143 1.54749 0 0 0 1</matrix>
+                    <matrix sid="transform">-0.164998 -0.166963 0.972059 -1.90292 -0.018631 -0.984864 -0.172325 0.518584 0.986118 -0.046544 0.15939 1.54749 0 0 0 1</matrix>
                     <node id="joint_L_UpperArm" name="joint_L_UpperArm" sid="bone14" type="JOINT">
-                      <matrix sid="transform">0.351667 0.348155 0.868975 5.74492 -0.185785 0.93576 -0.299728 -0.000000 -0.917504 -0.056037 0.393758 0.000003 0 0 0 1</matrix>
+                      <matrix sid="transform">0.339983 0.141787 0.929682 5.74492 0.172298 0.962445 -0.209793 0 -0.924514 0.231509 0.302785 -0.000001 0 0 0 1</matrix>
                       <node id="joint_L_Forearm" name="joint_L_Forearm" sid="bone17" type="JOINT">
-                        <matrix sid="transform">0.746164 0.665762 0 11.9546 -0.665762 0.746164 0 0 0 0 1 0.000001 0 0 0 1</matrix>
+                        <matrix sid="transform">0.89494 0.446186 0 11.9546 -0.446186 0.89494 0 0 0 0 1 0.000000 0 0 0 1</matrix>
                         <node id="joint_L_Hand" name="joint_L_Hand" sid="bone18" type="JOINT">
-                          <matrix sid="transform">0.993675 0.073891 -0.084555 9.69997 0.05225 0.362264 0.93061 0.000004 0.099395 -0.929142 0.356112 0 0 0 0 1</matrix>
+                          <matrix sid="transform">0.990162 0.098611 -0.099277 9.69997 0.080212 0.181344 0.980143 0.000000 0.114656 -0.978463 0.17165 -0.000000 0 0 0 1</matrix>
                           <node id="joint_L_Finger" name="joint_L_Finger" sid="bone22" type="JOINT">
-                            <matrix sid="transform">0.868899 -0.451708 -0.20242 3.58549 0.42899 0.891215 -0.14732 0.180767 0.246945 0.04117 0.968155 -0.004629 0 0 0 1</matrix>
+                            <matrix sid="transform">0.891672 -0.421686 -0.164627 3.58549 0.405511 0.905703 -0.123546 0.180769 0.201201 0.043405 0.978588 -0.004629 0 0 0 1</matrix>
                             <node id="HP_L_Finger" name="HP_L_Finger" type="JOINT">
                               <matrix sid="transform">1 0 0 4.13373 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                               <extra>
@@ -1907,15 +1907,15 @@
                     </extra>
                   </node>
                   <node id="joint_R_Shoulder" name="joint_R_Shoulder" sid="bone15" type="JOINT">
-                    <matrix sid="transform">-0.170651 -0.16706 -0.971066 -1.90292 0.060598 -0.985436 0.158883 0.518594 -0.983466 -0.031731 0.178289 -1.54749 0 0 0 1</matrix>
+                    <matrix sid="transform">-0.175811 -0.16706 -0.970145 -1.90292 0.061441 -0.985436 0.158558 0.518594 -0.982505 -0.031731 0.183515 -1.54749 0 0 0 1</matrix>
                     <node id="joint_R_UpperArm" name="joint_R_UpperArm" sid="bone16" type="JOINT">
-                      <matrix sid="transform">0.34684 -0.319526 -0.88182 5.74492 0.316719 0.924856 -0.210547 -0.000000 0.882832 -0.206262 0.421977 0.000000 0 0 0 1</matrix>
+                      <matrix sid="transform">0.311726 -0.259245 -0.914122 5.74492 0.269375 0.9467 -0.176624 0 0.911188 -0.191183 0.364945 -0.000007 0 0 0 1</matrix>
                       <node id="joint_R_Forearm" name="joint_R_Forearm" sid="bone19" type="JOINT">
-                        <matrix sid="transform">0.894577 0.446915 0 11.9546 -0.446914 0.894577 0 0.000001 0 0 1 0.000001 0 0 0 1</matrix>
+                        <matrix sid="transform">0.92053 0.390672 0 11.9546 -0.390672 0.92053 0 0.000000 0 0 1 0.000000 0 0 0 1</matrix>
                         <node id="joint_R_Hand" name="joint_R_Hand" sid="bone20" type="JOINT">
-                          <matrix sid="transform">0.997689 0.004053 0.067827 9.69996 0.063492 0.299904 -0.951854 -0.000000 -0.024199 0.953961 0.298953 0 0 0 0 1</matrix>
+                          <matrix sid="transform">0.999216 -0.009912 0.038341 9.69996 0.039363 0.354617 -0.934182 -0.000000 -0.004336 0.934959 0.354729 0 0 0 0 1</matrix>
                           <node id="joint_R_Finger" name="joint_R_Finger" sid="bone21" type="JOINT">
-                            <matrix sid="transform">0.894239 -0.420396 0.153633 3.58549 0.405056 0.906137 0.121843 0.180767 -0.190435 -0.046727 0.980587 0.004629 0 0 0 1</matrix>
+                            <matrix sid="transform">0.89672 -0.415079 0.153633 3.58549 0.399669 0.908526 0.121844 0.180768 -0.190155 -0.047856 0.980587 0.004629 0 0 0 1</matrix>
                             <node id="HP_R_Finger" name="HP_R_Finger" type="JOINT">
                               <matrix sid="transform">1 0 0 4.13373 0 1 0 0 0 0 -1 0 0 0 0 1</matrix>
                               <extra>
@@ -1973,13 +1973,13 @@
               </extra>
             </node>
             <node id="joint_L_Thigh" name="joint_L_Thigh" sid="bone1" type="JOINT">
-              <matrix sid="transform">-0.994729 0.022026 -0.100148 -3.77147 0.011006 0.993949 0.109289 1.3383 0.10195 0.10761 -0.988952 3.33952 0 0 0 1</matrix>
+              <matrix sid="transform">-0.992027 0.01581 -0.125032 -3.70404 -0.000156 0.991944 0.126674 1.23527 0.126027 0.125683 -0.984033 3.45309 0 0 0 1</matrix>
               <node id="joint_L_Calf" name="joint_L_Calf" sid="bone4" type="JOINT">
-                <matrix sid="transform">0.991122 0.132956 0 15.4011 -0.132956 0.991122 0 0 0 0 1 0.000000 0 0 0 1</matrix>
+                <matrix sid="transform">0.990792 0.135392 0 15.4011 -0.135392 0.990792 0 0 0 0 1 0 0 0 0 1</matrix>
                 <node id="joint_L_Foot" name="joint_L_Foot" sid="bone6" type="JOINT">
-                  <matrix sid="transform">0.990244 -0.078816 -0.114914 16.6795 0.12408 0.874034 0.469753 0.000000 0.063414 -0.479429 0.875287 -0.000000 0 0 0 1</matrix>
+                  <matrix sid="transform">0.990159 -0.079116 -0.115436 16.6795 0.124581 0.874082 0.469532 0.000000 0.063753 -0.479292 0.875337 0.000000 0 0 0 1</matrix>
                   <node id="joint_L_Toe" name="joint_L_Toe" sid="bone8" type="JOINT">
-                    <matrix sid="transform">0.020924 -0.999781 0.000166 3.06911 0.99978 0.020925 0.001407 4.89511 -0.00141 0.000136 0.999999 0.000000 0 0 0 1</matrix>
+                    <matrix sid="transform">0.020924 -0.999781 0.000166 3.06911 0.99978 0.020925 0.001407 4.89511 -0.00141 0.000136 0.999999 0 0 0 0 1</matrix>
                     <node id="HP_L_Toe" name="HP_L_Toe" type="JOINT">
                       <matrix sid="transform">1 0 0 3.33553 0 1 0 0 0 0 -1 0.000000 0 0 0 1</matrix>
                       <extra>
@@ -2013,13 +2013,13 @@
               </extra>
             </node>
             <node id="joint_R_Thigh" name="joint_R_Thigh" sid="bone2" type="JOINT">
-              <matrix sid="transform">-0.988596 0.150407 0.007428 -4.04643 0.148751 0.983022 -0.107426 0.802288 -0.02346 -0.105096 -0.994185 -3.36647 0 0 0 1</matrix>
+              <matrix sid="transform">-0.990355 0.137699 -0.015375 -4.13363 0.138523 0.98638 -0.088685 0.821861 0.002954 -0.089959 -0.995941 -3.25345 0 0 0 1</matrix>
               <node id="joint_R_Calf" name="joint_R_Calf" sid="bone5" type="JOINT">
-                <matrix sid="transform">0.953678 0.300829 0 15.4011 -0.300829 0.953678 0 0 0 0 1 0 0 0 0 1</matrix>
+                <matrix sid="transform">0.953731 0.300661 0 15.4011 -0.300661 0.953731 0 0.000000 0 0 1 0.000000 0 0 0 1</matrix>
                 <node id="joint_R_Foot" name="joint_R_Foot" sid="bone7" type="JOINT">
-                  <matrix sid="transform">0.988119 -0.144196 0.05318 16.6795 0.146314 0.988495 -0.038338 0.000000 -0.04704 0.045664 0.997849 -0.000000 0 0 0 1</matrix>
+                  <matrix sid="transform">0.988132 -0.144118 0.053147 16.6795 0.146243 0.988499 -0.038512 0.000000 -0.046985 0.045827 0.997844 -0.000000 0 0 0 1</matrix>
                   <node id="joint_R_Toe" name="joint_R_Toe" sid="bone23" type="JOINT">
-                    <matrix sid="transform">0.043376 -0.999059 0 3.06911 0.999059 0.043376 0 4.89511 0 0 1 -0.000000 0 0 0 1</matrix>
+                    <matrix sid="transform">0.043376 -0.999059 0 3.06911 0.999059 0.043376 0 4.89511 0 0 1 0.000000 0 0 0 1</matrix>
                     <node id="HP_R_Toe" name="HP_R_Toe" type="JOINT">
                       <matrix sid="transform">1 0 0 3.33553 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                       <extra>
