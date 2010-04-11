@@ -7,9 +7,9 @@ package
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
 	/**
 	 * TODO
-	 * 1. select model type man/woman
-	 * 2. select more textures
-	 * 3. pack back to new model pack
+	 * 1. select more textures
+	 * 2. pack back to new model pack?
+	 * 3. test external interface
 	 */
 	public class CharactorEditor extends BasicTemplate
 	{
