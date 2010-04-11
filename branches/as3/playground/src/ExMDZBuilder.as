@@ -26,6 +26,8 @@ package
 		private var _bonesAnimator:BonesAnimator;
 		private var _mdzBuilder:MDZBuilder;
 		private var _meshes:Vector.<MovieMesh>;
+		
+		private var _id:String = "4";
 
 		override protected function onInit():void
 		{
@@ -37,12 +39,19 @@ package
 
 			// some collada with animation
 			var _collada:Collada = new Collada();
-			//_collada.scaling = 10;
+			
+			//man
+			//_collada.scaling = 1/0.394;
+			//woman
+			//_collada.scaling = 1/2.54;
+			//_collada.scaling = 1/2.146;
+			_collada.scaling = 1/2.7;
+			
 			_collada.bothsides = false;
 
 			// load target model
 			var _loader3D:Loader3D = new Loader3D();
-			_loader3D.loadGeometry("chars/man/model_4.dae", _collada);
+			_loader3D.loadGeometry("chars/woman/model_"+_id+".dae", _collada);
 			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -77,6 +86,10 @@ package
 			_animationDatas[1].name = "walk";
 			_animationDatas[1].start = 65;
 			_animationDatas[1].end = 89;
+			
+			//woman
+			_animationDatas[0].end = 59;
+			_animationDatas[1].start = 60;
 
 			// convert to meshes
 			_meshes = _mdzBuilder.convert(_model, _animationDatas, 24);
@@ -98,7 +111,7 @@ package
 		private function onClick(event:MouseEvent):void
 		{
 			// save all as .mdz file
-			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "man_4.mdz");
+			new FileReference().save(_mdzBuilder.getMDZ(_meshes).byteArray, "model_" +_id + ".mdz");
 		}
 
 		override protected function onPreRender():void

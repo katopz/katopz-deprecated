@@ -7,11 +7,9 @@ package
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
 	/**
 	 * TODO
-	 * 1. load 5 prototype compressed model
-	 * 2. create model tree
-	 * 		Hair, Head, Shirt, Pant, Shoes
-	 * 3. rebuild dae and compress + save
-	 * 4. reload model for testing animation
+	 * 1. select model type man/woman
+	 * 2. select more textures
+	 * 3. pack back to new model pack
 	 */
 	public class CharactorEditor extends BasicTemplate
 	{
@@ -26,11 +24,12 @@ package
 			_EditorTool.initXML("config.xml");
 
 			// ModelPooling
-			var _modelPool:ModelPool = new ModelPool();
+			var _modelPool:ModelPool = new ModelPool(this);
 			_modelPool.initXML("chars.xml");
 
 			// binding
 			ModelPool.signal.add(_EditorTool.activate);
+			ModelPool.resetSignal.add(_EditorTool.reset);
 		}
 
 		override protected function onPreRender():void

@@ -88,6 +88,16 @@ package
 			_menuAction.x = 10;
 			_menuAction.y = _menuPart.y + _menuPart.height + 10;
 		}
+		
+		public function reset():void
+		{
+			_loadedModel = 0;
+			
+			for each(var _meshContainer:MovieMeshContainer3D in _meshes)
+				_meshContainer.destroy();
+				
+			_meshes = new Vector.<MovieMeshContainer3D>();
+		}
 			
 		public function onUserSelectMenu(action:String):void
 		{
@@ -133,7 +143,7 @@ package
 		private var _loadedModel:int = 0;
 		private var _totalModel:int = 4;
 		
-		private var _meshes:Vector.<MovieMeshContainer3D> = new Vector.<MovieMeshContainer3D>(); 
+		private var _meshes:Vector.<MovieMeshContainer3D>; 
 		
 		public function activate(modelData:ModelData):void
 		{
