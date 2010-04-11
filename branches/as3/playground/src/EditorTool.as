@@ -61,20 +61,20 @@ package
 			_menu.y = 150;
 			
 			var _menuPart:SDDialog = new SDDialog(<question><![CDATA[Select Part]]>
-					<answer src="as:onUserSelect('Hair_1')"><![CDATA[Hair_1]]></answer>
-					<answer src="as:onUserSelect('Hair_2')"><![CDATA[Hair_2]]></answer>
-					<answer src="as:onUserSelect('Hair_3')"><![CDATA[Hair_3]]></answer>
-					<answer src="as:onUserSelect('Hair_4')"><![CDATA[Hair_4]]></answer>
-					<answer src="as:onUserSelect('Head_1')"><![CDATA[Head_1]]></answer>
-					<answer src="as:onUserSelect('Shirt_1')"><![CDATA[Shirt_1]]></answer>
-					<answer src="as:onUserSelect('Shirt_2')"><![CDATA[Shirt_2]]></answer>
-					<answer src="as:onUserSelect('Shirt_3')"><![CDATA[Shirt_3]]></answer>
-					<answer src="as:onUserSelect('Shirt_4')"><![CDATA[Shirt_4]]></answer>
-					<answer src="as:onUserSelect('Pant_1')"><![CDATA[Pant_1]]></answer>
-					<answer src="as:onUserSelect('Pant_2')"><![CDATA[Pant_2]]></answer>
-					<answer src="as:onUserSelect('Pant_3')"><![CDATA[Pant_3]]></answer>
-					<answer src="as:onUserSelect('Shoes_1')"><![CDATA[Shoes_1]]></answer>
-					<answer src="as:onUserSelect('Shoes_2')"><![CDATA[Shoes_2]]></answer>
+					<answer src="as:onUserSelect('hair_1')"><![CDATA[hair_1]]></answer>
+					<answer src="as:onUserSelect('hair_2')"><![CDATA[hair_2]]></answer>
+					<answer src="as:onUserSelect('hair_3')"><![CDATA[hair_3]]></answer>
+					<answer src="as:onUserSelect('hair_4')"><![CDATA[hair_4]]></answer>
+					<answer src="as:onUserSelect('head_1')"><![CDATA[head_1]]></answer>
+					<answer src="as:onUserSelect('shirt_1')"><![CDATA[shirt_1]]></answer>
+					<answer src="as:onUserSelect('shirt_2')"><![CDATA[shirt_2]]></answer>
+					<answer src="as:onUserSelect('shirt_3')"><![CDATA[shirt_3]]></answer>
+					<answer src="as:onUserSelect('shirt_4')"><![CDATA[shirt_4]]></answer>
+					<answer src="as:onUserSelect('pant_1')"><![CDATA[pant_1]]></answer>
+					<answer src="as:onUserSelect('pant_2')"><![CDATA[pant_2]]></answer>
+					<answer src="as:onUserSelect('pant_3')"><![CDATA[pant_3]]></answer>
+					<answer src="as:onUserSelect('shoes_1')"><![CDATA[shoes_1]]></answer>
+					<answer src="as:onUserSelect('shoes_2')"><![CDATA[shoes_2]]></answer>
 					</question>, this);
 			_container.addChild(_menuPart);
 			_menuPart.x = 10;
