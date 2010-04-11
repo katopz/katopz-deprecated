@@ -3,13 +3,13 @@
 	<prototype id="man" path="chars/man/">
 		<model id="1" src="model_1.mdz"/>
 		<model id="2" src="model_2.mdz"/>
-		<model id="3" src="model_1.mdz"/>
+		<model id="3" src="model_3.mdz"/>
 		<model id="4" src="model_4.mdz"/>
 	</prototype>
 	<prototype id="woman" path="chars/woman/">
 		<model id="1" src="model_1.mdz"/>
 		<model id="2" src="model_2.mdz"/>
-		<model id="3" src="model_1.mdz"/>
+		<model id="3" src="model_3.mdz"/>
 		<model id="4" src="model_4.mdz"/>
 	</prototype>
 </chars>
