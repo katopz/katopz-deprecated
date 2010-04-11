@@ -1,14 +1,17 @@
 package
 {
+	import away3dlite.core.base.Object3D;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.loaders.MDZ;
 	
 	import com.cutecoma.playground.data.ModelData;
+	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.utils.LoaderUtil;
 	
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.utils.*;
 	
@@ -23,15 +26,19 @@ package
 		private var _xmls:SDGroup; /*xml*/
 		private var _models:SDGroup; /*ModelData*/
 
+		private var _currentModelType:String;
+		private var _xmlData:XML;
+		private var _container:Sprite;
+
 		// complete
 		public static var signal:Signal = new Signal(ModelData);
+		
+		public static var resetSignal:Signal = new Signal();
 
-		// TODO : add women
-		private var _currentPath:String = "chars/man/";
-
-		public function ModelPool()
+		public function ModelPool(container:Sprite)
 		{
 			//Debug.active = true;
+			_container = container;
 		}
 
 		public function initXML(src:String):void
@@ -45,20 +52,62 @@ package
 
 		private function buildFromXML(xmlData:XML):void
 		{
-			//
+			_xmlData = xmlData;
+			var _menuCharactor:SDDialog = new SDDialog(<question><![CDATA[Select Charactor]]>
+					<answer src="as:onSelectCharactor('man')"><![CDATA[Man]]></answer>
+					<answer src="as:onSelectCharactor('woman')"><![CDATA[Women]]></answer>
+				</question>, this);
+			_container.addChild(_menuCharactor);
+		}
+
+		public function onSelectCharactor(action:String):void
+		{
+			_currentModelType = action;
+			var _xmlPrototype:XML = _xmlData.prototype.(@id == _currentModelType)[0];
+
+			// destroy
+			if (_loaders)
+				_loaders.destroy();
+
+			if (_xmls)
+				_xmls.destroy();
+
+			if (_models)
+			{
+				for each (var _modelData:ModelData in _models.items)
+				{
+					_modelData.model.destroy();
+					_modelData.model = null;
+				}
+
+				_models.destroy();
+			}
+
+			_loaders = null;
+			_xmls = null;
+			_models = null;
+			
+			resetSignal.dispatch();
+
+			buildFromXML2(_xmlPrototype);
+		}
+
+		private function buildFromXML2(prototypeData:XML):void
+		{
 			_loaders = new SDGroup();
 			_xmls = new SDGroup();
 			_models = new SDGroup();
 
 			// get total 
-			_totalModel = xmlData.man.length();
+			_totalModel = XMLList(prototypeData.model).length();
 			_loadedModel = 0;
 
-			for each (var _node:XML in xmlData.man)
+			var _path:String = prototypeData.@path.toString();
+
+			for each (var _model:XML in prototypeData.model)
 			{
-				var _id:String = _node.@id.toString();
-				var _path:String = _node.@path.toString();
-				var _src:String = _node.@src.toString();
+				var _id:String = _model.@id.toString();
+				var _src:String = _model.@src.toString();
 
 				var _mdz:MDZ = new MDZ();
 				_mdz.autoPlay = false;
@@ -68,7 +117,7 @@ package
 				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 				_loader3D.loadGeometry(_path + _src, _mdz);
 
-				_models.addItem(new ModelData(_id, _loader3D, _currentPath), _loader3D);
+				_models.addItem(new ModelData(_id, _loader3D, _path), _loader3D);
 			}
 		}
 
