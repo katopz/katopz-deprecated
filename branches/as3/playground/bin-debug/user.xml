@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user>
+	<model id="hair" mesh="chars/mesh_1/hair_1.md2" texture="chars/texture_1/hair_1.png"/>
+	<model id="head" mesh="chars/mesh_1/head_1.md2" texture="chars/texture_1/head_1.png"/>
+	<model id="shirt" mesh="chars/mesh_1/shirt_1.md2" texture="chars/texture_1/shirt_1.png"/>
+	<model id="pant" mesh="chars/mesh_1/pant_1.md2" texture="chars/texture_1/pant_1.png"/>
+	<model id="shoes" mesh="chars/mesh_1/shoes_1.md2" texture="chars/texture_1/shoes_1.png"/>
+</user>
