@@ -27,7 +27,7 @@ package
 		private var _mdzBuilder:MDZBuilder;
 		private var _meshes:Vector.<MovieMesh>;
 		
-		private var _id:String = "4";
+		private var _id:String = "1";
 		private var _sex:String = "man";
 
 		override protected function onInit():void
@@ -75,6 +75,8 @@ package
 
 			// build as MD2
 			_mdzBuilder = new MDZBuilder();
+			_mdzBuilder.isIncludeMaterial = false;
+			_mdzBuilder.texturePath = "chars/man/";
 			
 			// add custom frame label
 			var _animationDatas:Vector.<AnimationData> = new Vector.<AnimationData>(2, true);
