@@ -116,14 +116,18 @@ package org.papervision3d.materials
 		*/
 		public function BitmapFileMaterial( url :String="", precise:Boolean=false )
 		{
-			super(null, precise);
-			
+			if(url!="")
+				load(url);
+		}
+		
+		public function load(url:String):void
+		{
 			// save URL reference
 			this.url = url;
-
+			
 			// set the loaded flag
 			this.loaded = false;
-
+			
 			// Loading color
 			this.fillAlpha = 1;
 			this.fillColor = LOADING_COLOR;
@@ -131,7 +135,6 @@ package org.papervision3d.materials
 			// start the loading by setting the texture
 			if( url.length > 0 ) texture = url;
 		}
-
 		// ___________________________________________________________________ CREATE BITMAP
 
 		/**

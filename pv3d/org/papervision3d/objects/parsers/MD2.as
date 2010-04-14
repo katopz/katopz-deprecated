@@ -466,11 +466,11 @@ package org.papervision3d.objects.parsers {
 			
 			// texture
 			data.position = 0x44;
-			textureName = "";
+			materialURL = "";
 			do{
 				var charCode:uint = data.readUnsignedByte();
 				if(charCode != 0x00)
-					textureName+=String.fromCharCode(charCode);
+					materialURL+=String.fromCharCode(charCode);
 			}while(charCode != 0x00)
 		}
 		
@@ -502,6 +502,6 @@ package org.papervision3d.objects.parsers {
 		protected var _currentTime:Number = 0;
 		
 		// texture file name
-		public var textureName:String;
+		public var materialURL:String;
 	}
 }
