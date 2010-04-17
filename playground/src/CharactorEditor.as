@@ -1,7 +1,7 @@
 package
 {
 	import away3dlite.templates.BasicTemplate;
-	
+
 	import flash.utils.*;
 
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
@@ -14,7 +14,7 @@ package
 	public class CharactorEditor extends BasicTemplate
 	{
 		private var _EditorTool:EditorTool;
-		
+
 		override protected function onInit():void
 		{
 			view.mouseEnabled3D = false;
@@ -35,11 +35,11 @@ package
 		override protected function onPreRender():void
 		{
 			camera.y = -200;
-			
+
 			//
 			//if (_EditorTool.skinAnimation)
 			//	_EditorTool.skinAnimation.update(getTimer() * 2 / 1000);
-			
+
 			scene.rotationY++;
 		}
 	}
