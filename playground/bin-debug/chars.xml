@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <chars>
-	<model id="man" src="chars/man/model_1.mdj"/>
+	<model type="man" src="chars/man/model_1.mdj"/>
+	<model type="man" src="chars/man/model_2.mdj"/>
 </chars>
