@@ -1,0 +1,23 @@
+{
+	"paths" : 
+	[
+		"chars/man/",
+		"chars/man/"
+	],
+	"meshes" : 
+	[
+		"meshes/hair_4.md2",
+		"meshes/head_1.md2",
+		"meshes/shirt_4.md2",
+		"meshes/pant_1.md2",
+		"meshes/shoes_1.md2"
+	],
+	"textures" : 
+	[
+		"texture_4/hair_1.png",
+		"texture_1/head_1.png",
+		"texture_4/shirt_1.png",
+		"texture_1/pant_1.png",
+		"texture_1/shoes_1.png"
+	]
+}
