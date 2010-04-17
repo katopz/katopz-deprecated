@@ -1,7 +1,8 @@
 package
 {
+	import away3dlite.core.utils.Debug;
 	import away3dlite.templates.BasicTemplate;
-
+	
 	import flash.utils.*;
 
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
@@ -18,6 +19,8 @@ package
 		override protected function onInit():void
 		{
 			view.mouseEnabled3D = false;
+			
+			Debug.active = true;
 
 			// EditorTool
 			_EditorTool = new EditorTool(this);
