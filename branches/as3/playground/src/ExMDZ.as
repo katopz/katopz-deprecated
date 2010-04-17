@@ -14,7 +14,7 @@ package
 		{
 			_mdz = new MDZ(false);
 			_mdz.addEventListener(Event.COMPLETE, onComplete);
-			_mdz.load("chars/man/model_1.mdz", null, 24, 10);
+			_mdz.load("chars/man/model_2.mdz", null, 24, 10);
 			
 			scene.addChild(_mdz);
 			
