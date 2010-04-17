@@ -141,7 +141,7 @@ package
 		}
 		
 		private var _loadedModel:int = 0;
-		private var _totalModel:int = 4;
+		private var _totalModel:int = 1;
 		
 		private var _meshes:Vector.<MovieMeshContainer3D>; 
 		
@@ -158,12 +158,14 @@ package
 			{
 				for each(var _meshContainer:MovieMeshContainer3D in _meshes)
 				{
-					_meshContainer.play("walk");
+					//_meshContainer.play("walk");
 					if(_meshContainer!=_meshes[0])
 						for each(var _mesh:MovieMesh in _meshContainer.children)
 							_mesh.visible = false;
 				}
 			}
+			
+			Debug.trace(" ! All Complete.");
 			
 			/*
 			_totalModel++;
