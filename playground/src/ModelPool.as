@@ -31,12 +31,10 @@ package
 		private var _xmlData:XML;
 		private var _container:Sprite;
 		
-		// gc
-		private var _loader3Ds:Array = [];
-
+		private var _loader3Ds:Array;
+		
 		// complete
 		public static var signal:Signal = new Signal(ModelData);
-		
 		public static var resetSignal:Signal = new Signal();
 
 		public function ModelPool(container:Sprite)
@@ -67,7 +65,7 @@ package
 		public function onSelectCharactor(action:String):void
 		{
 			_currentModelType = action;
-			var _xmlPrototype:XML = _xmlData.model.(@id == _currentModelType)[0];
+			var _xmlPrototype:XMLList = _xmlData.model.(@type == _currentModelType);
 
 			// destroy
 			if (_loaders)
@@ -96,20 +94,21 @@ package
 			initModel(_xmlPrototype);
 		}
 
-		private function initModel(prototypeData:XML):void
+		private function initModel(prototypeData:XMLList):void
 		{
 			_loaders = new SDGroup();
 			_xmls = new SDGroup();
 			_models = new SDGroup();
 
 			// get total 
-			_totalModel = XMLList(prototypeData).length();
+			_totalModel = prototypeData.length();
 			_loadedModel = 0;
-
+			
+			_loader3Ds = [];
 			for each (var _model:XML in prototypeData)
 			{
-				var _id:String = prototypeData.@id.toString();
-				var _src:String = prototypeData.@src.toString();
+				var _id:String = _model.@id.toString();
+				var _src:String = _model.@src.toString();
 
 				var _mdj:MDJ = new MDJ();
 				_mdj.autoPlay = false;
@@ -119,9 +118,8 @@ package
 				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 				_loader3D.loadGeometry(_src, _mdj);
 				
-				// gc
 				_loader3Ds.push(_loader3D);
-
+				
 				_models.addItem(new ModelData(_id, _loader3D, _src.slice(0, _src.lastIndexOf("/"))), _loader3D);
 			}
 		}
@@ -133,14 +131,11 @@ package
 			var _modelData:ModelData = _models.getItem(_loader3D);
 			_modelData.model = _loader3D.handle;
 			
-			Debug.active = true;
 			Debug.trace("onSuccess");
 			if (++_loadedModel == _totalModel)
 			{
 				Debug.trace(" ! All Complete.");
 				signal.dispatch(_modelData);
-				
-				_loader3Ds = [];
 			}
 			else
 			{
