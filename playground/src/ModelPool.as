@@ -131,7 +131,6 @@ package
 			var _modelData:ModelData = _models.getItem(_loader3D);
 			_modelData.model = _loader3D.handle;
 			
-			Debug.trace("onSuccess");
 			if (++_loadedModel == _totalModel)
 			{
 				Debug.trace(" ! All Complete.");

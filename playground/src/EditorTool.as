@@ -6,6 +6,8 @@ package
 	import away3dlite.core.base.Mesh;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.utils.Debug;
+	import away3dlite.materials.BitmapFileMaterial;
+	import away3dlite.materials.BitmapMaterial;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.LineSegment;
 	import away3dlite.templates.BasicTemplate;
@@ -80,6 +82,16 @@ package
 			_menuPart.x = 10;
 			_menuPart.y = _menu.y + _menu.height + 10;
 			
+			var _textureMenu:SDDialog = new SDDialog(<question><![CDATA[Select Texture]]>
+					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_1.png')"><![CDATA[hair_1]]></answer>
+					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_2.png')"><![CDATA[hair_2]]></answer>
+					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_3.png')"><![CDATA[hair_3]]></answer>
+					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_4.png')"><![CDATA[hair_4]]></answer>
+					</question>, this);
+			_container.addChild(_textureMenu);
+			_textureMenu.x = _menuPart.width + 20;
+			_textureMenu.y = _menu.y + _menu.height + 10;
+			
 			var _menuAction:SDDialog = new SDDialog(<question><![CDATA[Select Action]]>
 					<answer src="as:onUserSelectAction('talk')"><![CDATA[Talk]]></answer>
 					<answer src="as:onUserSelectAction('walk')"><![CDATA[Walk]]></answer>
@@ -107,6 +119,19 @@ package
 			
 		}
 		
+		public function onUserSelectTexture(part:String, src:String):void
+		{
+			var _meshContainer:MovieMeshContainer3D;
+			var _type:String = part.split("_")[0];
+			var _id:int = int(part.split("_")[1])-1;
+			
+			for each(_meshContainer in _meshes)
+			{
+				var _mesh:MovieMesh = _meshContainer.getChildByName(_type) as MovieMesh;
+				_mesh.material = new BitmapFileMaterial(src);
+			}
+		}
+		
 		public function onUserSelect(action:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
@@ -132,16 +157,18 @@ package
 		
 		public function onUserSelectAction(action:String):void
 		{
-			var _meshContainer:MovieMeshContainer3D
+			var _meshContainer:MovieMeshContainer3D;
+			/*
 			for each(_meshContainer in _meshes)
 				_meshContainer.stop();
+			*/
 			
 			for each(_meshContainer in _meshes)
 				_meshContainer.play(action);
 		}
 		
 		private var _loadedModel:int = 0;
-		private var _totalModel:int = 2;
+		private var _totalModel:int = 4;
 		
 		private var _meshes:Vector.<MovieMeshContainer3D>; 
 		
@@ -161,43 +188,9 @@ package
 					//_meshContainer.play("walk");
 					if(_meshContainer!=_meshes[0])
 						for each(var _mesh:MovieMesh in _meshContainer.children)
-						{
 							_mesh.visible = false;
-							Debug.trace("_mesh:"+_mesh);
-						}
 				}
 			}
-			
-			Debug.trace(" ! All Complete.");
-			
-			/*
-			_totalModel++;
-			trace("_totalModel:"+_totalModel);
-			
-			var _prototype:MovieMeshContainer3D = modelData.model as MovieMeshContainer3D;
-			//_container.scene.addChild(man_1);
-			
-			// prepare dummy
-			if(!currentModel)
-			{
-				currentModel = _prototype.clone() as MovieMeshContainer3D;
-				_container.scene.addChild(currentModel);
-				currentModel.play("talk");
-			}
-			
-			if(_totalModel==2)
-			{
-				trace("Done");
-				var _pant1:MovieMesh = currentModel.getChildByName("Pant") as MovieMesh;
-				var _pant2:MovieMesh = _prototype.getChildByName("Pant") as MovieMesh;
-				
-				_pant1.visible = false;
-				currentModel.removeChild(_pant1);
-				
-				_prototype.removeChild(_pant2);
-				currentModel.addChild(_pant2);
-			}
-			*/
 		}
 	}
 }
