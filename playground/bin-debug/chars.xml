@@ -2,4 +2,6 @@
 <chars>
 	<model type="man" src="chars/man/model_1.mdj"/>
 	<model type="man" src="chars/man/model_2.mdj"/>
+	<model type="man" src="chars/man/model_3.mdj"/>
+	<model type="man" src="chars/man/model_4.mdj"/>
 </chars>
