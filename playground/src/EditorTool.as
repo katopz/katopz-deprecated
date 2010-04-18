@@ -142,13 +142,20 @@ package
 			
 			var _type:String = action.split("_")[0];
 			var _id:int = int(action.split("_")[1])-1;
+			var _currentTime:Number = 0;
 			
 			// reset
 			for each(_meshContainer in _meshes)
+			{
 				_meshContainer.getChildByName(_type).visible = false;
+				_currentTime = MovieMesh(_meshContainer.getChildByName(_type)).currentTime;
+			}
 			
 			// pick one
 			_meshes[_id].getChildByName(_type).visible = true;
+			
+			// seek
+			MovieMesh(_meshes[_id].getChildByName(_type)).seek(_currentTime, _currentTime);
 			
 			// resume
 			for each(_meshContainer in _meshes)
@@ -158,10 +165,9 @@ package
 		public function onUserSelectAction(action:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
-			/*
+			
 			for each(_meshContainer in _meshes)
 				_meshContainer.stop();
-			*/
 			
 			for each(_meshContainer in _meshes)
 				_meshContainer.play(action);
