@@ -1,8 +1,8 @@
 {
 	"paths" : 
 	[
-		"chars/man/",
-		"chars/man/"
+		"chars/woman/",
+		"chars/woman/"
 	],
 	"meshes" : 
 	[
@@ -10,7 +10,7 @@
 		"meshes/head_1.md2",
 		"meshes/shirt_3.md2",
 		"meshes/pant_3.md2",
-		"meshes/shoes_1.md2"
+		"meshes/shoes_3.md2"
 	],
 	"textures" : 
 	[
@@ -18,6 +18,6 @@
 		"texture_1/head_1.png",
 		"texture_3/shirt_1.png",
 		"texture_3/pant_1.png",
-		"texture_1/shoes_1.png"
+		"texture_3/shoes_1.png"
 	]
 }

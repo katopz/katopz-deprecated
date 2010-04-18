@@ -3,30 +3,36 @@ package
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.animators.MovieMeshContainer3D;
-	import away3dlite.core.base.Mesh;
-	import away3dlite.core.base.Object3D;
-	import away3dlite.core.utils.Debug;
 	import away3dlite.materials.BitmapFileMaterial;
-	import away3dlite.materials.BitmapMaterial;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.LineSegment;
 	import away3dlite.templates.BasicTemplate;
 	import away3dlite.templates.Template;
-	
+
 	import com.cutecoma.playground.data.ModelData;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.utils.LoaderUtil;
-	
+
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import flash.utils.*;
 
+	import org.osflash.signals.Signal;
+
 	public class EditorTool extends RemovableEventDispatcher
 	{
+		private var _currentModel:MovieMeshContainer3D;
+		private var _bonesAnimator:BonesAnimator;
+
 		private var _container:Template;
-		public var currentModel:MovieMeshContainer3D;
-		public var skinAnimation:BonesAnimator;
+		private var _loadedModel:int = 0;
+		private var _totalModel:int = 4;
+
+		private var _meshes:Vector.<MovieMeshContainer3D>;
+
+		public static var initSignal:Signal = new Signal(XMLList);
+		private var _xmlData:XML;
 
 		public function EditorTool(container:BasicTemplate, size:int = 500)
 		{
@@ -39,9 +45,7 @@ package
 			_lines[2] = new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, size));
 
 			for each (var _line:LineSegment in _lines)
-				container.scene.addChild(_line);
-
-			// add menu open, save, compress
+				_container.scene.addChild(_line);
 		}
 
 		public function initXML(src:String):void
@@ -53,149 +57,289 @@ package
 				});
 		}
 
-		private function buildFromXML(xml:XML):void
+		private var _menuCharactor:SDDialog;
+		private var _textureMenu:SDDialog;
+		private var _menuPart:SDDialog;
+
+		private function buildFromXML(xmlData:XML):void
 		{
-			var _menu:SDDialog = new SDDialog(<question><![CDATA[Menu]]>
-					<answer src="as:onUserSelectMenu('Save')"><![CDATA[Save]]></answer>
-					</question>, this);
-			_container.addChild(_menu);
-			_menu.x = 10;
-			_menu.y = 150;
-			
-			var _menuPart:SDDialog = new SDDialog(<question><![CDATA[Select Part]]>
-					<answer src="as:onUserSelect('hair_1')"><![CDATA[hair_1]]></answer>
-					<answer src="as:onUserSelect('hair_2')"><![CDATA[hair_2]]></answer>
-					<answer src="as:onUserSelect('hair_3')"><![CDATA[hair_3]]></answer>
-					<answer src="as:onUserSelect('hair_4')"><![CDATA[hair_4]]></answer>
-					<answer src="as:onUserSelect('head_1')"><![CDATA[head_1]]></answer>
-					<answer src="as:onUserSelect('shirt_1')"><![CDATA[shirt_1]]></answer>
-					<answer src="as:onUserSelect('shirt_2')"><![CDATA[shirt_2]]></answer>
-					<answer src="as:onUserSelect('shirt_3')"><![CDATA[shirt_3]]></answer>
-					<answer src="as:onUserSelect('shirt_4')"><![CDATA[shirt_4]]></answer>
-					<answer src="as:onUserSelect('pant_1')"><![CDATA[pant_1]]></answer>
-					<answer src="as:onUserSelect('pant_2')"><![CDATA[pant_2]]></answer>
-					<answer src="as:onUserSelect('pant_3')"><![CDATA[pant_3]]></answer>
-					<answer src="as:onUserSelect('shoes_1')"><![CDATA[shoes_1]]></answer>
-					<answer src="as:onUserSelect('shoes_2')"><![CDATA[shoes_2]]></answer>
-					</question>, this);
-			_container.addChild(_menuPart);
-			_menuPart.x = 10;
-			_menuPart.y = _menu.y + _menu.height + 10;
-			
-			var _textureMenu:SDDialog = new SDDialog(<question><![CDATA[Select Texture]]>
-					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_1.png')"><![CDATA[hair_1]]></answer>
-					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_2.png')"><![CDATA[hair_2]]></answer>
-					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_3.png')"><![CDATA[hair_3]]></answer>
-					<answer src="as:onUserSelectTexture('hair','chars/man/texture_1/hair_4.png')"><![CDATA[hair_4]]></answer>
-					</question>, this);
-			_container.addChild(_textureMenu);
-			_textureMenu.x = _menuPart.width + 20;
-			_textureMenu.y = _menu.y + _menu.height + 10;
-			
-			var _menuAction:SDDialog = new SDDialog(<question><![CDATA[Select Action]]>
-					<answer src="as:onUserSelectAction('talk')"><![CDATA[Talk]]></answer>
-					<answer src="as:onUserSelectAction('walk')"><![CDATA[Walk]]></answer>
-					</question>, this);
+			_xmlData = xmlData;
+			_menuCharactor = new SDDialog(<question><![CDATA[Select Charactor]]>
+					<answer src="as:onSelectCharactor('man')"><![CDATA[Man]]></answer>
+					<answer src="as:onSelectCharactor('woman')"><![CDATA[Women]]></answer>
+				</question>, this);
+			_container.addChild(_menuCharactor);
+			_menuCharactor.x = 10;
+			_menuCharactor.y = 80;
+		}
+
+		public function onSelectCharactor(charType:String):void
+		{
+			var _xmlPrototype:XMLList = _xmlData.chars.model.(@type == charType);
+
+			reset();
+
+			initSignal.dispatch(_xmlPrototype);
+
+			initMenu(charType);
+
+			_container.mouseEnabled = _container.mouseChildren = false;
+		}
+
+		private var _menuAction:SDDialog;
+		private var _menu:SDDialog;
+		private var _charType:String;
+
+		private function initMenu(charType:String):void
+		{
+			_charType = charType;
+
+			if (_menuAction)
+			{
+				_container.removeChild(_menuAction);
+				_menuAction = null;
+			}
+
+			if (_menu)
+			{
+				_container.removeChild(_menu);
+				_menu = null;
+			}
+
+			if (_menuPart)
+			{
+				_container.removeChild(_menuPart);
+				_menuPart = null;
+			}
+
+			_menuAction = new SDDialog(<question><![CDATA[Select Action]]>
+					<answer src="as:onSelectAction('talk')"><![CDATA[Talk]]></answer>
+					<answer src="as:onSelectAction('walk')"><![CDATA[Walk]]></answer>
+				</question>, this);
 			_container.addChild(_menuAction);
 			_menuAction.x = 10;
-			_menuAction.y = _menuPart.y + _menuPart.height + 10;
+			_menuAction.y = _menuCharactor.y + _menuCharactor.height + 10;
+
+			_menu = new SDDialog(<question><![CDATA[Menu]]>
+					<answer src="as:onSelectMenu('open')"><![CDATA[Open]]></answer>
+					<answer src="as:onSelectMenu('save')"><![CDATA[Save]]></answer>
+				</question>, this);
+			_container.addChild(_menu);
+			_menu.x = 10;
+			_menu.y = _menuAction.y + _menuAction.height + 10;
+
+			switch (_charType)
+			{
+				case "man":
+					_menuPart = new SDDialog(<question><![CDATA[Select Part]]>
+							<answer src="as:onSelectMesh('hair_1')"><![CDATA[hair_1]]></answer>
+							<answer src="as:onSelectMesh('hair_2')"><![CDATA[hair_2]]></answer>
+							<answer src="as:onSelectMesh('hair_3')"><![CDATA[hair_3]]></answer>
+							<answer src="as:onSelectMesh('hair_4')"><![CDATA[hair_4]]></answer>
+							<answer src="as:onSelectMesh('head_1')"><![CDATA[head_1]]></answer>
+							<answer src="as:onSelectMesh('shirt_1')"><![CDATA[shirt_1]]></answer>
+							<answer src="as:onSelectMesh('shirt_2')"><![CDATA[shirt_2]]></answer>
+							<answer src="as:onSelectMesh('shirt_3')"><![CDATA[shirt_3]]></answer>
+							<answer src="as:onSelectMesh('shirt_4')"><![CDATA[shirt_4]]></answer>
+							<answer src="as:onSelectMesh('pant_1')"><![CDATA[pant_1]]></answer>
+							<answer src="as:onSelectMesh('pant_2')"><![CDATA[pant_2]]></answer>
+							<answer src="as:onSelectMesh('pant_3')"><![CDATA[pant_3]]></answer>
+							<answer src="as:onSelectMesh('shoes_1')"><![CDATA[shoes_1]]></answer>
+							<answer src="as:onSelectMesh('shoes_2')"><![CDATA[shoes_2]]></answer>
+						</question>, this);
+					_container.addChild(_menuPart);
+					_menuPart.x = 10;
+					_menuPart.y = _menu.y + _menu.height + 10;
+					break;
+				case "woman":
+					_menuPart = new SDDialog(<question><![CDATA[Select Part]]>
+							<answer src="as:onSelectMesh('hair_1')"><![CDATA[hair_1]]></answer>
+							<answer src="as:onSelectMesh('hair_2')"><![CDATA[hair_2]]></answer>
+							<answer src="as:onSelectMesh('hair_3')"><![CDATA[hair_3]]></answer>
+							<answer src="as:onSelectMesh('hair_4')"><![CDATA[hair_4]]></answer>
+							<answer src="as:onSelectMesh('head_1')"><![CDATA[head_1]]></answer>
+							<answer src="as:onSelectMesh('shirt_1')"><![CDATA[shirt_1]]></answer>
+							<answer src="as:onSelectMesh('shirt_2')"><![CDATA[shirt_2]]></answer>
+							<answer src="as:onSelectMesh('shirt_3')"><![CDATA[shirt_3]]></answer>
+							<answer src="as:onSelectMesh('shirt_4')"><![CDATA[shirt_4]]></answer>
+							<answer src="as:onSelectMesh('pant_1')"><![CDATA[pant_1]]></answer>
+							<answer src="as:onSelectMesh('pant_2')"><![CDATA[pant_2]]></answer>
+							<answer src="as:onSelectMesh('pant_3')"><![CDATA[pant_3]]></answer>
+							<answer src="as:onSelectMesh('pant_4')"><![CDATA[pant_4]]></answer>
+							<answer src="as:onSelectMesh('shoes_1')"><![CDATA[shoes_1]]></answer>
+							<answer src="as:onSelectMesh('shoes_2')"><![CDATA[shoes_2]]></answer>
+							<answer src="as:onSelectMesh('shoes_3')"><![CDATA[shoes_3]]></answer>
+						</question>, this);
+					_container.addChild(_menuPart);
+					_menuPart.x = 10;
+					_menuPart.y = _menu.y + _menu.height + 10;
+					break;
+			}
 		}
-		
+
+		public function createTextureMenu(meshType:String, meshID:int, x:int = 0, y:int = 0):void
+		{
+			if (_textureMenu)
+			{
+				_container.removeChild(_textureMenu);
+				x = _textureMenu.x;
+				y = _textureMenu.y;
+				_textureMenu = null;
+			}
+
+			var _xml:XML;
+			switch (_charType)
+			{
+				case "man":
+					_xml = <question><![CDATA[Select Texture]]>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/man/texture_$meshID/hair_1.png')"><![CDATA[hair_1]]></answer>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/man/texture_$meshID/hair_2.png')"><![CDATA[hair_2]]></answer>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/man/texture_$meshID/hair_3.png')"><![CDATA[hair_3]]></answer>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/man/texture_$meshID/hair_4.png')"><![CDATA[hair_4]]></answer>
+							<answer type="head" src="as:onSelectTexture('head','chars/man/texture_$meshID/head_1.png')"><![CDATA[head_1]]></answer>
+							<answer type="head" src="as:onSelectTexture('head','chars/man/texture_$meshID/head_2.png')"><![CDATA[head_2]]></answer>
+							<answer type="head" src="as:onSelectTexture('head','chars/man/texture_$meshID/head_3.png')"><![CDATA[head_3]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/man/texture_$meshID/shirt_1.png')"><![CDATA[shirt_1]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/man/texture_$meshID/shirt_2.png')"><![CDATA[shirt_2]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/man/texture_$meshID/shirt_3.png')"><![CDATA[shirt_3]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/man/texture_$meshID/shirt_4.png')"><![CDATA[shirt_4]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/man/texture_$meshID/pant_1.png')"><![CDATA[pant_1]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/man/texture_$meshID/pant_2.png')"><![CDATA[pant_2]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/man/texture_$meshID/pant_3.png')"><![CDATA[pant_3]]></answer>
+							<answer type="shoes" src="as:onSelectTexture('shoes','chars/man/texture_$meshID/shoes_1.png')"><![CDATA[shoes_1]]></answer>
+							<answer type="shoes" src="as:onSelectTexture('shoes','chars/man/texture_$meshID/shoes_2.png')"><![CDATA[shoes_2]]></answer>
+						</question>;
+					break;
+				case "woman":
+					_xml = <question><![CDATA[Select Texture]]>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/woman/texture_$meshID/hair_1.png')"><![CDATA[hair_1]]></answer>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/woman/texture_$meshID/hair_2.png')"><![CDATA[hair_2]]></answer>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/woman/texture_$meshID/hair_3.png')"><![CDATA[hair_3]]></answer>
+							<answer type="hair" src="as:onSelectTexture('hair','chars/woman/texture_$meshID/hair_4.png')"><![CDATA[hair_4]]></answer>
+							<answer type="head" src="as:onSelectTexture('head','chars/woman/texture_$meshID/head_1.png')"><![CDATA[head_1]]></answer>
+							<answer type="head" src="as:onSelectTexture('head','chars/woman/texture_$meshID/head_2.png')"><![CDATA[head_2]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/woman/texture_$meshID/shirt_1.png')"><![CDATA[shirt_1]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/woman/texture_$meshID/shirt_2.png')"><![CDATA[shirt_2]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/woman/texture_$meshID/shirt_3.png')"><![CDATA[shirt_3]]></answer>
+							<answer type="shirt" src="as:onSelectTexture('shirt','chars/woman/texture_$meshID/shirt_4.png')"><![CDATA[shirt_4]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/woman/texture_$meshID/pant_1.png')"><![CDATA[pant_1]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/woman/texture_$meshID/pant_2.png')"><![CDATA[pant_2]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/woman/texture_$meshID/pant_3.png')"><![CDATA[pant_3]]></answer>
+							<answer type="pant" src="as:onSelectTexture('pant','chars/woman/texture_$meshID/pant_4.png')"><![CDATA[pant_4]]></answer>
+							<answer type="shoes" src="as:onSelectTexture('shoes','chars/woman/texture_$meshID/shoes_1.png')"><![CDATA[shoes_1]]></answer>
+							<answer type="shoes" src="as:onSelectTexture('shoes','chars/woman/texture_$meshID/shoes_2.png')"><![CDATA[shoes_2]]></answer>
+							<answer type="shoes" src="as:onSelectTexture('shoes','chars/woman/texture_$meshID/shoes_3.png')"><![CDATA[shoes_3]]></answer>
+							<answer type="shoes" src="as:onSelectTexture('shoes','chars/woman/texture_$meshID/shoes_4.png')"><![CDATA[shoes_4]]></answer>
+						</question>;
+					break;
+			}
+
+			_xml = new XML("<question><![CDATA[Select Texture]]>" + _xml.answer.(@type == meshType).toString() + "</question>");
+
+			_xml = new XML(_xml.toString().split("$meshID").join(String(meshID)));
+
+			_textureMenu = new SDDialog(_xml, this);
+			_container.addChild(_textureMenu);
+			_textureMenu.x = x || _textureMenu.x;
+			_textureMenu.y = y || _textureMenu.y;
+		}
+
 		public function reset():void
 		{
 			_loadedModel = 0;
-			
-			for each(var _meshContainer:MovieMeshContainer3D in _meshes)
+
+			for each (var _meshContainer:MovieMeshContainer3D in _meshes)
 				_meshContainer.destroy();
-				
+
 			_meshes = new Vector.<MovieMeshContainer3D>();
 		}
-			
-		public function onUserSelectMenu(action:String):void
+
+		public function onSelectMenu(action:String):void
 		{
 			// collect mesh from visibility
-			
+
 			// pack and save
-			
 		}
-		
-		public function onUserSelectTexture(part:String, src:String):void
+
+		public function onSelectTexture(part:String, src:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
 			var _type:String = part.split("_")[0];
-			var _id:int = int(part.split("_")[1])-1;
-			
-			for each(_meshContainer in _meshes)
+			var _id:int = int(part.split("_")[1]) - 1;
+
+			for each (_meshContainer in _meshes)
 			{
 				var _mesh:MovieMesh = _meshContainer.getChildByName(_type) as MovieMesh;
-				_mesh.material = new BitmapFileMaterial(src);
+				if (_mesh.visible)
+					_mesh.material = new BitmapFileMaterial(src);
 			}
 		}
-		
-		public function onUserSelect(action:String):void
+
+		public function onSelectMesh(action:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
-			
+
 			// hold
-			for each(_meshContainer in _meshes)
+			for each (_meshContainer in _meshes)
 				_meshContainer.stop();
-			
+
 			var _type:String = action.split("_")[0];
-			var _id:int = int(action.split("_")[1])-1;
+			var _id:int = int(action.split("_")[1]) - 1;
 			var _currentTime:Number = 0;
-			
+
 			// reset
-			for each(_meshContainer in _meshes)
+			for each (_meshContainer in _meshes)
 			{
 				_meshContainer.getChildByName(_type).visible = false;
 				_currentTime = MovieMesh(_meshContainer.getChildByName(_type)).currentTime;
 			}
-			
+
 			// pick one
-			_meshes[_id].getChildByName(_type).visible = true;
-			
+			var _mesh:MovieMesh = _meshes[_id].getChildByName(_type) as MovieMesh;
+			_mesh.visible = true;
+
 			// seek
 			MovieMesh(_meshes[_id].getChildByName(_type)).seek(_currentTime, _currentTime);
-			
+
 			// resume
-			for each(_meshContainer in _meshes)
-				_meshContainer.play(_meshContainer.currentLabel);
+			if (_meshContainer.currentLabel)
+				for each (_meshContainer in _meshes)
+					_meshContainer.play(_meshContainer.currentLabel);
+
+			// change texture type
+			createTextureMenu(_type, _id + 1, _menuPart.width + 20, _menuPart.y);
 		}
-		
-		public function onUserSelectAction(action:String):void
+
+		public function onSelectAction(action:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
-			
-			for each(_meshContainer in _meshes)
+
+			for each (_meshContainer in _meshes)
 				_meshContainer.stop();
-			
-			for each(_meshContainer in _meshes)
+
+			for each (_meshContainer in _meshes)
 				_meshContainer.play(action);
 		}
-		
-		private var _loadedModel:int = 0;
-		private var _totalModel:int = 4;
-		
-		private var _meshes:Vector.<MovieMeshContainer3D>; 
-		
+
 		public function activate(modelData:ModelData):void
 		{
 			_loadedModel++;
-			
+
 			var _prototype:MovieMeshContainer3D = modelData.model as MovieMeshContainer3D;
 			_container.scene.addChild(_prototype);
-			
+
 			_meshes.push(_prototype);
-			
-			if(_loadedModel==_totalModel)
+
+			if (_loadedModel == _totalModel)
 			{
-				for each(var _meshContainer:MovieMeshContainer3D in _meshes)
+				for each (var _meshContainer:MovieMeshContainer3D in _meshes)
 				{
-					//_meshContainer.play("walk");
-					if(_meshContainer!=_meshes[0])
-						for each(var _mesh:MovieMesh in _meshContainer.children)
+					if (_meshContainer != _meshes[0])
+						for each (var _mesh:MovieMesh in _meshContainer.children)
 							_mesh.visible = false;
 				}
+
+				_container.mouseEnabled = _container.mouseChildren = true;
 			}
 		}
 	}

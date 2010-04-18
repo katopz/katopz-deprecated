@@ -8,13 +8,12 @@ package
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
 	/**
 	 * TODO
-	 * 1. select more textures
 	 * 2. pack back to new model pack?
 	 * 3. test external interface
 	 */
 	public class CharactorEditor extends BasicTemplate
 	{
-		private var _EditorTool:EditorTool;
+		private var _editorTool:EditorTool;
 
 		override protected function onInit():void
 		{
@@ -23,26 +22,21 @@ package
 			Debug.active = true;
 
 			// EditorTool
-			_EditorTool = new EditorTool(this);
-			_EditorTool.initXML("config.xml");
+			_editorTool = new EditorTool(this);
+			_editorTool.initXML("config.xml");
 
-			// ModelPooling
-			var _modelPool:ModelPool = new ModelPool(this);
-			_modelPool.initXML("chars.xml");
+			// ModelPool
+			var _modelPool:ModelPool = new ModelPool();
 
 			// binding
-			ModelPool.signal.add(_EditorTool.activate);
-			ModelPool.resetSignal.add(_EditorTool.reset);
+			EditorTool.initSignal.add(_modelPool.initXML);
+			
+			ModelPool.signalModel.add(_editorTool.activate);
 		}
 
 		override protected function onPreRender():void
 		{
 			camera.y = -200;
-
-			//
-			//if (_EditorTool.skinAnimation)
-			//	_EditorTool.skinAnimation.update(getTimer() * 2 / 1000);
-
 			scene.rotationY++;
 		}
 	}
