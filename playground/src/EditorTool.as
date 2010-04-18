@@ -3,21 +3,24 @@ package
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.animators.MovieMeshContainer3D;
+	import away3dlite.builders.MDJBuilder;
+	import away3dlite.core.utils.Debug;
 	import away3dlite.materials.BitmapFileMaterial;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.LineSegment;
 	import away3dlite.templates.BasicTemplate;
 	import away3dlite.templates.Template;
-
+	
 	import com.cutecoma.playground.data.ModelData;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.utils.LoaderUtil;
-
+	
 	import flash.events.Event;
 	import flash.geom.Vector3D;
+	import flash.net.FileReference;
 	import flash.utils.*;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class EditorTool extends RemovableEventDispatcher
@@ -257,8 +260,20 @@ package
 		public function onSelectMenu(action:String):void
 		{
 			// collect mesh from visibility
-
-			// pack and save
+			var _saveMeshes:Vector.<MovieMesh> = new Vector.<MovieMesh>();
+			for each (var _meshContainer:MovieMeshContainer3D in _meshes)
+			{
+				for each (var _mesh:MovieMesh in _meshContainer.children)
+					if (_mesh.visible)
+					{
+						_saveMeshes.push(_mesh);
+						Debug.trace(_mesh.url);
+					}
+			}
+			
+			// save
+			var _mdjBuilder:MDJBuilder = new MDJBuilder();
+			new FileReference().save(_mdjBuilder.getMDJ(_saveMeshes), "user.mdj");
 		}
 
 		public function onSelectTexture(part:String, src:String):void
