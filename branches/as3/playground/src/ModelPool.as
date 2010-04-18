@@ -88,6 +88,7 @@ package
 				_mdj.scaling = 5;
 
 				var _loader3D:Loader3D = new Loader3D();
+				_loader3D.ignoreParentURL = true;
 				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 				_loader3D.loadGeometry(_src, _mdj);
 
