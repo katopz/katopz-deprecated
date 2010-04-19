@@ -149,25 +149,29 @@ package com.sleepydesign.system
 			var functionString:String = uri.substring(1 + uri.indexOf(":"));
 			var functionName:String = functionString.split("(")[0];
 			var argumentString:String = functionString.substring(1 + functionString.indexOf("("), functionString.lastIndexOf(")"))
-			//var argumentArray:Array = argumentString.split(",");
-			var argument:*;
-
-			//TODO arguments
-			var arg:String = argumentString; //argumentArray[0];
-			if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length - 1))
+			var argumentArray:Array = argumentString.split(",");
+			var argument:Object;
+			var _args:Array = [];
+			for each(var arg:String in argumentArray)
 			{
-				//string
-				argument = arg.substring(1, arg.length - 1);
-			}
-			else if ((arg.indexOf('"') == 0) && (arg.lastIndexOf('"') == arg.length - 1))
-			{
-				//string
-				argument = arg.substring(1, arg.length - 1);
-			}
-			else
-			{
-				//number
-				argument = int(arg);
+				
+				//TODO : RegExp
+				if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length - 1))
+				{
+					//string
+					argument = arg.substring(1, arg.length - 1);
+				}
+				else if ((arg.indexOf('"') == 0) && (arg.lastIndexOf('"') == arg.length - 1))
+				{
+					//string
+					argument = arg.substring(1, arg.length - 1);
+				}
+				else
+				{
+					//number
+					argument = int(arg);
+				}
+				_args.push(argument);
 			}
 
 			switch (protocal)
@@ -176,7 +180,7 @@ package com.sleepydesign.system
 					if (argumentString.length > 0)
 					{
 						//custom::[functionName](argument);
-						caller[functionName].apply(caller, [argument]);
+						caller[functionName].apply(caller, _args);
 					}
 					else
 					{
@@ -189,7 +193,7 @@ package com.sleepydesign.system
 					var isExternal:Boolean = false;
 					if (argumentString.length > 0)
 					{
-						isExternal = callJS(functionName, argument);
+						isExternal = callJS(functionName, _args.toString());
 					}
 					else
 					{
