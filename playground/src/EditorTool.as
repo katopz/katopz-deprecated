@@ -341,17 +341,30 @@ package
 			_loadedModel++;
 
 			var _prototype:MovieMeshContainer3D = modelData.model as MovieMeshContainer3D;
-			_container.scene.addChild(_prototype);
-
 			_meshes.push(_prototype);
-
+			
+			var _mesh:MovieMesh;
+			
+			for each (_mesh in _prototype.children)
+				_mesh.visible = false;
+			
+			Debug.trace(_loadedModel+"/"+_totalModel);
+			
 			if (_loadedModel == _totalModel)
 			{
+				Debug.trace(_meshes.length);
 				for each (var _meshContainer:MovieMeshContainer3D in _meshes)
 				{
-					if (_meshContainer != _meshes[0])
-						for each (var _mesh:MovieMesh in _meshContainer.children)
-							_mesh.visible = false;
+					_container.scene.addChild(_meshContainer);
+					_meshContainer.visible = true;
+					Debug.trace("+"+_meshContainer.name);
+					for each (_mesh in _meshContainer.children)
+					{
+						Debug.trace("+"+_mesh.name);
+						_mesh.visible = (_meshContainer == _meshes[0]);
+						if(_mesh.visible)
+							Debug.trace(_mesh.name);
+					}
 				}
 
 				_container.mouseEnabled = _container.mouseChildren = true;

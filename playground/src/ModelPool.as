@@ -104,6 +104,7 @@ package
 
 			var _modelData:ModelData = _models.getItem(_loader3D);
 			_modelData.model = _loader3D.handle;
+			_modelData.model.visible = false;
 
 			if (++_loadedModel == _totalModel)
 			{
