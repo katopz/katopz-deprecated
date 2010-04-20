@@ -21,10 +21,17 @@ package com.sleepydesign.site
 		private var _currentPaths:Array = [];
 
 		private var _page:Page;
+		private static var _currentPage:Page;
+		
 		private var _currentPageID:String;
 
 		private static var _instance:SiteTool;
 
+		public static function currentPage():Page
+		{
+			return _currentPage;
+		}
+		
 		public static function getInstance():SiteTool
 		{
 			if (_instance)
@@ -48,7 +55,7 @@ package com.sleepydesign.site
 		public function setFocusByPath(path:String):void
 		{
 			DebugUtil.trace(" ! setFocusByPath : " + path);
-			DebugUtil.trace(" ! _currentPaths : " + _currentPaths);
+			DebugUtil.trace(" ! currentPaths : " + _currentPaths);
 			
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
@@ -152,6 +159,9 @@ package com.sleepydesign.site
 
 				// for destroy later
 				_currentPageID = _pathID;
+				
+				// for referer from other
+				_currentPage = _basePage;
 			}
 
 			// keep for destroy chain later
