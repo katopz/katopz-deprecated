@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.01
- * DATE: 2010-02-04
+ * VERSION: 1.04
+ * DATE: 2010-03-06
  * AS3
  * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/
  **/

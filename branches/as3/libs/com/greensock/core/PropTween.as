@@ -1,6 +1,6 @@
 ﻿/**
  * VERSION: 2.1
- * DATE: 9/12/2009
+ * DATE: 2009-09-12
  * ACTIONSCRIPT VERSION: 3.0 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/

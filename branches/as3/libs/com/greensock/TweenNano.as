@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.01
- * DATE: 10/22/2009
+ * VERSION: 1.03
+ * DATE: 2010-04-03
  * AS3 (AS2 is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenNano.com
  **/
@@ -29,7 +29,7 @@ package com.greensock {
  * 		<li><b> Fewer overwrite modes </b>- You can either overwrite all or none of the existing tweens of the same 
  * 			object (overwrite:true or overwrite:false) in TweenNano. TweenLite, however, can use OverwriteManager to expand 
  * 			its capabilities and use modes like AUTO, CONCURRENT, PREEXISTING, and ALL_ONSTART
- * 			(see <a href="http://blog.greensock.com/overwritemanager/">http://blog.greensock.com/overwritemanager/</a>
+ * 			(see <a href="http://www.greensock.com/overwritemanager/">http://www.greensock.com/overwritemanager/</a>
  * 			for details).</li>
  * 
  * 		<li><b>Compared to TweenLite, TweenNano is missing the following methods/properties:</b>
@@ -149,7 +149,7 @@ package com.greensock {
  * 	  
  * 	<li> If you find this class useful, please consider joining Club GreenSock which not only helps to sustain
  * 	  ongoing development, but also gets you bonus plugins, classes and other benefits that are ONLY available 
- * 	  to members. Learn more at <a href="http://blog.greensock.com/club/">http://blog.greensock.com/club/</a></li>
+ * 	  to members. Learn more at <a href="http://www.greensock.com/club/">http://www.greensock.com/club/</a></li>
  * </ul>
  * 
  * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
@@ -158,9 +158,9 @@ package com.greensock {
  */	 
 	public class TweenNano {
 		/** @private **/
-		protected static var _currentTime:Number;
+		protected static var _time:Number;
 		/** @private **/
-		protected static var _currentFrame:uint;
+		protected static var _frame:uint;
 		/** @private Holds references to all our tweens based on their targets (an Array for each target) **/
 		protected static var _masterList:Dictionary = new Dictionary(false); 
 		/** @private A reference to the Shape that we use to drive all our ENTER_FRAME events. **/
@@ -203,8 +203,8 @@ package com.greensock {
 		 */
 		public function TweenNano(target:Object, duration:Number, vars:Object) {
 			if (!_tnInitted) {			
-				_currentTime = getTimer() * 0.001;
-				_currentFrame = 0;
+				_time = getTimer() * 0.001;
+				_frame = 0;
 				_shape.addEventListener(Event.ENTER_FRAME, updateAll, false, 0, true);
 				_tnInitted = true;
 			}
@@ -220,7 +220,7 @@ package com.greensock {
 			_propTweens = [];
 			this.useFrames = Boolean(vars.useFrames == true);
 			var delay:Number = this.vars.delay || 0;
-			this.startTime = (this.useFrames) ? _currentFrame + delay : _currentTime + delay;
+			this.startTime = (this.useFrames) ? _frame + delay : _time + delay;
 			
 			var a:Array = _masterList[target];
 			if (a == null || int(this.vars.overwrite)) { 
@@ -248,7 +248,7 @@ package com.greensock {
 			if (this.vars.runBackwards) {
 				var pt:Array;
 				var i:int = _propTweens.length;
-				while (i--) {
+				while (--i > -1) {
 					pt = _propTweens[i];
 					pt[1] += pt[2];
 					pt[2] = -pt[2];
@@ -279,7 +279,7 @@ package com.greensock {
 			} else {
 				this.ratio = _ease(time, 0, 1, this.duration);			
 			}
-			while (i--) {
+			while (--i > -1) {
 				pt = _propTweens[i];
 				this.target[pt[0]] = pt[1] + (this.ratio * pt[2]); 
 			}
@@ -385,20 +385,20 @@ package com.greensock {
 		
 		/**
 		 * @private
-		 * Updates active tweens and activates those whose startTime is before the _currentTime/_currentFrame.
+		 * Updates active tweens and activates those whose startTime is before the _time/_frame.
 		 * 
 		 * @param e ENTER_FRAME Event
 		 */
 		public static function updateAll(e:Event=null):void {
-			_currentFrame++;
-			_currentTime = getTimer() * 0.001;
+			_frame++;
+			_time = getTimer() * 0.001;
 			var ml:Dictionary = _masterList, a:Array, tgt:Object, i:int, t:Number, tween:TweenNano;
 			for (tgt in ml) {
 				a = ml[tgt];
 				i = a.length;
-				while (i--) {
+				while (--i > -1) {
 					tween = a[i];
-					t = (tween.useFrames) ? _currentFrame : _currentTime;
+					t = (tween.useFrames) ? _frame : _time;
 					if (tween.active || (!tween.gc && t >= tween.startTime)) {
 						tween.renderTime(t - tween.startTime);
 					} else if (tween.gc) {
@@ -422,7 +422,7 @@ package com.greensock {
 				if (complete) {
 					var a:Array = _masterList[target];
 					var i:int = a.length;
-					while (i--) {
+					while (--i > -1) {
 						if (!TweenNano(a[i]).gc) {
 							TweenNano(a[i]).complete(false);
 						}
