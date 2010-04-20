@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.133
- * DATE: 1/18/2010
+ * VERSION: 11.32
+ * DATE: 2010-04-09
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -19,7 +19,7 @@ package com.greensock {
  *  want to consider TweenLite:
  * 	<ul>
  * 		<li><b> SPEED </b>- TweenLite has been highly optimized for maximum performance. See some speed comparisons yourself at 
- * 			 <a href="http://blog.greensock.com/tweening-speed-test/">http://blog.greensock.com/tweening-speed-test/</a></li>
+ * 			 <a href="http://www.greensock.com/tweening-speed-test/">http://www.greensock.com/tweening-speed-test/</a></li>
  * 		  
  * 		<li><b> Feature set </b>- In addition to tweening ANY numeric property of ANY object, TweenLite can tween filters, 
  * 		  	 hex colors, volume, tint, frames, and even do bezier tweening, plus LOTS more. TweenMax extends 
@@ -74,12 +74,22 @@ package com.greensock {
  * 										created, set <code>immediateRender</code> to true. Or to prevent a tween with a duration of zero from
  * 										rendering immediately, set <code>immediateRender</code> to false.</li>
  * 	
- * 	<li><b> onStart : Function</b>		A function that should be called when the tween begins.</li>
+ *  <li><b> onInit : Function</b>		A function that should be called just before the tween inits (renders for the first time).
+ * 										Since onInit runs before the start/end values are recorded internally, it is a good place to run
+ * 										code that affects the target's initial position or other tween-related properties. onStart, by
+ * 										contrast, runs AFTER the tween inits and the start/end values are recorded internally. onStart
+ * 										is called every time the tween begins which can happen more than once if the tween is restarted
+ * 										multiple times.</li>
+ * 	
+ *  <li><b> onInitParams : Array</b>	An Array of parameters to pass the onInit function.</li>	
+ * 
+ *  <li><b> onStart : Function</b>		A function that should be called when the tween begins (when its currentTime is at 0 and 
+ * 										changes to some other value which can happen more than once if the tween is restarted multiple times).</li>
  * 	
  * 	<li><b> onStartParams : Array</b>	An Array of parameters to pass the onStart function.</li>
  * 	
  * 	<li><b> onUpdate : Function</b>		A function that should be called every time the tween's time/position is updated 
- * 										(on every frame while the timeline is active)</li>
+ * 										(on every frame while the tween is active)</li>
  * 	
  * 	<li><b> onUpdateParams : Array</b>	An Array of parameters to pass the onUpdate function</li>
  * 	
@@ -96,7 +106,7 @@ package com.greensock {
  * 	<li><b> overwrite : int</b>			Controls how (and if) other tweens of the same target are overwritten by this tween. There are
  * 										several modes to choose from, but only the first two are available in TweenLite unless 
  * 										<code>OverwriteManager.init()</code> has been called (please see 
- * 										<a href="http://blog.greensock.com/overwritemanager/">http://blog.greensock.com/overwritemanager/</a> 
+ * 										<a href="http://www.greensock.com/overwritemanager/">http://www.greensock.com/overwritemanager/</a> 
  * 										for details and a full explanation of the various modes):
  * 										<ul>
  * 			  								<li>NONE (0) (or false) </li>
@@ -147,7 +157,7 @@ package com.greensock {
  * 	  
  * 	<li> If you find this class useful, please consider joining Club GreenSock which not only helps to sustain
  * 	  ongoing development, but also gets you bonus plugins, classes and other benefits that are ONLY available 
- * 	  to members. Learn more at <a href="http://blog.greensock.com/club/">http://blog.greensock.com/club/</a></li>
+ * 	  to members. Learn more at <a href="http://www.greensock.com/club/">http://www.greensock.com/club/</a></li>
  * </ul>
  * 
  * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
@@ -221,7 +231,7 @@ package com.greensock {
 		}
 		
 		/** @private **/
-		public static const version:Number = 11.133;
+		public static const version:Number = 11.32;
 		/** @private When plugins are activated, the class is added (named based on the special property) to this object so that we can quickly look it up in the initTweenVals() method.**/
 		public static var plugins:Object = {}; 
 		/** @private **/
@@ -245,7 +255,7 @@ package com.greensock {
 		/** @private Drives all our ENTER_FRAME events.**/
 		private static var _shape:Shape = new Shape(); 
 		/** @private Lookup for all of the reserved "special property" keywords.**/
-		protected static var _reservedProps:Object = {ease:1, delay:1, overwrite:1, onComplete:1, onCompleteParams:1, useFrames:1, runBackwards:1, startAt:1, onUpdate:1, onUpdateParams:1, roundProps:1, onStart:1, onStartParams:1, onReverseComplete:1, onReverseCompleteParams:1, onRepeat:1, onRepeatParams:1, proxiedEase:1, easeParams:1, yoyo:1, onCompleteListener:1, onUpdateListener:1, onStartListener:1, onReverseCompleteListener:1, onRepeatListener:1, orientToBezier:1, timeScale:1, immediateRender:1, repeat:1, repeatDelay:1, timeline:1, data:1, paused:1};
+		protected static var _reservedProps:Object = {ease:1, delay:1, overwrite:1, onComplete:1, onCompleteParams:1, useFrames:1, runBackwards:1, startAt:1, onUpdate:1, onUpdateParams:1, roundProps:1, onStart:1, onStartParams:1, onInit:1, onInitParams:1, onReverseComplete:1, onReverseCompleteParams:1, onRepeat:1, onRepeatParams:1, proxiedEase:1, easeParams:1, yoyo:1, onCompleteListener:1, onUpdateListener:1, onStartListener:1, onReverseCompleteListener:1, onRepeatListener:1, orientToBezier:1, timeScale:1, immediateRender:1, repeat:1, repeatDelay:1, timeline:1, data:1, paused:1};
 		
 		
 		/** Target object whose properties this tween affects. This can be ANY object, not just a DisplayObject. **/
@@ -314,6 +324,9 @@ package com.greensock {
 		 * Also triggers overwriting if necessary and sets the _hasUpdate variable.
 		 */
 		protected function init():void {
+			if (this.vars.onInit) {
+				this.vars.onInit.apply(null, this.vars.onInitParams);
+			}
 			var p:String, i:int, plugin:*, prioritize:Boolean, siblings:Array;
 			if (typeof(this.vars.ease) == "function") {
 				_ease = this.vars.ease;
@@ -338,7 +351,7 @@ package com.greensock {
 					
 					if (this.cachedPT1.name == "_MULTIPLE_") {
 						i = plugin.overwriteProps.length;
-						while (i--) {
+						while (--i > -1) {
 							this.propTweenLookup[plugin.overwriteProps[i]] = this.cachedPT1;
 						}
 					} else {
@@ -500,7 +513,7 @@ package com.greensock {
 						delete propTweenLookup[p];
 					}
 				}
-				if (permanent) {
+				if (permanent && vars != _overwrittenProps) {
 					_overwrittenProps[p] = 1;
 				}
 			}
@@ -622,7 +635,7 @@ package com.greensock {
 				for (tgt in ml) {
 					a = ml[tgt];
 					i = a.length;
-					while (i--) {
+					while (--i > -1) {
 						if (TweenLite(a[i]).gc) {
 							a.splice(i, 1);
 						}
@@ -637,25 +650,45 @@ package com.greensock {
 		
 		
 		/**
-		 * Kills all the tweens of a particular object, optionally completing them first.
+		 * Kills all the tweens (or certain tweening properties) of a particular object, optionally completing them first.
+		 * If, for example, you want to kill all tweens of the "mc" object, you'd do:<br /><br /><code>
+		 * 
+		 * TweenLite.killTweensOf(mc);<br /><br /></code>
+		 * 
+		 * But if you only want to kill all the "alpha" and "x" portions of mc's tweens, you'd do:<br /><br /><code>
+		 * 
+		 * TweenLite.killTweensOf(mc, false, {alpha:true, x:true});<br /><br /></code>
+		 * 
+		 * <code>killTweensOf()</code> affects tweens that haven't begun yet too. If, for example, 
+		 * a tween of object "mc" has a delay of 5 seconds and <code>TweenLite.killTweensOf(mc)</code> is called
+		 * 2 seconds after the tween was created, it will still be killed even though it hasn't started yet. <br /><br />
 		 * 
 		 * @param target Object whose tweens should be immediately killed
 		 * @param complete Indicates whether or not the tweens should be forced to completion before being killed.
+		 * @param vars An object defining which tweening properties should be killed (null causes all properties to be killed). For example, if you only want to kill "alpha" and "x" tweens of object "mc", you'd do <code>myTimeline.killTweensOf(mc, true, {alpha:true, x:true})</code>. If there are no tweening properties remaining in a tween after the indicated properties are killed, the entire tween is killed, meaning any onComplete, onUpdate, onStart, etc. won't fire.
 		 */
-		public static function killTweensOf(target:Object, complete:Boolean=false):void {
+		public static function killTweensOf(target:Object, complete:Boolean=false, vars:Object=null):void {
 			if (target in masterList) {
 				var a:Array = masterList[target];
 				var i:int = a.length;
-				while (i--) {
-					if (!TweenLite(a[i]).gc) {
+				var tween:TweenLite;
+				while (--i > -1) {
+					tween = a[i];
+					if (!tween.gc) {
 						if (complete) {
-							TweenLite(a[i]).complete(false, false);
-						} else {
-							TweenLite(a[i]).setEnabled(false, false);
+							tween.complete(false, false);
+						}
+						if (vars != null) {
+							tween.killVars(vars);
+						}
+						if (vars == null || (tween.cachedPT1 == null && tween.initted)) {
+							tween.setEnabled(false, false);
 						}
 					}
 				}
-				delete masterList[target];
+				if (vars == null) {
+					delete masterList[target];
+				}
 			}
 		}
 		

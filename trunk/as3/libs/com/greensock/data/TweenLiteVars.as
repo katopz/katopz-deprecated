@@ -1,6 +1,6 @@
 /**
- * VERSION: 4.01
- * DATE: 12/2/2009
+ * VERSION: 4.02
+ * DATE: 2010-03-06
  * AS3
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -8,7 +8,7 @@
 package com.greensock.data {
 	import com.greensock.TweenLite;
 /**
- * 	There are 2 primary benefits of using this utility to define your TweenLite variables:
+ * 	There are 2 primary benefits of using a TweenLiteVars instance to define your TweenLite variables:
  *  <ol>
  *		<li> In most code editors, code hinting will be activated which helps remind you which special properties are available in TweenLite</li>
  *		<li> It allows you to code using strict datatyping (although it doesn't force you to).</li>
@@ -30,8 +30,6 @@ package com.greensock.data {
  *	<li> This class adds about 13 Kb to your published SWF (including all dependencies).</li>
  *	<li> This utility is completely optional. If you prefer the shorter synatax in the regular TweenLite class, feel
  *	  	 free to use it. The purpose of this utility is simply to enable code hinting and to allow for strict datatyping.</li>
- *	<li> You may add custom properties to this class if you want, but in order to expose them to TweenLite, make sure
- *	 	 you also add a getter and a setter that adds the property to the _exposedVars Object.</li>
  *	<li> You can reuse a single TweenLiteVars Object for multiple tweens if you want, but be aware that there are a few
  *	 	 properties that must be handled in a special way, and once you set them, you cannot remove them. Those properties
  *	 	 are: frame, visible, tint, and volume. If you are altering these values, it might be better to avoid reusing a TweenLiteVars</li>
@@ -54,7 +52,16 @@ package com.greensock.data {
 		public var ease:Function;
 		/** An Array of extra parameter values to feed the easing equation (beyond the standard 4). This can be useful with easing equations like Elastic that accept extra parameters like the amplitude and period. Most easing equations, however, don't require extra parameters so you won't need to pass in any easeParams. **/
 		public var easeParams:Array;
-		/** A function to call when the tween begins. This can be useful when there's a delay and you want something to happen just as the tween begins. **/
+		/** A function that should be called just before the tween inits (renders for the first time).
+		 * Since onInit runs before the start/end values are recorded internally, it is a good place to run
+		 * code that affects the target's initial position or other tween-related properties. onStart, by
+		 * contrast, runs AFTER the tween inits and the start/end values are recorded internally. onStart
+		 * is called every time the tween begins which can happen more than once if the tween is restarted
+		 * multiple times. **/
+		public var onInit:Function; 
+		/** An Array of parameters to pass the onInit function. **/
+		public var onInitParams:Array;
+		/** A function that should be called when the tween begins (when its currentTime is at 0 and changes to some other value which can happen more than once if the tween is restarted multiple times). **/
 		public var onStart:Function; 
 		/** An Array of parameters to pass the onStart function. **/
 		public var onStartParams:Array;
@@ -97,12 +104,12 @@ package com.greensock.data {
 		public var hexColors:Object;
 		/**
 		 * A common effect that designers/developers want is for a MovieClip/Sprite to orient itself in the direction of a Bezier path (alter its rotation). orientToBezier makes it easy. In order to alter a rotation property accurately, TweenLite/Max needs 4 pieces of information:
-		 * 
-		 * 1. Position property 1 (typically "x")
-		 * 2. Position property 2 (typically "y")
-		 * 3. Rotational property (typically "rotation")
-		 * 4. Number of degrees to add (optional - makes it easy to orient your MovieClip/Sprite properly)
-		 * 
+		 * <ol>
+		 * 		<li>Position property 1 (typically "x")</li>
+		 * 		<li>Position property 2 (typically "y")</li>
+		 * 		<li>Rotational property (typically "rotation")</li>
+		 * 		<li>Number of degrees to add (optional - makes it easy to orient your MovieClip/Sprite properly)</li>
+		 * <ol>
 		 * The orientToBezier property should be an Array containing one Array for each set of these values. For maximum flexibility, you can pass in any number of Arrays inside the container Array, one for each rotational property. This can be convenient when working in 3D because you can rotate on multiple axis. If you're doing a standard 2D x/y tween on a bezier, you can simply pass in a boolean value of true and TweenMax will use a typical setup, [["x", "y", "rotation", 0]]. Hint: Don't forget the container Array (notice the double outer brackets)  
 		 */
 		public var orientToBezier:Array;
@@ -123,11 +130,12 @@ package com.greensock.data {
 		
 		
 		/**
+		 * Constructor
 		 * @param vars An Object containing properties that correspond to the properties you'd like to add to this TweenLiteVars Object. For example, TweenLiteVars({x:300, onComplete:myFunction})
 		 */
 		public function TweenLiteVars(vars:Object=null) {
 			super();
-			initEnumerables(["data","ease","easeParams","onStart","onStartParams","onUpdate","onUpdateParams","onComplete",
+			initEnumerables(["data","ease","easeParams","onInit","onInitParams","onStart","onStartParams","onUpdate","onUpdateParams","onComplete",
 							 "onCompleteParams","endArray","frameLabel","bevelFilter","bezier","bezierThrough",
 							 "blurFilter","colorMatrixFilter","dropShadowFilter","glowFilter","hexColors","orientToBezier","quaternions",
 							 "setSize","shortRotation","transformAroundPoint","transformAroundCenter","colorTransform","motionBlur","dynamicProps"],
