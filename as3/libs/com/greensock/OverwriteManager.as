@@ -1,8 +1,8 @@
 ﻿/**
- * VERSION: 6.0
- * DATE: 10/1/2009
+ * VERSION: 6.02
+ * DATE: 2010-04-03
  * AS3 (AS2 is also available)
- * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/overwritemanager/
+ * UPDATES AND DOCUMENTATION AT: http://www.greensock.com/overwritemanager/
  **/
 package com.greensock {
 	import com.greensock.core.*;
@@ -161,7 +161,7 @@ package com.greensock {
  */	 
 	public class OverwriteManager {
 		/** @private **/
-		public static const version:Number = 6.0;
+		public static const version:Number = 6.02;
 		/** Won't overwrite any other tweens **/
 		public static const NONE:int 			= 0;
 		/** Overwrites all existing tweens of the same target immediately when the tween is created **/
@@ -267,7 +267,7 @@ package com.greensock {
 		 * @param defaultMode The default mode that OverwriteManager should use.
 		 **/
 		public static function init(defaultMode:int=2):int {
-			if (TweenLite.version < 11.099994) {
+			if (TweenLite.version < 11.1) {
 				throw new Error("Warning: Your TweenLite class needs to be updated to work with OverwriteManager (or you may need to clear your ASO files). Please download and install the latest version from http://www.tweenlite.com.");
 			}
 			TweenLite.overwriteManager = OverwriteManager;
@@ -296,9 +296,10 @@ package com.greensock {
 				}
 				return changed;
 			}
-			var startTime:Number = tween.startTime, overlaps:Array = [], cousins:Array = [], cCount:uint = 0, oCount:uint = 0;
+			//NOTE: Add 0.0000000001 to overcome floating point errors that can cause the startTime to be VERY slightly off (when a tween's currentTime property is set for example)
+			var startTime:Number = tween.cachedStartTime + 0.0000000001, overlaps:Array = [], cousins:Array = [], cCount:uint = 0, oCount:uint = 0;
 			i = targetTweens.length;
-			while (i--) {
+			while (--i > -1) {
 				curTween = targetTweens[i];
 				if (curTween == tween || curTween.gc) {
 					//ignore
@@ -306,7 +307,7 @@ package com.greensock {
 					if (!getGlobalPaused(curTween)) {
 						cousins[cCount++] = curTween;
 					}
-				} else if (curTween.startTime <= startTime && curTween.startTime + curTween.totalDuration > startTime && !getGlobalPaused(curTween)) {
+				} else if (curTween.cachedStartTime <= startTime && curTween.cachedStartTime + curTween.totalDuration + 0.0000000001 > startTime && !getGlobalPaused(curTween)) {
 					overlaps[oCount++] = curTween;
 				}
 			}
@@ -316,23 +317,23 @@ package com.greensock {
 				timeline = tween.timeline;
 				while (timeline) {
 					combinedTimeScale *= timeline.cachedTimeScale;
-					combinedStartTime += timeline.startTime;
+					combinedStartTime += timeline.cachedStartTime;
 					timeline = timeline.timeline;
 				}
 				startTime = combinedTimeScale * combinedStartTime;
 				i = cCount;
-				while (i--) {
+				while (--i > -1) {
 					cousin = cousins[i];
 					combinedTimeScale = cousin.cachedTimeScale;
-					combinedStartTime = cousin.startTime;
+					combinedStartTime = cousin.cachedStartTime;
 					timeline = cousin.timeline;
 					while (timeline) {
 						combinedTimeScale *= timeline.cachedTimeScale;
-						combinedStartTime += timeline.startTime;
+						combinedStartTime += timeline.cachedStartTime;
 						timeline = timeline.timeline;
 					}
 					cousinStartTime = combinedTimeScale * combinedStartTime;
-					if (cousinStartTime <= startTime && (cousinStartTime + (cousin.totalDuration * combinedTimeScale) > startTime || cousin.cachedDuration == 0)) {
+					if (cousinStartTime <= startTime && (cousinStartTime + (cousin.totalDuration * combinedTimeScale) + 0.0000000001 > startTime || cousin.cachedDuration == 0)) {
 						overlaps[oCount++] = cousin;
 					}
 				}
@@ -344,7 +345,7 @@ package com.greensock {
 			
 			i = oCount;
 			if (mode == 2) {
-				while (i--) {
+				while (--i > -1) {
 					curTween = overlaps[i];
 					if (curTween.killVars(props)) {
 						changed = true;
@@ -355,7 +356,7 @@ package com.greensock {
 				}
 			
 			} else {
-				while (i--) {
+				while (--i > -1) {
 					if (TweenLite(overlaps[i]).setEnabled(false, false)) { //flags for garbage collection
 						changed = true;
 					}

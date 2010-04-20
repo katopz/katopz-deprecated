@@ -183,9 +183,9 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		
 		/**
 		 * Positions any object with x and y properties on the path at a specific progress position. 
-		 * For example, to position <cod>mc</code> in the middle of the path, you would do:<br /><br /><code>
+		 * For example, to position <code>mc</code> in the middle of the path, you would do:<br /><br /><code>
 		 * 
-		 * myPath.renderObjectAt(mc, 0.5);<br /><br /></code>
+		 * myPath.renderObjectAt(mc, 0.5);</code><br /><br />
 		 * 
 		 * Some paths have methods to translate other meaningful information into a progress value, like
 		 * for a <code>Circle2D</code> you can get the progress associated with the 90-degree position with the
@@ -193,7 +193,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		 * 
 		 * myCircle.renderObjectAt(mc, myCircle.angleToProgress(90));
 		 * 
-		 * <br /></code>
+		 * </code><br />
 		 * 
 		 * @param target The target object to position
 		 * @param progress The progress value (typically between 0 and 1 where 0 is the beginning of the path, 0.5 is in the middle, and 1 is at the end)
@@ -337,6 +337,13 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 			var f:PathFollower = _rootFollower;
 			while (f) {
 				f.cachedProgress += dif;
+				
+				if (f.cachedProgress > 1) {
+					f.cachedProgress -= int(f.cachedProgress);
+				} else if (f.cachedProgress < 0) {
+					f.cachedProgress -= int(f.cachedProgress) - 1;
+				}
+				
 				f = f.cachedNext;
 			}
 			_progress = value;

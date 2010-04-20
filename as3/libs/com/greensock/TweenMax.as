@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.14
- * DATE: 2010-02-01
+ * VERSION: 11.21
+ * DATE: 2010-04-03
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com 
  **/
@@ -14,14 +14,14 @@ package com.greensock {
 	import flash.utils.*;
 /**
  * 	TweenMax extends the extremely lightweight, fast TweenLite engine, adding many useful features
- * 	like timeScale, event dispatching, setDestination(), yoyo, repeat, repeatDelay, rounding, and more. It also 
+ * 	like timeScale, event dispatching, updateTo(), yoyo, repeat, repeatDelay, rounding, and more. It also 
  * 	activates many extra plugins by default, making it extremely full-featured. Since TweenMax extends 
  * 	TweenLite, it can do ANYTHING TweenLite can do plus much more. The syntax is identical. With plenty 
  *  of other tweening engines to choose from, here's why you might want to consider TweenMax: 
  * 
  * <ul>
  * 		<li><b> SPEED </b>- TweenMax has been highly optimized for maximum performance. See some speed comparisons yourself at 
- * 			 <a href="http://blog.greensock.com/tweening-speed-test/">http://blog.greensock.com/tweening-speed-test/</a></li>
+ * 			 <a href="http://www.greensock.com/tweening-speed-test/">http://www.greensock.com/tweening-speed-test/</a></li>
  * 
  * 	    <li><b> Feature set </b>- In addition to tweening ANY numeric property of ANY object, TweenMax can tween filters, 
  * 		  	hex colors, volume, tint, frames, saturation, contrast, hue, colorization, brightness, and even do 
@@ -66,7 +66,17 @@ package com.greensock {
  * 											like the amplitude and period.	Most easing equations, however, don't require extra parameters 
  * 											so you won't need to pass in any easeParams.</li>
  * 	
- * 	<li><b> onStart : Function</b>			A function that should be called when the tween begins.</li>
+ * 	<li><b> onInit : Function</b>			A function that should be called just before the tween inits (renders for the first time).
+ * 											Since onInit runs before the start/end values are recorded internally, it is a good place to run
+ * 											code that affects the target's initial position or other tween-related properties. onStart, by
+ * 											contrast, runs AFTER the tween inits and the start/end values are recorded internally. onStart
+ * 											is called every time the tween begins which can happen more than once if the tween is restarted
+ * 											multiple times.</li>
+ * 	
+ *  <li><b> onInitParams : Array</b>		An Array of parameters to pass the onInit function.</li>	
+ * 
+ *  <li><b> onStart : Function</b>			A function that should be called when the tween begins (when its currentTime is at 0 and 
+ * 											changes to some other value which can happen more than once if the tween is restarted multiple times).</li>
  * 	
  * 	<li><b> onStartParams : Array</b>		An Array of parameters to pass the onStart function.</li>
  * 	
@@ -107,7 +117,7 @@ package com.greensock {
  * 	<li><b> overwrite : int</b>			Controls how (and if) other tweens of the same target are overwritten by this tween. There are
  * 										several modes to choose from, and TweenMax automatically calls <code>OverwriteManager.init()</code> if you haven't
  * 										already manually dones so, which means that by default <code>AUTO</code> mode is used (please see 
- * 										<a href="http://blog.greensock.com/overwritemanager/">http://blog.greensock.com/overwritemanager/</a> 
+ * 										<a href="http://www.greensock.com/overwritemanager/">http://www.greensock.com/overwritemanager/</a> 
  * 										for details and a full explanation of the various modes):
  * 										<ul>
  * 			  								<li>NONE (0) (or false) </li>
@@ -257,7 +267,7 @@ package com.greensock {
  * 	  <code>TweenMax.to(mc, 2, {x:"-20"});</code> it'll move the mc.x to the left 20 pixels which is the same as doing
  * 	  <code>TweenMax.to(mc, 2, {x:mc.x - 20});</code> You could also cast it like: <code>TweenMax.to(mc, 2, {x:String(myVariable)});</code></li>
  * 	  
- * 	<li> If you prefer, instead of using the onCompleteListener, onStartListener, and onUpdateListener special properties, 
+ * 	<li> If you prefer, instead of using the onCompleteListener, onInitListener, onStartListener, and onUpdateListener special properties, 
  * 	  you can set up listeners the typical way, like:<br /><code>
  * 	  var myTween:TweenMax = new TweenMax(my_mc, 2, {x:200});<br />
  * 	  myTween.addEventListener(TweenEvent.COMPLETE, myFunction);</code></li>
@@ -273,7 +283,7 @@ package com.greensock {
  * 
  * 	<li> If you find this class useful, please consider joining Club GreenSock which not only helps to sustain
  * 	  ongoing development, but also gets you bonus plugins, classes and other benefits that are ONLY available 
- * 	  to members. Learn more at <a href="http://blog.greensock.com/club/">http://blog.greensock.com/club/</a></li>
+ * 	  to members. Learn more at <a href="http://www.greensock.com/club/">http://www.greensock.com/club/</a></li>
  * 	</ul>
  * 	  
  * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
@@ -282,7 +292,7 @@ package com.greensock {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.14;
+		public static const version:Number = 11.21;
 		
 		TweenPlugin.activate([
 			
@@ -373,7 +383,7 @@ package com.greensock {
 		 */
 		public function TweenMax(target:Object, duration:Number, vars:Object) {
 			super(target, duration, vars);
-			if (TweenLite.version < 11.1) {
+			if (TweenLite.version < 11.2) {
 				throw new Error("TweenMax error! Please update your TweenLite class or try deleting your ASO files. TweenMax requires a more recent version. Download updates at http://www.TweenMax.com.");
 			}
 			this.yoyo = Boolean(this.vars.yoyo);
@@ -381,7 +391,7 @@ package com.greensock {
 			_repeatDelay = this.vars.repeatDelay || 0;
 			this.cacheIsDirty = true; //ensures that if there is any repeat, the totalDuration will get recalculated to accurately report it.
 
-			if (this.vars.onCompleteListener || this.vars.onUpdateListener || this.vars.onStartListener || this.vars.onRepeatListener || this.vars.onReverseCompleteListener) {
+			if (this.vars.onCompleteListener || this.vars.onInitListener || this.vars.onUpdateListener || this.vars.onStartListener || this.vars.onRepeatListener || this.vars.onReverseCompleteListener) {
 				initDispatcher();
 				if (duration == 0 && _delay == 0) {
 					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.UPDATE));
@@ -404,6 +414,9 @@ package com.greensock {
 				this.vars.startAt.immediateRender = true;
 				var startTween:TweenMax = new TweenMax(this.target, 0, this.vars.startAt);
 			}
+			if (_dispatcher) {
+				_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.INIT));
+			}
 			super.init();
 			if (_ease in fastEaseLookup) {
 				_easeType = fastEaseLookup[_ease][0];
@@ -413,7 +426,7 @@ package com.greensock {
 			if (this.vars.roundProps != null && "roundProps" in TweenLite.plugins) {
 				var j:int, prop:String, multiProps:String, rp:Array = this.vars.roundProps, plugin:Object, ptPlugin:PropTween, pt:PropTween;
 				var i:int = rp.length;
-				while (i--) {
+				while (--i > -1) {
 					prop = rp[i];
 					pt = this.cachedPT1;
 					while (pt) {
@@ -462,7 +475,7 @@ package com.greensock {
 			if (isPlugin && name == "_MULTIPLE_") {
 				var op:Array = target.overwriteProps;
 				var i:int = op.length;
-				while (i--) {
+				while (--i > -1) {
 					this.propTweenLookup[op[i]] = pt;
 				}
 			} else {
@@ -531,13 +544,14 @@ package com.greensock {
 		 * 
 		 * Note: If you plan to constantly update values, please look into using the <code>DynamicPropsPlugin</code>.
 		 * 
-		 * @param vars Object containing properties with the end values that should be udpated. You do <b>NOT</b> need to redefine all of the original <code>vars</code> values - only the ones that should be updated. For example, to update the destination <code>x</code> value to 300 and the destination <code>y</code> value to 500, pass: <code>{x:300, y:500}</code>.
+		 * @param vars Object containing properties with the end values that should be udpated. You do <b>NOT</b> need to redefine all of the original <code>vars</code> values - only the ones that should be updated (although if you change a plugin value, you will need to fully define it). For example, to update the destination <code>x</code> value to 300 and the destination <code>y</code> value to 500, pass: <code>{x:300, y:500}</code>.
 		 * @param resetDuration If the tween has already started (or finished) and <code>resetDuration</code> is true, the tween will restart. If <code>resetDuration</code> is false, the tween's timing will be honored (no restart) and each tweening property's starting value will be adjusted so that it appears to seamlessly redirect to the new destination value.
 		 **/
 		public function updateTo(vars:Object, resetDuration:Boolean=false):void {
 			var curRatio:Number = this.ratio;
 			if (resetDuration && this.timeline != null && this.cachedStartTime < this.timeline.cachedTime) {
 				this.cachedStartTime = this.timeline.cachedTime;
+				this.setDirtyCache(false);
 				if (this.gc) {
 					this.setEnabled(true, false);
 				} else {
@@ -548,15 +562,18 @@ package com.greensock {
 				this.vars[p] = vars[p];
 			}
 			if (this.initted) {
-				init();
-				if (!resetDuration && this.cachedTime > 0 && this.cachedTime < this.cachedDuration) {
-					var inv:Number = 1 / (1 - curRatio);
-					var pt:PropTween = this.cachedPT1, endValue:Number;
-					while (pt) {
-						endValue = pt.start + pt.change; 
-						pt.change *= inv;
-						pt.start = endValue - pt.change;
-						pt = pt.nextNode;
+				this.initted = false;
+				if (!resetDuration) {
+					init();
+					if (!resetDuration && this.cachedTime > 0 && this.cachedTime < this.cachedDuration) {
+						var inv:Number = 1 / (1 - curRatio);
+						var pt:PropTween = this.cachedPT1, endValue:Number;
+						while (pt) {
+							endValue = pt.start + pt.change; 
+							pt.change *= inv;
+							pt.start = endValue - pt.change;
+							pt = pt.nextNode;
+						}
 					}
 				}
 			}
@@ -586,7 +603,7 @@ package com.greensock {
 		 */
 		public function killProperties(names:Array):void {
 			var v:Object = {}, i:int = names.length;
-			while (i--) {
+			while (--i > -1) {
 				v[names[i]] = true;
 			}
 			killVars(v);
@@ -678,29 +695,29 @@ package com.greensock {
 			if (setRatio) {
 				//if the ease is optimized, process it inline (function calls are expensive performance-wise)...
 				if (_easeType) {
-					var power:uint = _easePower;
+					var power:int = _easePower;
 					var val:Number = this.cachedTime / this.cachedDuration;
 					if (_easeType == 2) { 			//easeOut
 						this.ratio = val = 1 - val;
-						while (power--) {
+						while (--power > -1) {
 							this.ratio = val * this.ratio;
 						}
 						this.ratio = 1 - this.ratio;
 					} else if (_easeType == 1) { 	//easeIn
 						this.ratio = val;
-						while (power--) {
+						while (--power > -1) {
 							this.ratio = val * this.ratio;
 						}
 					} else {						//easeInOut
 						if (val < 0.5) {
 							this.ratio = val = val * 2;
-							while (power--) {
+							while (--power > -1) {
 								this.ratio = val * this.ratio;
 							}
 							this.ratio = this.ratio * 0.5;
 						} else {
 							this.ratio = val = (1 - val) * 2;
-							while (power--) {
+							while (--power > -1) {
 								this.ratio = val * this.ratio;
 							}
 							this.ratio = 1 - (0.5 * this.ratio);
@@ -774,6 +791,9 @@ package com.greensock {
 		protected function initDispatcher():void {
 			if (_dispatcher == null) {
 				_dispatcher = new EventDispatcher(this);
+			}
+			if (this.vars.onInitListener is Function) {
+				_dispatcher.addEventListener(TweenEvent.INIT, this.vars.onInitListener, false, 0, true);
 			}
 			if (this.vars.onStartListener is Function) {
 				_dispatcher.addEventListener(TweenEvent.START, this.vars.onStartListener, false, 0, true);
@@ -882,7 +902,7 @@ package com.greensock {
 		 * 
 		 * @param target Target object whose properties this tween affects. This can be ANY object, not just a DisplayObject. 
 		 * @param duration Duration in seconds (or in frames for frames-based tweens)
-		 * @param fromVars An object containing the starting values of the properties you're tweening. For example, to tween from x=0, y=0, you could pass {x:0, y:0}.
+		 * @param fromVars An object containing the starting values of the properties you're tweening. For example, to tween from x=0, y=0, you could pass {x:0, y:0}. Only put starting values in the fromVars parameter - all special properties for the tween (like onComplete, onUpdate, delay, etc.) belong in the toVars parameter. 
 		 * @param toVars An object containing the ending values of the properties you're tweening. For example, to tween to x=100, y=100, you could pass {x:100, y:100}. It can also contain special properties like "onComplete", "ease", "delay", etc.
 		 * @return TweenMax instance
 		 */
@@ -1025,7 +1045,7 @@ package com.greensock {
 			if (a) {
 				var i:int = a.length;
 				var cnt:uint = 0;
-				while (i--) {
+				while (--i > -1) {
 					if (!a[i].gc) {
 						toReturn[cnt++] = a[i];
 					}
@@ -1045,7 +1065,7 @@ package com.greensock {
 			var a:Array = getTweensOf(target);
 			var i:int = a.length;
 			var tween:TweenLite;
-			while (i--) {
+			while (--i > -1) {
 				tween = a[i];
 				if ((tween.active || (tween.cachedStartTime == tween.timeline.cachedTime && tween.timeline.active))) {
 					return true;
@@ -1067,7 +1087,7 @@ package com.greensock {
 			var toReturn:Array = [], a:Array, i:int;
 			for each (a in ml) {
 				i = a.length;
-				while (i--) {
+				while (--i > -1) {
 					if (!TweenLite(a[i]).gc) {
 						toReturn[cnt++] = a[i];
 					}
@@ -1087,7 +1107,7 @@ package com.greensock {
 			var a:Array = getAllTweens();
 			var isDC:Boolean;  //is delayedCall
 			var i:int = a.length;
-			while (i--) {
+			while (--i > -1) {
 				isDC = (a[i].target == a[i].vars.onComplete);
 				if (isDC == delayedCalls || isDC != tweens) {
 					if (complete) {
@@ -1109,7 +1129,7 @@ package com.greensock {
 			var a:Array = getAllTweens();
 			var curTarget:Object, curParent:DisplayObjectContainer;
 			var i:int = a.length;
-			while (i--) {
+			while (--i > -1) {
 				curTarget = a[i].target;
 				if (curTarget is DisplayObject) {
 					curParent = curTarget.parent;
@@ -1159,7 +1179,7 @@ package com.greensock {
 			var a:Array = getAllTweens();
 			var isDC:Boolean; //is delayedCall 
 			var i:int = a.length;
-			while (i--) {
+			while (--i > -1) {
 				isDC = (TweenLite(a[i]).target == TweenLite(a[i]).vars.onComplete);
 				if (isDC == delayedCalls || isDC != tweens) {
 					TweenCore(a[i]).paused = pause;
