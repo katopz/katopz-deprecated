@@ -1,8 +1,8 @@
 ﻿/**
- * VERSION: 1.142
- * DATE: 1/18/2010
+ * VERSION: 1.33
+ * DATE: 2010-04-03
  * AS3 (AS2 version is also available)
- * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/timelinelite/
+ * UPDATES AND DOCUMENTATION AT: http://www.greensock.com/timelinelite/
  **/
 package com.greensock {
 	import com.greensock.core.*;
@@ -32,27 +32,25 @@ package com.greensock {
  * 		<li> speed up or slow down the entire timeline with its timeScale property. You can even tween
  * 		  this property to gradually speed up or slow down.</li>
  * 		  
- * 		<li> add onComplete, onStart, onUpdate, and/or onReverseComplete callbacks using the constructor's "vars" object.</li>
+ * 		<li> add onComplete, onStart, onUpdate, and/or onReverseComplete callbacks using the constructor's <code>vars</code> object.</li>
  * 		  
- * 		<li> use the insertMultiple() or appendMultiple() methods to create complex sequences including 
+ * 		<li> use the <code>insertMultiple()</code> or <code>appendMultiple()</code> methods to create complex sequences including 
  * 			various alignment modes and staggering capabilities.</li>
  * 		  
  * 		<li> base the timing on frames instead of seconds if you prefer. Please note, however, that
  * 		  the timeline's timing mode dictates its childrens' timing mode as well. </li>
  * 		
- * 		<li> kill the tweens of a particular object with killTweensOf() or get the tweens of an object
- * 		  with getTweensOf() or get all the tweens/timelines in the timeline with getChildren()</li>
+ * 		<li> kill the tweens of a particular object with <code>killTweensOf()</code> or get the tweens of an object
+ * 		  with <code>getTweensOf()</code> or get all the tweens/timelines in the timeline with <code>getChildren()</code></li>
  * 		  
- * 		<li> If you need even more features like AS3 event listeners, repeat, repeatDelay, yoyo, currentLabel, 
- * 			getLabelAfter(), getLabelBefore(), addCallback(), removeCallback(), getActive() and more, check out 
+ * 		<li> If you need even more features like AS3 event listeners, <code>repeat, repeatDelay, yoyo, currentLabel, 
+ * 			getLabelAfter(), getLabelBefore(), addCallback(), removeCallback(), getActive()</code> and more, check out 
  * 			TimelineMax which extends TimelineLite.</li>
  * 	</ul>
  * 	
  * <b>EXAMPLE:</b><br /><br /><code>
  * 	
- * 		import com.greensock.TweenLite;<br />
- * 		import com.greensock.TweenMax;<br />
- * 		import com.greensock.TimelineLite;<br /><br />
+ * 		import com.greensock.~~;<br /><br />
  * 		
  * 		//create the timeline and add an onComplete callback that will call myFunction() when the timeline completes<br />
  * 		var myTimeline:TimelineLite = new TimelineLite({onComplete:myFunction});<br /><br />
@@ -99,7 +97,7 @@ package com.greensock {
  * 	
  * 		var myTimeline:TimelineLite = new TimelineLite({tweens:[new TweenLite(mc1, 1, {y:"100"}), TweenMax.to(mc2, 1, {tint:0xFF0000})], align:TweenAlign.SEQUENCE, onComplete:myFunction});</code><br /><br />
  * 	
- * 	If that confuses you, don't worry. Just use the append(), insert(), and prepend() methods to build your
+ * 	If that confuses you, don't worry. Just use the <code>append(), insert()</code>, and <code>prepend()</code> methods to build your
  * 	sequence. But power users will likely appreciate the quick, compact way they can set up sequences now. <br /><br />
  *  
  * 	
@@ -107,8 +105,8 @@ package com.greensock {
  * <ul>
  * 	<li> TimelineLite automatically inits the OverwriteManager class to prevent unexpected overwriting behavior in sequences.
  * 	  The default mode is <code>AUTO</code>, but you can set it to whatever you want with <code>OverwriteManager.init()</code>
- * 	 (see <a href="http://blog.greensock.com/overwritemanager/">http://blog.greensock.com/overwritemanager/</a>)</li>
- * 	<li> TimelineLite adds about 2.5k to your SWF (3.3kb including OverwriteManager).</li>
+ * 	 (see <a href="http://www.greensock.com/overwritemanager/">http://www.greensock.com/overwritemanager/</a>)</li>
+ * 	<li> TimelineLite adds about 2.6k to your SWF (3.3kb including OverwriteManager).</li>
  * </ul>
  * 
  * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
@@ -117,7 +115,7 @@ package com.greensock {
  **/
 	public class TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static const version:Number = 1.142;
+		public static const version:Number = 1.33;
 		/** @private **/
 		private static var _overwriteMode:int = (OverwriteManager.enabled) ? OverwriteManager.mode : OverwriteManager.init(2); //Ensures that TweenLite instances don't overwrite each other before being put into the timeline/sequence.
 		/** @private **/
@@ -445,10 +443,22 @@ package com.greensock {
 		 * Returns the time associated with a particular label. If the label isn't found, -1 is returned.
 		 * 
 		 * @param label Label name
-		 * @return Time associated with the label (or 0 if there is no such label)
+		 * @return Time associated with the label (or -1 if there is no such label)
 		 */
 		public function getLabelTime(label:String):Number {
 			return (label in _labels) ? Number(_labels[label]) : -1;
+		}
+		
+		/** @private **/
+		protected function parseTimeOrLabel(timeOrLabel:*):Number {
+			if (typeof(timeOrLabel) == "string") {
+				if (!(timeOrLabel in _labels)) {
+					throw new Error("TimelineLite error: the " + timeOrLabel + " label was not found.");
+					return 0;
+				}
+				return getLabelTime(String(timeOrLabel));
+			}
+			return Number(timeOrLabel);
 		}
 		
 		/** Pauses the timeline (same as pause() - added stop() for consistency with Flash's MovieClip.stop() functionality) **/
@@ -463,7 +473,7 @@ package com.greensock {
 		 * @param suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
 		public function gotoAndPlay(timeOrLabel:*, suppressEvents:Boolean=true):void {
-			goto(timeOrLabel, suppressEvents);
+			setTotalTime(parseTimeOrLabel(timeOrLabel), suppressEvents);
 			play();
 		}
 		
@@ -474,7 +484,7 @@ package com.greensock {
 		 * @param suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
 		public function gotoAndStop(timeOrLabel:*, suppressEvents:Boolean=true):void {
-			goto(timeOrLabel, suppressEvents);
+			setTotalTime(parseTimeOrLabel(timeOrLabel), suppressEvents);
 			this.paused = true;
 		}
 		
@@ -485,13 +495,7 @@ package com.greensock {
 		 * @param suppressEvents If true, no events or callbacks will be triggered as the "virtual playhead" moves to the new position (onComplete, onUpdate, onReverseComplete, etc. of this timeline and any of its child tweens/timelines won't be triggered, nor will any of the associated events be dispatched) 
 		 */
 		public function goto(timeOrLabel:*, suppressEvents:Boolean=true):void {
-			if (typeof(timeOrLabel) == "string") {
-				if (timeOrLabel in _labels) {
-					setTotalTime(Number(_labels[timeOrLabel]), suppressEvents);
-				}
-			} else {
-				setTotalTime(Number(timeOrLabel), suppressEvents);
-			}
+			setTotalTime(parseTimeOrLabel(timeOrLabel), suppressEvents);
 		}
 		
 		
@@ -509,7 +513,7 @@ package com.greensock {
 			} else if (!this.active && !this.cachedPaused) {
 				this.active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
-			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, prevStart:Number = this.cachedStartTime, tween:TweenCore, isComplete:Boolean, rendered:Boolean, next:TweenCore, dur:Number;
+			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, prevStart:Number = this.cachedStartTime, prevTimeScale:Number = this.cachedTimeScale, tween:TweenCore, isComplete:Boolean, rendered:Boolean, next:TweenCore, dur:Number, prevPaused:Boolean = this.cachedPaused;
 			if (time >= totalDur) {
 				if (_rawPrevTime <= totalDur && _rawPrevTime != time) {
 					this.cachedTotalTime = this.cachedTime = totalDur;
@@ -558,7 +562,9 @@ package com.greensock {
 				tween = _firstChild;
 				while (tween) {
 					next = tween.nextNode; //record it here because the value could change after rendering...
-					if (tween.active || (!tween.cachedPaused && tween.cachedStartTime <= this.cachedTime && !tween.gc)) {
+					if (this.cachedPaused && !prevPaused) { //in case a tween pauses the timeline when rendering
+						break;
+					} else if (tween.active || (!tween.cachedPaused && tween.cachedStartTime <= this.cachedTime && !tween.gc)) {
 						
 						if (!tween.cachedReversed) {
 							tween.renderTime((this.cachedTime - tween.cachedStartTime) * tween.cachedTimeScale, suppressEvents, false);
@@ -574,7 +580,9 @@ package com.greensock {
 				tween = _lastChild;
 				while (tween) {
 					next = tween.prevNode; //record it here because the value could change after rendering...
-					if (tween.active || (!tween.cachedPaused && tween.cachedStartTime <= prevTime && !tween.gc)) {
+					if (this.cachedPaused && !prevPaused) { //in case a tween pauses the timeline when rendering
+						break;
+					} else if (tween.active || (!tween.cachedPaused && tween.cachedStartTime <= prevTime && !tween.gc)) {
 						
 						if (!tween.cachedReversed) {
 							tween.renderTime((this.cachedTime - tween.cachedStartTime) * tween.cachedTimeScale, suppressEvents, false);
@@ -590,7 +598,7 @@ package com.greensock {
 			if (_hasUpdate && !suppressEvents) {
 				this.vars.onUpdate.apply(null, this.vars.onUpdateParams);
 			}
-			if (isComplete && prevStart == this.cachedStartTime) { //if one of the tweens that was rendered altered this timeline's startTime (like if an onComplete reversed the timeline), we shouldn't run complete() because it probably isn't complete. If it is, don't worry, because whatever call altered the startTime would have called complete() if it was necessary at the new time.
+			if (isComplete && (prevStart == this.cachedStartTime || prevTimeScale != this.cachedTimeScale)) { //if one of the tweens that was rendered altered this timeline's startTime (like if an onComplete reversed the timeline), we shouldn't run complete() because it probably isn't complete. If it is, don't worry, because whatever call altered the startTime would have called complete() if it was necessary at the new time. The only exception is the timeScale property.
 				complete(true, suppressEvents);
 			}
 		}
@@ -607,9 +615,12 @@ package com.greensock {
 		 */
 		protected function forceChildrenToBeginning(time:Number, suppressEvents:Boolean=false):Number {
 			var tween:TweenCore = _lastChild, next:TweenCore, dur:Number;
+			var prevPaused:Boolean = this.cachedPaused;
 			while (tween) {
 				next = tween.prevNode; //record it here because the value could change after rendering...
-				if (tween.active || (!tween.cachedPaused && !tween.gc && (tween.cachedTotalTime != 0 || tween.cachedDuration == 0))) {
+				if (this.cachedPaused && !prevPaused) { //in case a tween pauses the timeline when rendering
+					break;
+				} else if (tween.active || (!tween.cachedPaused && !tween.gc && (tween.cachedTotalTime != 0 || tween.cachedDuration == 0))) {
 					
 					if (time == 0 && (tween.cachedDuration != 0 || tween.cachedStartTime == 0)) {
 						tween.renderTime(tween.cachedReversed ? tween.cachedTotalDuration : 0, suppressEvents, false);
@@ -638,9 +649,12 @@ package com.greensock {
 		 */
 		protected function forceChildrenToEnd(time:Number, suppressEvents:Boolean=false):Number {
 			var tween:TweenCore = _firstChild, next:TweenCore, dur:Number;
+			var prevPaused:Boolean = this.cachedPaused;
 			while (tween) {
 				next = tween.nextNode; //record it here because the value could change after rendering...
-				if (tween.active || (!tween.cachedPaused && !tween.gc && (tween.cachedTotalTime != tween.cachedTotalDuration || tween.cachedDuration == 0))) {
+				if (this.cachedPaused && !prevPaused) { //in case a tween pauses the timeline when rendering
+					break;
+				} else if (tween.active || (!tween.cachedPaused && !tween.gc && (tween.cachedTotalTime != tween.cachedTotalDuration || tween.cachedDuration == 0))) {
 					
 					if (time == this.cachedDuration && (tween.cachedDuration != 0 || tween.cachedStartTime == this.cachedDuration)) {
 						tween.renderTime(tween.cachedReversed ? 0 : tween.cachedTotalDuration, suppressEvents, false);
@@ -715,9 +729,10 @@ package com.greensock {
 		public function getTweensOf(target:Object, nested:Boolean=true):Array {
 			var tweens:Array = getChildren(nested, true, false), a:Array = [], i:int;
 			var l:uint = tweens.length;
+			var cnt:uint = 0;
 			for (i = 0; i < l; i++) {
 				if (TweenLite(tweens[i]).target == target) {
-					a[a.length] = tweens[i];
+					a[cnt++] = tweens[i];
 				}
 			}
 			return a;
@@ -750,16 +765,33 @@ package com.greensock {
 		}
 		
 		/**
-		 * Kills tweens of a particular object.
+		 * Kills all the tweens (or certain tweening properties) of a particular object inside this TimelineLite, 
+		 * optionally completing them first. If, for example, you want to kill all tweens of the "mc" object, you'd do:<br /><br /><code>
+		 * 
+		 * myTimeline.killTweensOf(mc);<br /><br /></code>
+		 * 
+		 * But if you only want to kill all the "alpha" and "x" portions of mc's tweens, you'd do:<br /><br /><code>
+		 * 
+		 * myTimeline.killTweensOf(mc, false, {alpha:true, x:true});<br /><br /></code>
+		 * 
+		 * Killing a tween also removes it from the timeline.
 		 * 
 		 * @param target the target object of the tweens
 		 * @param nested determines whether or not tweens that are inside nested timelines should be affected. If you only want the "top level" tweens/timelines to be affected, set this to false.
+		 * @param vars An object defining which tweening properties should be killed (null causes all properties to be killed). For example, if you only want to kill "alpha" and "x" tweens of object "mc", you'd do <code>myTimeline.killTweensOf(mc, true, {alpha:true, x:true})</code>. If there are no tweening properties remaining in a tween after the indicated properties are killed, the entire tween is killed, meaning any onComplete, onUpdate, onStart, etc. won't fire.
 		 */
-		public function killTweensOf(target:Object, nested:Boolean=true):Boolean {
+		public function killTweensOf(target:Object, nested:Boolean=true, vars:Object=null):Boolean {
 			var tweens:Array = getTweensOf(target, nested);
 			var i:int = tweens.length;
-			while (i--) {
-				TweenLite(tweens[i]).setEnabled(false, false);
+			var tween:TweenLite;
+			while (--i > -1) {
+				tween = tweens[i];
+				if (vars != null) {
+					tween.killVars(vars);
+				}
+				if (vars == null || (tween.cachedPT1 == null && tween.initted)) {
+					tween.setEnabled(false, false);
+				}
 			}
 			return Boolean(tweens.length > 0);
 		}
@@ -786,7 +818,7 @@ package com.greensock {
 				tweens = getChildren(false, true, true);
 			}
 			var i:int = tweens.length;
-			while (i--) {
+			while (--i > -1) {
 				TweenCore(tweens[i]).setEnabled(false, false);
 			}
 		}
@@ -843,8 +875,8 @@ package com.greensock {
 		
 		/**
 		 * Duration of the timeline in seconds (or frames for frames-based timelines) not including any repeats
-		 * or repeatDelays. "totalDuration", by contrast, does include repeats and repeatDelays but since TimelineLite
-		 * doesn't offer "repeat" and "repeatDelay" functionality, duration and totalDuration will always be the same. 
+		 * or repeatDelays. <code>totalDuration</code>, by contrast, does include repeats and repeatDelays but since TimelineLite
+		 * doesn't offer "repeat" and "repeatDelay" functionality, <code>duration</code> and <code>totalDuration</code> will always be the same. 
 		 * In TimelineMax, however, they could be different. 
 		 **/
 		override public function get duration():Number {
@@ -862,8 +894,8 @@ package com.greensock {
 		
 		/**
 		 * Duration of the timeline in seconds (or frames for frames-based timelines) including any repeats
-		 * or repeatDelays. "duration", by contrast, does NOT include repeats and repeatDelays. Since TimelineLite
-		 * doesn't offer "repeat" and "repeatDelay" functionality, duration and totalDuration will always be the same. 
+		 * or repeatDelays. <code>duration</code>, by contrast, does NOT include repeats and repeatDelays. Since TimelineLite
+		 * doesn't offer "repeat" and "repeatDelay" functionality, <code>duration</code> and <code>totalDuration</code> will always be the same. 
 		 * In TimelineMax, however, they could be different. 
 		 **/
 		override public function get totalDuration():Number {
