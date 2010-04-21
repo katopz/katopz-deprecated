@@ -329,7 +329,7 @@ package org.papervision3d.objects.parsers {
 			if(_autoPlay)
 				play();
 			
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
+			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		/**
