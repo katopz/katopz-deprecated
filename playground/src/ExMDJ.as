@@ -13,8 +13,8 @@ package
 		override protected function onInit():void
 		{
 			_mdj = new MDJ(false);
-			//_mdj.addEventListener(Event.COMPLETE, onComplete);
-			//_mdj.load("chars/man/model_2.mdj", null, 24, 10);
+			_mdj.addEventListener(Event.COMPLETE, onComplete);
+			_mdj.load("chars/man/model_1.mdj", null, 24, 10);
 			
 			scene.addChild(_mdj);
 			
