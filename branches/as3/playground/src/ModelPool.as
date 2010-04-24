@@ -74,11 +74,11 @@ package
 			_models = new SDGroup();
 
 			// get total 
-			_totalModel = prototypeData.length();
+			_totalModel = prototypeData.model.length();
 			_loadedModel = 0;
 
 			_loader3Ds = [];
-			for each (var _model:XML in prototypeData)
+			for each (var _model:XML in prototypeData..model)
 			{
 				var _id:String = _model.@id.toString();
 				var _src:String = _model.@src.toString();

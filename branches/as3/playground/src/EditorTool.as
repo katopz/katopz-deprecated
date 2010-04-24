@@ -25,9 +25,6 @@ package
 
 	import org.osflash.signals.Signal;
 
-	/*
-	   TODO : open and read from model pool
-	 */
 	public class EditorTool extends RemovableEventDispatcher
 	{
 		private var _currentModel:MovieMeshContainer3D;
@@ -41,21 +38,38 @@ package
 
 		public static var initSignal:Signal = new Signal(XMLList);
 		private var _xmlData:XML;
-		
+
 		private var _jasonData:Object;
 
-		public function EditorTool(container:BasicTemplate, size:int = 500)
+		public function EditorTool(container:BasicTemplate)
 		{
 			_container = container;
+		}
 
-			// axis
-			var _lines:Vector.<LineSegment> = new Vector.<LineSegment>(3, true);
-			_lines[0] = new LineSegment(new WireframeMaterial(0xFF0000), new Vector3D(0, 0, 0), new Vector3D(size, 0, 0));
-			_lines[1] = new LineSegment(new WireframeMaterial(0x00FF00), new Vector3D(0, 0, 0), new Vector3D(0, size, 0));
-			_lines[2] = new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, size));
+		private var _lines:Vector.<LineSegment>;
 
-			for each (var _line:LineSegment in _lines)
-				_container.scene.addChild(_line);
+		public function set showAxis(value:Boolean):void
+		{
+			var _line:LineSegment;
+			var _size:int = 500
+
+			if (value)
+			{
+				// axis
+				_lines = new Vector.<LineSegment>(3, true);
+				_lines[0] = new LineSegment(new WireframeMaterial(0xFF0000), new Vector3D(0, 0, 0), new Vector3D(_size, 0, 0));
+				_lines[1] = new LineSegment(new WireframeMaterial(0x00FF00), new Vector3D(0, 0, 0), new Vector3D(0, _size, 0));
+				_lines[2] = new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, _size));
+
+				for each (_line in _lines)
+					_container.scene.addChild(_line);
+			}
+			else if (_lines)
+			{
+				for each (_line in _lines)
+					_container.scene.removeChild(_line);
+				_lines = null;
+			}
 		}
 
 		public function initXML(src:String):void
@@ -85,15 +99,18 @@ package
 
 		public function onSelectCharactor(charType:String):void
 		{
-			var _xmlPrototype:XMLList = _xmlData.chars.model.(@type == charType);
+			var _xmlPrototype:XMLList = _xmlData.chars[charType];
 
 			reset();
 
-			initSignal.dispatch(_xmlPrototype);
+			// no click while load 
+			_container.mouseEnabled = _container.mouseChildren = false;
+
+			var _modelPool:ModelPool = new ModelPool();
+			ModelPool.signalModel.add(activate);
+			_modelPool.initXML(_xmlPrototype);
 
 			initMenu(charType);
-
-			_container.mouseEnabled = _container.mouseChildren = false;
 		}
 
 		private var _menuAction:SDDialog;
@@ -157,9 +174,6 @@ package
 							<answer src="as:onSelectMesh('shoes_1')"><![CDATA[shoes_1]]></answer>
 							<answer src="as:onSelectMesh('shoes_2')"><![CDATA[shoes_2]]></answer>
 						</question>, this);
-					_container.addChild(_menuPart);
-					_menuPart.x = 10;
-					_menuPart.y = _menu.y + _menu.height + 10;
 					break;
 				case "woman":
 					_menuPart = new SDDialog(<question><![CDATA[Select Part]]>
@@ -180,11 +194,11 @@ package
 							<answer src="as:onSelectMesh('shoes_2')"><![CDATA[shoes_2]]></answer>
 							<answer src="as:onSelectMesh('shoes_3')"><![CDATA[shoes_3]]></answer>
 						</question>, this);
-					_container.addChild(_menuPart);
-					_menuPart.x = 10;
-					_menuPart.y = _menu.y + _menu.height + 10;
 					break;
 			}
+			_container.addChild(_menuPart);
+			_menuPart.x = 10;
+			_menuPart.y = _menu.y + _menu.height + 10;
 		}
 
 		public function createTextureMenu(meshType:String, meshID:int, x:int = 0, y:int = 0):void
