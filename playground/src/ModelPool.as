@@ -85,7 +85,7 @@ package
 
 				var _mdj:MDJ = new MDJ();
 				_mdj.autoPlay = false;
-				_mdj.scaling = 5;
+				_mdj.scaling = 4;
 
 				var _loader3D:Loader3D = new Loader3D();
 				_loader3D.ignoreParentURL = true;
@@ -105,6 +105,7 @@ package
 			var _modelData:ModelData = _models.getItem(_loader3D);
 			_modelData.model = _loader3D.handle;
 			_modelData.model.visible = false;
+			_modelData.model.rotationY = 180;
 
 			if (++_loadedModel == _totalModel)
 			{

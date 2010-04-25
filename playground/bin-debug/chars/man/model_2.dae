@@ -14,8 +14,8 @@ exportTexTangents=0;exportConstraints=0;exportPhysics=0;exportXRefs=1;
 dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
       <source_data>file:///C:/inetpub/wwwroot/Classes/katopz/branches/as3/playground/bin-debug/chars/man/model_2.mb</source_data>
     </contributor>
-    <created>2010-04-11T17:31:45Z</created>
-    <modified>2010-04-11T17:31:45Z</modified>
+    <created>2010-04-25T18:29:34Z</created>
+    <modified>2010-04-25T18:29:34Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -959,7 +959,7 @@ dereferenceXRefs=0;cameraXFov=0;cameraYFov=1</comments>
   </library_animations>
   <library_images>
     <image id="head_file" name="head_file">
-      <init_from>./texture_2/head_1.png</init_from>
+      <init_from>./texture_1/head_1.png</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>

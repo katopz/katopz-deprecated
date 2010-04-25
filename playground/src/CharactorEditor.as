@@ -2,30 +2,23 @@ package
 {
 	import away3dlite.templates.BasicTemplate;
 	
+	import flash.display.Sprite;
+	
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
 	/**
 	 * TODO
 	 * 2. pack back to new model pack?
 	 * 3. test external interface
 	 */
-	public class CharactorEditor extends BasicTemplate
+	public class CharactorEditor extends Sprite
 	{
 		private var _editorTool:EditorTool;
 
-		override protected function onInit():void
+		public function CharactorEditor()
 		{
-			view.mouseEnabled3D = false;
-
 			// EditorTool
-			_editorTool = new EditorTool(this);
-			_editorTool.showAxis = true;
+			addChild(_editorTool = new EditorTool());
 			_editorTool.initXML("config.xml");
-		}
-
-		override protected function onPreRender():void
-		{
-			camera.y = -200;
-			scene.rotationY++;
 		}
 	}
 }
