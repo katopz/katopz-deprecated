@@ -27,7 +27,7 @@ package
 		private var _mdzBuilder:MDZBuilder;
 		private var _meshes:Vector.<MovieMesh>;
 		
-		private var _id:String = "4";
+		private var _id:String = "2";
 		private var _sex:String = "man";
 
 		override protected function onInit():void

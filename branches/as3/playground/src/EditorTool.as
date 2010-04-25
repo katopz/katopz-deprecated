@@ -6,70 +6,51 @@ package
 	import away3dlite.builders.MDJBuilder;
 	import away3dlite.core.utils.Debug;
 	import away3dlite.materials.BitmapFileMaterial;
-	import away3dlite.materials.WireframeMaterial;
-	import away3dlite.primitives.LineSegment;
+	import away3dlite.primitives.Trident;
 	import away3dlite.templates.BasicTemplate;
 	import away3dlite.templates.Template;
-
+	
 	import com.adobe.serialization.json.JSON;
 	import com.cutecoma.playground.data.ModelData;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.utils.FileUtil;
 	import com.sleepydesign.utils.LoaderUtil;
-
+	
 	import flash.events.Event;
-	import flash.geom.Vector3D;
 	import flash.net.FileReference;
 	import flash.utils.*;
-
+	
 	import org.osflash.signals.Signal;
 
-	public class EditorTool extends RemovableEventDispatcher
+	public class EditorTool extends BasicTemplate
 	{
 		private var _currentModel:MovieMeshContainer3D;
 		private var _bonesAnimator:BonesAnimator;
 
-		private var _container:Template;
 		private var _loadedModel:int = 0;
 		private var _totalModel:int = 4;
 
 		private var _meshes:Vector.<MovieMeshContainer3D>;
 
-		public static var initSignal:Signal = new Signal(XMLList);
+		public static var initSignal:Signal = new Signal();
+		public static var changeSignal:Signal = new Signal(Object);
+		
 		private var _xmlData:XML;
 
-		private var _jasonData:Object;
+		private var _jsonData:Object;
 
-		public function EditorTool(container:BasicTemplate)
+		public var trident:Trident;
+
+		public function EditorTool()
 		{
-			_container = container;
+			
 		}
-
-		private var _lines:Vector.<LineSegment>;
-
-		public function set showAxis(value:Boolean):void
+		
+		override protected function onInit():void
 		{
-			var _line:LineSegment;
-			var _size:int = 500
-
-			if (value)
-			{
-				// axis
-				_lines = new Vector.<LineSegment>(3, true);
-				_lines[0] = new LineSegment(new WireframeMaterial(0xFF0000), new Vector3D(0, 0, 0), new Vector3D(_size, 0, 0));
-				_lines[1] = new LineSegment(new WireframeMaterial(0x00FF00), new Vector3D(0, 0, 0), new Vector3D(0, _size, 0));
-				_lines[2] = new LineSegment(new WireframeMaterial(0x0000FF), new Vector3D(0, 0, 0), new Vector3D(0, 0, _size));
-
-				for each (_line in _lines)
-					_container.scene.addChild(_line);
-			}
-			else if (_lines)
-			{
-				for each (_line in _lines)
-					_container.scene.removeChild(_line);
-				_lines = null;
-			}
+			view.mouseEnabled3D = false;
+			scene.addChild(trident = new Trident);
 		}
 
 		public function initXML(src:String):void
@@ -92,9 +73,11 @@ package
 					<answer src="as:onSelectCharactor('man')"><![CDATA[Man]]></answer>
 					<answer src="as:onSelectCharactor('woman')"><![CDATA[Women]]></answer>
 				</question>, this);
-			_container.addChild(_menuCharactor);
+			addChild(_menuCharactor);
 			_menuCharactor.x = 10;
 			_menuCharactor.y = 80;
+			
+			initSignal.dispatch();
 		}
 
 		public function onSelectCharactor(charType:String):void
@@ -104,7 +87,7 @@ package
 			reset();
 
 			// no click while load 
-			_container.mouseEnabled = _container.mouseChildren = false;
+			mouseEnabled = mouseChildren = false;
 
 			var _modelPool:ModelPool = new ModelPool();
 			ModelPool.signalModel.add(activate);
@@ -123,19 +106,19 @@ package
 
 			if (_menuAction)
 			{
-				_container.removeChild(_menuAction);
+				removeChild(_menuAction);
 				_menuAction = null;
 			}
 
 			if (_menu)
 			{
-				_container.removeChild(_menu);
+				removeChild(_menu);
 				_menu = null;
 			}
 
 			if (_menuPart)
 			{
-				_container.removeChild(_menuPart);
+				removeChild(_menuPart);
 				_menuPart = null;
 			}
 
@@ -143,7 +126,7 @@ package
 					<answer src="as:onSelectAction('talk')"><![CDATA[Talk]]></answer>
 					<answer src="as:onSelectAction('walk')"><![CDATA[Walk]]></answer>
 				</question>, this);
-			_container.addChild(_menuAction);
+			addChild(_menuAction);
 			_menuAction.x = 10;
 			_menuAction.y = _menuCharactor.y + _menuCharactor.height + 10;
 
@@ -151,7 +134,7 @@ package
 					<answer src="as:onSelectMenu('open')"><![CDATA[Open]]></answer>
 					<answer src="as:onSelectMenu('save')"><![CDATA[Save]]></answer>
 				</question>, this);
-			_container.addChild(_menu);
+			addChild(_menu);
 			_menu.x = 10;
 			_menu.y = _menuAction.y + _menuAction.height + 10;
 
@@ -196,7 +179,7 @@ package
 						</question>, this);
 					break;
 			}
-			_container.addChild(_menuPart);
+			addChild(_menuPart);
 			_menuPart.x = 10;
 			_menuPart.y = _menu.y + _menu.height + 10;
 		}
@@ -205,7 +188,7 @@ package
 		{
 			if (_textureMenu)
 			{
-				_container.removeChild(_textureMenu);
+				removeChild(_textureMenu);
 				x = _textureMenu.x;
 				y = _textureMenu.y;
 				_textureMenu = null;
@@ -263,7 +246,7 @@ package
 			_xml = new XML(_xml.toString().split("$meshID").join(String(meshID)));
 
 			_textureMenu = new SDDialog(_xml, this);
-			_container.addChild(_textureMenu);
+			addChild(_textureMenu);
 			_textureMenu.x = x || _textureMenu.x;
 			_textureMenu.y = y || _textureMenu.y;
 		}
@@ -286,6 +269,7 @@ package
 					FileUtil.open(["*.mdj"], onMDJOpen);
 					break;
 				case "save":
+					/*
 					// collect mesh from visibility
 					var _saveMeshes:Vector.<MovieMesh> = new Vector.<MovieMesh>();
 					for each (var _meshContainer:MovieMeshContainer3D in _meshes)
@@ -300,6 +284,7 @@ package
 
 					// save
 					var _mdjBuilder:MDJBuilder = new MDJBuilder();
+					*/
 					new FileReference().save(_mdjBuilder.getMDJ(_saveMeshes), "user.mdj");
 					break;
 			}
@@ -316,21 +301,21 @@ package
 			openJSON(JSON.decode(_data));
 		}
 
-		private function openJSON(jasonData:Object):void
+		public function openJSON(jsonData:Object):void
 		{
-			// not done yet leave _jasonData as is
-			_jasonData = jasonData;
+			// not done yet leave _jsonData as is
+			_jsonData = jsonData;
 
 			// check charactor type
-			if (String(_jasonData.meshes[0]).indexOf("/" + _charType + "/") == -1)
+			if (String(_jsonData.meshes[0]).indexOf("/" + _charType + "/") == -1)
 			{
 				// reload protype e.g. "chars/man/meshes/shirt_1.md2"
-				onSelectCharactor(_jasonData.meshes[0].split("/")[1]);
+				onSelectCharactor(_jsonData.meshes[0].split("/")[1]);
 			}
 			else
 			{
-				var _meshList:Array = _jasonData.meshes;
-				var _materialList:Array = _jasonData.textures;
+				var _meshList:Array = _jsonData.meshes;
+				var _materialList:Array = _jsonData.textures;
 
 				for (var i:int = 0; i < _meshList.length; i++)
 				{
@@ -343,7 +328,7 @@ package
 				}
 
 				// it's done
-				_jasonData = null;
+				_jsonData = null;
 			}
 		}
 
@@ -361,6 +346,8 @@ package
 				if (_mesh.visible)
 					_mesh.material = new BitmapFileMaterial(src);
 			}
+			
+			draw();
 		}
 
 		public function onSelectMesh(action:String):void
@@ -396,8 +383,29 @@ package
 
 			// change texture type
 			createTextureMenu(_type, _id + 1, _menuPart.width + 20, _menuPart.y);
+			
+			draw();
 		}
-
+		
+		private var _mdjBuilder:MDJBuilder = new MDJBuilder();
+		private var _saveMeshes:Vector.<MovieMesh>;
+		public function draw():void
+		{
+			// collect mesh from visibility
+			_saveMeshes = new Vector.<MovieMesh>();
+			for each (var _meshContainer:MovieMeshContainer3D in _meshes)
+			{
+				for each (var _mesh:MovieMesh in _meshContainer.children)
+				if (_mesh.visible)
+				{
+					_saveMeshes.push(_mesh);
+					Debug.trace(_mesh.url);
+				}
+			}
+			//var _mdjBuilder:MDJBuilder = new MDJBuilder();
+			changeSignal.dispatch({char:JSON.decode(_mdjBuilder.getMDJ(_saveMeshes))});
+		}
+			
 		public function onSelectAction(action:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
@@ -427,17 +435,17 @@ package
 			{
 				for each (var _meshContainer:MovieMeshContainer3D in _meshes)
 				{
-					_container.scene.addChild(_meshContainer);
+					scene.addChild(_meshContainer);
 					_meshContainer.visible = true;
 					for each (_mesh in _meshContainer.children)
 						_mesh.visible = (_meshContainer == _meshes[0]);
 				}
 
-				_container.mouseEnabled = _container.mouseChildren = true;
+				mouseEnabled = mouseChildren = true;
 
-				// reload for _jasonData?
-				if (_jasonData)
-					openJSON(_jasonData);
+				// reload for _jsonData?
+				if (_jsonData)
+					openJSON(_jsonData);
 			}
 		}
 	}

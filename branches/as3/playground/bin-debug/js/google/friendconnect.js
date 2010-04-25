@@ -41,7 +41,7 @@
 		// call flash function dialog
 		flashContent.onJSDialog('<question id="0">'
 								+ '<![CDATA[JS init Please wait...]]>'
-								+ '<answer src="js:signIn()"><![CDATA[Sign In]]></answer>'
+								+ '<answer src="js:signIn()"><![CDATA[Sign in]]></answer>'
 								+ '</question>');
 	}
 	
@@ -100,7 +100,7 @@
 		
 		// request data
 		var idSpec = opensocial.newIdSpec({'userId':'VIEWER', 'groupId':'SELF'});
-		req.add(req.newFetchPersonAppDataRequest(idSpec, 'time'), 'data');
+		req.add(req.newFetchPersonAppDataRequest(idSpec, 'avatar'), 'data');
 		
 		// Sent the request
 		req.send(onPersonAppData);
@@ -117,7 +117,7 @@
 		var req = opensocial.newDataRequest();
 		
 		// request data
-  		req.add(req.newUpdatePersonAppDataRequest(opensocial.IdSpec.PersonId.VIEWER, 'time', data));
+  		req.add(req.newUpdatePersonAppDataRequest(opensocial.IdSpec.PersonId.VIEWER, 'avatar', data));
 		
 		// Sent the request
 		req.send(onPersonAppData);
@@ -141,13 +141,14 @@
 			var saveData = saveDatas[viewerID];
 			
 			// default data template
-			var currentSaveData = {'time':new Date().toString()};
+			var currentSaveData = {"char":{"paths":["",""],"textures":["chars/man/texture_1/shirt_1.png","chars/man/texture_1/head_1.png","chars/man/texture_1/pant_1.png","chars/man/texture_1/shoes_1.png","chars/man/texture_1/hair_1.png"],"meshes":["chars/man/meshes/shirt_1.md2","chars/man/meshes/head_1.md2","chars/man/meshes/pant_1.md2","chars/man/meshes/shoes_1.md2","chars/man/meshes/hair_1.md2"]}};
 			
 			// parse
-			if(saveData && saveData['time'])currentSaveData['time'] = saveData['time'];
+			if(saveData && saveData['avatar'])
+				currentSaveData = saveData['avatar'];
 			
 			// output
-			var html = '<br/>Last login : ' + currentSaveData['time'];
+			var html = '<br/>Data : ' + currentSaveData;
 			setDataContent(html);
 			
 			// send data to flash 0.8 spec + custom data

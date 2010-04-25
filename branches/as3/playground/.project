@@ -3,6 +3,8 @@
 	<name>playground</name>
 	<comment></comment>
 	<projects>
+		<project>lite</project>
+		<project>lite_builder</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -5,12 +5,14 @@ package
 	
 	import flash.display.Sprite;
 
-	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "400", height = "300")]
+	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "800", height = "600")]
 	public class TestExternalInterface extends Sprite
 	{
 		private var _SDDialog:SDDialog;
 		private var _viewerID:String = "";
 		private var _viewerDisplayName:String = "";
+		
+		private var _editorTool:EditorTool;
 		
 		public function TestExternalInterface()
 		{
@@ -47,7 +49,11 @@ package
 			+ viewerDisplayName+']]>'
 			+ '<answer src="js:loadData()"><![CDATA[Load]]></answer>'
 			+ '<answer src="js:signOut()"><![CDATA[Sign Out]]></answer></question>';
-		}
+			
+			// EditorTool
+			addChild(_editorTool = new EditorTool());
+			_editorTool.initXML("config.xml");
+		} 
 		
 		public function onJSDialog(string:String):void
 		{
