@@ -113,7 +113,7 @@ package com.sleepydesign.utils
         	}
         }
         
-        public static function callJS(functionName:String, argument:String=""):Boolean
+        public static function callJS(functionName:String, argument:*=null):Boolean
         {
 			var isDone:Boolean = false;
 			if (isExternal())

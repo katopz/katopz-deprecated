@@ -2,17 +2,16 @@ package com.sleepydesign.components
 {
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.utils.SystemUtil;
-	
-	import flash.display.DisplayObject;
+
 	import flash.display.Loader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
-	import flash.geom.Point;
 	import flash.xml.XMLDocument;
 
 	public class SDDialog extends SDComponent
@@ -26,27 +25,27 @@ package com.sleepydesign.components
 
 		private var iText:*;
 		private var isTail:Boolean;
-		
+
 		private var caller:Object
 
-		public function SDDialog(iText:* = "", caller:Object=null)
+		public function SDDialog(iText:* = "", caller:Object = null)
 		{
 			this.iText = iText;
 			this.isTail = isTail;
-			
+
 			this.caller = caller;
-			
+
 			super();
 		}
-		
+
 		override protected function onStage(event:Event):void
 		{
 			super.onStage(event);
-			this.caller = caller?caller:this.parent;
+			this.caller = caller ? caller : this.parent;
 			mouseEnabled = true;
 			mouseChildren = true;
 			dragEnabled = true;
-			align = "c";
+			draw();
 		}
 
 		override public function create(config:Object = null):void
@@ -67,16 +66,16 @@ package com.sleepydesign.components
 
 			content = new XMLDocument();
 			content.parseXML(String(iText));
-			
+
 			// drag
 			_header = new Sprite();
-			
+
 			addChild(_back);
 			addChild(label);
 			addChild(_header);
 
 			cacheAsBitmap = true;
-			
+
 			htmlText = iText;
 		}
 
@@ -97,47 +96,62 @@ package com.sleepydesign.components
 			var w:Number = (label.width > pad) ? label.width : pad;
 			var h:Number = (label.height > pad) ? label.height : pad;
 
-			label.x = int(pad);//int(-w * .5);
-			label.y = int(pad);//int(-pad - length - h + pad * .25 - 1);
+			label.x = int(pad); //int(-w * .5);
+			label.y = int(pad); //int(-pad - length - h + pad * .25 - 1);
 
 			_back.graphics.clear();
 			_back.graphics.beginFill(_config.color);
-			_back.graphics.drawRoundRect(0,0,w+pad*2,h+pad*2, pad, pad);
-			
+			_back.graphics.drawRoundRect(0, 0, w + pad * 2, h + pad * 2, pad, pad);
+
 			/*
-			if(isTail)
-			{
-				_back.graphics.moveTo(0, 0);
-				_back.graphics.lineTo(-4, -length - pad * .5);
-				_back.graphics.lineTo(4, -length - pad * .5);
-			}
-			*/
-			
+			   if(isTail)
+			   {
+			   _back.graphics.moveTo(0, 0);
+			   _back.graphics.lineTo(-4, -length - pad * .5);
+			   _back.graphics.lineTo(4, -length - pad * .5);
+			   }
+			 */
+
 			_back.graphics.endFill();
-			
+
 			_header.graphics.beginFill(0xFF00FF, 0);
-			_header.graphics.drawRoundRect(0,0,w+pad*2,20, pad, pad);
+			_header.graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
 			_header.graphics.endFill();
+			
+			// align
+			if(stage)
+			switch (_align)
+			{
+				case StageAlign.TOP_LEFT:
+					setPosition(0, 0);
+					break;
+				case StageAlign.TOP_RIGHT:
+					setPosition(stage.stageWidth - width, 0);
+					break;
+				default:
+					setPosition(stage.stageWidth / 2 - width / 2, stage.stageHeight / 2 - height / 2);
+					break;
+			}
 
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 
 		public function setPosition(x:int, y:int):void
 		{
-			this.x = x;//+(width+pad)/2;
-			this.y = y;//+(height+pad)/2;
+			this.x = x; //+(width+pad)/2;
+			this.y = y; //+(height+pad)/2;
 		}
 
 		override public function get width():Number
 		{
 			return _back.width;
 		}
-		
+
 		override public function get height():Number
 		{
 			return _back.height;
 		}
-		
+
 		public function get text():String
 		{
 			return label.text;
@@ -165,30 +179,23 @@ package com.sleepydesign.components
 			setLabel(iText);
 			draw();
 		}
-		
+
 		public function set xmlText(iText:*):void
 		{
 			htmlText = XML(iText);
 		}
-		
-		private var _align:String = "center";
+
+		private var _align:String;
+
 		public function get align():String
 		{
 			return _align;
 		}
-		
+
 		public function set align(value:String):void
 		{
 			_align = value;
-			switch(_align)
-			{
-				case "tl" :
-					setPosition(0,0);
-				break;
-				case "c" :
-					setPosition(stage.stageWidth/2 - width/2, stage.stageHeight/2 - height/2);
-				break;
-			}
+			draw();
 		}
 
 		public function parseCSS(iCSSText:String = null):void
@@ -282,22 +289,22 @@ package com.sleepydesign.components
 		{
 			SystemUtil.link(e.text, caller);
 		}
-		
+
 		private function set dragEnabled(value:Boolean):void
 		{
-			if(value)
+			if (value)
 				_header.addEventListener(MouseEvent.MOUSE_DOWN, onDrag);
 			else
 				_header.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
 		}
-		
+
 		private function onDrag(event:MouseEvent):void
 		{
-			startDrag(false);//, root.scrollRect);
+			startDrag(false); //, root.scrollRect);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stage.addEventListener(Event.MOUSE_LEAVE, onDrop);
 		}
-		
+
 		private function onDrop(event:MouseEvent):void
 		{
 			stopDrag();
