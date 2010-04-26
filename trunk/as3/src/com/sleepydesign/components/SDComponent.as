@@ -3,6 +3,7 @@ package com.sleepydesign.components
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TransformEvent;
 	
+	import flash.display.StageAlign;
 	import flash.events.Event;
 	
 	public class SDComponent extends SDSprite
@@ -17,6 +18,7 @@ package com.sleepydesign.components
 		
 		public function draw():void
 		{
+			/*
 			if(stage)
 			switch (_align)
 			{
@@ -27,11 +29,27 @@ package com.sleepydesign.components
 					y = (_container.height == 0 ? _container.stage.stageHeight : _container.height) / 2 - height / 2;
 					_parent.addChild(this);
 					break;*/
-				case "center-stage":
+				/*case "center-stage":
 					x = stage.stageWidth / 2 - width / 2;
 					y = stage.stageHeight / 2 - height / 2;
 					break;
 			}
+			*/
+			
+			// align
+			if(stage)
+				switch (_align)
+				{
+					case StageAlign.TOP_LEFT:
+						setPosition(0, 0);
+						break;
+					case StageAlign.TOP_RIGHT:
+						setPosition(stage.stageWidth - width, 0);
+						break;
+					default:
+						setPosition(stage.stageWidth / 2 - width / 2, stage.stageHeight / 2 - height / 2);
+						break;
+				}
 		}
 		
 		protected var _align:String;
@@ -49,7 +67,14 @@ package com.sleepydesign.components
 				removeEventListener(Event.ADDED_TO_STAGE, onStage);
 				addEventListener(Event.ADDED_TO_STAGE, onStage);
 				return;
+			}else{
+				draw();
 			}
+		}
+		
+		public function setPosition(x:int, y:int):void
+		{
+			
 		}
 		
 		private function onStage(event:Event):void
