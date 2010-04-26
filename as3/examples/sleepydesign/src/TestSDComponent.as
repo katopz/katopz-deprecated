@@ -1,6 +1,7 @@
 package
 {
 	import com.sleepydesign.components.SDButton;
+	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDScrollPane;
 	import com.sleepydesign.components.SDSpeechBalloon;
 	import com.sleepydesign.components.SDTextInput;
@@ -56,9 +57,8 @@ package
 			_SDBalloon.y = 100;
 			addChild(_SDBalloon);
 
-			/*
 			// SDDialog
-			var _SDDialog:SDDialog = new SDDialog(this, 
+			var _SDDialog:SDDialog = new SDDialog(
 				<question id="0">
 					<![CDATA[Who say <b>Hello World</b>?<br/>Do you remember?]]>
 					<answer src="as:jump(1)"><![CDATA[Maybe me]]></answer>
@@ -74,23 +74,24 @@ package
 						<answer src="as:jump(0)"><![CDATA[No!]]></answer>
 					</question>
 					<answer src="http://www.google.com"><![CDATA[Try ask google!]]></answer>
-				</question>);
+				</question>, this);
 
-			_SDDialog.x = 100;
+			_SDDialog.x = 300;
 			_SDDialog.y = 200;
 			
+			addChild(_SDDialog);
+			/*
 			// SDDialog#2
-			var _SDDialog2:SDDialog = new SDDialog(this, 
+			var _SDDialog2:SDDialog = new SDDialog( 
 				<question id="0">
 					<![CDATA[Welcome! please log-in]]>
 					<answer src="js:login()"><![CDATA[login]]></answer>
-				</question>, false);
+				</question>, this);
 
 			_SDDialog2.x = 300;
 			_SDDialog2.y = 200;
 			addChild(_SDDialog2);
-			*/
-
+*/
 			_SDScrollPane.addContent(content);
 		}
 	}
