@@ -31,10 +31,15 @@ package com.sleepydesign.net
 		public static var UPLOAD_LIMIT:Number = 200000;
 		
 		/**
+		 * prevent gc 
+		 */		
+		private static var _file:FileReference;
+		
+		/**
 		 * Your upload path
 		 */
 		public static var UPLOAD_URL:String;
-
+		
 		/**
 		 * Browse with any file type and listen
 		 * @param eventHandler
@@ -45,19 +50,21 @@ package com.sleepydesign.net
 			fileTypes = fileTypes ? fileTypes : ["*.*"];
 			eventHandler = eventHandler = eventHandler is Function ? eventHandler : trace;
 
-			var file:FileReference = new FileReference();
+			_file = new FileReference();
 			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
-			file.addEventListener(Event.COMPLETE, eventHandler);
-			file.addEventListener(Event.CANCEL, eventHandler);
-			file.addEventListener(Event.SELECT, eventHandler);
+			
+			_file.addEventListener(Event.COMPLETE, eventHandler);
+			
+			_file.addEventListener(Event.CANCEL, eventHandler);
+			_file.addEventListener(Event.SELECT, eventHandler);
 			var _onCompleteFunction:Function;
-			file.addEventListener(Event.SELECT, _onCompleteFunction = function(event:Event):void
+			_file.addEventListener(Event.SELECT, _onCompleteFunction = function(event:Event):void
 			{
-				trace(" ^ Select : " + file.name + " | " + file.size);
+				trace(" ^ Select : " + _file.name + " | " + _file.size);
 				try
 				{
 					//FP10
-					file["load"]();
+					_file["load"]();
 				}
 				catch (e:*)
 				{
@@ -69,24 +76,24 @@ package com.sleepydesign.net
 					{
 						request.url = UPLOAD_URL;
 
-						if (file.size < UPLOAD_LIMIT)
+						if (_file.size < UPLOAD_LIMIT)
 						{
-							trace(" * Uploading : " + file.size);
-							file.addEventListener(Event.CANCEL, eventHandler);
-							file.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
-							file.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
-							file.addEventListener(Event.OPEN, eventHandler);
-							file.addEventListener(ProgressEvent.PROGRESS, eventHandler);
-							file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
-							file.addEventListener(Event.SELECT, eventHandler);
-							file.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, eventHandler);
+							trace(" * Uploading : " + _file.size);
+							_file.addEventListener(Event.CANCEL, eventHandler);
+							_file.addEventListener(HTTPStatusEvent.HTTP_STATUS, eventHandler);
+							_file.addEventListener(IOErrorEvent.IO_ERROR, eventHandler);
+							_file.addEventListener(Event.OPEN, eventHandler);
+							_file.addEventListener(ProgressEvent.PROGRESS, eventHandler);
+							_file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
+							_file.addEventListener(Event.SELECT, eventHandler);
+							_file.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, eventHandler);
 	
 							// TODO : gc
-							file.upload(request);
+							_file.upload(request);
 						}
 						else
 						{
-							trace("File is too large : " + int(file.size / 1024) + "KB");
+							trace("File is too large : " + int(_file.size / 1024) + "KB");
 						}
 					}else{
 						trace("Need upload URL!");
@@ -95,18 +102,18 @@ package com.sleepydesign.net
 			});
 
 			//gc
-			file.addEventListener(Event.COMPLETE, function(event:Event):void
+			_file.addEventListener(Event.COMPLETE, function(event:Event):void
 			{
-				file.removeEventListener(Event.COMPLETE, eventHandler);
-				file.removeEventListener(Event.CANCEL, eventHandler);
-				file.removeEventListener(Event.SELECT, eventHandler);
+				_file.removeEventListener(Event.COMPLETE, eventHandler);
+				_file.removeEventListener(Event.CANCEL, eventHandler);
+				_file.removeEventListener(Event.SELECT, eventHandler);
 
-				file.removeEventListener(Event.SELECT, _onCompleteFunction);
+				_file.removeEventListener(Event.SELECT, _onCompleteFunction);
 			});
 
-			file.browse(typeFilter);
+			_file.browse(typeFilter);
 
-			return file;
+			return _file;
 		}
 
 		public static function openCompress(eventHandler:Function):FileReference
