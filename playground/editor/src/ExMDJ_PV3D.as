@@ -6,7 +6,7 @@ package
 	import org.papervision3d.objects.parsers.MDJ;
 	
 	[SWF(backgroundColor="#CCCCCC", frameRate="30", width="800", height="600")]
-	public class ExMDJ extends PV3DTemplate
+	public class ExMDJ_PV3D extends PV3DTemplate
 	{
 		private var _mdj:MDJ;
 		

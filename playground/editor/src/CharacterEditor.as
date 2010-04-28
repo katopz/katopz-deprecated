@@ -11,11 +11,11 @@ package
 	 * 2. pack back to new model pack?
 	 * 3. test external interface
 	 */
-	public class CharactorEditor extends Sprite
+	public class CharacterEditor extends Sprite
 	{
 		private var _editorTool:EditorTool;
 
-		public function CharactorEditor()
+		public function CharacterEditor()
 		{
 			// EditorTool
 			Debug.active = true;
