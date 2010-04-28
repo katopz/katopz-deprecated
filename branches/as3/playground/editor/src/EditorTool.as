@@ -8,19 +8,17 @@ package
 	import away3dlite.materials.BitmapFileMaterial;
 	import away3dlite.primitives.Trident;
 	import away3dlite.templates.BasicTemplate;
-	import away3dlite.templates.Template;
-	
+
 	import com.adobe.serialization.json.JSON;
 	import com.cutecoma.playground.data.ModelData;
 	import com.sleepydesign.components.SDDialog;
-	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.FileUtil;
 	import com.sleepydesign.net.LoaderUtil;
-	
+
 	import flash.events.Event;
 	import flash.net.FileReference;
 	import flash.utils.*;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class EditorTool extends BasicTemplate
@@ -28,14 +26,11 @@ package
 		private var _currentModel:MovieMeshContainer3D;
 		private var _bonesAnimator:BonesAnimator;
 
-		private var _loadedModel:int = 0;
-		private var _totalModel:int = 4;
-
 		private var _meshes:Vector.<MovieMeshContainer3D>;
 
 		public static var initSignal:Signal = new Signal();
 		public static var changeSignal:Signal = new Signal(Object);
-		
+
 		private var _xmlData:XML;
 
 		private var _jsonData:Object;
@@ -44,9 +39,9 @@ package
 
 		public function EditorTool()
 		{
-			
+
 		}
-		
+
 		override protected function onInit():void
 		{
 			view.mouseEnabled3D = false;
@@ -76,7 +71,7 @@ package
 			addChild(_menuCharactor);
 			_menuCharactor.x = 10;
 			_menuCharactor.y = 80;
-			
+
 			initSignal.dispatch();
 		}
 
@@ -253,8 +248,6 @@ package
 
 		public function reset():void
 		{
-			_loadedModel = 0;
-
 			for each (var _meshContainer:MovieMeshContainer3D in _meshes)
 				_meshContainer.destroy();
 
@@ -270,22 +263,22 @@ package
 					break;
 				case "save":
 					/*
-					// collect mesh from visibility
-					var _saveMeshes:Vector.<MovieMesh> = new Vector.<MovieMesh>();
-					for each (var _meshContainer:MovieMeshContainer3D in _meshes)
-					{
-						for each (var _mesh:MovieMesh in _meshContainer.children)
-							if (_mesh.visible)
-							{
-								_saveMeshes.push(_mesh);
-								Debug.trace(_mesh.url);
-							}
-					}
+					   // collect mesh from visibility
+					   var _saveMeshes:Vector.<MovieMesh> = new Vector.<MovieMesh>();
+					   for each (var _meshContainer:MovieMeshContainer3D in _meshes)
+					   {
+					   for each (var _mesh:MovieMesh in _meshContainer.children)
+					   if (_mesh.visible)
+					   {
+					   _saveMeshes.push(_mesh);
+					   Debug.trace(_mesh.url);
+					   }
+					   }
 
-					// save
-					var _mdjBuilder:MDJBuilder = new MDJBuilder();
-					*/
-					new FileReference().save(_mdjBuilder.getMDJ(_saveMeshes), "user.mdj");
+					   // save
+					   var _mdjBuilder:MDJBuilder = new MDJBuilder();
+					 */
+					new FileReference().save(_mdjBuilder.getMDJ(_saveMeshes, {type:_charType}), "user.mdj");
 					break;
 			}
 		}
@@ -307,10 +300,9 @@ package
 			_jsonData = jsonData;
 
 			// check charactor type
-			if (String(_jsonData.meshes[0]).indexOf("/" + _charType + "/") == -1)
+			if (_jsonData.type != _charType)
 			{
-				// reload protype e.g. "chars/man/meshes/shirt_1.md2"
-				onSelectCharactor(_jsonData.meshes[0].split("/")[1]);
+				onSelectCharactor(_jsonData.type);
 			}
 			else
 			{
@@ -320,8 +312,8 @@ package
 				for (var i:int = 0; i < _meshList.length; i++)
 				{
 					var src:String = _meshList[i];
-					var _part:String = src.split(".")[0];
-					_part = _part.slice(src.lastIndexOf("/") + 1);
+					var _part:String = src.slice(src.lastIndexOf("/") + 1);
+					_part = _part.split(".")[0];
 
 					onSelectMesh(_part);
 					onSelectTexture(_materialList[i]);
@@ -346,7 +338,7 @@ package
 				if (_mesh.visible)
 					_mesh.material = new BitmapFileMaterial(src);
 			}
-			
+
 			draw();
 		}
 
@@ -383,12 +375,13 @@ package
 
 			// change texture type
 			createTextureMenu(_type, _id + 1, _menuPart.width + 20, _menuPart.y);
-			
+
 			draw();
 		}
-		
+
 		private var _mdjBuilder:MDJBuilder = new MDJBuilder();
 		private var _saveMeshes:Vector.<MovieMesh>;
+
 		public function draw():void
 		{
 			// collect mesh from visibility
@@ -396,16 +389,13 @@ package
 			for each (var _meshContainer:MovieMeshContainer3D in _meshes)
 			{
 				for each (var _mesh:MovieMesh in _meshContainer.children)
-				if (_mesh.visible)
-				{
-					_saveMeshes.push(_mesh);
-					Debug.trace(_mesh.url);
-				}
+					if (_mesh.visible)
+						_saveMeshes.push(_mesh);
 			}
 			//var _mdjBuilder:MDJBuilder = new MDJBuilder();
-			changeSignal.dispatch({char:JSON.decode(_mdjBuilder.getMDJ(_saveMeshes))});
+			changeSignal.dispatch({char: JSON.decode(_mdjBuilder.getMDJ(_saveMeshes))});
 		}
-			
+
 		public function onSelectAction(action:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
@@ -417,36 +407,28 @@ package
 				_meshContainer.play(action);
 		}
 
-		public function activate(modelData:ModelData):void
+		public function activate(modelDatas:Vector.<ModelData>):void
 		{
-			_loadedModel++;
-
-			var _prototype:MovieMeshContainer3D = modelData.model as MovieMeshContainer3D;
-			_meshes.push(_prototype);
-
-			var _mesh:MovieMesh;
-
-			for each (_mesh in _prototype.children)
-				_mesh.visible = false;
-
-			Debug.trace(_loadedModel + "/" + _totalModel);
-
-			if (_loadedModel == _totalModel)
+			// all prototype loaded
+			for each (var modelData:ModelData in modelDatas)
 			{
-				for each (var _meshContainer:MovieMeshContainer3D in _meshes)
-				{
-					scene.addChild(_meshContainer);
-					_meshContainer.visible = true;
-					for each (_mesh in _meshContainer.children)
-						_mesh.visible = (_meshContainer == _meshes[0]);
-				}
+				// MDJ
+				var _meshContainer:MovieMeshContainer3D = modelData.model as MovieMeshContainer3D;
+				_meshes.push(_meshContainer);
+				scene.addChild(_meshContainer);
+				_meshContainer.visible = true;
 
-				mouseEnabled = mouseChildren = true;
-
-				// reload for _jsonData?
-				if (_jsonData)
-					openJSON(_jsonData);
+				//MD2
+				for each (var _mesh:MovieMesh in _meshContainer.children)
+					_mesh.visible = (modelData.id == "0");
 			}
+			
+			// loading done
+			mouseEnabled = mouseChildren = true;
+			
+			// reload for _jsonData?
+			if (_jsonData)
+				openJSON(_jsonData);
 		}
 	}
 }
