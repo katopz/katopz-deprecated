@@ -1,2 +1,0 @@
-// ActionScript file
-Decoration
