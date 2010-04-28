@@ -2,6 +2,7 @@ package
 {
 	import away3dlite.core.utils.Debug;
 	
+	import com.adobe.serialization.json.JSON;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.system.SystemUtil;
 	
@@ -22,6 +23,7 @@ package
 		public function LogIn()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			alpha = .25
 		}
 		
 		protected function onAddedToStage(event:Event):void
@@ -49,8 +51,10 @@ package
 			// External Interface Proxy
 			SystemUtil.listenJS("onJSSignIn", onJSSignIn);
 			SystemUtil.listenJS("onJSSignOut", onJSSignOut);
-			SystemUtil.listenJS("onJSGetData", onJSGetData);
+			//SystemUtil.listenJS("onJSGetData", onJSGetData);
 			SystemUtil.listenJS("onJSDialog", onJSDialog);
+			
+			SystemUtil.listenJS("onJSGetSaveData", onJSGetSaveData);
 		}
 		
 		public function onJSSignIn(viewerID:String = null, viewerDisplayName:String = null):void
@@ -71,51 +75,57 @@ package
 		{
 			_currentData = charData;
 			
-			// EditorTool
-			if(_editorTool)
-				return;
-			
-			EditorTool.initSignal.add(onEditorInit);
-			EditorTool.changeSignal.add(onEditorChange);
-			addChild(_editorTool = new EditorTool());
-			_editorTool.initXML("config.xml");
+			if(!_editorTool)
+			{
+				// init EditorTool
+				EditorTool.initSignal.add(onEditorInit);
+				//EditorTool.changeSignal.add(onEditorChange);
+				addChild(_editorTool = new EditorTool());
+				_editorTool.initXML("config.xml");
+			}else{
+				// EditorTool already there just apply new data
+				onEditorInit();
+			}
 		} 
-		
+		/*
 		public function onEditorChange(charData:Object):void
 		{
 			_currentData = charData;
-			
-			trace("onEditorChange:"+_currentData['char'].meshes[0]);
-			trace("onEditorChange:"+_currentData['char'].meshes[1]);
-			trace("onEditorChange:"+_currentData['char'].meshes[2]);
-			trace("onEditorChange:"+_currentData['char'].meshes[3]);
-			trace("onEditorChange:"+_currentData['char'].meshes[4]);
+			trace("/onEditorChange-----------------------");
+			trace(_currentData['char'].meshes[0]);
+			trace(_currentData['char'].meshes[1]);
+			trace(_currentData['char'].meshes[2]);
+			trace(_currentData['char'].meshes[3]);
+			trace(_currentData['char'].meshes[4]);
+			trace("-----------------------onEditorChange/");
 			
 			//redrawSaveDialog(charData);
-		}
+		}*/
 		
 		public function onEditorInit():void
 		{
 			if(_currentData)
 			{
-				trace("onEditorInit:"+_currentData['char'].meshes[0]);
-				trace("onEditorInit:"+_currentData['char'].meshes[1]);
-				trace("onEditorInit:"+_currentData['char'].meshes[2]);
-				trace("onEditorInit:"+_currentData['char'].meshes[3]);
-				trace("onEditorInit:"+_currentData['char'].meshes[4]);
+				trace("/onEditorInit-----------------------");
+				trace(_currentData['char'].meshes[0]);
+				trace(_currentData['char'].meshes[1]);
+				trace(_currentData['char'].meshes[2]);
+				trace(_currentData['char'].meshes[3]);
+				trace(_currentData['char'].meshes[4]);
+				trace("-----------------------onEditorInit/");
 				_editorTool.openJSON(_currentData['char']);
 			}
 		}
 		
-		public function onJSDialog(string:String):void
+		public function onJSGetSaveData(string:String):void
 		{
-			trace(" ! onJSDialog : " + string);
-			_SDDialog.xmlText = string;
-		}
-		
-		public function onJSGetData(charData:Object):void
-		{
-			_currentData = charData;
+			trace(" ! onJSGetSaveData : " + string);
+			
+			string = string.split("&#34;").join('"');
+			
+			trace(" ! onJSGetSaveData : " + string);
+			
+			_currentData = JSON.decode(string);
 			
 			trace("onJSGetData:"+_currentData['char'].meshes[0]);
 			trace("onJSGetData:"+_currentData['char'].meshes[1]);
@@ -124,7 +134,27 @@ package
 			trace("onJSGetData:"+_currentData['char'].meshes[4]);
 			
 			//redrawSaveDialog(charData);
-			newData(charData);
+			newData(_currentData);
+		}
+		
+		public function onJSDialog(string:String):void
+		{
+			trace(" ! onJSDialog : " + string);
+			_SDDialog.xmlText = string;
+		}
+		/*
+		public function onJSGetData(charData:String):void
+		{
+			_currentData = JSON.decode(charData);
+			
+			trace("onJSGetData:"+_currentData['char'].meshes[0]);
+			trace("onJSGetData:"+_currentData['char'].meshes[1]);
+			trace("onJSGetData:"+_currentData['char'].meshes[2]);
+			trace("onJSGetData:"+_currentData['char'].meshes[3]);
+			trace("onJSGetData:"+_currentData['char'].meshes[4]);
+			
+			//redrawSaveDialog(charData);
+			newData(_currentData);
 		}	
 		/*
 		private function redrawSaveDialog(charData:Object):void
@@ -137,13 +167,16 @@ package
 		
 		public function saveData():void
 		{
+			/*
 			trace("saveData:"+_currentData['char'].meshes[0]);
 			trace("saveData:"+_currentData['char'].meshes[1]);
 			trace("saveData:"+_currentData['char'].meshes[2]);
 			trace("saveData:"+_currentData['char'].meshes[3]);
 			trace("saveData:"+_currentData['char'].meshes[4]);
+			*/
 			
-			SystemUtil.callJS("saveData", _currentData);
+			//save as string
+			SystemUtil.callJS("saveData", '{"char":'+_editorTool.getCurrentMDJ()+'}');
 		}
 		
 		public function onJSSignOut():void
