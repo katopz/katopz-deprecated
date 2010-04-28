@@ -1,6 +1,6 @@
 	// ------------------------- Init -------------------------
 	
-	google.friendconnect.container.setParentUrl('/' /* location of rpc_relay.html and canvas.html */);
+	google.friendconnect.container.setParentUrl('http://cutecom.com/' /* location of rpc_relay.html and canvas.html */);
 	google.friendconnect.container.loadOpenSocialApi({
 	  site: '09412210533340333505', // Change this on your site
 	  onload: function() { initFriendConnect(); }
