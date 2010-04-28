@@ -23,7 +23,6 @@ package
 		public function LogIn()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			alpha = .25
 		}
 		
 		protected function onAddedToStage(event:Event):void
@@ -83,8 +82,32 @@ package
 				addChild(_editorTool = new EditorTool());
 				_editorTool.initXML("config.xml");
 			}else{
+				_editorTool.onSelectCharactor();
+			}
+		}
+		
+		public function reloadData(charData:Object = null):void
+		{
+			_currentData = charData;
+			
+			if(!_editorTool)
+			{
+				// init EditorTool
+				EditorTool.initSignal.add(onEditorInit);
+				//EditorTool.changeSignal.add(onEditorChange);
+				addChild(_editorTool = new EditorTool());
+				_editorTool.initXML("config.xml");
+			}else{
+				
+				_editorTool.openJSON(_currentData['char']);
+				
+				//_editorTool.newAll();
+				
+				// clear menu
+				//_editorTool.resetMenu();
+				
 				// EditorTool already there just apply new data
-				onEditorInit();
+				//onEditorInit();
 			}
 		} 
 		/*
@@ -134,7 +157,7 @@ package
 			trace("onJSGetData:"+_currentData['char'].meshes[4]);
 			
 			//redrawSaveDialog(charData);
-			newData(_currentData);
+			reloadData(_currentData);
 		}
 		
 		public function onJSDialog(string:String):void

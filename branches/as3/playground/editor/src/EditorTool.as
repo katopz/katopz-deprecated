@@ -4,7 +4,6 @@ package
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.animators.MovieMeshContainer3D;
 	import away3dlite.builders.MDJBuilder;
-	import away3dlite.core.utils.Debug;
 	import away3dlite.materials.BitmapFileMaterial;
 	import away3dlite.primitives.Trident;
 	import away3dlite.templates.BasicTemplate;
@@ -16,6 +15,7 @@ package
 	import com.sleepydesign.net.LoaderUtil;
 	
 	import flash.events.Event;
+	import flash.geom.Vector3D;
 	import flash.net.FileReference;
 	import flash.utils.*;
 	
@@ -46,6 +46,14 @@ package
 		{
 			view.mouseEnabled3D = false;
 			scene.addChild(trident = new Trident);
+			
+			camera.y = -200;
+			camera.lookAt(new Vector3D);
+		}
+		
+		override protected function onPreRender():void
+		{
+			scene.rotationY+=0.5;
 		}
 
 		public function initXML(src:String):void
@@ -74,9 +82,13 @@ package
 
 			initSignal.dispatch();
 		}
-
-		public function onSelectCharactor(charType:String):void
+		
+		public function onSelectCharactor(charType:String = ""):void
 		{
+			// reset
+			if(charType=="")
+				charType = _charType;
+			
 			var _xmlPrototype:XMLList = _xmlData.chars[charType];
 
 			reset();
@@ -84,13 +96,18 @@ package
 			// no click while load 
 			mouseEnabled = mouseChildren = false;
 
-			var _modelPool:ModelPool = new ModelPool();
-			ModelPool.signalModel.add(activate);
+			if(!_modelPool)
+			{
+				_modelPool = new ModelPool();
+				ModelPool.signalModel.add(activate);
+			}
+			
 			_modelPool.initXML(_xmlPrototype);
 
 			initMenu(charType);
 		}
 
+		private var  _modelPool:ModelPool;
 		private var _menuAction:SDDialog;
 		private var _menu:SDDialog;
 		private var _charType:String;
@@ -125,7 +142,7 @@ package
 			_menuAction.x = 10;
 			_menuAction.y = _menuCharactor.y + _menuCharactor.height + 10;
 
-			_menu = new SDDialog(<question><![CDATA[Menu]]>
+			_menu = new SDDialog(<question><![CDATA[File (from disk)]]>
 					<answer src="as:onSelectMenu('open')"><![CDATA[Open]]></answer>
 					<answer src="as:onSelectMenu('save')"><![CDATA[Save]]></answer>
 				</question>, this);
@@ -256,14 +273,14 @@ package
 
 		public function getCurrentJSON():Object
 		{
-			return _mdjBuilder.getJSON(getCurrentSaveMeshes(), {type:_charType});
+			return _mdjBuilder.getJSON(getCurrentSaveMeshes(), {type: _charType});
 		}
-		
+
 		public function getCurrentMDJ():String
 		{
-			return _mdjBuilder.getMDJ(getCurrentSaveMeshes(), {type:_charType});
+			return _mdjBuilder.getMDJ(getCurrentSaveMeshes(), {type: _charType});
 		}
-		
+
 		public function onSelectMenu(action:String):void
 		{
 			switch (action)
@@ -306,9 +323,9 @@ package
 
 		public function openJSON(jsonData:Object):void
 		{
-			if(_jsonData == jsonData)
+			if (_jsonData == jsonData)
 				return;
-				
+
 			// not done yet leave _jsonData as is
 			_jsonData = jsonData;
 
@@ -317,13 +334,13 @@ package
 			{
 				// prevent rapid call
 				_charType = _jsonData.type;
-				
+
 				onSelectCharactor(_jsonData.type);
 			}
 			else
 			{
 				applyJSON(_jsonData);
-				
+
 				// it's done
 				_jsonData = null;
 			}
@@ -333,31 +350,26 @@ package
 		{
 			var _meshList:Array = jsonData.meshes;
 			var _materialList:Array = jsonData.textures;
-			
+
 			for (var i:int = 0; i < _meshList.length; i++)
 			{
 				var src:String = _meshList[i];
 				var _part:String = src.slice(src.lastIndexOf("/") + 1);
 				_part = _part.split(".")[0];
-				
-				selectMesh(_part);
-				selectTexture(_materialList[i]);
+
+				onSelectMesh(_part);
+				onSelectTexture(_materialList[i]);
 			}
 		}
-			
+
 		public function onSelectTexture(src:String):void
-		{
-			selectTexture(src);
-		}
-		
-		public function selectTexture(src:String):void
 		{
 			var _meshContainer:MovieMeshContainer3D;
 			var _part:String = src.split(".")[0];
 			_part = _part.slice(src.lastIndexOf("/") + 1);
 			var _type:String = _part.split("_")[0];
 			var _id:int = int(_part.split("_")[1]) - 1;
-			
+
 			for each (_meshContainer in _meshes)
 			{
 				var _mesh:MovieMesh = _meshContainer.getChildByName(_type) as MovieMesh;
@@ -368,40 +380,35 @@ package
 
 		public function onSelectMesh(action:String):void
 		{
-			selectMesh(action);
-		}
-		
-		public function selectMesh(action:String):void
-		{
 			var _meshContainer:MovieMeshContainer3D;
-			
+
 			// hold
 			for each (_meshContainer in _meshes)
-			_meshContainer.stop();
-			
+				_meshContainer.stop();
+
 			var _type:String = action.split("_")[0];
 			var _id:int = int(action.split("_")[1]) - 1;
 			var _currentTime:Number = 0;
-			
+
 			// reset
 			for each (_meshContainer in _meshes)
 			{
 				_meshContainer.getChildByName(_type).visible = false;
 				_currentTime = MovieMesh(_meshContainer.getChildByName(_type)).currentTime;
 			}
-			
+
 			// pick one
 			var _mesh:MovieMesh = _meshes[_id].getChildByName(_type) as MovieMesh;
 			_mesh.visible = true;
-			
+
 			// seek
 			MovieMesh(_meshes[_id].getChildByName(_type)).seek(_currentTime, _currentTime);
-			
+
 			// resume
 			if (_meshContainer.currentLabel)
 				for each (_meshContainer in _meshes)
-				_meshContainer.play(_meshContainer.currentLabel);
-			
+					_meshContainer.play(_meshContainer.currentLabel);
+
 			// change texture type
 			createTextureMenu(_type, _id + 1, _menuPart.width + 20, _menuPart.y);
 		}
@@ -421,7 +428,7 @@ package
 			}
 			//var _mdjBuilder:MDJBuilder = new MDJBuilder();
 			//changeSignal.dispatch({char: JSON.decode(_mdjBuilder.getMDJ(_saveMeshes, {type:_charType}))});
-			
+
 			return _saveMeshes;
 		}
 
@@ -434,6 +441,21 @@ package
 
 			for each (_meshContainer in _meshes)
 				_meshContainer.play(action);
+		}
+		
+		public function newAll():void
+		{
+			var _mesh:MovieMesh;
+			
+			// MDJ
+			for each (var _meshContainer:MovieMeshContainer3D in _meshes)
+			{
+				_meshContainer.stop();
+				
+				//MD2
+				for each (_mesh in _meshContainer.children)
+					_mesh.visible = (_meshContainer == _meshes[0]);
+			}
 		}
 
 		public function activate(modelDatas:Vector.<ModelData>):void
@@ -451,15 +473,15 @@ package
 				for each (var _mesh:MovieMesh in _meshContainer.children)
 					_mesh.visible = (modelData.id == "0");
 			}
-			
+
 			// loading done
 			mouseEnabled = mouseChildren = true;
-			
+
 			// reload for _jsonData?
 			if (_jsonData)
 			{
 				applyJSON(_jsonData);
-				
+
 				// clean up
 				_jsonData = null;
 			}
