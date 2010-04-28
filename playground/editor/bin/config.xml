@@ -5,16 +5,16 @@
 	</world>
 	<chars>
 		<man>
-			<model src="chars/man/model_1.mdj"/>
-			<model src="chars/man/model_2.mdj"/>
-			<model src="chars/man/model_3.mdj"/>
-			<model src="chars/man/model_4.mdj"/>
+			<model id="0" src="chars/man/model_1.mdj"/>
+			<model id="1" src="chars/man/model_2.mdj"/>
+			<model id="2" src="chars/man/model_3.mdj"/>
+			<model id="3" src="chars/man/model_4.mdj"/>
 		</man>
 		<woman>
-			<model src="chars/woman/model_1.mdj"/>
-			<model src="chars/woman/model_2.mdj"/>
-			<model src="chars/woman/model_3.mdj"/>
-			<model src="chars/woman/model_4.mdj"/>
+			<model id="0" src="chars/woman/model_1.mdj"/>
+			<model id="1" src="chars/woman/model_2.mdj"/>
+			<model id="2" src="chars/woman/model_3.mdj"/>
+			<model id="3" src="chars/woman/model_4.mdj"/>
 		</woman>
 	</chars>
 </config>

@@ -1,5 +1,6 @@
 package
 {
+	import away3dlite.core.utils.Debug;
 	import away3dlite.templates.BasicTemplate;
 	
 	import flash.display.Sprite;
@@ -17,8 +18,10 @@ package
 		public function CharactorEditor()
 		{
 			// EditorTool
+			Debug.active = true;
 			addChild(_editorTool = new EditorTool());
 			_editorTool.initXML("config.xml");
+			alpha = .25
 		}
 	}
 }

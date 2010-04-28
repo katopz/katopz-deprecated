@@ -1,19 +1,14 @@
 package
 {
-	import away3dlite.core.base.Object3D;
 	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.loaders.MDJ;
 	
 	import com.cutecoma.playground.data.ModelData;
-	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.events.RemovableEventDispatcher;
-	import com.sleepydesign.net.LoaderUtil;
 	
-	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.utils.*;
 	
 	import org.osflash.signals.Signal;
@@ -22,6 +17,7 @@ package
 	{
 		private var _loadedModel:int = 0;
 		private var _totalModel:int;
+		private var _modelDatas:Vector.<ModelData>;
 
 		private var _loaders:SDGroup; /*loader*/
 		private var _xmls:SDGroup; /*xml*/
@@ -30,7 +26,7 @@ package
 		private var _loader3Ds:Array;
 
 		// complete
-		public static var signalModel:Signal = new Signal(ModelData);
+		public static var signalModel:Signal = new Signal(Vector.<ModelData>);
 
 		public function ModelPool()
 		{
@@ -76,6 +72,7 @@ package
 			// get total 
 			_totalModel = prototypeData.model.length();
 			_loadedModel = 0;
+			_modelDatas = new Vector.<ModelData>(_totalModel, true);
 
 			_loader3Ds = [];
 			for each (var _model:XML in prototypeData..model)
@@ -107,15 +104,14 @@ package
 			_modelData.model.visible = false;
 			_modelData.model.rotationY = 180;
 
+			Debug.trace(" ! onSuccess :" + _modelData.model.url);
+
+			_modelDatas[int(_modelData.id)] = _modelData;
+
 			if (++_loadedModel == _totalModel)
 			{
 				Debug.trace(" ! All Complete.");
-				signalModel.dispatch(_modelData);
-			}
-			else
-			{
-				Debug.trace(" ! Complete.");
-				signalModel.dispatch(_modelData);
+				signalModel.dispatch(_modelDatas);
 			}
 		}
 	}
