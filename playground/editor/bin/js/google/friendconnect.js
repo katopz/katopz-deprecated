@@ -108,10 +108,8 @@
 		
 	function saveData(data)
 	{
-		alert(data);
-		
 		// debug
-		setDataContent("saveData");
+		setDataContent('<br/>Save Data : ' + data);
 		
 		// Create a request
 		var req = opensocial.newDataRequest();
@@ -141,18 +139,20 @@
 			var saveData = saveDatas[viewerID];
 			
 			// default data template
-			var currentSaveData = {"char":{"paths":["",""],"textures":["chars/man/texture_1/shirt_1.png","chars/man/texture_1/head_1.png","chars/man/texture_1/pant_1.png","chars/man/texture_1/shoes_1.png","chars/man/texture_1/hair_1.png"],"meshes":["chars/man/meshes/shirt_1.md2","chars/man/meshes/head_1.md2","chars/man/meshes/pant_1.md2","chars/man/meshes/shoes_1.md2","chars/man/meshes/hair_1.md2"]}};
+			//var currentSaveData = '{"char":{"type":"man","paths":["",""],"textures":["chars/man/texture_1/shirt_1.png","chars/man/texture_1/head_1.png","chars/man/texture_1/pant_1.png","chars/man/texture_1/shoes_1.png","chars/man/texture_1/hair_1.png"],"meshes":["chars/man/meshes/shirt_1.md2","chars/man/meshes/head_1.md2","chars/man/meshes/pant_1.md2","chars/man/meshes/shoes_1.md2","chars/man/meshes/hair_1.md2"]}}';
 			
 			// parse
-			if(saveData && saveData['avatar'])
-				currentSaveData = saveData['avatar'];
+			//if(saveData && saveData['avatar'])
+			//	currentSaveData = saveData['avatar'];
 			
 			// output
-			var html = '<br/>Data : ' + currentSaveData;
+			var html = '<br/>Open Data : ' + saveData['avatar'];
 			setDataContent(html);
 			
 			// send data to flash 0.8 spec + custom data
-			flashContent.onJSGetData(currentSaveData);
+			//flashContent.onJSGetData(String(saveData['avatar']));
+			
+			flashContent.onJSGetSaveData(saveData['avatar']);
 		}
 		else
 		{
