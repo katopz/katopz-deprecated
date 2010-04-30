@@ -26,8 +26,7 @@ package com.sleepydesign.templates
 			SWFAddress.addEventListener(SWFAddressEvent.INIT, onSWFAddressInit);
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
 
-			if (isSiteMap)
-				createSiteMap();
+			createSiteMap();
 		}
 
 		private function createSiteMap():void
@@ -36,6 +35,7 @@ package com.sleepydesign.templates
 			_systemLayer.addChild(_tree);
 			_tree.x = 10;
 			_tree.y = 10;
+			_tree.visible = isSiteMap;
 
 			_tree.addEventListener(TreeEvent.CHANGE_NODE_FOCUS, onTreeChangeFocus);
 		}
@@ -49,6 +49,13 @@ package com.sleepydesign.templates
 
 		private function onSWFAddressInit(e:SWFAddressEvent):void
 		{
+			var _focus:String = SWFAddress.getPath();
+			trace(" ! SWFAddress.focus : " + _focus);
+			trace(" ! xml.@focus : " + _xml.@focus);
+			
+			if(_focus!="/")
+				_xml.@focus = _focus;
+			
 			_site = new SiteTool(_contentLayer, _xml);
 			NavigationTool.signal.add(setFocus);
 		}
@@ -74,6 +81,9 @@ package com.sleepydesign.templates
 
 		private function setFocus(path:String):void
 		{
+			if(path.indexOf("/")!=0)
+				path = "/"+path;
+			
 			// tree
 			if (_tree)
 				_tree.setFocusByPath(path.split("/").join("/$"));
