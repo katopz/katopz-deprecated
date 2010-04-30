@@ -17,7 +17,8 @@ package com.sleepydesign.templates
 
 		public function WebTemplate()
 		{
-			//
+			super();
+			_configURI = "site.xml";
 		}
 
 		override protected function onInitXML():void
