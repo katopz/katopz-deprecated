@@ -12,7 +12,7 @@ package com.sleepydesign.templates
 	public class ApplicationTemplate extends SDSprite
 	{
 		protected var _title:String = "";
-		protected var _configURI:String = "site.xml";
+		protected var _configURI:String;
 
 		protected var _xml:XML;
 
@@ -28,6 +28,8 @@ package com.sleepydesign.templates
 		public function ApplicationTemplate()
 		{
 			super();
+			
+			_configURI = "config.xml";
 			
 			if (!_screenRectangle)
 				_screenRectangle = new Rectangle(0, 0, _stageWidth, _stageHeight);
