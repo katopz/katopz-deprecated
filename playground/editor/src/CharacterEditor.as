@@ -20,7 +20,6 @@ package
 			Debug.active = true;
 			addChild(_editorTool = new EditorTool());
 			_editorTool.initXML("config.xml");
-			alpha = .25
 		}
 	}
 }
