@@ -184,18 +184,20 @@
 
 			// ___________________________________________________________ Char
 
+			/*
 			var chars:Characters = new Characters();
 
 			chars.addCharacter(new CharacterData("man1", "assets/man1/model.swf", 1, 100, 24, ["stand", "walk", "sit"]));
 			chars.addCharacter(new CharacterData("woman1", "assets/woman1/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
 			chars.addCharacter(new CharacterData("man2", "assets/man2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
 			chars.addCharacter(new CharacterData("woman2", "assets/woman2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
+			*/
 
 			//TODO : wait for user select char and add player 
 
 			// ___________________________________________________________ Player
 
-			game.player = new Player(new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
+			game.player = new Player();//new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
 
 			// read map
 			game.player.map = area.map;
