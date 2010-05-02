@@ -3,7 +3,7 @@
 	<world>
 		<area path="areas/">87,88</area>
 	</world>
-	<chars>
+	<chars path="../../">
 		<man>
 			<model id="0" src="chars/man/model_1.mdj"/>
 			<model id="1" src="chars/man/model_2.mdj"/>
