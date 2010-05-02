@@ -1,4 +1,4 @@
-package
+package org.papervision3d.templates
 {
 	import flash.display.Sprite;
 	import flash.display.StageQuality;

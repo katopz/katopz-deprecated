@@ -1,4 +1,4 @@
-package
+package labs
 {
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.utils.SystemUtil;

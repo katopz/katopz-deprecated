@@ -24,8 +24,6 @@
 	import flash.utils.*;
 	
 	import net.hires.debug.Stats;
-	
-	import org.papervision3d.objects.parsers.MDZ;
 
 	[SWF(backgroundColor="0xFFFFFF", frameRate="30", width="800", height="480")]
 

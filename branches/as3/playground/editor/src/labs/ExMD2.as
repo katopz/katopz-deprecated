@@ -1,4 +1,4 @@
-package
+package labs
 {
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.core.base.*;
