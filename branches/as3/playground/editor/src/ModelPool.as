@@ -24,6 +24,8 @@ package
 		private var _models:SDGroup; /*ModelData*/
 
 		private var _loader3Ds:Array;
+		
+		public var path:String = "";
 
 		// complete
 		public static var signalModel:Signal = new Signal(Vector.<ModelData>);
@@ -81,13 +83,14 @@ package
 				var _src:String = _model.@src.toString();
 
 				var _mdj:MDJ = new MDJ();
+				_mdj.path = path;
 				_mdj.autoPlay = false;
 				_mdj.scaling = 4;
 
 				var _loader3D:Loader3D = new Loader3D();
 				_loader3D.ignoreParentURL = true;
 				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-				_loader3D.loadGeometry(_src, _mdj);
+				_loader3D.loadGeometry(path+_src, _mdj);
 
 				_loader3Ds.push(_loader3D);
 

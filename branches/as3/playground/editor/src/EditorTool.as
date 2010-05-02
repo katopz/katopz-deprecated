@@ -99,6 +99,7 @@ package
 			if(!_modelPool)
 			{
 				_modelPool = new ModelPool();
+				_modelPool.path = String(_xmlData.chars.@path);
 				ModelPool.signalModel.add(activate);
 			}
 			
