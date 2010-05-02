@@ -1,4 +1,4 @@
-package
+package labs
 {
 	import flash.display.*;
 	import flash.events.*;

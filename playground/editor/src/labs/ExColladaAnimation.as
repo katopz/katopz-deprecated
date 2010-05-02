@@ -1,4 +1,4 @@
-package
+package labs
 {
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.cameras.*;
