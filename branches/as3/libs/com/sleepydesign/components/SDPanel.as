@@ -11,6 +11,7 @@ package com.sleepydesign.components
 	{
 		protected var _mask:SDSprite;
 		protected var _back:Shape;
+		protected var _align:String;
 		
 		public var content:DisplayObject;
 		
@@ -76,10 +77,16 @@ package com.sleepydesign.components
 		
 		public function set align(value:String):void
 		{
-			if(value=="center")
+			if(_align == value)
+				return;
+			
+			_align = value;
+			switch(value)
 			{
-				x = stage.stageWidth/2 - width/2;
-				y = stage.stageHeight/2 - height/2;
+				default :
+					x = stage.stageWidth/2 - width/2;
+					y = stage.stageHeight/2 - height/2;
+					break;
 			}
 		}
 	}
