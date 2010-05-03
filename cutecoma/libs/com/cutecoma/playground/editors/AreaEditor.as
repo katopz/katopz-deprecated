@@ -19,6 +19,7 @@
 	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.BitmapData;
+	import flash.display.StageAlign;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -86,7 +87,7 @@
 			SDApplication.system.addChild(_helpToolDialog);
 
 			_helpToolDialog.alpha = .9;
-			_helpToolDialog.align = "tl";
+			_helpToolDialog.align = StageAlign.TOP_LEFT;
 			
 			_buildToolDialog = new SDDialog(
 				<question><![CDATA[Select type to draw Area.]]>
