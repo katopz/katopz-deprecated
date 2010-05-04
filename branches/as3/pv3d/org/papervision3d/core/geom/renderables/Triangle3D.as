@@ -234,6 +234,14 @@ package org.papervision3d.core.geom.renderables {
 			return _uvArray;	
 		}
 		
-		
+		public function destroy():void
+		{
+			vertices = null;
+			_uvArray = null;
+			
+			if(material)
+				material.destroy();
+			material = null;
+		}
 	}
 }

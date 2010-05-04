@@ -66,7 +66,7 @@ package org.papervision3d.objects.primitives {
 		*/
 		public function TilePlane( materials:MaterialsList, width:Number=0, height:Number=0, segmentsW:Number=0, segmentsH:Number=0 )
 		{
-			super( null, new Array(), new Array(), null );
+			super( null, [], [], null );
 			this.materials = materials;
 			
 			this.segmentsW = segmentsW || DEFAULT_SEGMENTS; // Defaults to 1
