@@ -206,5 +206,14 @@
 				
 			this.ready = true;
 		}
+		
+		public function destroy():void
+		{
+			for each(var f:Triangle3D in this.faces)
+				f.destroy();
+				
+			faces = null;
+			vertices = null;
+		}
 	}
 }

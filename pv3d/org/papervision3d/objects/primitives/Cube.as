@@ -254,14 +254,12 @@ package org.papervision3d.objects.primitives {
 			}
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
-			var mat:MaterialObject3D;
-			for each(mat in materials){
+			for each(var mat:MaterialObject3D in materials)
 				mat.unregisterObject(this);
-			}
+				
+			super.destroy();
 		}
-		
-		
 	}
 }
