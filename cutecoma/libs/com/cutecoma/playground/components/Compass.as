@@ -68,9 +68,10 @@ package com.cutecoma.playground.components
 			Game.getController().addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
 			Game.getController().removeEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag);
+			super.destroy();
 		}
 		
 		private function onMouseIsDrag(event:SDMouseEvent):void

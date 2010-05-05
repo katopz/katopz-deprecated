@@ -102,6 +102,9 @@
 				_tileMaterials.addMaterial(_wireColorMaterial);
 			}
 			
+			if(_tileInstance)
+				_tileInstance.destroy();
+				
 			_tileInstance = new TilePlane(_tileMaterials, w*Map.factorX, h*Map.factorZ, w,h);
 			//_tileInstance.useOwnContainer = true;
 			//_tileInstance.blendMode = BlendMode.MULTIPLY;

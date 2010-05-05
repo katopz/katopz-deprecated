@@ -263,6 +263,8 @@
 			area.map.bitmap.bitmapData = area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
 			area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
 			area.ground.update();
+			
+			_bitmapData.dispose();
 			SystemUtil.gc();
 		}
 		
