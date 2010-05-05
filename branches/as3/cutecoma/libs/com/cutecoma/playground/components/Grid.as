@@ -40,9 +40,12 @@ package com.cutecoma.playground.components
 			addChild(gridLine);
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
 			removeChild(gridLine);
+			gridLine = null;
+			
+			super.destroy();
 		}
 	}
 }

@@ -39,10 +39,12 @@ package com.cutecoma.playground.components
 			addChild(particles3D);
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
 			removeChild(guideLine);
 			removeChild(particles3D);
+			
+			super.destroy();
 		}
 	}
 }
