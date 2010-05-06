@@ -3,10 +3,12 @@ package com.sleepydesign.templates
 	import com.asual.SWFAddress;
 	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.components.SDTree;
+	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.site.NavigationTool;
 	import com.sleepydesign.site.SiteTool;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.StringUtil;
 
 	public class WebTemplate extends ApplicationTemplate
@@ -14,9 +16,12 @@ package com.sleepydesign.templates
 		protected var _site:SiteTool;
 		protected var _tree:SDTree;
 		protected var isSiteMap:Boolean;
-
+		
 		public function WebTemplate()
 		{
+			if (loaderInfo && loaderInfo.parameters)
+				DataProxy.setData("FLASH_VARS", loaderInfo.parameters);
+			
 			super();
 			_configURI = "site.xml";
 		}
