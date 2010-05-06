@@ -1,4 +1,4 @@
-package com.sleepydesign.events
+package com.cutecoma.playground.events
 {
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;

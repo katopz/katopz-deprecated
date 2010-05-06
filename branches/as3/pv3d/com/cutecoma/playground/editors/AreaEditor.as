@@ -5,11 +5,18 @@
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
+	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
+	import com.sleepydesign.events.SDKeyboardEvent;
+	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.ui.InputController;
+	import com.sleepydesign.ui.SDKeyBoard;
+	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.StringUtil;
+	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.BitmapData;
 	import flash.display.StageAlign;
@@ -18,6 +25,9 @@
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	
+	import org.papervision3d.core.math.Matrix3D;
+	import org.papervision3d.core.math.Number3D;
 	
 	public class AreaEditor extends RemovableEventDispatcher
 	{		
@@ -71,11 +81,11 @@
 			
 			paintColor = "0x000000";
 			_helpToolDialog = new SDDialog(
-			<question>
-				<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom]]>
-			</question>, this);
+				<question>
+					<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom]]>
+				</question>, this);
 			SDApplication.system.addChild(_helpToolDialog);
-
+			
 			_helpToolDialog.alpha = .9;
 			_helpToolDialog.align = StageAlign.TOP_LEFT;
 			
@@ -86,7 +96,7 @@
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
 					<answer src="as:onSelectType('warp')"><![CDATA[Warp point]]></answer>
 				</question>, this);
-
+			
 			_buildToolDialog.alpha = .9;
 			
 			SDApplication.system.addChild(_buildToolDialog);
@@ -120,17 +130,17 @@
 			{
 				case "0":
 					paintColor = "0x000000";
-				break;
+					break;
 				case "1":
 					paintColor = "0xFFFFFF";
-				break;
+					break;
 				case "2":
 					paintColor = "0x0000FF";
-				break;
+					break;
 				default :
 					// wait for user select area
 					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
-				break;
+					break;
 			}
 		}
 		
@@ -158,43 +168,43 @@
 		/*
 		public function toggleMap(map:Map):void
 		{
-			if(map.scaleX==1)
-			{
-				map.scaleX = 5;
-				map.scaleY = 5;
-			}else{
-				map.scaleX = 1;
-				map.scaleY = 1;
-			}
-			
-			map.x = area.stage.stageWidth - map.width;
-			map.y = 0;//stage.stageHeight/2 - map.height/2;
+		if(map.scaleX==1)
+		{
+		map.scaleX = 5;
+		map.scaleY = 5;
+		}else{
+		map.scaleX = 1;
+		map.scaleY = 1;
+		}
+		
+		map.x = area.stage.stageWidth - map.width;
+		map.y = 0;//stage.stageHeight/2 - map.height/2;
 		}
 		*/
 		
 		/*
 		private function onMapClick(event:MouseEvent):void
 		{
-			trace( " ^ onClick:", event.target, event.currentTarget);
+		trace( " ^ onClick:", event.target, event.currentTarget);
 		}
 		*/
 		
 		/*
 		private function onOpenBackgroundComplete(event:SDEvent):void
 		{
-			trace(" onOpenBackgroundComplete");
-			SDApplication.system.removeEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-			
-			// destroy
-			area.background.destroy();
-			
-			// logical
-			//area.data.background = SystemUtil.openFileName;
-			
-			// physical
-			var loader:Loader = new Loader();
-			loader.loadBytes(event.data);
-			area.background.addChild(loader);
+		trace(" onOpenBackgroundComplete");
+		SDApplication.system.removeEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
+		
+		// destroy
+		area.background.destroy();
+		
+		// logical
+		//area.data.background = SystemUtil.openFileName;
+		
+		// physical
+		var loader:Loader = new Loader();
+		loader.loadBytes(event.data);
+		area.background.addChild(loader);
 		}
 		*/
 		
@@ -210,38 +220,38 @@
 				//-
 				case 13:
 					zoom(event.shiftKey?-5:-1);
-				break;
+					break;
 				//+
 				case 11:
 					zoom(event.shiftKey?5:1);
-				break;
+					break;
 				case 8:
 					if(event.ctrlKey)
 						_rect.y++;
 					else
 						_rect.y--;
-				break;
+					break;
 				case 2:
 					if(event.ctrlKey)
 						_rect.height--;
 					else
 						_rect.height++;
-				break;
+					break;
 				case 4:
 					if(event.ctrlKey)
 						_rect.x++;
 					else
 						_rect.x--;
-				break;
+					break;
 				case 6:
 					if(event.ctrlKey)
 						_rect.width--;
 					else
 						_rect.width++;
-				break;
+					break;
 				default : 
 					return;
-				break;
+					break;
 			}
 			
 			var _width:int = -_rect.x+_rect.width;
@@ -261,9 +271,9 @@
 		private function onKeyIsPress(event:SDKeyboardEvent):void
 		{
 			// void while select area
-	        if(areaPanel && areaPanel.visible)
-	        	return;
-	        	
+			if(areaPanel && areaPanel.visible)
+				return;
+			
 			engine3D.dolly.moveForward(event.data.dz*5);
 			engine3D.dolly.moveRight(event.data.dx*5);
 			engine3D.dolly.moveUp(event.data.dy*5);
@@ -271,16 +281,16 @@
 			engine3D.dolly.roll(-event.data.dr);
 		}
 		
-	    private function onMouseIsDrag(event:SDMouseEvent):void
-	    {  
-	        // void while select area
-	        if(areaPanel && areaPanel.visible)
-	        	return;
-	        
-	        if(!SDKeyBoard.isCTRL)
-	        	return;
-	        
-	        var target:* = engine3D.dolly;
+		private function onMouseIsDrag(event:SDMouseEvent):void
+		{  
+			// void while select area
+			if(areaPanel && areaPanel.visible)
+				return;
+			
+			if(!SDKeyBoard.isCTRL)
+				return;
+			
+			var target:* = engine3D.dolly;
 			var vector:Number3D = new Number3D(event.data.dx, event.data.dy, 0);
 			
 			var targetRotationAxis:Number3D = new Number3D(target.x, target.y, target.z)
@@ -304,11 +314,11 @@
 		
 		private function onMouseWheel( event:MouseEvent ):void
 		{
-	        // void while select area
-	        if(areaPanel && areaPanel.visible)
-	        	return;
-	        	
-	        zoom(event.delta*(event.shiftKey?10:1)/5);
+			// void while select area
+			if(areaPanel && areaPanel.visible)
+				return;
+			
+			zoom(event.delta*(event.shiftKey?10:1)/5);
 		}
 		
 		private function zoom(delta:Number):void
@@ -335,9 +345,9 @@
 		
 		private function onMouseMove( event:MouseEvent ):void
 		{
-	        // void while select area
-	        if(areaPanel && areaPanel.visible)
-	        	return;
+			// void while select area
+			if(areaPanel && areaPanel.visible)
+				return;
 			
 			if(!event.relatedObject)
 			{
@@ -359,10 +369,10 @@
 		
 		public function onTileClick(event:GroundEvent):void
 		{
-	        // void while select area
-	        if(areaPanel && areaPanel.visible)
-	        	return;
-	        	
+			// void while select area
+			if(areaPanel && areaPanel.visible)
+				return;
+			
 			trace(" ! TilePlane :", event.bitmapX, event.bitmapZ, _paintColor);
 			
 			var _bitmapData:BitmapData = area.map.data.bitmapData;
