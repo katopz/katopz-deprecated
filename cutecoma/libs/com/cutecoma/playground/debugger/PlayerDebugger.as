@@ -1,22 +1,20 @@
 package com.cutecoma.playground.debugger
 {
-	import com.sleepydesign.core.SDObject;
+	import away3dlite.core.base.Object3D;
+	import away3dlite.primitives.Sphere;
+	
 	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.core.Engine3D;
+	import com.sleepydesign.events.RemovableEventDispatcher;
 	
-	import org.papervision3d.core.math.Matrix3D;
-	import org.papervision3d.materials.ColorMaterial;
-	import org.papervision3d.objects.DisplayObject3D;
-	import org.papervision3d.objects.primitives.Sphere;
-	
-	public class PlayerDebugger extends SDObject
+	public class PlayerDebugger extends RemovableEventDispatcher
 	{		
 		private var engine3D		:Engine3D;
 		public static var watching 	:Player;
 		
-		private static var dolly			:DisplayObject3D;
-		private static var decoy			:DisplayObject3D;
-		//private static var beacon			:DisplayObject3D;
+		private static var dolly			:Object3D;
+		private static var decoy			:Object3D;
+		//private static var beacon			:Object3D;
 		
 		public static function toggle(engine3D:Engine3D, player:Player):void
 		{
@@ -31,8 +29,8 @@ package com.cutecoma.playground.debugger
 		public static function watch(engine3D:Engine3D, player:Player):void
 		{
 			// Player
-			dolly 	= new Sphere(new ColorMaterial(0xFF0000), 25, 2, 2);
-			decoy	= new Sphere(new ColorMaterial(0x00FF00), 25, 2, 2);
+			dolly 	= new Sphere();
+			decoy	= new Sphere();
 			//beacon	= new Sphere(new ColorMaterial(0x0000FF), 25, 2, 2);
 			
 			// link

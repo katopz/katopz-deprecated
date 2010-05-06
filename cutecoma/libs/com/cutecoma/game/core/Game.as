@@ -2,26 +2,21 @@ package com.cutecoma.game.core
 {
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.player.Player;
-	import com.sleepydesign.application.core.SDApplication;
-	import com.sleepydesign.core.SDContainer;
+	import com.sleepydesign.core.SDGroup;
+	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.utils.ObjectUtil;
 	
 	import flash.events.Event;
 	
-	public class Game extends SDContainer
+	public class Game extends SDSprite
 	{
 		public var engine					: AbstractEngine;
 		public static var inputController	: InputController;
 		
 		public var player					: Player;
+		public var players					: SDGroup;
 		
-        public static function getController() : InputController 
-        {
-            if(inputController==null)inputController = new InputController(true);
-            return inputController as InputController;
-        }
-        
 		public static var instance : Game;
         public static function getInstance() : Game
         {
@@ -33,6 +28,8 @@ package com.cutecoma.game.core
 		{
 			instance = this;
 			super();
+			
+			players = new SDGroup;
 		}
 				
 		public function start() : void
@@ -47,7 +44,7 @@ package com.cutecoma.game.core
 		
 		protected function run(event:Event=null) : void
 		{
-			draw();
+			//draw();
 		}
 		
 		override public function destroy():void
@@ -72,11 +69,11 @@ package com.cutecoma.game.core
 			// remove if any
 			//removePlayer(player);
 			
-			// plug to game
-			addElement(_player, _player.id);
+			// plug to gameplayers.addItem
+			players.addItem(_player, _player.id);
 			
 			// plug to 3d Engine
-			engine.addChild(_player.instance);
+			//TODEV//engine.addChild(_player.instance);
 		}
 		
 		public function removePlayer(_player:Player=null):void
@@ -88,24 +85,24 @@ package com.cutecoma.game.core
 				trace(" - removePlayer	: "+_player.id);
 			
 				// unplug from 3d Engine
-				engine.removeChild(_player.instance);
+				//TODEV//engine.removeChild(_player.instance);
 				
 				// unplug from game
-				removeElement(_player, _player.id);
+				players.removeItem(_player, _player.id);
 				_player.destroy();
 				_player = null;
 			}
 			else
 			{
 				// remove all player
-				for each(var __player:Player in elements.items)
+				for each(var __player:Player in players.items)
 					removePlayer(__player);
 			}
 		}
 		
 		public function removeOtherPlayer():void
 		{
-			for each(var _player:Player in elements.items)
+			for each(var _player:Player in players.items)
 			{
 				if(_player!=player)
 					removePlayer(_player);
@@ -114,7 +111,7 @@ package com.cutecoma.game.core
 		
 		public function getPlayerByID(id:String):Player
 		{
-			return Player(getElementById(id));
+			return Player(players.getItemByID(id));
 		}
 		
 		// ______________________________ Update ____________________________
@@ -122,7 +119,7 @@ package com.cutecoma.game.core
 		public static function applyCommand(command:String, args:Array):void
 		{
 			//getInstance().engine.update({command:command});
-			SDApplication.getInstance().applyCommand({command:command, args:args});
+			//TODEV//SDApplication.getInstance().applyCommand({command:command, args:args});
 		}
 		
 		public function update(data:Object=null):void

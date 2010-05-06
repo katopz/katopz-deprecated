@@ -1,21 +1,20 @@
 ﻿package com.cutecoma.game.core
 {
 	import com.cutecoma.playground.data.AreaData;
-	import com.sleepydesign.core.SDContainer;
-	import com.sleepydesign.utils.FileUtil;
-	import com.sleepydesign.utils.LoaderUtil;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.net.FileUtil;
+	import com.sleepydesign.net.LoaderUtil;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 
-	public class BackGround extends SDContainer
+	public class BackGround extends SDSprite
 	{
 		private var content:DisplayObject;
 		private var _src:String;
 
 		public function BackGround(src:String)
 		{
-			super("background");
 			mouseEnabled = false;
 			mouseChildren = false;
 			
@@ -25,7 +24,7 @@
 
 		public function open():void
 		{
-			FileUtil.openAsset(onBackgroundComplete, [_src]);//FileUtil.DEFAULT_ASSETS.concat(["*.swf"]));
+			FileUtil.openImage(onBackgroundComplete, [_src]);//FileUtil.DEFAULT_ASSETS.concat(["*.swf"]));
 		}
 		
 		public function update(areaData:AreaData):void

@@ -1,14 +1,16 @@
 ﻿package com.cutecoma.game.core
 {
-	import com.sleepydesign.core.SDObject;
+	import away3dlite.animators.MovieMeshContainer3D;
 	
-	public class AbstractCharacter extends SDObject
+	import com.sleepydesign.events.RemovableEventDispatcher;
+	
+	public class AbstractCharacter extends RemovableEventDispatcher
 	{
 		//public var data			: PlayerData;
 		
 		public var id			: String;
 		public var _instance		: *;
-		public var model		: SDModel;
+		public var model		: MovieMeshContainer3D;
 		
 		public var height		: Number = 0;
 		

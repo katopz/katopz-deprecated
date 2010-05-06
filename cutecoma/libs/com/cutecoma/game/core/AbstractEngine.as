@@ -1,46 +1,37 @@
 ﻿package com.cutecoma.game.core
 {
-	import com.sleepydesign.core.SDObject;
-	
-	import flash.display.DisplayObjectContainer;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.RemovableEventDispatcher;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 
-	public class AbstractEngine extends SDObject
+	public class AbstractEngine extends RemovableEventDispatcher
 	{
-		protected var container : Sprite;
-		
+		protected var _container:Sprite;
+
 		public function AbstractEngine():void
 		{
 			super();
 		}
-				
-        public function start() : void
+
+		public function start():void
 		{
-			if(!container)container = new Sprite();
-			
-			container.removeEventListener(Event.ENTER_FRAME, run);
-			container.addEventListener(Event.ENTER_FRAME, run);
+			if (!_container)
+				_container = new SDSprite();
+
+			_container.removeEventListener(Event.ENTER_FRAME, run);
+			_container.addEventListener(Event.ENTER_FRAME, run);
 		}
-		
-        public function stop() : void
+
+		public function stop():void
 		{
-			container.removeEventListener(Event.ENTER_FRAME, run);
+			_container.removeEventListener(Event.ENTER_FRAME, run);
 		}
-		
-        protected function run(event:Event=null) : void
-        {
+
+		protected function run(event:Event = null):void
+		{
 			//
-        }
-        
-		public function addChild(child:Object):Object
-        {
-        	return child;
-        }
-        
-		public function removeChild(child:Object):Object
-        {
-        	return child;
-        }
+		}
 	}
 }

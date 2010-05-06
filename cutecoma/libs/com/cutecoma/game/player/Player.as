@@ -1,35 +1,34 @@
 ﻿﻿package com.cutecoma.game.player
 {
-	import com.greensock.*;
-	import com.greensock.easing.Linear;
-	import com.sleepydesign.components.SDBalloon;
-	import com.sleepydesign.core.SDObject;
-	import com.sleepydesign.events.SDEvent;
+	import away3dlite.core.base.Object3D;
+	import away3dlite.core.base.Particle;
+	
 	import com.cutecoma.game.core.Character;
-	import com.cutecoma.game.core.Clip3D;
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.game.core.Position;
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.playground.core.Map;
+	import com.greensock.*;
+	import com.greensock.easing.Linear;
+	import com.sleepydesign.components.SDDialog;
+	import com.sleepydesign.events.RemovableEventDispatcher;
 	
-	import org.papervision3d.core.geom.Particles;
-	import org.papervision3d.core.geom.renderables.Particle;
-	import org.papervision3d.materials.special.SDParticleMaterial;
-	import org.papervision3d.objects.DisplayObject3D;
+	import flash.events.Event;
+
 	//import org.papervision3d.objects.SDObject3D;
 
-	public class Player extends SDObject
+	public class Player extends RemovableEventDispatcher
 	{
 		public var id			: String;
 		public var instance		: *;
 		
-		private var clip:Clip3D;
+		//private var clip:Clip3D;
 		
 		private var dolly:*;
 		public var decoy:*;
 		
-		public var balloon:SDBalloon;
+		public var balloon:SDDialog; 
 		
 		public var positions:Array;
 		//public var speed:Number;
@@ -38,15 +37,7 @@
 		
 		private var _dirty:Boolean = false;
 		
-		public function get data():PlayerData
-		{
-			return PlayerData(_data);
-		}
-		
-		public function set data(value:PlayerData):void
-		{
-			_data = value;
-		}
+		public var data:PlayerData;
 		
 		public function get msg():String
 		{
@@ -111,7 +102,7 @@
 		
         // ______________________________ Initialize ______________________________
         
-		override protected function init():void
+		protected function init():void
 		{
 			positions = [];
 			
@@ -122,22 +113,22 @@
 		// ______________________________ Create ______________________________
 		
 		private var char:Character
-		override public function create(config:Object=null):void
+		public function create(config:Object=null):void
 		{
 			//instance = new Sphere(new WireframeMaterial(0xFF00FF), 50, 2, 2);
 			
 			char =  new Character();
-			instance = char.instance;
+			//instance = char.instance;
 			instance.alpha = 0;
 			instance.visible = false;
 			
-			dolly = new DisplayObject3D();
-			decoy = new DisplayObject3D();
+			dolly = new Object3D();
+			decoy = new Object3D();
 			
 			if(config)
 			{
-				char.addEventListener(SDEvent.COMPLETE, onCharacterComplete);
-				char.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
+				//char.addEventListener(SDEvent.COMPLETE, onCharacterComplete);
+				//char.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 				char.create(config);
 	
 				//instance.transform = Matrix3D.fromPosition(data.pos);
@@ -150,9 +141,10 @@
 			}
 			
 			// ready to roll
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE, config));
+			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, config));
 		}
 		
+		/*
 		private function onCharacterComplete(event:SDEvent):void
 		{
 			// i'm taller?
@@ -169,6 +161,7 @@
 			TweenLite.to(instance, 1, {autoAlpha:1});
 			dispatchEvent(event.clone());
 		}
+		*/
 		
 		// ______________________________ Action ______________________________
 		
@@ -176,6 +169,8 @@
 		{
 			if(!balloon)
 			{
+				balloon = new SDDialog();
+				/*
 				balloon = new SDBalloon(msg?msg:"");
 				balloon.addEventListener(SDEvent.DRAW, onBalloonChange);
 			
@@ -183,14 +178,15 @@
 				var particles3D:Particles = new Particles();
 				
 				balloonClip = new Particle(spm, 1, 0, 200, 0);
+				*/
 				
-				particles3D.addParticle(balloonClip);
+				//particles3D.addParticle(balloonClip);
 				//particles3D.useOwnContainer = true;
 				//particles3D.filters = [ new GlowFilter( 0x999999, 1, 4, 4, 1, 1) ];
 				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onBalloonClick);
 				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_OVER, onBalloonClick);
 				
-				instance.addChild(particles3D);
+				//instance.addChild(particles3D);
 				act(PlayerEvent.TALK);
 			}
 			else if(msg && balloon.text != msg)
@@ -205,11 +201,13 @@
 			this.msg = msg;
 		}
 		
-		private var balloonClip:Particle
-		private function onBalloonChange( event:SDEvent ):void
+		private var balloonClip:Particle;
+		private function onBalloonChange( event:Event ):void
 		{
+			if(event.type!=Event.CHANGE)
+				return;
 			balloonClip.visible = balloon.visible;
-			balloonClip.material.updateBitmap();
+			//balloonClip.material.updateBitmap();
 		}
 		
 		// TODO : getset
@@ -220,21 +218,23 @@
 			if(map)
 			{
 				// Mr. map please find path for "me"
-				map.addEventListener(SDEvent.UPDATE, onWalkTo);
+				//map.addEventListener(SDEvent.UPDATE, onWalkTo);
 				map.findPath(id, Position.parse(dolly), position);
 			}else{
 				// no map? wooooot? why????
 			}
 		}
 		
-		private function onWalkTo( event:SDEvent ):void
+		private function onWalkTo( event:Event ):void
 		{
+			/*
 			if(event.data.id == id)
 			{
 				trace(" ! onWalkTo : "+event.data.id);
 				map.removeEventListener(SDEvent.UPDATE, onWalkTo);
 				walk(event.data.positions);
 			}
+			*/
 		}
 		
 		public function walk(positions:Array):void
@@ -377,7 +377,7 @@
 		
 		// ______________________________ Update ____________________________
 		
-		override public function update(data:Object=null):void
+		public function update(data:Object=null):void
 		{
 			trace(" Player.update : " + data);
 			var playerData:PlayerData = PlayerData(this.data);
