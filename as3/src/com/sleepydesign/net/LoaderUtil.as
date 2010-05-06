@@ -27,8 +27,8 @@ package com.sleepydesign.net
 	{
 		public static var useDebug:Boolean = true;
 
-		public static var showLoader:Function;
-		public static var hideLoader:Function;
+		public static var showLoader:Function = new Function();
+		public static var hideLoader:Function = new Function();
 
 		public static var loaderClip:DisplayObject;
 		
