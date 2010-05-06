@@ -1,6 +1,6 @@
 package com.sleepydesign.ui
 {
-	import com.sleepydesign.events.MouseUIEvent;
+	import com.cutecoma.playground.events.SDMouseEvent;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	
 	import flash.display.InteractiveObject;
@@ -71,7 +71,7 @@ package com.sleepydesign.ui
 					_dragTarget = null;
 
 					_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
-					dispatchEvent(new MouseUIEvent(MouseUIEvent.MOUSE_DROP, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+					dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DROP, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
 					break;
 				case MouseEvent.MOUSE_MOVE:
 					_target["mouseChildren"] = false;
@@ -81,7 +81,7 @@ package com.sleepydesign.ui
 						var dy:Number = event.stageY - _lastPosition.y;
 						distance = Point.distance(new Point(event.stageX, event.stageY), _lastPosition);
 
-						dispatchEvent(new MouseUIEvent(MouseUIEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+						dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
 
 						_lastPosition.x = event.stageX;
 						_lastPosition.y = event.stageY;
