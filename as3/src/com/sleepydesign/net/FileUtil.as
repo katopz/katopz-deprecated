@@ -134,15 +134,15 @@ package com.sleepydesign.net
 				}
 			});
 		}
-
+		
 		/**
 		 * Browse image and listen
 		 * @param eventHandler
 		 * @return FileReference
 		 */
-		public static function openImage(eventHandler:Function):FileReference
+		public static function openImage(eventHandler:Function, fileTypes:Array = null):FileReference
 		{
-			return open(["*.jpg", "*.jpeg", "*.gif", "*.png"], function(event:Event):void
+			return open(fileTypes || ["*.jpg", "*.jpeg", "*.gif", "*.png"] , function(event:Event):void
 			{
 				if (event.type == Event.COMPLETE || event.type == DataEvent.UPLOAD_COMPLETE_DATA)
 				{
@@ -174,13 +174,13 @@ package com.sleepydesign.net
 		 * @param container
 		 * @return FileReference
 		 */
-		public static function openImageTo(container:DisplayObjectContainer):FileReference
+		public static function openImageTo(container:DisplayObjectContainer, fileTypes:Array = null):FileReference
 		{
 			return openImage(function onGetImage(event:Event):void
 			{
 				if (event.type == Event.COMPLETE)
 					container.addChild(event.target["content"] as Bitmap);
-			});
+			}, fileTypes);
 		}
 
 		public static function openXML(eventHandler:Function):FileReference
