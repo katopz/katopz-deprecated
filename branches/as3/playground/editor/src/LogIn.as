@@ -3,6 +3,7 @@ package
 	import away3dlite.core.utils.Debug;
 	
 	import com.adobe.serialization.json.JSON;
+	import com.cutecoma.playground.editors.CharacterEditor;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.system.SystemUtil;
 	
@@ -18,7 +19,7 @@ package
 		private var _viewerID:String = "";
 		private var _viewerDisplayName:String = "";
 		
-		private var _editorTool:EditorTool;
+		private var _editorTool:PLCharacterEditor;
 		
 		public function LogIn()
 		{
@@ -77,12 +78,12 @@ package
 			if(!_editorTool)
 			{
 				// init EditorTool
-				EditorTool.initSignal.add(onEditorInit);
+				CharacterEditor.initSignal.add(onEditorInit);
 				//EditorTool.changeSignal.add(onEditorChange);
-				addChild(_editorTool = new EditorTool());
+				addChild(_editorTool = new PLCharacterEditor());
 				_editorTool.initXML("config.xml");
 			}else{
-				_editorTool.onSelectCharactor();
+				_editorTool.onSelectCharacter();
 			}
 		}
 		
@@ -93,9 +94,9 @@ package
 			if(!_editorTool)
 			{
 				// init EditorTool
-				EditorTool.initSignal.add(onEditorInit);
+				CharacterEditor.initSignal.add(onEditorInit);
 				//EditorTool.changeSignal.add(onEditorChange);
-				addChild(_editorTool = new EditorTool());
+				addChild(_editorTool = new PLCharacterEditor());
 				_editorTool.initXML("config.xml");
 			}else{
 				

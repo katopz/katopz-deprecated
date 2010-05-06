@@ -12,7 +12,7 @@ package labs
 		private var _viewerID:String = "";
 		private var _viewerDisplayName:String = "";
 		
-		private var _editorTool:EditorTool;
+		private var _editorTool:PLCharacterEditor;
 		
 		public function TestExternalInterface()
 		{
@@ -51,7 +51,7 @@ package labs
 			+ '<answer src="js:signOut()"><![CDATA[Sign Out]]></answer></question>';
 			
 			// EditorTool
-			addChild(_editorTool = new EditorTool());
+			addChild(_editorTool = new PLCharacterEditor());
 			_editorTool.initXML("config.xml");
 		} 
 		
