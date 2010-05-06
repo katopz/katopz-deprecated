@@ -1,6 +1,5 @@
 package
 {
-	//import com.cutecoma.playground.editors.WorldEditor;
 	import com.sleepydesign.components.SDDialog;
 	
 	import flash.display.Sprite;
@@ -14,9 +13,6 @@ package
 
 		public function main()
 		{
-			// init
-			//WorldEditor
-			
 			// menu
 			_menu = new SDDialog(<question><![CDATA[Select Editor]]>
 								<answer src="as:onSelectEditor('WorldEditor')"><![CDATA[World]]></answer>
@@ -32,7 +28,7 @@ package
 			switch(editorType)
 			{
 				case "World":
-				//addChild(_currentEditor = new WorldEditor());
+				addChild(_currentEditor = new PLWorldEditor());
 				break;
 				case "Character":
 				addChild(_currentEditor = new PLCharacterEditor());
