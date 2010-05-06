@@ -5,9 +5,10 @@ package com.cutecoma.playground.editors
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
-	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
+	import com.sleepydesign.net.FileUtil;
+	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.*;
 	
 	import flash.display.*;
@@ -26,7 +27,7 @@ package com.cutecoma.playground.editors
 		
 		private var _selectAreaID:String = "00";
 
-		public function WorldEditor(engine3D:Engine3D, area:Area)
+		public function WorldEditor(engine3D:Engine3D = null, area:Area = null)
 		{
 			this.engine3D = engine3D;
 			this.area = area;
@@ -52,14 +53,14 @@ package com.cutecoma.playground.editors
 			{
 				areaEditor = new AreaEditor(engine3D, area);
 				//addChild(areaEditor);
-				area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
+				//area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
 				PlayerDebugger.toggle(engine3D, Game.getInstance().player);
 				
-				SystemUtil.addContext(SDApplication.getInstance(), "Open Area", onContextMenu, true);
-				SystemUtil.addContext(SDApplication.getInstance(), "Save Area", onContextMenu);
-				SystemUtil.addContext(SDApplication.getInstance(), "Change Background", onContextMenu, true);
-				//SystemUtil.addContext(SDApplication.getInstance(), "Edit Map", onContextMenu);
-				SystemUtil.addContext(SDApplication.getInstance(), "Toggle Debug", onContextMenu, !true);
+				SystemUtil.addContext(engine3D, "Open Area", onContextMenu, true);
+				SystemUtil.addContext(engine3D, "Save Area", onContextMenu);
+				SystemUtil.addContext(engine3D, "Change Background", onContextMenu, true);
+				//SystemUtil.addContext(engine3D, "Edit Map", onContextMenu);
+				SystemUtil.addContext(engine3D, "Toggle Debug", onContextMenu, !true);
 			}
 		}
 		
@@ -116,9 +117,9 @@ package com.cutecoma.playground.editors
 					break;*/
 				case "Toggle Debug":
 					PlayerDebugger.toggle(engine3D, Game.getInstance().player);
-					engine3D.grid = !engine3D.grid;
+					//engine3D.grid = !engine3D.grid;
 					area.ground.debug = !area.ground.debug;
-					engine3D.axis = !engine3D.axis;
+					//engine3D.axis = !engine3D.axis;
 					break;
 				/*case "Edit":
 						if(this.isActivate)
@@ -175,13 +176,13 @@ package com.cutecoma.playground.editors
 				// exist area
 				areaData = new AreaData();
 				IExternalizable(areaData).readExternal(event.target.data);
-				SDApplication.getInstance()["gotoArea"](areaData);
+				//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
 			}
 			else if (event.type == IOErrorEvent.IO_ERROR)
 			{
 				// new area
-				areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
-				SDApplication.getInstance()["gotoArea"](areaData);
+				areaData = new AreaData(_selectAreaID, _selectAreaID + "_bg.swf", 40, 40);
+				//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
 			}
 		}
 		
@@ -191,7 +192,7 @@ package com.cutecoma.playground.editors
 
 			if (areaEditor)
 			{
-				area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
+				//area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = false;
 				//removeChild(areaEditor);
 				areaEditor.destroy();
 				areaEditor = null;

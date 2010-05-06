@@ -5,10 +5,14 @@
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
+	import com.cutecoma.playground.events.SDKeyboardEvent;
+	import com.cutecoma.playground.events.SDMouseEvent;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.managers.EventManager;
+	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.text.SDTextField;
+	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.utils.StringUtil;
 	
 	import flash.display.BitmapData;
@@ -18,13 +22,14 @@
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.geom.Vector3D;
 	
 	public class AreaEditor extends RemovableEventDispatcher
 	{		
 		//public var log			:SDTextField;
 		private var engine3D	:Engine3D;
 		private var area		:Area;
-		private static const FORWARD:Number3D = new Number3D(0, 0, -1);
+		private static const FORWARD:Vector3D = new Vector3D(0, 0, -1);
 		
 		private var _paintColor:String;
 		private var _rollOverColor:String;
@@ -55,7 +60,7 @@
 			*/
 			
 			// controller
-			Game.inputController = new InputController(true, true);
+			Game.inputController = new InputController(engine3D, true, true);
 			Game.inputController.mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
@@ -74,7 +79,7 @@
 			<question>
 				<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom]]>
 			</question>, this);
-			SDApplication.system.addChild(_helpToolDialog);
+			engine3D.system.addChild(_helpToolDialog);
 
 			_helpToolDialog.alpha = .9;
 			_helpToolDialog.align = StageAlign.TOP_LEFT;
@@ -89,8 +94,8 @@
 
 			_buildToolDialog.alpha = .9;
 			
-			SDApplication.system.addChild(_buildToolDialog);
-			SDApplication.system.addChild(_codeText);
+			engine3D.system.addChild(_buildToolDialog);
+			engine3D.system.addChild(_codeText);
 			
 			area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
 			area.ground.addEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
@@ -138,7 +143,7 @@
 		{
 			if(event.type!="complete")return;
 			areaPanel = event.target.content as AreaPanel;
-			SDApplication.system.addChild(areaPanel);
+			engine3D.system.addChild(areaPanel);
 			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 		}
 		
@@ -255,7 +260,6 @@
 			area.ground.update();
 			
 			_bitmapData.dispose();
-			SystemUtil.gc();
 		}
 		
 		private function onKeyIsPress(event:SDKeyboardEvent):void
@@ -263,12 +267,14 @@
 			// void while select area
 	        if(areaPanel && areaPanel.visible)
 	        	return;
-	        	
+	        
+			/*
 			engine3D.dolly.moveForward(event.data.dz*5);
 			engine3D.dolly.moveRight(event.data.dx*5);
 			engine3D.dolly.moveUp(event.data.dy*5);
 			
 			engine3D.dolly.roll(-event.data.dr);
+			*/
 		}
 		
 	    private function onMouseIsDrag(event:SDMouseEvent):void
@@ -276,22 +282,22 @@
 	        // void while select area
 	        if(areaPanel && areaPanel.visible)
 	        	return;
-	        
+	        /*
 	        if(!SDKeyBoard.isCTRL)
 	        	return;
 	        
 	        var target:* = engine3D.dolly;
-			var vector:Number3D = new Number3D(event.data.dx, event.data.dy, 0);
+			var vector:Vector3D = new Vector3D(event.data.dx, event.data.dy, 0);
 			
-			var targetRotationAxis:Number3D = new Number3D(target.x, target.y, target.z)
+			var targetRotationAxis:Vector3D = new Vector3D(target.x, target.y, target.z)
 			
-			var rotationAxis:Number3D = Number3D.cross(vector, FORWARD);
+			var rotationAxis:Vector3D = Vector3D.cross(vector, FORWARD);
 			rotationAxis.normalize();
 			
 			var rotationMatrix:Matrix3D = Matrix3D.rotationMatrix(-rotationAxis.x*Math.abs(target.z)/target.z, -rotationAxis.y, rotationAxis.z*Math.abs(target.y)/target.y, event.data.distance/(600*Math.pow(target.scale, 5)));
 			
 			target.transform.calculateMultiply3x3(rotationMatrix, target.transform);
-			
+			*/
 			//this line used to apply transform to actual rotation values, so that if you change scale, the changes are persisted
 			//target.copyTransform(target);
 			/*
@@ -313,6 +319,7 @@
 		
 		private function zoom(delta:Number):void
 		{
+			/*
 			if(SDKeyBoard.isCTRL)
 			{
 				var nextFOV:Number = engine3D.camera.fov + delta;
@@ -331,6 +338,7 @@
 				if((nextZoom>0)&&(nextZoom<100))
 					engine3D.camera.zoom += (nextZoom - engine3D.camera.zoom)/2;
 			}
+			*/
 		}
 		
 		private function onMouseMove( event:MouseEvent ):void
@@ -349,7 +357,7 @@
 		public function onTileMouseMove(event:GroundEvent):void
 		{
 			//trace("onTileMouseMove:"+event.color);
-			_rollOverColor = StringUtil.hex(event.color);
+			_rollOverColor = StringUtil.toHEX(event.color);
 			
 			if(_rollOverColor)
 				_codeText.text = _paintColor + ", " + _rollOverColor;
@@ -380,10 +388,10 @@
 			area.ground.removeEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
 			//area.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			
-			SDApplication.system.removeChild(_helpToolDialog);
+			engine3D.system.removeChild(_helpToolDialog);
 			_helpToolDialog.destroy();
 			
-			SDApplication.system.removeChild(_buildToolDialog);
+			engine3D.system.removeChild(_buildToolDialog);
 			_buildToolDialog.destroy();
 			
 			//removeChild(log);

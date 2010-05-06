@@ -2,88 +2,59 @@
 {
 	import com.cutecoma.game.core.BackGround;
 	import com.cutecoma.playground.data.AreaData;
-	import com.sleepydesign.core.SDContainer;
+	import com.sleepydesign.display.SDSprite;
 	
-	import flash.events.Event;
-	
-	public class Area extends SDContainer
+	public class Area extends SDSprite
 	{
 		public var background:BackGround;
 		public var map:Map;
 		public var ground:Ground;
 
-		public var data:AreaData;
+		private var _data:AreaData;
+
+		public function get data():AreaData
+		{
+			return _data;
+		}
 		
 		public function Area(areaData:AreaData)
 		{
-			//super();
-			//init({engine3D:engine3D, game:game});
 			// background
 			background = new BackGround(areaData.background);
-			//DEV//
 			addChild(background);
-			
-			//background.addEventListener(Event.CHANGE);
-			
-			//mouseEnabled = false;
-			//mouseChildren = false;
-			
-			super("Area");
-			
-			id  = areaData.id;
-			data = areaData;
-			create(areaData);
+		
+			update(areaData);
 		}
 		
-		// ______________________________ Create ______________________________
-		
-		override public function create(config:Object=null):void
+		public function update(areaData:AreaData):void
 		{
-			super.create(config);
-			update(AreaData(config));
-		}
-		
-		// ______________________________ Update ____________________________
-		
-		public function update(data:AreaData):void
-		{
-			this.data = data;
+			if(_data == areaData)
+				return;
 			
-			id  = data.id;
-			background.update(data);
+			_data = areaData;
+			
+			background.update(areaData);
 			
 			// map
 			if(!map)
 			{
 				map = new Map();
 				addChild(map);
-				//map.visible = false;
 			}
 			
-			map.update(data);
+			map.update(areaData);
 			
 			if(ground)
 				ground.update();
 		}
 		
-		// ______________________________ Destroy ______________________________
-
 		override public function destroy():void
 		{
-			id = null;
 			background.destroy();
 			map.destroy();
 			ground.destroy();
+			
+			super.destroy();
 		}
-		
-		/*
-		public function setArea(areaID:String):void
-		{
-			trace("setMap:"+areaID);
-			background.update({
-				background:"assets/day2.jpg"
-			});
-		}
-		*/
 	}
 }

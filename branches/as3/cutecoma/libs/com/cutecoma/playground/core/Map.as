@@ -4,18 +4,19 @@ package com.cutecoma.playground.core
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.MapData;
 	import com.cutecoma.playground.pathfinder.AStar3D;
-	import com.sleepydesign.core.SDSprite;
-	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.utils.DebugUtil;
-
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
+	
+	import org.osflash.signals.Signal;
 
-	public class Map extends SDSprite
+	public class Map extends com.sleepydesign.display.SDSprite
 	{
 		private var pathFinder:AStar3D;
 
@@ -190,37 +191,15 @@ package com.cutecoma.playground.core
 			}
 		}
 
-		private function onPathError(event:SDEvent):void
-		{
-			//trace(" ! Over flow");
-		}
+		public static var completeSignal:Signal = new Signal(String, Array, Array);
 
-		private function onPathComplete(event:SDEvent):void
+		private function onPathComplete(id:String, paths:Array, positions:Array):void
 		{
 			trace(" ! onPathComplete");
 
 			// player
-			dispatchEvent(new SDEvent(SDEvent.UPDATE, { id: event.data.id, paths: event.data.paths, positions: event.data.positions }));
-
-			// map
-			drawPath(event.data.positions, event.data.segmentX, event.data.segmentZ);
-		}
-
-		public function drawPath(positions:Array, segmentX:Number = 1, segmentZ:Number = 1):void
-		{
-		/*
-		   //draw
-		   line.graphics.clear();
-		   line.graphics.lineStyle(0.5, 0x00FFFF, 1, false, "none" );
-		   line.graphics.moveTo(positions[0].xPoint, positions[0].zPos);
-
-		   var length:int = positions.length-1;
-		   for (var i:uint = 0; i < length;i++ )
-		   {
-		   line.graphics.lineTo(positions[i+1].xPoint*segmentX, positions[i+1].zPos*segmentZ);
-		   }
-		   line.graphics.endFill();
-		 */
+			//dispatchEvent(new SDEvent(SDEvent.UPDATE, { id: event.data.id, paths: event.data.paths, positions: event.data.positions }));
+			completeSignal.dispatch(id, paths, positions);
 		}
 
 		// ______________________________ Update ____________________________
@@ -267,14 +246,18 @@ package com.cutecoma.playground.core
 			if(pathFinder)
 			{
 				pathFinder.destroy();
-				pathFinder.removeEventListener(SDEvent.COMPLETE, onPathComplete);
-				pathFinder.removeEventListener(SDEvent.ERROR, onPathError);
+				AStar3D.completeSignal.removeAll();
+				//pathFinder.removeEventListener(SDEvent.COMPLETE, onPathComplete);
+				//pathFinder.removeEventListener(SDEvent.ERROR, onPathError);
 			}
 
 			pathFinder = new AStar3D(); //engine3D.scene);
 			pathFinder.create(this.data.bitmapData, factorX, 0, factorZ, 1, 0, 1);
-			pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
-			pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
+			AStar3D.completeSignal.add(onPathComplete);
+			//AStar3D.errorSignal.add(onPathError);
+			
+			//pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
+			//pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
 		}
 
 		public function draw():void
@@ -290,13 +273,16 @@ package com.cutecoma.playground.core
 			//bitmap.removeEventListener(MouseEvent.CLICK, onMapClick);
 			bitmap = null;
 
-			minimap.destroy();
+			if(minimap)
+				minimap.destroy();
 			minimap = null;
 
-			pathFinder.destroy();
-			pathFinder.removeEventListener(SDEvent.COMPLETE, onPathComplete);
-			pathFinder.removeEventListener(SDEvent.ERROR, onPathError);
-			pathFinder = null;
+			if(pathFinder)
+			{
+				pathFinder.destroy();
+				AStar3D.completeSignal.removeAll();
+				pathFinder = null;
+			}
 
 			factorX = 1;
 			factorZ = 1;
