@@ -1,1 +1,0 @@
-name=ข้าว&src=serverside/G2.dae
