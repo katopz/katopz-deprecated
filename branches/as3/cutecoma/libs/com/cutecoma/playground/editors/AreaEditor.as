@@ -5,18 +5,11 @@
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
-	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
-	import com.sleepydesign.events.SDKeyboardEvent;
-	import com.sleepydesign.events.SDMouseEvent;
 	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.text.SDTextField;
-	import com.sleepydesign.ui.InputController;
-	import com.sleepydesign.ui.SDKeyBoard;
-	import com.sleepydesign.utils.LoaderUtil;
 	import com.sleepydesign.utils.StringUtil;
-	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.BitmapData;
 	import flash.display.StageAlign;
@@ -25,9 +18,6 @@
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-	
-	import org.papervision3d.core.math.Matrix3D;
-	import org.papervision3d.core.math.Number3D;
 	
 	public class AreaEditor extends RemovableEventDispatcher
 	{		
