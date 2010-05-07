@@ -1,14 +1,19 @@
 package com.sleepydesign.templates
 {
+	import com.sleepydesign.components.SDTree;
 	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.site.NavigationTool;
+	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.skins.Preloader;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.system.SystemUtil;
 	
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-
+	
 	public class ApplicationTemplate extends SDSprite
 	{
 		protected var _title:String = "";
@@ -24,12 +29,19 @@ package com.sleepydesign.templates
 		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
 
 		protected var _screenRectangle:Rectangle;
+		
+		//nav
+		protected var _site:SiteTool;
+		protected var _tree:SDTree;
+		protected var isSiteMap:Boolean;
+		
+		public var path:String;
 
 		public function ApplicationTemplate()
 		{
 			super();
 			
-			_configURI = "config.xml";
+			_configURI = "app.xml";
 			
 			if (!_screenRectangle)
 				_screenRectangle = new Rectangle(0, 0, _stageWidth, _stageHeight);
@@ -84,6 +96,54 @@ package com.sleepydesign.templates
 		protected function onInitXML():void
 		{
 			// override me
+			
+			createSiteMap();
+			initNavigation();
+			setFocus(path);
+		}
+		
+		protected function initNavigation():void
+		{
+			DebugUtil.trace(" ! xml.@focus : " + _xml.@focus);
+			
+			_site = new SiteTool(_contentLayer, _xml);
+			NavigationTool.signal.add(setFocus);
+			
+			NavigationTool.setFocusByPath(path = String(_xml.@focus));
+		}
+		
+		protected function createSiteMap():void
+		{
+			_tree = new SDTree(_xml, true, true, true);
+			_systemLayer.addChild(_tree);
+			_tree.x = 10;
+			_tree.y = 10;
+			_tree.visible = isSiteMap;
+			
+			_tree.addEventListener(TreeEvent.CHANGE_NODE_FOCUS, onTreeChangeFocus);
+		}
+		
+		protected function onTreeChangeFocus(event:TreeEvent):void
+		{
+			var _path:String = String("/" + event.node.path).split("/$").join("/");
+			if (path != _path)
+			{
+				path = _path;
+				setFocus(_path);
+			}
+		}
+		
+		protected function setFocus(path:String):void
+		{
+			if(path.indexOf("/")!=0)
+				path = "/"+path;
+			
+			// tree
+			if (_tree)
+				_tree.setFocusByPath(path.split("/").join("/$"));
+			
+			// site
+			_site.setFocusByPath(path);
 		}
 
 		// TODO:destroy
