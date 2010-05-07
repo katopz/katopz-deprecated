@@ -306,9 +306,6 @@ package com.sleepydesign.net
 						_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
 					}
 
-					if (loaderClip && hideLoader is Function)
-						hideLoader();
-
 					// gc
 					if (_loaderVO)
 					{
@@ -318,6 +315,9 @@ package com.sleepydesign.net
 						_loaderVO.info = null;
 						_loaderVO.loader = null;
 					}
+					
+					if (loaderClip && hideLoader is Function && loaders && loaders.length==0)
+							hideLoader();
 
 					_loaderVO = null;
 
