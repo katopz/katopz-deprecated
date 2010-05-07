@@ -62,6 +62,7 @@ package com.sleepydesign.system
 
 		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function = null, separatorBefore:Boolean = false, enabled:Boolean = true, visible:Boolean = true):void
 		{
+			try{
 			var _oldItems:Array = container["contextMenu"] ? container["contextMenu"].customItems.concat() : [];
 			var _contextMenu:ContextMenu = container["contextMenu"] = new ContextMenu();
 			_contextMenu.hideBuiltInItems();
@@ -73,6 +74,12 @@ package com.sleepydesign.system
 
 			if (eventHandler is Function)
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, eventHandler);
+			}
+			catch(e:*)
+			{
+				//TODO AIR
+				trace(" ! playerType : " + Capabilities.playerType)
+			}
 		}
 
 		// StandAlone or Browser
