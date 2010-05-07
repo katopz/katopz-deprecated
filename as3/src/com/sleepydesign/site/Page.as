@@ -187,6 +187,8 @@ package com.sleepydesign.site
 					// reset
 					_totalLoaded = 0;
 					_pageLoaders = [];
+				}else{
+					LoaderUtil.showLoader();
 				}
 			}
 		}
