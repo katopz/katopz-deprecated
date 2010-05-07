@@ -119,13 +119,16 @@ package com.sleepydesign.site
 						_oldPage = _basePage.getChildByName(_prevPageID) as Page;
 					}
 
-					_childIndex = _oldPage.parent.getChildIndex(_oldPage);
-					DisplayObjectUtil.removeChildren(_oldPage, true, true);
-					
-					_oldPage.destroy();
-					_oldPage = null;
-
-					SystemUtil.gc();
+					if(_oldPage)
+					{
+						_childIndex = _oldPage.parent.getChildIndex(_oldPage);
+						DisplayObjectUtil.removeChildren(_oldPage, true, true);
+						
+						_oldPage.destroy();
+						_oldPage = null;
+	
+						SystemUtil.gc();
+					}
 				}
 
 				if (!_subPage)
