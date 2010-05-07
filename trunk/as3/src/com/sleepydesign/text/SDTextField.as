@@ -125,6 +125,8 @@ package com.sleepydesign.text {
 		{
 			this._listenerManager = ListenerManager.getManager(this);
 			
+			super();
+			
 			// Flash CS4 assets
 			if(name.indexOf("instance")!=0) return;
 			
