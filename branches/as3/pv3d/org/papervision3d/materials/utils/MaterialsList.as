@@ -155,8 +155,8 @@
 		
 		public function destroy():void
 		{
-			for( var name:String in _materials )
-				this.removeMaterialByName(name);
+			for each( var m:MaterialObject3D in this.materialsByName )
+				m.destroy();
 				
 			_materials = null;
 			materialsByName = null;
