@@ -1,6 +1,10 @@
 ﻿package com.cutecoma.playground.editors
 {
+	import away3dlite.primitives.Plane;
+	import away3dlite.templates.BasicTemplate;
+	
 	import com.cutecoma.game.core.Game;
+	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.events.AreaEditorEvent;
@@ -27,8 +31,8 @@
 	public class AreaEditor extends RemovableEventDispatcher
 	{		
 		//public var log			:SDTextField;
-		private var engine3D	:Engine3D;
-		private var area		:Area;
+		private var _engine3D	:IEngine3D;
+		private var _area		:Area;
 		private static const FORWARD:Vector3D = new Vector3D(0, 0, -1);
 		
 		private var _paintColor:String;
@@ -46,10 +50,9 @@
 				_codeText.text = _paintColor;
 		}
 		
-		public function AreaEditor(engine3D:Engine3D, area:Area)
+		public function AreaEditor(engine3D:IEngine3D)
 		{
-			this.engine3D = engine3D;
-			this.area = area;
+			_engine3D = engine3D;
 			
 			/*
 			// log
@@ -60,7 +63,7 @@
 			*/
 			
 			// controller
-			Game.inputController = new InputController(engine3D, true, true);
+			Game.inputController = new InputController(_engine3D.systemLayer, true, true);
 			Game.inputController.mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag, false, 0 ,true);
 			Game.inputController.keyboard.addEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress, false, 0 ,true);
 			Game.inputController.mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0 ,true);
@@ -79,7 +82,7 @@
 			<question>
 				<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom]]>
 			</question>, this);
-			engine3D.system.addChild(_helpToolDialog);
+			_engine3D.systemLayer.addChild(_helpToolDialog);
 
 			_helpToolDialog.alpha = .9;
 			_helpToolDialog.align = StageAlign.TOP_LEFT;
@@ -93,24 +96,22 @@
 				</question>, this);
 
 			_buildToolDialog.alpha = .9;
+			_buildToolDialog.align = "center";
 			
-			engine3D.system.addChild(_buildToolDialog);
-			engine3D.system.addChild(_codeText);
-			
-			area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
-			area.ground.addEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
-			area.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			_engine3D.systemLayer.addChild(_buildToolDialog);
+			_engine3D.systemLayer.addChild(_codeText);
 		}
 		
-		public function editMap():void
+		public function setArea(area:Area):void
 		{
-			var _bitmapData:BitmapData = area.map.data.bitmapData;
-			for(var i:int=0;i<_bitmapData.width*_bitmapData.height;i++)
-			{
-				_bitmapData.setPixel32(Math.random()*20, Math.random()*20, 0xFF0000);
-			}
+			_area = area;
 			
-			area.ground.update();
+			if(_area.ground)
+			{
+				//_area.ground.addEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+				//_area.ground.addEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
+			}
+			_area.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 		
 		private var _helpToolDialog:SDDialog;
@@ -143,7 +144,7 @@
 		{
 			if(event.type!="complete")return;
 			areaPanel = event.target.content as AreaPanel;
-			engine3D.system.addChild(areaPanel);
+			_engine3D.canvasLayer.addChild(areaPanel);
 			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 		}
 		
@@ -157,7 +158,7 @@
 		public function setupBackground():void
 		{
 			//SDApplication.system.addEventListener(SDEvent.COMPLETE, onOpenBackgroundComplete);
-			area.background.open();
+			_area.background.open();
 		}
 		
 		/*
@@ -205,7 +206,7 @@
 		
 		private function onKeyIsDown(event:KeyboardEvent):void
 		{
-			var _bitmapData:BitmapData = area.map.data.bitmapData.clone();
+			var _bitmapData:BitmapData = _area.map.data.bitmapData.clone();
 			var _rect:Rectangle = _bitmapData.rect; 
 			
 			// NUM 1 -> 9
@@ -255,9 +256,9 @@
 			_width = _width>0?_width:1;
 			_height = _height>0?_height:1;
 			
-			area.map.bitmap.bitmapData = area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
-			area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
-			area.ground.update();
+			_area.map.bitmap.bitmapData = _area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
+			_area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
+			_area.ground.update(_area.map.data);
 			
 			_bitmapData.dispose();
 		}
@@ -373,9 +374,9 @@
 	        	
 			trace(" ! TilePlane :", event.bitmapX, event.bitmapZ, _paintColor);
 			
-			var _bitmapData:BitmapData = area.map.data.bitmapData;
+			var _bitmapData:BitmapData = _area.map.data.bitmapData;
 			_bitmapData.setPixel(event.bitmapX, event.bitmapZ , Number(_paintColor));
-			area.ground.update();
+			_area.ground.update(_area.map.data);
 		}
 		
 		override public function destroy():void
@@ -384,14 +385,14 @@
 			Game.inputController.keyboard.removeEventListener(SDKeyboardEvent.KEY_PRESS, onKeyIsPress);
 			Game.inputController.mouse.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			
-			area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
-			area.ground.removeEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
+			//_area.ground.removeEventListener(GroundEvent.MOUSE_DOWN, onTileClick);
+			//_area.ground.removeEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
 			//area.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			
-			engine3D.system.removeChild(_helpToolDialog);
+			_engine3D.systemLayer.removeChild(_helpToolDialog);
 			_helpToolDialog.destroy();
 			
-			engine3D.system.removeChild(_buildToolDialog);
+			_engine3D.systemLayer.removeChild(_buildToolDialog);
 			_buildToolDialog.destroy();
 			
 			//removeChild(log);

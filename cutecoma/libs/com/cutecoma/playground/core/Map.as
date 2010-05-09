@@ -193,7 +193,7 @@ package com.cutecoma.playground.core
 
 		public static var completeSignal:Signal = new Signal(String, Array, Array);
 
-		private function onPathComplete(id:String, paths:Array, positions:Array):void
+		private function onPathComplete(id:String, paths:Array, positions:Array, sx:uint, sy:uint, sz:uint):void
 		{
 			trace(" ! onPathComplete");
 

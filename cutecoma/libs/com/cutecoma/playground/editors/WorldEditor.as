@@ -1,5 +1,9 @@
 package com.cutecoma.playground.editors
 {
+	import away3dlite.containers.Scene3D;
+	import away3dlite.containers.View3D;
+	import away3dlite.core.IDestroyable;
+	import away3dlite.primitives.Plane;
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.cutecoma.game.core.*;
@@ -8,6 +12,7 @@ package com.cutecoma.playground.editors
 	import com.cutecoma.playground.data.*;
 	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.components.*;
+	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.*;
 	import com.sleepydesign.net.FileUtil;
 	import com.sleepydesign.system.SystemUtil;
@@ -20,22 +25,51 @@ package com.cutecoma.playground.editors
 	import flash.utils.*;
 
 
-	public class WorldEditor extends BasicTemplate
+	public class WorldEditor extends BasicTemplate implements IEngine3D, IDestroyable
 	{
 		public var areaEditor:AreaEditor;
 
 		private var area:Area;
 		
 		private var _selectAreaID:String = "00";
+		
+		private var _systemLayer:SDSprite;
+		public function get systemLayer():SDSprite
+		{
+			return _systemLayer;
+		}
+		
+		private var _canvasLayer:SDSprite;
+		public function get canvasLayer():SDSprite
+		{
+			return _canvasLayer;
+		}
+		
+		public function get view3D():View3D
+		{
+			return view;
+		}
+		
+		public function get scene3D():Scene3D
+		{
+			return scene;
+		}
 
 		public function WorldEditor()
 		{
 		}
 		
+		override protected function onStage():void
+		{
+			addChild(_canvasLayer = new SDSprite);
+		}
+		
 		override protected function onInit():void
 		{
-			//areaEditor = new AreaEditor(engine3D, area);
-			//addChild(areaEditor);
+			addChild(_systemLayer = new SDSprite);
+			
+			areaEditor = new AreaEditor(this);
+			//systemLayer.addChild(areaEditor);
 			//area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
 			//PlayerDebugger.toggle(engine3D, Game.getInstance().player);
 			
@@ -46,44 +80,16 @@ package com.cutecoma.playground.editors
 			SystemUtil.addContext(this, "Toggle Debug", onContextMenu, !true);
 		}
 		
-		private var tree:SDTree;
-
-		private function toggleOption(event:Event=null):void
+		public function createArea(areaData:AreaData):void
 		{
-			/*
-			// Engine Explorer
-			if (!tree)
-			{
-				tree = new SDTree
-				(
-					<Option>
-						<Open/>
-						<Save/>
-						<Edit>
-							<Background/>
-							<Map/>
-						</Edit>
-						<View>
-							<MiniMap/>
-							<Grid/>
-							<Axis/>
-							<Debugger/>
-							<Ground/>
-						</View>
-					</Option>
-				, true);
-
-				tree.x = 10;
-				tree.y = 120;
-				tree.filters = [new GlowFilter(0xFFFFFF, 1, 2, 2)]
-				SDApplication.system.addChild(tree);
-				tree.addEventListener(SDMouseEvent.CLICK, onExplorer);
-				tree.visible = false;
-			}
-			tree.visible = !tree.visible;
-			*/
+			// create area
+			area = new Area(this, areaData);
+			_canvasLayer.addChild(area);
+			
+			// bind to editor
+			areaEditor.setArea(area);
 		}
-
+		
 		private function onContextMenu(event:ContextMenuEvent):void
 		{
 			trace(" ^ onContextMenu : " + ContextMenuEvent.MENU_SELECT);
@@ -91,9 +97,6 @@ package com.cutecoma.playground.editors
 			var _caption:String = ContextMenuItem(event.target).caption;//= SDTreeNode(event.data.node).label;
 			switch (_caption)
 			{
-				case "Edit Map":
-					areaEditor.editMap();
-					break;
 				/*case "MiniMap":
 						area.map.visible = !area.map.visible;
 					break;*/
@@ -118,25 +121,7 @@ package com.cutecoma.playground.editors
 				case "Change Background":
 					this.areaEditor.setupBackground();
 					break;
-				/*case "Grid":
-					engine3D.grid = !engine3D.grid;
-					break;
-				case "Ground":
-					area.ground.debug = !area.ground.debug;
-					break;
-				case "Axis":
-					engine3D.axis = !engine3D.axis;
-					break;*/
-				/*
-				case "man1":
-				case "man2":
-				case "woman1":
-				case "woman2":
-					var fakeData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), _label, "walk", 1.5);
-					fakeData.des = new Position(200 * Math.random() - 200 * Math.random(), 0, 200 * Math.random() - 200 * Math.random());
-					fakeData.msg = "Walk to : " + fakeData.des;
-					game.update(fakeData)
-					break;*/
+
 				case "Save Area":
 					// TODO : new area id input box here
 					var _saveAreaData:AreaData = new AreaData().parse(area.data);
@@ -158,8 +143,7 @@ package com.cutecoma.playground.editors
 				// exist area
 				areaData = new AreaData();
 				IExternalizable(areaData).readExternal(event.target.data);
-				
-				trace(areaData.id);
+				createArea(areaData);
 				
 				//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
 			}

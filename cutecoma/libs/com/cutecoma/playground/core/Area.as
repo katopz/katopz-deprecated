@@ -1,6 +1,9 @@
 ﻿package com.cutecoma.playground.core
 {
+	import away3dlite.primitives.Plane;
+	
 	import com.cutecoma.game.core.BackGround;
+	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.data.AreaData;
 	import com.sleepydesign.display.SDSprite;
 	
@@ -17,11 +20,19 @@
 			return _data;
 		}
 		
-		public function Area(areaData:AreaData)
+		public function Area(engine3D:IEngine3D, areaData:AreaData)
 		{
 			// background
 			background = new BackGround(areaData.background);
 			addChild(background);
+			
+			//map
+			addChild(map = new Map);
+			map.update(areaData);
+			
+			// Ground
+			ground = new Ground(engine3D);
+			//ground.update(map.data);
 		
 			update(areaData);
 		}
@@ -34,18 +45,8 @@
 			_data = areaData;
 			
 			background.update(areaData);
-			
-			// map
-			if(!map)
-			{
-				map = new Map();
-				addChild(map);
-			}
-			
 			map.update(areaData);
-			
-			if(ground)
-				ground.update();
+			ground.update(map.data);
 		}
 		
 		override public function destroy():void

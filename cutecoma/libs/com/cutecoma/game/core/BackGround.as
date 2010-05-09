@@ -32,7 +32,7 @@
 			if (content)
 				destroy();
 
-			LoaderUtil.loadAsset(areaData.background, onBackgroundComplete);
+			LoaderUtil.loadAsset("../../"+areaData.background, onBackgroundComplete);
 
 			//this._data = areaData;
 		}
