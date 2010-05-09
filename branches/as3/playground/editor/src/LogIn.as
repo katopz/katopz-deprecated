@@ -12,7 +12,7 @@ package
 	import flash.events.Event;
 	import flash.text.TextField;
 
-	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "800", height = "600")]
+	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "800", height = "480")]
 	public class LogIn extends Sprite
 	{
 		private var _SDDialog:SDDialog;

@@ -4,7 +4,7 @@ package
 	
 	import flash.display.Sprite;
 	
-	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="600")]
+	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="480")]
 	public class main extends Sprite
 	{
 		private var _currentEditor:*;
@@ -15,7 +15,7 @@ package
 		{
 			// menu
 			_menu = new SDDialog(<question><![CDATA[Select Editor]]>
-								<answer src="as:onSelectEditor('WorldEditor')"><![CDATA[World]]></answer>
+								<answer src="as:onSelectEditor('World')"><![CDATA[World]]></answer>
 								<answer src="as:onSelectEditor('Character')"><![CDATA[Character]]></answer>
 							</question>, this);
 			_menu.align = "";
