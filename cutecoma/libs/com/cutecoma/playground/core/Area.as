@@ -28,7 +28,7 @@
 			
 			//map
 			addChild(map = new Map);
-			map.update(areaData);
+			//map.update(areaData);
 			
 			// Ground
 			ground = new Ground(engine3D);
