@@ -21,7 +21,13 @@ package com.sleepydesign.templates
 
 		protected var _xml:XML;
 
-		protected var _systemLayer:SDSprite;
+		private static var _systemLayer:SDSprite;
+
+		public static function get systemLayer():SDSprite
+		{
+			return _systemLayer;
+		}
+
 		protected var _contentLayer:SDSprite;
 
 		// app
