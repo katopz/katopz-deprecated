@@ -74,11 +74,10 @@
 					//_tileMaterials.addMaterial(_wireColorMaterial);
 			}
 			
-			_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(mapData.bitmapData)));
+			_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(mapData.bitmapData), w*Map.factorX, h*Map.factorZ));
 			_plane.bothsides = true;
 			_plane.rotationX = 45;
 			
-			_engine3D.scene3D.addChild(new Plane);
 		/*
 		   if(_tileInstance)
 		   _tileInstance.destroy();
