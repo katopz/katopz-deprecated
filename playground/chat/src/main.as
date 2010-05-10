@@ -341,6 +341,7 @@
 		{
 			if (!area)
 			{
+				areaData.background = PixelLiving.areaPath + areaData.background;  
 				createArea(areaData);
 				currentRoomID = areaData.id;
 				return;
