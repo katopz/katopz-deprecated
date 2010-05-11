@@ -31,7 +31,7 @@ package com.sleepydesign.net
 		public static var hideLoader:Function = new Function();
 
 		public static var loaderClip:DisplayObject;
-		
+
 		private static var loaders:Array = [];
 
 		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
@@ -66,13 +66,11 @@ package com.sleepydesign.net
 					if (_loaderVO)
 					{
 						removeItem(loaders, _loaderVO);
-
 						_loaderVO.destroy = null;
-						_loaderVO.info = null;
+						_loaderVO.loader = null;
 					}
 
 					_loaderVO = null;
-
 					_loader = null;
 					request = null;
 				}
@@ -113,20 +111,18 @@ package com.sleepydesign.net
 					if (_loaderVO)
 					{
 						removeItem(loaders, _loaderVO);
-
 						_loaderVO.destroy = null;
-						_loaderVO.info = null;
+						_loaderVO.loader = null;
 					}
 
 					_loaderVO = null;
-
 					_loader = null;
 				};
 			_loaderVO.info = _loader;
 			_loaderVO.destroy = _removeEventListeners;
 			loaders.push(_loaderVO);
 
-			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
+			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, _removeEventListeners);
 
 			return _loader;
 		}
@@ -204,16 +200,6 @@ package com.sleepydesign.net
 				}, URLLoaderDataFormat.BINARY) as URLLoader;
 		}
 
-		/*
-		public static function loadAssets(uris:Array, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest = null):Array
-		{
-			var _length:int = uris.length;
-			for (var i:int = 0; i < uris.length; i++)
-				load(uris[i], eventHandler, type, urlRequest);
-			return loaders;
-		}
-		*/
-		
 		public static function queue(uri:String, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest = null):*
 		{
 			return load(uri, eventHandler, type, urlRequest, true);
@@ -310,14 +296,13 @@ package com.sleepydesign.net
 					if (_loaderVO)
 					{
 						removeItem(loaders, _loaderVO);
-
 						_loaderVO.destroy = null;
 						_loaderVO.info = null;
 						_loaderVO.loader = null;
 					}
-					
-					if (loaderClip && hideLoader is Function && loaders && loaders.length==0)
-							hideLoader();
+
+					if (loaderClip && hideLoader is Function && loaders && loaders.length == 0)
+						hideLoader();
 
 					_loaderVO = null;
 
@@ -335,7 +320,8 @@ package com.sleepydesign.net
 			var _404:Function = function():void
 				{
 					_loader.removeEventListener(IOErrorEvent.IO_ERROR, _404);
-					if (useDebug)trace(" ! Not found : " + uri);
+					if (useDebug)
+						trace(" ! Not found : " + uri);
 					_removeEventListeners();
 				}
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, _404);
@@ -345,6 +331,7 @@ package com.sleepydesign.net
 			{
 				urlRequest = urlRequest ? urlRequest : new URLRequest(uri);
 				_loaderVO.urlRequest = urlRequest;
+
 				if (type == "asset")
 				{
 					_loaderVO.loader = loader;
@@ -365,6 +352,7 @@ package com.sleepydesign.net
 				if (useDebug)
 					trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
+
 			return null;
 		}
 
@@ -435,6 +423,8 @@ package com.sleepydesign.net
 
 		public static function cancel(loader:* = null):void
 		{
+			hideLoader();
+
 			if (loaders.length <= 0)
 				return;
 
@@ -444,13 +434,11 @@ package com.sleepydesign.net
 			if (loader is Loader)
 				loader = loader.contentLoaderInfo;
 
-			for each (var _loaderVO:*in loaders)
+			for each (var _loaderVO:* in loaders)
 			{
 				if (_loaderVO && _loaderVO.info == loader && _loaderVO.destroy is Function)
 					_loaderVO.destroy();
 			}
-			
-			hideLoader();
 		}
 	}
 }
