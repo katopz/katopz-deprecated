@@ -67,7 +67,7 @@ package com.sleepydesign.skins
 			};
 
 			// resize
-			_stage.addEventListener(Event.RESIZE, onResize);
+			_stage.addEventListener(Event.RESIZE, onResize, false, 0, true);
 			draw();
 		}
 
