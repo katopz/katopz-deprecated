@@ -81,7 +81,7 @@ package com.sleepydesign.templates
 		protected function initLoader():void
 		{
 			// skin loader
-			LoaderUtil.loaderClip = new Preloader(_systemLayer);
+			LoaderUtil.loaderClip = new Preloader(_systemLayer, _screenRectangle);
 		}
 
 		protected function initSystem():void
