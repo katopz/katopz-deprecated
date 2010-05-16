@@ -28,6 +28,7 @@
   </STATION>
   <ALLSTATION>
     <E01>
+      <LABEL>ศูนย์ฯ</LABEL>
       <POWER>0</POWER>
       <BATTERY>0</BATTERY>
       <DOOR>0</DOOR>
@@ -154,6 +155,7 @@
       <RADIO>0</RADIO>
     </E18>
     <E19>
+      <LABEL>แสนแสบ-คลองตัน</LABEL>
       <POWER>0</POWER>
       <BATTERY>0</BATTERY>
       <DOOR>0</DOOR>

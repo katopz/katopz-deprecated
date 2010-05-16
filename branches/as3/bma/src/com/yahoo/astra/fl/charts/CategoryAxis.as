@@ -5,14 +5,16 @@ http://developer.yahoo.com/flash/license.html
 */
 package com.yahoo.astra.fl.charts
 {
-	import flash.geom.Rectangle;
+	import fl.core.UIComponent;
+	
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
+	import flash.text.AntiAliasType;
+	import flash.text.GridFitType;
+	import flash.text.StyleSheet;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
-	import flash.text.AntiAliasType;
-	import flash.text.GridFitType;
-	import fl.core.UIComponent;
 	import flash.text.TextFormatAlign;
 	
 	/**
@@ -526,6 +528,9 @@ package com.yahoo.astra.fl.charts
 					}
 					if(label.visible) lastVisibleLabel = label;
 				}
+				
+				//
+				label.x += 28;
 			} //end for loop
 		}
 		
@@ -566,13 +571,13 @@ package com.yahoo.astra.fl.charts
 				}
 			}
 			
-			var textFormat:TextFormat = this.getStyleValue("textFormat") as TextFormat;
-			textFormat.align = TextFormatAlign.CENTER;
+//var textFormat:TextFormat = this.getStyleValue("textFormat") as TextFormat;
+//textFormat.align = TextFormatAlign.CENTER;
 			//textFormat.size = 9
 			for(i = 0; i < labelCount; i++)
 			{
 				label = this.labels[i] as TextField;
-				label.defaultTextFormat = textFormat;
+//				label.defaultTextFormat = textFormat;
 			}
 			
 			//with the labels in place, update the displayed text
@@ -580,7 +585,7 @@ package com.yahoo.astra.fl.charts
 			{
 				this.setLabelText();
 			}
-			textFormat.align = TextFormatAlign.LEFT;
+//			textFormat.align = TextFormatAlign.LEFT;
 		}
 		
 		/**
@@ -595,17 +600,23 @@ package com.yahoo.astra.fl.charts
 			for(var i:Number = 0; i < this.labels.length; i++)
 			{
 				var label:TextField = this.labels[labelCount] as TextField;
+				label.embedFonts = true;
+				
+				label.styleSheet = new StyleSheet();
+				label.styleSheet.parseCSS("p {font-family: supermarket;font-size: 12px;color:#000000;}");
+				
+				label.rotation = 90;
 				
 				var _str:String = this.valueToLabel(i);
-				label.text = _str.substring(0,1)+"\n"+_str.substring(1,3)
+				label.htmlText = "<p>"+_str+"</p>";//.substring(0,1)+"\n"+_str.substring(1,3)
 				
 				if(this.orientation == AxisOrientation.VERTICAL)
 					this._maxLabelSize = Math.max(this._maxLabelSize, label.width);
-				else this._maxLabelSize = Math.max(this._maxLabelSize, label.height);
+				else 
+					this._maxLabelSize = Math.max(this._maxLabelSize, label.height);
 				
 				labelCount++;
 			}
 		}
-		
 	}
 }

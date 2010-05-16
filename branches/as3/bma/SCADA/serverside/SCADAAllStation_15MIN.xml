@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <SCADA>
-    <STATION id="E00">
+  <STATION id="E00">
+    <LABEL>ศูนย์ฯ</LABEL>
     <NAME>Flood Control Center</NAME>
     <STATUS>0</STATUS>
     <RAIN_15MIN>59.00</RAIN_15MIN>
-    </STATION>
+  </STATION>
   <STATION id="E01">
     <NAME>ปตร. คลองสองสายใต้</NAME>
     <STATUS>1</STATUS>
@@ -96,6 +97,7 @@
     <RAIN_15MIN>50.00</RAIN_15MIN>
   </STATION>
   <STATION id="E19">
+  	<LABEL>แสนแสบ-คลองตัน</LABEL>
     <NAME>สถานีสูบน้ำคลองแสนแสบ ตอนคลองตัน</NAME>
     <STATUS>0</STATUS>
     <RAIN_15MIN>0.00</RAIN_15MIN>
