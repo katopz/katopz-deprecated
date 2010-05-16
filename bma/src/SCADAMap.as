@@ -1,26 +1,21 @@
-/**
-* ...
-* @author katopz@sleepydesign.com
-* @version 0.1
-*/
-
-package {
-	
+package
+{
 	import flash.display.*
 
-	public class SCADAMap extends Map{
+	public class SCADAMap extends Map
+	{
 
-		public function SCADAMap(){
-			
+		public function SCADAMap()
+		{
+
 			contentParentName = "SCADA"
 			housesMovieClip = iHouses as MovieClip;
-			
+
 			init();
-			
+
 			//test();
 			
+			trace("map");
 		}
-		
 	}
-
 }
