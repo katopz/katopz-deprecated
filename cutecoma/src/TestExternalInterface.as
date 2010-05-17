@@ -24,7 +24,7 @@ package
 				<question id="0">
 					<![CDATA[Welcome! Guest, please log-in]]>
 					<answer src="js:signIn()"><![CDATA[Sign In]]></answer>
-				</question>, false);
+				</question>, this);
 
 			_SDDialog.x = stage.stageWidth/2;
 			_SDDialog.y = stage.stageHeight/2;

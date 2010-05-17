@@ -1,14 +1,14 @@
 ﻿package com.cutecoma.playground.core
 {
 	import away3dlite.core.IDestroyable;
-	import away3dlite.materials.BitmapMaterial;
+	import away3dlite.core.base.Face;
+	import away3dlite.events.MouseEvent3D;
+	import away3dlite.materials.ColorMaterial;
 	import away3dlite.primitives.Plane;
-	import away3dlite.primitives.Sphere;
 	
 	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.data.MapData;
 	
-	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 
 	public class Ground implements IDestroyable
@@ -60,24 +60,36 @@
 			var w:uint = mapData.bitmapData.width;
 			var h:uint = mapData.bitmapData.height;
 
+			//_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(mapData.bitmapData), w*Map.factorX, h*Map.factorZ));
+			_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX*10, Map.factorZ*10,w, h));
+			//_plane.bothsides = true;
+			_plane.rotationX = 45;
+			
 			//_tileMaterials = new MaterialsList();
 			var _getPixel:Function = mapData.bitmapData.getPixel;
 			for (var k:uint = 0; k < w * h; k++)
 			{
 				var i:int = int(k % w);
 				var j:int = int(k / w);
-				var color:Number = _getPixel(i, j);
+				var color:Number = _getPixel(i,h-j-1);
 
 					//if(color!=0x000000)
 					//var _wireColorMaterial:WireColorMaterial = new WireColorMaterial(color, .5, true);
 					//_wireColorMaterial.name = i + "_" + j;
 					//_tileMaterials.addMaterial(_wireColorMaterial);
+				
+				_plane.faces[k].material = new ColorMaterial(color);
 			}
 			
-			_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(mapData.bitmapData), w*Map.factorX, h*Map.factorZ));
-			_plane.bothsides = true;
-			_plane.rotationX = 45;
-			
+			_engine3D.scene3D.addEventListener(MouseEvent3D.MOUSE_UP, onSceneMouseUp);
+		}
+		
+		private function onSceneMouseUp(e:MouseEvent3D):void
+		{
+			var _face:Face = e.face;
+			_face.material = new ColorMaterial(int(Math.random() * 0xFF0000));
+		}
+		
 		/*
 		   if(_tileInstance)
 		   _tileInstance.destroy();
@@ -92,8 +104,8 @@
 
 		   _tileInstance.removeEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
 		   _tileInstance.addEventListener(InteractiveScene3DEvent.OBJECT_MOVE, onMouseMove);
-		 */
-		}
+		 
+		}*/
 
 		/*
 		   public function onClick(event:InteractiveScene3DEvent):void

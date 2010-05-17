@@ -1,12 +1,8 @@
 ﻿package com.cutecoma.playground.editors
 {
-	import away3dlite.primitives.Plane;
-	import away3dlite.templates.BasicTemplate;
-	
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.core.Area;
-	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
 	import com.cutecoma.playground.events.SDKeyboardEvent;
