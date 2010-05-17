@@ -1,7 +1,5 @@
 ﻿package com.cutecoma.playground.core
 {
-	import away3dlite.primitives.Plane;
-	
 	import com.cutecoma.game.core.BackGround;
 	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.data.AreaData;

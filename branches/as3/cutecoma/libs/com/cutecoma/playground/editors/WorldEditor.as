@@ -3,14 +3,12 @@ package com.cutecoma.playground.editors
 	import away3dlite.containers.Scene3D;
 	import away3dlite.containers.View3D;
 	import away3dlite.core.IDestroyable;
-	import away3dlite.primitives.Plane;
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.cutecoma.game.core.*;
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
-	import com.cutecoma.playground.debugger.PlayerDebugger;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.*;
@@ -23,7 +21,6 @@ package com.cutecoma.playground.editors
 	import flash.filters.*;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.*;
-
 
 	public class WorldEditor extends BasicTemplate implements IEngine3D, IDestroyable
 	{
