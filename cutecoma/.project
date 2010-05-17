@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>CuteComa</name>
+	<name>cutecoma</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -18,7 +18,12 @@
 		<link>
 			<name>[source path] libs</name>
 			<type>2</type>
-			<location>C:/Inetpub/wwwroot/Classes/katopz/branches/as3/libs</location>
+			<location>C:/inetpub/wwwroot/Classes/katopz/trunk/as3/libs</location>
+		</link>
+		<link>
+			<name>[source path] src</name>
+			<type>2</type>
+			<location>C:/inetpub/wwwroot/Classes/katopz/trunk/as3/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
