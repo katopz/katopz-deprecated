@@ -14,11 +14,12 @@ package view
 	public class Crystal extends SDSprite implements IDestroyable
 	{
 		// status
-		public static const STATUS_ADDED:String = "STATUS_ADDED";
+		public static const STATUS_FALL:String = "STATUS_FALL";
+		public static const STATUS_READY:String = "STATUS_READY";
 		public static const STATUS_TOBE_REMOVE:String = "STATUS_TOBE_REMOVE";
 		public static const STATUS_REMOVED:String = "STATUS_REMOVED";
 		
-		public var status:String = STATUS_ADDED;
+		public var status:String = STATUS_READY;
 		
 		// asset
 		[Embed(source="assets/game.swf", symbol="CrystalClip")]
@@ -71,7 +72,7 @@ package view
 			else
 				_crystalClip.gotoAndStop(value+1);
 			
-			status = STATUS_ADDED;
+			status = STATUS_READY;
 		}
 
 		public function set focus(value:Boolean):void
