@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.1 (beta)
- * DATE: 1/19/2010
+ * VERSION: 0.2 (beta)
+ * DATE: 2010-04-21
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com
  **/
@@ -8,8 +8,10 @@ package com.greensock.motionPaths {
 /**
  * A PathFollower is used to associate a particular target object (like a MovieClip, Point, Sprite, etc.) 
  * with a MotionPath and it offers a tweenable <code>progress</code> property that manages positioning
- * the target on the path accordingly. The <code>progress</code> property is typically a value between
- * 0 and 1 where 0 is at the beginning of the path, 0.5 is in the middle, and 1 is at the end. <br /><br />
+ * the target on the path accordingly. The <code>progress</code> property is a value between
+ * 0 and 1 where 0 is at the beginning of the path, 0.5 is in the middle, and 1 is at the end. 
+ * When the follower's <code>autoRotate</code> property is <code>true</code>, the target will be
+ * rotated in relation to the path that it is following. <br /><br />
  * 
  * @example Example AS3 code:<listing version="3.0">
 import com.greensock.~~;
@@ -19,7 +21,7 @@ import com.greensock.motionPaths.~~;
 var circle:Circle2D = new Circle2D(150, 150, 100);
 
 //make the MovieClip "mc" follow the circle and start at a position of 90 degrees (this returns a PathFollower instance)
-var follower:PathFollower = circle.addFollower(mc, circle.angleToProgress(90));
+var follower:PathFollower = circle.addFollower(mc, circle.angleToProgress(90), true);
 
 //tween the follower clockwise along the path to 315 degrees
 TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 315, Direction.CLOCKWISE)});
@@ -52,14 +54,22 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		
 		/** The MotionPath instance that this PathFollower should follow **/
 		public var path:MotionPath;
+		/** When <code>autoRotate</code> is <code>true</code>, the follower will automatically be rotated so that it is oriented to the angle of the path that it is following. To offset this value (like to always add 90 degrees for example), use the <code>rotationOffset</code> property. **/
+		public var autoRotate:Boolean;
+		/** When <code>autoRotate</code> is <code>true</code>, this value will always be added to the resulting <code>rotation</code> of the target. **/
+		public var rotationOffset:Number;
 		
 		/**
 		 * Constructor
 		 * 
 		 * @param target The target object associated with the PathFollower (like a Sprite, MovieClip, Point, etc.). The object must have x and y properties. 
+		 * @param autoRotate When <code>autoRotate</code> is <code>true</code>, the follower will automatically be rotated so that it is oriented to the angle of the path that it is following. To offset this value (like to always add 90 degrees for example), use the <code>rotationOffset</code> property.
+		 * @param rotationOffset When <code>autoRotate</code> is <code>true</code>, this value will always be added to the resulting <code>rotation</code> of the target.
 		 */
-		public function PathFollower(target:Object) {
+		public function PathFollower(target:Object, autoRotate:Boolean=false, rotationOffset:Number=0) {
 			this.target = target;
+			this.autoRotate = autoRotate;
+			this.rotationOffset = rotationOffset;
 			this.cachedProgress = 0;
 		}
 		
@@ -85,7 +95,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 			}
 			this.cachedProgress = value;
 			if (this.path) {
-				this.path.renderObjectAt(this.target, value);
+				this.path.renderObjectAt(this.target, value, this.autoRotate, this.rotationOffset);
 			}
 		}
 		

@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.1 (beta)
- * DATE: 2010-04-16
+ * VERSION: 0.2 (beta)
+ * DATE: 2010-04-21
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com
  **/
@@ -84,7 +84,7 @@ TweenLite.to(follower, 2, {progress:-1});
 			var xOffset:Number = _centerOrigin ? _rawWidth / -2 : 0;
 			var yOffset:Number = _centerOrigin ? _rawHeight / -2 : 0;
 			
-			var length:Number, px:Number, py:Number;
+			var length:Number, px:Number, py:Number, xFactor:Number, yFactor:Number;
 			var m:Matrix = this.transform.matrix;
 			var a:Number = m.a, b:Number = m.b, c:Number = m.c, d:Number = m.d, tx:Number = m.tx, ty:Number = m.ty;
 			var f:PathFollower = _rootFollower;
@@ -93,24 +93,37 @@ TweenLite.to(follower, 2, {progress:-1});
 				py = yOffset;
 				if (f.cachedProgress < 0.5) {
 					length = f.cachedProgress * (_rawWidth + _rawHeight) * 2;
-					if (length > _rawWidth) {
+					if (length > _rawWidth) { 	//top
 						px += _rawWidth;
 						py += length - _rawWidth;
-					} else {
+						xFactor = 0;
+						yFactor = _rawHeight;
+					} else { 					//right
 						px += length;
+						xFactor = _rawWidth;
+						yFactor = 0;
 					}
 				} else {
 					length = (f.cachedProgress - 0.5) / 0.5 * (_rawWidth + _rawHeight);
-					if (length <= _rawWidth) {
+					if (length <= _rawWidth) {	//bottom
 						px += _rawWidth - length;
 						py += _rawHeight;
-					} else {
+						xFactor = -_rawWidth;
+						yFactor = 0;
+					} else {					//left
 						py += _rawHeight - (length - _rawWidth);
+						xFactor = 0;
+						yFactor = -_rawHeight;
 					}
 				}
 				
 				f.target.x = px * a + py * c + tx;
 				f.target.y = px * b + py * d + ty;
+				
+				if (f.autoRotate) {
+					f.target.rotation = Math.atan2(xFactor * b + yFactor * d, xFactor * a + yFactor * c) * _RAD2DEG + f.rotationOffset;
+				}
+				
 				f = f.cachedNext;
 			}
 			if (_redrawLine && this.visible && this.parent) {
@@ -123,7 +136,7 @@ TweenLite.to(follower, 2, {progress:-1});
 		}
 		
 		/** @inheritDoc **/
-		override public function renderObjectAt(target:Object, progress:Number):void {
+		override public function renderObjectAt(target:Object, progress:Number, autoRotate:Boolean=false, rotationOffset:Number=0):void {
 			if (progress > 1) {
 				progress -= int(progress);
 			} else if (progress < 0) {
@@ -132,27 +145,39 @@ TweenLite.to(follower, 2, {progress:-1});
 			
 			var px:Number = _centerOrigin ? _rawWidth / -2 : 0;
 			var py:Number = _centerOrigin ? _rawHeight / -2 : 0;
-			var length:Number;
+			var length:Number, xFactor:Number, yFactor:Number;
 			if (progress < 0.5) {
 				length = progress * (_rawWidth + _rawHeight) * 2;
 				if (length > _rawWidth) {
 					px += _rawWidth;
 					py += length - _rawWidth;
+					xFactor = 0;
+					yFactor = _rawHeight;
 				} else {
 					px += length;
+					xFactor = _rawWidth;
+					yFactor = 0;
 				}
 			} else {
 				length = (progress - 0.5) / 0.5 * (_rawWidth + _rawHeight);
 				if (length <= _rawWidth) {
 					px += _rawWidth - length;
 					py += _rawHeight;
+					xFactor = -_rawWidth;
+					yFactor = 0;
 				} else {
 					py += _rawHeight - (length - _rawWidth);
+					xFactor = 0;
+					yFactor = -_rawHeight;
 				}
 			}
 			var m:Matrix = this.transform.matrix;
 			target.x = px * m.a + py * m.c + m.tx;
 			target.y = px * m.b + py * m.d + m.ty;
+			
+			if (autoRotate) {
+				target.rotation = Math.atan2(xFactor * m.b + yFactor * m.d, xFactor * m.a + yFactor * m.c) * _RAD2DEG + rotationOffset;
+			}
 		}
 		
 		
