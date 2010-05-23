@@ -2,12 +2,13 @@ package
 {
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-
+	
 	import control.Rule;
-
+	
 	import flash.display.Sprite;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-
+	
 	import view.Crystal;
 
 	public class main extends Sprite
@@ -24,35 +25,77 @@ package
 		private var _focusCrystal:Crystal;
 		private var _swapCrystal:Crystal;
 
-		private var _crystals:Array;
+		private var _crystals:Vector.<Crystal>;
 
 		public function main()
 		{
 			// canvas
 			addChild(_canvas = new SDSprite());
 
-			_crystals = [];
+			_crystals = new Vector.<Crystal>();
 
-			for (var i:int = 0; i < config.COL_SIZE; i++)
+			for (var j:int = 0; j < config.ROW_SIZE; j++)
 			{
-				for (var j:int = 0; j < config.ROW_SIZE; j++)
+				for (var i:int = 0; i < config.COL_SIZE; i++)
 				{
 					// init
 					var _crystal:Crystal = new Crystal();
 					_canvas.addChild(_crystal);
 					_crystals.push(_crystal);
-					_crystal.id = i * config.COL_SIZE + j;
+					_crystal.id = j * config.COL_SIZE + i;
 
 					// position
 					_crystal.x = i * _crystal.width;
 					_crystal.y = j * _crystal.height;
-
-					// texture
-					_crystal.spin();
 				}
 			}
 
+			shuffle();
+
+			_crystals[0].spin(0);
+			_crystals[1].spin(1);
+			_crystals[2].spin(2);
+			_crystals[3].spin(3);
+
+			_crystals[4].spin(0);
+			_crystals[5].spin(1);
+			_crystals[6].spin(2);
+			_crystals[7].spin(3);
+
+			var _k:int = 2;
+
+			_crystals[_k * 8 + 0].spin(0);
+			_crystals[_k * 8 + 1].spin(1);
+			_crystals[_k * 8 + 2].spin(0);
+			_crystals[_k * 8 + 3].spin(0);
+
+			_crystals[_k * 8 + 4].spin(1);
+			_crystals[_k * 8 + 5].spin(2);
+			_crystals[_k * 8 + 6].spin(3);
+			_crystals[_k * 8 + 6].spin(4);
+
 			_canvas.addEventListener(MouseEvent.CLICK, onClick);
+
+			// debug
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, shuffle);
+		}
+
+		private function shuffle(e:* = null):void
+		{
+			var _length:int = _crystals.length;
+			for (var _index:int = 0; _index < _length; _index++)
+			{
+				var _crystal:Crystal = _crystals[_index];
+				_crystal.spin();
+			}
+
+			Rule.check(_crystals, onShuffleComplete);
+		}
+
+		private function onShuffleComplete(result:Boolean, crystals:Vector.<Crystal>):void
+		{
+			if (result)
+				shuffle();
 		}
 
 		private function onClick(event:MouseEvent):void
@@ -129,25 +172,25 @@ package
 			if (!_focusCrystal.focus && !_swapCrystal.focus)
 			{
 				trace(" ! onSwapComplete");
+
+				// swap
+				var _crystal:Crystal = _crystals[_swapCrystal.id];
+				_crystals[_swapCrystal.id] = _crystals[_focusCrystal.id];
+				_crystals[_focusCrystal.id] = _crystal;
+
 				trace(" > Begin Check condition...");
-				Rule.check(_focusCrystal.id, _swapCrystal.id, _crystals, onCheckComplete);
+				Rule.check(_crystals, onCheckComplete);
 			}
 		}
 
-		private function onCheckComplete(result:Boolean, crystals:Array):void
+		private function onCheckComplete(result:Boolean, crystals:Vector.<Crystal>):void
 		{
 			trace(" < End Check condition...");
 			if (result)
 			{
 				// good move
-				trace(" ! Good move");
-
-				trace(" * Call effect");
-
-				trace(" * Effect done");
-
-				// done
-				onGoodMoveComplete();
+				trace(" * Call good effect");
+				doGoodEffect();
 			}
 			else
 			{
@@ -158,9 +201,38 @@ package
 			}
 		}
 
-		private function onGoodMoveComplete():void
+		private function doGoodEffect():void
 		{
+			var _length:int = _crystals.length;
+			for (var _index:int = 0; _index < _length; _index++)
+			{
+				// TODO add effect
+				var _crystal:Crystal = _crystals[_index];
+				if (_crystal.status == Crystal.STATUS_TOBE_REMOVE)
+					TweenLite.to(_crystal, .25, {alpha:0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystals[_index]]});
+			}
+			trace(" * Effect done");
+		}
+
+		private function onGoodMoveComplete(crystal:Crystal):void
+		{
+			// mark as done
+			crystal.status = Crystal.STATUS_REMOVED;
+			
+			// all clean?
+			var _length:int = _crystals.length;
+			while(--_length>-1 && (_crystals[_length].status != Crystal.STATUS_TOBE_REMOVE))
+			{
+				//
+			}
+			if(_length > -1)
+				return;
+			
 			trace(" ! onGoodMoveComplete");
+			
+			trace(" * falling down");
+
+			trace(" * Recheck until all ready");
 
 			// dispose
 			_focusCrystal = null;
