@@ -1,9 +1,9 @@
 package control
 {
 	import flash.geom.Point;
-
+	
 	import org.osflash.signals.Signal;
-
+	
 	import view.Crystal;
 
 	public class Rule
@@ -26,13 +26,28 @@ package control
 
 			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
 		}
+		
+		public static function swapByID(crystals:Vector.<Crystal>, sorceID:int, targetID:int):void
+		{
+			var _crystal:Crystal = crystals[targetID];
+			crystals[targetID] = crystals[sorceID];
+			crystals[sorceID] = _crystal;
+		}
 
-		private static function getPositionFromIndex(index:uint, size:uint):Point
+		public static function getAboveCrystal(crystals:Vector.<Crystal>, index:int, size:uint):Crystal
+		{
+			while(((index -= size) >=0) && (crystals[index].status != Crystal.STATUS_READY))
+			{
+			}
+			return index>-1?crystals[index]:null;
+		}
+		
+		public static function getPositionFromIndex(index:int, size:uint):Point
 		{
 			return new Point(int(index % size), int(index / size));
 		}
 
-		public static function check(boards:Vector.<Crystal>, listener:Function):void
+		public static function check(crystals:Vector.<Crystal>, listener:Function):void
 		{
 			checkSignal.addOnce(listener);
 
@@ -49,10 +64,10 @@ package control
 				{
 					_count = 0;
 					var _currentIndex:uint = k;
-					var _skinIndex:uint = boards[k].skinIndex;
+					var _skinIndex:uint = crystals[k].skinIndex;
 
 					// start skin index same as other skin index?
-					while ((k < j + config.COL_SIZE - 2) && (_isSame = (_skinIndex == boards[k + 1].skinIndex)))
+					while ((k < j + config.COL_SIZE - 2) && (_isSame = (_skinIndex == crystals[k + 1].skinIndex)))
 					{
 						/*
 						   same color more than 3 time
@@ -70,7 +85,7 @@ package control
 								// eliminate all in col
 								for (var _index:int = _currentIndex; _index <= k + 1; _index++)
 								{
-									boards[_index].status = Crystal.STATUS_TOBE_REMOVE;
+									crystals[_index].status = Crystal.STATUS_TOBE_REMOVE;
 									trace(_index);
 								}
 
@@ -88,7 +103,7 @@ package control
 			}
 
 			// result
-			checkSignal.dispatch(_result, boards);
+			checkSignal.dispatch(_result, crystals);
 		}
 	}
 }

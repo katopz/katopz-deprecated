@@ -8,9 +8,19 @@ package
 	import flash.display.Sprite;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import view.Crystal;
-
+	/**
+	 * TODO
+	 * 
+	 * - add row score rule
+	 * - test deep fall
+	 * - recheck combo
+	 * - add real score
+	 *   
+	 * @author katopz
+	 */
 	public class main extends Sprite
 	{
 		// status
@@ -174,9 +184,7 @@ package
 				trace(" ! onSwapComplete");
 
 				// swap
-				var _crystal:Crystal = _crystals[_swapCrystal.id];
-				_crystals[_swapCrystal.id] = _crystals[_focusCrystal.id];
-				_crystals[_focusCrystal.id] = _crystal;
+				Rule.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 
 				trace(" > Begin Check condition...");
 				Rule.check(_crystals, onCheckComplete);
@@ -203,41 +211,104 @@ package
 
 		private function doGoodEffect():void
 		{
+			trace(" > Begin Effect");
 			var _length:int = _crystals.length;
 			for (var _index:int = 0; _index < _length; _index++)
 			{
-				// TODO add effect
 				var _crystal:Crystal = _crystals[_index];
 				if (_crystal.status == Crystal.STATUS_TOBE_REMOVE)
-					TweenLite.to(_crystal, .25, {alpha:0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystals[_index]]});
+					TweenLite.to(_crystal, .25, {alpha: 0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystal]});
 			}
-			trace(" * Effect done");
 		}
 
 		private function onGoodMoveComplete(crystal:Crystal):void
 		{
 			// mark as done
 			crystal.status = Crystal.STATUS_REMOVED;
-			
+
 			// all clean?
 			var _length:int = _crystals.length;
-			while(--_length>-1 && (_crystals[_length].status != Crystal.STATUS_TOBE_REMOVE))
+			while (--_length > -1 && (_crystals[_length].status != Crystal.STATUS_TOBE_REMOVE))
 			{
 				//
 			}
-			if(_length > -1)
+			if (_length > -1)
+				return;
+
+			trace(" < End Effect");
+			refill();
+		}
+
+		private function refill():void
+		{
+			trace(" > Begin Refill");
+			
+			var _topCrystals:Vector.<Crystal> = new Vector.<Crystal>(config.COL_SIZE, true);
+			var _position:Point;
+			
+			var _index:int = _crystals.length;
+			// from bottom to top
+			while (--_index > -1)
+			{
+				var _crystal:Crystal = _crystals[_index];
+				// it's removed
+				if (_crystal.status == Crystal.STATUS_REMOVED || _crystal.status == Crystal.STATUS_FALL)
+				{
+					// find top most to replace
+					var _aboveCrystal:Crystal = Rule.getAboveCrystal(_crystals, _index, config.COL_SIZE);
+					if(_aboveCrystal)
+					{
+						// got something on top
+						
+						// fall to bottom
+						_aboveCrystal.status = Crystal.STATUS_FALL;
+						TweenLite.to(_aboveCrystal, .25, {x: _crystal.x, y: _crystal.y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
+						
+						// fall from top
+						_crystal.status = Crystal.STATUS_FALL;
+						//_crystal.y = -config.CYSTAL_SIZE;
+						//TweenLite.to(_crystal, .25, {alpha:1, x: _aboveCrystal.x, y: _aboveCrystal.y, onComplete: onRefillComplete, onCompleteParams: [_crystal]});
+						//_crystal.spin();
+						
+						// real swap
+						//Rule.swapByID(_crystals, _crystal.id, _aboveCrystal.id);
+						
+						// move to top for pooling reuse
+						_position = Rule.getPositionFromIndex(_index, config.COL_SIZE);
+						if(!_topCrystals[_position.x])
+							_topCrystals[_position.x] = _crystal;
+					}else{
+						
+						// nothing on top, get top most from stock
+						_position = Rule.getPositionFromIndex(_index, config.COL_SIZE);
+						_aboveCrystal = _topCrystals[_position.x];
+						_aboveCrystal.y = _crystal.y-config.CYSTAL_SIZE;
+						_crystal.status = Crystal.STATUS_FALL;
+						TweenLite.to(_aboveCrystal, .25, {alpha:1, x: _crystal.x, y: _crystal.y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
+						_aboveCrystal.spin();
+					}
+				}
+			}
+		}
+
+		private function onRefillComplete(crystal:Crystal):void
+		{
+			// mark as done
+			crystal.status = Crystal.STATUS_READY;
+			
+			// all clean?
+			var _length:int = _crystals.length;
+			while (--_length > -1 && (_crystals[_length].status == Crystal.STATUS_READY))
+			{
+				//
+			}
+			if (_length > -1)
 				return;
 			
-			trace(" ! onGoodMoveComplete");
+			trace(" < End Refill");
 			
-			trace(" * falling down");
-
-			trace(" * Recheck until all ready");
-
-			// dispose
-			_focusCrystal = null;
-			_swapCrystal = null;
-
+			trace(" * Re check for combo before next turn");
+			
 			nextTurn();
 		}
 
@@ -275,6 +346,12 @@ package
 		private function nextTurn():void
 		{
 			trace(" ! nextTurn");
+
+			// dispose
+			_focusCrystal = null;
+			_swapCrystal = null;
+
+			// accept inpt
 			unfreeze();
 			_status = SELECT_FOCUS;
 		}
