@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.33
- * DATE: 2010-04-03
+ * VERSION: 1.381
+ * DATE: 2010-05-17
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.greensock.com/timelinemax/
  **/
@@ -13,7 +13,7 @@ package com.greensock {
 /**
  * 	TimelineMax extends TimelineLite, offering exactly the same functionality plus useful 
  *  (but non-essential) features like AS3 event dispatching, repeat, repeatDelay, yoyo, 
- *  currentLabel, addCallback(), removeCallback(), tweenTo(), getLabelAfter(), getLabelBefore(),
+ *  currentLabel, addCallback(), removeCallback(), tweenTo(), tweenFromTo(), getLabelAfter(), getLabelBefore(),
  * 	and getActive() (and probably more in the future). It is the ultimate sequencing tool. 
  *  Think of a TimelineMax instance like a virtual MovieClip timeline or a container where 
  *  you place tweens (or other timelines) over the course of time. You can:
@@ -146,7 +146,7 @@ package com.greensock {
  **/
 	public class TimelineMax extends TimelineLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.33;
+		public static const version:Number = 1.381;
 		
 		/** @private **/
 		protected var _repeat:int;
@@ -269,10 +269,10 @@ package com.greensock {
 		 */
 		public function TimelineMax(vars:Object=null) {
 			super(vars);
-			_repeat = this.vars.repeat || 0;
-			_repeatDelay = this.vars.repeatDelay || 0;
+			_repeat = (this.vars.repeat) ? Number(this.vars.repeat) : 0;
+			_repeatDelay = (this.vars.repeatDelay) ? Number(this.vars.repeatDelay) : 0;
 			_cyclesComplete = 0;
-			this.yoyo = this.vars.yoyo || false;
+			this.yoyo = Boolean(this.vars.yoyo == true);
 			this.cacheIsDirty = true;
 			if (this.vars.onCompleteListener != null || this.vars.onUpdateListener != null || this.vars.onStartListener != null || this.vars.onRepeatListener != null || this.vars.onReverseCompleteListener != null) {
 				initDispatcher();
@@ -301,7 +301,7 @@ package com.greensock {
 		 * particular function are removed from the timeline.
 		 * 
 		 * @param function callback function to be removed
-		 * @param timeOrLabel the time in seconds (or frames for frames-based timelines) or label from which the callback should be removed. For example, myTimeline.removeCallback(myFunction, 3) would remove the callback from 3-seconds into the timeline, and myTimeline.removeCallback(myFunction, "myLabel") would remove it from the "myLabel" label, and myTimeline.removeCallback(myFunction, null) would remove ALL callbacks of that function regardless of where they are on the timeline.
+		 * @param timeOrLabel the time in seconds (or frames for frames-based timelines) or label from which the callback should be removed. For example, <code>myTimeline.removeCallback(myFunction, 3)</code> would remove the callback from 3-seconds into the timeline, and <code>myTimeline.removeCallback(myFunction, "myLabel")</code> would remove it from the "myLabel" label, and <code>myTimeline.removeCallback(myFunction, null)</code> would remove ALL callbacks of that function regardless of where they are on the timeline.
 		 * @return true if any callbacks were successfully found and removed. false otherwise.
 		 */
 		public function removeCallback(callback:Function, timeOrLabel:*=null):Boolean {
@@ -364,7 +364,7 @@ package com.greensock {
 			varsCopy.onInit = onInitTweenTo;
 			varsCopy.onInitParams = [null, this, NaN];
 			varsCopy.currentTime = parseTimeOrLabel(timeOrLabel);
-			var tl:TweenLite = new TweenLite(this, Math.abs(Number(varsCopy.currentTime) - this.cachedTime) / this.cachedTimeScale || 0.001, varsCopy);
+			var tl:TweenLite = new TweenLite(this, (Math.abs(Number(varsCopy.currentTime) - this.cachedTime) / this.cachedTimeScale) || 0.001, varsCopy);
 			tl.vars.onInitParams[0] = tl;
 			return tl;
 		}
@@ -405,7 +405,7 @@ package com.greensock {
 		public function tweenFromTo(fromTimeOrLabel:*, toTimeOrLabel:*, vars:Object=null):TweenLite {
 			var tl:TweenLite = tweenTo(toTimeOrLabel, vars);
 			tl.vars.onInitParams[2] = parseTimeOrLabel(fromTimeOrLabel);
-			tl.duration = Math.abs(Number(tl.vars.currentTime) - tl.vars.onInitParams[2]);
+			tl.duration = Math.abs(Number(tl.vars.currentTime) - tl.vars.onInitParams[2]) / this.cachedTimeScale;
 			return tl;
 		}
 		
@@ -415,7 +415,9 @@ package com.greensock {
 			if (!isNaN(fromTime)) {
 				timeline.currentTime = fromTime;
 			}
-			tween.duration = Math.abs(Number(tween.vars.currentTime) - timeline.currentTime);
+			if (tween.vars.currentTime != timeline.currentTime) { //don't make the duration zero - if it's supposed to be zero, don't worry because it's already initting the tween and will complete immediately, effectively making the duration zero anyway. If we make duration zero, the tween won't run at all.
+				tween.duration = Math.abs(Number(tween.vars.currentTime) - timeline.currentTime) / timeline.cachedTimeScale;
+			}
 		}
 		
 		/** @private **/
@@ -431,7 +433,7 @@ package com.greensock {
 			} else if (!this.active && !this.cachedPaused) {
 				this.active = true; //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
-			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, prevStart:Number = this.cachedStartTime, tween:TweenCore, isComplete:Boolean, rendered:Boolean, repeated:Boolean, next:TweenCore, dur:Number, prevPaused:Boolean = this.cachedPaused;
+			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, prevStart:Number = this.cachedStartTime, prevTimeScale:Number = this.cachedTimeScale, tween:TweenCore, isComplete:Boolean, rendered:Boolean, repeated:Boolean, next:TweenCore, dur:Number, prevPaused:Boolean = this.cachedPaused;
 			if (time >= totalDur) {
 				if (_rawPrevTime <= totalDur && _rawPrevTime != time) {
 					if (!this.cachedReversed && this.yoyo && _repeat % 2 != 0) {
@@ -459,13 +461,8 @@ package com.greensock {
 				}
 				if (_rawPrevTime >= 0 && _rawPrevTime != time) {
 					this.cachedTotalTime = 0;
-					if (!this.cachedReversed && this.yoyo && _repeat % 2 != 0) {
-						forceChildrenToEnd(this.cachedDuration, suppressEvents);
-						this.cachedTime = this.cachedDuration;
-					} else {
-						forceChildrenToBeginning(0, suppressEvents);
-						this.cachedTime = 0;
-					}
+					forceChildrenToBeginning(0, suppressEvents);
+					this.cachedTime = 0;
 					rendered = true;
 					if (this.cachedReversed) {
 						isComplete = true;
@@ -475,17 +472,20 @@ package com.greensock {
 				this.cachedTotalTime = this.cachedTime = time;
 			}
 			_rawPrevTime = time;
-			
-			if (_repeat != 0) {
 				
+			if (_repeat != 0) {
 				var cycleDuration:Number = this.cachedDuration + _repeatDelay;
 				if (isComplete) {
 					if (this.yoyo && _repeat % 2) {
 						this.cachedTime = 0;
 					}
 				} else if (time > 0) {
-					var prevCycle:Number = _cyclesComplete;
-					if (_cyclesComplete != (_cyclesComplete = int(this.cachedTotalTime / cycleDuration))) {
+					var prevCycles:int = _cyclesComplete;
+					_cyclesComplete = int(this.cachedTotalTime / cycleDuration);
+					if (_cyclesComplete == this.cachedTotalTime / cycleDuration) {
+						_cyclesComplete--; //otherwise when rendered exactly at the end time, it will act as though it is repeating (at the beginning)
+					}
+					if (prevCycles != _cyclesComplete) {
 						repeated = true;
 					}
 					
@@ -512,9 +512,9 @@ package com.greensock {
 					*/
 					
 					var forward:Boolean = Boolean(!this.yoyo || (_cyclesComplete % 2 == 0));
-					var prevForward:Boolean = Boolean(!this.yoyo || (prevCycle % 2 == 0));
+					var prevForward:Boolean = Boolean(!this.yoyo || (prevCycles % 2 == 0));
 					var wrap:Boolean = Boolean(forward == prevForward);
-					if (prevCycle > _cyclesComplete) {
+					if (prevCycles > _cyclesComplete) {
 						prevForward = !prevForward;
 					}
 					
@@ -596,7 +596,7 @@ package com.greensock {
 			if (_hasUpdateListener && !suppressEvents) {
 				_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.UPDATE));
 			}
-			if (isComplete && prevStart == this.cachedStartTime) { //if one of the tweens that was rendered altered this timeline's startTime (like if an onComplete reversed the timeline), we shouldn't run complete() because it probably isn't complete. If it is, don't worry, because whatever call altered the startTime would have called complete() if it was necessary at the new time.
+			if (isComplete && (prevStart == this.cachedStartTime || prevTimeScale != this.cachedTimeScale) && (totalDur >= this.totalDuration || this.cachedTime == 0)) { //if one of the tweens that was rendered altered this timeline's startTime (like if an onComplete reversed the timeline) or if it added more tweens to the timeline, we shouldn't run complete() because it probably isn't complete. If it is, don't worry, because whatever call altered the startTime would have called complete() if it was necessary at the new time. The only exception is the timeScale property.
 				complete(true, suppressEvents);
 			} else if (repeated && !suppressEvents) {
 				if (this.vars.onRepeat) {
@@ -647,9 +647,9 @@ package com.greensock {
 		
 		/** @inheritDoc **/
 		override public function invalidate():void {
-			_repeat = this.vars.repeat || 0;
-			_repeatDelay = this.vars.repeatDelay || 0;
-			this.yoyo = this.vars.yoyo || false;
+			_repeat = (this.vars.repeat) ? Number(this.vars.repeat) : 0;
+			_repeatDelay = (this.vars.repeatDelay) ? Number(this.vars.repeatDelay) : 0;
+			this.yoyo = Boolean(this.vars.yoyo == true);
 			if (this.vars.onCompleteListener != null || this.vars.onUpdateListener != null || this.vars.onStartListener != null || this.vars.onRepeatListener != null || this.vars.onReverseCompleteListener != null) {
 				initDispatcher();
 			}

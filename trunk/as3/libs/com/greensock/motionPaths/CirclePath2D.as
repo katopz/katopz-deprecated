@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.2 (beta)
- * DATE: 2010-04-16
+ * VERSION: 0.21 (beta)
+ * DATE: 2010-04-21
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com
  **/
@@ -96,6 +96,14 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 				py = Math.sin(angle) * _radius;
 				f.target.x = px * a + py * c + tx;
 				f.target.y = px * b + py * d + ty;
+				
+				if (f.autoRotate) {
+					angle += Math.PI / 2;
+					px = Math.cos(angle) * _radius;
+					py = Math.sin(angle) * _radius;
+					f.target.rotation = Math.atan2(px * m.b + py * m.d, px * m.a + py * m.c) * _RAD2DEG + f.rotationOffset;
+				}
+				
 				f = f.cachedNext;
 			}
 			if (_redrawLine && this.visible && this.parent) {
@@ -108,13 +116,20 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		
 		/** @inheritDoc **/
-		override public function renderObjectAt(target:Object, progress:Number):void {
+		override public function renderObjectAt(target:Object, progress:Number, autoRotate:Boolean=false, rotationOffset:Number=0):void {
 			var angle:Number = progress * Math.PI * 2;
 			var m:Matrix = this.transform.matrix;
 			var px:Number = Math.cos(angle) * _radius;
 			var py:Number = Math.sin(angle) * _radius;
 			target.x = px * m.a + py * m.c + m.tx;
 			target.y = px * m.b + py * m.d + m.ty;
+			
+			if (autoRotate) {
+				angle += Math.PI / 2;
+				px = Math.cos(angle) * _radius;
+				py = Math.sin(angle) * _radius;
+				target.rotation = Math.atan2(px * m.b + py * m.d, px * m.a + py * m.c) * _RAD2DEG + rotationOffset;
+			}
 		}
 		
 		

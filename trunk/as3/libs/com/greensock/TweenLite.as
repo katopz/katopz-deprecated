@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.32
- * DATE: 2010-04-09
+ * VERSION: 11.36
+ * DATE: 2010-04-27
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -231,7 +231,7 @@ package com.greensock {
 		}
 		
 		/** @private **/
-		public static const version:Number = 11.32;
+		public static const version:Number = 11.36;
 		/** @private When plugins are activated, the class is added (named based on the special property) to this object so that we can quickly look it up in the initTweenVals() method.**/
 		public static var plugins:Object = {}; 
 		/** @private **/
@@ -289,7 +289,7 @@ package com.greensock {
 		public function TweenLite(target:Object, duration:Number, vars:Object) {
 			super(duration, vars);
 			this.target = target;
-			if (this.target is TweenCore && "timeScale" in this.vars) { //if timeScale is in the vars object and the target is a TweenCore, this tween's timeScale must be adjusted (in TweenCore's constructor, it was set to whatever the vars.timeScale was)
+			if (this.target is TweenCore && this.vars.timeScale) { //if timeScale is in the vars object and the target is a TweenCore, this tween's timeScale must be adjusted (in TweenCore's constructor, it was set to whatever the vars.timeScale was)
 				this.cachedTimeScale = 1;
 			}
 			propTweenLookup = {};
