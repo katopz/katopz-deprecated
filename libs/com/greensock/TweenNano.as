@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.03
- * DATE: 2010-04-03
+ * VERSION: 1.05
+ * DATE: 2010-05-11
  * AS3 (AS2 is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenNano.com
  **/
@@ -41,6 +41,7 @@ package com.greensock {
  * 				<li>reverse()</li>
  * 				<li>invalidate()</li>
  * 				<li>onStart</li>
+ * 				<li>onInit</li>
  * 				<li>defaultEase</li>
  * 				<li>easeParams</li>
  * 				<li>currentTime</li>
@@ -84,11 +85,15 @@ package com.greensock {
  * 	
  * 	<li><b> overwrite : Boolean</b>		Controls how other tweens of the same object are handled when this tween is created. Here are the options:
  * 										<ul>
- * 			  							<li><b> false (NONE):</b> No tweens are overwritten. This is the fastest mode, but you need to be careful not to create any 
- * 			  										tweens with overlapping properties, otherwise they'll conflict with each other. </li>
+ * 			  							<li><b> false (NONE):</b> No tweens are overwritten. This is the fastest mode, but you need to be careful not 
+ * 													to create any tweens with overlapping properties of the same object that run at the same time, 
+ * 													otherwise they'll conflict with each other. <br /><code>
+ * 												   		TweenNano.to(mc, 1, {x:100, y:200});<br />
+ * 														TweenNano.to(mc, 1, {x:300, delay:2, overwrite:false}); //does NOT overwrite the previous tween.</code></li>
  * 											
  * 										<li><b> true (ALL_IMMEDIATE):</b> This is the default mode in TweenNano. All tweens of the same target
- * 													are completely overwritten immediately when the tween is created. <br /><code>
+ * 													are completely overwritten immediately when the tween is created, regardless of whether or 
+ * 													not any of the properties overlap. <br /><code>
  * 												   		TweenNano.to(mc, 1, {x:100, y:200});<br />
  * 														TweenNano.to(mc, 1, {x:300, delay:2, overwrite:true}); //immediately overwrites the previous tween</code></li>
  * 										</ul></li>
@@ -142,6 +147,9 @@ package com.greensock {
  * 	  
  * 	<li> You can kill all delayedCalls to a particular function using <code>TweenNano.killTweensOf(myFunction);</code>
  * 	  This can be helpful if you want to preempt a call.</li>
+ * 
+ *  <li> If some of your tweens don't appear to be working, read about the <code>overwrite</code> special property
+ * 		above - it is most likely an overwriting issue that could be solved by adding <code>overwrite:false</code> to your vars object.</li>
  * 	  
  * 	<li> Use the <code>TweenNano.from()</code> method to animate things into place. For example, if you have things set up on 
  * 	  the stage in the spot where they should end up, and you just want to animate them into place, you can 
@@ -219,11 +227,11 @@ package com.greensock {
 			}
 			_propTweens = [];
 			this.useFrames = Boolean(vars.useFrames == true);
-			var delay:Number = this.vars.delay || 0;
+			var delay:Number = ("delay" in this.vars) ? Number(this.vars.delay) : 0;
 			this.startTime = (this.useFrames) ? _frame + delay : _time + delay;
 			
 			var a:Array = _masterList[target];
-			if (a == null || int(this.vars.overwrite)) { 
+			if (a == null || int(this.vars.overwrite) == 1 || this.vars.overwrite == null) { 
 				_masterList[target] = [this];
 			} else {
 				a[a.length] = this;
