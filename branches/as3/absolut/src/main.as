@@ -2,22 +2,20 @@ package
 {
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	
-	import control.Rule;
-	
+
+	import model.Rule;
+
 	import flash.display.Sprite;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import view.Crystal;
 
 	/**
 	 * TODO
-	 *
-	 * - add row score rule
-	 * - test deep fall
-	 * - recheck combo
+	 * 
+	 * - check for gameover condition
 	 * - add real score
 	 *
 	 * @author katopz
@@ -63,41 +61,41 @@ package
 			}
 
 			shuffle();
-/*
-			_crystals[0].spin(0);
-			_crystals[1].spin(1);
-			_crystals[2].spin(5);
-			_crystals[3].spin(4);
+			/*
+			   _crystals[0].spin(0);
+			   _crystals[1].spin(1);
+			   _crystals[2].spin(5);
+			   _crystals[3].spin(4);
 
-			_crystals[4].spin(0);
-			_crystals[5].spin(1);
-			_crystals[6].spin(0);
-			_crystals[7].spin(0);
+			   _crystals[4].spin(0);
+			   _crystals[5].spin(1);
+			   _crystals[6].spin(0);
+			   _crystals[7].spin(0);
 
-			var _k:int = 1;
+			   var _k:int = 1;
 
-			_crystals[_k * 8 + 0].spin(5);
-			_crystals[_k * 8 + 1].spin(1);
-			_crystals[_k * 8 + 2].spin(2);
-			_crystals[_k * 8 + 3].spin(3);
+			   _crystals[_k * 8 + 0].spin(5);
+			   _crystals[_k * 8 + 1].spin(1);
+			   _crystals[_k * 8 + 2].spin(2);
+			   _crystals[_k * 8 + 3].spin(3);
 
-			_crystals[_k * 8 + 4].spin(1);
-			_crystals[_k * 8 + 5].spin(1);
-			_crystals[_k * 8 + 6].spin(0);
-			_crystals[_k * 8 + 7].spin(0);
-			
-			_k = 2;
+			   _crystals[_k * 8 + 4].spin(1);
+			   _crystals[_k * 8 + 5].spin(1);
+			   _crystals[_k * 8 + 6].spin(0);
+			   _crystals[_k * 8 + 7].spin(0);
 
-			_crystals[_k * 8 + 0].spin(2);
-			_crystals[_k * 8 + 1].spin(2);
-			_crystals[_k * 8 + 2].spin(1);
-			_crystals[_k * 8 + 3].spin(3);
+			   _k = 2;
 
-			_crystals[_k * 8 + 4].spin(3);
-			_crystals[_k * 8 + 5].spin(1);
-			_crystals[_k * 8 + 6].spin(0);
-			_crystals[_k * 8 + 7].spin(0);
-*/
+			   _crystals[_k * 8 + 0].spin(2);
+			   _crystals[_k * 8 + 1].spin(2);
+			   _crystals[_k * 8 + 2].spin(1);
+			   _crystals[_k * 8 + 3].spin(3);
+
+			   _crystals[_k * 8 + 4].spin(3);
+			   _crystals[_k * 8 + 5].spin(1);
+			   _crystals[_k * 8 + 6].spin(0);
+			   _crystals[_k * 8 + 7].spin(0);
+			 */
 			_canvas.addEventListener(MouseEvent.CLICK, onClick);
 
 			// debug
@@ -114,14 +112,14 @@ package
 				_crystal.spin();
 				_crystal.status = Crystal.STATUS_READY;
 			}
-			
+
 			var _i:int = 0;
 			var _j:int = 2;
-			
-			_crystals[_i++*config.COL_SIZE + _j].spin(0);
-			_crystals[_i++*config.COL_SIZE + _j].spin(1);
-			_crystals[_i++*config.COL_SIZE + _j].spin(0);
-			_crystals[_i++*config.COL_SIZE + _j].spin(0);
+
+			_crystals[_i++ * config.COL_SIZE + _j].spin(0);
+			_crystals[_i++ * config.COL_SIZE + _j].spin(1);
+			_crystals[_i++ * config.COL_SIZE + _j].spin(0);
+			_crystals[_i++ * config.COL_SIZE + _j].spin(0);
 
 			onShuffleComplete(Rule.checkCol(_crystals) || Rule.checkRow(_crystals));
 		}
@@ -135,11 +133,11 @@ package
 		private function onClick(event:MouseEvent):void
 		{
 			// click on crystal
-			if(event.target.parent is Crystal)
+			if (event.target.parent is Crystal)
 			{
 				//freeze
 				freeze();
-	
+
 				var _crystal:Crystal = event.target.parent;
 				if (_crystal)
 					focusCrystal(_crystal);
@@ -168,10 +166,13 @@ package
 						break;
 
 					case SELECT_SWAP:
-						
+
 						// click on old crystal
-						if(_focusCrystal == _crystal)
+						if (_focusCrystal == _crystal)
 						{
+							_crystal.focus = !_crystal.focus;
+							_focusCrystal = null;
+							_status = SELECT_FOCUS;
 							unfreeze();
 							return;
 						}
@@ -285,8 +286,8 @@ package
 
 			var _topCrystals:Vector.<Crystal> = new Vector.<Crystal>(config.COL_SIZE, true);
 			var _position:Point;
-
 			var _index:int = _crystals.length;
+			
 			// from bottom to top
 			while (--_index > -1)
 			{
@@ -298,28 +299,11 @@ package
 					var _aboveCrystal:Crystal = Rule.getAboveCrystal(_crystals, _index, config.COL_SIZE);
 					if (_aboveCrystal)
 					{
-						// got something on top
-
 						// fall to bottom
 						_crystal.swapID = _aboveCrystal.id;
 						_aboveCrystal.status = Crystal.STATUS_FALL;
 
-						//TweenLite.to(_aboveCrystal, .25, {x: _crystal.x, y: _crystal.y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
-
-						//trace("fall:" + _crystal.id + "->" + _aboveCrystal.id);
-
 						onRefillComplete(_crystal);
-
-							// fall from top
-							//_crystal.status = Crystal.STATUS_FALL;
-
-							// move to top for pooling
-						/*
-						   _position = Rule.getPositionFromIndex(_index, config.COL_SIZE);
-						   if(!_topCrystals[_position.x])
-						   _topCrystals[_position.x] = _crystal;
-						 */
-
 					}
 					else
 					{
@@ -328,33 +312,8 @@ package
 						_crystal.spin();
 						_crystal.status = Crystal.STATUS_READY;
 						_crystal.swapID = -1;
-						
+
 						onRefillComplete(_crystal);
-
-						/*
-						   _position = Rule.getPositionFromIndex(_index, config.COL_SIZE);
-						   _aboveCrystal = _topCrystals[_position.x];
-
-						   trace(_aboveCrystal.id);
-
-						   trace("*fall:"+_crystal.id+"->"+_aboveCrystal.id);
-						   _aboveCrystal.y = _crystal.y-config.CYSTAL_SIZE;
-						   _crystal.status = Crystal.STATUS_FALL;
-						   var _x:Number = _crystal.x;
-						   var _y:Number = _crystal.y;
-						   TweenLite.to(_aboveCrystal, .25, {alpha:1, x: _x, y: _y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
-
-						   // real swap
-						   //Rule.swapByID(_crystals, _crystal.id, _aboveCrystal.id);
-
-
-						   _topCrystals[_position.x] = null;
-
-						   // to swap
-						   _aboveCrystal.swapID = _crystal.id;
-
-						   _aboveCrystal.spin();
-						 */
 					}
 				}
 			}
@@ -386,14 +345,12 @@ package
 			trace(" < End Refill");
 
 			trace(" > Begin Recheck");
-			//Rule.check(_crystals, onCheckComplete);
-			
 			reCheck(Rule.checkCol(_crystals) || Rule.checkRow(_crystals));
 		}
 
 		private function reCheck(result:Boolean):void
 		{
-			if(result)
+			if (result)
 			{
 				onCheckComplete(result);
 			}
@@ -403,7 +360,7 @@ package
 				nextTurn();
 			}
 		}
-		
+
 		private function onBadMoveComplete(crystal:Crystal):void
 		{
 			// dispose

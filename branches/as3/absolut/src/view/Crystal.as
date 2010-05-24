@@ -53,9 +53,10 @@ package view
 		}
 
 		private var _skinIndex:int;
+
 		public function get skinIndex():int
 		{
-			return _skinIndex;//_crystalClip.currentFrame - 1;
+			return _skinIndex; //_crystalClip.currentFrame - 1;
 		}
 
 		public function set skinIndex(value:int):void
@@ -88,9 +89,9 @@ package view
 
 		public function spin(value:int = -1):void
 		{
-			_skinIndex = (value == -1)?int((_crystalClip.totalFrames-1) * Math.random()):value;
-			_crystalClip.gotoAndStop(_skinIndex+1);
-			
+			_skinIndex = (value == -1) ? int((_crystalClip.totalFrames - 1) * Math.random()) : value;
+			_crystalClip.gotoAndStop(_skinIndex + 1);
+
 			swapID = -1;
 		}
 

@@ -1,13 +1,11 @@
-package control
+package model
 {
 	import flash.geom.Point;
-	
+
 	import view.Crystal;
 
 	public class Rule
 	{
-		//public static var checkSignal:Signal = new Signal(Boolean /*result*/, Vector.<Crystal>);
-
 		/**
 		 *
 		 * Rule #1 : swap only nearby area.
@@ -27,8 +25,6 @@ package control
 
 		public static function swapPositionByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
 		{
-			//trace("pos : " + srcID + "->" + targetID);
-
 			var x:Number = crystals[targetID].x;
 			crystals[targetID].x = crystals[srcID].x;
 			crystals[srcID].x = x;
@@ -40,8 +36,6 @@ package control
 
 		public static function swapByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
 		{
-			//trace("swap : " + srcID + "->" + targetID);
-
 			var _crystal:Crystal = crystals[targetID];
 			crystals[targetID] = crystals[srcID];
 			crystals[srcID] = _crystal;
@@ -49,16 +43,6 @@ package control
 			var _status:String = crystals[targetID].status;
 			crystals[targetID].status = crystals[srcID].status;
 			crystals[srcID].status = _status;
-
-			/*
-			   var _swapID:int = crystals[targetID].swapID;
-			   crystals[targetID].swapID = crystals[srcID].swapID;
-			   crystals[srcID].swapID = _swapID;
-
-			   var _skinIndex:uint = crystals[targetID].skinIndex;
-			   crystals[targetID].skinIndex = crystals[srcID].skinIndex;
-			   crystals[srcID].skinIndex = _skinIndex;
-			 */
 
 			var _id:int = crystals[targetID].id;
 			crystals[targetID].id = crystals[srcID].id;
@@ -80,7 +64,7 @@ package control
 
 		public static function checkCol(crystals:Vector.<Crystal>):Boolean
 		{
-			var _resultCol:Boolean = false;
+			var _result:Boolean = false;
 			for (var j:int = 0; j < crystals.length; j += config.COL_SIZE)
 			{
 				// check col
@@ -98,32 +82,19 @@ package control
 					// start skin index same as other skin index?
 					while ((k < j + config.COL_SIZE - 1) && (_isSame = (_skinIndex == crystals[k + 1].skinIndex)))
 					{
-						/*
-						   same color more than 3 time
-						   [0] [1] [2] [3] [4] [5] [6] [7]
-						   [a] [a] [a] [b] [c] [d] [e] [f]
-						   [a] [b] [c] [d] [e] [f] [f] [f]
-						 */
-
 						if (_isSame)
 						{
-							// more than 3?
-							_count++;
-
 							// same more than 3
-							if (_count > 1)
+							if (++_count > 1)
 							{
 								// eliminate all in row
 								for (var _index:int = _currentIndex; _index <= k + 1; _index++)
-								{
 									crystals[_index].status = Crystal.STATUS_TOBE_REMOVE;
-										//trace(" ! col remove : " + _index);
-								}
-								_resultCol = _resultCol || true;
+								_result = _result || true;
 							}
 							else
 							{
-								_resultCol = _resultCol || false;
+								_result = _result || false;
 							}
 						}
 						k++;
@@ -131,61 +102,46 @@ package control
 					k++;
 				}
 			}
-			
-			// result
-			//checkSignal.dispatch(_resultCol || _resultRow, crystals);
-			return _resultCol;
+
+			return _result;
 		}
-		
+
 		public static function checkRow(crystals:Vector.<Crystal>):Boolean
 		{
-			//checkSignal.addOnce(listener);
-				var _resultRow:Boolean = false;
+			var _result:Boolean = false;
+			for (var j:int = 0; j < crystals.length; j++)
+			{
+				var _isSame:Boolean;
+				var k:int = j;
+				var _count:int = 0;
 
-				// all in col
-				for (var j:int = 0; j < crystals.length; j++)
+				var _skinIndex:uint = crystals[j].skinIndex;
+
+				// start skin index same as other skin index?
+				while ((k + config.COL_SIZE < config.ROW_SIZE * config.COL_SIZE) && (_isSame = (_skinIndex == crystals[k + config.COL_SIZE].skinIndex)))
 				{
-					var _isSame:Boolean;
-					var k:int = j;
-					var _count:int = 0;
-
-					var _skinIndex:uint = crystals[j].skinIndex;
-
-					// start skin index same as other skin index?
-					while ((k + config.COL_SIZE < config.ROW_SIZE * config.COL_SIZE) && (_isSame = (_skinIndex == crystals[k + config.COL_SIZE].skinIndex)))
+					if (_isSame && crystals[k + config.COL_SIZE].status != Crystal.STATUS_TOBE_REMOVE)
 					{
-						if (_isSame && crystals[k + config.COL_SIZE].status != Crystal.STATUS_TOBE_REMOVE)
+						// same more than 3
+						if (++_count > 1)
 						{
-							// more than 3?
-							_count++;
-						
-							// same more than 3
-							if (_count > 1)
-							{
-								// eliminate all in col
-								var _position:Point = getPositionFromIndex(j, config.COL_SIZE);
-								//for (var _index:int = j; _index <= (_position.y+_count)*config.COL_SIZE; _index += config.COL_SIZE)
-								for (var _index:int = _position.y; _index<=_position.y+_count;_index++)
-								{
-									crystals[_position.x + _index*config.COL_SIZE].status = Crystal.STATUS_TOBE_REMOVE;
-									//trace(" ! remove : " + (_position.x + _index*config.COL_SIZE));
-								}
-								
-								_resultRow = _resultRow || true;
-							}
-							else
-							{
-								_resultRow = _resultRow || false;
-							}
+							// eliminate all in col
+							var _position:Point = getPositionFromIndex(j, config.COL_SIZE);
+							for (var _index:int = _position.y; _index <= _position.y + _count; _index++)
+								crystals[_position.x + _index * config.COL_SIZE].status = Crystal.STATUS_TOBE_REMOVE;
+
+							_result = _result || true;
 						}
-						k += config.COL_SIZE;
+						else
+						{
+							_result = _result || false;
+						}
 					}
+					k += config.COL_SIZE;
 				}
-			
-			trace("_result:" + _resultRow);
-			
-			// result
-			return _resultRow;
+			}
+
+			return _result;
 		}
 	}
 }
