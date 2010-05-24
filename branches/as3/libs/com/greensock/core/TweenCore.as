@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.13
- * DATE: 2009-12-08
+ * VERSION: 1.361
+ * DATE: 2010-04-28
  * ACTIONSCRIPT VERSION: 3.0 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -17,7 +17,7 @@ package com.greensock.core {
  */
 	public class TweenCore {
 		/** @private **/
-		public static const version:Number = 1.13;
+		public static const version:Number = 1.361;
 		
 		/** @private **/
 		protected static var _classInitted:Boolean;
@@ -67,10 +67,10 @@ package com.greensock.core {
 		public var data:*; 
 		
 		public function TweenCore(duration:Number=0, vars:Object=null) {
-			this.vars = vars || {};
-			this.cachedDuration = this.cachedTotalDuration = duration || 0;
-			_delay = this.vars.delay || 0;
-			this.cachedTimeScale = this.vars.timeScale || 1;
+			this.vars = (vars != null) ? vars : {};
+			this.cachedDuration = this.cachedTotalDuration = duration;
+			_delay = (this.vars.delay) ? Number(this.vars.delay) : 0;
+			this.cachedTimeScale = (this.vars.timeScale) ? Number(this.vars.timeScale) : 1;
 			this.active = Boolean(duration == 0 && _delay == 0 && this.vars.immediateRender != false);
 			this.cachedTotalTime = this.cachedTime = 0;
 			this.data = this.vars.data;
@@ -87,7 +87,6 @@ package com.greensock.core {
 			var tl:SimpleTimeline = (this.vars.timeline is SimpleTimeline) ? this.vars.timeline : (this.vars.useFrames) ? TweenLite.rootFramesTimeline : TweenLite.rootTimeline;
 			this.cachedStartTime = tl.cachedTotalTime + _delay;
 			tl.addChild(this);
-			
 			if (this.vars.reversed) {
 				this.cachedReversed = true;
 			}
@@ -163,7 +162,7 @@ package com.greensock.core {
 		 */
 		public function complete(skipRender:Boolean=false, suppressEvents:Boolean=false):void {
 			if (!skipRender) {
-				renderTime(this.cachedTotalDuration, suppressEvents, false); //just to force the final render
+				renderTime(this.totalDuration, suppressEvents, false); //just to force the final render
 				return; //renderTime() will call complete() again, so just return here.
 			}
 			if (this.timeline.autoRemoveChildren) {

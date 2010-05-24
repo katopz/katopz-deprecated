@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.1 (beta)
- * DATE: 1/19/2010
+ * VERSION: 0.21 (beta)
+ * DATE: 2010-04-21
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com
  **/
@@ -28,13 +28,13 @@ package com.greensock.motionPaths {
 import com.greensock.~~;
 import com.greensock.plugins.~~;
 import com.greensock.motionPaths.~~;
-TweenPlugin.activate([Circle2DPlugin]); //only needed once in your swf, and only if you plan to use the circle2D tweening feature for convenience
+TweenPlugin.activate([CirclePath2DPlugin]); //only needed once in your swf, and only if you plan to use the circlePath2D tweening feature for convenience
 
 //create a circle motion path at coordinates x:150, y:150 with a radius of 100
-var circle:Circle2D = new Circle2D(150, 150, 100);
+var circle:CirclePath2D = new CirclePath2D(150, 150, 100);
 
 //tween mc along the path from the bottom (90 degrees) to 315 degrees in the counter-clockwise direction and make an extra revolution
-TweenLite.to(mc, 3, {circle2D:{path:circle, startAngle:90, endAngle:315, direction:Direction.COUNTER_CLOCKWISE, extraRevolutions:1}});
+TweenLite.to(mc, 3, {circlePath2D:{path:circle, startAngle:90, endAngle:315, autoRotate:true, direction:Direction.COUNTER_CLOCKWISE, extraRevolutions:1}});
 
 //tween the circle's rotation, scaleX, scaleY, x, and y properties:
 TweenLite.to(circle, 3, {rotation:180, scaleX:0.5, scaleY:2, x:250, y:200});
@@ -116,10 +116,17 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		 * 
 		 * @param target Any object that has x and y properties that you'd like to follow the path. Existing PathFollower instances are allowed.
 		 * @param progress The progress position at which the target should be placed initially (0 by default)
+		 * @param autoRotate When <code>autoRotate</code> is <code>true</code>, the target will automatically be rotated so that it is oriented to the angle of the path. To offset this value (like to always add 90 degrees for example), use the <code>rotationOffset</code> property.
+		 * @param rotationOffset When <code>autoRotate</code> is <code>true</code>, this value will always be added to the resulting <code>rotation</code> of the target.
 		 * @return A PathFollower instance associated with the target (you can tween this PathFollower's <code>progress</code> property to move it along the path).
 		 */
-		public function addFollower(target:*, progress:Number=0):PathFollower {
-			var f:PathFollower = getFollower(target) || new PathFollower(target);
+		public function addFollower(target:*, progress:Number=0, autoRotate:Boolean=false, rotationOffset:Number=0):PathFollower {
+			var f:PathFollower = getFollower(target);
+			if (f == null) {
+				f = new PathFollower(target);
+			}
+			f.autoRotate = autoRotate;
+			f.rotationOffset = rotationOffset;
 			if (f.path != this) {
 				if (_rootFollower) {
 					_rootFollower.cachedPrev = f;
@@ -128,7 +135,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 				_rootFollower = f;
 				f.path = this;
 				f.cachedProgress = progress;
-				renderObjectAt(f.target, progress);
+				renderObjectAt(f.target, progress, autoRotate, rotationOffset);
 			}
 			return f;
 		}
@@ -156,8 +163,67 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 			f.path = null;
 		}
 		
+		/** Removes all followers. **/
+		public function removeAllFollowers():void {
+			var f:PathFollower = _rootFollower;
+			var next:PathFollower;
+			while (f) {
+				next = f.cachedNext;
+				f.cachedNext = f.cachedPrev = null;
+				f.path = null;
+				f = next;
+			}
+			_rootFollower = null;
+		}
+		
 		/**
-		 * Returns the PathFollower instance associated with a particular target or null if none exist.
+		 * Distributes objects evenly along the MotionPath. You can optionally define minimum and maximum 
+		 * <code>progress</code> values between which the objects will be distributed. For example, if you want them 
+		 * distributed from the very beginning of the path to the middle, you would do:<br /><br /><code>
+		 * 
+		 * path.distribute([mc1, mc2, mc3], 0, 0.5);<br /><br /></code>
+		 * 
+		 * As it loops through the <code>targets</code> array, if a target is found for which a PathFollower
+		 * doesn't exist, one will automatically be created and added to the path. The <code>targets</code> 
+		 * array can be populated with PathFollowers or DisplayObjects or Points or pretty much any object. 
+		 * 
+		 * @param targets An array of targets (PathFollowers, DisplayObjects, Points, or pretty much any object) that should be distributed evenly along the MotionPath. As it loops through the <code>targets</code> array, if a target is found for which a PathFollower doesn't exist, one will automatically be created and added to the path.
+		 * @param min The minimum <code>progress</code> value at which the targets will begin being distributed. This value will always be between 0 and 1. For example, if the targets should be distributed from the midpoint of the path through the end, the <code>min</code> parameter would be 0.5 and the <code>max</code> parameter would be 1.
+		 * @param max The maximum <code>progress</code> value where the targets will end distribution. This value will always be between 0 and 1. For example, if the targets should be distributed from the midpoint of the path through the end, the <code>min</code> parameter would be 0.5 and the <code>max</code> parameter would be 1.
+		 * @param autoRotate When <code>autoRotate</code> is <code>true</code>, the target will automatically be rotated so that it is oriented to the angle of the path. To offset this value (like to always add 90 degrees for example), use the <code>rotationOffset</code> property.
+		 * @param rotationOffset When <code>autoRotate</code> is <code>true</code>, this value will always be added to the resulting <code>rotation</code> of the target. For example, to always add 90 degrees to the autoRotation, <code>rotationOffset</code> would be 90.
+		 */
+		public function distribute(targets:Array=null, min:Number=0, max:Number=1, autoRotate:Boolean=false, rotationOffset:Number=0):void {
+			if (targets == null) {
+				targets = this.followers;
+			}
+			min = _normalize(min);
+			max = _normalize(max);
+			var f:PathFollower;
+			var i:int = targets.length;
+			var space:Number = (i > 1) ? (max - min) / (i - 1) : 1;
+			while (--i > -1) {
+				f = getFollower(targets[i]);
+				if (f == null) {
+					f = this.addFollower(targets[i], 0, autoRotate, rotationOffset);
+				}
+				f.cachedProgress = min + (space * i);
+				this.renderObjectAt(f.target, f.cachedProgress, autoRotate, rotationOffset);
+			}
+		}
+		
+		/** @private **/
+		protected function _normalize(num:Number):Number {
+			if (num > 1) {
+				num -= int(num);
+			} else if (num < 0) {
+				num -= int(num) - 1;
+			}
+			return num;
+		}
+		
+		/**
+		 * Returns the PathFollower instance associated with a particular target or null if none exists.
 		 * 
 		 * @param target The target whose PathFollower instance you want returned.
 		 * @return PathFollower instance
@@ -188,7 +254,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		 * myPath.renderObjectAt(mc, 0.5);</code><br /><br />
 		 * 
 		 * Some paths have methods to translate other meaningful information into a progress value, like
-		 * for a <code>Circle2D</code> you can get the progress associated with the 90-degree position with the
+		 * for a <code>CirclePath2D</code> you can get the progress associated with the 90-degree position with the
 		 * <code>angleToPosition()</code> method like this:<br /><br /><code>
 		 * 
 		 * myCircle.renderObjectAt(mc, myCircle.angleToProgress(90));
@@ -197,17 +263,19 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		 * 
 		 * @param target The target object to position
 		 * @param progress The progress value (typically between 0 and 1 where 0 is the beginning of the path, 0.5 is in the middle, and 1 is at the end)
+		 * @param autoRotate When <code>autoRotate</code> is <code>true</code>, the target will automatically be rotated so that it is oriented to the angle of the path. To offset this value (like to always add 90 degrees for example), use the <code>rotationOffset</code> property.
+		 * @param rotationOffset When <code>autoRotate</code> is <code>true</code>, this value will always be added to the resulting <code>rotation</code> of the target.
 		 */
-		public function renderObjectAt(target:Object, progress:Number):void {
+		public function renderObjectAt(target:Object, progress:Number, autoRotate:Boolean=false, rotationOffset:Number=0):void {
 			
 		}
 		
 		/**
 		 * Sets the line style for the path which you will only see if you add the path to the display list
 		 * with something like addChild() and make sure the visible property is true. For example, to make
-		 * a Circle2D visible with a red line red that's 3 pixels thick, you could do: <br /><br /><code>
+		 * a CirclePath2D visible with a red line red that's 3 pixels thick, you could do: <br /><br /><code>
 		 * 
-		 * var myCircle:Circle2D = new Circle2D(150, 150, 100); <br />
+		 * var myCircle:CirclePath2D = new CirclePath2D(150, 150, 100); <br />
 		 * myCircle.lineStyle(3, 0xFF0000);<br />
 		 * addChild(myCircle);<br />
 		 * 
@@ -317,7 +385,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		 * path in a way that performs better than tweening each follower independently (plus it's easier). You can tween to
 		 * values that are greater than 1 or less than 0 but the values are simply wrapped. So, for example, setting 
 		 * <code>progress</code> to 1.2 is the same as setting it to 0.2 and -0.2 is the same as 0.8. If your goal is to
-		 * tween all followers around a Circle2D twice completely, you could just add 2 to the progress value or use a
+		 * tween all followers around a CirclePath2D twice completely, you could just add 2 to the progress value or use a
 		 * relative value in the tween, like: <br /><br /><code>
 		 * 
 		 * TweenLite.to(myCircle, 5, {progress:"2"}); //or myCircle.progress + 2

@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.21
- * DATE: 2010-04-03
+ * VERSION: 11.37
+ * DATE: 2010-05-14
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com 
  **/
@@ -59,7 +59,7 @@ package com.greensock {
  * 											always determined by its parent timeline. </li>
  * 	
  * 	<li><b> ease : Function</b>				Use any standard easing equation to control the rate of change. For example, 
- * 											Elastic.easeOut. The Default is Regular.easeOut.</li>
+ * 											Elastic.easeOut. The Default is Quad.easeOut.</li>
  * 	
  * 	<li><b> easeParams : Array</b>			An Array of extra parameters to feed the easing equation (beyond the standard first 4). 
  * 											This can be useful when using an ease like Elastic and want to control extra parameters 
@@ -292,7 +292,7 @@ package com.greensock {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.21;
+		public static const version:Number = 11.37;
 		
 		TweenPlugin.activate([
 			
@@ -387,8 +387,8 @@ package com.greensock {
 				throw new Error("TweenMax error! Please update your TweenLite class or try deleting your ASO files. TweenMax requires a more recent version. Download updates at http://www.TweenMax.com.");
 			}
 			this.yoyo = Boolean(this.vars.yoyo);
-			_repeat = this.vars.repeat || 0;
-			_repeatDelay = this.vars.repeatDelay || 0;
+			_repeat = (this.vars.repeat) ? int(this.vars.repeat) : 0;
+			_repeatDelay = (this.vars.repeatDelay) ? Number(this.vars.repeatDelay) : 0;
 			this.cacheIsDirty = true; //ensures that if there is any repeat, the totalDuration will get recalculated to accurately report it.
 
 			if (this.vars.onCompleteListener || this.vars.onInitListener || this.vars.onUpdateListener || this.vars.onStartListener || this.vars.onRepeatListener || this.vars.onReverseCompleteListener) {
@@ -398,7 +398,7 @@ package com.greensock {
 					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.COMPLETE));
 				}
 			}
-			if ("timeScale" in this.vars && !(this.target is TweenCore)) {
+			if (this.vars.timeScale && !(this.target is TweenCore)) {
 				this.cachedTimeScale = this.vars.timeScale;
 			}
 		}
@@ -512,8 +512,8 @@ package com.greensock {
 		/** @inheritDoc **/
 		override public function invalidate():void {
 			this.yoyo = Boolean(this.vars.yoyo == true);
-			_repeat = this.vars.repeat || 0;
-			_repeatDelay = this.vars.repeatDelay || 0;
+			_repeat = (this.vars.repeat) ? Number(this.vars.repeat) : 0;
+			_repeatDelay = (this.vars.repeatDelay) ? Number(this.vars.repeatDelay) : 0;
 			_hasUpdateListener = false;
 			if (this.vars.onCompleteListener != null || this.vars.onUpdateListener != null || this.vars.onStartListener != null) {			
 				initDispatcher();
@@ -661,7 +661,12 @@ package com.greensock {
 						this.cachedTime = this.ratio = 0;
 					}
 				} else if (time > 0) {
-					if (_cyclesComplete != (_cyclesComplete = int(this.cachedTotalTime / cycleDuration))) {
+					var prevCycles:int = _cyclesComplete;
+					_cyclesComplete = int(this.cachedTotalTime / cycleDuration);
+					if (_cyclesComplete == this.cachedTotalTime / cycleDuration) {
+						_cyclesComplete--; //otherwise when rendered exactly at the end time, it will act as though it is repeating (at the beginning)
+					}
+					if (prevCycles != _cyclesComplete) {
 						repeated = true;
 					}
 					
@@ -937,7 +942,7 @@ package com.greensock {
 			var i:int, varsDup:Object, p:String;
 			var l:uint = targets.length;
 			var a:Array = [];
-			var curDelay:Number = vars.delay || 0;
+			var curDelay:Number = ("delay" in vars) ? Number(vars.delay) : 0;
 			var onCompleteProxy:Function = vars.onComplete;
 			var onCompleteParamsProxy:Array = vars.onCompleteParams;
 			var lastIndex:int = (stagger <= 0) ? 0 : l - 1;
