@@ -21,6 +21,7 @@ package
 	 *   
 	 * @author katopz
 	 */
+	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="600")]
 	public class main extends Sprite
 	{
 		// status
@@ -69,20 +70,20 @@ package
 
 			_crystals[4].spin(0);
 			_crystals[5].spin(1);
-			_crystals[6].spin(2);
-			_crystals[7].spin(3);
+			_crystals[6].spin(0);
+			_crystals[7].spin(0);
 
-			var _k:int = 2;
+			var _k:int = 1;
 
 			_crystals[_k * 8 + 0].spin(0);
 			_crystals[_k * 8 + 1].spin(1);
-			_crystals[_k * 8 + 2].spin(0);
-			_crystals[_k * 8 + 3].spin(0);
+			_crystals[_k * 8 + 2].spin(2);
+			_crystals[_k * 8 + 3].spin(3);
 
-			_crystals[_k * 8 + 4].spin(1);
-			_crystals[_k * 8 + 5].spin(2);
-			_crystals[_k * 8 + 6].spin(3);
-			_crystals[_k * 8 + 6].spin(4);
+			_crystals[_k * 8 + 4].spin(0);
+			_crystals[_k * 8 + 5].spin(1);
+			_crystals[_k * 8 + 6].spin(0);
+			_crystals[_k * 8 + 7].spin(0);
 
 			_canvas.addEventListener(MouseEvent.CLICK, onClick);
 
@@ -97,6 +98,7 @@ package
 			{
 				var _crystal:Crystal = _crystals[_index];
 				_crystal.spin();
+				_crystal.status = Crystal.STATUS_READY;
 			}
 
 			Rule.check(_crystals, onShuffleComplete);
@@ -206,6 +208,9 @@ package
 				trace(" ! Bad move");
 				TweenLite.to(_focusCrystal, .5, {x: _swapCrystal.x, y: _swapCrystal.y, onComplete: onBadMoveComplete, onCompleteParams: [_focusCrystal]});
 				TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: onBadMoveComplete, onCompleteParams: [_swapCrystal]});
+				
+				// swap back
+				Rule.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 			}
 		}
 
@@ -217,7 +222,9 @@ package
 			{
 				var _crystal:Crystal = _crystals[_index];
 				if (_crystal.status == Crystal.STATUS_TOBE_REMOVE)
+				{
 					TweenLite.to(_crystal, .25, {alpha: 0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystal]});
+				}
 			}
 		}
 
@@ -261,31 +268,58 @@ package
 						// got something on top
 						
 						// fall to bottom
+						_crystal.swapID = _aboveCrystal.id;
 						_aboveCrystal.status = Crystal.STATUS_FALL;
-						TweenLite.to(_aboveCrystal, .25, {x: _crystal.x, y: _crystal.y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
+						
+						//TweenLite.to(_aboveCrystal, .25, {x: _crystal.x, y: _crystal.y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
+						
+						trace("fall:"+_crystal.id+"->"+_aboveCrystal.id);
+						
+						onRefillComplete(_crystal);
 						
 						// fall from top
-						_crystal.status = Crystal.STATUS_FALL;
-						//_crystal.y = -config.CYSTAL_SIZE;
-						//TweenLite.to(_crystal, .25, {alpha:1, x: _aboveCrystal.x, y: _aboveCrystal.y, onComplete: onRefillComplete, onCompleteParams: [_crystal]});
-						//_crystal.spin();
+						//_crystal.status = Crystal.STATUS_FALL;
 						
-						// real swap
-						//Rule.swapByID(_crystals, _crystal.id, _aboveCrystal.id);
-						
-						// move to top for pooling reuse
+						// move to top for pooling
+						/*
 						_position = Rule.getPositionFromIndex(_index, config.COL_SIZE);
 						if(!_topCrystals[_position.x])
 							_topCrystals[_position.x] = _crystal;
+						*/
+							
 					}else{
-						
 						// nothing on top, get top most from stock
+						_crystal.alpha = 1;
+						_crystal.spin();
+						_crystal.status = Crystal.STATUS_READY;
+						_crystal.swapID = -1;
+						trace("---");
+						onRefillComplete(_crystal);
+						
+						/*
 						_position = Rule.getPositionFromIndex(_index, config.COL_SIZE);
 						_aboveCrystal = _topCrystals[_position.x];
+						
+						trace(_aboveCrystal.id);
+						
+						trace("*fall:"+_crystal.id+"->"+_aboveCrystal.id);
 						_aboveCrystal.y = _crystal.y-config.CYSTAL_SIZE;
 						_crystal.status = Crystal.STATUS_FALL;
-						TweenLite.to(_aboveCrystal, .25, {alpha:1, x: _crystal.x, y: _crystal.y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
+						var _x:Number = _crystal.x;
+						var _y:Number = _crystal.y;
+						TweenLite.to(_aboveCrystal, .25, {alpha:1, x: _x, y: _y, onComplete: onRefillComplete, onCompleteParams: [_aboveCrystal]});
+						
+						// real swap
+						//Rule.swapByID(_crystals, _crystal.id, _aboveCrystal.id);
+
+						
+						_topCrystals[_position.x] = null;
+						
+						// to swap
+						_aboveCrystal.swapID = _crystal.id;
+						
 						_aboveCrystal.spin();
+						*/
 					}
 				}
 			}
@@ -295,6 +329,15 @@ package
 		{
 			// mark as done
 			crystal.status = Crystal.STATUS_READY;
+			
+			// real swap
+			if(crystal.swapID!=-1)
+			{
+				Rule.swapPositionByID(_crystals, crystal.id, crystal.swapID);
+				Rule.swapByID(_crystals, crystal.id, crystal.swapID);
+				
+				crystal.swapID = NaN;
+			}
 			
 			// all clean?
 			var _length:int = _crystals.length;
