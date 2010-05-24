@@ -3,13 +3,10 @@ package view
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.text.SDTextField;
 	
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.events.Event;
 
 	public class Crystal extends SDSprite implements IDestroyable
 	{
@@ -26,7 +23,19 @@ package view
 		private const _CrystalClip:Class;
 		private var _crystalClip:MovieClip = new _CrystalClip();
 
-		public var id:int;
+		private var _id:int;
+		public function get id():int
+		{
+			return _id;
+		}
+		
+		public function set id(value:int):void
+		{
+			_id = value;
+			label.htmlText = String(_id);
+		}
+		
+		public var swapID:int;
 		
 		private var _width:Number = config.CYSTAL_SIZE;
 
@@ -46,6 +55,11 @@ package view
 		{
 			return _crystalClip.currentFrame-1;
 		}
+		
+		public function set skinIndex(value:uint):void
+		{
+			_crystalClip.gotoAndStop(value+1);
+		}
 
 		private var _focus:Boolean;
 
@@ -63,7 +77,11 @@ package view
 			cacheAsBitmap = true;
 
 			hitArea = addChild(DrawUtil.drawRect(_width, _height, 0x000000, 0)) as Sprite;
+			
+			addChild(label = new SDTextField);
 		}
+		
+		public var label:SDTextField;
 
 		public function spin(value:int = -1):void
 		{
@@ -72,7 +90,7 @@ package view
 			else
 				_crystalClip.gotoAndStop(value+1);
 			
-			status = STATUS_READY;
+			swapID = -1;
 		}
 
 		public function set focus(value:Boolean):void

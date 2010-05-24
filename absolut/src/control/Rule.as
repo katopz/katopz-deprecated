@@ -1,9 +1,9 @@
 package control
 {
 	import flash.geom.Point;
-	
+
 	import org.osflash.signals.Signal;
-	
+
 	import view.Crystal;
 
 	public class Rule
@@ -27,21 +27,54 @@ package control
 			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
 		}
 		
-		public static function swapByID(crystals:Vector.<Crystal>, sorceID:int, targetID:int):void
+		public static function swapPositionByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
 		{
+			//trace("pos : " + srcID + "->" + targetID);
+
+			var x:Number = crystals[targetID].x;
+			crystals[targetID].x = crystals[srcID].x;
+			crystals[srcID].x = x;
+			
+			var y:Number = crystals[targetID].y;
+			crystals[targetID].y = crystals[srcID].y;
+			crystals[srcID].y = y;
+		}
+		
+		public static function swapByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
+		{
+			//trace("swap : " + srcID + "->" + targetID);
+
 			var _crystal:Crystal = crystals[targetID];
-			crystals[targetID] = crystals[sorceID];
-			crystals[sorceID] = _crystal;
+			crystals[targetID] = crystals[srcID];
+			crystals[srcID] = _crystal;
+			
+			var _status:String = crystals[targetID].status;
+			crystals[targetID].status = crystals[srcID].status;
+			crystals[srcID].status = _status;
+			
+			/*
+			var _swapID:int = crystals[targetID].swapID;
+			crystals[targetID].swapID = crystals[srcID].swapID;
+			crystals[srcID].swapID = _swapID;		
+			
+			var _skinIndex:uint = crystals[targetID].skinIndex;
+			crystals[targetID].skinIndex = crystals[srcID].skinIndex;
+			crystals[srcID].skinIndex = _skinIndex;
+			*/
+			
+			var _id:int = crystals[targetID].id;
+			crystals[targetID].id = crystals[srcID].id;
+			crystals[srcID].id = _id;
 		}
 
 		public static function getAboveCrystal(crystals:Vector.<Crystal>, index:int, size:uint):Crystal
 		{
-			while(((index -= size) >=0) && (crystals[index].status != Crystal.STATUS_READY))
+			while (((index -= size) >= 0) && (crystals[index].status != Crystal.STATUS_READY))
 			{
 			}
-			return index>-1?crystals[index]:null;
+			return index > -1 ? crystals[index] : null;
 		}
-		
+
 		public static function getPositionFromIndex(index:int, size:uint):Point
 		{
 			return new Point(int(index % size), int(index / size));
@@ -67,11 +100,13 @@ package control
 					var _skinIndex:uint = crystals[k].skinIndex;
 
 					// start skin index same as other skin index?
-					while ((k < j + config.COL_SIZE - 2) && (_isSame = (_skinIndex == crystals[k + 1].skinIndex)))
+					while ((k < j + config.COL_SIZE - 1) && (_isSame = (_skinIndex == crystals[k + 1].skinIndex)))
 					{
 						/*
 						   same color more than 3 time
+						   [0] [1] [2] [3] [4] [5] [6] [7]
 						   [a] [a] [a] [b] [c] [d] [e] [f]
+						   [a] [b] [c] [d] [e] [f] [f] [f]
 						 */
 
 						if (_isSame)
@@ -86,7 +121,7 @@ package control
 								for (var _index:int = _currentIndex; _index <= k + 1; _index++)
 								{
 									crystals[_index].status = Crystal.STATUS_TOBE_REMOVE;
-									trace(_index);
+									trace(" ! remove : " + _index);
 								}
 
 								_result = _result || true;
