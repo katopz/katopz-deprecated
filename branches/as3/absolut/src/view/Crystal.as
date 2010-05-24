@@ -4,7 +4,7 @@ package view
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
-	
+
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 
@@ -15,28 +15,29 @@ package view
 		public static const STATUS_READY:String = "STATUS_READY";
 		public static const STATUS_TOBE_REMOVE:String = "STATUS_TOBE_REMOVE";
 		public static const STATUS_REMOVED:String = "STATUS_REMOVED";
-		
+
 		public var status:String = STATUS_READY;
-		
+
 		// asset
 		[Embed(source="assets/game.swf", symbol="CrystalClip")]
 		private const _CrystalClip:Class;
 		private var _crystalClip:MovieClip = new _CrystalClip();
 
 		private var _id:int;
+
 		public function get id():int
 		{
 			return _id;
 		}
-		
+
 		public function set id(value:int):void
 		{
 			_id = value;
 			label.htmlText = String(_id);
 		}
-		
+
 		public var swapID:int;
-		
+
 		private var _width:Number = config.CYSTAL_SIZE;
 
 		override public function get width():Number
@@ -50,15 +51,17 @@ package view
 		{
 			return _height;
 		}
-		
-		public function get skinIndex():uint
+
+		private var _skinIndex:int;
+		public function get skinIndex():int
 		{
-			return _crystalClip.currentFrame-1;
+			return _skinIndex;//_crystalClip.currentFrame - 1;
 		}
-		
-		public function set skinIndex(value:uint):void
+
+		public function set skinIndex(value:int):void
 		{
-			_crystalClip.gotoAndStop(value+1);
+			_skinIndex = value;
+			_crystalClip.gotoAndStop(_skinIndex + 1);
 		}
 
 		private var _focus:Boolean;
@@ -77,18 +80,16 @@ package view
 			cacheAsBitmap = true;
 
 			hitArea = addChild(DrawUtil.drawRect(_width, _height, 0x000000, 0)) as Sprite;
-			
+
 			addChild(label = new SDTextField);
 		}
-		
+
 		public var label:SDTextField;
 
 		public function spin(value:int = -1):void
 		{
-			if (value == -1)
-				_crystalClip.gotoAndStop(int(_crystalClip.totalFrames * Math.random()));
-			else
-				_crystalClip.gotoAndStop(value+1);
+			_skinIndex = (value == -1)?int((_crystalClip.totalFrames-1) * Math.random()):value;
+			_crystalClip.gotoAndStop(_skinIndex+1);
 			
 			swapID = -1;
 		}
