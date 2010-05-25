@@ -1,12 +1,16 @@
 package application.model
 {
-
-	import flash.geom.Point;
-
 	import application.view.components.Crystal;
+	
+	import flash.geom.Point;
+	
+	import org.puremvc.as3.interfaces.IProxy;
+	import org.puremvc.as3.patterns.proxy.Proxy;
 
-	public class RuleProxy
+	public class RuleProxy extends Proxy implements IProxy
 	{
+		public static const NAME:String = "RuleProxy";
+		
 		public static function checkCol(crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = false;

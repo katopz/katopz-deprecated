@@ -12,10 +12,6 @@ package application.model
 	{
 		public static const NAME:String = "DataProxy";
 		
-		public static const EASY:Number = 1;
-		public static const NORMAL:Number = 2;
-		public static const HARD:Number = 3;
-		
 		// Defaults.
 		private var _boardSize:Number = 15;
 		private var _tileSize:Number = 21;
@@ -188,10 +184,6 @@ package application.model
 				sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(userTile) );
 				resetGame();
 			}
-			else
-			{
-				AIMove();
-			}
 		}
 		
 		public function resetGame():void
@@ -361,88 +353,6 @@ package application.model
 			return -1;
 		}
 		
-		private function AIMove():void
-		{
-			var maxS:Number = evaluatePosition(userArray, userTile);
-			var maxQ:Number = evaluatePosition(AIArray, AITile);
-			
-			if ( maxQ >= maxS )
-			{
-				maxS = -1;
-				
-				for ( var i:Number = 0; i < boardSize; i++ )
-				{
-					for ( var j:Number = 0; j < boardSize; j++ )
-					{
-						if ( AIArray[i][j] == maxQ )
-		                {
-		                    if ( maxS < userArray[i][j] )
-		                    {
-		                        maxS = userArray[i][j];
-		                        nMax = 0;
-		                    }
-		                    if ( userArray[i][j] == maxS )
-		                    {
-		                        iMax[nMax] = i;
-		                        jMax[nMax] = j;
-		                        nMax++;
-		                    }
-		                }
-					}
-				}
-			}
-			else
-			{
-				maxQ = -1;
-		        for ( i = 0; i < boardSize; i++ )
-		        {
-		            for ( j = 0; j < boardSize; j++ )
-		            {
-		                if ( userArray[i][j] == maxS )
-		                {
-		                    if ( maxQ < AIArray[i][j] )
-		                    {
-		                        maxQ = AIArray[i][j];
-		                        nMax = 0;
-		                    }
-		                    if ( AIArray[i][j] == maxQ )
-		                    {
-		                        iMax[nMax] = i;
-		                        jMax[nMax] = j;
-		                        nMax++;
-		                    } 
-		                }
-		            }
-		        }
-			}
-			
-			var randomK:Number = Math.floor( nMax * Math.random() );
-
-			var xAI:Number = iMax[randomK];
-    		var yAI:Number = jMax[randomK];
-    		
-    		movesArray[xAI][yAI] = AITile;
-    		
-    		var coordinates:Object = new Object();
-    		coordinates.x = xAI;
-    		coordinates.y = yAI;
-    		
-    		sendNotification(ApplicationFacade.AI_MOVE, coordinates);
-    		
-    		if ( isWinner(xAI, yAI, AITile) == winningMove )
-    		{
-    			AIWinCount++;
-    			inGame = false;
-    			sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(AITile) );
-    			resetGame();
-    		}
-    		else if ( drawPosition )
-    		{
-    			sendNotification(ApplicationFacade.DRAWN_GAME);
-    			inGame = false;
-    			resetGame();
-    		}
-		}
 		
 		private function evaluatePosition(array:Array, tile:Number):Number
 		{

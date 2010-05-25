@@ -19,11 +19,8 @@ package application
 		public static const DRAWN_GAME:String = "drawn_game";
 		
 		public static const USER_MOVE:String = "user_move";
-		public static const AI_MOVE:String = "ai_move";
 		
 		public static const SHOW_RULES:String = "show_rules";
-		public static const SHOW_HISTORY:String = "show_history";
-		public static const SHOW_OPTIONS:String = "show_options";
 		
 		public static const SOUND_CHANGE:String = "sound_change";
 		
