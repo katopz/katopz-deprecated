@@ -30,7 +30,6 @@ package application.view
 		{
 			return new Array( ApplicationFacade.START_GAME,
 							  ApplicationFacade.RESTART_GAME,
-							  ApplicationFacade.AI_MOVE,
 							  ApplicationFacade.GAME_OVER,
 							  ApplicationFacade.DRAWN_GAME,
 							  ApplicationFacade.SOUND_CHANGE );
@@ -50,17 +49,7 @@ package application.view
 					//board.makeFirstMove();
 					break;
 				
-				case ApplicationFacade.AI_MOVE:
-					//board.showAIMove( notification.getBody().x, notification.getBody().y);
-					break;
-				
 				case ApplicationFacade.GAME_OVER:
-					var y1:Number = notification.getBody().y1;
-					var x1:Number = notification.getBody().x1;
-					var y2:Number = notification.getBody().y2;
-					var x2:Number = notification.getBody().x2;
-					var tile:Number = notification.getBody().tile;
-					
 					//board.drawWinLine(y1, x1, y2, x2, tile);
 					//board.setBoardEnabled(false);
 					break;
