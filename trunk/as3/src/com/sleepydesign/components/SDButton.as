@@ -4,6 +4,8 @@ package com.sleepydesign.components
 	
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
+	
+	import flashx.textLayout.formats.TextAlign;
 
 	public class SDButton extends SDComponent
 	{
@@ -16,9 +18,9 @@ package com.sleepydesign.components
 		private var _selected:Boolean = false;
 		private var _toggle:Boolean = false;
 
-		public function SDButton(label:String = "")
+		public function SDButton(text:String = "")
 		{
-			_labelText = label;
+			_labelText = text;
 			
 			_back = new Shape();
 			addChild(_back);
@@ -26,7 +28,7 @@ package com.sleepydesign.components
 			_label = new SDLabel(_labelText);
 			addChild(_label);
 			
-			_label.autoSize = "center";
+			_label.autoSize = TextAlign.CENTER;
 
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 			addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
@@ -38,7 +40,7 @@ package com.sleepydesign.components
 
 		override public function draw():void
 		{
-			_label.autoSize = "center";
+			_label.autoSize = TextAlign.CENTER;
 			_label.text = _labelText;
 			if (_label.width > _width - 4)
 			{
@@ -47,10 +49,13 @@ package com.sleepydesign.components
 			}
 			else
 			{
-				_label.autoSize = "center";
+				_label.autoSize = TextAlign.CENTER;
 			}
 			_label.draw();
 			_label.x = _width / 2 - _label.width / 2;
+			
+			if(_width<_label.width+4)
+				setSize(_label.width+4, _height);
 			
 			_back.graphics.clear();
 			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true);
