@@ -1,18 +1,17 @@
 package application.view.components
 {
+	import application.model.ConfigProxy;
+	import application.model.CrystalProxy;
+	import application.model.RuleProxy;
+	
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	
-	import application.model.CrystalProxy;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import application.model.RuleProxy;
-	
 	import org.osflash.signals.Signal;
-	import application.model.ConfigProxy;
 
 	public class Board extends SDSprite
 	{
@@ -136,7 +135,7 @@ package application.view.components
 			
 			// ------------------------------------------------- Cheat
 
-			if(RuleProxy.checkCol(_crystals) || RuleProxy.checkRow(_crystals))
+			if(RuleProxy.checkSame(_crystals))
 				shuffle();
 		}
 
@@ -233,7 +232,7 @@ package application.view.components
 
 				trace(" > Begin Check condition...");
 				//Rule.check(_crystals, onCheckComplete);
-				onCheckComplete(RuleProxy.checkCol(_crystals) || RuleProxy.checkRow(_crystals));
+				onCheckComplete(RuleProxy.checkSame(_crystals));
 			}
 		}
 
@@ -355,7 +354,7 @@ package application.view.components
 			trace(" < End Refill");
 
 			trace(" > Begin Recheck");
-			reCheck(RuleProxy.checkCol(_crystals) || RuleProxy.checkRow(_crystals));
+			reCheck(RuleProxy.checkSame(_crystals));
 		}
 
 		private function reCheck(result:Boolean):void

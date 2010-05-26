@@ -11,6 +11,12 @@ package application.model
 	{
 		public static const NAME:String = "RuleProxy";
 		
+		public static function checkSame(crystals:Vector.<Crystal>):Boolean
+		{
+			var _result:Boolean = checkCol(crystals);
+			return checkRow(crystals) || _result;
+		}
+		
 		public static function checkCol(crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = false;
