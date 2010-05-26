@@ -32,7 +32,7 @@ package application.view
 		
 		override public function listNotificationInterests():Array
 		{
-			return new Array();
+			return [];
 		}
 		
 		override public function handleNotification(notification:INotification):void

@@ -3,21 +3,22 @@ package application.view.components
 	import application.model.ConfigProxy;
 	import application.model.CrystalProxy;
 	import application.model.RuleProxy;
-	
+
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	
+	import com.sleepydesign.utils.DisplayObjectUtil;
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
 	{
 		// signal
-		public var initSignal:Signal = new Signal();
-		
+		//public var initSignal:Signal = new Signal();
+
 		// status
 		private const SELECT_FOCUS:String = "SELECT_FOCUS";
 		private const SELECT_SWAP:String = "SELECT_SWAP";
@@ -32,6 +33,18 @@ package application.view.components
 
 		private var _crystals:Vector.<Crystal>;
 
+		private var _enabled:Boolean;
+
+		public function get enabled():Boolean
+		{
+			return _enabled;
+		}
+
+		public function set enabled(value:Boolean):void
+		{
+			_enabled = _canvas.mouseEnabled = _canvas.mouseChildren = value;
+		}
+
 		public function Board()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
@@ -42,14 +55,14 @@ package application.view.components
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			init();
 		}
-		
+
 		private function init():void
 		{
 			// canvas
 			addChild(_canvas = new SDSprite());
-			
+
 			_crystals = new Vector.<Crystal>();
-			
+
 			for (var j:int = 0; j < ConfigProxy.ROW_SIZE; j++)
 			{
 				for (var i:int = 0; i < ConfigProxy.COL_SIZE; i++)
@@ -59,20 +72,18 @@ package application.view.components
 					_canvas.addChild(_crystal);
 					_crystals.push(_crystal);
 					_crystal.id = j * ConfigProxy.COL_SIZE + i;
-					
+
 					// position
 					_crystal.x = i * _crystal.width;
 					_crystal.y = j * _crystal.height;
 				}
 			}
-			
-			shuffle();
-			
+
 			addEventListener(MouseEvent.CLICK, onClick);
-			
-			initSignal.dispatch();
+
+			//initSignal.dispatch();
 		}
-		
+
 		public function shuffle(e:* = null):void
 		{
 			trace(" ! Shuffle");
@@ -83,7 +94,7 @@ package application.view.components
 				_crystal.spin();
 				_crystal.status = Crystal.STATUS_READY;
 			}
-			
+
 			// Cheat -------------------------------------------------
 			var _i:int = 0;
 			var _j:int = 2;
@@ -92,50 +103,50 @@ package application.view.components
 			_crystals[_i++ * ConfigProxy.COL_SIZE + _j].spin(1);
 			_crystals[_i++ * ConfigProxy.COL_SIZE + _j].spin(0);
 			//_crystals[_i++ * config.COL_SIZE + _j].spin(0);
-			
+
 			_crystals[8].spin(0);
 			_crystals[9].spin(0);
 			_crystals[11].spin(0);
-			
+
 			/*
-			_crystals[0].spin(0);
-			_crystals[1].spin(1);
-			_crystals[2].spin(5);
-			_crystals[3].spin(4);
-			
-			_crystals[4].spin(0);
-			_crystals[5].spin(1);
-			_crystals[6].spin(0);
-			_crystals[7].spin(0);
-			
-			var _k:int = 1;
-			
-			_crystals[_k * 8 + 0].spin(5);
-			_crystals[_k * 8 + 1].spin(1);
-			_crystals[_k * 8 + 2].spin(2);
-			_crystals[_k * 8 + 3].spin(3);
-			
-			_crystals[_k * 8 + 4].spin(1);
-			_crystals[_k * 8 + 5].spin(1);
-			_crystals[_k * 8 + 6].spin(0);
-			_crystals[_k * 8 + 7].spin(0);
-			
-			_k = 2;
-			
-			_crystals[_k * 8 + 0].spin(2);
-			_crystals[_k * 8 + 1].spin(2);
-			_crystals[_k * 8 + 2].spin(1);
-			_crystals[_k * 8 + 3].spin(3);
-			
-			_crystals[_k * 8 + 4].spin(3);
-			_crystals[_k * 8 + 5].spin(1);
-			_crystals[_k * 8 + 6].spin(0);
-			_crystals[_k * 8 + 7].spin(0);
-			*/
-			
+			   _crystals[0].spin(0);
+			   _crystals[1].spin(1);
+			   _crystals[2].spin(5);
+			   _crystals[3].spin(4);
+
+			   _crystals[4].spin(0);
+			   _crystals[5].spin(1);
+			   _crystals[6].spin(0);
+			   _crystals[7].spin(0);
+
+			   var _k:int = 1;
+
+			   _crystals[_k * 8 + 0].spin(5);
+			   _crystals[_k * 8 + 1].spin(1);
+			   _crystals[_k * 8 + 2].spin(2);
+			   _crystals[_k * 8 + 3].spin(3);
+
+			   _crystals[_k * 8 + 4].spin(1);
+			   _crystals[_k * 8 + 5].spin(1);
+			   _crystals[_k * 8 + 6].spin(0);
+			   _crystals[_k * 8 + 7].spin(0);
+
+			   _k = 2;
+
+			   _crystals[_k * 8 + 0].spin(2);
+			   _crystals[_k * 8 + 1].spin(2);
+			   _crystals[_k * 8 + 2].spin(1);
+			   _crystals[_k * 8 + 3].spin(3);
+
+			   _crystals[_k * 8 + 4].spin(3);
+			   _crystals[_k * 8 + 5].spin(1);
+			   _crystals[_k * 8 + 6].spin(0);
+			   _crystals[_k * 8 + 7].spin(0);
+			 */
+
 			// ------------------------------------------------- Cheat
 
-			if(RuleProxy.checkSame(_crystals))
+			if (RuleProxy.checkSame(_crystals))
 				shuffle();
 		}
 
@@ -144,9 +155,6 @@ package application.view.components
 			// click on crystal
 			if (event.target.parent is Crystal)
 			{
-				//freeze
-				freeze();
-
 				var _crystal:Crystal = event.target.parent;
 				if (_crystal)
 					focusCrystal(_crystal);
@@ -158,6 +166,7 @@ package application.view.components
 			// click on crystal
 			if (_crystal)
 			{
+				enabled = false;
 				switch (_status)
 				{
 					case SELECT_FOCUS:
@@ -169,7 +178,8 @@ package application.view.components
 						_focusCrystal = _crystal;
 
 						// wait for next click
-						unfreeze();
+						enabled = true;
+						
 						_status = SELECT_SWAP;
 
 						break;
@@ -182,7 +192,8 @@ package application.view.components
 							_crystal.focus = !_crystal.focus;
 							_focusCrystal = null;
 							_status = SELECT_FOCUS;
-							unfreeze();
+							enabled = true;
+							
 							return;
 						}
 
@@ -387,20 +398,6 @@ package application.view.components
 			}
 		}
 
-		private function freeze():void
-		{
-			trace(" ! freeze");
-			_canvas.mouseEnabled = false;
-			_canvas.mouseChildren = false;
-		}
-
-		private function unfreeze():void
-		{
-			trace(" ! unfreeze");
-			_canvas.mouseEnabled = true;
-			_canvas.mouseChildren = true;
-		}
-
 		private function nextTurn():void
 		{
 			trace(" ! nextTurn");
@@ -410,7 +407,7 @@ package application.view.components
 			_swapCrystal = null;
 
 			// accept inpt
-			unfreeze();
+			enabled = true;
 			_status = SELECT_FOCUS;
 		}
 	}

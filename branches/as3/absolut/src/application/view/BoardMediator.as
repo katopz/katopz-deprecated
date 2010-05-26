@@ -28,11 +28,11 @@ package application.view
 		
 		override public function listNotificationInterests():Array
 		{
-			return new Array( ApplicationFacade.START_GAME,
+			return [ApplicationFacade.START_GAME,
 							  ApplicationFacade.RESTART_GAME,
 							  ApplicationFacade.GAME_OVER,
 							  ApplicationFacade.DRAWN_GAME,
-							  ApplicationFacade.SOUND_CHANGE );
+							  ApplicationFacade.SOUND_CHANGE];
 		}
 		
 		override public function handleNotification(notification:INotification):void
@@ -40,13 +40,13 @@ package application.view
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.START_GAME:
-					//board.setBoardEnabled(true);
-					//board.makeFirstMove();
+					board.shuffle();
+					board.enabled = true;
 					break;
 					
 				case ApplicationFacade.RESTART_GAME:
-					//board.setBoardEnabled(true);
-					//board.makeFirstMove();
+					board.shuffle();
+					board.enabled = true;
 					break;
 				
 				case ApplicationFacade.GAME_OVER:

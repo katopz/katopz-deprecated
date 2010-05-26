@@ -11,7 +11,7 @@ package application.view.components
 		public static const START:String = "start";
 		public static const RULES:String = "rules";
 
-		private var labelsArray:Array = new Array("new", "rules");
+		private var labelsArray:Array = ["new", "rules"];
 
 		public function Menu()
 		{
@@ -36,7 +36,7 @@ package application.view.components
 		{
 			switch (event.target.name)
 			{
-				case "new game":
+				case "new":
 					dispatchEvent(new Event(Menu.START));
 					break;
 

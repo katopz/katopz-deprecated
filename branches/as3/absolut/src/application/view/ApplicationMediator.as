@@ -4,13 +4,10 @@ package application.view
 	import application.model.DataProxy;
 	import application.view.components.Board;
 	import application.view.components.Menu;
-	
+
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.media.Sound;
-	import flash.media.SoundChannel;
-	import flash.media.SoundTransform;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -19,10 +16,10 @@ package application.view
 	{
 		public static const NAME:String = "ApplicationMediator";
 
-		// Model.
+		// Model
 		private var data:DataProxy;
 
-		// Assets.
+		// Assets
 		private var menu:Menu;
 		private var board:Board;
 
@@ -41,10 +38,9 @@ package application.view
 
 		override public function listNotificationInterests():Array
 		{
-			return new Array(
-				ApplicationFacade.GAME_OVER, 
+			return [ApplicationFacade.GAME_OVER, 
 				ApplicationFacade.RESTART_REQUEST, 
-				ApplicationFacade.DRAWN_GAME);
+				ApplicationFacade.DRAWN_GAME];
 		}
 
 		override public function handleNotification(notification:INotification):void
@@ -66,12 +62,8 @@ package application.view
 					break;
 
 				case ApplicationFacade.RESTART_REQUEST:
-					/*
-					   showModal();
-					   showAlert("This will restart your current game.\nAre you sure?", AlertBox.YES);
-
-					   alignContent();
-					 */
+					//TODO : warn before shuffle
+					board.shuffle();
 					break;
 
 				case ApplicationFacade.DRAWN_GAME:
@@ -95,7 +87,7 @@ package application.view
 			board = new Board();
 			facade.registerMediator(new BoardMediator(board));
 			main.addChild(board);
-			
+
 			menu = new Menu();
 			facade.registerMediator(new MenuMediator(menu));
 			main.addChild(menu);
