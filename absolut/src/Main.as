@@ -1,7 +1,7 @@
 package
 {
 	import application.ApplicationFacade;
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 
 	import com.sleepydesign.display.SDSprite;
 
@@ -26,7 +26,7 @@ package
 
 			// auto start
 			facade.sendNotification(ApplicationFacade.START_GAME, this);
-			var data:DataProxy = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			var data:CrystalDataProxy = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 			data.resetGame();
 			data.inGame = true;
 		}

@@ -1,6 +1,6 @@
 package application.controller
 {
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	
 	import org.puremvc.as3.interfaces.ICommand;
 	import org.puremvc.as3.interfaces.INotification;
@@ -10,7 +10,7 @@ package application.controller
 	{
 		override public function execute(notification:INotification):void
 		{
-			facade.registerProxy(new DataProxy());
+			facade.registerProxy(new CrystalDataProxy());
 		}
 	}
 }

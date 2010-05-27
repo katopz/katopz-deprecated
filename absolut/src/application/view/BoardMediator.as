@@ -1,7 +1,7 @@
 package application.view
 {
 	import application.ApplicationFacade;
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	import application.model.Rules;
 	import application.view.components.Board;
 	import application.view.components.Crystal;
@@ -21,13 +21,13 @@ package application.view
 	{
 		public static const NAME:String = "BoardMediator";
 
-		private var data:DataProxy;
+		private var data:CrystalDataProxy;
 
 		public function BoardMediator(viewComponent:Object)
 		{
 			super(NAME, viewComponent);
 
-			data = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 
 			//board.soundState = data.soundState;
 			board.addEventListener(MouseEvent.CLICK, onTileClick);

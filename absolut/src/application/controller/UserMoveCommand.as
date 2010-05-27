@@ -1,6 +1,6 @@
 package application.controller
 {
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	
 	import org.puremvc.as3.interfaces.ICommand;
 	import org.puremvc.as3.interfaces.INotification;
@@ -8,11 +8,11 @@ package application.controller
 
 	public class UserMoveCommand extends SimpleCommand implements ICommand
 	{
-		private var data:DataProxy;
+		private var data:CrystalDataProxy;
 
 		override public function execute(notification:INotification):void
 		{
-			data = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 			data.userMove(notification.getBody()[0], notification.getBody()[1]);
 		}
 	}
