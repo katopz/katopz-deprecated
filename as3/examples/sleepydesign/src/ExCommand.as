@@ -1,20 +1,32 @@
 package
 {
 	import com.sleepydesign.core.CommandManager;
-
+	import com.sleepydesign.core.SDCommand;
+	
 	import flash.display.Sprite;
 
 	public class ExCommand extends Sprite
 	{
 		public function ExCommand()
 		{
-			new CommandManager().addCommand(new MyCommand1).addCommand(new MyCommand2).start();
+			var _commandManager:CommandManager = new CommandManager();
+			
+			// test add command
+			_commandManager.addCommand(new MyCommand1);
+			_commandManager.addCommand(new MyCommand2);
+			
+			// test remove command
+			var _removeCommand:SDCommand = _commandManager.addCommand(new MyCommand1) as SDCommand;
+			_commandManager.removeCommand(_removeCommand);
+			
+			// start!
+			_commandManager.start();
 		}
 	}
 }
-import com.sleepydesign.core.AbstractCommand;
+import com.sleepydesign.core.SDCommand;
 
-internal class MyCommand1 extends AbstractCommand
+internal class MyCommand1 extends SDCommand
 {
 	override public function command():void
 	{
@@ -23,7 +35,7 @@ internal class MyCommand1 extends AbstractCommand
 	}
 }
 
-internal class MyCommand2 extends AbstractCommand
+internal class MyCommand2 extends SDCommand
 {
 	override public function command():void
 	{
