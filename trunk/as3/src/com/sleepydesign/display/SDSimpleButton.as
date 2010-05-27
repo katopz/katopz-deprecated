@@ -35,8 +35,7 @@ package com.sleepydesign.display {
 	import flash.events.Event;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.IRemovableEventDispatcher;
-	import com.sleepydesign.managers.ListenerManager;
-	import flash.display.DisplayObject;
+	import com.sleepydesign.events.ListenerManager	import flash.display.DisplayObject;
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	
 	

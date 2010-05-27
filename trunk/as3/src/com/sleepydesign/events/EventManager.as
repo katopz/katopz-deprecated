@@ -1,4 +1,4 @@
-package com.sleepydesign.managers
+package com.sleepydesign.events
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
