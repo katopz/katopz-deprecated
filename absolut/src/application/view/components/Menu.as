@@ -1,7 +1,7 @@
 package application.view.components
 {
 	import com.sleepydesign.components.SDButton;
-
+	
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -25,7 +25,7 @@ package application.view.components
 				var menuItem:SDButton = new SDButton(labelsArray[i]);
 				menuItem.name = labelsArray[i];
 				menuItem.x = 400;
-				menuItem.y = i*20;
+				menuItem.y = i * 20;
 				addChild(menuItem);
 			}
 
