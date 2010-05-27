@@ -19,11 +19,11 @@ package
 		new ApplicationFacade
 
 		public function Main()
-		{ 
+		{
 			// init
 			facade = ApplicationFacade.getInstance();
 			facade.sendNotification(ApplicationFacade.STARTUP, this);
-			
+
 			// auto start
 			facade.sendNotification(ApplicationFacade.START_GAME, this);
 		}

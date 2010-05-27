@@ -1,26 +1,28 @@
 package application.model
 {
 	import application.view.components.Crystal;
+	import application.view.components.CrystalStatus;
 	
 	import flash.geom.Point;
 	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
-	public class RuleProxy extends Proxy implements IProxy
+	public class Rules extends Proxy implements IProxy
 	{
-		public static const NAME:String = "RuleProxy";
-		
+		public static var COL_SIZE:uint = 8;
+		public static var ROW_SIZE:uint = 8;
+
 		public static function checkSame(crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = checkCol(crystals);
 			return checkRow(crystals) || _result;
 		}
-		
+
 		public static function checkCol(crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = false;
-			for (var j:int = 0; j < crystals.length; j += ConfigProxy.COL_SIZE)
+			for (var j:int = 0; j < crystals.length; j += COL_SIZE)
 			{
 				// check col
 				var _isSame:Boolean;
@@ -28,14 +30,14 @@ package application.model
 				var _count:int = 0;
 
 				// all in col
-				while (k < j + ConfigProxy.COL_SIZE - 1)
+				while (k < j + COL_SIZE - 1)
 				{
 					_count = 0;
 					var _currentIndex:uint = k;
 					var _skinIndex:uint = crystals[k].skinIndex;
 
 					// start skin index same as other skin index?
-					while ((k < j + ConfigProxy.COL_SIZE - 1) && (_isSame = (_skinIndex == crystals[k + 1].skinIndex)))
+					while ((k < j + COL_SIZE - 1) && (_isSame = (_skinIndex == crystals[k + 1].skinIndex)))
 					{
 						if (_isSame)
 						{
@@ -44,7 +46,7 @@ package application.model
 							{
 								// eliminate all in row
 								for (var _index:int = _currentIndex; _index <= k + 1; _index++)
-									crystals[_index].status = Crystal.STATUS_TOBE_REMOVE;
+									crystals[_index].status = CrystalStatus.TOBE_REMOVE;
 								_result = _result || true;
 							}
 							else
@@ -73,7 +75,7 @@ package application.model
 				var _skinIndex:uint = crystals[j].skinIndex;
 
 				// start skin index same as other skin index?
-				while ((k + ConfigProxy.COL_SIZE < ConfigProxy.ROW_SIZE * ConfigProxy.COL_SIZE) && (_isSame = (_skinIndex == crystals[k + ConfigProxy.COL_SIZE].skinIndex)))
+				while ((k + COL_SIZE < ROW_SIZE * COL_SIZE) && (_isSame = (_skinIndex == crystals[k + COL_SIZE].skinIndex)))
 				{
 					if (_isSame) //&& crystals[k + config.COL_SIZE].status != Crystal.STATUS_TOBE_REMOVE)
 					{
@@ -81,9 +83,9 @@ package application.model
 						if (++_count > 1)
 						{
 							// eliminate all in col
-							var _position:Point = CrystalProxy.getPositionFromIndex(j, ConfigProxy.COL_SIZE);
+							var _position:Point = DataProxy.getPositionFromIndex(j, COL_SIZE);
 							for (var _index:int = _position.y; _index <= _position.y + _count; _index++)
-								crystals[_position.x + _index * ConfigProxy.COL_SIZE].status = Crystal.STATUS_TOBE_REMOVE;
+								crystals[_position.x + _index * COL_SIZE].status = CrystalStatus.TOBE_REMOVE;
 
 							_result = _result || true;
 						}
@@ -92,7 +94,7 @@ package application.model
 							_result = _result || false;
 						}
 					}
-					k += ConfigProxy.COL_SIZE;
+					k += COL_SIZE;
 				}
 			}
 

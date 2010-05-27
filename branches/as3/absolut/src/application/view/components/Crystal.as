@@ -4,25 +4,20 @@ package application.view.components
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
-
+	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import application.model.ConfigProxy;
 
 	public class Crystal extends SDSprite implements IDestroyable
 	{
-		// status
-		public static const STATUS_FALL:String = "STATUS_FALL";
-		public static const STATUS_READY:String = "STATUS_READY";
-		public static const STATUS_TOBE_REMOVE:String = "STATUS_TOBE_REMOVE";
-		public static const STATUS_REMOVED:String = "STATUS_REMOVED";
-
-		public var status:String = STATUS_READY;
+		public var status:String = CrystalStatus.READY;
 
 		// asset
 		[Embed(source="assets/game.swf", symbol="CrystalClip")]
 		private const _CrystalClip:Class;
 		private var _crystalClip:MovieClip = new _CrystalClip();
+
+		public static var SIZE:uint = 38;
 
 		private var _id:int;
 
@@ -39,14 +34,14 @@ package application.view.components
 
 		public var swapID:int;
 
-		private var _width:Number = ConfigProxy.CYSTAL_SIZE;
+		private var _width:Number = SIZE;
 
 		override public function get width():Number
 		{
 			return _width;
 		}
 
-		private var _height:Number = ConfigProxy.CYSTAL_SIZE;
+		private var _height:Number = SIZE;
 
 		override public function get height():Number
 		{

@@ -1,18 +1,14 @@
 package application.view.components
 {
-	import application.model.ConfigProxy;
-	import application.model.CrystalProxy;
-	import application.model.RuleProxy;
-
+	import application.model.DataProxy;
+	import application.model.Rules;
+	
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.utils.DisplayObjectUtil;
-
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-
-	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
 	{
@@ -63,15 +59,15 @@ package application.view.components
 
 			_crystals = new Vector.<Crystal>();
 
-			for (var j:int = 0; j < ConfigProxy.ROW_SIZE; j++)
+			for (var j:int = 0; j < Rules.ROW_SIZE; j++)
 			{
-				for (var i:int = 0; i < ConfigProxy.COL_SIZE; i++)
+				for (var i:int = 0; i < Rules.COL_SIZE; i++)
 				{
 					// init
 					var _crystal:Crystal = new Crystal();
 					_canvas.addChild(_crystal);
 					_crystals.push(_crystal);
-					_crystal.id = j * ConfigProxy.COL_SIZE + i;
+					_crystal.id = j * Rules.COL_SIZE + i;
 
 					// position
 					_crystal.x = i * _crystal.width;
@@ -92,16 +88,16 @@ package application.view.components
 			{
 				var _crystal:Crystal = _crystals[_index];
 				_crystal.spin();
-				_crystal.status = Crystal.STATUS_READY;
+				_crystal.status = CrystalStatus.READY;
 			}
 
 			// Cheat -------------------------------------------------
 			var _i:int = 0;
 			var _j:int = 2;
 
-			_crystals[_i++ * ConfigProxy.COL_SIZE + _j].spin(0);
-			_crystals[_i++ * ConfigProxy.COL_SIZE + _j].spin(1);
-			_crystals[_i++ * ConfigProxy.COL_SIZE + _j].spin(0);
+			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
+			_crystals[_i++ * Rules.COL_SIZE + _j].spin(1);
+			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
 			//_crystals[_i++ * config.COL_SIZE + _j].spin(0);
 
 			_crystals[8].spin(0);
@@ -146,7 +142,7 @@ package application.view.components
 
 			// ------------------------------------------------- Cheat
 
-			if (RuleProxy.checkSame(_crystals))
+			if (Rules.checkSame(_crystals))
 				shuffle();
 		}
 
@@ -179,7 +175,7 @@ package application.view.components
 
 						// wait for next click
 						enabled = true;
-						
+
 						_status = SELECT_SWAP;
 
 						break;
@@ -193,12 +189,12 @@ package application.view.components
 							_focusCrystal = null;
 							_status = SELECT_FOCUS;
 							enabled = true;
-							
+
 							return;
 						}
 
 						// rule #1 : nearby?
-						if (!CrystalProxy.isNearby(_focusCrystal.id, _crystal.id))
+						if (!DataProxy.hasNeighbour(_focusCrystal.id, _crystal.id))
 						{
 							// refocus
 							_focusCrystal.focus = !_focusCrystal.focus;
@@ -239,11 +235,11 @@ package application.view.components
 				trace(" ! onSwapComplete");
 
 				// swap
-				CrystalProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
+				DataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 
 				trace(" > Begin Check condition...");
 				//Rule.check(_crystals, onCheckComplete);
-				onCheckComplete(RuleProxy.checkSame(_crystals));
+				onCheckComplete(Rules.checkSame(_crystals));
 			}
 		}
 
@@ -264,7 +260,7 @@ package application.view.components
 				TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: onBadMoveComplete, onCompleteParams: [_swapCrystal]});
 
 				// swap back
-				CrystalProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
+				DataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 			}
 		}
 
@@ -275,7 +271,7 @@ package application.view.components
 			for (var _index:int = 0; _index < _length; _index++)
 			{
 				var _crystal:Crystal = _crystals[_index];
-				if (_crystal.status == Crystal.STATUS_TOBE_REMOVE)
+				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
 				{
 					TweenLite.to(_crystal, .25, {alpha: 0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystal]});
 				}
@@ -285,11 +281,11 @@ package application.view.components
 		private function onGoodMoveComplete(crystal:Crystal):void
 		{
 			// mark as done
-			crystal.status = Crystal.STATUS_REMOVED;
+			crystal.status = CrystalStatus.REMOVED;
 
 			// all clean?
 			var _length:int = _crystals.length;
-			while (--_length > -1 && (_crystals[_length].status != Crystal.STATUS_TOBE_REMOVE))
+			while (--_length > -1 && (_crystals[_length].status != CrystalStatus.TOBE_REMOVE))
 			{
 				//
 			}
@@ -304,7 +300,7 @@ package application.view.components
 		{
 			trace(" > Begin Refill");
 
-			var _topCrystals:Vector.<Crystal> = new Vector.<Crystal>(ConfigProxy.COL_SIZE, true);
+			var _topCrystals:Vector.<Crystal> = new Vector.<Crystal>(Rules.COL_SIZE, true);
 			var _position:Point;
 			var _index:int = _crystals.length;
 
@@ -313,15 +309,15 @@ package application.view.components
 			{
 				var _crystal:Crystal = _crystals[_index];
 				// it's removed
-				if (_crystal.status == Crystal.STATUS_REMOVED || _crystal.status == Crystal.STATUS_FALL)
+				if (_crystal.status == CrystalStatus.REMOVED || _crystal.status == CrystalStatus.MOVE)
 				{
 					// find top most to replace
-					var _aboveCrystal:Crystal = CrystalProxy.getAboveCrystal(_crystals, _index, ConfigProxy.COL_SIZE);
+					var _aboveCrystal:Crystal = DataProxy.getAboveCrystal(_crystals, _index, Rules.COL_SIZE);
 					if (_aboveCrystal)
 					{
 						// fall to bottom
 						_crystal.swapID = _aboveCrystal.id;
-						_aboveCrystal.status = Crystal.STATUS_FALL;
+						_aboveCrystal.status = CrystalStatus.MOVE;
 
 						onRefillComplete(_crystal);
 					}
@@ -330,7 +326,7 @@ package application.view.components
 						// nothing on top, get top most from stock
 						_crystal.alpha = 1;
 						_crystal.spin();
-						_crystal.status = Crystal.STATUS_READY;
+						_crystal.status = CrystalStatus.READY;
 						_crystal.swapID = -1;
 
 						onRefillComplete(_crystal);
@@ -342,20 +338,20 @@ package application.view.components
 		private function onRefillComplete(crystal:Crystal):void
 		{
 			// mark as done
-			crystal.status = Crystal.STATUS_READY;
+			crystal.status = CrystalStatus.READY;
 
 			// real swap
 			if (crystal.swapID != -1)
 			{
-				CrystalProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
-				CrystalProxy.swapByID(_crystals, crystal.id, crystal.swapID);
+				DataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
+				DataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
 
 				crystal.swapID = -1;
 			}
 
 			// all clean?
 			var _length:int = _crystals.length;
-			while (--_length > -1 && (_crystals[_length].status == Crystal.STATUS_READY))
+			while (--_length > -1 && (_crystals[_length].status == CrystalStatus.READY))
 			{
 				//
 			}
@@ -365,7 +361,7 @@ package application.view.components
 			trace(" < End Refill");
 
 			trace(" > Begin Recheck");
-			reCheck(RuleProxy.checkSame(_crystals));
+			reCheck(Rules.checkSame(_crystals));
 		}
 
 		private function reCheck(result:Boolean):void
