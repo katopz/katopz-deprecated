@@ -12,7 +12,11 @@ package application.model
 	{
 		public static const NAME:String = "DataProxy";
 
+		// status
 		public var inGame:Boolean = false;
+		
+		//
+		public static var _crystals:Vector.<Crystal>;
 
 		// Level.
 		/*
@@ -53,42 +57,24 @@ package application.model
 		public function DataProxy()
 		{
 			super(NAME);
-
-		/*
-		   map = new LocalPersistenceMap("storage", "/");
-
-		   if ( !map.containsKey("level") )
-		   {
-		   map.put("level", DataProxy.NORMAL);
-		   map.put("soundState", true);
-		   }
-
-		   this.level = map.getValue("level");
-		   this.soundState = map.getValue("soundState");
-
-		   // Fill default arrays.
-		   for ( var i:Number = 0; i < boardSize; i++ )
-		   {
-		   movesArray[i] = [];
-		   userArray[i] = [];
-		   AIArray[i] = [];
-
-		   for ( var j:Number = 0; j < boardSize; j++ )
-		   {
-		   if ( i == this.centerTile && j == this.centerTile )
-		   {
-		   movesArray[i][j] = -1;
-		   AIArray[i][j] = -1;
-		   }
-		   else
-		   {
-		   movesArray[i][j] = 0;
-		   AIArray[i][j] = 0;
-		   }
-		   userArray[i][j] = 0;
-		   }
-		   }
-		 */
+			
+			_crystals = new Vector.<Crystal>();
+			
+			for (var j:int = 0; j < Rules.ROW_SIZE; j++)
+			{
+				for (var i:int = 0; i < Rules.COL_SIZE; i++)
+				{
+					// init
+					var _crystal:Crystal = new Crystal();
+					//_canvas.addChild(_crystal);
+					_crystals.push(_crystal);
+					_crystal.id = j * Rules.COL_SIZE + i;
+					
+					// position
+					_crystal.x = i * _crystal.width;
+					_crystal.y = j * _crystal.height;
+				}
+			}
 		}
 
 		public function userMove(x:Number, y:Number):void
@@ -96,34 +82,105 @@ package application.model
 			// move data
 
 			// check win condition
-		/*
-		   if ( isWinner(x, y, userTile) == winningMove )
-		   {
-		   inGame = false;
-		   sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(userTile) );
-		   resetGame();
-		   }
-		 */
+			/*
+			   if ( isWinner(x, y, userTile) == winningMove )
+			   {
+			   inGame = false;
+			   sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(userTile) );
+			   resetGame();
+			   }
+			 */
 		}
 
 		public function resetGame():void
 		{
-			//
+			shuffle(_crystals);
+		}
+		
+		public function shuffle(crystals:Vector.<Crystal>):void
+		{
+			trace(" ! Shuffle");
+			for each(var _crystal:Crystal in _crystals)
+			{
+				_crystal.spin();
+				_crystal.status = CrystalStatus.READY;
+			}
+			
+			// Cheat -------------------------------------------------
+			/*
+			var _i:int = 0;
+			var _j:int = 2;
+			
+			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
+			_crystals[_i++ * Rules.COL_SIZE + _j].spin(1);
+			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
+			//_crystals[_i++ * config.COL_SIZE + _j].spin(0);
+			
+			_crystals[8].spin(0);
+			_crystals[9].spin(0);
+			_crystals[11].spin(0);
+			
+			_crystals[0].spin(0);
+			_crystals[1].spin(1);
+			_crystals[2].spin(5);
+			_crystals[3].spin(4);
+			
+			_crystals[4].spin(0);
+			_crystals[5].spin(1);
+			_crystals[6].spin(0);
+			_crystals[7].spin(0);
+			
+			var _k:int = 1;
+			
+			_crystals[_k * 8 + 0].spin(5);
+			_crystals[_k * 8 + 1].spin(1);
+			_crystals[_k * 8 + 2].spin(2);
+			_crystals[_k * 8 + 3].spin(3);
+			
+			_crystals[_k * 8 + 4].spin(1);
+			_crystals[_k * 8 + 5].spin(1);
+			_crystals[_k * 8 + 6].spin(0);
+			_crystals[_k * 8 + 7].spin(0);
+			
+			_k = 2;
+			
+			_crystals[_k * 8 + 0].spin(2);
+			_crystals[_k * 8 + 1].spin(2);
+			_crystals[_k * 8 + 2].spin(1);
+			_crystals[_k * 8 + 3].spin(3);
+			
+			_crystals[_k * 8 + 4].spin(3);
+			_crystals[_k * 8 + 5].spin(1);
+			_crystals[_k * 8 + 6].spin(0);
+			_crystals[_k * 8 + 7].spin(0);
+			*/
+			
+			// ------------------------------------------------- Cheat
+			
+			if (Rules.checkSame(crystals))
+				shuffle(crystals);
 		}
 
 		private function evaluatePosition(array:Array, tile:Number):Number
 		{
 			return -1;
 		}
-
-		public static function hasNeighbour(focusID:int, swapID:int):Boolean
+		
+		// select
+		public static function getAboveCrystal(crystals:Vector.<Crystal>, index:int, size:uint):Crystal
 		{
-			var _a:Point = getPositionFromIndex(focusID, Rules.COL_SIZE);
-			var _b:Point = getPositionFromIndex(swapID, Rules.COL_SIZE);
-
-			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
+			while (((index -= size) >= 0) && (crystals[index].status != CrystalStatus.READY))
+			{
+			}
+			return index > -1 ? crystals[index] : null;
 		}
-
+		
+		public static function getPositionFromIndex(index:int, size:uint):Point
+		{
+			return new Point(int(index % size), int(index / size));
+		}
+		
+		// modify
 		public static function swapPositionByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
 		{
 			var x:Number = crystals[targetID].x;
@@ -148,19 +205,6 @@ package application.model
 			var _id:int = crystals[targetID].id;
 			crystals[targetID].id = crystals[srcID].id;
 			crystals[srcID].id = _id;
-		}
-
-		public static function getAboveCrystal(crystals:Vector.<Crystal>, index:int, size:uint):Crystal
-		{
-			while (((index -= size) >= 0) && (crystals[index].status != CrystalStatus.READY))
-			{
-			}
-			return index > -1 ? crystals[index] : null;
-		}
-
-		public static function getPositionFromIndex(index:int, size:uint):Point
-		{
-			return new Point(int(index % size), int(index / size));
 		}
 	}
 }

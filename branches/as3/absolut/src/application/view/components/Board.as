@@ -6,14 +6,15 @@ package application.view.components
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
 	
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	
+	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
 	{
 		// signal
-		//public var initSignal:Signal = new Signal();
+		public var moveSignal:Signal = new Signal();
 
 		// status
 		private const SELECT_FOCUS:String = "SELECT_FOCUS";
@@ -25,9 +26,28 @@ package application.view.components
 
 		// focus
 		private var _focusCrystal:Crystal;
+
+		public function get focusCrystal():Crystal
+		{
+			return _focusCrystal;
+		}
+
 		private var _swapCrystal:Crystal;
 
-		private var _crystals:Vector.<Crystal>;
+		public function get swapCrystal():Crystal
+		{
+			return _swapCrystal;
+		}
+
+		public function get _crystals():Vector.<Crystal>
+		{
+			return DataProxy._crystals;
+		}
+		
+		public function set _crystals(value:Vector.<Crystal>):void
+		{
+			DataProxy._crystals = value;
+		}
 
 		private var _enabled:Boolean;
 
@@ -43,107 +63,14 @@ package application.view.components
 
 		public function Board()
 		{
-			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
-		}
-
-		private function onStage(event:Event):void
-		{
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			init();
-		}
-
-		private function init():void
-		{
 			// canvas
 			addChild(_canvas = new SDSprite());
 
-			_crystals = new Vector.<Crystal>();
-
-			for (var j:int = 0; j < Rules.ROW_SIZE; j++)
-			{
-				for (var i:int = 0; i < Rules.COL_SIZE; i++)
-				{
-					// init
-					var _crystal:Crystal = new Crystal();
-					_canvas.addChild(_crystal);
-					_crystals.push(_crystal);
-					_crystal.id = j * Rules.COL_SIZE + i;
-
-					// position
-					_crystal.x = i * _crystal.width;
-					_crystal.y = j * _crystal.height;
-				}
-			}
-
-			addEventListener(MouseEvent.CLICK, onClick);
+			for each(var _crystal:Crystal in _crystals)
+				_canvas.addChild(_crystal);
 
 			//initSignal.dispatch();
-		}
-
-		public function shuffle(e:* = null):void
-		{
-			trace(" ! Shuffle");
-			var _length:int = _crystals.length;
-			for (var _index:int = 0; _index < _length; _index++)
-			{
-				var _crystal:Crystal = _crystals[_index];
-				_crystal.spin();
-				_crystal.status = CrystalStatus.READY;
-			}
-
-			// Cheat -------------------------------------------------
-			var _i:int = 0;
-			var _j:int = 2;
-
-			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
-			_crystals[_i++ * Rules.COL_SIZE + _j].spin(1);
-			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
-			//_crystals[_i++ * config.COL_SIZE + _j].spin(0);
-
-			_crystals[8].spin(0);
-			_crystals[9].spin(0);
-			_crystals[11].spin(0);
-
-			/*
-			   _crystals[0].spin(0);
-			   _crystals[1].spin(1);
-			   _crystals[2].spin(5);
-			   _crystals[3].spin(4);
-
-			   _crystals[4].spin(0);
-			   _crystals[5].spin(1);
-			   _crystals[6].spin(0);
-			   _crystals[7].spin(0);
-
-			   var _k:int = 1;
-
-			   _crystals[_k * 8 + 0].spin(5);
-			   _crystals[_k * 8 + 1].spin(1);
-			   _crystals[_k * 8 + 2].spin(2);
-			   _crystals[_k * 8 + 3].spin(3);
-
-			   _crystals[_k * 8 + 4].spin(1);
-			   _crystals[_k * 8 + 5].spin(1);
-			   _crystals[_k * 8 + 6].spin(0);
-			   _crystals[_k * 8 + 7].spin(0);
-
-			   _k = 2;
-
-			   _crystals[_k * 8 + 0].spin(2);
-			   _crystals[_k * 8 + 1].spin(2);
-			   _crystals[_k * 8 + 2].spin(1);
-			   _crystals[_k * 8 + 3].spin(3);
-
-			   _crystals[_k * 8 + 4].spin(3);
-			   _crystals[_k * 8 + 5].spin(1);
-			   _crystals[_k * 8 + 6].spin(0);
-			   _crystals[_k * 8 + 7].spin(0);
-			 */
-
-			// ------------------------------------------------- Cheat
-
-			if (Rules.checkSame(_crystals))
-				shuffle();
+			addEventListener(MouseEvent.CLICK, onClick);
 		}
 
 		public function onClick(event:MouseEvent):void
@@ -153,11 +80,11 @@ package application.view.components
 			{
 				var _crystal:Crystal = event.target.parent;
 				if (_crystal)
-					focusCrystal(_crystal);
+					setFocusCrystal(_crystal);
 			}
 		}
 
-		private function focusCrystal(_crystal:Crystal):void
+		private function setFocusCrystal(_crystal:Crystal):void
 		{
 			// click on crystal
 			if (_crystal)
@@ -194,12 +121,12 @@ package application.view.components
 						}
 
 						// rule #1 : nearby?
-						if (!DataProxy.hasNeighbour(_focusCrystal.id, _crystal.id))
+						if (!Rules.hasNeighbor(_focusCrystal.id, _crystal.id))
 						{
 							// refocus
 							_focusCrystal.focus = !_focusCrystal.focus;
 							_status = SELECT_FOCUS;
-							focusCrystal(_crystal);
+							setFocusCrystal(_crystal);
 						}
 						else
 						{
@@ -223,6 +150,11 @@ package application.view.components
 			}
 		}
 
+		private function showSwapEffect(focusCrystal:Crystal, swapCrystal:Crystal):void
+		{
+			
+		}
+		
 		private function onSwapComplete(crystal:Crystal):void
 		{
 			// remove focus
@@ -405,6 +337,16 @@ package application.view.components
 			// accept inpt
 			enabled = true;
 			_status = SELECT_FOCUS;
+		}
+		
+		override public function destroy():void
+		{
+			removeEventListener(MouseEvent.CLICK, onClick);
+			
+			_focusCrystal = null;
+			_swapCrystal = null;
+			
+			super.destroy();
 		}
 	}
 }

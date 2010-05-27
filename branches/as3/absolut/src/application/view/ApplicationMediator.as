@@ -63,7 +63,8 @@ package application.view
 
 				case ApplicationFacade.RESTART_REQUEST:
 					//TODO : warn before shuffle
-					board.shuffle();
+					//bypass comfirm and send notification
+					sendNotification(ApplicationFacade.RESTART_GAME);
 					break;
 
 				case ApplicationFacade.DRAWN_GAME:

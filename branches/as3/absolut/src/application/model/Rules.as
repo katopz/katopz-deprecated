@@ -12,6 +12,14 @@ package application.model
 	{
 		public static var COL_SIZE:uint = 8;
 		public static var ROW_SIZE:uint = 8;
+		
+		public static function hasNeighbor(focusID:int, swapID:int):Boolean
+		{
+			var _a:Point = DataProxy.getPositionFromIndex(focusID, COL_SIZE);
+			var _b:Point = DataProxy.getPositionFromIndex(swapID, COL_SIZE);
+			
+			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
+		}
 
 		public static function checkSame(crystals:Vector.<Crystal>):Boolean
 		{

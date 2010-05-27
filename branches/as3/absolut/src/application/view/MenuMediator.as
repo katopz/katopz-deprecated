@@ -53,7 +53,7 @@ package application.view
 			}
 			else
 			{
-				//if ( data.soundState ) alertSound.play();				
+				//if ( data.soundState ) alertSound.play();
 				sendNotification(ApplicationFacade.RESTART_REQUEST);
 			}
 		}
