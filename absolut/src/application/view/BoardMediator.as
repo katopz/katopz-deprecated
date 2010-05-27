@@ -2,9 +2,16 @@ package application.view
 {
 	import application.ApplicationFacade;
 	import application.model.DataProxy;
+	import application.model.Rules;
 	import application.view.components.Board;
+	import application.view.components.Crystal;
+	
+	import com.greensock.TweenLite;
+	import com.sleepydesign.display.SDSprite;
 	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -23,13 +30,14 @@ package application.view
 			data = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
 
 			//board.soundState = data.soundState;
-			//board.addEventListener(Board.TILE_CLICK, onTileClick);
+			board.addEventListener(MouseEvent.CLICK, onTileClick);
 		}
 
 		override public function listNotificationInterests():Array
 		{
 			return [ApplicationFacade.START_GAME,
 				ApplicationFacade.RESTART_GAME,
+				ApplicationFacade.USER_MOVE,
 				ApplicationFacade.GAME_OVER,
 				ApplicationFacade.DRAWN_GAME,
 				ApplicationFacade.SOUND_CHANGE];
@@ -40,13 +48,17 @@ package application.view
 			switch (notification.getName())
 			{
 				case ApplicationFacade.START_GAME:
-					board.shuffle();
+					//already shuffle data while init//board.shuffle();
 					board.enabled = true;
 					break;
 
 				case ApplicationFacade.RESTART_GAME:
-					board.shuffle();
+					//already shuffle data by command//board.shuffle();
 					board.enabled = true;
+					break;
+				
+				case ApplicationFacade.USER_MOVE:
+					//board.showMoveEffect();
 					break;
 
 				case ApplicationFacade.GAME_OVER:
@@ -71,7 +83,8 @@ package application.view
 
 		private function onTileClick(event:Event):void
 		{
-			//sendNotification(ApplicationFacade.USER_MOVE, board.tileCoordinate);
+			// send request to model
+			sendNotification(ApplicationFacade.USER_MOVE, Vector.<Crystal>([board.focusCrystal, board.swapCrystal]));
 		}
 	}
 }

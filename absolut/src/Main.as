@@ -1,7 +1,8 @@
 package
 {
 	import application.ApplicationFacade;
-	
+	import application.model.DataProxy;
+
 	import com.sleepydesign.display.SDSprite;
 
 	/**
@@ -16,7 +17,6 @@ package
 	public class Main extends SDSprite
 	{
 		private var facade:ApplicationFacade;
-		new ApplicationFacade
 
 		public function Main()
 		{
@@ -26,6 +26,9 @@ package
 
 			// auto start
 			facade.sendNotification(ApplicationFacade.START_GAME, this);
+			var data:DataProxy = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			data.resetGame();
+			data.inGame = true;
 		}
 
 		override public function destroy():void

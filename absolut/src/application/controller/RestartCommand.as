@@ -7,11 +7,9 @@ package application.controller
 
 	public class RestartCommand extends SimpleCommand
 	{
-		private var data:DataProxy;
-
 		override public function execute(notification:INotification):void
 		{
-			data = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			var data:DataProxy = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
 			data.resetGame();
 		}
 	}
