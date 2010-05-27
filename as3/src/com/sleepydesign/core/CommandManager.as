@@ -5,15 +5,32 @@ package com.sleepydesign.core
 		private var _isDestroyed:Boolean;
 		protected var _commands:Vector.<ICommand> = new Vector.<ICommand>();
 
-		public function addCommand(command:ICommand):CommandManager
+		public function addCommand(command:ICommand):ICommand
 		{
 			_commands.fixed = false;
 			_commands.push(command);
 			_commands.fixed = true;
 
-			return this;
+			return command;
 		}
-
+		
+		public function removeCommand(command:ICommand):ICommand
+		{
+			var i:int = _commands.indexOf(command);
+			var f:uint = 0;
+			
+			_commands.fixed = false;
+			while (i != -1)
+			{
+				_commands.splice(i, 1);
+				i = _commands.indexOf(command, i);
+				f++;
+			}
+			_commands.fixed = true;
+			
+			return command;
+		}
+		
 		public function start():void
 		{
 			trace(" ! Start");
