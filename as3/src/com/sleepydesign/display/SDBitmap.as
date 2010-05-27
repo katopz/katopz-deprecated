@@ -36,8 +36,7 @@ package com.sleepydesign.display {
 	import flash.events.Event;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.IRemovableEventDispatcher;
-	import com.sleepydesign.managers.ListenerManager;
-	
+	import com.sleepydesign.events.ListenerManager	
 	/**
 		A base Bitmap that implements {@link IRemovableEventDispatcher} and {@link IDestroyable}.
 		
