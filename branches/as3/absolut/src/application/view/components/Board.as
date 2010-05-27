@@ -4,6 +4,7 @@ package application.view.components
 	import application.model.Rules;
 	
 	import com.greensock.TweenLite;
+	import com.sleepydesign.core.CommandManager;
 	import com.sleepydesign.display.SDSprite;
 	
 	import flash.events.MouseEvent;
@@ -208,6 +209,9 @@ package application.view.components
 					TweenLite.to(_crystal, .25, {alpha: 0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystal]});
 				}
 			}
+			
+			var _commandManager:CommandManager = new CommandManager();
+			_commandManager.addCommand(new MyCommand1);
 		}
 
 		private function onGoodMoveComplete(crystal:Crystal):void
@@ -348,5 +352,16 @@ package application.view.components
 			
 			super.destroy();
 		}
+	}
+}
+
+import com.sleepydesign.core.SDCommand;
+
+internal class MyCommand1 extends SDCommand
+{
+	override public function command():void
+	{
+		for (var i:int = 0; i < 3; i++)
+			trace(this, [" * Command1 : " + i]);
 	}
 }
