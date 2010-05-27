@@ -2,7 +2,7 @@ package com.sleepydesign.core
 {
 	import org.osflash.signals.Signal;
 
-	public class AbstractCommand implements ICommand
+	public class SDCommand implements ICommand
 	{
 		protected var _completeSignal:Signal = new Signal();
 

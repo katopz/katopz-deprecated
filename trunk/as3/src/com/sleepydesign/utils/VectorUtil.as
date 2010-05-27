@@ -24,5 +24,25 @@ package com.sleepydesign.utils
 		{
 			return toArray(vector).sortOn(fieldName, options);
 		}
+		
+		public static function removeItem(tarVector:Vector.<*>, item:*):uint
+		{
+			var i:int = tarVector.indexOf(item);
+			var f:uint = 0;
+			var _fixed:Boolean = tarVector.fixed;
+			
+			tarVector.fixed = false;
+				
+			while (i != -1)
+			{
+				tarVector.splice(i, 1);
+				i = tarVector.indexOf(item, i);
+				f++;
+			}
+			
+			tarVector.fixed = _fixed;
+			
+			return f;
+		}
 	}
 }
