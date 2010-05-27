@@ -1,6 +1,6 @@
 package application.controller
 {
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -9,7 +9,7 @@ package application.controller
 	{
 		override public function execute(notification:INotification):void
 		{
-			var data:DataProxy = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			var data:CrystalDataProxy = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 			data.resetGame();
 		}
 	}

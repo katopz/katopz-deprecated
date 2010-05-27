@@ -1,6 +1,6 @@
 package application.controller
 {
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	
 	import org.puremvc.as3.patterns.command.MacroCommand;
 

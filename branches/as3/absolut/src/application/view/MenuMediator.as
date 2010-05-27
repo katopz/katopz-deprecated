@@ -1,7 +1,7 @@
 package application.view
 {
 	import application.ApplicationFacade;
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	import application.view.components.Menu;
 	
 	import flash.events.Event;
@@ -15,14 +15,14 @@ package application.view
 	{
 		public static const NAME:String = "MenuMediator";
 
-		private var data:DataProxy;
+		private var data:CrystalDataProxy;
 		private var alertSound:Sound;
 
 		public function MenuMediator(viewComponent:Object)
 		{
 			super(NAME, viewComponent);
 
-			data = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 
 			menu.addEventListener(Menu.START, onStart);
 			menu.addEventListener(Menu.RULES, onRules);

@@ -1,6 +1,6 @@
 package application.view.components
 {
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	import application.model.Rules;
 	
 	import com.greensock.TweenLite;
@@ -41,12 +41,12 @@ package application.view.components
 
 		public function get _crystals():Vector.<Crystal>
 		{
-			return DataProxy._crystals;
+			return CrystalDataProxy._crystals;
 		}
 		
 		public function set _crystals(value:Vector.<Crystal>):void
 		{
-			DataProxy._crystals = value;
+			CrystalDataProxy._crystals = value;
 		}
 
 		private var _enabled:Boolean;
@@ -167,7 +167,7 @@ package application.view.components
 				trace(" ! onSwapComplete");
 
 				// swap
-				DataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
+				CrystalDataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 
 				trace(" > Begin Check condition...");
 				//Rule.check(_crystals, onCheckComplete);
@@ -192,7 +192,7 @@ package application.view.components
 				TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: onBadMoveComplete, onCompleteParams: [_swapCrystal]});
 
 				// swap back
-				DataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
+				CrystalDataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 			}
 		}
 
@@ -244,7 +244,7 @@ package application.view.components
 				if (_crystal.status == CrystalStatus.REMOVED || _crystal.status == CrystalStatus.MOVE)
 				{
 					// find top most to replace
-					var _aboveCrystal:Crystal = DataProxy.getAboveCrystal(_crystals, _index, Rules.COL_SIZE);
+					var _aboveCrystal:Crystal = CrystalDataProxy.getAboveCrystal(_crystals, _index, Rules.COL_SIZE);
 					if (_aboveCrystal)
 					{
 						// fall to bottom
@@ -275,8 +275,8 @@ package application.view.components
 			// real swap
 			if (crystal.swapID != -1)
 			{
-				DataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
-				DataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
+				CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
+				CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
 
 				crystal.swapID = -1;
 			}

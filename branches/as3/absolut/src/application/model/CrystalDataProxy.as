@@ -8,7 +8,7 @@ package application.model
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
-	public class DataProxy extends Proxy implements IProxy
+	public class CrystalDataProxy extends Proxy implements IProxy
 	{
 		public static const NAME:String = "DataProxy";
 
@@ -54,7 +54,7 @@ package application.model
 		 */
 
 		// Constructor.
-		public function DataProxy()
+		public function CrystalDataProxy()
 		{
 			super(NAME);
 			

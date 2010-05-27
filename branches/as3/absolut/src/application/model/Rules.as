@@ -15,8 +15,8 @@ package application.model
 		
 		public static function hasNeighbor(focusID:int, swapID:int):Boolean
 		{
-			var _a:Point = DataProxy.getPositionFromIndex(focusID, COL_SIZE);
-			var _b:Point = DataProxy.getPositionFromIndex(swapID, COL_SIZE);
+			var _a:Point = CrystalDataProxy.getPositionFromIndex(focusID, COL_SIZE);
+			var _b:Point = CrystalDataProxy.getPositionFromIndex(swapID, COL_SIZE);
 			
 			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
 		}
@@ -91,7 +91,7 @@ package application.model
 						if (++_count > 1)
 						{
 							// eliminate all in col
-							var _position:Point = DataProxy.getPositionFromIndex(j, COL_SIZE);
+							var _position:Point = CrystalDataProxy.getPositionFromIndex(j, COL_SIZE);
 							for (var _index:int = _position.y; _index <= _position.y + _count; _index++)
 								crystals[_position.x + _index * COL_SIZE].status = CrystalStatus.TOBE_REMOVE;
 

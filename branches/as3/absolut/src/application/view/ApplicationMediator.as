@@ -1,7 +1,7 @@
 package application.view
 {
 	import application.ApplicationFacade;
-	import application.model.DataProxy;
+	import application.model.CrystalDataProxy;
 	import application.view.components.Board;
 	import application.view.components.Menu;
 	
@@ -17,7 +17,7 @@ package application.view
 		public static const NAME:String = "ApplicationMediator";
 
 		// Model
-		private var data:DataProxy;
+		private var data:CrystalDataProxy;
 
 		// Assets
 		private var menu:Menu;
@@ -31,7 +31,7 @@ package application.view
 			main.stage.scaleMode = StageScaleMode.NO_SCALE;
 
 			// Retrieve proxies.
-			data = facade.retrieveProxy(DataProxy.NAME) as DataProxy;
+			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 
 			drawAssets();
 		}
