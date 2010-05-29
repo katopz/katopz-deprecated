@@ -1,5 +1,8 @@
 package com.sleepydesign.core
 {
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+
 	import org.osflash.signals.Signal;
 
 	public class CommandManager implements IDestroyable
@@ -9,6 +12,8 @@ package com.sleepydesign.core
 		protected var _totalCommands:int;
 
 		public var completeSignal:Signal = new Signal(CommandManager);
+
+		protected var _timers:Vector.<Timer>;
 
 		public function addCommand(command:ICommand):ICommand
 		{
@@ -54,23 +59,47 @@ package com.sleepydesign.core
 			// start
 			_commands[0].doCommand();
 		}
-		
+
 		public function startAll():void
 		{
 			if (!_commands)
 				return;
 			else if (_commands.length <= 0)
 				return;
-			
+
 			// link list as Parallel
-			var _commands_length:int = _totalCommands = _commands.length;
-			for each(var _command:ICommand in _commands)
+			if (_timer)
 			{
-				_command.completeSignal.addOnce(onSubCommandComplete);
-				_command.doCommand();
+				_timer.stop();
+				_timer = null;
+			}
+
+			var _commands_length:int = _totalCommands = _commands.length;
+
+			_timers = new Vector.<Timer>(_commands_length, true);
+
+			for (var i:int = 0; i < _commands_length; i++)
+			{
+				_commands[i].completeSignal.addOnce(onSubCommandComplete);
+				//trace("add:"+i);
+				var _timer:Timer = new Timer(1000/30, 1);
+				_timers[i] = _timer;
+				_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+				_timer.start();
 			}
 		}
-		
+
+		protected function onTimerComplete(event:TimerEvent):void
+		{
+			var _timer:Timer = event.target as Timer;
+			_timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+
+			var _index:int = _timers.indexOf(_timer);
+			var _command:ICommand = _commands[_index];
+			_command.completeSignal.addOnce(onSubCommandComplete);
+			_command.doCommand();
+		}
+
 		protected function onSubCommandComplete():void
 		{
 			if (--_totalCommands == 0)
@@ -79,7 +108,7 @@ package com.sleepydesign.core
 				onCommandComplete();
 			}
 		}
-		
+
 		protected function onCommandComplete():void
 		{
 			completeSignal.dispatch(this);
