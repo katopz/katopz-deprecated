@@ -11,9 +11,10 @@ package com.sleepydesign.core
 		protected var _commands:Vector.<ICommand> = new Vector.<ICommand>();
 		protected var _totalCommands:int;
 
-		public var completeSignal:Signal = new Signal(CommandManager);
+		private var _timer:Timer;
+		private var _fps:int = 30;
 
-		protected var _timers:Vector.<Timer>;
+		public var completeSignal:Signal = new Signal();
 
 		public function addCommand(command:ICommand):ICommand
 		{
@@ -74,30 +75,24 @@ package com.sleepydesign.core
 				_timer = null;
 			}
 
-			var _commands_length:int = _totalCommands = _commands.length;
-
-			_timers = new Vector.<Timer>(_commands_length, true);
-
-			for (var i:int = 0; i < _commands_length; i++)
-			{
-				_commands[i].completeSignal.addOnce(onSubCommandComplete);
-				//trace("add:"+i);
-				var _timer:Timer = new Timer(1000/30, 1);
-				_timers[i] = _timer;
-				_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
-				_timer.start();
-			}
+			_totalCommands = _commands.length;
+			_timer = new Timer(1000 / _fps, _totalCommands);
+			_timer.addEventListener(TimerEvent.TIMER, onTimer);
+			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+			_timer.start();
 		}
 
-		protected function onTimerComplete(event:TimerEvent):void
+		protected function onTimer(event:TimerEvent):void
 		{
 			var _timer:Timer = event.target as Timer;
-			_timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
-
-			var _index:int = _timers.indexOf(_timer);
-			var _command:ICommand = _commands[_index];
+			var _command:ICommand = _commands[_timer.currentCount - 1];
 			_command.completeSignal.addOnce(onSubCommandComplete);
 			_command.doCommand();
+		}
+		
+		protected function onTimerComplete(event:TimerEvent):void
+		{
+			stop();
 		}
 
 		protected function onSubCommandComplete():void
@@ -111,7 +106,7 @@ package com.sleepydesign.core
 
 		protected function onCommandComplete():void
 		{
-			completeSignal.dispatch(this);
+			completeSignal.dispatch();
 		}
 
 		public function stop():void
@@ -128,6 +123,13 @@ package com.sleepydesign.core
 
 				// don't stop anymore
 				_commands[_commands.length - 1].completeSignal.remove(stop);
+			}
+
+			// destroy parallel
+			if (_timer)
+			{
+				_timer.stop();
+				_timer = null;
 			}
 
 			_commands = null;
