@@ -141,8 +141,7 @@ package application.view.components
 								_swapCrystal = _crystal;
 
 								// swap both
-								TweenLite.to(_focusCrystal, .5, {x: _swapCrystal.x, y: _swapCrystal.y, onComplete: onSwapComplete, onCompleteParams: [_focusCrystal]});
-								TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: onSwapComplete, onCompleteParams: [_swapCrystal]});
+								showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
 							}
 						}
 
@@ -151,9 +150,10 @@ package application.view.components
 			}
 		}
 
-		private function showSwapEffect(focusCrystal:Crystal, swapCrystal:Crystal):void
+		private function showSwapEffect(_focusCrystal:Crystal, _swapCrystal:Crystal, callBack:Function):void
 		{
-			
+			TweenLite.to(_focusCrystal, .5, {x: _swapCrystal.x, y: _swapCrystal.y, onComplete: callBack, onCompleteParams: [_focusCrystal]});
+			TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: callBack, onCompleteParams: [_swapCrystal]});
 		}
 		
 		private function onSwapComplete(crystal:Crystal):void
@@ -189,9 +189,8 @@ package application.view.components
 			{
 				// bad move
 				trace(" ! Bad move");
-				TweenLite.to(_focusCrystal, .5, {x: _swapCrystal.x, y: _swapCrystal.y, onComplete: onBadMoveComplete, onCompleteParams: [_focusCrystal]});
-				TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: onBadMoveComplete, onCompleteParams: [_swapCrystal]});
-
+				showSwapEffect(_focusCrystal, _swapCrystal, onBadMoveComplete);
+				
 				// swap back
 				CrystalDataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 			}
@@ -200,34 +199,16 @@ package application.view.components
 		private function doGoodEffect():void
 		{
 			trace(" > Begin Effect");
-			var _length:int = _crystals.length;
-			for (var _index:int = 0; _index < _length; _index++)
-			{
-				var _crystal:Crystal = _crystals[_index];
-				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
-				{
-					TweenLite.to(_crystal, .25, {alpha: 0, onComplete: onGoodMoveComplete, onCompleteParams: [_crystal]});
-				}
-			}
-			
 			var _commandManager:CommandManager = new CommandManager();
-			_commandManager.addCommand(new MyCommand1);
+			for each(var _crystal:Crystal in _crystals)
+				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
+					_commandManager.addCommand(new HideCrystalEffect(_crystal));
+			_commandManager.completeSignal.addOnce(onGoodMoveComplete);
+			_commandManager.startAll();
 		}
 
-		private function onGoodMoveComplete(crystal:Crystal):void
+		private function onGoodMoveComplete():void
 		{
-			// mark as done
-			crystal.status = CrystalStatus.REMOVED;
-
-			// all clean?
-			var _length:int = _crystals.length;
-			while (--_length > -1 && (_crystals[_length].status != CrystalStatus.TOBE_REMOVE))
-			{
-				//
-			}
-			if (_length > -1)
-				return;
-
 			trace(" < End Effect");
 			refill();
 		}
@@ -355,13 +336,28 @@ package application.view.components
 	}
 }
 
+import application.view.components.Crystal;
+import application.view.components.CrystalStatus;
+
+import com.greensock.TweenLite;
 import com.sleepydesign.core.SDCommand;
 
-internal class MyCommand1 extends SDCommand
+internal class HideCrystalEffect extends SDCommand
 {
+	private var _crystal:Crystal;
+	
+	public function HideCrystalEffect(crystal:Crystal)
+	{
+		_crystal = crystal;
+	}
+	
+	override public function doCommand():void
+	{
+		TweenLite.to(_crystal, .25, {alpha: 0, onComplete: super.doCommand});
+	}
+	
 	override public function command():void
 	{
-		for (var i:int = 0; i < 3; i++)
-			trace(this, [" * Command1 : " + i]);
+		_crystal.status = CrystalStatus.REMOVED;
 	}
 }

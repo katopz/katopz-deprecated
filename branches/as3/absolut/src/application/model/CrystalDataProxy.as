@@ -90,6 +90,7 @@ package application.model
 			   resetGame();
 			   }
 			 */
+			
 		}
 
 		public function resetGame():void
@@ -161,11 +162,6 @@ package application.model
 				shuffle(crystals);
 		}
 
-		private function evaluatePosition(array:Array, tile:Number):Number
-		{
-			return -1;
-		}
-		
 		// select
 		public static function getAboveCrystal(crystals:Vector.<Crystal>, index:int, size:uint):Crystal
 		{

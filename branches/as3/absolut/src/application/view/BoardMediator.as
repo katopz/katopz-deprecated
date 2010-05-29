@@ -37,7 +37,6 @@ package application.view
 		{
 			return [ApplicationFacade.START_GAME,
 				ApplicationFacade.RESTART_GAME,
-				ApplicationFacade.USER_MOVE,
 				ApplicationFacade.GAME_OVER,
 				ApplicationFacade.DRAWN_GAME,
 				ApplicationFacade.SOUND_CHANGE];
@@ -57,10 +56,6 @@ package application.view
 					board.enabled = true;
 					break;
 				
-				case ApplicationFacade.USER_MOVE:
-					//board.showMoveEffect();
-					break;
-
 				case ApplicationFacade.GAME_OVER:
 					//board.drawWinLine(y1, x1, y2, x2, tile);
 					//board.setBoardEnabled(false);
@@ -83,8 +78,8 @@ package application.view
 
 		private function onTileClick(event:Event):void
 		{
-			// send request to model
-			sendNotification(ApplicationFacade.USER_MOVE, Vector.<Crystal>([board.focusCrystal, board.swapCrystal]));
+			if(board.focusCrystal && board.swapCrystal)
+				sendNotification(ApplicationFacade.USER_MOVE, Vector.<Crystal>([board.focusCrystal, board.swapCrystal]));
 		}
 	}
 }
