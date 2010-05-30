@@ -77,7 +77,7 @@ package application.model
 			}
 		}
 
-		public function userMove(x:Number, y:Number):void
+		public function userMove(_focusCrystal:Crystal, _swapCrystal:Crystal):void
 		{
 			// move data
 
@@ -90,7 +90,11 @@ package application.model
 			   resetGame();
 			   }
 			 */
-			
+		}
+		
+		public function userMoveDone():void
+		{
+			trace("TODO : check for gameover condition");
 		}
 
 		public function resetGame():void
@@ -108,6 +112,13 @@ package application.model
 			}
 			
 			// Cheat -------------------------------------------------
+			var _i:int = 0;
+			var _j:int = 0;
+			_crystals[0+_i+_j].spin(0);
+			_crystals[1+_i+_j].spin(1);
+			_crystals[2+_i+_j].spin(0);
+			_crystals[3+_i+_j].spin(0);
+			
 			/*
 			var _i:int = 0;
 			var _j:int = 2;

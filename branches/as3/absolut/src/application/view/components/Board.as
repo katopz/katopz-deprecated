@@ -2,14 +2,14 @@ package application.view.components
 {
 	import application.model.CrystalDataProxy;
 	import application.model.Rules;
-	
+
 	import com.greensock.TweenLite;
 	import com.sleepydesign.core.CommandManager;
 	import com.sleepydesign.display.SDSprite;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
@@ -44,7 +44,7 @@ package application.view.components
 		{
 			return CrystalDataProxy._crystals;
 		}
-		
+
 		public function set _crystals(value:Vector.<Crystal>):void
 		{
 			CrystalDataProxy._crystals = value;
@@ -67,7 +67,7 @@ package application.view.components
 			// canvas
 			addChild(_canvas = new SDSprite());
 
-			for each(var _crystal:Crystal in _crystals)
+			for each (var _crystal:Crystal in _crystals)
 				_canvas.addChild(_crystal);
 
 			//initSignal.dispatch();
@@ -155,7 +155,7 @@ package application.view.components
 			TweenLite.to(_focusCrystal, .5, {x: _swapCrystal.x, y: _swapCrystal.y, onComplete: callBack, onCompleteParams: [_focusCrystal]});
 			TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: callBack, onCompleteParams: [_swapCrystal]});
 		}
-		
+
 		private function onSwapComplete(crystal:Crystal):void
 		{
 			// remove focus
@@ -190,7 +190,7 @@ package application.view.components
 				// bad move
 				trace(" ! Bad move");
 				showSwapEffect(_focusCrystal, _swapCrystal, onBadMoveComplete);
-				
+
 				// swap back
 				CrystalDataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
 			}
@@ -200,7 +200,7 @@ package application.view.components
 		{
 			trace(" > Begin Effect");
 			var _commandManager:CommandManager = new CommandManager();
-			for each(var _crystal:Crystal in _crystals)
+			for each (var _crystal:Crystal in _crystals)
 				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
 					_commandManager.addCommand(new HideCrystalEffect(_crystal));
 			_commandManager.completeSignal.addOnce(onGoodMoveComplete);
@@ -290,7 +290,14 @@ package application.view.components
 			else
 			{
 				trace(" < End ReCheck");
-				nextTurn();
+				trace(" > Begin Game over check");
+				if(!Rules.isOver(_crystals))
+				{
+					trace(" < End Game over check");
+					nextTurn();
+				}else{
+					trace(" < Game Over!");
+				}
 			}
 		}
 
@@ -323,14 +330,14 @@ package application.view.components
 			enabled = true;
 			_status = SELECT_FOCUS;
 		}
-		
+
 		override public function destroy():void
 		{
 			removeEventListener(MouseEvent.CLICK, onClick);
-			
+
 			_focusCrystal = null;
 			_swapCrystal = null;
-			
+
 			super.destroy();
 		}
 	}
@@ -345,17 +352,17 @@ import com.sleepydesign.core.SDCommand;
 internal class HideCrystalEffect extends SDCommand
 {
 	private var _crystal:Crystal;
-	
+
 	public function HideCrystalEffect(crystal:Crystal)
 	{
 		_crystal = crystal;
 	}
-	
+
 	override public function doCommand():void
 	{
 		TweenLite.to(_crystal, .25, {alpha: 0, onComplete: super.doCommand});
 	}
-	
+
 	override public function command():void
 	{
 		_crystal.status = CrystalStatus.REMOVED;
