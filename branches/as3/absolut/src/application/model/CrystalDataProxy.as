@@ -112,6 +112,7 @@ package application.model
 			}
 			
 			// Cheat -------------------------------------------------
+			/*
 			var _i:int = 0;
 			var _j:int = 0;
 			_crystals[0+_i+_j].spin(0);
@@ -119,6 +120,7 @@ package application.model
 			_crystals[2+_i+_j].spin(0);
 			_crystals[3+_i+_j].spin(0);
 			
+			*/
 			/*
 			var _i:int = 0;
 			var _j:int = 2;
@@ -169,7 +171,7 @@ package application.model
 			
 			// ------------------------------------------------- Cheat
 			
-			if (Rules.checkSame(crystals))
+			if (Rules.isSameColorRemain(crystals))
 				shuffle(crystals);
 		}
 

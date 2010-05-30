@@ -172,7 +172,7 @@ package application.view.components
 
 				trace(" > Begin Check condition...");
 				//Rule.check(_crystals, onCheckComplete);
-				onCheckComplete(Rules.checkSame(_crystals));
+				onCheckComplete(Rules.isSameColorRemain(_crystals));
 			}
 		}
 
@@ -278,7 +278,7 @@ package application.view.components
 			trace(" < End Refill");
 
 			trace(" > Begin Recheck");
-			reCheck(Rules.checkSame(_crystals));
+			reCheck(Rules.isSameColorRemain(_crystals));
 		}
 
 		private function reCheck(result:Boolean):void
