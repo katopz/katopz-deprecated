@@ -12,12 +12,12 @@ package application.model
 	{
 		public static var COL_SIZE:uint = 8;
 		public static var ROW_SIZE:uint = 8;
-		
+
 		public static function hasNeighbor(focusID:int, swapID:int):Boolean
 		{
 			var _a:Point = CrystalDataProxy.getPositionFromIndex(focusID, COL_SIZE);
 			var _b:Point = CrystalDataProxy.getPositionFromIndex(swapID, COL_SIZE);
-			
+
 			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
 		}
 
@@ -27,10 +27,148 @@ package application.model
 			return checkRow(crystals) || _result;
 		}
 
-		public static function checkCol(crystals:Vector.<Crystal>):Boolean
+		public static function isOver(_crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = false;
-			for (var j:int = 0; j < crystals.length; j += COL_SIZE)
+			var j:int;
+			// try up
+			/*
+			var _crystals_length:int = _crystals.length;
+			for (j = COL_SIZE; j < _crystals_length; j++)
+			{
+				var _crystal:Crystal = _crystals[j];
+				var _swapCrystal:Crystal = _crystals[j - COL_SIZE];
+
+				CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+
+				// chk /a
+				if (checkCol(_crystals, true) || checkRow(_crystals, true))
+				{
+					// swap back anyway
+					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+					_crystal.alpha = .25;
+					return false;
+				}
+				else
+				{
+					// swap back
+					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+				}
+			}
+			*/
+			
+			/*
+			// try down
+			var _crystals_length:int = _crystals.length;
+			for (j = 0; j < _crystals_length - ROW_SIZE; j++)
+			{
+				var _crystal:Crystal = _crystals[j];
+				var _swapCrystal:Crystal = _crystals[j + COL_SIZE];
+				
+				CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+				
+				// chk /a
+				if (checkCol(_crystals, true) || checkRow(_crystals, true))
+				{
+					// swap back anyway
+					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+					_crystal.alpha = .25;
+					return false;
+				}
+				else
+				{
+					// swap back
+					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+				}
+			}
+			*/
+			
+			/*
+			// try left
+			var _crystals_length:int = _crystals.length;
+			for (j = 1; j < _crystals_length; j++)
+			{
+				var _crystal:Crystal = _crystals[j];
+				var _swapCrystal:Crystal = _crystals[j - 1];
+				
+				CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+				
+				// chk /a
+				if (checkCol(_crystals, true) || checkRow(_crystals, true))
+				{
+					// swap back anyway
+					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+					_crystal.alpha = .25;
+					return false;
+				}
+				else
+				{
+					// swap back
+					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+				}
+			}
+			*/
+
+			// try left/right
+			var _crystals_length:int = _crystals.length;
+			var _crystal:Crystal;
+			var _swapCrystal:Crystal;
+			
+			for (j = 0; j < _crystals_length; j++)
+			{
+				// right : ignore next one = new line
+				if(j==0 || (j>0 && (j+1)%COL_SIZE!=0))
+				{
+					_crystal = _crystals[j];
+					_swapCrystal = _crystals[j + 1];
+					if(!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
+					{
+						_crystal.alpha = .25;
+						return false;
+					}
+				}
+				
+				// left : ignore prev one = above line
+				if(j%COL_SIZE!=0)
+				{
+					_crystal = _crystals[j];
+					_swapCrystal = _crystals[j - 1];
+					
+					if(!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
+					{
+						_crystal.alpha = .25;
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+		
+		public static function isSwapAndOver(_crystals:Vector.<Crystal>, _crystalID:int, _swapCrystaID:int):Boolean
+		{
+			CrystalDataProxy.swapByID(_crystals,  _crystalID, _swapCrystaID);
+			
+			// chk /a
+			if (checkCol(_crystals, true) || checkRow(_crystals, true))
+			{
+				// swap back anyway
+				CrystalDataProxy.swapByID(_crystals, _crystalID, _swapCrystaID);
+				return false;
+			}
+			else
+			{
+				// swap back
+				CrystalDataProxy.swapByID(_crystals, _crystalID, _swapCrystaID);
+				return true;
+			}
+		}
+
+		public static function checkCol(crystals:Vector.<Crystal>, isJustCheck:Boolean = false):Boolean
+		{
+			var _result:Boolean = false;
+			var _crystals_length:int = crystals.length;
+			for (var j:int = 0; j < _crystals_length; j += COL_SIZE)
 			{
 				// check col
 				var _isSame:Boolean;
@@ -53,8 +191,9 @@ package application.model
 							if (++_count > 1)
 							{
 								// eliminate all in row
-								for (var _index:int = _currentIndex; _index <= k + 1; _index++)
-									crystals[_index].status = CrystalStatus.TOBE_REMOVE;
+								if(!isJustCheck)
+									for (var _index:int = _currentIndex; _index <= k + 1; _index++)
+										crystals[_index].status = CrystalStatus.TOBE_REMOVE;
 								_result = _result || true;
 							}
 							else
@@ -71,7 +210,7 @@ package application.model
 			return _result;
 		}
 
-		public static function checkRow(crystals:Vector.<Crystal>):Boolean
+		public static function checkRow(crystals:Vector.<Crystal>, isJustCheck:Boolean = false):Boolean
 		{
 			var _result:Boolean = false;
 			for (var j:int = 0; j < crystals.length; j++)
@@ -92,8 +231,9 @@ package application.model
 						{
 							// eliminate all in col
 							var _position:Point = CrystalDataProxy.getPositionFromIndex(j, COL_SIZE);
-							for (var _index:int = _position.y; _index <= _position.y + _count; _index++)
-								crystals[_position.x + _index * COL_SIZE].status = CrystalStatus.TOBE_REMOVE;
+							if(!isJustCheck)
+								for (var _index:int = _position.y; _index <= _position.y + _count; _index++)
+									crystals[_position.x + _index * COL_SIZE].status = CrystalStatus.TOBE_REMOVE;
 
 							_result = _result || true;
 						}
