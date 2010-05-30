@@ -21,7 +21,7 @@ package application.model
 			return (Math.abs(_a.x - _b.x) + Math.abs(_a.y - _b.y) <= 1);
 		}
 
-		public static function checkSame(crystals:Vector.<Crystal>):Boolean
+		public static function isSameColorRemain(crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = checkCol(crystals);
 			return checkRow(crystals) || _result;
@@ -30,113 +30,59 @@ package application.model
 		public static function isOver(_crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = false;
-			var j:int;
-			// try up
-			/*
-			var _crystals_length:int = _crystals.length;
-			for (j = COL_SIZE; j < _crystals_length; j++)
-			{
-				var _crystal:Crystal = _crystals[j];
-				var _swapCrystal:Crystal = _crystals[j - COL_SIZE];
 
-				CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
+			var _crystals_length:int = _crystals.length;
 
-				// chk /a
-				if (checkCol(_crystals, true) || checkRow(_crystals, true))
-				{
-					// swap back anyway
-					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-					_crystal.alpha = .25;
-					return false;
-				}
-				else
-				{
-					// swap back
-					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-				}
-			}
-			*/
-			
-			/*
-			// try down
-			var _crystals_length:int = _crystals.length;
-			for (j = 0; j < _crystals_length - ROW_SIZE; j++)
-			{
-				var _crystal:Crystal = _crystals[j];
-				var _swapCrystal:Crystal = _crystals[j + COL_SIZE];
-				
-				CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-				
-				// chk /a
-				if (checkCol(_crystals, true) || checkRow(_crystals, true))
-				{
-					// swap back anyway
-					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-					_crystal.alpha = .25;
-					return false;
-				}
-				else
-				{
-					// swap back
-					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-				}
-			}
-			*/
-			
-			/*
-			// try left
-			var _crystals_length:int = _crystals.length;
-			for (j = 1; j < _crystals_length; j++)
-			{
-				var _crystal:Crystal = _crystals[j];
-				var _swapCrystal:Crystal = _crystals[j - 1];
-				
-				CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-				
-				// chk /a
-				if (checkCol(_crystals, true) || checkRow(_crystals, true))
-				{
-					// swap back anyway
-					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-					_crystal.alpha = .25;
-					return false;
-				}
-				else
-				{
-					// swap back
-					CrystalDataProxy.swapByID(_crystals, _crystal.id, _swapCrystal.id);
-				}
-			}
-			*/
-
-			// try left/right
-			var _crystals_length:int = _crystals.length;
 			var _crystal:Crystal;
 			var _swapCrystal:Crystal;
-			
-			for (j = 0; j < _crystals_length; j++)
+
+			for (var i:int = 0; i < _crystals_length; i++)
 			{
+				_crystal = _crystals[i];
+
 				// right : ignore next one = new line
-				if(j==0 || (j>0 && (j+1)%COL_SIZE!=0))
+				if (i == 0 || (i > 0 && (i + 1) % COL_SIZE != 0))
 				{
-					_crystal = _crystals[j];
-					_swapCrystal = _crystals[j + 1];
-					if(!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
+					_swapCrystal = _crystals[i + 1];
+					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
 					{
-						_crystal.alpha = .25;
+						//HINT//_crystal.alpha = .25;
 						return false;
 					}
 				}
-				
+
 				// left : ignore prev one = above line
-				if(j%COL_SIZE!=0)
+				if (i % COL_SIZE != 0)
 				{
-					_crystal = _crystals[j];
-					_swapCrystal = _crystals[j - 1];
-					
-					if(!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
+					_swapCrystal = _crystals[i - 1];
+
+					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
 					{
-						_crystal.alpha = .25;
+						//HINT//_crystal.alpha = .25;
+						return false;
+					}
+				}
+
+				// up : ignore top line
+				if (i > COL_SIZE)
+				{
+					_swapCrystal = _crystals[i - COL_SIZE];
+
+					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
+					{
+						//HINT//_crystal.alpha = .25;
+						return false;
+					}
+				}
+
+				// down : ignore last line
+				if (i < COL_SIZE)
+				{
+					_swapCrystal = _crystals[i + COL_SIZE];
+
+					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
+					{
+						//HINT//_crystal.alpha = .25;
 						return false;
 					}
 				}
@@ -144,11 +90,11 @@ package application.model
 
 			return true;
 		}
-		
-		public static function isSwapAndOver(_crystals:Vector.<Crystal>, _crystalID:int, _swapCrystaID:int):Boolean
+
+		private static function isSwapAndOver(_crystals:Vector.<Crystal>, _crystalID:int, _swapCrystaID:int):Boolean
 		{
-			CrystalDataProxy.swapByID(_crystals,  _crystalID, _swapCrystaID);
-			
+			CrystalDataProxy.swapByID(_crystals, _crystalID, _swapCrystaID);
+
 			// chk /a
 			if (checkCol(_crystals, true) || checkRow(_crystals, true))
 			{
@@ -164,7 +110,7 @@ package application.model
 			}
 		}
 
-		public static function checkCol(crystals:Vector.<Crystal>, isJustCheck:Boolean = false):Boolean
+		private static function checkCol(crystals:Vector.<Crystal>, isJustCheck:Boolean = false):Boolean
 		{
 			var _result:Boolean = false;
 			var _crystals_length:int = crystals.length;
@@ -191,7 +137,7 @@ package application.model
 							if (++_count > 1)
 							{
 								// eliminate all in row
-								if(!isJustCheck)
+								if (!isJustCheck)
 									for (var _index:int = _currentIndex; _index <= k + 1; _index++)
 										crystals[_index].status = CrystalStatus.TOBE_REMOVE;
 								_result = _result || true;
@@ -210,7 +156,7 @@ package application.model
 			return _result;
 		}
 
-		public static function checkRow(crystals:Vector.<Crystal>, isJustCheck:Boolean = false):Boolean
+		private static function checkRow(crystals:Vector.<Crystal>, isJustCheck:Boolean = false):Boolean
 		{
 			var _result:Boolean = false;
 			for (var j:int = 0; j < crystals.length; j++)
@@ -231,7 +177,7 @@ package application.model
 						{
 							// eliminate all in col
 							var _position:Point = CrystalDataProxy.getPositionFromIndex(j, COL_SIZE);
-							if(!isJustCheck)
+							if (!isJustCheck)
 								for (var _index:int = _position.y; _index <= _position.y + _count; _index++)
 									crystals[_position.x + _index * COL_SIZE].status = CrystalStatus.TOBE_REMOVE;
 
