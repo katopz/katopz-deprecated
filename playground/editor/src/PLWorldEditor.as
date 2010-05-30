@@ -9,8 +9,18 @@ package
 	import flash.net.registerClassAlias;
 	
 	[SWF(backgroundColor="#000000", frameRate="30", width="800", height="480")]
+	/**
+	 *  
+	 * @author katopz
+	 * 
+	 */	
 	public class PLWorldEditor extends WorldEditor
 	{
+		/* 
+		TODO : 
+		1. redraw tileplane
+		2. test r/w
+		*/
 		public function PLWorldEditor()
 		{
 			registerClassAlias("com.cutecoma.playground.data.AreaData", AreaData);
