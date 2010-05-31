@@ -258,9 +258,11 @@ package application.view.components
 				}
 			}
 			
+			/*
 			_fillEffect.completeSignal.removeAll();
 			_fillEffect.completeSignal.addOnce(onMoveComplete);
 			_fillEffect.start();
+			*/
 		}
 		
 		/*
@@ -278,13 +280,16 @@ package application.view.components
 			// real swap
 			if (crystal.swapID != -1)
 			{
-				_fillEffect.addCommand(new MoveCrystalEffect(_crystals[crystal.id], _crystals[crystal.swapID]));
+				//trace(crystal.id, crystal.swapID);
+				//_fillEffect.addCommand(new MoveCrystalEffect(_crystals, crystal.id, crystal.swapID));
 				
 				CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
 				CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
 				
 				crystal.swapID = -1;
 			}
+			
+			onMoveComplete();
 		}
 		
 		private function onMoveComplete():void
@@ -366,6 +371,7 @@ package application.view.components
 	}
 }
 
+import application.model.CrystalDataProxy;
 import application.view.components.Crystal;
 import application.view.components.CrystalStatus;
 
@@ -396,22 +402,44 @@ internal class HideCrystalEffect extends SDCommand
 
 internal class MoveCrystalEffect extends SDCommand
 {
+	private var _crystals:Vector.<Crystal>;
 	private var _crystal:Crystal;
-	private var _swapPoint:Point;
+	//private var _swapPoint:Point;
 	
-	public function MoveCrystalEffect(crystal:Crystal, swapCrystal:Crystal)
+	private var _crystalID:int;
+	private var _swapID:int;
+	
+	public function MoveCrystalEffect(crystals:Vector.<Crystal>, crystalID:int, swapID:int)
 	{
-		_crystal = swapCrystal;
-		_swapPoint = new Point(swapCrystal.x, swapCrystal.y);
+		_crystals = crystals;
+		
+		_crystalID = crystalID;
+		_swapID = swapID;
+		
+		_crystal = crystals[crystalID];
+		_crystal.swapID = swapID;
+		
+		//_swapPoint = new Point(swapCrystal.x, swapCrystal.y);
+		
+		//CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
+		//CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
+		
+		//crystal.swapID = -1;
 	}
 	
-	/*
+	
 	override public function doCommand():void
 	{
-		TweenLite.to(_crystal, 0.5, {x:_swapPoint.x, y:_swapPoint.y, onComplete: super.doCommand});
+		//TweenLite.to(_crystal, 0.25, {x:_swapPoint.x, y:_swapPoint.y, onComplete: super.doCommand});
 		//Math.abs(_swapCrystal.y - _crystal.y)/2
+		
+		CrystalDataProxy.swapPositionByID(_crystals, _crystalID, _swapID);
+		CrystalDataProxy.swapByID(_crystals, _crystalID, _swapID);
+		
+		//_crystal.swapID = -1;
+		
+		super.doCommand();
 	}
-	*/
 	
 	
 	override public function command():void
