@@ -199,12 +199,12 @@ package application.view.components
 		private function doGoodEffect():void
 		{
 			trace(" > Begin Effect");
-			var _commandManager:CommandManager = new CommandManager();
+			var _commandManager:CommandManager = new CommandManager(true);
 			for each (var _crystal:Crystal in _crystals)
 				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
 					_commandManager.addCommand(new HideCrystalEffect(_crystal));
 			_commandManager.completeSignal.addOnce(onGoodMoveComplete);
-			_commandManager.startAll();
+			_commandManager.start();
 		}
 
 		private function onGoodMoveComplete():void
@@ -213,7 +213,7 @@ package application.view.components
 			refill();
 		}
 		
-		private var _fillEffect:CommandManager = new CommandManager();
+		private var _fillEffect:CommandManager = new CommandManager(true);
 
 		private function refill():void
 		{
@@ -260,7 +260,7 @@ package application.view.components
 			
 			_fillEffect.completeSignal.removeAll();
 			_fillEffect.completeSignal.addOnce(onMoveComplete);
-			_fillEffect.startAll();
+			_fillEffect.start();
 		}
 		
 		/*
