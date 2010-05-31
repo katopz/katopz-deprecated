@@ -144,7 +144,6 @@ package application.view.components
 								showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
 							}
 						}
-
 						break;
 				}
 			}
@@ -152,19 +151,22 @@ package application.view.components
 
 		private function showSwapEffect(_focusCrystal:Crystal, _swapCrystal:Crystal, callBack:Function):void
 		{
-			TweenLite.to(_focusCrystal, .5, {x: _swapCrystal.x, y: _swapCrystal.y, onComplete: callBack, onCompleteParams: [_focusCrystal]});
-			TweenLite.to(_swapCrystal, .5, {x: _focusCrystal.x, y: _focusCrystal.y, onComplete: callBack, onCompleteParams: [_swapCrystal]});
+			var _commandManager:CommandManager = new CommandManager(true);
+			_commandManager.addCommand(new SwapCrystalEffect(_focusCrystal, _swapCrystal));
+			_commandManager.addCommand(new SwapCrystalEffect(_swapCrystal, _focusCrystal));
+			_commandManager.completeSignal.addOnce(callBack);
+			_commandManager.start();
 		}
 
-		private function onSwapComplete(crystal:Crystal):void
+		private function onSwapComplete():void
 		{
 			// remove focus
-			if (crystal)
-				crystal.focus = false;
+			//if (crystal)
+			//	crystal.focus = false;
 
 			// swap complete
-			if (!_focusCrystal.focus && !_swapCrystal.focus)
-			{
+			//if (!_focusCrystal.focus && !_swapCrystal.focus)
+			//{
 				trace(" ! onSwapComplete");
 
 				// swap
@@ -173,7 +175,7 @@ package application.view.components
 				trace(" > Begin Check condition...");
 				//Rule.check(_crystals, onCheckComplete);
 				onCheckComplete(Rules.isSameColorRemain(_crystals));
-			}
+			//}
 		}
 
 		private function onCheckComplete(result:Boolean):void
@@ -329,21 +331,21 @@ package application.view.components
 			}
 		}
 
-		private function onBadMoveComplete(crystal:Crystal):void
+		private function onBadMoveComplete():void
 		{
 			// dispose
-			if (crystal == _focusCrystal)
+			//if (crystal == _focusCrystal)
 				_focusCrystal = null;
 
-			if (crystal == _swapCrystal)
+			//if (crystal == _swapCrystal)
 				_swapCrystal = null;
 
 			// swap complete
-			if (!_focusCrystal && !_swapCrystal)
-			{
+			//if (!_focusCrystal && !_swapCrystal)
+			//{
 				trace(" ! onBadMoveComplete");
 				nextTurn();
-			}
+			//}
 		}
 
 		private function nextTurn():void
@@ -397,6 +399,28 @@ internal class HideCrystalEffect extends SDCommand
 	override public function command():void
 	{
 		_crystal.status = CrystalStatus.REMOVED;
+	}
+}
+
+internal class SwapCrystalEffect extends SDCommand
+{
+	private var _position:Point;
+	private var _focusCrystal:Crystal;
+	
+	public function SwapCrystalEffect(focusCrystal:Crystal, swapCrystal:Crystal)
+	{
+		_focusCrystal = focusCrystal;
+		_position = new Point(swapCrystal.x, swapCrystal.y);
+	}
+	
+	override public function doCommand():void
+	{
+		TweenLite.to(_focusCrystal, .5, {x: _position.x, y: _position.y, onComplete: super.doCommand});
+	}
+	
+	override public function command():void
+	{
+		_focusCrystal.focus = false;
 	}
 }
 
