@@ -2,14 +2,14 @@ package application.view.components
 {
 	import application.model.CrystalDataProxy;
 	import application.model.Rules;
-
+	
 	import com.greensock.TweenLite;
 	import com.sleepydesign.core.CommandManager;
 	import com.sleepydesign.display.SDSprite;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
@@ -212,6 +212,8 @@ package application.view.components
 			trace(" < End Effect");
 			refill();
 		}
+		
+		private var _fillEffect:CommandManager = new CommandManager();
 
 		private function refill():void
 		{
@@ -235,37 +237,58 @@ package application.view.components
 						// fall to bottom
 						_crystal.swapID = _aboveCrystal.id;
 						_aboveCrystal.status = CrystalStatus.MOVE;
-
+						
 						onRefillComplete(_crystal);
+						
+						//if(_crystal.status == CrystalStatus.MOVE)
+							//_fillEffect.addCommand(new MoveCrystalEffect(_crystals[_crystal.id], _crystals[_crystal.swapID]));
+						//else
+							//onRefillComplete(_crystal);
 					}
 					else
 					{
 						// nothing on top, get top most from stock
 						_crystal.alpha = 1;
 						_crystal.spin();
-						_crystal.status = CrystalStatus.READY;
+						//_crystal.status = CrystalStatus.READY;
 						_crystal.swapID = -1;
 
 						onRefillComplete(_crystal);
 					}
 				}
 			}
+			
+			_fillEffect.completeSignal.removeAll();
+			_fillEffect.completeSignal.addOnce(onMoveComplete);
+			_fillEffect.startAll();
 		}
+		
+		/*
+		private function onMoveComplete():void
+		{
+			trace(" > Begin Recheck");
+			//reCheck(Rules.isSameColorRemain(_crystals));
+		}
+		*/
 
 		private function onRefillComplete(crystal:Crystal):void
 		{
-			// mark as done
 			crystal.status = CrystalStatus.READY;
-
+			
 			// real swap
 			if (crystal.swapID != -1)
 			{
+				_fillEffect.addCommand(new MoveCrystalEffect(_crystals[crystal.id], _crystals[crystal.swapID]));
+				
 				CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
 				CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
-
+				
 				crystal.swapID = -1;
 			}
-
+		}
+		
+		private function onMoveComplete():void
+		{
 			// all clean?
 			var _length:int = _crystals.length;
 			while (--_length > -1 && (_crystals[_length].status == CrystalStatus.READY))
@@ -349,6 +372,8 @@ import application.view.components.CrystalStatus;
 import com.greensock.TweenLite;
 import com.sleepydesign.core.SDCommand;
 
+import flash.geom.Point;
+
 internal class HideCrystalEffect extends SDCommand
 {
 	private var _crystal:Crystal;
@@ -366,5 +391,31 @@ internal class HideCrystalEffect extends SDCommand
 	override public function command():void
 	{
 		_crystal.status = CrystalStatus.REMOVED;
+	}
+}
+
+internal class MoveCrystalEffect extends SDCommand
+{
+	private var _crystal:Crystal;
+	private var _swapPoint:Point;
+	
+	public function MoveCrystalEffect(crystal:Crystal, swapCrystal:Crystal)
+	{
+		_crystal = swapCrystal;
+		_swapPoint = new Point(swapCrystal.x, swapCrystal.y);
+	}
+	
+	/*
+	override public function doCommand():void
+	{
+		TweenLite.to(_crystal, 0.5, {x:_swapPoint.x, y:_swapPoint.y, onComplete: super.doCommand});
+		//Math.abs(_swapCrystal.y - _crystal.y)/2
+	}
+	*/
+	
+	
+	override public function command():void
+	{
+		_crystal.status = CrystalStatus.READY;
 	}
 }
