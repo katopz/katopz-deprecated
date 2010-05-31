@@ -16,8 +16,16 @@ package com.sleepydesign.core
 
 		public var completeSignal:Signal = new Signal();
 
+		private var _isParallel:Boolean = false;
+
+		public function CommandManager(isParallel:Boolean = false)
+		{
+			_isParallel = isParallel;
+		}
+
 		public function addCommand(command:ICommand):ICommand
 		{
+			// add to queue
 			_commands.fixed = false;
 			_commands.push(command);
 			_commands.fixed = true;
@@ -30,6 +38,7 @@ package com.sleepydesign.core
 			var i:int = _commands.indexOf(command);
 			var f:uint = 0;
 
+			// remove
 			_commands.fixed = false;
 			while (i != -1)
 			{
@@ -37,8 +46,10 @@ package com.sleepydesign.core
 				i = _commands.indexOf(command, i);
 				f++;
 			}
+			
 			_commands.fixed = true;
-
+			_totalCommands = _commands.length;
+				
 			return command;
 		}
 
@@ -49,53 +60,50 @@ package com.sleepydesign.core
 			else if (_commands.length <= 0)
 				return;
 
-			// link list serial command like command1 --- complete ---> command2 --- complete ---> ...
-			var _commands_length:int = _commands.length;
-			while (--_commands_length)
-				_commands[_commands_length - 1].completeSignal.addOnce(_commands[_commands_length].doCommand);
-
-			// stop
-			_commands[_commands.length - 1].completeSignal.addOnce(onCommandComplete);
-
-			// start
-			_commands[0].doCommand();
-		}
-
-		public function startAll():void
-		{
-			if (!_commands)
-				return;
-			else if (_commands.length <= 0)
-				return;
-
-			// link list as Parallel
-			if (_timer)
+			var _commands_length:int = _totalCommands = _commands.length;
+			if (!_isParallel)
 			{
-				_timer.stop();
-				_timer = null;
-			}
+				// link list serial command like command1 --- complete ---> command2 --- complete ---> ...
+				while (--_commands_length > 0)
+					_commands[_commands_length - 1].completeSignal.addOnce(_commands[_commands_length].doCommand);
 
-			_totalCommands = _commands.length;
-			_timer = new Timer(1000 / _fps, _totalCommands);
-			_timer.addEventListener(TimerEvent.TIMER, onTimer);
-			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
-			_timer.start();
+				// stop
+				_commands[_commands.length - 1].completeSignal.addOnce(onCommandComplete);
+
+				// start
+				_commands[0].doCommand();
+			}
+			else
+			{
+				// link list as Parallel
+				if (_timer)
+				{
+					_timer.stop();
+					_timer = null;
+				}
+
+				// do command each frame
+				_timer = new Timer((1000 / _fps) / _totalCommands, _totalCommands);
+				_timer.addEventListener(TimerEvent.TIMER, onTimer);
+
+				// link
+				_commands_length = _commands.length;
+				while (_commands_length--)
+					_commands[_commands_length].completeSignal.addOnce(onSubCommandComplete);
+
+				// start
+				_timer.start();
+			}
 		}
 
-		protected function onTimer(event:TimerEvent):void
+		private function onTimer(event:TimerEvent):void
 		{
 			var _timer:Timer = event.target as Timer;
 			var _command:ICommand = _commands[_timer.currentCount - 1];
-			_command.completeSignal.addOnce(onSubCommandComplete);
 			_command.doCommand();
 		}
-		
-		protected function onTimerComplete(event:TimerEvent):void
-		{
-			stop();
-		}
 
-		protected function onSubCommandComplete():void
+		private function onSubCommandComplete():void
 		{
 			if (--_totalCommands == 0)
 			{
@@ -104,7 +112,7 @@ package com.sleepydesign.core
 			}
 		}
 
-		protected function onCommandComplete():void
+		private function onCommandComplete():void
 		{
 			completeSignal.dispatch();
 		}
@@ -116,14 +124,8 @@ package com.sleepydesign.core
 
 			// destroy link list
 			var _commands_length:int = _commands.length;
-			if (_commands_length > 0)
-			{
-				while (--_commands_length)
-					_commands[_commands_length - 1].completeSignal.remove(_commands[_commands_length].doCommand);
-
-				// don't stop anymore
-				_commands[_commands.length - 1].completeSignal.remove(stop);
-			}
+			while (--_commands_length > 0)
+				_commands[_commands_length].completeSignal.removeAll();
 
 			// destroy parallel
 			if (_timer)
@@ -132,7 +134,7 @@ package com.sleepydesign.core
 				_timer = null;
 			}
 
-			_commands = null;
+			_totalCommands = 0;
 		}
 
 		public function get destroyed():Boolean
@@ -144,6 +146,11 @@ package com.sleepydesign.core
 		{
 			this._isDestroyed = true;
 			stop();
+			
+			_commands = null;
+
+			completeSignal.removeAll();
+			completeSignal = null;
 		}
 	}
 }
