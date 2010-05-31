@@ -16,7 +16,7 @@ package com.sleepydesign.core
 			command();
 			_completeSignal.dispatch();
 		}
-		
+
 		public function command():void
 		{
 			// override me
