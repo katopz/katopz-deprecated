@@ -40,12 +40,12 @@ package application.view.components
 			return _swapCrystal;
 		}
 
-		public function get _crystals():Vector.<Crystal>
+		public function get crystals():Vector.<Crystal>
 		{
 			return CrystalDataProxy._crystals;
 		}
 
-		public function set _crystals(value:Vector.<Crystal>):void
+		public function set crystals(value:Vector.<Crystal>):void
 		{
 			CrystalDataProxy._crystals = value;
 		}
@@ -67,7 +67,7 @@ package application.view.components
 			// canvas
 			addChild(_canvas = new SDSprite());
 
-			for each (var _crystal:Crystal in _crystals)
+			for each (var _crystal:Crystal in crystals)
 				_canvas.addChild(_crystal);
 
 			addEventListener(MouseEvent.CLICK, onClick);
@@ -148,11 +148,11 @@ package application.view.components
 			}
 		}
 
-		private function showSwapEffect(_focusCrystal:Crystal, _swapCrystal:Crystal, callBack:Function):void
+		private function showSwapEffect(sourceCrystal:Crystal, targetCrystal:Crystal, callBack:Function):void
 		{
 			var _commandManager:CommandManager = new CommandManager(true);
-			_commandManager.addCommand(new SwapCrystalEffect(_focusCrystal, _swapCrystal));
-			_commandManager.addCommand(new SwapCrystalEffect(_swapCrystal, _focusCrystal));
+			_commandManager.addCommand(new SwapCrystalEffect(sourceCrystal, targetCrystal));
+			_commandManager.addCommand(new SwapCrystalEffect(targetCrystal, sourceCrystal));
 			_commandManager.completeSignal.addOnce(callBack);
 			_commandManager.start();
 		}
@@ -160,13 +160,13 @@ package application.view.components
 		private function onSwapComplete():void
 		{
 			trace(" ! onSwapComplete");
-			CrystalDataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
+			CrystalDataProxy.swapByID(crystals, _focusCrystal.id, _swapCrystal.id);
 
 			trace(" > Begin Check condition...");
-			onCheckComplete(Rules.isSameColorRemain(_crystals));
+			endCheckComplete(Rules.isSameColorRemain(crystals));
 		}
 
-		private function onCheckComplete(result:Boolean):void
+		private function endCheckComplete(result:Boolean):void
 		{
 			trace(" < End Check condition...");
 			if (result)
@@ -182,7 +182,7 @@ package application.view.components
 				showSwapEffect(_focusCrystal, _swapCrystal, onBadMoveComplete);
 
 				// swap back
-				CrystalDataProxy.swapByID(_crystals, _focusCrystal.id, _swapCrystal.id);
+				CrystalDataProxy.swapByID(crystals, _focusCrystal.id, _swapCrystal.id);
 			}
 		}
 
@@ -190,7 +190,7 @@ package application.view.components
 		{
 			trace(" > Begin Effect");
 			var _commandManager:CommandManager = new CommandManager(true);
-			for each (var _crystal:Crystal in _crystals)
+			for each (var _crystal:Crystal in crystals)
 				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
 					_commandManager.addCommand(new HideCrystalEffect(_crystal));
 			_commandManager.completeSignal.addOnce(onGoodMoveComplete);
@@ -210,12 +210,12 @@ package application.view.components
 			trace(" > Begin Refill");
 
 			var _crystal:Crystal
-			var _index:int = _crystals.length;
+			var _index:int = crystals.length;
 
 			// from bottom to top
 			while (--_index > -1)
 			{
-				_crystal = _crystals[_index];
+				_crystal = crystals[_index];
 
 				// it's removed
 				if (_crystal.status == CrystalStatus.REMOVED || _crystal.status == CrystalStatus.MOVE)
@@ -224,7 +224,7 @@ package application.view.components
 						_crystal.prevPoint = new Point(_crystal.x, _crystal.y);
 
 					// find top most to replace
-					var _aboveCrystal:Crystal = CrystalDataProxy.getAboveCrystal(_crystals, _index, Rules.COL_SIZE);
+					var _aboveCrystal:Crystal = CrystalDataProxy.getAboveCrystal(crystals, _index, Rules.COL_SIZE);
 					if (_aboveCrystal)
 					{
 						// fall to bottom
@@ -249,6 +249,8 @@ package application.view.components
 					}
 				}
 			}
+			
+			onMoveComplete();
 		}
 
 		private function onRefillComplete(_crystal:Crystal):void
@@ -256,34 +258,23 @@ package application.view.components
 			// real swap
 			if (_crystal.swapID != -1)
 			{
-				CrystalDataProxy.swapPositionByID(_crystals, _crystal.id, _crystal.swapID);
-				_crystal.prevPoint = new Point(_crystals[_crystal.swapID].x, _crystals[_crystal.swapID].y);
-				CrystalDataProxy.swapByID(_crystals, _crystal.id, _crystal.swapID);
+				CrystalDataProxy.swapPositionByID(crystals, _crystal.id, _crystal.swapID);
+				_crystal.prevPoint = new Point(crystals[_crystal.swapID].x, crystals[_crystal.swapID].y);
+				CrystalDataProxy.swapByID(crystals, _crystal.id, _crystal.swapID);
 
 				_crystal.swapID = -1;
 			}
-
-			onMoveComplete();
 		}
 
 		private function onMoveComplete():void
 		{
-			// all clean?
-			var _length:int = _crystals.length;
-			while (--_length > -1 && (_crystals[_length].status == CrystalStatus.READY))
-			{
-				//
-			}
-			if (_length > -1)
-				return;
-
 			trace(" < End Refill");
 
 			// begin effect
 			_fillEffect.stop();
 			_fillEffect.completeSignal.removeAll();
 
-			for each (var _crystal:Crystal in _crystals)
+			for each (var _crystal:Crystal in crystals)
 			{
 				if (!_crystal.prevPoint)
 					continue;
@@ -313,20 +304,20 @@ package application.view.components
 		private function onMoveEffectComplete():void
 		{
 			trace(" > Begin Recheck");
-			reCheck(Rules.isSameColorRemain(_crystals));
+			reCheck(Rules.isSameColorRemain(crystals));
 		}
 
 		private function reCheck(result:Boolean):void
 		{
 			if (result)
 			{
-				onCheckComplete(result);
+				endCheckComplete(result);
 			}
 			else
 			{
 				trace(" < End ReCheck");
 				trace(" > Begin Game over check");
-				if (!Rules.isOver(_crystals))
+				if (!Rules.isOver(crystals))
 				{
 					trace(" < End Game over check");
 					nextTurn();
