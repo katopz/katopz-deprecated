@@ -7,52 +7,52 @@ package application.model
 	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
-
+	
 	public class CrystalDataProxy extends Proxy implements IProxy
 	{
 		public static const NAME:String = "DataProxy";
-
+		
 		// status
 		public var inGame:Boolean = false;
 		
 		//
 		public static var _crystals:Vector.<Crystal>;
-
+		
 		// Level.
 		/*
-		   public function get level():Number
-		   {
-		   return _level;
-		   }
-
-		   public function set level(value:Number):void
-		   {
-		   if ( value <= 3 && value >= 1 )
-		   {
-		   _level = value;
-		   map.put("level", value);
-		   }
-		   else
-		   {
-		   trace("Wrong value.");
-		   }
-		   }
-		 */
+		public function get level():Number
+		{
+		return _level;
+		}
+		
+		public function set level(value:Number):void
+		{
+		if ( value <= 3 && value >= 1 )
+		{
+		_level = value;
+		map.put("level", value);
+		}
+		else
+		{
+		trace("Wrong value.");
+		}
+		}
+		*/
 		/*
-		   // soundState.
-		   public function get soundState():Boolean
-		   {
-		   return _soundState;
-		   }
-
-		   public function set soundState(value:Boolean):void
-		   {
-		   _soundState = value;
-		   sendNotification(ApplicationFacade.SOUND_CHANGE, value);
-		   map.put("soundState", value);
-		   }
-		 */
-
+		// soundState.
+		public function get soundState():Boolean
+		{
+		return _soundState;
+		}
+		
+		public function set soundState(value:Boolean):void
+		{
+		_soundState = value;
+		sendNotification(ApplicationFacade.SOUND_CHANGE, value);
+		map.put("soundState", value);
+		}
+		*/
+		
 		// Constructor.
 		public function CrystalDataProxy()
 		{
@@ -76,27 +76,27 @@ package application.model
 				}
 			}
 		}
-
+		
 		public function userMove(_focusCrystal:Crystal, _swapCrystal:Crystal):void
 		{
 			// move data
-
+			
 			// check win condition
 			/*
-			   if ( isWinner(x, y, userTile) == winningMove )
-			   {
-			   inGame = false;
-			   sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(userTile) );
-			   resetGame();
-			   }
-			 */
+			if ( isWinner(x, y, userTile) == winningMove )
+			{
+			inGame = false;
+			sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(userTile) );
+			resetGame();
+			}
+			*/
 		}
 		
 		public function userMoveDone():void
 		{
 			trace("TODO : check for gameover condition");
 		}
-
+		
 		public function resetGame():void
 		{
 			shuffle(_crystals);
@@ -105,22 +105,23 @@ package application.model
 		public function shuffle(crystals:Vector.<Crystal>):void
 		{
 			trace(" ! Shuffle");
-			for each(var _crystal:Crystal in _crystals)
+			for each (var _crystal:Crystal in _crystals)
 			{
 				_crystal.spin();
 				_crystal.status = CrystalStatus.READY;
 			}
 			
 			// Cheat -------------------------------------------------
-			/*
-			var _i:int = 0;
-			var _j:int = 0;
-			_crystals[0+_i+_j].spin(0);
-			_crystals[1+_i+_j].spin(1);
-			_crystals[2+_i+_j].spin(0);
-			_crystals[3+_i+_j].spin(0);
 			
-			*/
+			var _k:int = 1;
+			
+			_crystals[0].spin(0);
+			_crystals[8].spin(0);
+			_crystals[16].spin(1);
+			_crystals[24].spin(0);
+			_crystals[32].spin(0);
+			_crystals[40].spin(2);
+			
 			/*
 			var _i:int = 0;
 			var _j:int = 2;
@@ -129,6 +130,7 @@ package application.model
 			_crystals[_i++ * Rules.COL_SIZE + _j].spin(1);
 			_crystals[_i++ * Rules.COL_SIZE + _j].spin(0);
 			//_crystals[_i++ * config.COL_SIZE + _j].spin(0);
+			
 			
 			_crystals[8].spin(0);
 			_crystals[9].spin(0);
@@ -174,7 +176,7 @@ package application.model
 			if (Rules.isSameColorRemain(crystals))
 				shuffle(crystals);
 		}
-
+		
 		// select
 		public static function getAboveCrystal(crystals:Vector.<Crystal>, index:int, size:uint):Crystal
 		{
@@ -195,22 +197,27 @@ package application.model
 			var x:Number = crystals[targetID].x;
 			crystals[targetID].x = crystals[srcID].x;
 			crystals[srcID].x = x;
-
+			
 			var y:Number = crystals[targetID].y;
 			crystals[targetID].y = crystals[srcID].y;
 			crystals[srcID].y = y;
 		}
-
+		
 		public static function swapByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
 		{
 			var _crystal:Crystal = crystals[targetID];
 			crystals[targetID] = crystals[srcID];
 			crystals[srcID] = _crystal;
-
+			
 			var _status:String = crystals[targetID].status;
 			crystals[targetID].status = crystals[srcID].status;
 			crystals[srcID].status = _status;
-
+			/*
+			var _swapPoint:Point = crystals[targetID].swapPoint;
+			crystals[targetID].swapPoint = crystals[srcID].swapPoint;
+			crystals[srcID].swapPoint = _swapPoint;
+			*/
+			
 			var _id:int = crystals[targetID].id;
 			crystals[targetID].id = crystals[srcID].id;
 			crystals[srcID].id = _id;

@@ -7,6 +7,7 @@ package application.view.components
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.geom.Point;
 
 	public class Crystal extends SDSprite implements IDestroyable
 	{
@@ -33,6 +34,8 @@ package application.view.components
 		}
 
 		public var swapID:int;
+		
+		public var swapPoint:Point;
 
 		private var _width:Number = SIZE;
 
