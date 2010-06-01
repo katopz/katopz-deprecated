@@ -41,7 +41,7 @@ package application.model
 			}
 		}
 		
-		public function userMove(focusCrystal:Crystal, swapCrystal:Crystal):void
+		public function userMove():void//focusCrystal:Crystal, swapCrystal:Crystal):void
 		{
 			// move data
 			

@@ -13,7 +13,7 @@ package application.controller
 		override public function execute(notification:INotification):void
 		{
 			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
-			data.userMove(notification.getBody()[0], notification.getBody()[1]);
+			data.userMove();//notification.getBody()[0], notification.getBody()[1]);
 		}
 	}
 }

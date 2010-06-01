@@ -30,7 +30,7 @@ package application.view
 			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 
 			//board.soundState = data.soundState;
-			board.addEventListener(MouseEvent.CLICK, onTileClick);
+			board.moveSignal.addOnce(onTileClick);
 		}
 
 		override public function listNotificationInterests():Array
@@ -78,8 +78,7 @@ package application.view
 
 		private function onTileClick(event:Event):void
 		{
-			if(board.focusCrystal && board.swapCrystal)
-				sendNotification(ApplicationFacade.USER_MOVE, Vector.<Crystal>([board.focusCrystal, board.swapCrystal]));
+			sendNotification(ApplicationFacade.USER_MOVE);
 		}
 	}
 }
