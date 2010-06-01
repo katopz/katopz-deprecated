@@ -17,6 +17,9 @@ package application.view.components
 		[Embed(source="assets/game.swf", symbol="CrystalClip")]
 		private const _CrystalClip:Class;
 		private var _crystalClip:MovieClip = new _CrystalClip();
+		
+		// debug
+		public var label:SDTextField;
 
 		public static var SIZE:uint = 38;
 
@@ -30,6 +33,7 @@ package application.view.components
 		public function set id(value:int):void
 		{
 			_id = value;
+			// debug
 			label.htmlText = String(_id);
 		}
 
@@ -56,7 +60,7 @@ package application.view.components
 
 		public function get skinIndex():int
 		{
-			return _skinIndex; //_crystalClip.currentFrame - 1;
+			return _skinIndex;
 		}
 
 		public function set skinIndex(value:int):void
@@ -84,8 +88,6 @@ package application.view.components
 
 			addChild(label = new SDTextField);
 		}
-
-		public var label:SDTextField;
 
 		public function spin(value:int = -1):void
 		{

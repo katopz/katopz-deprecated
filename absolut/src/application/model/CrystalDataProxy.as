@@ -18,41 +18,6 @@ package application.model
 		//
 		public static var _crystals:Vector.<Crystal>;
 		
-		// Level.
-		/*
-		public function get level():Number
-		{
-		return _level;
-		}
-		
-		public function set level(value:Number):void
-		{
-		if ( value <= 3 && value >= 1 )
-		{
-		_level = value;
-		map.put("level", value);
-		}
-		else
-		{
-		trace("Wrong value.");
-		}
-		}
-		*/
-		/*
-		// soundState.
-		public function get soundState():Boolean
-		{
-		return _soundState;
-		}
-		
-		public function set soundState(value:Boolean):void
-		{
-		_soundState = value;
-		sendNotification(ApplicationFacade.SOUND_CHANGE, value);
-		map.put("soundState", value);
-		}
-		*/
-		
 		// Constructor.
 		public function CrystalDataProxy()
 		{
@@ -66,7 +31,6 @@ package application.model
 				{
 					// init
 					var _crystal:Crystal = new Crystal();
-					//_canvas.addChild(_crystal);
 					_crystals.push(_crystal);
 					_crystal.id = j * Rules.COL_SIZE + i;
 					
@@ -77,7 +41,7 @@ package application.model
 			}
 		}
 		
-		public function userMove(_focusCrystal:Crystal, _swapCrystal:Crystal):void
+		public function userMove(focusCrystal:Crystal, swapCrystal:Crystal):void
 		{
 			// move data
 			
