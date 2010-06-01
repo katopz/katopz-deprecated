@@ -35,7 +35,8 @@ package application.view.components
 
 		public var swapID:int;
 		
-		public var swapPoint:Point;
+		public var prevPoint:Point;
+		public var nextPoint:Point;
 
 		private var _width:Number = SIZE;
 

@@ -220,16 +220,25 @@ package application.view.components
 		private function refill():void
 		{
 			trace(" > Begin Refill");
+			
+			var _crystal:Crystal
+			
+			// mem pos
+			//for each(_crystal in _crystals)
+			//	_crystal.prevPoint = new Point(_crystal.x, _crystal.y);
 
 			var _index:int = _crystals.length;
 			
 			// from bottom to top
 			while (--_index > -1)
 			{
-				var _crystal:Crystal = _crystals[_index];
+				_crystal = _crystals[_index];
 				// it's removed
 				if (_crystal.status == CrystalStatus.REMOVED || _crystal.status == CrystalStatus.MOVE)
 				{
+					if(!_crystal.prevPoint)
+						_crystal.prevPoint = new Point(_crystal.x, _crystal.y);
+					
 					// find top most to replace
 					var _aboveCrystal:Crystal = CrystalDataProxy.getAboveCrystal(_crystals, _index, Rules.COL_SIZE);
 					if (_aboveCrystal)
@@ -238,6 +247,8 @@ package application.view.components
 						_crystal.swapID = _aboveCrystal.id;
 						
 						_aboveCrystal.status = CrystalStatus.MOVE;
+						if(!_aboveCrystal.prevPoint)
+							_aboveCrystal.prevPoint = new Point(_aboveCrystal.x, _aboveCrystal.y);
 						
 						/*
 						if(_crystal.swapPoint)
@@ -252,6 +263,8 @@ package application.view.components
 						*/
 						
 						//_fillEffect.addCommand(new MoveCrystalEffect(crystal));
+						_crystal.status = CrystalStatus.READY;
+						
 						onRefillComplete(_crystal);
 					}
 					else
@@ -290,16 +303,17 @@ package application.view.components
 
 		private function onRefillComplete(_crystal:Crystal):void
 		{
-			_crystal.status = CrystalStatus.READY;
+			
 			
 			// real swap
 			if (_crystal.swapID != -1)
 			{
 				//trace(crystal.id, crystal.swapID);
-				_crystal.swapPoint = new Point(_crystals[_crystal.swapID].x, _crystals[_crystal.swapID].y);
+				//_crystal.swapPoint = new Point(_crystals[_crystal.swapID].x, _crystals[_crystal.swapID].y);
 				//_fillEffect.addCommand(new MoveCrystalEffect(crystal));
 				
 				CrystalDataProxy.swapPositionByID(_crystals, _crystal.id, _crystal.swapID);
+				_crystal.prevPoint = new Point(_crystals[_crystal.swapID].x, _crystals[_crystal.swapID].y);
 				CrystalDataProxy.swapByID(_crystals, _crystal.id, _crystal.swapID);
 				
 				_crystal.swapID = -1;
@@ -319,8 +333,38 @@ package application.view.components
 			trace(_length);
 			if (_length > -1)
 				return;
-
+			
 			trace(" < End Refill");
+			
+			// begin effect
+			_fillEffect.stop();
+			_fillEffect.completeSignal.removeAll();
+			
+			for each(var _crystal:Crystal in _crystals)
+			{
+				if(!_crystal.prevPoint)
+					continue;
+				
+				trace(_crystal.prevPoint);
+				
+				_crystal.nextPoint = new Point(_crystal.x, _crystal.y);
+					
+				if(_crystal.prevPoint.y<_crystal.nextPoint.y)
+				{
+					// do effect only falling
+					_crystal.x = _crystal.prevPoint.x;
+					_crystal.y = _crystal.prevPoint.y;
+					_fillEffect.addCommand(new MoveCrystalEffect(_crystal));
+				}else if(_crystal.prevPoint){
+					// swap from bottom? make it higher
+					_crystal.x = _crystal.nextPoint.x;
+					_crystal.y = -_crystal.nextPoint.y-Crystal.SIZE;
+					_fillEffect.addCommand(new MoveCrystalEffect(_crystal));
+				}
+			}
+			
+			_fillEffect.completeSignal.addOnce(onMoveEffectComplete);
+			_fillEffect.start();
 			
 			/*
 			_fillEffect.stop();
@@ -346,7 +390,7 @@ package application.view.components
 			////_fillEffect.start();
 			
 			
-			onMoveEffectComplete();
+			//onMoveEffectComplete();
 		}
 		
 		private function onMoveEffectComplete():void
@@ -472,7 +516,7 @@ internal class MoveCrystalEffect extends SDCommand
 {
 	//private var _crystals:Vector.<Crystal>;
 	private var _crystal:Crystal;
-	private var _swapPoint:Point;
+	//private var _swapPoint:Point;
 	
 	//private var _crystalID:int;
 	//private var _swapID:int;
@@ -487,7 +531,7 @@ internal class MoveCrystalEffect extends SDCommand
 		//_crystal = crystals[crystalID];
 		//_crystal.swapID = swapID;
 		
-		_swapPoint = crystal.swapPoint;
+		//_swapPoint = crystal.swapPoint;
 		
 		//CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
 		//CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
@@ -498,8 +542,9 @@ internal class MoveCrystalEffect extends SDCommand
 	
 	override public function doCommand():void
 	{
-		TweenLite.to(_crystal, 0.25, {x:_swapPoint.x, y:_swapPoint.y, onComplete: super.doCommand});
-		//Math.abs(_swapCrystal.y - _crystal.y)/2
+		TweenLite.to(_crystal, 0.5*1000/Math.abs(_crystal.nextPoint.y - _crystal.y)/Crystal.SIZE, {alpha:1, x:_crystal.nextPoint.x, y:_crystal.nextPoint.y, onComplete: super.doCommand});
+		
+		//*Math.abs(_crystal.nextPoint.y - _crystal.y)/Crystal.SIZE
 		
 		//CrystalDataProxy.swapPositionByID(_crystals, _crystalID, _swapID);
 		//CrystalDataProxy.swapByID(_crystals, _crystalID, _swapID);
@@ -509,6 +554,7 @@ internal class MoveCrystalEffect extends SDCommand
 	
 	override public function command():void
 	{
-		_crystal.status = CrystalStatus.READY;
+		//_crystal.status = CrystalStatus.READY;
+		_crystal.prevPoint = _crystal.nextPoint = null;
 	}
 }
