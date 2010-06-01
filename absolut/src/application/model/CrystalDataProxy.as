@@ -156,15 +156,15 @@ package application.model
 		}
 		
 		// modify
-		public static function swapPositionByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
+		public static function swapPosition(source:Crystal, target:Crystal):void
 		{
-			var x:Number = crystals[targetID].x;
-			crystals[targetID].x = crystals[srcID].x;
-			crystals[srcID].x = x;
+			var _x:Number = source.x;
+			source.x = target.x;
+			target.x = _x;
 			
-			var y:Number = crystals[targetID].y;
-			crystals[targetID].y = crystals[srcID].y;
-			crystals[srcID].y = y;
+			var _y:Number = source.y;
+			source.y = target.y;
+			target.y = _y;
 		}
 		
 		public static function swapByID(crystals:Vector.<Crystal>, srcID:int, targetID:int):void
