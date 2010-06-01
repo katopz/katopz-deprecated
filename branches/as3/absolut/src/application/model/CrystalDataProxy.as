@@ -113,6 +113,7 @@ package application.model
 			
 			// Cheat -------------------------------------------------
 			
+			/*
 			var _k:int = 1;
 			
 			_crystals[0].spin(0);
@@ -122,7 +123,6 @@ package application.model
 			_crystals[32].spin(0);
 			_crystals[40].spin(2);
 			
-			/*
 			var _i:int = 0;
 			var _j:int = 2;
 			
@@ -212,11 +212,6 @@ package application.model
 			var _status:String = crystals[targetID].status;
 			crystals[targetID].status = crystals[srcID].status;
 			crystals[srcID].status = _status;
-			/*
-			var _swapPoint:Point = crystals[targetID].swapPoint;
-			crystals[targetID].swapPoint = crystals[srcID].swapPoint;
-			crystals[srcID].swapPoint = _swapPoint;
-			*/
 			
 			var _id:int = crystals[targetID].id;
 			crystals[targetID].id = crystals[srcID].id;

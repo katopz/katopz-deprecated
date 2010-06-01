@@ -7,8 +7,6 @@ package
 
 	/**
 	 * TODO
-	 *
-	 * - check for gameover condition
 	 * - add real score
 	 *
 	 * @author katopz
