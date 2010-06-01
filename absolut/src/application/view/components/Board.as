@@ -221,10 +221,8 @@ package application.view.components
 		{
 			trace(" > Begin Refill");
 
-			var _topCrystals:Vector.<Crystal> = new Vector.<Crystal>(Rules.COL_SIZE, true);
-			var _position:Point;
 			var _index:int = _crystals.length;
-
+			
 			// from bottom to top
 			while (--_index > -1)
 			{
@@ -238,33 +236,48 @@ package application.view.components
 					{
 						// fall to bottom
 						_crystal.swapID = _aboveCrystal.id;
+						
 						_aboveCrystal.status = CrystalStatus.MOVE;
 						
-						onRefillComplete(_crystal);
+						/*
+						if(_crystal.swapPoint)
+						{
+							//already swap must use swap point instead 
+							_aboveCrystal.swapPoint = new Point(_crystals[_crystal.id].swapPoint.x, _crystals[_crystal.id].swapPoint.y);
+							_crystal.swapPoint = new Point(_crystals[_aboveCrystal.id].x, _crystals[_aboveCrystal.id].y);
+						}else {
+							_aboveCrystal.swapPoint = new Point(_crystals[_crystal.id].x, _crystals[_crystal.id].y);
+							_crystal.swapPoint = new Point(_crystals[_aboveCrystal.id].x, _crystals[_aboveCrystal.id].y);
+						}
+						*/
 						
-						//if(_crystal.status == CrystalStatus.MOVE)
-							//_fillEffect.addCommand(new MoveCrystalEffect(_crystals[_crystal.id], _crystals[_crystal.swapID]));
-						//else
-							//onRefillComplete(_crystal);
+						//_fillEffect.addCommand(new MoveCrystalEffect(crystal));
+						onRefillComplete(_crystal);
 					}
 					else
 					{
-						// nothing on top, get top most from stock
+						// stable position wait for reveal
 						_crystal.alpha = 1;
 						_crystal.spin();
-						//_crystal.status = CrystalStatus.READY;
+						
+						/*
+						if(_index< Rules.COL_SIZE && _crystal.swapPoint)
+						{
+							_crystal.x = _crystal.swapPoint.x;
+							_crystal.y = 0;
+							
+							_crystal.swapPoint = null;
+						}
+						*/
+						
+						_crystal.status = CrystalStatus.READY;
 						_crystal.swapID = -1;
-
 						onRefillComplete(_crystal);
 					}
 				}
 			}
 			
-			/*
-			_fillEffect.completeSignal.removeAll();
-			_fillEffect.completeSignal.addOnce(onMoveComplete);
-			_fillEffect.start();
-			*/
+			//onMoveComplete();
 		}
 		
 		/*
@@ -275,38 +288,69 @@ package application.view.components
 		}
 		*/
 
-		private function onRefillComplete(crystal:Crystal):void
+		private function onRefillComplete(_crystal:Crystal):void
 		{
-			crystal.status = CrystalStatus.READY;
+			_crystal.status = CrystalStatus.READY;
 			
 			// real swap
-			if (crystal.swapID != -1)
+			if (_crystal.swapID != -1)
 			{
 				//trace(crystal.id, crystal.swapID);
-				//_fillEffect.addCommand(new MoveCrystalEffect(_crystals, crystal.id, crystal.swapID));
+				_crystal.swapPoint = new Point(_crystals[_crystal.swapID].x, _crystals[_crystal.swapID].y);
+				//_fillEffect.addCommand(new MoveCrystalEffect(crystal));
 				
-				CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
-				CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
+				CrystalDataProxy.swapPositionByID(_crystals, _crystal.id, _crystal.swapID);
+				CrystalDataProxy.swapByID(_crystals, _crystal.id, _crystal.swapID);
 				
-				crystal.swapID = -1;
+				_crystal.swapID = -1;
 			}
 			
 			onMoveComplete();
 		}
 		
 		private function onMoveComplete():void
-		{
+		{			
 			// all clean?
 			var _length:int = _crystals.length;
 			while (--_length > -1 && (_crystals[_length].status == CrystalStatus.READY))
 			{
 				//
 			}
+			trace(_length);
 			if (_length > -1)
 				return;
 
 			trace(" < End Refill");
-
+			
+			/*
+			_fillEffect.stop();
+			_fillEffect.completeSignal.removeAll();
+			
+			var _length:int = _crystals.length;
+			while (--_length)
+			{
+				var _crystal:Crystal = _crystals[_length];
+				
+				if(_crystal.swapPoint)
+				{
+					////_fillEffect.addCommand(new MoveCrystalEffect(_crystal));
+					_crystal.x = _crystal.swapPoint.x
+					_crystal.y = _crystal.swapPoint.y
+						
+					_crystal.swapPoint = null;
+				}
+			}
+			*/
+			
+			////_fillEffect.completeSignal.addOnce(onMoveEffectComplete);
+			////_fillEffect.start();
+			
+			
+			onMoveEffectComplete();
+		}
+		
+		private function onMoveEffectComplete():void
+		{
 			trace(" > Begin Recheck");
 			reCheck(Rules.isSameColorRemain(_crystals));
 		}
@@ -426,24 +470,24 @@ internal class SwapCrystalEffect extends SDCommand
 
 internal class MoveCrystalEffect extends SDCommand
 {
-	private var _crystals:Vector.<Crystal>;
+	//private var _crystals:Vector.<Crystal>;
 	private var _crystal:Crystal;
-	//private var _swapPoint:Point;
+	private var _swapPoint:Point;
 	
-	private var _crystalID:int;
-	private var _swapID:int;
+	//private var _crystalID:int;
+	//private var _swapID:int;
 	
-	public function MoveCrystalEffect(crystals:Vector.<Crystal>, crystalID:int, swapID:int)
+	public function MoveCrystalEffect(crystal:Crystal)
 	{
-		_crystals = crystals;
+		_crystal = crystal;
 		
-		_crystalID = crystalID;
-		_swapID = swapID;
+		//_crystalID = crystalID;
+		//_swapID = swapID;
 		
-		_crystal = crystals[crystalID];
-		_crystal.swapID = swapID;
+		//_crystal = crystals[crystalID];
+		//_crystal.swapID = swapID;
 		
-		//_swapPoint = new Point(swapCrystal.x, swapCrystal.y);
+		_swapPoint = crystal.swapPoint;
 		
 		//CrystalDataProxy.swapPositionByID(_crystals, crystal.id, crystal.swapID);
 		//CrystalDataProxy.swapByID(_crystals, crystal.id, crystal.swapID);
@@ -454,17 +498,14 @@ internal class MoveCrystalEffect extends SDCommand
 	
 	override public function doCommand():void
 	{
-		//TweenLite.to(_crystal, 0.25, {x:_swapPoint.x, y:_swapPoint.y, onComplete: super.doCommand});
+		TweenLite.to(_crystal, 0.25, {x:_swapPoint.x, y:_swapPoint.y, onComplete: super.doCommand});
 		//Math.abs(_swapCrystal.y - _crystal.y)/2
 		
-		CrystalDataProxy.swapPositionByID(_crystals, _crystalID, _swapID);
-		CrystalDataProxy.swapByID(_crystals, _crystalID, _swapID);
+		//CrystalDataProxy.swapPositionByID(_crystals, _crystalID, _swapID);
+		//CrystalDataProxy.swapByID(_crystals, _crystalID, _swapID);
 		
 		//_crystal.swapID = -1;
-		
-		super.doCommand();
 	}
-	
 	
 	override public function command():void
 	{
