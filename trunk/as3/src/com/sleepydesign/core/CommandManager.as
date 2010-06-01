@@ -58,7 +58,10 @@ package com.sleepydesign.core
 			if (!_commands)
 				return;
 			else if (_commands.length <= 0)
+			{
+				onCommandComplete();
 				return;
+			}
 
 			var _commands_length:int = _totalCommands = _commands.length;
 			if (!_isParallel)
@@ -133,7 +136,8 @@ package com.sleepydesign.core
 				_timer.stop();
 				_timer = null;
 			}
-
+			
+			_commands = new Vector.<ICommand>();
 			_totalCommands = 0;
 		}
 
