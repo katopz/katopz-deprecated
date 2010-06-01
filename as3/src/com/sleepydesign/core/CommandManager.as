@@ -128,7 +128,7 @@ package com.sleepydesign.core
 			// destroy link list
 			var _commands_length:int = _commands.length;
 			while (--_commands_length > 0)
-				_commands[_commands_length].completeSignal.removeAll();
+				IDestroyable(_commands[_commands_length]).destroy();
 
 			// destroy parallel
 			if (_timer)
