@@ -37,8 +37,6 @@ package application.view.components
 			label.htmlText = String(_id);
 		}
 
-		public var swapID:int;
-		
 		public var prevPoint:Point;
 		public var nextPoint:Point;
 
@@ -93,8 +91,6 @@ package application.view.components
 		{
 			_skinIndex = (value == -1) ? int((_crystalClip.totalFrames - 1) * Math.random()) : value;
 			_crystalClip.gotoAndStop(_skinIndex + 1);
-
-			swapID = -1;
 		}
 
 		public function set focus(value:Boolean):void
