@@ -163,10 +163,10 @@ package application.view.components
 			CrystalDataProxy.swapByID(crystals, _focusCrystal.id, _swapCrystal.id);
 
 			trace(" > Begin Check condition...");
-			endCheckComplete(Rules.isSameColorRemain(crystals));
+			checkRule(Rules.isSameColorRemain(crystals));
 		}
 
-		private function endCheckComplete(result:Boolean):void
+		private function checkRule(result:Boolean):void
 		{
 			trace(" < End Check condition...");
 			if (result)
@@ -235,7 +235,10 @@ package application.view.components
 							_aboveCrystal.prevPoint = new Point(_aboveCrystal.x, _aboveCrystal.y);
 
 						_crystal.status = CrystalStatus.READY;
-						onRefillComplete(_crystal);
+						
+						CrystalDataProxy.swapPositionByID(crystals, _crystal.id, _crystal.swapID);
+						_crystal.prevPoint = new Point(crystals[_crystal.swapID].x, crystals[_crystal.swapID].y);
+						CrystalDataProxy.swapByID(crystals, _crystal.id, _crystal.swapID);
 					}
 					else
 					{
@@ -244,26 +247,11 @@ package application.view.components
 						_crystal.spin();
 
 						_crystal.status = CrystalStatus.READY;
-						_crystal.swapID = -1;
-						onRefillComplete(_crystal);
 					}
+					_crystal.swapID = -1;
 				}
 			}
-			
 			onMoveComplete();
-		}
-
-		private function onRefillComplete(_crystal:Crystal):void
-		{
-			// real swap
-			if (_crystal.swapID != -1)
-			{
-				CrystalDataProxy.swapPositionByID(crystals, _crystal.id, _crystal.swapID);
-				_crystal.prevPoint = new Point(crystals[_crystal.swapID].x, crystals[_crystal.swapID].y);
-				CrystalDataProxy.swapByID(crystals, _crystal.id, _crystal.swapID);
-
-				_crystal.swapID = -1;
-			}
 		}
 
 		private function onMoveComplete():void
@@ -311,7 +299,7 @@ package application.view.components
 		{
 			if (result)
 			{
-				endCheckComplete(result);
+				checkRule(result);
 			}
 			else
 			{
