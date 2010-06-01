@@ -66,7 +66,7 @@ package com.sleepydesign.core
 			var _commands_length:int = _totalCommands = _commands.length;
 			if (!_isParallel)
 			{
-				// link list serial command like command1 --- complete ---> command2 --- complete ---> ...
+				// link list serial eg. [command1 - complete] -> [command2 - complete] -> ... -> [command3 - complete]
 				while (--_commands_length > 0)
 					_commands[_commands_length - 1].completeSignal.addOnce(_commands[_commands_length].doCommand);
 
@@ -143,12 +143,12 @@ package com.sleepydesign.core
 
 		public function get destroyed():Boolean
 		{
-			return this._isDestroyed;
+			return _isDestroyed;
 		}
 
 		public function destroy():void
 		{
-			this._isDestroyed = true;
+			_isDestroyed = true;
 			stop();
 			
 			_commands = null;
