@@ -2,16 +2,10 @@ package application.view
 {
 	import application.ApplicationFacade;
 	import application.model.CrystalDataProxy;
-	import application.model.Rules;
 	import application.view.components.Board;
 	import application.view.components.Crystal;
 
-	import com.greensock.TweenLite;
-	import com.sleepydesign.display.SDSprite;
-
 	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.geom.Point;
 
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
