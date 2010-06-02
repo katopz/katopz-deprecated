@@ -3,10 +3,10 @@ package application.view
 	import application.ApplicationFacade;
 	import application.model.CrystalDataProxy;
 	import application.view.components.Menu;
-	
+
 	import flash.events.Event;
 	import flash.media.Sound;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;

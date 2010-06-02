@@ -1,7 +1,7 @@
 package application.view.components
 {
 	import com.sleepydesign.components.SDButton;
-	
+
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;

@@ -4,7 +4,7 @@ package application.view.components
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
-	
+
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -17,7 +17,7 @@ package application.view.components
 		[Embed(source="assets/game.swf", symbol="CrystalClip")]
 		private const _CrystalClip:Class;
 		private var _crystalClip:MovieClip = new _CrystalClip();
-		
+
 		// debug
 		public var label:SDTextField;
 

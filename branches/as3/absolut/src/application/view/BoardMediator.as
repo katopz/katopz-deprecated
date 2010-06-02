@@ -5,14 +5,14 @@ package application.view
 	import application.model.Rules;
 	import application.view.components.Board;
 	import application.view.components.Crystal;
-	
+
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -30,7 +30,8 @@ package application.view
 			data = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
 
 			//board.soundState = data.soundState;
-			board.moveSignal.addOnce(onTileClick);
+			board.moveSignal.add(onTileClick);
+			board.effectSignal.add(onEffectDone);
 		}
 
 		override public function listNotificationInterests():Array
@@ -39,7 +40,8 @@ package application.view
 				ApplicationFacade.RESTART_GAME,
 				ApplicationFacade.GAME_OVER,
 				ApplicationFacade.DRAWN_GAME,
-				ApplicationFacade.SOUND_CHANGE];
+				ApplicationFacade.SOUND_CHANGE,
+				ApplicationFacade.REFILL_DONE];
 		}
 
 		override public function handleNotification(notification:INotification):void
@@ -48,6 +50,7 @@ package application.view
 			{
 				case ApplicationFacade.START_GAME:
 					//already shuffle data while init//board.shuffle();
+					board.init(data.getCrystals());
 					board.enabled = true;
 					break;
 
@@ -55,7 +58,7 @@ package application.view
 					//already shuffle data by command//board.shuffle();
 					board.enabled = true;
 					break;
-				
+
 				case ApplicationFacade.GAME_OVER:
 					//board.drawWinLine(y1, x1, y2, x2, tile);
 					//board.setBoardEnabled(false);
@@ -68,6 +71,11 @@ package application.view
 				case ApplicationFacade.SOUND_CHANGE:
 					//board.soundState = notification.getBody() as Boolean;
 					break;
+
+				case ApplicationFacade.REFILL_DONE:
+					//board.soundState = notification.getBody() as Boolean;
+					board.refill(notification.getBody() as Vector.<Crystal>);
+					break;
 			}
 		}
 
@@ -79,6 +87,11 @@ package application.view
 		private function onTileClick(event:Event):void
 		{
 			sendNotification(ApplicationFacade.USER_MOVE);
+		}
+
+		private function onEffectDone():void
+		{
+			sendNotification(ApplicationFacade.EFFECT_DONE);
 		}
 	}
 }

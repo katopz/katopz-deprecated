@@ -1,7 +1,7 @@
 package application.controller
 {
 	import application.model.CrystalDataProxy;
-	
+
 	import org.puremvc.as3.patterns.command.MacroCommand;
 
 	public class StartupCommand extends MacroCommand
@@ -10,7 +10,7 @@ package application.controller
 		{
 			// prepare data
 			addSubCommand(ModelPrepCommand);
-			
+
 			// render time
 			addSubCommand(ViewPrepCommand);
 		}

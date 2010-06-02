@@ -12,12 +12,7 @@ package application.view.components
 	{
 		public static function get crystals():Vector.<Crystal>
 		{
-			return CrystalDataProxy._crystals;
-		}
-
-		public static function set crystals(value:Vector.<Crystal>):void
-		{
-			CrystalDataProxy._crystals = value;
+			return CrystalDataProxy.crystals;
 		}
 
 		public static function showSwapEffect(sourceCrystal:Crystal, targetCrystal:Crystal, callBack:Function):void
@@ -39,23 +34,24 @@ package application.view.components
 			_commandManager.completeSignal.addOnce(callBack);
 			_commandManager.start();
 		}
-		
+
 		private static var _fillEffect:CommandManager = new CommandManager(true);
+
 		public static function onMoveComplete(callBack:Function):void
 		{
 			trace(" < End Refill");
-			
+
 			// begin effect
 			_fillEffect.stop();
 			_fillEffect.completeSignal.removeAll();
-			
+
 			for each (var _crystal:Crystal in crystals)
 			{
 				if (!_crystal.prevPoint)
 					continue;
-				
+
 				_crystal.nextPoint = new Point(_crystal.x, _crystal.y);
-				
+
 				if (_crystal.prevPoint.y < _crystal.nextPoint.y)
 				{
 					// do effect only falling
@@ -71,7 +67,7 @@ package application.view.components
 					_fillEffect.addCommand(new MoveCrystalEffect(_crystal));
 				}
 			}
-			
+
 			_fillEffect.completeSignal.addOnce(callBack);
 			_fillEffect.start();
 		}

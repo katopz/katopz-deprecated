@@ -2,20 +2,21 @@ package application.view.components
 {
 	import application.model.CrystalDataProxy;
 	import application.model.Rules;
-	
+
 	import com.greensock.TweenLite;
 	import com.sleepydesign.core.CommandManager;
 	import com.sleepydesign.display.SDSprite;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
 	{
 		// signal
 		public var moveSignal:Signal = new Signal();
+		public var effectSignal:Signal = new Signal();
 
 		// status
 		private const SELECT_FOCUS:String = "SELECT_FOCUS";
@@ -40,15 +41,17 @@ package application.view.components
 			return _swapCrystal;
 		}
 
-		public function get crystals():Vector.<Crystal>
-		{
-			return CrystalDataProxy._crystals;
-		}
+		/*
+		   public function get crystals():Vector.<Crystal>
+		   {
+		   return CrystalDataProxy._crystals;
+		   }
 
-		public function set crystals(value:Vector.<Crystal>):void
-		{
-			CrystalDataProxy._crystals = value;
-		}
+		   public function set crystals(value:Vector.<Crystal>):void
+		   {
+		   CrystalDataProxy._crystals = value;
+		   }
+		 */
 
 		private var _enabled:Boolean;
 
@@ -66,7 +69,10 @@ package application.view.components
 		{
 			// canvas
 			addChild(_canvas = new SDSprite());
+		}
 
+		public function init(crystals:Vector.<Crystal>):void
+		{
 			for each (var _crystal:Crystal in crystals)
 				_canvas.addChild(_crystal);
 
@@ -84,10 +90,10 @@ package application.view.components
 			}
 		}
 
-		private function setFocusCrystal(_crystal:Crystal):void
+		private function setFocusCrystal(crystal:Crystal):void
 		{
 			// click on crystal
-			if (_crystal)
+			if (crystal)
 			{
 				enabled = false;
 				switch (_status)
@@ -95,10 +101,10 @@ package application.view.components
 					case SELECT_FOCUS:
 
 						// click on old crystal
-						_crystal.focus = !_crystal.focus;
+						crystal.focus = !crystal.focus;
 
 						// mark as focus
-						_focusCrystal = _crystal;
+						_focusCrystal = crystal;
 
 						// wait for next click
 						enabled = true;
@@ -110,37 +116,37 @@ package application.view.components
 					case SELECT_SWAP:
 
 						// click on old crystal
-						if (_focusCrystal == _crystal)
+						if (_focusCrystal == crystal)
 						{
-							_crystal.focus = !_crystal.focus;
+							crystal.focus = !crystal.focus;
 							_focusCrystal = null;
 							_status = SELECT_FOCUS;
 							enabled = true;
-
-							return;
-						}
-
-						// rule #1 : nearby?
-						if (!Rules.hasNeighbor(_focusCrystal.id, _crystal.id))
-						{
-							// refocus
-							_focusCrystal.focus = !_focusCrystal.focus;
-							_status = SELECT_FOCUS;
-							setFocusCrystal(_crystal);
 						}
 						else
 						{
-							// click on other crystal
-							_crystal.focus = !_crystal.focus;
-
-							// already mark?
-							if (_focusCrystal)
+							// rule #1 : nearby?
+							if (!Rules.hasNeighbor(_focusCrystal.id, crystal.id))
 							{
-								// will swap focus crystal with this one
-								_swapCrystal = _crystal;
+								// refocus
+								_focusCrystal.focus = !_focusCrystal.focus;
+								_status = SELECT_FOCUS;
+								setFocusCrystal(crystal);
+							}
+							else
+							{
+								// click on other crystal
+								crystal.focus = !crystal.focus;
 
-								// swap both
-								BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
+								// already mark?
+								if (_focusCrystal)
+								{
+									// will swap focus crystal with this one
+									_swapCrystal = crystal;
+
+									// swap both
+									BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
+								}
 							}
 						}
 						break;
@@ -151,10 +157,10 @@ package application.view.components
 		private function onSwapComplete():void
 		{
 			trace(" ! onSwapComplete");
-			CrystalDataProxy.swapByID(crystals, _focusCrystal.id, _swapCrystal.id);
+			CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
 
 			trace(" > Begin Check condition...");
-			checkRule(Rules.isSameColorRemain(crystals));
+			checkRule(CrystalDataProxy.isSameColorRemain());
 		}
 
 		private function checkRule(result:Boolean):void
@@ -173,66 +179,28 @@ package application.view.components
 				BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onBadMoveComplete);
 
 				// swap back
-				CrystalDataProxy.swapByID(crystals, _focusCrystal.id, _swapCrystal.id);
+				CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
 			}
 		}
 
 		private function onGoodMoveComplete():void
 		{
 			trace(" < End Effect");
-			refill();
+			//refill();
+			effectSignal.dispatch();
 		}
 
-		private function refill():void
+		public function refill(crystals:Vector.<Crystal>):void
 		{
 			trace(" > Begin Refill");
 
-			var _crystal:Crystal
-			var _index:int = crystals.length;
-
-			// from bottom to top
-			while (--_index > -1)
-			{
-				_crystal = crystals[_index];
-
-				// it's removed
-				if (_crystal.status == CrystalStatus.REMOVED || _crystal.status == CrystalStatus.MOVE)
-				{
-					if (!_crystal.prevPoint)
-						_crystal.prevPoint = new Point(_crystal.x, _crystal.y);
-
-					// find top most to replace
-					var _aboveCrystal:Crystal = CrystalDataProxy.getAboveCrystal(crystals, _index, Rules.COL_SIZE);
-					if (_aboveCrystal)
-					{
-						// fall to bottom
-						_aboveCrystal.status = CrystalStatus.MOVE;
-						if (!_aboveCrystal.prevPoint)
-							_aboveCrystal.prevPoint = new Point(_aboveCrystal.x, _aboveCrystal.y);
-
-						_crystal.status = CrystalStatus.READY;
-						
-						CrystalDataProxy.swapPosition(_crystal, _aboveCrystal);
-						_crystal.prevPoint = new Point(_aboveCrystal.x, _aboveCrystal.y);
-						CrystalDataProxy.swapByID(crystals, _crystal.id, _aboveCrystal.id);
-					}
-					else
-					{
-						// stable position wait for reveal
-						_crystal.alpha = 1;
-						_crystal.spin();
-
-						_crystal.status = CrystalStatus.READY;
-					}
-				}
-			}
 			BoardEffect.onMoveComplete(onMoveEffectComplete);
 		}
 
 		private function onMoveEffectComplete():void
 		{
 			trace(" > Begin Recheck");
-			reCheck(Rules.isSameColorRemain(crystals));
+			reCheck(CrystalDataProxy.isSameColorRemain());
 		}
 
 		private function reCheck(result:Boolean):void
@@ -245,7 +213,7 @@ package application.view.components
 			{
 				trace(" < End ReCheck");
 				trace(" > Begin Game over check");
-				if (!Rules.isOver(crystals))
+				if (!CrystalDataProxy.isOver())
 				{
 					trace(" < End Game over check");
 					nextTurn();
@@ -265,7 +233,7 @@ package application.view.components
 		private function nextTurn():void
 		{
 			trace(" ! nextTurn");
-			
+
 			// dispose
 			_focusCrystal = _swapCrystal = null;
 
