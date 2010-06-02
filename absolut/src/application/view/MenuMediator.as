@@ -61,7 +61,7 @@ package application.view
 		{
 			sendNotification(ApplicationFacade.SHOW_RULES);
 		}
-		
+
 		private function onHint(event:Event):void
 		{
 			sendNotification(ApplicationFacade.SHOW_HINT, data.getCrystals());

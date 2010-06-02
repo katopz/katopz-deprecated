@@ -2,12 +2,12 @@ package application.view.components
 {
 	import application.model.CrystalDataProxy;
 	import application.model.Rules;
-	
+
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	
+
 	import flash.events.MouseEvent;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
@@ -163,19 +163,7 @@ package application.view.components
 			trace(" * Refill");
 			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete);
 		}
-		
-		public function showHint(crystals:Vector.<Crystal>):void
-		{
-			if(_enabled)
-			for each (var _crystal:Crystal in crystals)
-				if(_crystal.isGoodToMove)
-					TweenLite.to(_crystal, 0.25, {alpha:.1, onCompleteParams:[_crystal], onComplete:
-						function (crystal:Crystal):void
-						{
-							TweenLite.to(crystal, 0.25, {alpha:1});
-						}});
-		}
-		
+
 		private function onMoveEffectComplete():void
 		{
 			trace(" * Recheck");
@@ -203,12 +191,24 @@ package application.view.components
 			trace(" ! nextTurn");
 
 			// dispose
-			_focusCrystal.focus = _swapCrystal.focus = false; 
+			_focusCrystal.focus = _swapCrystal.focus = false;
 			_focusCrystal = _swapCrystal = null;
 
 			// accept input
 			enabled = true;
 			_status = SELECT_FOCUS;
+		}
+
+		public function showHint(crystals:Vector.<Crystal>):void
+		{
+			if (_enabled)
+				for each (var _crystal:Crystal in crystals)
+					if (_crystal.isGoodToMove)
+						TweenLite.to(_crystal, 0.25, {alpha:.1, onCompleteParams:[_crystal], onComplete:
+								function (crystal:Crystal):void
+							{
+								TweenLite.to(crystal, 0.25, {alpha:1});
+							}});
 		}
 
 		override public function destroy():void

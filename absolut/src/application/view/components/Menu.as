@@ -44,7 +44,7 @@ package application.view.components
 				case "rules":
 					dispatchEvent(new Event(Menu.RULES));
 					break;
-				
+
 				case "hint":
 					dispatchEvent(new Event(Menu.HINT));
 					break;

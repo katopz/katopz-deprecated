@@ -98,7 +98,7 @@ package application.view
 		{
 			sendNotification(ApplicationFacade.EFFECT_DONE);
 		}
-		
+
 		private function onGameOver():void
 		{
 			sendNotification(ApplicationFacade.GAME_OVER);

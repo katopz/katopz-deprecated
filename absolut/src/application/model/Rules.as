@@ -34,7 +34,7 @@ package application.model
 			var _crystal:Crystal;
 			var _swapCrystal:Crystal;
 			var i:int;
-			
+
 			for (i = 0; i < _crystals_length; i++)
 				_crystals[i].isGoodToMove = false;
 
