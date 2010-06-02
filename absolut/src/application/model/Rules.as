@@ -2,9 +2,9 @@ package application.model
 {
 	import application.view.components.Crystal;
 	import application.view.components.CrystalStatus;
-	
+
 	import flash.geom.Point;
-	
+
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -93,19 +93,19 @@ package application.model
 
 		private static function isSwapAndOver(_crystals:Vector.<Crystal>, _crystalID:int, _swapCrystaID:int):Boolean
 		{
-			CrystalDataProxy.swapByID(_crystals, _crystalID, _swapCrystaID);
+			CrystalDataProxy.swapByID(_crystalID, _swapCrystaID);
 
 			// chk /a
 			if (checkCol(_crystals, true) || checkRow(_crystals, true))
 			{
 				// swap back anyway
-				CrystalDataProxy.swapByID(_crystals, _crystalID, _swapCrystaID);
+				CrystalDataProxy.swapByID(_crystalID, _swapCrystaID);
 				return false;
 			}
 			else
 			{
 				// swap back
-				CrystalDataProxy.swapByID(_crystals, _crystalID, _swapCrystaID);
+				CrystalDataProxy.swapByID(_crystalID, _swapCrystaID);
 				return true;
 			}
 		}

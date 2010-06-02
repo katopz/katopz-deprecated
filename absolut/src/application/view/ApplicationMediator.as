@@ -4,10 +4,10 @@ package application.view
 	import application.model.CrystalDataProxy;
 	import application.view.components.Board;
 	import application.view.components.Menu;
-	
+
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
