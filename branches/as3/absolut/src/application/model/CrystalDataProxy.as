@@ -64,11 +64,7 @@ package application.model
 
 		public function effectDone():void
 		{
-			refill();
-		}
-
-		private function refill():void
-		{
+			//refill
 			var _crystal:Crystal
 			var _index:int = crystals.length;
 
@@ -107,7 +103,6 @@ package application.model
 					}
 				}
 			}
-			//BoardEffect.onMoveComplete(onMoveEffectComplete);
 			sendNotification(ApplicationFacade.REFILL_DONE, _crystals);
 		}
 
@@ -190,7 +185,7 @@ package application.model
 			// still have good condition left
 			if (Rules.isSameColorRemain(crystals))
 				shuffle(crystals);
-			
+
 			// can't be play
 			if (Rules.isOver(crystals))
 				shuffle(crystals);

@@ -1,7 +1,6 @@
 package application
 {
 	import application.controller.EffectDoneCommand;
-	import application.controller.RefillDoneCommand;
 	import application.controller.RestartCommand;
 	import application.controller.StartupCommand;
 	import application.controller.UserMoveCommand;
@@ -48,10 +47,7 @@ package application
 
 			registerCommand(ApplicationFacade.STARTUP, StartupCommand);
 			registerCommand(ApplicationFacade.USER_MOVE, UserMoveCommand);
-
 			registerCommand(ApplicationFacade.EFFECT_DONE, EffectDoneCommand);
-			registerCommand(ApplicationFacade.REFILL_DONE, RefillDoneCommand);
-
 			registerCommand(ApplicationFacade.RESTART_GAME, RestartCommand);
 		}
 	}

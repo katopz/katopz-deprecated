@@ -4,7 +4,7 @@ package application.view.components
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
-	
+
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.Point;
