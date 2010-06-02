@@ -6,7 +6,6 @@ package application.view
 	import application.view.components.Menu;
 
 	import flash.display.StageScaleMode;
-	import flash.events.Event;
 
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -39,8 +38,7 @@ package application.view
 		override public function listNotificationInterests():Array
 		{
 			return [ApplicationFacade.GAME_OVER, 
-				ApplicationFacade.RESTART_REQUEST, 
-				ApplicationFacade.DRAWN_GAME];
+				ApplicationFacade.RESTART_REQUEST];
 		}
 
 		override public function handleNotification(notification:INotification):void
@@ -48,32 +46,13 @@ package application.view
 			switch (notification.getName())
 			{
 				case ApplicationFacade.GAME_OVER:
-					var winner:Number = notification.getBody().tile;
-					/*
-					   if ( winner == 1 )
-					   {
-					   userWinCount.text = "USR:" + data.userWinCount;
-					   }
-					   else
-					   {
-					   AIWinCount.text = "CPU:" + data.AIWinCount;
-					   }
-					 */
+					trace(" ! Game over...do something? dialog?");
 					break;
 
 				case ApplicationFacade.RESTART_REQUEST:
 					//TODO : warn before shuffle
 					//bypass comfirm and send notification
 					sendNotification(ApplicationFacade.RESTART_GAME);
-					break;
-
-				case ApplicationFacade.DRAWN_GAME:
-					/*
-					   showModal();
-					   showAlert("Only draw is available.\nTry again.", AlertBox.OK);
-
-					   alignContent();
-					 */
 					break;
 			}
 		}
@@ -92,21 +71,6 @@ package application.view
 			menu = new Menu();
 			facade.registerMediator(new MenuMediator(menu));
 			main.addChild(menu);
-		}
-
-		private function onSoundOn(event:Event):void
-		{
-			//
-		}
-
-		private function onSoundOff(event:Event):void
-		{
-			//
-		}
-
-		private function setSound(value:Boolean):void
-		{
-			//
 		}
 	}
 }

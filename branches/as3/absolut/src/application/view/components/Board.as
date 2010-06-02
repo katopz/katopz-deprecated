@@ -2,14 +2,12 @@ package application.view.components
 {
 	import application.model.CrystalDataProxy;
 	import application.model.Rules;
-
+	
 	import com.greensock.TweenLite;
-	import com.sleepydesign.core.CommandManager;
 	import com.sleepydesign.display.SDSprite;
-
+	
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
@@ -17,6 +15,7 @@ package application.view.components
 		// signal
 		public var moveSignal:Signal = new Signal();
 		public var effectSignal:Signal = new Signal();
+		public var gameoverSignal:Signal = new Signal();
 
 		// status
 		private const SELECT_FOCUS:String = "SELECT_FOCUS";
@@ -28,31 +27,9 @@ package application.view.components
 
 		// focus
 		private var _focusCrystal:Crystal;
-
-		public function get focusCrystal():Crystal
-		{
-			return _focusCrystal;
-		}
-
 		private var _swapCrystal:Crystal;
 
-		public function get swapCrystal():Crystal
-		{
-			return _swapCrystal;
-		}
-
-		/*
-		   public function get crystals():Vector.<Crystal>
-		   {
-		   return CrystalDataProxy._crystals;
-		   }
-
-		   public function set crystals(value:Vector.<Crystal>):void
-		   {
-		   CrystalDataProxy._crystals = value;
-		   }
-		 */
-
+		// interactive
 		private var _enabled:Boolean;
 
 		public function get enabled():Boolean
@@ -71,7 +48,7 @@ package application.view.components
 			addChild(_canvas = new SDSprite());
 		}
 
-		public function init(crystals:Vector.<Crystal>):void
+		public function initView(crystals:Vector.<Crystal>):void
 		{
 			for each (var _crystal:Crystal in crystals)
 				_canvas.addChild(_crystal);
@@ -146,6 +123,7 @@ package application.view.components
 
 									// swap both
 									BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
+									CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
 								}
 							}
 						}
@@ -156,78 +134,68 @@ package application.view.components
 
 		private function onSwapComplete():void
 		{
-			trace(" ! onSwapComplete");
-			CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
-
-			trace(" > Begin Check condition...");
+			trace(" * Check");
 			checkRule(CrystalDataProxy.isSameColorRemain());
 		}
 
 		private function checkRule(result:Boolean):void
 		{
-			trace(" < End Check condition...");
 			if (result)
 			{
 				// good move
-				trace(" * Call good effect");
-				BoardEffect.doGoodEffect(onGoodMoveComplete);
+				trace(" ! Good move -> call effect -> refill");
+				BoardEffect.doGoodEffect(effectSignal.dispatch);
 			}
 			else
 			{
 				// bad move
-				trace(" ! Bad move");
-				BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onBadMoveComplete);
+				trace(" ! Bad move -> swap -> next turn");
+				BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, nextTurn);
 
 				// swap back
+				trace(" * Swap back");
 				CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
 			}
 		}
 
-		private function onGoodMoveComplete():void
-		{
-			trace(" < End Effect");
-			//refill();
-			effectSignal.dispatch();
-		}
-
 		public function refill(crystals:Vector.<Crystal>):void
 		{
-			trace(" > Begin Refill");
-
-			BoardEffect.onMoveComplete(onMoveEffectComplete);
+			trace(" * Refill");
+			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete);
 		}
-
+		
+		public function showHint(crystals:Vector.<Crystal>):void
+		{
+			if(_enabled)
+			for each (var _crystal:Crystal in crystals)
+				if(_crystal.isGoodToMove)
+					TweenLite.to(_crystal, 0.25, {alpha:.1, onCompleteParams:[_crystal], onComplete:
+						function (crystal:Crystal):void
+						{
+							TweenLite.to(crystal, 0.25, {alpha:1});
+						}});
+		}
+		
 		private function onMoveEffectComplete():void
 		{
-			trace(" > Begin Recheck");
-			reCheck(CrystalDataProxy.isSameColorRemain());
-		}
-
-		private function reCheck(result:Boolean):void
-		{
+			trace(" * Recheck");
+			var result:Boolean = CrystalDataProxy.isSameColorRemain()
 			if (result)
 			{
 				checkRule(result);
 			}
 			else
 			{
-				trace(" < End ReCheck");
-				trace(" > Begin Game over check");
+				trace(" * Check for game over");
 				if (!CrystalDataProxy.isOver())
-				{
-					trace(" < End Game over check");
 					nextTurn();
-				}
 				else
 				{
-					trace(" < Game Over!");
+					trace(" ! Game Over!");
+					// TODO : send score -> app -> dialog
+					gameoverSignal.dispatch();
 				}
 			}
-		}
-
-		private function onBadMoveComplete():void
-		{
-			nextTurn();
 		}
 
 		private function nextTurn():void
@@ -235,9 +203,10 @@ package application.view.components
 			trace(" ! nextTurn");
 
 			// dispose
+			_focusCrystal.focus = _swapCrystal.focus = false; 
 			_focusCrystal = _swapCrystal = null;
 
-			// accept inpt
+			// accept input
 			enabled = true;
 			_status = SELECT_FOCUS;
 		}
