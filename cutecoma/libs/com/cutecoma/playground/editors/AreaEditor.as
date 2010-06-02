@@ -8,8 +8,8 @@
 	import com.cutecoma.playground.events.SDKeyboardEvent;
 	import com.cutecoma.playground.events.SDMouseEvent;
 	import com.sleepydesign.components.SDDialog;
+	import com.sleepydesign.events.EventManager;
 	import com.sleepydesign.events.RemovableEventDispatcher;
-	import com.sleepydesign.managers.EventManager;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.text.SDTextField;
 	import com.sleepydesign.ui.InputController;
