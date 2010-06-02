@@ -5,7 +5,7 @@ package
 	import com.cutecoma.primitives.SDSquare;
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDPanel;
-	import com.sleepydesign.managers.EventManager;
+	import com.sleepydesign.events.EventManager;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.text.SDTextField;
 	
