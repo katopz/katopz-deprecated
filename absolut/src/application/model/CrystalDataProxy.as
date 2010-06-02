@@ -69,8 +69,6 @@ package application.model
 
 		private function refill():void
 		{
-			trace(" > Begin Refill");
-
 			var _crystal:Crystal
 			var _index:int = crystals.length;
 
@@ -97,7 +95,6 @@ package application.model
 						_crystal.status = CrystalStatus.READY;
 
 						CrystalDataProxy.swapPosition(_crystal, _aboveCrystal);
-						_crystal.prevPoint = new Point(_aboveCrystal.x, _aboveCrystal.y);
 						CrystalDataProxy.swapByID(_crystal.id, _aboveCrystal.id);
 					}
 					else
@@ -190,7 +187,12 @@ package application.model
 
 			// ------------------------------------------------- Cheat
 
+			// still have good condition left
 			if (Rules.isSameColorRemain(crystals))
+				shuffle(crystals);
+			
+			// can't be play
+			if (Rules.isOver(crystals))
 				shuffle(crystals);
 		}
 

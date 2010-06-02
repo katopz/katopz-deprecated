@@ -30,13 +30,15 @@ package application.model
 		public static function isOver(_crystals:Vector.<Crystal>):Boolean
 		{
 			var _result:Boolean = false;
-
 			var _crystals_length:int = _crystals.length;
-
 			var _crystal:Crystal;
 			var _swapCrystal:Crystal;
+			var i:int;
+			
+			for (i = 0; i < _crystals_length; i++)
+				_crystals[i].isGoodToMove = false;
 
-			for (var i:int = 0; i < _crystals_length; i++)
+			for (i = 0; i < _crystals_length; i++)
 			{
 				_crystal = _crystals[i];
 
@@ -46,7 +48,7 @@ package application.model
 					_swapCrystal = _crystals[i + 1];
 					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
 					{
-						//HINT//_crystal.alpha = .25;
+						_crystal.isGoodToMove = _swapCrystal.isGoodToMove = true;
 						return false;
 					}
 				}
@@ -58,7 +60,7 @@ package application.model
 
 					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
 					{
-						//HINT//_crystal.alpha = .25;
+						_crystal.isGoodToMove = _swapCrystal.isGoodToMove = true;
 						return false;
 					}
 				}
@@ -70,7 +72,7 @@ package application.model
 
 					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
 					{
-						//HINT//_crystal.alpha = .25;
+						_crystal.isGoodToMove = _swapCrystal.isGoodToMove = true;
 						return false;
 					}
 				}
@@ -82,7 +84,7 @@ package application.model
 
 					if (!isSwapAndOver(_crystals, _crystal.id, _swapCrystal.id))
 					{
-						//HINT//_crystal.alpha = .25;
+						_crystal.isGoodToMove = _swapCrystal.isGoodToMove = true;
 						return false;
 					}
 				}

@@ -10,8 +10,9 @@ package application.view.components
 	{
 		public static const START:String = "start";
 		public static const RULES:String = "rules";
+		public static const HINT:String = "hint";
 
-		private var labelsArray:Array = ["new", "rules"];
+		private var labelsArray:Array = ["new", "rules", "hint"];
 
 		public function Menu()
 		{
@@ -42,6 +43,10 @@ package application.view.components
 
 				case "rules":
 					dispatchEvent(new Event(Menu.RULES));
+					break;
+				
+				case "hint":
+					dispatchEvent(new Event(Menu.HINT));
 					break;
 			}
 		}

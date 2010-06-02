@@ -25,6 +25,7 @@ package application
 		public static const REFILL_DONE:String = "REFILL_DONE";
 
 		public static const SHOW_RULES:String = "show_rules";
+		public static const SHOW_HINT:String = "show_hint";
 
 		public static const SOUND_CHANGE:String = "sound_change";
 

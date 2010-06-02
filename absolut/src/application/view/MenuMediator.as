@@ -26,7 +26,7 @@ package application.view
 
 			menu.addEventListener(Menu.START, onStart);
 			menu.addEventListener(Menu.RULES, onRules);
-			//alertSound = new AlertSound();
+			menu.addEventListener(Menu.HINT, onHint);
 		}
 
 		override public function listNotificationInterests():Array
@@ -53,15 +53,18 @@ package application.view
 			}
 			else
 			{
-				//if ( data.soundState ) alertSound.play();
 				sendNotification(ApplicationFacade.RESTART_REQUEST);
 			}
 		}
 
 		private function onRules(event:Event):void
 		{
-			//if ( data.soundState ) alertSound.play();
 			sendNotification(ApplicationFacade.SHOW_RULES);
+		}
+		
+		private function onHint(event:Event):void
+		{
+			sendNotification(ApplicationFacade.SHOW_HINT, data.getCrystals());
 		}
 	}
 }

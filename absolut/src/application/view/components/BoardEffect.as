@@ -26,7 +26,6 @@ package application.view.components
 
 		public static function doGoodEffect(callBack:Function):void
 		{
-			trace(" > Begin Effect");
 			var _commandManager:CommandManager = new CommandManager(true);
 			for each (var _crystal:Crystal in crystals)
 				if (_crystal.status == CrystalStatus.TOBE_REMOVE)
@@ -37,10 +36,8 @@ package application.view.components
 
 		private static var _fillEffect:CommandManager = new CommandManager(true);
 
-		public static function onMoveComplete(callBack:Function):void
+		public static function onMoveComplete(crystals:Vector.<Crystal>, callBack:Function):void
 		{
-			trace(" < End Refill");
-
 			// begin effect
 			_fillEffect.stop();
 			_fillEffect.completeSignal.removeAll();

@@ -32,6 +32,7 @@ package application.view
 			//board.soundState = data.soundState;
 			board.moveSignal.add(onTileClick);
 			board.effectSignal.add(onEffectDone);
+			board.gameoverSignal.add(onGameOver);
 		}
 
 		override public function listNotificationInterests():Array
@@ -41,7 +42,8 @@ package application.view
 				ApplicationFacade.GAME_OVER,
 				ApplicationFacade.DRAWN_GAME,
 				ApplicationFacade.SOUND_CHANGE,
-				ApplicationFacade.REFILL_DONE];
+				ApplicationFacade.REFILL_DONE,
+				ApplicationFacade.SHOW_HINT];
 		}
 
 		override public function handleNotification(notification:INotification):void
@@ -50,7 +52,7 @@ package application.view
 			{
 				case ApplicationFacade.START_GAME:
 					//already shuffle data while init//board.shuffle();
-					board.init(data.getCrystals());
+					board.initView(data.getCrystals());
 					board.enabled = true;
 					break;
 
@@ -76,6 +78,9 @@ package application.view
 					//board.soundState = notification.getBody() as Boolean;
 					board.refill(notification.getBody() as Vector.<Crystal>);
 					break;
+				case ApplicationFacade.SHOW_HINT:
+					board.showHint(notification.getBody() as Vector.<Crystal>);
+					break;
 			}
 		}
 
@@ -92,6 +97,11 @@ package application.view
 		private function onEffectDone():void
 		{
 			sendNotification(ApplicationFacade.EFFECT_DONE);
+		}
+		
+		private function onGameOver():void
+		{
+			sendNotification(ApplicationFacade.GAME_OVER);
 		}
 	}
 }

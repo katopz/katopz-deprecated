@@ -4,7 +4,7 @@ package application.view.components
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.text.SDTextField;
-
+	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -20,6 +20,7 @@ package application.view.components
 
 		// debug
 		public var label:SDTextField;
+		public var isGoodToMove:Boolean;
 
 		public static var SIZE:uint = 38;
 
