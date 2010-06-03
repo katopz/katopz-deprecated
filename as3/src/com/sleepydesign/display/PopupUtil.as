@@ -16,8 +16,6 @@ package com.sleepydesign.display
 		private static var container:DisplayObjectContainer;
 		private static var currentPopup:DisplayObjectContainer;
 		
-		private static var _listener:Function;
-		
 		public static function init(popupObject:DisplayObjectContainer):void
 		{
 			if(!popupObject)
@@ -85,7 +83,7 @@ package com.sleepydesign.display
 			PopupUtil.container = container;
 		}
 		
-		public static function popdown():void
+		public static function popdown(handler:Function = null):void
 		{
 			if(!currentPopup)
 				return;
@@ -93,7 +91,15 @@ package com.sleepydesign.display
 			currentPopup.mouseEnabled = false;
 			
 			TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
-			TweenLite.to(currentPopup, .5, {autoAlpha:0, onComplete:destroy});
+			TweenLite.to(bitmap, .25, {autoAlpha:0, blurFilter:{blurX:0, blurY:0}});
+			TweenLite.to(currentPopup, .25, {autoAlpha:0, onComplete:popdownComplete, onCompleteParams:[handler]});
+		}
+		
+		public static function popdownComplete(handler:Function):void
+		{
+			if(handler is Function)
+				handler();
+			destroy();
 		}
 		
 		public static function destroy():void
