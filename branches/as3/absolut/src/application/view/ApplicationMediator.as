@@ -50,7 +50,6 @@ package application.view
 			switch (notification.getName())
 			{
 				case ApplicationFacade.GAME_OVER:
-					trace(" ! Game over...do something? dialog?");
 					// menu
 					PopupUtil.popup(main, new SDDialog(<question>Game Over!
 							<answer src="as:onGameOverOK()">OK</answer>
