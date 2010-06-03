@@ -3,9 +3,11 @@ package application.model
 	import application.ApplicationFacade;
 	import application.view.components.Crystal;
 	import application.view.components.CrystalStatus;
-
+	
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.geom.Point;
-
+	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -210,9 +212,27 @@ package application.model
 			return new Point(int(index % size), int(index / size));
 		}
 
+		private static var _comboScore:uint = 0;
+		
 		public static function isSameColorRemain():Boolean
 		{
-			return Rules.isSameColorRemain(_crystals);
+			var _result:Boolean = Rules.isSameColorRemain(_crystals);
+			
+			var _score:uint = 0;
+			for each (var _crystal:Crystal in crystals)
+				if(_crystal.status == CrystalStatus.TOBE_REMOVE)
+					_score++;
+			
+			if(_score > 0)
+			{
+				_comboScore = _comboScore + _score;
+				DebugUtil.trace(" Score : " + _score);
+				DebugUtil.trace(" Combo : " + _comboScore);
+			}else{
+				_comboScore = 0;
+			}
+			
+			return _result;
 		}
 
 		public static function isOver():Boolean
