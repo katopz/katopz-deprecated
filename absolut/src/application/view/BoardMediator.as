@@ -4,9 +4,11 @@ package application.view
 	import application.model.CrystalDataProxy;
 	import application.view.components.Board;
 	import application.view.components.Crystal;
-
+	
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.events.Event;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -54,8 +56,7 @@ package application.view
 					break;
 
 				case ApplicationFacade.GAME_OVER:
-					//board.drawWinLine(y1, x1, y2, x2, tile);
-					//board.setBoardEnabled(false);
+					board.enabled = false;
 					break;
 
 				case ApplicationFacade.REFILL_DONE:

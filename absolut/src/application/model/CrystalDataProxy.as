@@ -229,11 +229,11 @@ package application.model
 			if(_score > 0)
 			{
 				++_comboScore;
-				DebugUtil.trace(" Score : " + _score);
-				DebugUtil.trace(" Combo : " + _comboScore);
+				DebugUtil.trace(" ! Score : " + _score);
+				DebugUtil.trace(" ! Combo : " + _comboScore);
 			}else{
 				_comboScore = 0;
-				DebugUtil.trace(" Total : " + _totalScore);
+				DebugUtil.trace(" ! Total : " + _totalScore);
 			}
 			
 			return _result;
