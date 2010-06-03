@@ -4,9 +4,12 @@ package application.view
 	import application.model.CrystalDataProxy;
 	import application.view.components.Board;
 	import application.view.components.Menu;
-
+	
+	import com.sleepydesign.components.SDDialog;
+	import com.sleepydesign.display.PopupUtil;
+	
 	import flash.display.StageScaleMode;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -47,14 +50,32 @@ package application.view
 			{
 				case ApplicationFacade.GAME_OVER:
 					trace(" ! Game over...do something? dialog?");
+					// menu
+					PopupUtil.popup(main, new SDDialog(<question>Game Over!
+										<answer src="as:onGameOverOK()">OK</answer>
+									</question>, this));
 					break;
 
 				case ApplicationFacade.RESTART_REQUEST:
-					//TODO : warn before shuffle
-					//bypass comfirm and send notification
-					sendNotification(ApplicationFacade.RESTART_GAME);
+					PopupUtil.popup(main, new SDDialog(<question>Restart?
+															<answer src="as:onRestart(true)">OK</answer>
+															<answer src="as:onRestart(false)">Cancel</answer>
+														</question>, this));
 					break;
 			}
+		}
+		
+		public function onGameOverOK():void
+		{
+			PopupUtil.popdown();
+			sendNotification(ApplicationFacade.RESTART_GAME);
+		}
+		
+		public function onRestart(isNeedRestart:Boolean):void
+		{
+			PopupUtil.popdown();
+			if(isNeedRestart)
+				sendNotification(ApplicationFacade.RESTART_GAME);
 		}
 
 		protected function get main():Main
