@@ -34,8 +34,6 @@ package application.view
 			return [ApplicationFacade.START_GAME,
 				ApplicationFacade.RESTART_GAME,
 				ApplicationFacade.GAME_OVER,
-				ApplicationFacade.DRAWN_GAME,
-				ApplicationFacade.SOUND_CHANGE,
 				ApplicationFacade.REFILL_DONE,
 				ApplicationFacade.SHOW_HINT];
 		}
@@ -58,14 +56,6 @@ package application.view
 				case ApplicationFacade.GAME_OVER:
 					//board.drawWinLine(y1, x1, y2, x2, tile);
 					//board.setBoardEnabled(false);
-					break;
-
-				case ApplicationFacade.DRAWN_GAME:
-					//board.setBoardEnabled(false);
-					break;
-
-				case ApplicationFacade.SOUND_CHANGE:
-					//board.soundState = notification.getBody() as Boolean;
 					break;
 
 				case ApplicationFacade.REFILL_DONE:
