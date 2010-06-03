@@ -181,18 +181,23 @@ package application.view.components
 				{
 					trace(" ! Game Over!");
 					// TODO : send score -> app -> dialog
+					resetFocus();
 					gameoverSignal.dispatch();
 				}
 			}
 		}
 
+		private function resetFocus():void
+		{
+			_focusCrystal.focus = _swapCrystal.focus = false;
+			_focusCrystal = _swapCrystal = null;
+		}
+		
 		private function nextTurn():void
 		{
 			trace(" ! nextTurn");
 
-			// dispose
-			_focusCrystal.focus = _swapCrystal.focus = false;
-			_focusCrystal = _swapCrystal = null;
+			resetFocus();
 
 			// accept input
 			enabled = true;
