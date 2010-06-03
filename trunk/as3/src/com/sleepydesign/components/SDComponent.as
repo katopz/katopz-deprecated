@@ -64,7 +64,8 @@ package com.sleepydesign.components
 			
 			if(!stage)
 			{
-				removeEventListener(Event.ADDED_TO_STAGE, onStage);
+				if(hasEventListener(Event.ADDED_TO_STAGE))
+					removeEventListener(Event.ADDED_TO_STAGE, onStage);
 				addEventListener(Event.ADDED_TO_STAGE, onStage);
 				return;
 			}else{
