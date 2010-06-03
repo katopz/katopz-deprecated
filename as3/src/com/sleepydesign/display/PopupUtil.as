@@ -23,8 +23,10 @@ package com.sleepydesign.display
 			if(!popupObject)
 				return;
 			
+			TweenLite.killTweensOf(popupObject);
+			
 			//down
-			if(popupObject.parent.contains(popupObject))
+			if(popupObject.parent && popupObject.parent.contains(popupObject))
 				popupObject.parent.removeChild(popupObject);
 			
 			popupObject.visible = false;
@@ -38,7 +40,7 @@ package com.sleepydesign.display
 				return;
 			
 			//down
-			dispose();
+			init(popupObject);
 			
 			// deactivate
 			var _rect:Rectangle;
@@ -59,8 +61,6 @@ package com.sleepydesign.display
 			container.stage.addChild(popupObject);
 			
 			TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
-			popupObject.alpha = 0;
-			TweenLite.killTweensOf(popupObject);
 			TweenLite.to(popupObject, .5, {autoAlpha:1});
 			
 			popupObject.mouseEnabled = true;
@@ -68,7 +68,8 @@ package com.sleepydesign.display
 			var _listener:Function = function(e:Event):void
 			{
 				e.target.removeEventListener(Event.REMOVED_FROM_STAGE, _listener);
-				activate();
+				_listener = null;
+				destroy();
 			}
 			popupObject.addEventListener(Event.REMOVED_FROM_STAGE, _listener);
 			
@@ -84,15 +85,18 @@ package com.sleepydesign.display
 			PopupUtil.container = container;
 		}
 		
-		public static function dispose():void
+		public static function popdown():void
 		{
-			//down
-			init(currentPopup);
+			if(!currentPopup)
+				return;
 			
-			activate();
+			currentPopup.mouseEnabled = false;
+			
+			TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
+			TweenLite.to(currentPopup, .5, {autoAlpha:0, onComplete:destroy});
 		}
 		
-		public static function activate():void
+		public static function destroy():void
 		{
 			// activate
 			if(container)
@@ -105,8 +109,6 @@ package com.sleepydesign.display
 				}
 			}
 			
-			currentPopup = null;
-			
 			if(bitmap && bitmap.parent && bitmap.parent.contains(bitmap))
 			{
 				TweenLite.killTweensOf(bitmap);
@@ -115,9 +117,11 @@ package com.sleepydesign.display
 				TweenLite.to(_bitmap, .5, {autoAlpha:0, blurFilter:{blurX:0, blurY:0}, onComplete:function():void{
 					_bitmap.parent.removeChild(_bitmap);
 					_bitmap.destroy();
-					_bitmap = null;
+					_bitmap = bitmap = null;
 				}});
 			}
+			
+			currentPopup = null;
 		}
 	}
 }

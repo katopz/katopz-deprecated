@@ -4,11 +4,9 @@ package com.sleepydesign.components
 	import com.sleepydesign.text.SDTextField;
 	
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.display.StageAlign;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
@@ -35,7 +33,7 @@ package com.sleepydesign.components
 		
 		private var caller:Object
 
-		public function SDDialog(iText:* = "", caller:Object = null)
+		public function SDDialog(iText:* = "", caller:Object = null, align:String = "")
 		{
 			this.iText = iText;
 			this.isTail = isTail;
@@ -43,6 +41,8 @@ package com.sleepydesign.components
 			this.caller = caller || this;
 			
 			super();
+			
+			this.align = align;
 			
 			init();
 		}
