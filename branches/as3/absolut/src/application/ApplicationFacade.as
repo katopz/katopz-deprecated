@@ -17,7 +17,6 @@ package application
 		public static const RESTART_REQUEST:String = "restart_request";
 		public static const RESTART_GAME:String = "restart_game";
 		public static const GAME_OVER:String = "game_over";
-		public static const DRAWN_GAME:String = "drawn_game";
 
 		public static const USER_MOVE:String = "user_move";
 		public static const EFFECT_DONE:String = "EFFECT_DONE";
@@ -25,8 +24,6 @@ package application
 
 		public static const SHOW_RULES:String = "show_rules";
 		public static const SHOW_HINT:String = "show_hint";
-
-		public static const SOUND_CHANGE:String = "sound_change";
 
 		/**
 		 * Singleton ApplicationFacade Factory Method
