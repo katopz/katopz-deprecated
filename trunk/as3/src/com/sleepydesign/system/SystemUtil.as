@@ -176,7 +176,7 @@ package com.sleepydesign.system
 				{
 					//boolean? number?
 					if(arg=="true" || arg=="false")
-						argument = Boolean(arg);
+						argument = (arg=="true");
 					else
 						argument = Number(arg);
 				}
