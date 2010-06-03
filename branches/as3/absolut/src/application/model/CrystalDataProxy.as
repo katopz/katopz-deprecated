@@ -213,6 +213,7 @@ package application.model
 		}
 
 		private static var _comboScore:uint = 0;
+		private static var _totalScore:uint = 0;
 		
 		public static function isSameColorRemain():Boolean
 		{
@@ -223,13 +224,16 @@ package application.model
 				if(_crystal.status == CrystalStatus.TOBE_REMOVE)
 					_score++;
 			
+			_totalScore = _totalScore + _score;
+				
 			if(_score > 0)
 			{
-				_comboScore = _comboScore + _score;
+				++_comboScore;
 				DebugUtil.trace(" Score : " + _score);
 				DebugUtil.trace(" Combo : " + _comboScore);
 			}else{
 				_comboScore = 0;
+				DebugUtil.trace(" Total : " + _totalScore);
 			}
 			
 			return _result;
