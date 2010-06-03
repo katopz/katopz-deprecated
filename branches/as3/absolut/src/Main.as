@@ -2,7 +2,7 @@ package
 {
 	import application.ApplicationFacade;
 	import application.model.CrystalDataProxy;
-
+	
 	import com.sleepydesign.display.SDSprite;
 
 	/**
@@ -22,13 +22,12 @@ package
 			facade = ApplicationFacade.getInstance();
 			facade.sendNotification(ApplicationFacade.STARTUP, this);
 
-			// auto start
-			facade.sendNotification(ApplicationFacade.START_GAME, this);
 			var data:CrystalDataProxy = facade.retrieveProxy(CrystalDataProxy.NAME) as CrystalDataProxy;
+			facade.sendNotification(ApplicationFacade.START_GAME, data.getCrystals());
 			data.resetGame();
 			data.inGame = true;
 		}
-
+			
 		override public function destroy():void
 		{
 			facade = null;
