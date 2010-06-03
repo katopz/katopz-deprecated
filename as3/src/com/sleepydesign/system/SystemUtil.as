@@ -161,7 +161,6 @@ package com.sleepydesign.system
 			var _args:Array = [];
 			for each(var arg:String in argumentArray)
 			{
-				
 				//TODO : RegExp
 				if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length - 1))
 				{
@@ -175,8 +174,11 @@ package com.sleepydesign.system
 				}
 				else
 				{
-					//number
-					argument = int(arg);
+					//boolean? number?
+					if(arg=="true" || arg=="false")
+						argument = Boolean(arg);
+					else
+						argument = Number(arg);
 				}
 				_args.push(argument);
 			}
