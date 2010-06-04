@@ -13,7 +13,7 @@ package application.view.components
 	public class Board extends SDSprite
 	{
 		// signal
-		public var moveSignal:Signal = new Signal();
+		public var moveSignal:Signal = new Signal(int, int);
 		public var effectSignal:Signal = new Signal();
 		public var gameoverSignal:Signal = new Signal();
 
@@ -122,8 +122,9 @@ package application.view.components
 									_swapCrystal = crystal;
 
 									// swap both
-									BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
-									CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
+									//BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
+									//CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
+									moveSignal.dispatch(_focusCrystal.id, _swapCrystal.id);
 								}
 							}
 						}
@@ -132,10 +133,16 @@ package application.view.components
 			}
 		}
 
+		public function showSwapEffect(focusCrystal:Crystal, swapCrystal:Crystal):void
+		{
+			BoardEffect.showSwapEffect(focusCrystal, swapCrystal, onSwapComplete);
+		}
+		
 		private function onSwapComplete():void
 		{
 			trace(" * Check");
-			checkRule(CrystalDataProxy.isSameColorRemain());
+			var result:Boolean = CrystalDataProxy.isSameColorRemain();
+			checkRule(result);
 		}
 
 		private function checkRule(result:Boolean):void
@@ -167,10 +174,12 @@ package application.view.components
 		private function onMoveEffectComplete():void
 		{
 			trace(" * Recheck");
-			var result:Boolean = CrystalDataProxy.isSameColorRemain()
+			var result:Boolean = CrystalDataProxy.isSameColorRemain();
 			if (result)
 			{
-				checkRule(result);
+				// good move
+				trace(" ! Good move -> call effect -> refill");
+				BoardEffect.doGoodEffect(effectSignal.dispatch);
 			}
 			else
 			{
