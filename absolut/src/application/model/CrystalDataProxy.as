@@ -49,19 +49,10 @@ package application.model
 			}
 		}
 
-		public function userMove():void //focusCrystal:Crystal, swapCrystal:Crystal):void
+		public function userMove(sourceID:int, targetID:int):void //focusCrystal:Crystal, swapCrystal:Crystal):void
 		{
-			// move data
-
-			// check win condition
-		/*
-		   if ( isWinner(x, y, userTile) == winningMove )
-		   {
-		   inGame = false;
-		   sendNotification( ApplicationFacade.GAME_OVER, wrapWinCoordinates(userTile) );
-		   resetGame();
-		   }
-		 */
+			swapByID(sourceID, targetID);
+			sendNotification(ApplicationFacade.USER_MOVE_DONE, Vector.<Crystal>([_crystals[sourceID], _crystals[targetID]]));
 		}
 
 		public function effectDone():void

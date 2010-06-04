@@ -18,7 +18,9 @@ package application
 		public static const RESTART_GAME:String = "restart_game";
 		public static const GAME_OVER:String = "game_over";
 
-		public static const USER_MOVE:String = "user_move";
+		public static const USER_MOVE:String = "USER_MOVE";
+		public static const USER_MOVE_DONE:String = "USER_MOVE_DONE";
+		
 		public static const EFFECT_DONE:String = "EFFECT_DONE";
 		public static const REFILL_DONE:String = "REFILL_DONE";
 
