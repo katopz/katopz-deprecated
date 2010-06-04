@@ -1,11 +1,11 @@
 package application.view.components
 {
 	import application.model.CrystalDataProxy;
-
+	
 	import com.greensock.TweenLite;
 	import com.sleepydesign.core.CommandManager;
 	import com.sleepydesign.display.SDSprite;
-
+	
 	import flash.geom.Point;
 
 	public class BoardEffect extends SDSprite
@@ -15,12 +15,12 @@ package application.view.components
 			return CrystalDataProxy.crystals;
 		}
 
-		public static function showSwapEffect(sourceCrystal:Crystal, targetCrystal:Crystal, callBack:Function):void
+		public static function showSwapEffect(sourceCrystal:Crystal, targetCrystal:Crystal, callBack:Function, args:Array = null):void
 		{
 			var _commandManager:CommandManager = new CommandManager(true);
 			_commandManager.addCommand(new SwapCrystalEffect(sourceCrystal, targetCrystal));
 			_commandManager.addCommand(new SwapCrystalEffect(targetCrystal, sourceCrystal));
-			_commandManager.completeSignal.addOnce(callBack);
+			_commandManager.completeSignal.addOnce(function():void{args?callBack(args):callBack()});
 			_commandManager.start();
 		}
 

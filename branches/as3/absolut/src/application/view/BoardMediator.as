@@ -70,8 +70,8 @@ package application.view
 				
 				case ApplicationFacade.USER_MOVE_DONE:
 					//board.soundState = notification.getBody() as Boolean;
-					var _datas:Vector.<Crystal> = notification.getBody() as Vector.<Crystal>
-					board.showSwapEffect(_datas[0], _datas[1]);
+					var _result:Boolean = notification.getBody() as Boolean
+					board.showSwapEffect(_result);
 					break;
 			}
 		}
