@@ -78,7 +78,7 @@ package application.model
 						_crystal.prevPoint = new Point(_crystal.x, _crystal.y);
 
 					// find top most to replace
-					var _aboveCrystal:Crystal = CrystalDataProxy.getAboveCrystal(_index, Rules.COL_SIZE);
+					var _aboveCrystal:Crystal = getAboveCrystal(_index, Rules.COL_SIZE);
 					if (_aboveCrystal)
 					{
 						// fall to bottom
@@ -88,8 +88,8 @@ package application.model
 
 						_crystal.status = CrystalStatus.READY;
 
-						CrystalDataProxy.swapPosition(_crystal, _aboveCrystal);
-						CrystalDataProxy.swapByID(_crystal.id, _aboveCrystal.id);
+						swapPosition(_crystal, _aboveCrystal);
+						swapByID(_crystal.id, _aboveCrystal.id);
 					}
 					else
 					{
@@ -112,7 +112,7 @@ package application.model
 
 		public function shuffle(crystals:Vector.<Crystal>):void
 		{
-			trace(" ! Shuffle");
+			DebugUtil.trace(" ! Shuffle");
 			for each (var _crystal:Crystal in crystals)
 			{
 				_crystal.spin();
@@ -196,7 +196,7 @@ package application.model
 			return crystals;
 		}
 
-		public static function getAboveCrystal(index:int, size:uint):Crystal
+		private function getAboveCrystal(index:int, size:uint):Crystal
 		{
 			while (((index -= size) >= 0) && (_crystals[index].status != CrystalStatus.READY))
 			{
@@ -212,7 +212,7 @@ package application.model
 		private static var _comboScore:uint = 0;
 		private static var _totalScore:uint = 0;
 		
-		public static function isSameColorRemain():Boolean
+		private function isSameColorRemain():Boolean
 		{
 			var _result:Boolean = Rules.isSameColorRemain(_crystals);
 			
@@ -236,13 +236,13 @@ package application.model
 			return _result;
 		}
 
-		public static function isOver():Boolean
+		private function isOver():Boolean
 		{
 			return Rules.isOver(_crystals);
 		}
 
 		// modify
-		public static function swapPosition(source:Crystal, target:Crystal):void
+		private function swapPosition(source:Crystal, target:Crystal):void
 		{
 			var _x:Number = source.x;
 			source.x = target.x;
