@@ -1,13 +1,14 @@
 package application.view.components
 {
-	import application.model.CrystalDataProxy;
+	import application.model.BoardStatus;
 	import application.model.Rules;
-	
+
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-	
+	import com.sleepydesign.system.DebugUtil;
+
 	import flash.events.MouseEvent;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
@@ -122,8 +123,6 @@ package application.view.components
 									_swapCrystal = crystal;
 
 									// swap both
-									//BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete);
-									//CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
 									moveSignal.dispatch(_focusCrystal.id, _swapCrystal.id);
 								}
 							}
@@ -133,61 +132,53 @@ package application.view.components
 			}
 		}
 
-		public function showSwapEffect(crystals:Vector.<Crystal>, result:Boolean):void
+		public function showSwapEffect(crystals:Vector.<Crystal>, result:String):void
 		{
 			BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete, [crystals, result]);
 		}
-		
+
 		private function onSwapComplete(args:Array):void
 		{
-			trace(" * Check");
-			var result:Boolean = args[1];//CrystalDataProxy.isSameColorRemain();
-			if (result)
+			DebugUtil.trace(" * Check");
+			switch (args[1])
 			{
-				// good move
-				trace(" ! Good move -> call effect -> refill");
-				BoardEffect.doGoodEffect(args[0], effectSignal.dispatch);
-			}
-			else
-			{
-				// bad move
-				trace(" ! Bad move -> swap -> next turn");
-				BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, nextTurn);
-
-				// swap back
-				//trace(" * Swap back");
-				//CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
+				case BoardStatus.HAVE_SAME_COLOR:
+					// good move
+					DebugUtil.trace(" ! Good move -> call effect -> refill");
+					BoardEffect.doGoodEffect(args[0], effectSignal.dispatch);
+					break;
+				case BoardStatus.HAVE_NOT_SAME_COLOR:
+					// bad move
+					DebugUtil.trace(" ! Bad move -> swap -> next turn");
+					BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, nextTurn);
+					break;
 			}
 		}
 
-		public function refill(crystals:Vector.<Crystal>, result:Boolean):void
+		public function refill(crystals:Vector.<Crystal>, result:String):void
 		{
-			trace(" * Refill");
+			DebugUtil.trace(" * Refill");
 			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete, [crystals, result]);
 		}
 
 		private function onMoveEffectComplete(args:Array):void
 		{
-			trace(" * Recheck");
-			var result:Boolean = args[1];//CrystalDataProxy.isSameColorRemain();
-			if (result)
+			DebugUtil.trace(" * Recheck");
+			switch (args[1])
 			{
-				// good move
-				trace(" ! Good move -> call effect -> refill");
-				BoardEffect.doGoodEffect(args[0], effectSignal.dispatch);
-			}
-			else
-			{
-				trace(" * Check for game over");
-				if (!CrystalDataProxy.isOver())
+				case BoardStatus.HAVE_SAME_COLOR:
+					// good move
+					DebugUtil.trace(" ! Good move -> call effect -> refill");
+					BoardEffect.doGoodEffect(args[0], effectSignal.dispatch);
+					break;
+				case BoardStatus.HAVE_NOT_SAME_COLOR:
 					nextTurn();
-				else
-				{
-					trace(" ! Game Over!");
-					// TODO : send score -> app -> dialog
+					break;
+				case BoardStatus.CANT_MOVE:
+					DebugUtil.trace(" ! Game Over!");
 					resetFocus();
 					gameoverSignal.dispatch();
-				}
+					break;
 			}
 		}
 
@@ -195,17 +186,17 @@ package application.view.components
 		{
 			_focusCrystal.focus = _swapCrystal.focus = false;
 			_focusCrystal = _swapCrystal = null;
+			_status = SELECT_FOCUS;
 		}
-		
+
 		private function nextTurn():void
 		{
-			trace(" ! nextTurn");
+			DebugUtil.trace(" ! nextTurn");
 
 			resetFocus();
 
 			// accept input
 			enabled = true;
-			_status = SELECT_FOCUS;
 		}
 
 		public function showHint(crystals:Vector.<Crystal>):void
