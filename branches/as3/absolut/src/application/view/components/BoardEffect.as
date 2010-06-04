@@ -36,7 +36,7 @@ package application.view.components
 
 		private static var _fillEffect:CommandManager = new CommandManager(true);
 
-		public static function onMoveComplete(crystals:Vector.<Crystal>, callBack:Function):void
+		public static function onMoveComplete(crystals:Vector.<Crystal>, callBack:Function, args:Array = null):void
 		{
 			// begin effect
 			_fillEffect.stop();
@@ -65,7 +65,7 @@ package application.view.components
 				}
 			}
 
-			_fillEffect.completeSignal.addOnce(callBack);
+			_fillEffect.completeSignal.addOnce(function():void{args?callBack(args):callBack()});
 			_fillEffect.start();
 		}
 	}
