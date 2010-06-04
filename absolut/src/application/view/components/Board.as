@@ -133,20 +133,20 @@ package application.view.components
 			}
 		}
 
-		public function showSwapEffect(result:Boolean):void
+		public function showSwapEffect(crystals:Vector.<Crystal>, result:Boolean):void
 		{
-			BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete, [result]);
+			BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete, [crystals, result]);
 		}
 		
 		private function onSwapComplete(args:Array):void
 		{
 			trace(" * Check");
-			var result:Boolean = args[0];//CrystalDataProxy.isSameColorRemain();
+			var result:Boolean = args[1];//CrystalDataProxy.isSameColorRemain();
 			if (result)
 			{
 				// good move
 				trace(" ! Good move -> call effect -> refill");
-				BoardEffect.doGoodEffect(effectSignal.dispatch);
+				BoardEffect.doGoodEffect(args[0], effectSignal.dispatch);
 			}
 			else
 			{
@@ -163,18 +163,18 @@ package application.view.components
 		public function refill(crystals:Vector.<Crystal>, result:Boolean):void
 		{
 			trace(" * Refill");
-			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete, [result]);
+			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete, [crystals, result]);
 		}
 
 		private function onMoveEffectComplete(args:Array):void
 		{
 			trace(" * Recheck");
-			var result:Boolean = args[0];//CrystalDataProxy.isSameColorRemain();
+			var result:Boolean = args[1];//CrystalDataProxy.isSameColorRemain();
 			if (result)
 			{
 				// good move
 				trace(" ! Good move -> call effect -> refill");
-				BoardEffect.doGoodEffect(effectSignal.dispatch);
+				BoardEffect.doGoodEffect(args[0], effectSignal.dispatch);
 			}
 			else
 			{

@@ -10,10 +10,6 @@ package application.view.components
 
 	public class BoardEffect extends SDSprite
 	{
-		public static function get crystals():Vector.<Crystal>
-		{
-			return CrystalDataProxy.crystals;
-		}
 
 		public static function showSwapEffect(sourceCrystal:Crystal, targetCrystal:Crystal, callBack:Function, args:Array = null):void
 		{
@@ -24,7 +20,7 @@ package application.view.components
 			_commandManager.start();
 		}
 
-		public static function doGoodEffect(callBack:Function):void
+		public static function doGoodEffect(crystals:Vector.<Crystal>, callBack:Function):void
 		{
 			var _commandManager:CommandManager = new CommandManager(true);
 			for each (var _crystal:Crystal in crystals)
