@@ -61,14 +61,14 @@ package application.view
 					break;
 
 				case ApplicationFacade.REFILL_DONE:
-					board.refill(data.getCrystals(), notification.getBody() as Boolean);
+					board.refill(data.getCrystals(), notification.getBody() as String);
 					break;
 				case ApplicationFacade.SHOW_HINT:
 					board.showHint(notification.getBody() as Vector.<Crystal>);
 					break;
 				
 				case ApplicationFacade.USER_MOVE_DONE:
-					board.showSwapEffect(data.getCrystals(), notification.getBody() as Boolean);
+					board.showSwapEffect(data.getCrystals(), notification.getBody() as String);
 					break;
 			}
 		}

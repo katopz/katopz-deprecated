@@ -53,7 +53,7 @@ package application.model
 		{
 			swapByID(sourceID, targetID);
 			var _result:Boolean = isSameColorRemain();
-			sendNotification(ApplicationFacade.USER_MOVE_DONE, _result);
+			sendNotification(ApplicationFacade.USER_MOVE_DONE, _result?BoardStatus.HAVE_SAME_COLOR:BoardStatus.HAVE_NOT_SAME_COLOR);
 			
 			// bad move -> swap back
 			if(!_result)
@@ -101,11 +101,12 @@ package application.model
 					}
 				}
 			}
-			sendNotification(ApplicationFacade.REFILL_DONE, isSameColorRemain());
+			sendNotification(ApplicationFacade.REFILL_DONE, isSameColorRemain()?BoardStatus.HAVE_SAME_COLOR:isOver()?BoardStatus.CANT_MOVE:BoardStatus.HAVE_NOT_SAME_COLOR);
 		}
 
 		public function resetGame():void
 		{
+			_totalScore = _comboScore = 0;
 			shuffle(_crystals);
 		}
 
