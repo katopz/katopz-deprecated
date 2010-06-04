@@ -2,12 +2,12 @@ package application.view.components
 {
 	import application.model.CrystalDataProxy;
 	import application.model.Rules;
-
+	
 	import com.greensock.TweenLite;
 	import com.sleepydesign.display.SDSprite;
-
+	
 	import flash.events.MouseEvent;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class Board extends SDSprite
@@ -133,20 +133,15 @@ package application.view.components
 			}
 		}
 
-		public function showSwapEffect(focusCrystal:Crystal, swapCrystal:Crystal):void
+		public function showSwapEffect(result:Boolean):void
 		{
-			BoardEffect.showSwapEffect(focusCrystal, swapCrystal, onSwapComplete);
+			BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, onSwapComplete, [result]);
 		}
 		
-		private function onSwapComplete():void
+		private function onSwapComplete(args:Array):void
 		{
 			trace(" * Check");
-			var result:Boolean = CrystalDataProxy.isSameColorRemain();
-			checkRule(result);
-		}
-
-		private function checkRule(result:Boolean):void
-		{
+			var result:Boolean = args[0];//CrystalDataProxy.isSameColorRemain();
 			if (result)
 			{
 				// good move
@@ -160,8 +155,8 @@ package application.view.components
 				BoardEffect.showSwapEffect(_focusCrystal, _swapCrystal, nextTurn);
 
 				// swap back
-				trace(" * Swap back");
-				CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
+				//trace(" * Swap back");
+				//CrystalDataProxy.swapByID(_focusCrystal.id, _swapCrystal.id);
 			}
 		}
 

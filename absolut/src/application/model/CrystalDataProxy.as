@@ -52,7 +52,12 @@ package application.model
 		public function userMove(sourceID:int, targetID:int):void //focusCrystal:Crystal, swapCrystal:Crystal):void
 		{
 			swapByID(sourceID, targetID);
-			sendNotification(ApplicationFacade.USER_MOVE_DONE, Vector.<Crystal>([_crystals[sourceID], _crystals[targetID]]));
+			var _result:Boolean = isSameColorRemain();
+			sendNotification(ApplicationFacade.USER_MOVE_DONE, _result);
+			
+			// bad move -> swap back
+			if(!_result)
+				swapByID(sourceID, targetID);
 		}
 
 		public function effectDone():void
