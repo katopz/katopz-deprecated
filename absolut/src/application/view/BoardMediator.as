@@ -61,17 +61,14 @@ package application.view
 					break;
 
 				case ApplicationFacade.REFILL_DONE:
-					//board.soundState = notification.getBody() as Boolean;
-					board.refill(notification.getBody() as Vector.<Crystal>);
+					board.refill(data.getCrystals(), notification.getBody() as Boolean);
 					break;
 				case ApplicationFacade.SHOW_HINT:
 					board.showHint(notification.getBody() as Vector.<Crystal>);
 					break;
 				
 				case ApplicationFacade.USER_MOVE_DONE:
-					//board.soundState = notification.getBody() as Boolean;
-					var _result:Boolean = notification.getBody() as Boolean
-					board.showSwapEffect(_result);
+					board.showSwapEffect(notification.getBody() as Boolean);
 					break;
 			}
 		}

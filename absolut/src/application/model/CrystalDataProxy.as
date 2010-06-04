@@ -101,7 +101,7 @@ package application.model
 					}
 				}
 			}
-			sendNotification(ApplicationFacade.REFILL_DONE, _crystals);
+			sendNotification(ApplicationFacade.REFILL_DONE, isSameColorRemain());
 		}
 
 		public function resetGame():void

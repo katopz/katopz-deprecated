@@ -160,16 +160,16 @@ package application.view.components
 			}
 		}
 
-		public function refill(crystals:Vector.<Crystal>):void
+		public function refill(crystals:Vector.<Crystal>, result:Boolean):void
 		{
 			trace(" * Refill");
-			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete);
+			BoardEffect.onMoveComplete(crystals, onMoveEffectComplete, [result]);
 		}
 
-		private function onMoveEffectComplete():void
+		private function onMoveEffectComplete(args:Array):void
 		{
 			trace(" * Recheck");
-			var result:Boolean = CrystalDataProxy.isSameColorRemain();
+			var result:Boolean = args[0];//CrystalDataProxy.isSameColorRemain();
 			if (result)
 			{
 				// good move
