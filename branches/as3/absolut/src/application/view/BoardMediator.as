@@ -68,7 +68,7 @@ package application.view
 					break;
 				
 				case ApplicationFacade.USER_MOVE_DONE:
-					board.showSwapEffect(notification.getBody() as Boolean);
+					board.showSwapEffect(data.getCrystals(), notification.getBody() as Boolean);
 					break;
 			}
 		}
