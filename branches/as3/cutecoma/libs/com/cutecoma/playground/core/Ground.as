@@ -61,6 +61,9 @@
 			var h:uint = mapData.bitmapData.height;
 
 			//_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(mapData.bitmapData), w*Map.factorX, h*Map.factorZ));
+			if(_plane)
+				_plane.destroy();
+			_plane = null;
 			_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX*10, Map.factorZ*10,w, h));
 			//_plane.bothsides = true;
 			_plane.rotationX = 45;
@@ -81,14 +84,15 @@
 				_plane.faces[k].material = new ColorMaterial(color);
 			}
 			
-			_engine3D.scene3D.addEventListener(MouseEvent3D.MOUSE_UP, onSceneMouseUp);
+			//_engine3D.scene3D.addEventListener(MouseEvent3D.MOUSE_UP, onSceneMouseUp);
 		}
-		
+		/*
 		private function onSceneMouseUp(e:MouseEvent3D):void
 		{
 			var _face:Face = e.face;
 			_face.material = new ColorMaterial(int(Math.random() * 0xFF0000));
 		}
+		*/
 		
 		/*
 		   if(_tileInstance)
