@@ -11,15 +11,15 @@ package away3dlite.plugins
 		{
 			var tr:flash.geom.Matrix3D = new flash.geom.Matrix3D();
 			tr.rawData[0] = do3d.transform.n11;
-			tr.rawData[4] = do3d.transform.n12;
+			tr.rawData[4] = -do3d.transform.n12;
 			tr.rawData[8] = do3d.transform.n13;
 			tr.rawData[12] = do3d.transform.n14;
-			tr.rawData[1] = do3d.transform.n21;
+			tr.rawData[1] = -do3d.transform.n21;
 			tr.rawData[5] = do3d.transform.n22;
-			tr.rawData[9] = do3d.transform.n23;
+			tr.rawData[9] = -do3d.transform.n23;
 			tr.rawData[13] = do3d.transform.n24;
 			tr.rawData[2] = do3d.transform.n31;
-			tr.rawData[6] = do3d.transform.n32;
+			tr.rawData[6] = -do3d.transform.n32;
 			tr.rawData[10] = do3d.transform.n33;
 			tr.rawData[14] = do3d.transform.n34;
 			tr.rawData[3] = do3d.transform.n41;
