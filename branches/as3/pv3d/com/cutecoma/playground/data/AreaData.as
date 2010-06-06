@@ -21,7 +21,7 @@ package com.cutecoma.playground.data
 			if(!id)return;
 			
 			this.id = id;
-			this.background = background;
+			this.background = background.slice(background.lastIndexOf("/")+1);
 			this.width = width;
 			this.height = height;
 			this.scene = scene || new SceneData();
@@ -33,7 +33,7 @@ package com.cutecoma.playground.data
 		public function parse(raw:*):AreaData
 		{
 			id = raw.id ? String(raw.id) : id;
-			background = raw.background ? String(raw.background) : background;
+			background = raw.background ? String(raw.background).slice(String(raw.background).lastIndexOf("/")+1) : background;
 			width = raw.width ? Number(raw.width) : width;
 			height = raw.height ? Number(raw.height) : height;
 			scene = raw.scene ? SceneData(raw.scene) : scene;
