@@ -36,17 +36,8 @@ package
 			camera.x = 1000 * Math.cos(step);
 			camera.y = 10 * (300 - mouseY);
 			camera.z = 1000 * Math.sin(step);
+			
 			camera.lookAt(new Vector3D());
-
-			// pv3d
-			--pv3d_root.rotationX;
-			++pv3d_root.rotationY;
-			--pv3d_root.rotationZ;
-
-			pv3d_camera.x = camera.x;
-			pv3d_camera.y = -camera.y;
-			pv3d_camera.z = camera.z;
-			pv3d_camera.lookAt(pv3d_root);
 
 			step += 0.01;
 		}
