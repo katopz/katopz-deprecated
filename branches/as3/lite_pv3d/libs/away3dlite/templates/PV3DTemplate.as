@@ -68,30 +68,6 @@ package away3dlite.templates
 			// lite
 			super.onEnterFrame(event);
 			
-			// pv3d
-			// TODO : use matrix transform 
-			/*if(pv3d_root.rotationX != -scene.rotationX)
-				pv3d_root.rotationX = -scene.rotationX;
-			if(pv3d_root.rotationY != scene.rotationY)
-				pv3d_root.rotationY = scene.rotationY;
-			if(pv3d_root.rotationZ != -scene.rotationZ)
-				pv3d_root.rotationZ = -scene.rotationZ;*/
-			
-			// camera
-/*			if(pv3d_camera.x != camera.x)
-				pv3d_camera.x = camera.x;
-			if(pv3d_camera.y !== -camera.y)
-				pv3d_camera.y = -camera.y;
-			if(pv3d_camera.z !== camera.z)
-				pv3d_camera.z = camera.z;
-			
-			if(pv3d_camera.rotationX != -camera.rotationX)
-				pv3d_camera.rotationX = -camera.rotationX;
-			if(pv3d_camera.rotationY !== camera.rotationY)
-				pv3d_camera.rotationY = camera.rotationY;
-			if(pv3d_camera.rotationZ !== -camera.rotationZ)
-				pv3d_camera.rotationZ = -camera.rotationZ;
-*/			
 			PV3D.setTransform(pv3d_root, scene.transform.matrix3D);
 			PV3D.setTransform(pv3d_camera, camera.transform.matrix3D);
 			
