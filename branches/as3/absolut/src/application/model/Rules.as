@@ -2,13 +2,10 @@ package application.model
 {
 	import application.view.components.Crystal;
 	import application.view.components.CrystalStatus;
-
+	
 	import flash.geom.Point;
 
-	import org.puremvc.as3.interfaces.IProxy;
-	import org.puremvc.as3.patterns.proxy.Proxy;
-
-	public class Rules extends Proxy implements IProxy
+	public class Rules
 	{
 		public static var COL_SIZE:uint = 8;
 		public static var ROW_SIZE:uint = 8;
