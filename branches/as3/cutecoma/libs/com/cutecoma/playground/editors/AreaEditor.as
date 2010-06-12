@@ -387,7 +387,8 @@
 			*/
 			
 			var _face:Face = event.face;
-			_face.material = new ColorMaterial(Number(_paintColor));
+			if(_face)
+				_face.material = new ColorMaterial(Number(_paintColor));
 		}
 		
 		override public function destroy():void

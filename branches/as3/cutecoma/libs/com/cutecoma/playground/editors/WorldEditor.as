@@ -142,7 +142,7 @@ package com.cutecoma.playground.editors
 				IExternalizable(areaData).readExternal(event.target.data);
 				createArea(areaData);
 				
-				//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
+				//SDApplication.getInstance()["gotoArea"](areaData);
 			}
 			else if (event.type == IOErrorEvent.IO_ERROR)
 			{
