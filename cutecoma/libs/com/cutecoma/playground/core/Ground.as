@@ -1,8 +1,6 @@
 ﻿package com.cutecoma.playground.core
 {
 	import away3dlite.core.IDestroyable;
-	import away3dlite.core.base.Face;
-	import away3dlite.events.MouseEvent3D;
 	import away3dlite.materials.ColorMaterial;
 	import away3dlite.primitives.Plane;
 	
@@ -64,9 +62,9 @@
 			if(_plane)
 				_plane.destroy();
 			_plane = null;
-			_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX*10, Map.factorZ*10,w, h));
+			_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX*w, Map.factorZ*h,w, h));
 			//_plane.bothsides = true;
-			_plane.rotationX = 45;
+			//_plane.rotationX = 45;
 			
 			//_tileMaterials = new MaterialsList();
 			var _getPixel:Function = mapData.bitmapData.getPixel;

@@ -4,13 +4,11 @@ package com.cutecoma.playground.core
 	import away3dlite.core.base.Object3D;
 	import away3dlite.templates.BasicTemplate;
 	
-	import com.cutecoma.game.core.AbstractEngine;
 	import com.cutecoma.playground.data.CameraData;
 	import com.cutecoma.playground.data.SceneData;
 	import com.sleepydesign.display.SDSprite;
 	
 	import flash.display.Sprite;
-	import flash.events.Event;
 
 	public class Engine3D extends BasicTemplate
 	{
