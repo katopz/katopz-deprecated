@@ -50,10 +50,9 @@ package away3dlite.templates
 			view.renderer = renderer || view.renderer;
 			view.clipping = clipping || view.clipping;
 			
-			// apply lite config
-			pv3d_camera.z = camera.z;//-1000
-			pv3d_camera.focus = camera.focus;//100
-			pv3d_camera.zoom = camera.zoom;//10
+			// apply lite camera
+			PV3D.setTransform(pv3d_camera, camera.transform.matrix3D);
+			PV3D.setCamera(pv3d_camera, camera);
 			
 			onInitPV3D();
 		}
