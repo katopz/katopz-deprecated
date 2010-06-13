@@ -134,7 +134,7 @@ package com.sleepydesign.text {
 			mouseEnabled = false;
 			mouseWheelEnabled = false;
 			defaultTextFormat = textFormat ? textFormat : new TextFormat("Tahoma", 12, 0x000000);
-			//autoSize = "left";
+			autoSize = "left";
 			cacheAsBitmap = true;
 			filters = [new GlowFilter(0x000000, 0, 0, 0, 0, 0)];
 			
