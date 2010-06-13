@@ -46,6 +46,13 @@ package com.sleepydesign.components
 					case StageAlign.TOP_RIGHT:
 						setPosition(stage.stageWidth - width, 0);
 						break;
+					case "center-container":
+						var _parent:DisplayObjectContainer = parent;
+						_parent.removeChild(this);
+						setPosition((width == 0 ? stage.stageWidth : width) / 2 - width / 2,
+						(height == 0 ? stage.stageHeight : height) / 2 - height / 2);
+						_parent.addChild(this);
+						break;
 					default:
 						setPosition(stage.stageWidth / 2 - width / 2, stage.stageHeight / 2 - height / 2);
 						break;
@@ -75,7 +82,8 @@ package com.sleepydesign.components
 		
 		public function setPosition(x:int, y:int):void
 		{
-			
+			this.x = x;
+			this.y = y;
 		}
 		
 		private function onStage(event:Event):void
