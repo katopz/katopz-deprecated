@@ -18,8 +18,8 @@ package
 	{
 		/* 
 		TODO : 
-		1. redraw tileplane
-		2. test r/w
+			- test w from lite
+			- 
 		*/
 		public function PLWorldEditor()
 		{
