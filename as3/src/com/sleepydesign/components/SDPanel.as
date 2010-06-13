@@ -1,7 +1,5 @@
 package com.sleepydesign.components
 {
-	import com.sleepydesign.display.SDSprite;
-
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.geom.Rectangle;
@@ -41,7 +39,10 @@ package com.sleepydesign.components
 			_back.graphics.drawRect(0, 0, _width, _height);
 			_back.graphics.endFill();
 
-			scrollRect = _back.getRect(_back.parent);
+			var _scrollRect:Rectangle = _back.getRect(_back.parent);
+			_scrollRect.width += SDStyle.BORDER_THICK;
+			_scrollRect.height += SDStyle.BORDER_THICK;
+			scrollRect = _scrollRect;
 
 			super.draw();
 		}
