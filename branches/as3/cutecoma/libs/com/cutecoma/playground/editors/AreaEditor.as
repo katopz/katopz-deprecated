@@ -136,7 +136,7 @@
 					break;
 				default :
 					// wait for user select area
-					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
+					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);0
 					break;
 			}
 		}
@@ -145,7 +145,7 @@
 		{
 			if(event.type!="complete")return;
 			areaPanel = event.target.content as AreaPanel;
-			_engine3D.canvasLayer.addChild(areaPanel);
+			_engine3D.systemLayer.addChild(areaPanel);
 			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 		}
 		
