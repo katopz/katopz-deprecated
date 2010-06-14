@@ -25,7 +25,7 @@ package com.cutecoma.playground.data
 		
 		public var bitmapData:BitmapData;
 		public var spawnPoint:Point;
-		public var warpPoint:Dictionary = new Dictionary(true);
+		//public var warpPoint:Dictionary = new Dictionary(true);
 
 		//public var nodes:Array;
 		//public var width:uint;

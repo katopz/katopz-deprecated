@@ -122,7 +122,7 @@ package com.cutecoma.playground.editors
 				case "Save Area":
 					// TODO : new area id input box here
 					var _saveAreaData:AreaData = new AreaData().parse(area.data);
-					_saveAreaData.scene = new SceneData(new CameraData().parse(camera));
+					_saveAreaData.viewData = new ViewData(new CameraData().parse(camera));
 
 					FileUtil.save(_saveAreaData, _selectAreaID + ".ara");
 					break;

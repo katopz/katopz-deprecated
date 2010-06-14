@@ -25,6 +25,7 @@
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 	
@@ -388,7 +389,21 @@
 			
 			var _face:Face = event.face;
 			if(_face)
-				_face.material = new ColorMaterial(Number(_paintColor));
+			{
+				//_face.material = new ColorMaterial(Number(_paintColor));
+				var _drawPoint:Point = getPositionFromIndex(_face.faceIndex, _area.map.data.bitmapData.width)
+				var _bitmapData:BitmapData = _area.map.data.bitmapData;
+				_bitmapData.setPixel(_drawPoint.x, _area.map.data.bitmapData.height-_drawPoint.y-1, Number(_paintColor));
+				
+				//TODO : _bitmapData.floodFill(_drawPoint.x, _drawPoint.y, Number(_paintColor));
+				
+				_area.ground.update(_area.map.data);
+			}
+		}
+		
+		private function getPositionFromIndex(index:int, size:uint):Point
+		{
+			return new Point(int(index % size), int(index / size));
 		}
 		
 		override public function destroy():void

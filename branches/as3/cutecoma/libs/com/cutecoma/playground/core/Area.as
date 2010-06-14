@@ -73,7 +73,6 @@
 				//case MouseEvent3D.MOUSE_OUT:
 				//	trace("MOUSE_OUT");
 				case MouseEvent3D.MOUSE_UP:
-					trace("Area.MOUSE_OUT");
 					_isDrag = false;
 					//_engine3D.scene3D.removeEventListener(MouseEvent3D.MOUSE_MOVE, onSceneMouse);
 					//_engine3D.scene3D.removeEventListener(MouseEvent3D.MOUSE_UP, onSceneMouse);
@@ -98,18 +97,32 @@
 			ground.update(map.data);
 			
 			var _camera:Camera3D = _engine3D.view3D.camera;
-			var _cameraData:CameraData = areaData.scene.camera;
+			var _cameraData:CameraData = areaData.viewData.cameraData;
 			
 			_engine3D.view3D.camera.zoom = _cameraData.zoom;
 			_engine3D.view3D.camera.focus = _cameraData.focus;
 			
-			_camera.x = _cameraData.x;
-			_camera.y = -_cameraData.y;
-			_camera.z = _cameraData.z;
+			/*if(areaData.version == 0)
+			{
+				_camera.x = _cameraData.x;
+				_camera.y = -_cameraData.y;
+				_camera.z = _cameraData.z;
+				
+				_camera.rotationX = -_cameraData.rotationX;
+				_camera.rotationY = _cameraData.rotationY;
+				_camera.rotationZ = -_cameraData.rotationZ;
+			}else{*/
+				_camera.x = _cameraData.x;
+				_camera.y = _cameraData.y;
+				_camera.z = _cameraData.z;
+				
+				_camera.rotationX = _cameraData.rotationX;
+				_camera.rotationY = _cameraData.rotationY;
+				_camera.rotationZ = _cameraData.rotationZ;
+			//}
 			
-			_camera.rotationX = -_cameraData.rotationX;
-			_camera.rotationY = _cameraData.rotationY;
-			_camera.rotationZ = -_cameraData.rotationZ;
+			// already convert
+			//areaData.version = AreaData.CURRENT_VERION;
 		}
 		
 		override public function destroy():void

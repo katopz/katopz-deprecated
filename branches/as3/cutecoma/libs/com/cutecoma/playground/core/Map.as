@@ -212,7 +212,7 @@ package com.cutecoma.playground.core
 			//if(!_areaData.map)
 			//	data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
 			//else
-			data = _areaData.map;
+			data = _areaData.mapData;
 
 			// _______________________________________________________ MiniMap
 
