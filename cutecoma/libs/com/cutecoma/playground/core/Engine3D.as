@@ -5,7 +5,7 @@ package com.cutecoma.playground.core
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.cutecoma.playground.data.CameraData;
-	import com.cutecoma.playground.data.SceneData;
+	import com.cutecoma.playground.data.ViewData;
 	import com.sleepydesign.display.SDSprite;
 	
 	import flash.display.Sprite;
@@ -39,11 +39,11 @@ package com.cutecoma.playground.core
 		{
 			//container.stage.quality = "medium";
 
-			//var defaultRaw:SceneData = new SceneData(new CameraData(0,1000,-0.00000001,0,0,0,60,8.7,70));
+			//var defaultRaw:ViewData = new ViewData(new CameraData(0,1000,-0.00000001,0,0,0,60,8.7,70));
 
 			//ObjectUtil.merge(raw, defaultRaw);
 
-			parse(_data ? _data : new SceneData(new CameraData()));
+			parse(_data ? _data : new ViewData(new CameraData()));
 			
 			addChild(system = new SDSprite);
 		}

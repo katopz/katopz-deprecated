@@ -13,19 +13,20 @@ package com.cutecoma.playground.data
 		public var background:String;
 		public var width:Number;
 		public var height:Number;
-		public var scene:SceneData;
-		public var map:MapData;
+		public var viewData:ViewData;
+		public var mapData:MapData;
 
-		public function AreaData(id:String=null, background:String=null, width:Number=0, height:Number=0, scene:SceneData=null, map:MapData=null)
+		public var version:Number = 1;
+		public static const CURRENT_VERION:Number = 1;
+
+		public function AreaData(id:String = null, background:String = null, width:Number = 0, height:Number = 0, viewData:ViewData = null, mapData:MapData = null)
 		{
-			if(!id)return;
-			
 			this.id = id;
 			this.background = background;
 			this.width = width;
 			this.height = height;
-			this.scene = scene || new SceneData();
-			this.map = map || new MapData();
+			this.viewData = viewData || new ViewData();
+			this.mapData = mapData || new MapData();
 		}
 
 		// _______________________________________________________internal
@@ -36,9 +37,23 @@ package com.cutecoma.playground.data
 			background = raw.background ? String(raw.background) : background;
 			width = raw.width ? Number(raw.width) : width;
 			height = raw.height ? Number(raw.height) : height;
-			scene = raw.scene ? SceneData(raw.scene) : scene;
-			map = raw.map ? MapData(raw.map) : map;
-			
+
+			if (!raw.version)
+			{
+				// old version
+				if(raw.scene)
+					viewData.cameraData.parse_v0(raw.scene.camera);
+				mapData = raw.map ? MapData(raw.map) : mapData;
+				version = CURRENT_VERION;
+			}
+			else
+			{
+				// new version
+				viewData = raw.viewData ? ViewData(raw.viewData) : viewData;
+				mapData = raw.mapData ? MapData(raw.mapData) : mapData;
+				version = raw.version ? Number(raw.version) : version;
+			}
+
 			return this;
 		}
 
@@ -46,7 +61,9 @@ package com.cutecoma.playground.data
 
 		public function writeExternal(output:IDataOutput):void
 		{
-			output.writeObject({id: id, background: background, width: width, height: height, scene: scene, map:map});
+			output.writeObject({version:CURRENT_VERION, id: id, background: background, 
+					width: width, height: height, 
+					viewData: viewData, mapData:mapData});
 		}
 
 		public function readExternal(input:IDataInput):void
