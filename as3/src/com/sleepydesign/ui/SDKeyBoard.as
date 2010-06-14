@@ -27,10 +27,6 @@ package com.sleepydesign.ui
 		public static var isSPACE		:Boolean = false;
 		public static var isCAPLOCK		:Boolean = false;
 		
-		private var fx :Number = 0;
-		private var fy :Number = 0;
-		private var fz :Number = 0;
-			
 		private var target:InteractiveObject;
 		
 		public function SDKeyBoard(target:InteractiveObject)
@@ -81,10 +77,6 @@ package com.sleepydesign.ui
 			}else if ( keyPeekRight ){
 				dr=factor;
 			}			
-			
-			fx += dx/2;
-			fy += dy/2;
-			fz += dz/2;
 			
 			dispatchEvent(new SDKeyboardEvent(SDKeyboardEvent.KEY_PRESS,{dx:dx, dy:dy, dz:dz, dr:dr}))
 		}
