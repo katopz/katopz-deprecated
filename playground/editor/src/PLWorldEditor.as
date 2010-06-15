@@ -25,7 +25,7 @@ package
 			- view FPS controller
 			- flood fill
 			//- import/export external bitmap as map
-			- load and save as other id 
+			//- load and save as other id 
 			- clean up
 			- MVC
 		
@@ -51,7 +51,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			alpha = .1;
+			//alpha = .1;
 		}
 	}
 }
