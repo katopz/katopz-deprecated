@@ -2,7 +2,6 @@
 {
 	import away3dlite.core.base.Face;
 	import away3dlite.events.MouseEvent3D;
-	import away3dlite.materials.ColorMaterial;
 	
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.game.core.IEngine3D;
@@ -137,24 +136,49 @@
 					break;
 				default :
 					// wait for user select area
-					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);0
+					showAreaPanel(onAreaIDChange);
 					break;
 			}
 		}
 		
+		/*
 		private function onAreaPanelLoad(event:Event):void
 		{
-			if(event.type!="complete")return;
+			if(event.type!="complete")
+				return;
+			
 			areaPanel = event.target.content as AreaPanel;
 			_engine3D.systemLayer.addChild(areaPanel);
 			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 		}
+		*/
 		
 		private function onAreaIDChange(event:AreaEditorEvent):void
 		{
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			areaPanel.visible = false;
 			paintColor = "0x00FF"+event.areaID;
+		}
+		
+		public function showAreaPanel(callback:Function):void
+		{
+			if(!areaPanel)
+			{
+				LoaderUtil.loadAsset("AreaPanel.swf", function onAreaPanelLoad(event:Event):void
+				{
+					if(event.type!="complete")
+						return;
+					
+					areaPanel = event.target.content as AreaPanel;
+					_engine3D.systemLayer.addChild(areaPanel);
+					EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
+				});
+			}
+			else
+			{
+				areaPanel.visible = true;
+				EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
+			}
 		}
 		
 		public function setupBackground():void
