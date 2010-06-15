@@ -8,6 +8,7 @@ package com.cutecoma.playground.core
 	import com.sleepydesign.system.DebugUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.geom.Point;
@@ -213,7 +214,12 @@ package com.cutecoma.playground.core
 			//	data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
 			//else
 			data = _areaData.mapData;
-
+			
+			updateBitmapData(data.bitmapData);
+		}
+		
+		public function updateBitmapData(bitmapData:BitmapData):void
+		{
 			// _______________________________________________________ MiniMap
 
 			//if(minimap)
@@ -226,12 +232,12 @@ package com.cutecoma.playground.core
 				minimap.mouseChildren = false;
 				addChild(minimap);
 
-				bitmap = new Bitmap(data.bitmapData);
+				bitmap = new Bitmap(bitmapData);
 				minimap.addChild(bitmap);
 			}
 			else
 			{
-				bitmap.bitmapData = data.bitmapData;
+				bitmap.bitmapData = bitmapData;
 			}
 
 			draw();
@@ -253,7 +259,7 @@ package com.cutecoma.playground.core
 			}
 
 			pathFinder = new AStar3D(); //engine3D.scene);
-			pathFinder.create(this.data.bitmapData, factorX, 0, factorZ, 1, 0, 1);
+			pathFinder.create(bitmapData, factorX, 0, factorZ, 1, 0, 1);
 			AStar3D.completeSignal.add(onPathComplete);
 			//AStar3D.errorSignal.add(onPathError);
 			

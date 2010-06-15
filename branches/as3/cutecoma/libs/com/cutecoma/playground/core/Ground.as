@@ -5,8 +5,8 @@
 	import away3dlite.primitives.Plane;
 	
 	import com.cutecoma.game.core.IEngine3D;
-	import com.cutecoma.playground.data.MapData;
 	
+	import flash.display.BitmapData;
 	import flash.events.MouseEvent;
 
 	public class Ground implements IDestroyable
@@ -53,12 +53,12 @@
 		 */
 		}
 
-		public function update(mapData:MapData):void
+		public function updateBitmapData(bitmapData:BitmapData):void
 		{
-			var w:uint = mapData.bitmapData.width;
-			var h:uint = mapData.bitmapData.height;
+			var w:uint = bitmapData.width;
+			var h:uint = bitmapData.height;
 
-			//_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(mapData.bitmapData), w*Map.factorX, h*Map.factorZ));
+			//_engine3D.scene3D.addChild(_plane = new Plane(new BitmapMaterial(bitmapData), w*Map.factorX, h*Map.factorZ));
 			if(_plane)
 				_plane.destroy();
 			_plane = null;
@@ -67,7 +67,7 @@
 			//_plane.rotationX = 45;
 			
 			//_tileMaterials = new MaterialsList();
-			var _getPixel:Function = mapData.bitmapData.getPixel;
+			var _getPixel:Function = bitmapData.getPixel;
 			for (var k:uint = 0; k < w * h; k++)
 			{
 				var i:int = int(k % w);

@@ -9,7 +9,7 @@
 	import com.cutecoma.playground.data.CameraData;
 	import com.sleepydesign.display.SDSprite;
 	
-	import flash.events.MouseEvent;
+	import flash.display.BitmapData;
 	
 	import org.osflash.signals.Signal;
 	
@@ -85,6 +85,12 @@
 			}
 		}
 		
+		public function updateBitmap(bitmapData:BitmapData):void
+		{
+			map.updateBitmapData(bitmapData);
+			ground.updateBitmapData(bitmapData);
+		}
+		
 		public function update(areaData:AreaData):void
 		{
 			if(_data == areaData)
@@ -93,8 +99,9 @@
 			_data = areaData;
 			
 			background.update(areaData);
+			
 			map.update(areaData);
-			ground.update(map.data);
+			ground.updateBitmapData(map.data.bitmapData);
 			
 			var _camera:Camera3D = _engine3D.view3D.camera;
 			var _cameraData:CameraData = areaData.viewData.cameraData;
