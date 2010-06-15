@@ -10,6 +10,7 @@ package com.cutecoma.playground.editors
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.playground.core.*;
 	import com.cutecoma.playground.data.*;
+	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.*;
@@ -123,14 +124,17 @@ package com.cutecoma.playground.editors
 					break;
 					*/
 				case "Change ID":
+					/*
 					var _idDialog:SDInputDialog = new SDInputDialog(
 						"+----------------------+\n"+
 						"| Enter number.        |\n"+
-						"| ID : _$id__________  |\n"+
+						"| ID : [$id-number-____]|\n"+
 						"|          [OK][CANCEL]|\n"+
 						"+----------------------+"
 						, onChangeID);
 					systemLayer.addChild(_idDialog);
+					*/
+					areaEditor.showAreaPanel(onAreaIDChange);
 					break;
 				case "Change Background":
 					this.areaEditor.setupBackground();
@@ -156,9 +160,21 @@ package com.cutecoma.playground.editors
 			}
 		}
 		
-		private function onChangeID(id:String):void
+		/*
+		private function onAreaPanelLoad(event:Event):void
 		{
-			area.data.id = id;
+			if(event.type!="complete")
+				return;
+			areaPanel = event.target.content as AreaPanel;
+			_engine3D.systemLayer.addChild(areaPanel);
+			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
+		}
+		*/
+		
+		private function onAreaIDChange(event:AreaEditorEvent):void
+		{
+			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
+			area.data.id = event.areaID;
 		}
 		
 		private function onImportBitmap(event:Event):void
