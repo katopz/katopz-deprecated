@@ -246,6 +246,7 @@ package com.cutecoma.playground.core
 			if(pathFinder)
 			{
 				pathFinder.destroy();
+				pathFinder = null;
 				AStar3D.completeSignal.removeAll();
 				//pathFinder.removeEventListener(SDEvent.COMPLETE, onPathComplete);
 				//pathFinder.removeEventListener(SDEvent.ERROR, onPathError);

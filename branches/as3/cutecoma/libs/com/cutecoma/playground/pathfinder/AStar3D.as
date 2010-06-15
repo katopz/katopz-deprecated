@@ -2,12 +2,12 @@
 {
 	import com.cutecoma.game.core.Position;
 	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
-	
+
 	import org.osflash.signals.Signal;
 
 	//import org.papervision3d.materials.WireframeMaterial;
@@ -19,7 +19,6 @@
 	 */
 	public class AStar3D extends EventDispatcher
 	{
-
 		// Node members
 		public static var nodes:Array;
 
@@ -418,7 +417,7 @@
 			}
 
 			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, {id: id, positions: positions, segmentX: segmentX, segmentZ: segmentZ}));
-			
+
 			completeSignal.dispatch(id, positions, segmentX, segmentY, segmentZ);
 		}
 
@@ -581,10 +580,22 @@
 
 		public function destroy():void
 		{
-			//DebugUtil.trace(this+".destroy");
 			nodes = null;
-			//bitmapData.dispose();
-			//bitmapData = null;
+
+			startNode = null;
+			finishNode = null;
+
+			positions = null;
+			open = null;
+			closed = null;
+
+			position = null;
+			destination = null;
+
+			bitmapData.dispose();
+			bitmapData = null;
+
+			scene = null;
 		}
 	}
 }

@@ -77,14 +77,19 @@ package com.cutecoma.playground.editors
 			SystemUtil.addContext(this, "Toggle Debug", onContextMenu, !true);
 		}
 		
-		public function createArea(areaData:AreaData):void
+		private function updateArea(areaData:AreaData):void
 		{
-			// create area
-			area = new Area(this, areaData);
-			_canvasLayer.addChild(area);
-			
-			// bind to editor
-			areaEditor.setArea(area);
+			if(!area)
+			{
+				// create area
+				area = new Area(this, areaData);
+				_canvasLayer.addChild(area);
+				
+				// bind to editor
+				areaEditor.setArea(area);
+			}else{
+				area.update(areaData);
+			}
 		}
 		
 		private function onContextMenu(event:ContextMenuEvent):void
@@ -140,7 +145,7 @@ package com.cutecoma.playground.editors
 				// exist area
 				areaData = new AreaData();
 				IExternalizable(areaData).readExternal(event.target.data);
-				createArea(areaData);
+				updateArea(areaData);
 				
 				//SDApplication.getInstance()["gotoArea"](areaData);
 			}

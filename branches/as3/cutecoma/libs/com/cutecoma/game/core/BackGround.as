@@ -29,8 +29,7 @@
 		
 		public function update(areaData:AreaData):void
 		{
-			if (content)
-				destroy();
+			dispose();
 
 			LoaderUtil.loadAsset("../../"+areaData.background, onBackgroundComplete);
 
@@ -47,13 +46,20 @@
 		}
 
 		// ______________________________ Destroy ______________________________
+		
+		private function dispose():void
+		{
+			if (content && content.parent)
+				content.parent.removeChild(content);
+			
+			content = null;
+		}
 
 		override public function destroy():void
 		{
-			if (content)
-				removeChild(content);
-
-			content = null;
+			dispose();
+			
+			super.destroy();
 		}
 	}
 }
