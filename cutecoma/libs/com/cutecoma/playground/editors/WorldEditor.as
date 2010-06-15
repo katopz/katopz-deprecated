@@ -5,6 +5,7 @@ package com.cutecoma.playground.editors
 	import away3dlite.core.IDestroyable;
 	import away3dlite.templates.BasicTemplate;
 	
+	import com.adobe.images.PNGEncoder;
 	import com.cutecoma.game.core.*;
 	import com.cutecoma.game.data.*;
 	import com.cutecoma.playground.core.*;
@@ -72,6 +73,8 @@ package com.cutecoma.playground.editors
 			
 			SystemUtil.addContext(this, "Open Area", onContextMenu, true);
 			SystemUtil.addContext(this, "Save Area", onContextMenu);
+			SystemUtil.addContext(this, "Import Bitmap", onContextMenu, true);
+			SystemUtil.addContext(this, "Emport Bitmap", onContextMenu);
 			SystemUtil.addContext(this, "Change Background", onContextMenu, true);
 			//SystemUtil.addContext(this, "Edit Map", onContextMenu);
 			SystemUtil.addContext(this, "Toggle Debug", onContextMenu, !true);
@@ -124,6 +127,9 @@ package com.cutecoma.playground.editors
 					this.areaEditor.setupBackground();
 					break;
 
+				case "Open Area":
+					FileUtil.open(["*.ara"], onAreaLoad);
+					break;
 				case "Save Area":
 					// TODO : new area id input box here
 					var _saveAreaData:AreaData = new AreaData().parse(area.data);
@@ -131,15 +137,26 @@ package com.cutecoma.playground.editors
 
 					FileUtil.save(_saveAreaData, _selectAreaID + ".ara");
 					break;
-				case "Open Area":
-					FileUtil.open(["*.ara"], onAreaLoad);
+				
+				case "Import Bitmap":
+					FileUtil.openImage(onImportBitmap, ["*.png"]);
+					break;
+				case "Emport Bitmap":
+					FileUtil.save(PNGEncoder.encode(area.map.data.bitmapData), _selectAreaID + ".png");
 					break;
 			}
 		}
 		
+		private function onImportBitmap(event:Event):void
+		{
+			if (event.type != "complete")
+				return;
+			area.updateBitmap(Bitmap(event.target["content"]).bitmapData);
+		}
+		
 		private function onAreaLoad(event:Event):void
 		{
-			var areaData:AreaData
+			var areaData:AreaData;
 			if (event.type == "complete")
 			{
 				// exist area

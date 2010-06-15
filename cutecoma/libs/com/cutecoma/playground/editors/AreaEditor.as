@@ -264,7 +264,7 @@
 			
 			_area.map.data.bitmapData = new BitmapData(_width, _height, true, 0xFFFFFFFF);
 			_area.map.data.bitmapData.draw(_bitmapData, new Matrix(1,0,0,1,-_rect.x, -_rect.y));
-			_area.ground.update(_area.map.data);
+			_area.ground.updateBitmapData(_area.map.data.bitmapData);
 			
 			_bitmapData.dispose();
 			_bitmapData = null;
@@ -397,7 +397,7 @@
 				
 				//TODO : _bitmapData.floodFill(_drawPoint.x, _drawPoint.y, Number(_paintColor));
 				
-				_area.ground.update(_area.map.data);
+				_area.ground.updateBitmapData(_area.map.data.bitmapData);
 			}
 		}
 		
