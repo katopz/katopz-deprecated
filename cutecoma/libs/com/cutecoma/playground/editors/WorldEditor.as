@@ -29,8 +29,6 @@ package com.cutecoma.playground.editors
 
 		private var area:Area;
 		
-		private var _selectAreaID:String = "00";
-		
 		private var _systemLayer:SDSprite;
 		public function get systemLayer():SDSprite
 		{
@@ -75,6 +73,7 @@ package com.cutecoma.playground.editors
 			SystemUtil.addContext(this, "Save Area", onContextMenu);
 			SystemUtil.addContext(this, "Import Bitmap", onContextMenu, true);
 			SystemUtil.addContext(this, "Emport Bitmap", onContextMenu);
+			SystemUtil.addContext(this, "Change ID", onContextMenu);
 			SystemUtil.addContext(this, "Change Background", onContextMenu, true);
 			//SystemUtil.addContext(this, "Edit Map", onContextMenu);
 			SystemUtil.addContext(this, "Toggle Debug", onContextMenu, !true);
@@ -123,6 +122,16 @@ package com.cutecoma.playground.editors
 					//areaEditor.toggleTerrain(area.map);
 					break;
 					*/
+				case "Change ID":
+					var _idDialog:SDInputDialog = new SDInputDialog(
+						"+----------------------+\n"+
+						"| Enter number.        |\n"+
+						"| ID : _$id__________  |\n"+
+						"|          [OK][CANCEL]|\n"+
+						"+----------------------+"
+						, onChangeID);
+					systemLayer.addChild(_idDialog);
+					break;
 				case "Change Background":
 					this.areaEditor.setupBackground();
 					break;
@@ -135,16 +144,21 @@ package com.cutecoma.playground.editors
 					var _saveAreaData:AreaData = new AreaData().parse(area.data);
 					_saveAreaData.viewData = new ViewData(new CameraData().parse(camera));
 
-					FileUtil.save(_saveAreaData, _selectAreaID + ".ara");
+					FileUtil.save(_saveAreaData, area.data.id + ".ara");
 					break;
 				
 				case "Import Bitmap":
 					FileUtil.openImage(onImportBitmap, ["*.png"]);
 					break;
 				case "Emport Bitmap":
-					FileUtil.save(PNGEncoder.encode(area.map.data.bitmapData), _selectAreaID + ".png");
+					FileUtil.save(PNGEncoder.encode(area.map.data.bitmapData), area.data.id + ".png");
 					break;
 			}
+		}
+		
+		private function onChangeID(id:String):void
+		{
+			area.data.id = id;
 		}
 		
 		private function onImportBitmap(event:Event):void
@@ -169,7 +183,7 @@ package com.cutecoma.playground.editors
 			else if (event.type == IOErrorEvent.IO_ERROR)
 			{
 				// new area
-				areaData = new AreaData(_selectAreaID, _selectAreaID + "_bg.swf", 40, 40);
+				areaData = new AreaData(area.data.id, area.data.id + "_bg.swf", 40, 40);
 				//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
 			}
 		}
