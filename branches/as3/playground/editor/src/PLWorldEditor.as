@@ -21,10 +21,10 @@ package
 		TODO : 
 		
 		+ editor
-			- switch between area //reload other area -> destroy -> create
+			//- switch between area //reload other area -> destroy -> create
 			- view FPS controller
 			- flood fill
-			- import/export external bitmap as map
+			//- import/export external bitmap as map
 			- load and save as other id 
 			- clean up
 			- MVC
