@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 1.371
- * DATE: 2010-05-11
+ * VERSION: 1.382
+ * DATE: 2010-05-25
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.greensock.com/timelinelite/
  **/
@@ -115,7 +115,7 @@ package com.greensock {
  **/
 	public class TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static const version:Number = 1.371;
+		public static const version:Number = 1.382;
 		/** @private **/
 		private static var _overwriteMode:int = (OverwriteManager.enabled) ? OverwriteManager.mode : OverwriteManager.init(2); //Ensures that TweenLite instances don't overwrite each other before being put into the timeline/sequence.
 		/** @private **/
@@ -202,7 +202,7 @@ package com.greensock {
 		 */
 		public function TimelineLite(vars:Object=null) {
 			super(vars);
-			_endCaps = [];
+			_endCaps = [null, null];
 			_labels = {};
 			this.autoRemoveChildren = Boolean(this.vars.autoRemoveChildren == true);
 			_hasUpdate = Boolean(typeof(this.vars.onUpdate) == "function");
@@ -221,7 +221,7 @@ package com.greensock {
 		 * @param tween TweenLite, TweenMax, TimelineLite, or TimelineMax instance
 		 */
 		override public function addChild(tween:TweenCore):void {
-			if (!tween.gc && tween.timeline) {
+			if (!tween.cachedOrphan && tween.timeline) {
 				tween.timeline.remove(tween, true); //removes from existing timeline so that it can be properly added to this one. Even if the timeline is this, it still needs to be removed so that it can be added in the appropriate order (required for proper rendering)
 			}
 			tween.timeline = this;
@@ -232,8 +232,8 @@ package com.greensock {
 			
 			//now make sure it is inserted in the proper order...
 			
-			var first:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0];
-			var last:TweenCore = (_lastChild != null) ? _lastChild : _endCaps[1];
+			var first:TweenCore = (this.gc) ? _endCaps[0] : _firstChild;
+			var last:TweenCore =  (this.gc) ? _endCaps[1] : _lastChild;
 			
 			if (last == null) {
 				first = last = tween;
@@ -259,6 +259,7 @@ package com.greensock {
 					curTween.nextNode = tween;
 				}
 			}
+			tween.cachedOrphan = false;
 			
 			if (this.gc) {
 				_endCaps[0] = first;
@@ -276,14 +277,14 @@ package com.greensock {
 		 * @param skipDisable If false (the default), the TweenLite/Max/TimelineLite/Max instance is disabled. This is primarily used internally - there's really no reason to set it to true. 
 		 */
 		override public function remove(tween:TweenCore, skipDisable:Boolean=false):void {
-			if (tween.gc) {
+			if (tween.cachedOrphan) {
 				return; //already removed!
 			} else if (!skipDisable) {
 				tween.setEnabled(false, true);
 			}
 			
-			var first:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0];
-			var last:TweenCore = (_lastChild != null) ? _lastChild : _endCaps[1];
+			var first:TweenCore = (this.gc) ? _endCaps[0] : _firstChild;
+			var last:TweenCore = (this.gc) ? _endCaps[1] : _lastChild;
 			
 			if (tween.nextNode) {
 				tween.nextNode.prevNode = tween.prevNode;
@@ -303,6 +304,8 @@ package com.greensock {
 				_firstChild = first;
 				_lastChild = last;
 			}
+			tween.cachedOrphan = true;
+			
 			//don't null nextNode and prevNode, otherwise the chain could break in rendering loops.
 			setDirtyCache(true);
 		}
@@ -678,7 +681,7 @@ package com.greensock {
 		 * @return Indicates whether or not the timeline contains any paused children
 		 */
 		public function hasPausedChild():Boolean {
-			var tween:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0];
+			var tween:TweenCore = (this.gc) ? _endCaps[0] : _firstChild;
 			while (tween) {
 				if (tween.cachedPaused || ((tween is TimelineLite) && (tween as TimelineLite).hasPausedChild())) {
 					return true;
@@ -698,7 +701,7 @@ package com.greensock {
 		 * @return an Array containing the child tweens/timelines.
 		 */
 		public function getChildren(nested:Boolean=true, tweens:Boolean=true, timelines:Boolean=true, ignoreBeforeTime:Number=-9999999999):Array {
-			var a:Array = [], cnt:uint = 0, tween:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0];
+			var a:Array = [], cnt:uint = 0, tween:TweenCore = (this.gc) ? _endCaps[0] : _firstChild;
 			while (tween) {
 				if (tween.cachedStartTime < ignoreBeforeTime) {
 					//do nothing
@@ -747,7 +750,7 @@ package com.greensock {
 		 * @param ignoreBeforeTime All children that begin at or after the startAtTime will be affected by the shift (the default is 0, causing all children to be affected). This provides an easy way to splice children into a certain spot on the timeline, pushing only the children after that point back to make room.
 		 */
 		public function shiftChildren(amount:Number, adjustLabels:Boolean=false, ignoreBeforeTime:Number=0):void {
-			var tween:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0];
+			var tween:TweenCore = (this.gc) ? _endCaps[0] : _firstChild;
 			while (tween) {
 				if (tween.cachedStartTime >= ignoreBeforeTime) {
 					tween.cachedStartTime += amount;
@@ -798,7 +801,7 @@ package com.greensock {
 		
 		/** @inheritDoc **/
 		override public function invalidate():void {
-			var tween:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0];
+			var tween:TweenCore = (this.gc) ? _endCaps[0] : _firstChild;
 			while (tween) {
 				tween.invalidate();
 				tween = tween.nextNode;
@@ -827,7 +830,6 @@ package com.greensock {
 		override public function setEnabled(enabled:Boolean, ignoreTimeline:Boolean=false):Boolean {
 			if (enabled == this.gc) {
 				var tween:TweenCore, next:TweenCore;
-				
 				/*
 				NOTE: To avoid circular references (TweenCore.timeline and SimpleTimeline._firstChild/_lastChild) which cause garbage collection
 				problems, store the _firstChild and _lastChild in the _endCaps Array when the timeline is disabled.
@@ -835,7 +837,8 @@ package com.greensock {
 				
 				if (enabled) {
 					_firstChild = tween = _endCaps[0];
-					_lastChild = _endCaps[1];					
+					_lastChild = _endCaps[1];
+					_endCaps = [null, null];
 				} else {
 					tween = _firstChild;
 					_endCaps = [_firstChild, _lastChild];
@@ -900,7 +903,7 @@ package com.greensock {
 		 **/
 		override public function get totalDuration():Number {
 			if (this.cacheIsDirty) {
-				var max:Number = 0, end:Number, tween:TweenCore = (_firstChild != null) ? _firstChild : _endCaps[0], prevStart:Number = -Infinity, next:TweenCore;
+				var max:Number = 0, end:Number, tween:TweenCore = (this.gc) ? _endCaps[0] : _firstChild, prevStart:Number = -Infinity, next:TweenCore;
 				while (tween) {
 					next = tween.nextNode; //record it here in case the tween changes position in the sequence...
 					
