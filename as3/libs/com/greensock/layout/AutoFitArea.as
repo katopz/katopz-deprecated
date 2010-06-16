@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.5
- * DATE: 2010-04-01
+ * VERSION: 1.52
+ * DATE: 2010-06-14
  * AS3
  * UPDATES AND DOCUMENTATION AT: http://www.greensock.com/autofitarea/
  **/
@@ -14,7 +14,6 @@ package com.greensock.layout {
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-
 /**
  * AutoFitArea allows you to define a rectangular area and then <code>attach()</code> DisplayObjects 
  * so that they automatically fill the area, scaling/stretching in any of the following modes: <code>STRETCH, 
@@ -75,10 +74,10 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
  */	 
 	public class AutoFitArea extends Shape {
 		/** @private **/
-		public static const version:Number = 1.5;
+		public static const version:Number = 1.52;
 		
 		/** @private **/
-		private static var _bd:BitmapData = new BitmapData(2800, 2800, true, 0x00FFFFFF);
+		private static var _bd:BitmapData;
 		/** @private **/
 		private static var _rect:Rectangle = new Rectangle(0, 0, 2800, 2800);
 		/** @private **/
@@ -254,7 +253,6 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 		 * @param event An optional event (which is unused internally) - this makes it possible to have an ENTER_FRAME or some other listener call this method if, for example, you want the AutoFitArea to constantly update and make any adjustments to attached objects that may have resized or been manually moved.
 		 **/
 		public function update(event:Event=null):void {
-			
 			//create local variables to speed things up
 			var width:Number = this.width;
 			var height:Number = this.height;
@@ -263,7 +261,7 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 			var matrix:Matrix = this.transform.matrix;
 			
 			var item:AutoFitItem = _rootItem;
-			var w:Number, h:Number, target:DisplayObject, bounds:Rectangle, tRatio:Number, scaleMode:String, ratio:Number, angle:Number, sin:Number, cos:Number, tRotation:Number, m:Matrix, mScale:Number, mPrev:Matrix;
+			var w:Number, h:Number, target:DisplayObject, bounds:Rectangle, tRatio:Number, scaleMode:String, ratio:Number, angle:Number, sin:Number, cos:Number, m:Matrix, mScale:Number, mPrev:Matrix;
 			while (item) {
 				target = item.target;
 				scaleMode = item.scaleMode;
@@ -363,17 +361,17 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 				if (item.hAlign == AlignMode.LEFT) {
 					target.x += (x - bounds.x);
 				} else if (item.hAlign == AlignMode.CENTER) {
-					target.x += (x - bounds.x) + ((width - bounds.width) * 0.5);
+					target.x += (x - bounds.x) + ((width - w) * 0.5);
 				} else {
-					target.x += (x - bounds.x) + (width - bounds.width);
+					target.x += (x - bounds.x) + (width - w);
 				}
 				
 				if (item.vAlign == AlignMode.TOP) {
 					target.y += (y - bounds.y);
 				} else if (item.vAlign == AlignMode.CENTER) {
-					target.y += (y - bounds.y) + ((height - bounds.height) * 0.5);
+					target.y += (y - bounds.y) + ((height - h) * 0.5);
 				} else {
-					target.y += (y - bounds.y) + (height - bounds.height);
+					target.y += (y - bounds.y) + (height - h);
 				}
 				
 				if (item.mask) {
@@ -450,11 +448,16 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 				release(item.target);
 				item = nxt;
 			}
+			_bd.dispose();
+			_bd = null;
 			_parent = null;
 		}
 		
 		/** @private For objects with masks, the only way to accurately report the bounds of the visible areas is to use BitmapData. **/
 		protected static function getVisibleBounds(target:DisplayObject, targetCoordinateSpace:DisplayObject):Rectangle {
+			if (_bd == null) {
+				_bd = new BitmapData(2800, 2800, true, 0x00FFFFFF);
+			}
 			_bd.fillRect(_rect, 0x00FFFFFF);
 			_matrix.tx = _matrix.ty = 0;
 			var offset:Rectangle = target.getBounds(targetCoordinateSpace);
@@ -560,7 +563,6 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 	}
 }
 
-import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.Shape;

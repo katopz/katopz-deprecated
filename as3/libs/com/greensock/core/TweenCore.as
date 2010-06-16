@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.361
- * DATE: 2010-04-28
+ * VERSION: 1.382
+ * DATE: 2010-05-25
  * ACTIONSCRIPT VERSION: 3.0 (AS2 version is also available)
  * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
  **/
@@ -17,7 +17,7 @@ package com.greensock.core {
  */
 	public class TweenCore {
 		/** @private **/
-		public static const version:Number = 1.361;
+		public static const version:Number = 1.382;
 		
 		/** @private **/
 		protected static var _classInitted:Boolean;
@@ -59,6 +59,8 @@ package com.greensock.core {
 		public var nextNode:TweenCore; 
 		/** @private Previous TweenCore object in the linked list**/
 		public var prevNode:TweenCore; 
+		/** @private When a TweenCore has been removed from its timeline, it is considered an orphan. When it it added to a timeline, it is no longer an orphan. We don't just set its "timeline" property to null because we need to always keep track of the timeline in case the TweenCore is enabled again by restart() or basically any operation that would cause it to become active again. "cachedGC" is different in that a TweenCore could be eligible for gc yet not removed from its timeline, like when a TimelineLite completes for example. **/
+		public var cachedOrphan:Boolean;
 		/** @private Indicates that the duration or totalDuration may need refreshing (like if a TimelineLite's child had a change in duration or startTime). This is another performance booster because if the cache isn't dirty, we can quickly read from the cachedDuration and/or cachedTotalDuration **/
 		public var cacheIsDirty:Boolean; 
 		/** @private Quicker way to read the paused property. It is public for speed purposes. When setting the paused state, always use the regular "paused" property.**/
@@ -204,18 +206,18 @@ package com.greensock.core {
 		 * @return Boolean value indicating whether or not important properties may have changed when the TweenCore was enabled/disabled. For example, when a motionBlur (plugin) is disabled, it swaps out a BitmapData for the target and may alter the alpha. We need to know this in order to determine whether or not a new tween that is overwriting this one should be re-initted() with the changed properties. 
 		 **/
 		public function setEnabled(enabled:Boolean, ignoreTimeline:Boolean=false):Boolean {
+			this.gc = !enabled;
 			if (enabled) {
 				this.active = Boolean(!this.cachedPaused && this.cachedTotalTime > 0 && this.cachedTotalTime < this.cachedTotalDuration);
-				if (!ignoreTimeline && this.gc) {
+				if (!ignoreTimeline && this.cachedOrphan) {
 					this.timeline.addChild(this);
 				}
 			} else {
 				this.active = false;
-				if (!ignoreTimeline) {
+				if (!ignoreTimeline && !this.cachedOrphan) {
 					this.timeline.remove(this, true);
 				}
 			}
-			this.gc = !enabled;
 			return false;
 		}
 		
