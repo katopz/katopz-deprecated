@@ -638,6 +638,12 @@ package
 					section.extra.detail.label0.MSL_VALUE_IN.text = item.MSL_VALUE_IN
 					section.extra.detail.label.visible = false;
 				}
+				
+				//2010/05/16 : more detailon text
+				if(String(item.MSL_VALUE_IN)=="0")
+					section.extra.detail.label0.gotoAndStop(2);
+				else
+					section.extra.detail.label0.gotoAndStop(1);
 
 				//2008/03/27 special request for E41
 				//2008/03/31 special request for E14
