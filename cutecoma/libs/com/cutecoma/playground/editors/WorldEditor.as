@@ -1,8 +1,10 @@
 package com.cutecoma.playground.editors
 {
+	import away3dlite.cameras.HoverCamera3D;
 	import away3dlite.containers.Scene3D;
 	import away3dlite.containers.View3D;
 	import away3dlite.core.IDestroyable;
+	import away3dlite.core.base.Object3D;
 	import away3dlite.templates.BasicTemplate;
 	
 	import com.adobe.images.PNGEncoder;
@@ -15,6 +17,7 @@ package com.cutecoma.playground.editors
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.*;
 	import com.sleepydesign.net.FileUtil;
+	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.*;
 	
@@ -58,8 +61,21 @@ package com.cutecoma.playground.editors
 		
 		override protected function onStage():void
 		{
+			/*
+			var _camera:HoverCamera3D = new HoverCamera3D();
+			_camera.minTiltAngle = -90;
+			_camera.maxTiltAngle = 90;
+			_camera.panAngle = 0;
+			_camera.tiltAngle = 0;
+			_camera.hover(true);
+			
+			camera = _camera;
+			*/
+			
 			addChild(_canvasLayer = new SDSprite);
 		}
+		
+		public var dolly:Object3D;
 		
 		override protected function onInit():void
 		{
@@ -78,6 +94,12 @@ package com.cutecoma.playground.editors
 			SystemUtil.addContext(this, "Change Background", onContextMenu, true);
 			//SystemUtil.addContext(this, "Edit Map", onContextMenu);
 			SystemUtil.addContext(this, "Toggle Debug", onContextMenu, !true);
+			
+			// 3d stuff
+			addChild(dolly = new Object3D);
+			
+			// test
+			LoaderUtil.loadBinary("../../areas/87.ara", onAreaLoad);
 		}
 		
 		private function updateArea(areaData:AreaData):void
