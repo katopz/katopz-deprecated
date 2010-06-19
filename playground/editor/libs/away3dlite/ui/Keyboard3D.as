@@ -1,7 +1,7 @@
 package away3dlite.ui
 {
 	import away3dlite.events.Keyboard3DEvent;
-
+	
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -40,7 +40,7 @@ package away3dlite.ui
 
 		private var _numKeyPress:int = 0;
 
-		public function Keyboard3D(target:InteractiveObject, eventHandler:Function)
+		public function Keyboard3D(target:InteractiveObject, eventHandler:Function = null)
 		{
 			_target = target;
 			_eventHandler = eventHandler;
@@ -48,8 +48,11 @@ package away3dlite.ui
 			_target.addEventListener(KeyboardEvent.KEY_DOWN, keyHandler);
 			_target.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
 
-			_target.addEventListener(KeyboardEvent.KEY_DOWN, _eventHandler);
-			_target.addEventListener(KeyboardEvent.KEY_UP, _eventHandler);
+			if(_eventHandler is Function)
+			{
+				_target.addEventListener(KeyboardEvent.KEY_DOWN, _eventHandler);
+				_target.addEventListener(KeyboardEvent.KEY_UP, _eventHandler);
+			}
 
 			position = new Vector3D();
 		}
@@ -60,8 +63,11 @@ package away3dlite.ui
 			_target.removeEventListener(KeyboardEvent.KEY_UP, keyHandler);
 			_target.removeEventListener(Event.ENTER_FRAME, onKey);
 
-			_target.removeEventListener(KeyboardEvent.KEY_DOWN, _eventHandler);
-			_target.removeEventListener(KeyboardEvent.KEY_UP, _eventHandler);
+			if(_eventHandler is Function)
+			{
+				_target.removeEventListener(KeyboardEvent.KEY_DOWN, _eventHandler);
+				_target.removeEventListener(KeyboardEvent.KEY_UP, _eventHandler);
+			}
 		}
 
 		private function onKey(event:Event):void
