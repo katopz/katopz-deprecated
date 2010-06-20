@@ -1,27 +1,22 @@
 ﻿package com.cutecoma.playground.editors
 {
 	import away3dlite.cameras.Camera3D;
-	import away3dlite.cameras.HoverCamera3D;
 	import away3dlite.core.base.Face;
 	import away3dlite.events.Keyboard3DEvent;
 	import away3dlite.events.MouseEvent3D;
 	import away3dlite.primitives.Trident;
 	import away3dlite.ui.Keyboard3D;
 	
-	import com.cutecoma.game.core.Game;
 	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.core.Area;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
-	import com.cutecoma.playground.events.SDKeyboardEvent;
 	import com.cutecoma.playground.events.SDMouseEvent;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.EventManager;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.text.SDTextField;
-	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.ui.SDMouse;
 	import com.sleepydesign.utils.StringUtil;
 	
@@ -31,10 +26,8 @@
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
-	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.geom.Utils3D;
 	import flash.geom.Vector3D;
 
 	public class AreaEditor extends RemovableEventDispatcher
@@ -90,13 +83,11 @@
 
 			paintColor = "0x000000";
 			_helpToolDialog = new SDDialog(<question>
-					<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- (SHIFT) to zoom]]>
-				</question>, this);
+					<![CDATA[1. Right Click to load Background<br/>2. Use WASD CV QE to move view.<br/>3. Use NUMPAD or CTRL+NUMPAD to +,- map size.<br/>4. Use CTRL+DRAG to move camera.<br/>5. Use Wheel or +/- to zoom, (+CTRL to focus)]]>
+				</question>, this, StageAlign.TOP_RIGHT);
 			_engine3D.systemLayer.addChild(_helpToolDialog);
 
 			_helpToolDialog.alpha = .9;
-			_helpToolDialog.align = StageAlign.TOP_LEFT;
-
 			_buildToolDialog = new SDDialog(<question><![CDATA[Select type to draw Area.]]>
 					<answer src="as:onSelectType('0')"><![CDATA[Unwalkable Area]]></answer>
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
@@ -105,7 +96,6 @@
 				</question>, this);
 
 			_buildToolDialog.alpha = .9;
-			_buildToolDialog.align = "center";
 
 			_engine3D.systemLayer.addChild(_buildToolDialog);
 			_engine3D.systemLayer.addChild(_codeText);
@@ -325,11 +315,16 @@
 				return;
 			
 			var _camera:Camera3D = _engine3D.view3D.camera;
-			var _f:Vector3D = new Vector3D(event.data.x, event.data.y, event.data.z);
+			var _f:Vector3D = Vector3D(event.data).clone();
 			
-			_camera.x += _f.x;
-			_camera.y += _f.y;
-			_camera.z += _f.z;
+			if(Keyboard3D.isSHIFT)
+			{
+				_f.scaleBy(10);
+				_f.w*=10;
+			}
+			
+			_camera.transform.matrix3D.position = _camera.transform.matrix3D.transformVector(_f);
+			_camera.rotationZ += _f.w*.1;
 		}
 		
 		private var lastPanAngle:Number;
