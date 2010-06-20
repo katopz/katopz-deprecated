@@ -16,6 +16,8 @@ package com.sleepydesign.ui
 
 		public static var isMouseDown:Boolean = false;
 		public static var distance:Number = 0;
+		
+		public var yUp:Boolean = true;
 		 
 		public function SDMouse(target:InteractiveObject)
 		{
@@ -81,7 +83,7 @@ package com.sleepydesign.ui
 						var dy:Number = event.stageY - _lastPosition.y;
 						distance = Point.distance(new Point(event.stageX, event.stageY), _lastPosition);
 
-						dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+						dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: yUp?-dy:dy, distance: distance}, event));
 
 						_lastPosition.x = event.stageX;
 						_lastPosition.y = event.stageY;
