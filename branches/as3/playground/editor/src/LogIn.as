@@ -1,7 +1,5 @@
 package
 {
-	import away3dlite.core.utils.Debug;
-	
 	import com.adobe.serialization.json.JSON;
 	import com.cutecoma.playground.editors.CharacterEditor;
 	import com.sleepydesign.components.SDDialog;
@@ -10,8 +8,7 @@ package
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.events.Event;
-	import flash.text.TextField;
-
+	
 	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "800", height = "480")]
 	public class LogIn extends Sprite
 	{

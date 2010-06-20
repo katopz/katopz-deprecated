@@ -22,7 +22,7 @@ package
 		
 		+ editor
 			//- switch between area //reload other area -> destroy -> create
-			- view FPS controller
+			//- view FPS controller
 			- flood fill
 			//- import/export external bitmap as map
 			//- load and save as other id 
@@ -30,7 +30,7 @@ package
 			- MVC
 		
 		+ chat
-			- load MDJ and test path finder, speed
+			- load MDJ and test path finder, speed, destroy, model pool
 			- test switch between area
 			- login via opensocial
 			- clean up
