@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 2010-06-16
+ * VERSION: 1.11
+ * DATE: 2010-06-18
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -33,7 +33,7 @@ package com.greensock.loading {
  * 		<li><strong> Integration of loaders inside subloaded swfs</strong> - With most other systems, if you subload a swf, the loader will only concern itself with the swf file's bytes but what if that swf must subload other content like XML, images, and/or other swf files before it should be considered fully loaded? LoaderMax can elegantly handle the sub-subloads as deep as they go. You can link any loader and/or LoaderMax with a swf's root (using the <code>requireWithRoot</code> vars property) so that when you subload it into another Flash application, the parent SWFLoader automatically factors the nested loaders into its overall loading progress! It won't dispatch its <code>COMPLETE</code> event until they have finished as well. </li>
  * 		<li><strong> Automatic parsing of LoaderMax-related nodes inside XML</strong> - The XMLLoader class automatically looks for LoaderMax-related nodes like <code>&lt;LoaderMax&gt;, &lt;ImageLoader&gt;, &lt;SWFLoader&gt;, &lt;XMLLoader&gt;, &lt;VideoLoader&gt;, &lt;DataLoader&gt;, &lt;CSSLoader&gt;, &lt;MP3Loader&gt;</code>, etc. in XML files that it loads, and if any are found it will create the necessary instances and then begin loading the ones that had a <code>load="true"</code> attribute, automatically integrating their progress into the XMLLoader's overall progress and it won't dispatch a <code>COMPLETE</code> event until the XML-driven loaders have finished as well.</li>
  * 		<li><strong> Tight file size</strong> - Many other systems are 16-24k+ even if you're just loading text, but LoaderMax can be as little as <strong>7k</strong> (depending on which loader types you use).</li>
- * 		<li><strong> A common set of properties and methods among all loaders</strong> - Every loader type (XMLLoader, SWFLoader, ImageLoader, MP3Loader, CSSLoader, VideoLoader, LoaderMax, etc.) all share common <code>content, name, status, paused, bytesLoaded, bytesTotal,</code> and <code>progress</code> properties as well as methods like <code>load(), pause(), resume(), prioritize(), unload(), cancel(), auditSize()</code> and <code>dispose()</code> delivering a touch of polymorphism sweetness.</li>
+ * 		<li><strong> A common set of properties and methods among all loaders</strong> - Every loader type (XMLLoader, SWFLoader, ImageLoader, MP3Loader, CSSLoader, VideoLoader, LoaderMax, etc.) all share common <code>content, name, status, loadTime, paused, bytesLoaded, bytesTotal,</code> and <code>progress</code> properties as well as methods like <code>load(), pause(), resume(), prioritize(), unload(), cancel(), auditSize()</code> and <code>dispose()</code> delivering a touch of polymorphism sweetness.</li>
  * 		<li><strong> Nest LoaderMax instances inside other LoaderMax instances as deeply as you want.</strong> - This makes complex queues simple. Need to know when the first 3 loaders have finished loading inside a 10-loader queue? Just put those 3 into their own LoaderMax that has an onComplete and nest that LoaderMax inside your main LoaderMax queue. </li>
  * 		<li><strong> Set a width/height for an ImageLoader, SWFLoader, or VideoLoader and when it loads, the image/swf/video will automatically scale to fit</strong> using any of the following scaleModes: "stretch", "proportionalInside", "proportionalOutside", "widthOnly", or "heightOnly".</li>
  * 		<li><strong> Conveniences like auto smoothing of images, centering their registration point, noCache, setting initial x, y, scaleX, scaleY, rotation, alpha, and blendMode properties, optional autoPlay for mp3s, swfs, and videos, and more.</strong></li>
@@ -43,6 +43,7 @@ package com.greensock.loading {
  * 		<li><strong> Accurate progress reporting</strong> - For maximum performance, set an <code>estimatedBytes</code> for each loader or allow LoaderMax's <code>auditSize</code> feature to automatically preload just enough of each child loader's content to determine its <code>bytesTotal</code>, making progress reporting on large queues very accurate.</li>
  * 		<li><strong> prioritize() a loader anytime</strong> - Kick an object to the top of all LoaderMax queues to which it belongs, immediately supplanting the top spot in each one.</li>
  * 		<li><strong> A robust event system</strong></li>
+ * 		<li><strong> Define an alternateURL for any loader</strong> - If the original <code>url</code> fails to load, it will automatically switch to the <code>alternateURL</code> and try again.</li>
  * 		<li><strong> Set up multiple event listeners in one line</strong> - Add listeners like onComplete, onProgress, onError, etc. via the constructor like <code>new LoaderMax({name:"mainQueue", onComplete:completeHandler, onProgress:progressHandler, onError:errorHandler});</code></li>
  * 		<li><strong> maxConnections</strong> - Set the maximum number of simultaneous connections for each LoaderMax instance (default is 2). This can speed up overall loading times.</li>
  * 		<li><strong> pause()/resume()</strong> - no queue loading solution would be complete without the ability to pause()/resume() anytime.</li>
@@ -59,7 +60,7 @@ import com.greensock.loading.display.~~;
 var queue:LoaderMax = new LoaderMax({name:"mainQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});
 
 //append several loaders
-queue.append( new XMLLoader("xml/data.xml", {name:"xmlDoc"}) );
+queue.append( new XMLLoader("xml/data.xml", {name:"xmlDoc", alternateURL:"http://otherserver.com/data.xml"}) );
 queue.append( new ImageLoader("img/photo1.jpg", {name:"photo1", estimatedBytes:2400, container:this, alpha:0, width:250, height:150, scaleMode:"proportionalInside"}) );
 queue.append( new SWFLoader("swf/main.swf", {name:"mainClip", estimatedBytes:3000, container:this, x:250, autoPlay:false}) );
 
@@ -132,7 +133,7 @@ function errorHandler(event:LoaderEvent):void {
  */	
 	public class LoaderMax extends LoaderCore {		
 		/** @private **/
-		public static const version:Number = 1.0;
+		public static const version:Number = 1.11;
 		/** The default value that will be used for the <code>estimatedBytes</code> on loaders that don't declare one in the <code>vars</code> parameter of the constructor. **/
 		public static var defaultEstimatedBytes:uint = 20000;
 		/** The class used by ImageLoaders, SWFLoaders, and VideoLoaders to create the containers into which they'll dump their rawContent - by default it is the <code>com.greensock.loading.display.ContentDisplay</code> class but if you're using Flex, it is typically best to change this to <code>com.greensock.loading.display.FlexContentDisplay</code>. You only need to do this once, like <br /><code>import com.greensock.loading.LoaderMax;<br />import com.greensock.loading.display.FlexContentDisplay;<br />LoaderMax.contentDisplayClass = FlexContentDisplay;</code> **/
@@ -539,7 +540,10 @@ function completeHandler(event:LoaderEvent):void {
 		 * inserted into multiple LoaderMax instances, its <code>url</code> change affects them all. <br /><br />
 		 * 
 		 * <code>prependURLs()</code> only affects loaders that are children of the LoaderMax when 
-		 * the method is called - it does <strong>not</strong> affect loaders that are inserted later. 
+		 * the method is called - it does <strong>not</strong> affect loaders that are inserted later. <br /><br />
+		 * 
+		 * <code>prependURLs()</code> does <strong>NOT</strong> affect any <code>alternateURL</code> values that are defined
+		 * for each child loader.
 		 * 
 		 * @param value The String that should be prepended to each child loader
 		 * @param includeNested If <code>true</code>, loaders nested inside child LoaderMax instances will also be affected. It is <code>false</code> by default.
@@ -574,7 +578,9 @@ function completeHandler(event:LoaderEvent):void {
 		 * inserted into multiple LoaderMax instances, its <code>url</code> change affects them all. <br /><br />
 		 * 
 		 * <code>replaceURLText()</code> only affects loaders that are children of the LoaderMax when 
-		 * the method is called - it does <strong>not</strong> affect loaders that are inserted later. 
+		 * the method is called - it does <strong>not</strong> affect loaders that are inserted later. <br /><br />
+		 * 
+		 * <code>replaceURLText()</code> <strong>does</strong> affect <code>alternateURL</code> values for child loaders. 
 		 * 
 		 * @param fromText The old String that should be replaced in each child loader.
 		 * @param toText The new String that should replace the <code>fromText</code>.
@@ -583,9 +589,14 @@ function completeHandler(event:LoaderEvent):void {
 		 */
 		public function replaceURLText(fromText:String, toText:String, includeNested:Boolean=false):void {
 			var loaders:Array = getChildren(includeNested, true);
+			var loader:LoaderItem;
 			var i:int = loaders.length;
 			while (--i > -1) {
-				LoaderItem(_loaders[i]).url = LoaderItem(_loaders[i]).url.split(fromText).join(toText);
+				loader = _loaders[i];
+				loader.url = loader.url.split(fromText).join(toText);
+				if ("alternateURL" in loader.vars) {
+					loader.vars.alternateURL = loader.vars.alternateURL.split(fromText).join(toText);
+				}
 			}
 		}
 		
@@ -754,7 +765,7 @@ function completeHandler(event:LoaderEvent):void {
 				var bl:uint = _cachedBytesLoaded;
 				var bt:uint = _cachedBytesTotal;
 				_calculateProgress();
-				if (_cachedBytesLoaded != _cachedBytesTotal && (bl != _cachedBytesLoaded || bt != _cachedBytesTotal)) {
+				if ((_cachedBytesLoaded != _cachedBytesTotal || _status != LoaderStatus.LOADING) && (bl != _cachedBytesLoaded || bt != _cachedBytesTotal)) { //note: added _status != LoaderStatus.LOADING because it's possible for all the children to load independently (without the LoaderMax actively loading), so in those cases, the progress would never reach 1 since LoaderMax's _completeHandler() won't be called to dispatch the final PROGRESS event.
 					dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));
 				}
 			} else {
@@ -894,17 +905,18 @@ function completeHandler(event:LoaderEvent):void {
 		
 		/** @inheritDoc **/
 		override public function get status():int {
-			if (_status > LoaderStatus.LOADING && _status != LoaderStatus.DISPOSED) {
-				var failed:uint = getChildrenByStatus(LoaderStatus.FAILED, false).length;
-				if (!this.skipFailed && failed != 0) {
+			//if the status of children changed after the LoaderMax completed, we need to make adjustments to the LoaderMax's status.
+			if (_status == LoaderStatus.COMPLETED) {
+				var statusCounts:Array = [0, 0, 0, 0, 0, 0]; //store the counts of each type of status (index 0 is for READY, 1 is LOADING, 2 is COMPLETE, etc.
+				var i:int = _loaders.length;
+				while (--i > -1) {
+					statusCounts[LoaderCore(_loaders[i]).status]++;
+				}
+				if ((!this.skipFailed && statusCounts[4] != 0) || (!this.skipPaused && statusCounts[3] != 0)) {
 					_status = LoaderStatus.FAILED;
-				} else {
-					var paused:uint = getChildrenByStatus(LoaderStatus.PAUSED, false).length;
-					if (!this.skipPaused && paused != 0) {
-						_status == LoaderStatus.FAILED;
-					} else if (this.getChildrenByStatus(LoaderStatus.COMPLETED, false).length == _loaders.length - failed - paused) {
-						_status = LoaderStatus.COMPLETED;
-					}
+				} else if (statusCounts[0] + statusCounts[1] != 0) {
+					_status = LoaderStatus.READY;
+					_cacheIsDirty = true;
 				}
 			}
 			return _status;

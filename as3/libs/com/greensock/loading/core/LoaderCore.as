@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 2010-06-16
+ * VERSION: 1.11
+ * DATE: 2010-06-18
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -15,6 +15,7 @@ package com.greensock.loading.core {
 	import flash.net.LocalConnection;
 	import flash.system.Capabilities;
 	import flash.utils.Dictionary;
+	import flash.utils.getTimer;
 	
 	[Event(name="open", type="com.greensock.events.LoaderEvent")]
 	[Event(name="progress", type="com.greensock.events.LoaderEvent")]
@@ -34,7 +35,7 @@ package com.greensock.loading.core {
  */	
 	public class LoaderCore extends EventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.0;
+		public static const version:Number = 1.11;
 		
 		/** @private **/
 		protected static var _loaderCount:uint = 0;
@@ -86,6 +87,8 @@ package com.greensock.loading.core {
 		protected var _dispatchChildProgress:Boolean;
 		/** @private **/
 		protected var _type:String;
+		/** @private used to store timing information. When the loader begins loading, the startTime is stored here. When it completes or fails, it is set to the total elapsed time between when it started and ended. We reuse this variable like this in order to minimize size. **/
+		protected var _time:uint;
 		/** @private **/
 		protected var _content:*;
 		
@@ -144,14 +147,19 @@ package com.greensock.loading.core {
 		 * @param flushContent If <code>true</code>, any previously loaded content in the loader will be flushed so that it loads again from the beginning. For example, a LoaderMax may have already loaded 4 out of the 10 loaders in its queue but if you want it to flush the data and start again, set the <code>flushContent</code> parameter to <code>true</code> (it is <code>false</code> by default). 
 		 */
 		public function load(flushContent:Boolean=false):void {
-			if (_status == LoaderStatus.PAUSED) {
+			var time:uint = getTimer();
+			if (this.status == LoaderStatus.PAUSED) { //use this.status instead of _status so that LoaderMax instances have a chance to do their magic in the getter and make sure their status is calibrated properly in case any of its children changed status after the LoaderMax completed (maybe they were manually loaded or failed, etc.).
 				_status = (_prePauseStatus <= LoaderStatus.LOADING) ? LoaderStatus.READY : _prePauseStatus;
+				if (_status == LoaderStatus.READY && this is LoaderMax) {
+					time -= _time; //when a LoaderMax is resumed, we should offset the start time.
+				}
 			}
 			if (flushContent || _status == LoaderStatus.FAILED) {
 				_dump(1, LoaderStatus.READY);
 			}
 			if (_status == LoaderStatus.READY) {
 				_status = LoaderStatus.LOADING;
+				_time = time;
 				_load();
 				dispatchEvent(new LoaderEvent(LoaderEvent.OPEN, this));
 			} else if (_status == LoaderStatus.COMPLETED) {
@@ -192,7 +200,7 @@ package com.greensock.loading.core {
 		
 		/** 
 		 * @private 
-		 * Cancels, unloads, or disposes of the loader depending on the <code>scrubLevel</code>. This consolidates
+		 * Cancels, unloads, and/or disposes of the loader depending on the <code>scrubLevel</code>. This consolidates
 		 * the actions into a single function to conserve file size and because many of the same tasks must 
 		 * be performed regardless of the scrubLevel, so this eliminates redundant code.
 		 * 
@@ -205,6 +213,9 @@ package com.greensock.loading.core {
 				_prePauseStatus = newStatus;
 			} else if (_status != LoaderStatus.DISPOSED) {
 				_status = newStatus;
+			}
+			if (isLoading) {
+				_time = getTimer() - _time;
 			}
 			if (_dispatchProgress) {
 				if (this is LoaderMax) {
@@ -299,8 +310,8 @@ package com.greensock.loading.core {
 		/**
 		 * Attempts loading just enough of the content to accurately determine the <code>bytesTotal</code> 
 		 * in order to improve the accuracy of the <code>progress</code> property. Once the 
-		 * bytesTotal has been determined or the <code>auditSize()</code> attempt fails due
-		 * to an IO_ERROR or SECURITY_ERROR, the <code>auditedSize</code> property will be 
+		 * <code>bytesTotal</code> has been determined or the <code>auditSize()</code> attempt fails due
+		 * to an error (typically IO_ERROR or SECURITY_ERROR), the <code>auditedSize</code> property will be 
 		 * set to <code>true</code>. Auditing the size opens a URLStream that will be closed 
 		 * as soon as a response is received.
 		 **/
@@ -308,7 +319,7 @@ package com.greensock.loading.core {
 			//override in subclasses
 		}
 		
-		/** Returns information about the loader, like its type, its name, and its <code>url</code> (if it has one). **/
+		/** Returns information about the loader, like its type, its <code>name</code>, and its <code>url</code> (if it has one). **/
 		override public function toString():String {
 			return _type + " '" + this.name + "'" + ((this is LoaderItem) ? " (" + (this as LoaderItem).url + ")" : "");
 		}
@@ -344,8 +355,11 @@ package com.greensock.loading.core {
 		/** @private **/
 		protected function _completeHandler(event:Event=null):void {
 			_cachedBytesLoaded = _cachedBytesTotal;
-			dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));
-			_status = LoaderStatus.COMPLETED;
+			if (_status != LoaderStatus.COMPLETED) {
+				dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));
+				_status = LoaderStatus.COMPLETED;
+				_time = getTimer() - _time;
+			}
 			dispatchEvent(new LoaderEvent(LoaderEvent.COMPLETE, this));
 			if (this.autoDispose) {
 				dispose();
@@ -355,11 +369,13 @@ package com.greensock.loading.core {
 		/** @private **/
 		protected function _errorHandler(event:Event):void {
 			var target:Object = (event is LoaderEvent && this.hasOwnProperty("getChildren")) ? event.target : this;
+			var text:String = (event as Object).text;
+			trace("Loading error on " + this.toString() + ": " + text);
 			if (event.type != LoaderEvent.ERROR && this.hasEventListener(event.type)) {
-				dispatchEvent(new LoaderEvent(event.type, target, (event as Object).text));
+				dispatchEvent(new LoaderEvent(event.type, target, text));
 			}
 			if (this.hasEventListener(LoaderEvent.ERROR)) {
-				dispatchEvent(new LoaderEvent(LoaderEvent.ERROR, target, this.toString() + " > " + (event as Object).text));
+				dispatchEvent(new LoaderEvent(LoaderEvent.ERROR, target, this.toString() + " > " + text));
 			}
 		}
 		
@@ -405,15 +421,14 @@ package com.greensock.loading.core {
 				_prePauseStatus = _status;
 				if (_status == LoaderStatus.LOADING) {
 					_dump(0, LoaderStatus.PAUSED);
-				} else {
-					_status == LoaderStatus.PAUSED;
 				}
+				_status == LoaderStatus.PAUSED;
 				
 			} else if (!value && _status == LoaderStatus.PAUSED) {
-				_status = _prePauseStatus || LoaderStatus.READY;
-				if (_status == LoaderStatus.LOADING) {
-					_status = LoaderStatus.READY;
-					load(false);
+				if (_prePauseStatus == LoaderStatus.LOADING) {
+					load(false); //will change the _status for us inside load()
+				} else {
+					_status = _prePauseStatus || LoaderStatus.READY;
 				}
 			}
 		}
@@ -481,6 +496,25 @@ package com.greensock.loading.core {
 		 **/
 		public function get auditedSize():Boolean {
 			return _auditedSize;
+		}
+		
+		/** 
+		 * The number of seconds that elapsed between when the loader began and when it either completed, failed, 
+		 * or was canceled. You may check a loader's <code>loadTime</code> anytime, not just after it completes. For
+		 * example, you could access this value in an onProgress handler and you'd see it steadily increase as the loader
+		 * loads and then when it completes, <code>loadTime</code> will stop increasing. LoaderMax instances ignore 
+		 * any pauses when calculating this value, so if a LoaderMax begins loading and after 1 second it gets paused, 
+		 * and then 10 seconds later it resumes and takes an additional 14 seconds to complete, its <code>loadTime</code> 
+		 * would be 15, <strong>not</strong> 25.
+		 **/
+		public function get loadTime():Number {
+			if (_status == LoaderStatus.READY) {
+				return 0;
+			} else if (_status == LoaderStatus.LOADING) {
+				return (getTimer() - _time) / 1000;
+			} else {
+				return _time / 1000;
+			}
 		}
 		
 	}

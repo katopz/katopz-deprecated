@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 2010-06-16
+ * VERSION: 1.11
+ * DATE: 2010-06-18
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -46,6 +46,8 @@ package com.greensock.loading.core {
 		protected var _context:LoaderContext;
 		/** @private **/
 		protected var _initted:Boolean;
+		/** @private used by SWFLoader when the loader is canceled before the SWF ever had a chance to init which causes garbage collection issues. We slip into stealthMode at that point, wait for it to init, and then cancel the _loader's loading.**/
+		protected var _stealthMode:Boolean;
 		
 		/**
 		 * Constructor
@@ -156,7 +158,9 @@ package com.greensock.loading.core {
 					(_sprite as Object).dispose(false, false); //makes sure the ContentDisplay is removed from its parent as well.
 				}
 			}
-			_refreshLoader(Boolean(scrubLevel != 2));
+			if (!_stealthMode) {
+				_refreshLoader(Boolean(scrubLevel != 2));
+			}
 			super._dump(scrubLevel, newStatus);
 		}
 		

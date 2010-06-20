@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 2010-06-16
+ * VERSION: 1.11
+ * DATE: 2010-06-18
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -106,15 +106,31 @@ package com.greensock.loading.core {
 				if (_preferEstimatedBytesInAudit && uint(this.vars.estimatedBytes) > _cachedBytesTotal) {
 					_cachedBytesTotal = uint(this.vars.estimatedBytes);
 				}
+			} else if (event.type == "ioError") {
+				if ("alternateURL" in this.vars && _url != this.vars.alternateURL) {
+					this.url = this.vars.alternateURL;
+					_auditStream.load(_request);
+					return;
+				} else {	
+					//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a NetStream.
+					super._failHandler(event);
+				}
 			}
 			_auditedSize = true;
 			_closeStream();
-			if (event.type == "ioError") {
-				//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a NetStream.
-				_failHandler(event);
-			}
 			dispatchEvent(new Event("auditedSize"));
 		}
+		
+		/** @private **/
+		override protected function _failHandler(event:Event):void {
+			if ("alternateURL" in this.vars && _url != this.vars.alternateURL) {
+				this.url = this.vars.alternateURL;
+				_load();
+			} else {
+				super._failHandler(event);
+			}
+		}
+		
 		
 		/** @private **/
 		protected function _httpStatusHandler(event:Event):void {
@@ -131,9 +147,6 @@ package com.greensock.loading.core {
 		}
 		public function set url(value:String):void {
 			_url = _request.url = value;
-			if (_status == LoaderStatus.LOADING) {
-				load(true);
-			}
 		}
 		
 		/** The <code>URLRequest</code> associated with the loader **/
