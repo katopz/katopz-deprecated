@@ -1,5 +1,6 @@
 ﻿package com.cutecoma.playground.editors
 {
+	import away3dlite.arcane;
 	import away3dlite.cameras.Camera3D;
 	import away3dlite.core.base.Face;
 	import away3dlite.events.Keyboard3DEvent;
@@ -26,9 +27,12 @@
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
+
+	use namespace arcane;
 
 	public class AreaEditor extends RemovableEventDispatcher
 	{
@@ -106,7 +110,7 @@
 			// controller
 			new Keyboard3D(_engine3D.systemLayer.stage, onKey).addEventListener(Keyboard3DEvent.KEY_PRESS, onKeyIsPress);
 			var _mouse:SDMouse = new SDMouse(_engine3D.systemLayer.stage);
-			
+
 			//_mouse.addEventListener(SDMouseEvent.MOUSE_DOWN, onMouseIsDown);
 			_mouse.addEventListener(SDMouseEvent.MOUSE_DRAG, onMouseIsDrag);
 			_mouse.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
@@ -313,35 +317,40 @@
 			// void while select area
 			if (areaPanel && areaPanel.visible)
 				return;
-			
-			var _camera:Camera3D = _engine3D.view3D.camera;
+
+			var _camera3D:Camera3D = _engine3D.view3D.camera;
+			var _matrix3D:Matrix3D = _camera3D.transform.matrix3D;
 			var _f:Vector3D = Vector3D(event.data).clone();
 			
-			if(Keyboard3D.isSHIFT)
+			if (Keyboard3D.isSHIFT)
 			{
 				_f.scaleBy(10);
-				_f.w*=10;
+				_f.w *= 10;
 			}
 			
-			_camera.transform.matrix3D.position = _camera.transform.matrix3D.transformVector(_f);
-			_camera.rotationZ += _f.w*.1;
+			// position
+			_matrix3D.position = _matrix3D.transformVector(_f);
+			
+			// rotationZ
+			_camera3D.roll(_f.w*.1);
 		}
-		
-		private var lastPanAngle:Number;
-		private var lastTiltAngle:Number;
-		
+
 		private function onMouseIsDrag(event:SDMouseEvent):void
 		{
 			// void while select area
 			if (areaPanel && areaPanel.visible)
 				return;
-			
-			if(!Keyboard3D.isCTRL)
+
+			if (!Keyboard3D.isCTRL)
 				return;
 
-			var _camera:Camera3D = _engine3D.view3D.camera;
-			_camera.rotationX += event.data.dy*.1;
-			_camera.rotationY += event.data.dx*.1;
+			var _camera3D:Camera3D = _engine3D.view3D.camera;
+			
+			// rotationX
+			_camera3D.pitch(event.data.dy * .1);
+			
+			// rotationY
+			_camera3D.yaw(event.data.dx * .1);
 		}
 
 		private function onMouseWheel(event:MouseEvent):void
@@ -399,6 +408,10 @@
 		{
 			// void while select area
 			if (areaPanel && areaPanel.visible)
+				return;
+			
+			// camera mode
+			if (Keyboard3D.isCTRL)
 				return;
 
 			/*
