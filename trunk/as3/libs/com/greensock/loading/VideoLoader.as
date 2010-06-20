@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.0
- * DATE: 2010-06-16
+ * VERSION: 1.11
+ * DATE: 2010-06-18
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -17,6 +17,7 @@ package com.greensock.loading {
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.utils.getTimer;
 	
 	[Event(name="httpStatus", type="com.greensock.events.LoaderEvent")]
 	[Event(name="videoComplete", type="com.greensock.loading.VideoLoader")]
@@ -84,6 +85,7 @@ package com.greensock.loading {
  * 		<li><strong> estimatedDuration : Number</strong> - Estimated duration of the video in seconds. VideoLoader will only use this value until it receives the necessary metaData from the video in order to accurately determine the video's duration. You do not need to specify an <code>estimatedDuration</code>, but doing so can help make the playProgress and some other values more accurate (until the metaData has loaded). It can also make the <code>progress/bytesLoaded/bytesTotal</code> more accurate when a <code>estimatedDuration</code> is defined, particularly in <code>bufferMode</code>.</li>
  * 		<li><strong> deblocking : int</strong> - Indicates the type of filter applied to decoded video as part of post-processing. The default value is 0, which lets the video compressor apply a deblocking filter as needed. See Adobe's <code>flash.media.Video</code> class docs for details.</li>
  * 		<li><strong> bufferMode : Boolean </strong> - When <code>true</code>, the loader will report its progress only in terms of the video's buffer which can be very convenient if, for example, you want to display loading progress for the video's buffer or tuck it into a LoaderMax with other loaders and allow the LoaderMax to dispatch its <code>COMPLETE</code> event when the buffer is full instead of waiting for the whole file to download. When <code>bufferMode</code> is <code>true</code>, the VideoLoader will dispatch its <code>COMPLETE</code> event when the buffer is full as opposed to waiting for the entire video to load. You can toggle the <code>bufferMode</code> anytime. Please read the full <code>bufferMode</code> property ASDoc description below for details about how it affects things like <code>bytesTotal</code>.</li>
+ * 		<li><strong> alternateURL:String</strong> - If you define an <code>alternateURL</code>, the loader will initially try to load from its original <code>url</code> and if it fails, it will automatically (and permanently) change the loader's <code>url</code> to the <code>alternateURL</code> and try again. Think of it as a fallback or backup <code>url</code>. It is perfectly acceptable to use the same <code>alternateURL</code> for multiple loaders (maybe a default image for various ImageLoaders for example).</li>
  * 		<li><strong> noCache : Boolean</strong> - If <code>noCache</code> is <code>true</code>, a "cacheBusterID" parameter will be appended to the url with a random set of numbers to prevent caching (don't worry, this info is ignored when you <code>getLoader()</code> or <code>getContent()</code> by url and when you're running locally)</li>
  * 		<li><strong> estimatedBytes : uint</strong> - Initially, the loader's <code>bytesTotal</code> is set to the <code>estimatedBytes</code> value (or <code>LoaderMax.defaultEstimatedBytes</code> if one isn't defined). Then, when the loader begins loading and it can accurately determine the bytesTotal, it will do so. Setting <code>estimatedBytes</code> is optional, but the more accurate the value, the more accurate your loaders' overall progress will be initially. If the loader will be inserted into a LoaderMax instance (for queue management), its <code>auditSize</code> feature can attempt to automatically determine the <code>bytesTotal</code> at runtime (there is a slight performance penalty for this, however - see LoaderMax's documentation for details).</li>
  * 		<li><strong> requireWithRoot : DisplayObject</strong> - LoaderMax supports <i>subloading</i>, where an object can be factored into a parent's loading progress. If you want LoaderMax to require this VideoLoader as part of its parent SWFLoader's progress, you must set the <code>requireWithRoot</code> property to your swf's <code>root</code>. For example, <code>var loader:VideoLoader = new VideoLoader("myScript.php", {name:"textData", requireWithRoot:this.root});</code></li>
@@ -158,6 +160,8 @@ function errorHandler(event:LoaderEvent):void {
 		public static const VIDEO_PAUSE:String="videoPause";
 		/** Event type constant for when the video begins or resumes playing. **/
 		public static const VIDEO_PLAY:String="videoPlay";
+		/** Event type constant for when the video reaches a cue point in the playback of the NetStream. **/
+		public static const VIDEO_CUE_POINT:String="videoCuePoint";
 		
 		/** @private **/
 		protected var _ns:NetStream;
@@ -244,6 +248,7 @@ function errorHandler(event:LoaderEvent):void {
 		 * 		<li><strong> estimatedDuration : Number</strong> - Estimated duration of the video in seconds. VideoLoader will only use this value until it receives the necessary metaData from the video in order to accurately determine the video's duration. You do not need to specify an <code>estimatedDuration</code>, but doing so can help make the playProgress and some other values more accurate (until the metaData has loaded). It can also make the <code>progress/bytesLoaded/bytesTotal</code> more accurate when a <code>estimatedDuration</code> is defined, particularly in <code>bufferMode</code>.</li>
 		 * 		<li><strong> deblocking : int</strong> - Indicates the type of filter applied to decoded video as part of post-processing. The default value is 0, which lets the video compressor apply a deblocking filter as needed. See Adobe's <code>flash.media.Video</code> class docs for details.</li>
 		 * 		<li><strong> bufferMode : Boolean </strong> - When <code>true</code>, the loader will report its progress only in terms of the video's buffer which can be very convenient if, for example, you want to display loading progress for the video's buffer or tuck it into a LoaderMax with other loaders and allow the LoaderMax to dispatch its <code>COMPLETE</code> event when the buffer is full instead of waiting for the whole file to download. When <code>bufferMode</code> is <code>true</code>, the VideoLoader will dispatch its <code>COMPLETE</code> event when the buffer is full as opposed to waiting for the entire video to load. You can toggle the <code>bufferMode</code> anytime. Please read the full <code>bufferMode</code> property ASDoc description below for details about how it affects things like <code>bytesTotal</code>.</li>
+		 * 		<li><strong> alternateURL:String</strong> - If you define an <code>alternateURL</code>, the loader will initially try to load from its original <code>url</code> and if it fails, it will automatically (and permanently) change the loader's <code>url</code> to the <code>alternateURL</code> and try again. Think of it as a fallback or backup <code>url</code>. It is perfectly acceptable to use the same <code>alternateURL</code> for multiple loaders (maybe a default image for various ImageLoaders for example).</li>
 		 * 		<li><strong> noCache : Boolean</strong> - If <code>noCache</code> is <code>true</code>, a "cacheBusterID" parameter will be appended to the url with a random set of numbers to prevent caching (don't worry, this info is ignored when you <code>getLoader()</code> or <code>getContent()</code> by url and when you're running locally)</li>
 		 * 		<li><strong> estimatedBytes : uint</strong> - Initially, the loader's <code>bytesTotal</code> is set to the <code>estimatedBytes</code> value (or <code>LoaderMax.defaultEstimatedBytes</code> if one isn't defined). Then, when the loader begins loading and it can accurately determine the bytesTotal, it will do so. Setting <code>estimatedBytes</code> is optional, but the more accurate the value, the more accurate your loaders' overall progress will be initially. If the loader will be inserted into a LoaderMax instance (for queue management), its <code>auditSize</code> feature can attempt to automatically determine the <code>bytesTotal</code> at runtime (there is a slight performance penalty for this, however - see LoaderMax's documentation for details).</li>
 		 * 		<li><strong> requireWithRoot : DisplayObject</strong> - LoaderMax supports <i>subloading</i>, where an object can be factored into a parent's loading progress. If you want LoaderMax to require this VideoLoader as part of its parent SWFLoader's progress, you must set the <code>requireWithRoot</code> property to your swf's <code>root</code>. For example, <code>var loader:VideoLoader = new VideoLoader("myScript.php", {name:"textData", requireWithRoot:this.root});</code></li>
@@ -305,7 +310,12 @@ function errorHandler(event:LoaderEvent):void {
 			_repeatCount = 0;
 			this.metaData = null;
 			_pauseOnBufferFull = _videoPaused;
-			this.volume = _volume; //ensures the volume is back to normal in case it had been temporarily silenced while buffering
+			if (_videoPaused) {
+				_sound.volume = 0;
+				_ns.soundTransform = _sound; //temporarily silence the audio because in some cases, the Flash Player will begin playing it for a brief second right before the buffer is full (we can't pause until then)
+			} else {
+				this.volume = _volume; //ensures the volume is back to normal in case it had been temporarily silenced while buffering
+			}
 			_sprite.addEventListener(Event.ENTER_FRAME, _enterFrameHandler);
 			_videoComplete = _initted = false;
 			_ns.play(_request.url);
@@ -451,44 +461,50 @@ function errorHandler(event:LoaderEvent):void {
 			if ("height" in info) {
 				_video.height = Number(info.height);
 			}
+			if (_ns.bufferTime > _duration) {
+				_ns.bufferTime = _duration;
+			}
 			_initted = true;
 			(_sprite as Object).rawContent = _video; //resizes it appropriately
 			dispatchEvent(new LoaderEvent(LoaderEvent.INIT, this));
 		}
 		
 		protected function _cuePointHandler(info:Object):void {
-			
+			dispatchEvent(new LoaderEvent(VIDEO_CUE_POINT, this));
 		}
 		
 		/** @private **/
 		protected function _statusHandler(event:NetStatusEvent):void {
-			if (_pauseOnBufferFull && this.bufferProgress == 1) {
+			var code:String = event.info.code;
+			if (_pauseOnBufferFull && (code == "NetStream.Play.Start" || this.bufferProgress == 1)) {
 				this.videoPaused = true;
 				gotoVideoTime(0, false);
+				this.volume = _volume;
+			} else if (code == "NetStream.Play.Start") {
+				dispatchEvent(new LoaderEvent(VIDEO_PLAY, this));
 			}
-			var code:String = event.info.code;
+			dispatchEvent(new LoaderEvent(NetStatusEvent.NET_STATUS, this, code));
 			if (code == "NetStream.Play.Stop") {
 				if (this.vars.repeat == -1 || uint(this.vars.repeat) > _repeatCount) {
 					_repeatCount++;
-					dispatchEvent(new Event(VIDEO_COMPLETE));
+					dispatchEvent(new LoaderEvent(VIDEO_COMPLETE, this));
 					gotoVideoTime(0, true);
 				} else {
 					_videoComplete = true;
 					this.videoPaused = true;
-					dispatchEvent(new Event(VIDEO_COMPLETE));
+					dispatchEvent(new LoaderEvent(VIDEO_COMPLETE, this));
 				}
 			} else if (code == "NetStream.Buffer.Full") {
-				dispatchEvent(new Event(VIDEO_BUFFER_FULL));
+				dispatchEvent(new LoaderEvent(VIDEO_BUFFER_FULL, this));
 			} else if (code == "NetStream.Buffer.Empty") {
-				dispatchEvent(new Event(VIDEO_BUFFER_EMPTY));
+				dispatchEvent(new LoaderEvent(VIDEO_BUFFER_EMPTY, this));
 			} else if (code == "NetStream.Play.StreamNotFound" || 
 					   code == "NetConnection.Connect.Failed" ||
 					   code == "NetStream.Play.Failed" ||
 					   code == "NetStream.Play.FileStructureInvalid" || 
 					   code == "The MP4 doesn't contain any supported tracks") {
-				_failHandler(new LoaderEvent(LoaderEvent.FAIL, this, code));
+				_failHandler(new LoaderEvent(LoaderEvent.ERROR, this, code));
 			}
-			_passThroughEvent(new LoaderEvent(NetStatusEvent.NET_STATUS, this, code));
 		}
 		
 		/** @private **/
@@ -496,7 +512,7 @@ function errorHandler(event:LoaderEvent):void {
 			var bl:uint = _cachedBytesLoaded;
 			var bt:uint = _cachedBytesTotal;
 			_calculateProgress();
-			if (_cachedBytesLoaded == _cachedBytesTotal && _ns.bytesTotal > 5 && this.metaData != null) { //make sure the metaData has been received because if the NetStream file is cached locally sometimes the bytesLoaded == bytesTotal BEFORE the metaData arrives.
+			if (_cachedBytesLoaded == _cachedBytesTotal && _ns.bytesTotal > 5 && (this.metaData != null || getTimer() - _time > 5000)) { //make sure the metaData has been received because if the NetStream file is cached locally sometimes the bytesLoaded == bytesTotal BEFORE the metaData arrives. Or timeout after 5 seconds.
 				_sprite.removeEventListener(Event.ENTER_FRAME, _enterFrameHandler);
 				if (!_initted) {
 					(_sprite as Object).rawContent = _video;
@@ -558,14 +574,14 @@ function errorHandler(event:LoaderEvent):void {
 					_ns.pause();
 				}
 				if (changed) {
-					dispatchEvent(new Event(VIDEO_PAUSE));
+					dispatchEvent(new LoaderEvent(VIDEO_PAUSE, this));
 				}
 			} else {
 				_pauseOnBufferFull = false;
 				this.volume = _volume; //Just resets the volume to where it should be in case we temporarily made it silent during the buffer.
 				_ns.resume();
 				if (changed) {
-					dispatchEvent(new Event(VIDEO_PLAY));
+					dispatchEvent(new LoaderEvent(VIDEO_PLAY, this));
 				}
 			}
 		}
