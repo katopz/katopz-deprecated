@@ -1,22 +1,21 @@
 package com.cutecoma.playground.editors
 {
 	import com.adobe.images.PNGEncoder;
-	import com.cutecoma.game.core.*;
-	import com.cutecoma.game.data.*;
-	import com.cutecoma.playground.core.*;
-	import com.cutecoma.playground.data.*;
+	import com.cutecoma.game.core.IEngine3D;
+	import com.cutecoma.playground.core.Area;
+	import com.cutecoma.playground.core.World;
+	import com.cutecoma.playground.data.AreaData;
+	import com.cutecoma.playground.data.CameraData;
+	import com.cutecoma.playground.data.ViewData;
 	import com.cutecoma.playground.events.AreaEditorEvent;
-	import com.sleepydesign.components.*;
-	import com.sleepydesign.events.*;
+	import com.sleepydesign.events.EventManager;
 	import com.sleepydesign.net.FileUtil;
 	import com.sleepydesign.system.SystemUtil;
-	import com.sleepydesign.utils.*;
 
-	import flash.display.*;
-	import flash.events.*;
-	import flash.filters.*;
+	import flash.display.Bitmap;
+	import flash.events.ContextMenuEvent;
+	import flash.events.Event;
 	import flash.ui.ContextMenuItem;
-	import flash.utils.*;
 
 	public class WorldEditor extends World
 	{
