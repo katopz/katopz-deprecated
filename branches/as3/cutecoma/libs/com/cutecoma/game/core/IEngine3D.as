@@ -8,7 +8,7 @@ package com.cutecoma.game.core
 	public interface IEngine3D
 	{
 		function get systemLayer():SDSprite;
-		function get canvasLayer():SDSprite;
+		function get contentLayer():SDSprite;
 		
 		function get scene3D():Scene3D;
 		function get view3D():View3D;

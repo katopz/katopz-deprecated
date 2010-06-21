@@ -1,9 +1,8 @@
 package com.cutecoma.playground.net
 {
-	import com.sleepydesign.events.NetEvent;
+	import com.cutecoma.playground.events.NetEvent;
 	import com.sleepydesign.events.RemovableEventDispatcher;
-	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.utils.DebugUtil;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ObjectUtil;
 	
 	import flash.events.NetStatusEvent;

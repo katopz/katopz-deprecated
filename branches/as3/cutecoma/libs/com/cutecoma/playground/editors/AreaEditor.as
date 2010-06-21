@@ -36,10 +36,8 @@
 
 	public class AreaEditor extends RemovableEventDispatcher
 	{
-		//public var log			:SDTextField;
 		private var _engine3D:IEngine3D;
 		private var _area:Area;
-		private static const FORWARD:Vector3D = new Vector3D(0, 0, -1);
 
 		private var _paintColor:String;
 		private var _rollOverColor:String;
@@ -126,7 +124,7 @@
 				//_area.ground.addEventListener(GroundEvent.MOUSE_MOVE, onTileMouseMove);
 				_area.mouseSignal.add(onTileClick);
 			}
-			_area.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			_engine3D.systemLayer.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 
 		private var _helpToolDialog:SDDialog;

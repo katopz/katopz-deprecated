@@ -2,25 +2,24 @@ package com.cutecoma.playground.components
 {
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDComponent;
-	import com.sleepydesign.components.SDInputText;
-	import com.sleepydesign.events.SDEvent;
-	import com.sleepydesign.events.SDMouseEvent;
+	import com.sleepydesign.components.SDTextInput;
 	
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 
 	public class SDChatBox extends SDComponent
 	{
-		private var chatInputText:SDInputText;
+		private var chatInputText:SDTextInput;
 
 		public function SDChatBox()
 		{
-			chatInputText = new SDInputText();
+			chatInputText = new SDTextInput();
 			chatInputText.width = 200;
 			addChild(chatInputText);
 
 			var chatButton:SDButton = new SDButton("Talk");
 			chatButton.x = chatInputText.width;
-			chatButton.addEventListener(SDMouseEvent.CLICK, onClick);
+			chatButton.addEventListener(MouseEvent.CLICK, onClick);
 			addChild(chatButton);
 
 			chatInputText.addEventListener(KeyboardEvent.KEY_DOWN, onEnter);
@@ -33,7 +32,7 @@ package com.cutecoma.playground.components
 				submit();
 		}
 
-		private function onClick(event:SDMouseEvent):void
+		private function onClick(event:MouseEvent):void
 		{
 			submit();
 		}
