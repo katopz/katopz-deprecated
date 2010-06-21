@@ -1,12 +1,12 @@
 package com.cutecoma.playground.components
 {
+    import com.cutecoma.playground.events.NetEvent;
     import com.cutecoma.playground.net.SharedObjectConnector;
     import com.sleepydesign.components.SDButton;
     import com.sleepydesign.components.SDComponent;
-    import com.sleepydesign.components.SDInputText;
-    import com.sleepydesign.events.NetEvent;
-    import com.sleepydesign.events.SDEvent;
-    import com.sleepydesign.events.SDMouseEvent;
+    import com.sleepydesign.components.SDTextInput;
+    
+    import flash.events.MouseEvent;
 	
 	public class SDConnector extends SDComponent
 	{
@@ -16,7 +16,7 @@ package com.cutecoma.playground.components
 		
 		private var connector:SharedObjectConnector;
 		
-		private var serverInputText:SDInputText;
+		private var serverInputText:SDTextInput;
 		private var connectButton:SDButton;
 		
 		private var isConnect:Boolean = false;
@@ -36,7 +36,7 @@ package com.cutecoma.playground.components
 			//var uri:String = "rtmp://www.digs.jp/SOSample";
 			
 			// TODO : apply from config ?
-			serverInputText = new SDInputText(uri);
+			serverInputText = new SDTextInput(uri);
 			serverInputText.width = 200;
 			addChild(serverInputText);
 			
@@ -45,7 +45,7 @@ package com.cutecoma.playground.components
 			connectButton.setSize(64, connectButton.height);
 			connectButton.x = serverInputText.width;
 			addChild(connectButton);
-			connectButton.addEventListener(SDMouseEvent.CLICK, onClick);
+			connectButton.addEventListener(MouseEvent.CLICK, onClick);
 			
 			super();
 			
@@ -55,7 +55,7 @@ package com.cutecoma.playground.components
 			}
 		}
 		
-		private function onClick(event:SDMouseEvent):void
+		private function onClick(event:MouseEvent):void
 		{
 			trace( " ^ onClick : "+isConnect);
 			if(!isConnect)

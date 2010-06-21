@@ -1,157 +1,67 @@
 package com.cutecoma.playground.core
 {
 	import away3dlite.cameras.Camera3D;
+	import away3dlite.containers.Scene3D;
+	import away3dlite.containers.View3D;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.templates.BasicTemplate;
 	
+	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.data.CameraData;
 	import com.cutecoma.playground.data.ViewData;
+	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.display.SDSprite;
 	
 	import flash.display.Sprite;
+	
+	import org.osflash.signals.Signal;
 
-	public class Engine3D extends BasicTemplate
+	public class Engine3D extends BasicTemplate implements IEngine3D, IDestroyable
 	{
-		public var system:SDSprite;
-		
-		public var dolly:Camera3D;
-		public var decoy:Object3D;
+		private var _systemLayer:SDSprite;
 
-		public var im:*;
-		
-		public var container:Sprite;
-		private var _data:Object;
-		
-		private var config:Object;
-
-		// ______________________________ Core ______________________________
-
-		public function Engine3D(container:Sprite, engine3DData:Object = null):void
+		public function set systemLayer(value:SDSprite):void
 		{
-			this.container = container;
-			_data = engine3DData;
-			init();
+			_systemLayer = value;
 		}
 
-		// ______________________________ Initialize ______________________________
-
-		protected function init():void
+		public function get systemLayer():SDSprite
 		{
-			//container.stage.quality = "medium";
+			return _systemLayer;
+		}
+		
+		private var _contentLayer:SDSprite;
 
-			//var defaultRaw:ViewData = new ViewData(new CameraData(0,1000,-0.00000001,0,0,0,60,8.7,70));
+		public function set contentLayer(value:SDSprite):void
+		{
+			_contentLayer = value;
+		}
 
-			//ObjectUtil.merge(raw, defaultRaw);
-
-			parse(_data ? _data : new ViewData(new CameraData()));
+		public function get contentLayer():SDSprite
+		{
+			return _contentLayer;
+		}
+		
+		public function get view3D():View3D
+		{
+			return view;
+		}
+		
+		public function get scene3D():Scene3D
+		{
+			return scene;
+		}
+		
+		public var completeSignal:Signal = new Signal();
+		
+		public function Engine3D()
+		{
 			
-			addChild(system = new SDSprite);
 		}
-
-		// ______________________________ Parse ______________________________
-
-		public function parse(raw:Object = null):void
+		
+		override protected function onInit():void
 		{
-			// default config
-			raw.animated = true;
-			raw.interactive = true;
-			raw.autoClipping = !true;
-			raw.autoCulling = !true;
-			raw.width = container.stage.stageWidth;
-			raw.height = container.stage.stageHeight;
-
-			//ObjectUtil.merge(raw, config);
-
-			create(raw);
-		}
-
-		// ______________________________ Create ______________________________	
-
-		public function create(config:Object = null):void
-		{
-			//super.create(config);
-			this.config = config;
-
-			dolly = new Camera3D();
-			//decoy = new DisplayObject3D();
-
-			update(config);
-		}
-
-		// ______________________________ Update ____________________________
-
-		public function update(data:Object = null):void
-		{
-			config = data;
-
-			camera.x = config.camera.x;
-			camera.y = config.camera.y;
-			camera.z = config.camera.z;
-			camera.rotationX = config.camera.rotationX;
-			camera.rotationY = config.camera.rotationY;
-			camera.rotationZ = config.camera.rotationZ;
-			//camera.fov = config.camera.fov;
-			camera.focus = config.camera.focus;
-			camera.zoom = config.camera.zoom;
-
-			/*
-			   camera.copyPosition(camLee);
-			 */
-
-			/*
-			   decoy.x = config.decoy.x;
-			   decoy.y = config.decoy.y;
-			   decoy.z = config.decoy.z;
-			   dolly.lookAt(decoy);
-			   decoy.lookAt(dolly);
-			 */
-
-			//camera.copyPosition(dolly);
-			//dolly.copyTransform(camera);
-			dolly.transform.matrix3D = camera.transform.matrix3D.clone();
-			//dolly.fov = camera.fov;
-			dolly.focus = camera.focus;
-			dolly.zoom = camera.zoom;
-
-			//trace("dolly:" + dolly)
-
-			//var length:uint = dolly.distanceTo(decoy);
-
-			//trace("length:" + length)
-			//var vt = new Vertex3D(0, 0, 0)
-
-			//camLee = new LeeCamera3D(vt,length,0,0);
-
-			//____________________________________________________________ Debug
-
-			//init3d(new Event(Event.COMPLETE));
-
-		/*
-		   trace("____________________________________________________");
-		   trace("camera:" + camera);
-		   trace("____________________________________________________");
-		 */
-
-			 //trace("dolly:" + dolly);
-			 //trace("decoy:" + decoy);
-
-			 //trace("fov:" + camera.fov);
-			 //trace("focus:" + camera.focus);
-			 //trace("zoom:" + camera.zoom);
-		}
-
-		override protected function onPreRender():void
-		{
-			/*
-			   camera.copyTransform(dolly);
-
-			   renderer.renderScene(scene, camera, viewport);
-
-			   if(uiScene)
-			   renderer.renderScene(uiScene, camera, uiViewport);
-			 */
-
-			//draw();
+			completeSignal.dispatch();
 		}
 	}
 }
