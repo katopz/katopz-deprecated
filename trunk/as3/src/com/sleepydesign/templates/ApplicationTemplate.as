@@ -21,9 +21,9 @@ package com.sleepydesign.templates
 
 		protected var _xml:XML;
 
-		private static var _systemLayer:SDSprite;
+		protected var _systemLayer:SDSprite;
 
-		public static function get systemLayer():SDSprite
+		public function get systemLayer():SDSprite
 		{
 			return _systemLayer;
 		}
@@ -65,6 +65,8 @@ package com.sleepydesign.templates
 			initLayer();
 			initLoader();
 			initSystem();
+			
+			onInit();
 		}
 
 		protected function initLayer():void
@@ -101,11 +103,14 @@ package com.sleepydesign.templates
 
 		protected function onInitXML():void
 		{
-			// override me
-			
 			createSiteMap();
 			initNavigation();
 			setFocus(path);
+		}
+		
+		protected function onInit():void
+		{
+			// override me
 		}
 		
 		protected function initNavigation():void
