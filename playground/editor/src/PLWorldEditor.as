@@ -67,11 +67,9 @@ package
 		override protected function onInit():void
 		{
 			_engine3D = new Engine3D();
-			_engine3D.systemLayer = _systemLayer;
-			_engine3D.contentLayer = _contentLayer;
 			_engine3D.completeSignal.addOnce(onEngineInit);
 
-			addChild(_engine3D);
+			_contentLayer.addChild(_engine3D);
 		}
 
 		private function onEngineInit():void
