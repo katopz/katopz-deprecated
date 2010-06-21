@@ -11,10 +11,11 @@
 	import com.cutecoma.playground.editors.WorldEditor;
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.greensock.plugins.*;
-	import com.sleepydesign.application.core.SDApplication;
 	import com.sleepydesign.components.*;
 	import com.sleepydesign.events.*;
-	import com.sleepydesign.managers.EventManager;
+	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.system.SystemUtil;
+	import com.sleepydesign.templates.ApplicationTemplate;
 	import com.sleepydesign.utils.*;
 	
 	import flash.display.*;
@@ -36,9 +37,9 @@
 	   Edit Charactor -> Edit Area -> View
 
 	 */
-	public class main extends SDApplication
+	public class main extends ApplicationTemplate
 	{
-		private const VERSION:String = "PlayGround 2.4";
+		private const VERSION:String = "PlayGround beta 3";
 		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
 		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 		//private const SERVER_URI:String = "rtmp://localhost/SOSample";
@@ -46,6 +47,7 @@
 		registerClassAlias("com.cutecoma.playground.data.AreaData", AreaData);
 		registerClassAlias("com.cutecoma.playground.data.MapData", MapData);
 		registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
+		registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 		registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 
 		private var engine3D:Engine3D;
@@ -66,31 +68,24 @@
 		private var areaPanel:AreaPanel;
 
 		private var _selectAreaID:String = "00";
-
+		
+		private var stats:Stats;
+		
 		public function main()
 		{
-			//SleepyDesign.stage = stage;
-			super("PlayGround");
-			addEventListener(Event.ADDED_TO_STAGE, onStage);
-
 			SystemUtil.addContext(this, "Show stats", toggleStat);
+			alpha = .1
 		}
 
 		protected function toggleStat(event:Event):void
 		{
 			if (!stats)
-				system.addChild(stats = new Stats());
+				systemLayer.addChild(stats = new Stats());
 			else
 			{
-				system.removeChild(stats);
+				systemLayer.removeChild(stats);
 				stats = null;
 			}
-		}
-
-		protected function onStage(event:Event):void
-		{
-			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			LoaderUtil.loadXML("config.xml", onGetConfig);
 		}
 
 		private function onGetConfig(event:Event):void
@@ -129,22 +124,33 @@
 				case "edit-area":
 					_isEditArea = true;
 				case "enter-area":
-					LoaderUtil.loadAsset("AreaPanel.swf", onAreaPanelLoad);
+					showAreaPanel(onAreaIDChange);
 					break;
 				case "edit-character":
 
 					break;
 			}
 		}
-
-		private function onAreaPanelLoad(event:Event):void
+		
+		private function showAreaPanel(callback:Function):void
 		{
-			if (event.type != "complete")
-				return;
-			areaPanel = event.target.content as AreaPanel;
-			areaPanel.isEdit = _isEditArea;
-			SDApplication.system.addChild(areaPanel);
-			EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
+			if (!areaPanel)
+			{
+				LoaderUtil.loadAsset("AreaPanel.swf", function onAreaPanelLoad(event:Event):void
+				{
+					if (event.type != "complete")
+						return;
+					
+					areaPanel = event.target.content as AreaPanel;
+					systemLayer.addChild(areaPanel);
+					EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
+				});
+			}
+			else
+			{
+				areaPanel.visible = true;
+				EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
+			}
 		}
 
 		private function onAreaIDChange(event:AreaEditorEvent):void
@@ -160,6 +166,7 @@
 
 		public function createArea(areaData:AreaData):void
 		{
+			/*
 			// ___________________________________________________________ 2D Layer
 
 			// game
@@ -180,19 +187,6 @@
 			area.ground = new Ground(engine3D, area.map, true);
 			area.ground.addEventListener(SDMouseEvent.MOUSE_DOWN, onGroundClick);
 
-			// ___________________________________________________________ Char
-
-			/*
-			var chars:Characters = new Characters();
-
-			chars.addCharacter(new CharacterData("man1", "assets/man1/model.swf", 1, 100, 24, ["stand", "walk", "sit"]));
-			chars.addCharacter(new CharacterData("woman1", "assets/woman1/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
-			chars.addCharacter(new CharacterData("man2", "assets/man2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
-			chars.addCharacter(new CharacterData("woman2", "assets/woman2/model.dae", 1, 100, 24, ["stand", "walk", "sit"]));
-			*/
-
-			//TODO : wait for user select char and add player 
-
 			// ___________________________________________________________ Player
 
 			game.player = new Player();//new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
@@ -208,7 +202,7 @@
 			if (_isEditArea)
 			{
 				worldEditor = new WorldEditor(engine3D, area);
-				system.addChild(worldEditor);
+				systemLayer.addChild(worldEditor);
 				worldEditor.activate();
 			}
 			else
@@ -221,14 +215,17 @@
 
 			// start
 			game.start();
+			*/
 		}
 
 		// _______________________________________________________ Action
 
-		private function onGroundClick(event:SDMouseEvent):void
+		private function onGroundClick(event:MouseEvent):void
 		{
+			/*
 			if (!_isEditArea)
 				game.player.walkTo(Position.parse(event.data.position));
+			*/
 		}
 
 		// _______________________________________________________ Connector
@@ -239,7 +236,7 @@
 			connector = new SDConnector(SERVER_URI, id);
 			connector.x = 100;
 			connector.y = 20;
-			system.addChild(connector);
+			systemLayer.addChild(connector);
 			//connector.visible = false;
 
 			// bind connector -> game
@@ -255,7 +252,7 @@
 			chatBox = new SDChatBox();
 			chatBox.x = 100;
 			chatBox.y = 40;
-			system.addChild(chatBox);
+			systemLayer.addChild(chatBox);
 
 			// bind chat -> player
 			chatBox.addEventListener(SDEvent.UPDATE, onTalk);
@@ -296,19 +293,19 @@
 				//cache
 				configs[areaData.id] = areaData;
 
-				SDApplication.getInstance()["gotoArea"](areaData);
+//SDApplication.getInstance()["gotoArea"](areaData);
 			}
 			else if (event.type == IOErrorEvent.IO_ERROR && _isEditArea)
 			{
 				// new area
 				areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
-				SDApplication.getInstance()["gotoArea"](areaData);
+//SDApplication.getInstance()["gotoArea"](areaData);
 			}
 		}
 
 		// ______________________________ Update ____________________________
 
-		override public function applyCommand(data:Object = null):void
+		public function applyCommand(data:Object = null):void
 		{
 			var _player:Player = Player(data.args[1]);
 
@@ -325,7 +322,7 @@
 		}
 
 		//private var _selectAreaID:String = "00";
-
+		private var _data:AreaData;
 		private function gotoAreaID(id:String):void
 		{
 			_data = getConfigByAreaID(id);
@@ -366,7 +363,7 @@
 
 				//update area
 				area.update(areaData);
-				engine3D.update(areaData.scene);
+////engine3D.update(areaData.scene);
 				game.player.warp(area.map.getWarpPoint(currentRoomID));
 
 				// TODO : actually we need to wait for connection success?
