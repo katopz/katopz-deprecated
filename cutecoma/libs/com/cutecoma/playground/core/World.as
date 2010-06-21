@@ -1,23 +1,13 @@
 ﻿package com.cutecoma.playground.core
 {
-	import com.adobe.images.PNGEncoder;
-	import com.cutecoma.game.core.*;
-	import com.cutecoma.game.data.*;
-	import com.cutecoma.playground.core.*;
-	import com.cutecoma.playground.data.*;
-	import com.cutecoma.playground.events.AreaEditorEvent;
-	import com.sleepydesign.components.*;
-	import com.sleepydesign.events.*;
-	import com.sleepydesign.net.FileUtil;
+	import com.cutecoma.game.core.IEngine3D;
+	import com.cutecoma.playground.data.AreaData;
 	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.system.SystemUtil;
-	import com.sleepydesign.utils.*;
 	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.filters.*;
-	import flash.ui.ContextMenuItem;
-	import flash.utils.*;
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.utils.ByteArray;
+	import flash.utils.IExternalizable;
 	
 	public class World
 	{

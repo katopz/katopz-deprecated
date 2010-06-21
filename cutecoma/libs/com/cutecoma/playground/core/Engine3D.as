@@ -59,8 +59,14 @@ package com.cutecoma.playground.core
 			
 		}
 		
+		override protected function onStage():void
+		{
+			addChild(_contentLayer = new SDSprite);
+		}
+		
 		override protected function onInit():void
 		{
+			addChild(_systemLayer = new SDSprite);
 			completeSignal.dispatch();
 		}
 	}
