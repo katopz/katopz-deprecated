@@ -14,7 +14,7 @@ package
 		public function Authen()
 		{
 			// asset
-			logInClip = new FormClip() as Sprite
+			logInClip = new FormClip() as Sprite;
 			addChild(logInClip);
 			
 			//trace("logInClip" + logInClip);
