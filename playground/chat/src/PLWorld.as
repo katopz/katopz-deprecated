@@ -1,6 +1,7 @@
 package
 {
 	import com.cutecoma.game.core.Game;
+	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.components.SDChatBox;
@@ -23,13 +24,14 @@ package
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="480")]
 	
 	/**
-	 *		 [OtherUser] .  [User]
+	 *					 .
+	 * 		 [OtherUser] .  [User]
 	 *				 \	 .	 /
 	 *		 	  [Authenticate]
 	 * 			     /   .   \ 
 	 *	 	     [Net]   .   [UI] --- [Controller]
 	 *	 	       |     .     |
-	 *	    [MultiPlayer].[Player] --- [Model]
+	 *	    [MultiPlayer].[Player] --- [Character]
 	 * 		           \ . /
 	 * 		          [Game] --- [PathFinder]
 	 * 	 	             |
@@ -69,8 +71,8 @@ package
 	public class PLWorld extends ApplicationTemplate
 	{
 		private const VERSION:String = "PlayGround beta 3";
-		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
-		private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
+		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
+		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
 		//private const SERVER_URI:String = "rtmp://localhost/SOSample";
 		
 		private var _world:World;
@@ -243,8 +245,11 @@ package
 			// world
 			_world.createArea(areaData);
 			
+			// fake player data, TODO : load from real player data via open social
+			var _playerData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), _world.area.map.getSpawnPoint(), "user.mdj", PlayerEvent.STAND, 3);
+			
 			// player
-			_game.player = new Player(); //new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
+			_game.player = new Player(_playerData); //new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
 
 			// read map
 			_game.player.map = _world.area.map;
