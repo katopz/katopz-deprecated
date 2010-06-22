@@ -15,43 +15,6 @@ package
 	 */
 	public class PLWorldEditor extends ApplicationTemplate
 	{
-		/**
-		 * 	       [PlayGround]
-		 * 	             |
-		 * 	        [Engine3D]
-		 *	             |
-		 *	[Char]----[World]----[Area]
-		 *	   |         |         |
-		 *	[CharE]---[WorldE]---[AreaE]
-		 */
-
-		/*
-		   TODO :
-
-		   + editor
-		   //- switch between area //reload other area -> destroy -> create
-		   //- view FPS controller
-		   - flood fill
-		   //- import/export external bitmap as map
-		   //- load and save as other id
-		   - clean up
-		   - MVC
-
-		   + chat
-		   - load MDJ and test path finder, speed, destroy, model pool
-		   - test switch between area
-		   - login via opensocial
-		   - clean up
-		   - MVC
-
-		   + lite
-		   - heightmap support, test with jiglib
-		   - 2.5D Clip, animation controller
-		   - infinite loop perlin noise fog, fire
-		   - lenflare
-		   - explode effect
-		 */
-
 		private var _worldEditor:WorldEditor;
 		private var _engine3D:Engine3D;
 
@@ -62,6 +25,8 @@ package
 			registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
+			
+			alpha = .1;
 		}
 
 		override protected function onInit():void
