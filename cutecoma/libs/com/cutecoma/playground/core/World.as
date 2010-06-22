@@ -1,19 +1,34 @@
 ﻿package com.cutecoma.playground.core
 {
-	import com.cutecoma.game.core.IEngine3D;
-	import com.cutecoma.playground.data.AreaData;
+	import com.adobe.images.PNGEncoder;
+	import com.cutecoma.game.core.*;
+	import com.cutecoma.game.data.*;
+	import com.cutecoma.playground.core.*;
+	import com.cutecoma.playground.data.*;
+	import com.cutecoma.playground.events.AreaEditorEvent;
+	import com.sleepydesign.components.*;
+	import com.sleepydesign.events.*;
+	import com.sleepydesign.net.FileUtil;
 	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.system.SystemUtil;
+	import com.sleepydesign.utils.*;
 	
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.utils.ByteArray;
-	import flash.utils.IExternalizable;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.filters.*;
+	import flash.ui.ContextMenuItem;
+	import flash.utils.*;
 	
 	public class World
 	{
 		protected var _engine3D:IEngine3D;
 		
-		protected var area:Area;
+		protected var _area:Area;
+
+		public function get area():Area
+		{
+			return _area;
+		}
 		
 		public function World(engine3D:IEngine3D)
 		{
@@ -43,13 +58,12 @@
 			if (event.type == "complete")
 				readArea(event.target.data);
 			else if (event.type == IOErrorEvent.IO_ERROR)
-				newArea();
+				createArea(new AreaData(_area.data.id, _area.data.id + "_bg.swf", 40, 40));
 		}
 		
-		protected function newArea():void
+		public function createArea(areaData:AreaData):void
 		{
-			// new area
-			var areaData:AreaData = new AreaData(area.data.id, area.data.id + "_bg.swf", 40, 40);
+			_area = new Area(_engine3D, areaData);
 			//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
 		}
 		
@@ -66,10 +80,10 @@
 		
 		protected function updateArea(areaData:AreaData):void
 		{
-			if(!area)
-				area = new Area(_engine3D, areaData);
+			if(!_area)
+				createArea(areaData);
 			else
-				area.update(areaData);
+				_area.update(areaData);
 		}
 	}
 }

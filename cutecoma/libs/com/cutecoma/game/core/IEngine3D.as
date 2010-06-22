@@ -12,5 +12,8 @@ package com.cutecoma.game.core
 		
 		function get scene3D():Scene3D;
 		function get view3D():View3D;
+		
+		function start():void;
+		function stop():void;
 	}
 }

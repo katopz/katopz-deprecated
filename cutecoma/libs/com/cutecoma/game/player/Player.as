@@ -119,8 +119,8 @@
 			
 			char =  new Character();
 			//instance = char.instance;
-			instance.alpha = 0;
-			instance.visible = false;
+			//instance.alpha = 0;
+			//instance.visible = false;
 			
 			dolly = new Object3D();
 			decoy = new Object3D();
@@ -132,7 +132,7 @@
 				char.create(config);
 	
 				//instance.transform = Matrix3D.fromPosition(data.pos);
-				instance.copyPosition(config.pos);
+				//instance.copyPosition(config.pos);
 				dolly.copyPosition(config.pos);
 				decoy.copyPosition(config.des);
 				
