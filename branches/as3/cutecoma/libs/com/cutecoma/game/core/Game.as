@@ -1,5 +1,7 @@
 package com.cutecoma.game.core
 {
+	import away3dlite.animators.MovieMeshContainer3D;
+	
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.player.Player;
 	import com.sleepydesign.core.IDestroyable;
@@ -48,8 +50,16 @@ package com.cutecoma.game.core
 			// plug to gameplayers.addItem
 			players.addItem(_player, _player.id);
 			
+			// wait for char model complete
+			_player.charCompleteSignal.addOnce(addCharacterModelToEngine);
+			
 			// plug to 3d Engine
 			//TODEV//engine.addChild(_player.instance);
+		}
+		
+		public function addCharacterModelToEngine(model:MovieMeshContainer3D):void
+		{
+			_engine3D.scene3D.addChild(model);
 		}
 		
 		public function removePlayer(_player:Player=null):void

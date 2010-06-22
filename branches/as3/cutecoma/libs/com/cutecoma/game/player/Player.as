@@ -1,5 +1,6 @@
 ﻿﻿package com.cutecoma.game.player
 {
+	import away3dlite.animators.MovieMeshContainer3D;
 	import away3dlite.core.base.Object3D;
 	import away3dlite.core.base.Particle;
 	
@@ -15,6 +16,8 @@
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	
 	import flash.events.Event;
+	
+	import org.osflash.signals.Signal;
 
 	//import org.papervision3d.objects.SDObject3D;
 
@@ -112,12 +115,16 @@
 		
 		// ______________________________ Create ______________________________
 		
-		private var char:Character
+		private var char:Character;
+		public var charCompleteSignal:Signal = new Signal(MovieMeshContainer3D);
+		
 		public function create(config:Object=null):void
 		{
 			//instance = new Sphere(new WireframeMaterial(0xFF00FF), 50, 2, 2);
 			
 			char =  new Character();
+			char.completeSignal.addOnce(function(model:MovieMeshContainer3D):void{charCompleteSignal.dispatch(model)});
+				
 			//instance = char.instance;
 			//instance.alpha = 0;
 			//instance.visible = false;
@@ -133,8 +140,8 @@
 	
 				//instance.transform = Matrix3D.fromPosition(data.pos);
 				//instance.copyPosition(config.pos);
-				dolly.copyPosition(config.pos);
-				decoy.copyPosition(config.des);
+				//dolly.copyPosition(config.pos);
+				//decoy.copyPosition(config.des);
 				
 				if(balloonClip)
 					balloonClip.y = char.height;
