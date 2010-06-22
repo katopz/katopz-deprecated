@@ -25,9 +25,9 @@ package
 	
 	/**
 	 *					 .
-	 * 		 [OtherUser] .  [User]
+	 * 		[OtherUser]  .  [User]
 	 *				 \	 .	 /
-	 *		 	  [Authenticate]
+	 *		 	  [Authenticate] --- [Persistent Data]
 	 * 			     /   .   \ 
 	 *	 	     [Net]   .   [UI] --- [Controller]
 	 *	 	       |     .     |
@@ -51,6 +51,7 @@ package
 	- flood fill
 	//- import/export external bitmap as map
 	//- load and save as other id
+	- add wire frame box for estimate scene height
 	- clean up
 	- MVC
 	
@@ -101,8 +102,6 @@ package
 			registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
-
-			alpha = .1;
 		}
 
 		override protected function onInit():void
