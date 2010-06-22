@@ -2,6 +2,7 @@ package com.cutecoma.game.core
 {
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.player.Player;
+	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.ui.InputController;
@@ -11,32 +12,24 @@ package com.cutecoma.game.core
 	
 	public class Game extends SDSprite
 	{
-		public var engine					: AbstractEngine;
-		public static var inputController	: InputController;
+		protected var _engine3D:IEngine3D;
+		
+		//public static var inputController	: InputController;
 		
 		public var player					: Player;
 		public var players					: SDGroup;
 		
-		public static var instance : Game;
-        public static function getInstance() : Game
-        {
-            if ( instance == null ) instance = new Game();//null, factorX, factorZ);
-            return instance as Game;
-        }
-        
-		public function Game()
+		public function Game(engine3D:IEngine3D)
 		{
-			instance = this;
-			super();
-			
+			_engine3D = engine3D;
 			players = new SDGroup;
 		}
 				
 		public function start() : void
 		{
-			if(engine)
+			if(_engine3D)
 			{
-				engine.start();
+				_engine3D.start();
 			}else{
 				trace(" ! Error : no engine found!");
 			}
@@ -45,23 +38,6 @@ package com.cutecoma.game.core
 		protected function run(event:Event=null) : void
 		{
 			//draw();
-		}
-		
-		override public function destroy():void
-		{
-			if(inputController)
-			{
-				inputController.destroy();
-				inputController = null;
-			}
-			
-			removePlayer();
-			
-			if(engine)
-			{
-				engine.destroy();
-				engine = null;
-			}
 		}
 		
 		public function addPlayer(_player:Player):void
@@ -178,6 +154,15 @@ package com.cutecoma.game.core
 				// it's me
 				// do someting? maybe god speech from server?
 			}
+		}
+		
+		override public function destroy():void
+		{
+			removePlayer();
+			
+			if(IDestroyable(_engine3D))
+				IDestroyable(_engine3D).destroy();
+			_engine3D = null;
 		}
 	}
 }

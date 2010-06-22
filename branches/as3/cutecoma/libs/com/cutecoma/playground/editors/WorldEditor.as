@@ -105,10 +105,10 @@ package com.cutecoma.playground.editors
 			if (!area)
 			{
 				// create area
-				area = new Area(_engine3D, areaData);
+				_area = new Area(_engine3D, areaData);
 
 				// bind to editor
-				areaEditor.setArea(area);
+				areaEditor.setArea(_area);
 			}
 			else
 			{
