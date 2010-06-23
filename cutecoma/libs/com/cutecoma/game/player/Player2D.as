@@ -317,7 +317,7 @@
 				commandData.args.push(this);
 				
 				// apply
-				AbstractGame.applyCommand(commandData.command, commandData.args);
+				//AbstractGame.applyCommand(commandData.command, commandData.args);
 			}
 		}
 		
