@@ -60,7 +60,7 @@ package com.cutecoma.game.core
 			//eventHandler(model);
 			
 			var _mdj:MDJ = new MDJ();
-			_mdj.path = serverPath;
+			_mdj.meshPath = _mdj.texturePath = serverPath;
 				
 			//data.fps
 			//_mdj.scaling = data.scale;

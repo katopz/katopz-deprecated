@@ -17,6 +17,10 @@
 		private var _engine3D:IEngine3D;
 		
 		private var _plane:Plane;
+		public function get plane():Plane
+		{
+			return _plane;
+		}
 
 		// tile
 		private var _debug:Boolean = false;

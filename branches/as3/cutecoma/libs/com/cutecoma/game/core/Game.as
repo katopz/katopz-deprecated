@@ -7,7 +7,6 @@ package com.cutecoma.game.core
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.ui.InputController;
 	import com.sleepydesign.utils.ObjectUtil;
 	
 	import flash.events.Event;
@@ -50,16 +49,14 @@ package com.cutecoma.game.core
 			// plug to gameplayers.addItem
 			players.addItem(_player, _player.id);
 			
-			// wait for char model complete
+			// wait for char model complete and plug to 3d Engine
 			_player.charCompleteSignal.addOnce(addCharacterModelToEngine);
-			
-			// plug to 3d Engine
-			//TODEV//engine.addChild(_player.instance);
 		}
 		
 		public function addCharacterModelToEngine(model:MovieMeshContainer3D):void
 		{
 			_engine3D.scene3D.addChild(model);
+			model.stop();
 		}
 		
 		public function removePlayer(_player:Player=null):void
