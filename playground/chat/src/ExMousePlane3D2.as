@@ -1,8 +1,12 @@
 package
 {
+	import away3dlite.core.base.Mesh;
 	import away3dlite.core.utils.Debug;
+	import away3dlite.events.MouseEvent3D;
 	import away3dlite.materials.ColorMaterial;
+	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.materials.WireframeMaterial;
+	import away3dlite.primitives.Plane;
 	import away3dlite.primitives.Sphere;
 	import away3dlite.templates.PhysicsTemplate;
 	
@@ -33,6 +37,8 @@ package
 		private var dragConstraint:JConstraintWorldPoint;
 		
 		private var _sphere:Sphere;
+		private var _sphere2:Sphere;
+		private var _plane:Plane;
 
 		override protected function build():void
 		{
@@ -42,15 +48,26 @@ package
 
 			init3D();
 
-			/*
+			scene.addChild(_sphere = new Sphere(new WireColorMaterial(null, 0.5)));
+			scene.addChild(_sphere2 = new Sphere(new WireColorMaterial(null, 0.5)));
+			scene.addChild(_plane = new Plane(new WireColorMaterial(null,0.5),1000,1000));
+			
 			ground.rotationX = 15;
-			ground.rotationY = 45;
+			ground.rotationY = 15;
 			ground.rotationZ = 15;
-			*/
 			
-			scene.addChild(_sphere = new Sphere);
+			_plane.rotationX = 15;
+			_plane.rotationY = 15;
+			_plane.rotationZ = 15;
 			
-			alpha=.1
+			scene.addEventListener(MouseEvent3D.MOUSE_DOWN, onSceneMouseUp);
+		}
+		
+		private function onSceneMouseUp(e:MouseEvent3D):void
+		{
+			Debug.trace("---"+e.scenePosition);
+			_sphere2.x = e.scenePosition.x;
+			_sphere2.z = e.scenePosition.z;
 		}
 
 		private function init3D():void
@@ -96,7 +113,7 @@ package
 			var ray:Vector3D = unproject(camera.transform.matrix3D, camera.focus, camera.zoom, view.mouseX, -view.mouseY);
 			
 			//convert ray to a 3d point in the ray direction from the camera
-			ray = ray.add(_cameraPosition);
+			//ray = ray.add(_cameraPosition);
 			
 			//find the intersection of the line defined by the camera and the ray position with the plane3D
 			var intersect:Vector3D = JMath3D.getIntersectionLine(planeToDragOn, _cameraPosition, ray);
@@ -104,7 +121,7 @@ package
 			_sphere.x = intersect.x;
 			_sphere.z = intersect.z;
 			
-			Debug.trace(intersect);
+			Debug.trace("***"+intersect);
 		}
 		
 		private function unproject(matrix3D:Matrix3D, focus:Number, zoom:Number, mX:Number, mY:Number):Vector3D
@@ -114,16 +131,8 @@ package
 			var vector:Vector3D = new Vector3D(mX / persp, -mY / persp, focus);
 			return matrix3D.transformVector(vector);
 			*/
-			/*
-			var persp:Number = (focus * zoom) / matrix3D.position.z;
-			Debug.trace(persp);
+			var persp:Number = -0.84908;//(focus * zoom) / matrix3D.position.z;
 			var vector:Vector3D = new Vector3D(mX / persp, -mY / persp, matrix3D.position.z - focus);
-			return matrix3D.transformVector(vector);
-			*/
-			var persp:Number = matrix3D.position.z / (zoom * focus);
-			Debug.trace(persp);
-			var vector:Vector3D = new Vector3D(mX * persp, -mY * persp, matrix3D.position.z - focus);
-			Debug.trace(vector);
 			return matrix3D.transformVector(vector);
 		}
 
