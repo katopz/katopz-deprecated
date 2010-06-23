@@ -33,13 +33,14 @@ package
 	 *	 	       |     .     |
 	 *	    [MultiPlayer].[Player] --- [Character]
 	 * 		           \ . /
-	 * 		          [Game] --- [PathFinder]
+	 * 		          [Game]
 	 * 	 	             |
 	 * 		         [Engine3D]
 	 *		             |
-	 *		[Char]----[World]----[Area]
+	 *		[Char]----[World]----[Area]----[Ground]----[PathFinder]
 	 *		   |         |         |
 	 *		[CharE]---[WorldE]---[AreaE]
+	 * 
 	 */
 	
 	/*
@@ -56,7 +57,10 @@ package
 	- MVC
 	
 	+ chat
-	- load MDJ and test path finder, speed, destroy, model pool
+	//- load MDJ 
+	- test path finder 
+	- test action
+	- speed, destroy, model pool
 	- test switch between area
 	- login via opensocial
 	- clean up
@@ -102,6 +106,8 @@ package
 			registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
+			
+			alpha = .1;
 		}
 
 		override protected function onInit():void
