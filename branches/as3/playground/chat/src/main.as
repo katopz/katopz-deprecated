@@ -74,7 +74,6 @@
 		public function main()
 		{
 			SystemUtil.addContext(this, "Show stats", toggleStat);
-			alpha = .1
 		}
 
 		protected function toggleStat(event:Event):void
@@ -94,7 +93,7 @@
 				return;
 
 			var _xml:XML = event.target.data;
-			PixelLiving.areaPath = String(_xml.world.area.@path);
+			//PixelLiving.areaPath = String(_xml.world.area.@path);
 
 			setupMenu();
 		}
@@ -298,7 +297,7 @@
 			else if (event.type == IOErrorEvent.IO_ERROR && _isEditArea)
 			{
 				// new area
-				areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
+				//areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
 //SDApplication.getInstance()["gotoArea"](areaData);
 			}
 		}
@@ -328,17 +327,20 @@
 			_data = getConfigByAreaID(id);
 
 			// cache not exist
+			/*
+			
 			if (!_data)
 				LoaderUtil.load(PixelLiving.areaPath + id + ".ara", onAreaLoad);
 			else
 				gotoArea(_data);
+			*/
 		}
 
 		public function gotoArea(areaData:AreaData):void
 		{
 			if (!area)
 			{
-				areaData.background = PixelLiving.areaPath + areaData.background;  
+				//areaData.background = PixelLiving.areaPath + areaData.background;  
 				createArea(areaData);
 				currentRoomID = areaData.id;
 				return;

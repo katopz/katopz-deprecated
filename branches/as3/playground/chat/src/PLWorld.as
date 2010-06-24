@@ -107,7 +107,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			alpha = .1;
+			//alpha = .1;
 		}
 
 		override protected function onInit():void
@@ -128,7 +128,7 @@ package
 
 		override protected function onInitXML():void
 		{
-			PixelLiving.areaPath = String(_xml.world.area.@path);
+			_world.areaPath = String(_xml.world.area.@path);
 
 			initMenu();
 		}
@@ -139,7 +139,7 @@ package
 					<!--<answer src="as:onUserSelect('edit-character')"><![CDATA[Select Character.]]></answer>-->
 					<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter Area]]></answer>
 					<answer src="as:onUserSelect('edit-area')"><![CDATA[Edit Area]]>
-					</answer></question>, this));
+					</answer></question>, this, "center"));
 		}
 
 		public function onUserSelect(action:String):void
@@ -195,7 +195,7 @@ package
 
 			// cache not exist
 			if (!_data)
-				LoaderUtil.load(PixelLiving.areaPath + id + ".ara", onAreaLoad);
+				LoaderUtil.load(_world.areaPath + id + ".ara", onAreaLoad);
 			else
 				gotoArea(_data);
 		}
@@ -204,8 +204,8 @@ package
 		{
 			if (!_world.area)
 			{
-				areaData.background = PixelLiving.areaPath + areaData.background;
-				createArea(areaData);
+				//areaData.background = _world.areaPath + areaData.background;
+				createArea(areaData, _world.areaPath);
 				currentRoomID = areaData.id;
 				return;
 			}
@@ -245,10 +245,10 @@ package
 			_game.player.enter();
 		}
 
-		public function createArea(areaData:AreaData):void
+		public function createArea(areaData:AreaData, areaPath:String):void
 		{
 			// world
-			_world.createArea(areaData);
+			_world.createArea(areaData, areaPath);
 			
 			// fake player data, TODO : load from real player data via open social
 			var _playerData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), _world.area.map.getSpawnPoint(), "user.mdj", PlayerEvent.STAND, 3);
@@ -327,7 +327,7 @@ package
 				IExternalizable(areaData).readExternal(event.target.data);
 
 				// cache
-				configs[areaData.id] = areaData;
+				//configs[areaData.id] = areaData;
 
 				// todo dispatch
 				gotoArea(areaData);
@@ -335,7 +335,7 @@ package
 			else if (event.type == IOErrorEvent.IO_ERROR && _isEditArea)
 			{
 				// new area
-				areaData = new AreaData(_selectAreaID, PixelLiving.areaPath + _selectAreaID + "_bg.swf", 40, 40);
+				areaData = new AreaData(_selectAreaID, _world.areaPath + _selectAreaID + "_bg.swf", 40, 40);
 
 				// todo dispatch
 				gotoArea(areaData);
