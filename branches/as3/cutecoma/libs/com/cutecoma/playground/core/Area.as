@@ -22,6 +22,8 @@
 		public var background:BackGround;
 		public var map:Map;
 		public var ground:Ground;
+		
+		private var _path:String = "";
 
 		private var _data:AreaData;
 
@@ -33,15 +35,17 @@
 			return _data;
 		}
 
-		public function Area(engine3D:IEngine3D, areaData:AreaData)
+		public function Area(engine3D:IEngine3D, areaData:AreaData, path:String = "")
 		{
 			_engine3D = engine3D;
+			_path = path;
 			
 			// to stage
 			_engine3D.contentLayer.addChild(this);
 
 			// background
-			background = new BackGround(areaData.background);
+			background = new BackGround();
+			background.path = path;
 			addChild(background);
 
 			//map
@@ -50,8 +54,7 @@
 
 			// Ground
 			ground = new Ground(_engine3D);
-			_engine3D.view3D.addChild(ground.plane.layer = new SDSprite);
-			ground.plane.layer.addEventListener(MouseEvent.CLICK, onGroundClick);
+			_engine3D.view3D.addEventListener(MouseEvent.CLICK, onGroundClick);
 				
 			//ground.update(map.data);
 

@@ -95,7 +95,7 @@
 					<answer src="as:onSelectType('1')"><![CDATA[Walkable Area]]></answer>
 					<answer src="as:onSelectType('2')"><![CDATA[Spawn point]]></answer>
 					<answer src="as:onSelectType('warp')"><![CDATA[Warp point]]></answer>
-				</question>, this);
+				</question>, this, "center");
 
 			_buildToolDialog.alpha = .9;
 

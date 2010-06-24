@@ -15,7 +15,7 @@ package com.cutecoma.playground.data
 		public var height:Number;
 		public var viewData:ViewData;
 		public var mapData:MapData;
-
+		
 		public var version:Number = 1;
 		public static const CURRENT_VERION:Number = 1;
 
@@ -45,6 +45,8 @@ package com.cutecoma.playground.data
 					viewData.cameraData.parse_v0(raw.scene.camera);
 				mapData = raw.map ? MapData(raw.map) : mapData;
 				version = CURRENT_VERION;
+				
+				background = background.split("/").pop();
 			}
 			else
 			{

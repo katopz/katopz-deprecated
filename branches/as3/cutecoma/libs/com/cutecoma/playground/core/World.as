@@ -24,6 +24,7 @@
 		protected var _engine3D:IEngine3D;
 		
 		protected var _area:Area;
+		public var areaPath:String = "";
 
 		public function get area():Area
 		{
@@ -49,7 +50,7 @@
 		
 		public function openArea(uri:String):void
 		{
-			LoaderUtil.loadBinary(uri, onAreaLoad);
+			LoaderUtil.loadBinary(areaPath + uri, onAreaLoad);
 		}
 		
 		protected function onAreaLoad(event:Event):void
@@ -58,12 +59,12 @@
 			if (event.type == "complete")
 				readArea(event.target.data);
 			else if (event.type == IOErrorEvent.IO_ERROR)
-				createArea(new AreaData(_area.data.id, _area.data.id + "_bg.swf", 40, 40));
+				createArea(new AreaData(_area.data.id, _area.data.id + "_bg.swf", 40, 40), areaPath);
 		}
 		
-		public function createArea(areaData:AreaData):void
+		public function createArea(areaData:AreaData, areaPath:String):void
 		{
-			_area = new Area(_engine3D, areaData);
+			_area = new Area(_engine3D, areaData, areaPath);
 			//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
 		}
 		
@@ -74,14 +75,14 @@
 			
 			var areaData:AreaData = new AreaData();
 			IExternalizable(areaData).readExternal(rawAreaData);
-			updateArea(areaData);
+			updateArea(areaData, areaPath);
 			//SDApplication.getInstance()["gotoArea"](areaData);
 		}
 		
-		protected function updateArea(areaData:AreaData):void
+		protected function updateArea(areaData:AreaData, areaPath:String):void
 		{
 			if(!_area)
-				createArea(areaData);
+				createArea(areaData, areaPath);
 			else
 				_area.update(areaData);
 		}
