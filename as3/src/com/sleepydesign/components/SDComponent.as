@@ -53,7 +53,7 @@ package com.sleepydesign.components
 						(height == 0 ? stage.stageHeight : height) / 2 - height / 2);
 						_parent.addChild(this);
 						break;
-					default:
+					case "center":
 						setPosition(stage.stageWidth / 2 - width / 2, stage.stageHeight / 2 - height / 2);
 						break;
 				}
