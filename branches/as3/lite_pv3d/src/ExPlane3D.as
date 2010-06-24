@@ -36,7 +36,7 @@ package
 			// pv3d
 			var _mats:MaterialsList = new MaterialsList();
 			_mats.addMaterial(new ColorMaterial(0x0000FF, .5), "all");
-			pv3d_root.addChild(_pv3d_cube = new Cube(_mats, 100, 100, 100));
+			_pv3d_root.addChild(_pv3d_cube = new Cube(_mats, 100, 100, 100));
 
 			// camera
 			camera.y = -1000;
@@ -49,7 +49,7 @@ package
 		private function clickHandler(event:MouseEvent):void
 		{
 			// pv3d
-			var _pv3d_intersect:Vector3D = PV3DProxy.getRayPosition(pv3d_camera, pv3d_viewport.containerSprite.mouseX, pv3d_viewport.containerSprite.mouseY);
+			var _pv3d_intersect:Vector3D = PV3DProxy.getRayPosition(_pv3d_camera, _pv3d_viewport.containerSprite.mouseX, _pv3d_viewport.containerSprite.mouseY);
 
 			_red_cube.x = _pv3d_cube.x = _pv3d_intersect.x;
 			_red_cube.y = _pv3d_cube.y = _pv3d_intersect.y;
