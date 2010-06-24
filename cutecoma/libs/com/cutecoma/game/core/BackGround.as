@@ -4,6 +4,7 @@
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.FileUtil;
 	import com.sleepydesign.net.LoaderUtil;
+	import com.sleepydesign.system.DebugUtil;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -12,14 +13,18 @@
 	{
 		private var content:DisplayObject;
 		private var _src:String;
+		
+		public var path:String = "";
 
-		public function BackGround(src:String)
+		public function BackGround()
 		{
 			mouseEnabled = false;
 			mouseChildren = false;
 			
+			/*
 			var _srcs:Array = src.split("/"); 
 			_src = _srcs.pop();
+			*/
 		}
 
 		public function open():void
@@ -31,8 +36,8 @@
 		{
 			dispose();
 
-			LoaderUtil.loadAsset("../../"+areaData.background, onBackgroundComplete);
-
+			LoaderUtil.loadAsset(path+areaData.background, onBackgroundComplete);
+			DebugUtil.trace("load:"+path+areaData.background);
 			//this._data = areaData;
 		}
 

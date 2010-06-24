@@ -100,12 +100,12 @@ package com.cutecoma.playground.editors
 			area.updateBitmap(Bitmap(event.target["content"]).bitmapData);
 		}
 
-		override protected function updateArea(areaData:AreaData):void
+		override protected function updateArea(areaData:AreaData, areaPath:String):void
 		{
 			if (!area)
 			{
 				// create area
-				_area = new Area(_engine3D, areaData);
+				_area = new Area(_engine3D, areaData, areaPath);
 
 				// bind to editor
 				areaEditor.setArea(_area);
