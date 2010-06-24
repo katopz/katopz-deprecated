@@ -25,8 +25,6 @@ package
 			registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
-			
-			alpha = .1;
 		}
 
 		override protected function onInit():void
@@ -40,9 +38,10 @@ package
 		private function onEngineInit():void
 		{
 			_worldEditor = new WorldEditor(_engine3D);
+			_worldEditor.areaPath = "../../areas/"
 
 			// test
-			_worldEditor.openArea("../../areas/87.ara");
+			_worldEditor.openArea("87.ara");
 		}
 	}
 }
