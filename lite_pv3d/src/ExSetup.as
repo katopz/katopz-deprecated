@@ -23,7 +23,7 @@ package
 			// pv3d
 			var _mats:MaterialsList = new MaterialsList();
 			_mats.addMaterial(new WireframeMaterial, "all");
-			pv3d_root.addChild(new Cube(_mats, 100, 100, 100));
+			_pv3d_root.addChild(new Cube(_mats, 100, 100, 100));
 		}
 
 		override protected function onPreRender():void

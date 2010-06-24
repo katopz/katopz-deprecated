@@ -20,24 +20,24 @@ package away3dlite.templates
 	
 	public class PV3DTemplate extends Template
 	{
-		protected var pv3d_viewport:Viewport3D;
-		protected var pv3d_scene:Scene3D;
-		protected var pv3d_camera:Camera3D;
-		protected var pv3d_renderer:BasicRenderEngine;
+		protected var _pv3d_viewport:Viewport3D;
+		protected var _pv3d_scene:Scene3D;
+		protected var _pv3d_camera:Camera3D;
+		protected var _pv3d_renderer:BasicRenderEngine;
 		
-		protected var pv3d_root:DisplayObject3D;
+		protected var _pv3d_root:DisplayObject3D;
 		
 		/** @private */
 		arcane override function init():void
 		{
 			// pv3d
-			addChild(pv3d_viewport = new Viewport3D(_screenRect.width, _screenRect.height));
+			addChild(_pv3d_viewport = new Viewport3D(_screenRect.width, _screenRect.height));
 			
-			pv3d_renderer = new BasicRenderEngine();
-			pv3d_scene = new Scene3D();
-			pv3d_camera = new Camera3D();
+			_pv3d_renderer = new BasicRenderEngine();
+			_pv3d_scene = new Scene3D();
+			_pv3d_camera = new Camera3D();
 			
-			pv3d_scene.addChild(pv3d_root = new DisplayObject3D);
+			_pv3d_scene.addChild(_pv3d_root = new DisplayObject3D);
 			
 			//pv3d_camera.z = -1000;
 			//pv3d_camera.focus = 100;//8.660254037844387
@@ -51,8 +51,8 @@ package away3dlite.templates
 			view.clipping = clipping || view.clipping;
 			
 			// apply lite camera
-			PV3D.setTransform(pv3d_camera, camera.transform.matrix3D);
-			PV3D.setCamera(pv3d_camera, camera);
+			PV3D.setTransform(_pv3d_camera, camera.transform.matrix3D);
+			PV3D.setCamera(_pv3d_camera, camera);
 			
 			onInitPV3D();
 		}
@@ -67,11 +67,11 @@ package away3dlite.templates
 			// lite
 			super.onEnterFrame(event);
 			
-			PV3D.setTransform(pv3d_root, scene.transform.matrix3D);
-			PV3D.setTransform(pv3d_camera, camera.transform.matrix3D);
+			PV3D.setTransform(_pv3d_root, scene.transform.matrix3D);
+			PV3D.setTransform(_pv3d_camera, camera.transform.matrix3D);
 			
 			// pv3d
-			pv3d_renderer.renderScene(pv3d_scene, pv3d_camera, pv3d_viewport);
+			_pv3d_renderer.renderScene(_pv3d_scene, _pv3d_camera, _pv3d_viewport);
 		}
 		
 		/**
