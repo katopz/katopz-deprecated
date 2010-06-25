@@ -9,8 +9,6 @@ package
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 
-	import flash.utils.*;
-
 	import org.osflash.signals.Signal;
 
 	public class ModelPool extends RemovableEventDispatcher
