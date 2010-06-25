@@ -38,7 +38,7 @@ package
 		private function onEngineInit():void
 		{
 			_worldEditor = new WorldEditor(_engine3D);
-			_worldEditor.areaPath = "../../areas/"
+			_worldEditor.areaPath = "../../areas/";
 
 			// test
 			_worldEditor.openArea("87.ara");

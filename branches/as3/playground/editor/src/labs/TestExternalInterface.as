@@ -1,18 +1,20 @@
 package labs
 {
-	import com.sleepydesign.components.SDDialog;
-	import com.sleepydesign.utils.SystemUtil;
+	//import com.sleepydesign.components.SDDialog;
+	//import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.Sprite;
 
 	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "800", height = "600")]
 	public class TestExternalInterface extends Sprite
 	{
-		private var _SDDialog:SDDialog;
+		/*
+		//private var _SDDialog:SDDialog;
 		private var _viewerID:String = "";
 		private var _viewerDisplayName:String = "";
 		
 		private var _editorTool:PLCharacterEditor;
+		
 		
 		public function TestExternalInterface()
 		{
@@ -80,5 +82,6 @@ package labs
 		{
 			this[functionName].apply(this, [arg]);
 		}
+		*/
 	}
 }
