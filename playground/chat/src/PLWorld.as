@@ -24,22 +24,22 @@ package
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="480")]
 	
 	/**
-	 *					 .
-	 * 		[OtherUser]  .  [User]
-	 *				 \	 .	 /
-	 *		 	  [Authenticate] --- [Persistent Data]
-	 * 			     /   .   \ 
-	 *	 	     [Net]   .   [UI] --- [Controller]
-	 *	 	       |     .     |
-	 *	    [MultiPlayer].[Player] --- [Character]
-	 * 		           \ . /
-	 * 		          [Game]
-	 * 	 	             |
-	 * 		         [Engine3D]
-	 *		             |
-	 *		[Char]----[World]----[Area]----[Ground]----[PathFinder]
-	 *		   |         |         |
-	 *		[CharE]---[WorldE]---[AreaE]
+	 *										 .
+	 *					 		[OtherUser]  .  [User]
+	 *									 \	 .	 /
+	 *							 	  [Authenticate]---[Persistent Data]
+	 *	 							     /   .   \ 
+	 *						 	     [Net]   .   [UI]---[Controller]
+	 *						 	       |     .    |
+	 *		  [SharedObject]---[MultiPlayer] . [Player]---[Character]---[ModelPool]
+	 *					 		          \  .  /
+	 *					 		           [Game]
+	 *					 	 	             |
+	 *					 		         [Engine3D]
+	 *							             |
+	 *							 [Char]---[World]---[Area]---[Ground]---[PathFinder]
+	 *							  /          |         \
+	 *					  [CharEditor]-[WorldEditor]-[AreaEditor]
 	 * 
 	 */
 	
