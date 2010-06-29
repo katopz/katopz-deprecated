@@ -139,6 +139,7 @@
 			}
 
 			_menuAction = new SDDialog(<question><![CDATA[Select Action]]>
+					<answer src="as:onSelectAction('stand')"><![CDATA[Stand]]></answer>
 					<answer src="as:onSelectAction('talk')"><![CDATA[Talk]]></answer>
 					<answer src="as:onSelectAction('walk')"><![CDATA[Walk]]></answer>
 				</question>, this);
@@ -196,8 +197,8 @@
 					break;
 			}
 			addChild(_menuPart);
-			_menuPart.x = 10;
-			_menuPart.y = _menu.y + _menu.height + 10;
+			_menuPart.x = _menuAction.x + _menuAction.width + 10;
+			_menuPart.y = _menuAction.y;//_menu.y + _menu.height + 10;
 		}
 
 		public function createTextureMenu(meshType:String, meshID:int, x:int = 0, y:int = 0):void
@@ -414,7 +415,7 @@
 					_meshContainer.play(_meshContainer.currentLabel);
 
 			// change texture type
-			createTextureMenu(_type, _id + 1, _menuPart.width + 20, _menuPart.y);
+			createTextureMenu(_type, _id + 1, _menuPart.x + _menuPart.width + 10, _menuPart.y);
 		}
 
 		private var _mdjBuilder:MDJBuilder = new MDJBuilder();
