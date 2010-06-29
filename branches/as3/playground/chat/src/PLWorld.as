@@ -27,17 +27,17 @@ package
 	 *										 .
 	 *					 		[OtherUser]  .  [User]
 	 *									 \	 .	 /
-	 *							 	  [Authenticate]---[Persistent Data]
+	 *							 	  [Authenticate]---[Persistent Data]//MODEL//
 	 *	 							     /   .   \ 
 	 *						 	     [Net]   .   [UI]---[Controller]
 	 *						 	       |     .    |
 	 *		  [SharedObject]---[MultiPlayer] . [Player]---[Character]---[ModelPool]
 	 *					 		          \  .  /
-	 *					 		           [Game]
+	 *					 		//CONTROL//[Game]---[PathFinder]
 	 *					 	 	             |
-	 *					 		         [Engine3D]
-	 *							             |
-	 *							 [Char]---[World]---[Area]---[Ground]---[PathFinder]
+	 *					 		         [Engine3D]//VIEW//
+	 * 										 |
+	 *							 [Char]---[World]---[Area]---[Ground]
 	 *							  /          |         \
 	 *					  [CharEditor]-[WorldEditor]-[AreaEditor]
 	 * 
@@ -52,7 +52,7 @@ package
 	- flood fill
 	//- import/export external bitmap as map
 	//- load and save as other id
-	- add wire frame box for estimate scene height
+	//- add wire frame box for estimate scene height
 	- clean up
 	- MVC
 	
@@ -89,8 +89,6 @@ package
 
 		private var dialog:SDDialog;
 
-		private var configs:Dictionary = new Dictionary();
-
 		private var _selectAreaID:String = "00";
 
 		private var connector:SDConnector;
@@ -107,7 +105,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			//alpha = .1;
+			alpha = .1;
 		}
 
 		override protected function onInit():void
@@ -191,13 +189,7 @@ package
 
 		private function gotoAreaID(id:String):void
 		{
-			var _data:AreaData = configs[id];
-
-			// cache not exist
-			if (!_data)
-				LoaderUtil.load(_world.areaPath + id + ".ara", onAreaLoad);
-			else
-				gotoArea(_data);
+			LoaderUtil.load(_world.areaPath + id + ".ara", onAreaLoad);
 		}
 
 		public function gotoArea(areaData:AreaData):void
@@ -325,9 +317,6 @@ package
 				// exist area
 				areaData = new AreaData();
 				IExternalizable(areaData).readExternal(event.target.data);
-
-				// cache
-				//configs[areaData.id] = areaData;
 
 				// todo dispatch
 				gotoArea(areaData);
