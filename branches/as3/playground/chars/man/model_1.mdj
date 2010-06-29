@@ -1,23 +1,18 @@
 {
-	"paths" : 
-	[
-		"chars/man/",
-		"chars/man/"
-	],
 	"meshes" : 
 	[
-		"meshes/hair_1.md2",
-		"meshes/head_1.md2",
-		"meshes/shirt_1.md2",
-		"meshes/pant_1.md2",
-		"meshes/shoes_1.md2"
+		"chars/man/meshes/hair_1.md2",
+		"chars/man/meshes/head_1.md2",
+		"chars/man/meshes/shirt_1.md2",
+		"chars/man/meshes/pant_1.md2",
+		"chars/man/meshes/shoes_1.md2"
 	],
 	"textures" : 
 	[
-		"texture_1/hair_1.png",
-		"texture_1/head_1.png",
-		"texture_1/shirt_1.png",
-		"texture_1/pant_1.png",
-		"texture_1/shoes_1.png"
+		"chars/man/texture_1/hair_1.png",
+		"chars/man/texture_1/head_1.png",
+		"chars/man/texture_1/shirt_1.png",
+		"chars/man/texture_1/pant_1.png",
+		"chars/man/texture_1/shoes_1.png"
 	]
 }
