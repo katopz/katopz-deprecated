@@ -378,7 +378,7 @@
 			{
 				var _mesh:MovieMesh = _meshContainer.getChildByName(_type) as MovieMesh;
 				if (_mesh.visible)
-					_mesh.material = new BitmapFileMaterial(src);
+					_mesh.material = new BitmapFileMaterial(_modelPool.texturePath + src);
 			}
 		}
 
