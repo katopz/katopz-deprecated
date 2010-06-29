@@ -33,10 +33,10 @@ package
 	 *						 	       |     .    |
 	 *		  [SharedObject]---[MultiPlayer] . [Player]---[Character]---[ModelPool]
 	 *					 		          \  .  /
-	 *					 		//CONTROL//[Game]---[PathFinder]
-	 *					 	 	             |
-	 *					 		         [Engine3D]//VIEW//
-	 * 										 |
+	 *					 		//CONTROL//[Game]---[Map]---[PathFinder]
+	 *					 	 	             |		  |
+	 *					 		 //VIEW//[Engine3D]   |
+	 * 										 |		  |
 	 *							 [Char]---[World]---[Area]---[Ground]
 	 *							  /          |         \
 	 *					  [CharEditor]-[WorldEditor]-[AreaEditor]
@@ -63,6 +63,7 @@ package
 	- speed, destroy, model pool
 	- test switch between area
 	- login via opensocial
+	- model bounding box
 	- clean up
 	- MVC
 	
@@ -121,7 +122,7 @@ package
 		private function onEngineInit():void
 		{
 			_world = new World(_engine3D);
-			_game = new Game(_engine3D);
+			_game = new Game(_engine3D, _world);
 		}
 
 		override protected function onInitXML():void
