@@ -7,13 +7,11 @@ package com.cutecoma.playground.data
 		public var id:String;
 
 		public var model:Object3D;
-		public var path:String;
 
-		public function ModelData(id:String, model:Object3D, path:String)
+		public function ModelData(id:String, model:Object3D)
 		{
 			this.id = id;
 			this.model = model;
-			this.path = path;
 		}
 	}
 }
