@@ -7,17 +7,12 @@
 	import away3dlite.core.math.Plane3D;
 	import away3dlite.materials.ColorMaterial;
 	import away3dlite.materials.QuadWireframeMaterial;
-	import away3dlite.materials.WireColorMaterial;
-	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Cube6;
 	import away3dlite.primitives.Plane;
-	import away3dlite.primitives.Sphere;
-	import away3dlite.templates.BasicTemplate;
 	
 	import com.cutecoma.game.core.IEngine3D;
 	
 	import flash.display.BitmapData;
-	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -53,7 +48,6 @@
 			
 			// dewbug box
 			_engine3D.scene3D.addChild(_box = new Cube6(new QuadWireframeMaterial(0xFFFFFF,.75,5),100,200,100));
-			_box.bothsides = true;
 			_box.visible = false;
 			_box.y = -_box.height*.5;
 			

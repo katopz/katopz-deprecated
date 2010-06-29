@@ -2,18 +2,21 @@
 {
 	import away3dlite.cameras.Camera3D;
 	import away3dlite.core.base.Face;
-
+	
 	import com.cutecoma.game.core.BackGround;
 	import com.cutecoma.game.core.IEngine3D;
+	import com.cutecoma.game.core.Position;
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.CameraData;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.system.DebugUtil;
-
+	
 	import flash.display.BitmapData;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	
+	import org.osflash.signals.Signal;
 
 	public class Area extends SDSprite
 	{
@@ -31,8 +34,10 @@
 		{
 			return _data;
 		}
+		
+		public var completeSignal:Signal = new Signal();
 
-		public function Area(engine3D:IEngine3D, areaData:AreaData, path:String = "")
+		public function Area(engine3D:IEngine3D, path:String = "")
 		{
 			_engine3D = engine3D;
 			_path = path;
@@ -50,15 +55,18 @@
 
 			// Ground
 			ground = new Ground(_engine3D);
-			ground.mouseSignal.add(onGroundClick);
+			//ground.mouseSignal.add(onGroundClick);
 
-			update(areaData);
+			//update(areaData);
 		}
-
+		
+		/*
 		protected function onGroundClick(event:MouseEvent, position:Vector3D, face:Face, point:Point):void
 		{
-			//DebugUtil.trace("TODO : bind to player : " + position, face, point);
+			DebugUtil.trace("TODO : bind to player : " + position, face, point);
+			map.findPath("", ,position);
 		}
+		*/
 
 		public function updateBitmap(bitmapData:BitmapData):void
 		{
@@ -91,6 +99,8 @@
 			_camera.rotationX = _cameraData.rotationX;
 			_camera.rotationY = _cameraData.rotationY;
 			_camera.rotationZ = _cameraData.rotationZ;
+			
+			completeSignal.dispatch();
 		}
 
 		override public function destroy():void

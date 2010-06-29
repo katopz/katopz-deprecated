@@ -192,15 +192,15 @@ package com.cutecoma.playground.core
 			}
 		}
 
-		public static var completeSignal:Signal = new Signal(String, Array, Array);
+		public var completeSignal:Signal = new Signal(String, Array);
 
-		private function onPathComplete(id:String, paths:Array, positions:Array, sx:uint, sy:uint, sz:uint):void
+		private function onPathComplete(paths:Array):void
 		{
 			trace(" ! onPathComplete");
 
 			// player
 			//dispatchEvent(new SDEvent(SDEvent.UPDATE, { id: event.data.id, paths: event.data.paths, positions: event.data.positions }));
-			completeSignal.dispatch(id, paths, positions);
+			completeSignal.dispatch(paths);
 		}
 
 		// ______________________________ Update ____________________________

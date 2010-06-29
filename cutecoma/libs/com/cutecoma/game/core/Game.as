@@ -1,15 +1,21 @@
 package com.cutecoma.game.core
 {
 	import away3dlite.animators.MovieMeshContainer3D;
+	import away3dlite.core.base.Face;
 	
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.player.Player;
+	import com.cutecoma.playground.core.World;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ObjectUtil;
 	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	import flash.geom.Vector3D;
 	
 	public class Game extends SDSprite
 	{
@@ -17,15 +23,41 @@ package com.cutecoma.game.core
 		
 		//public static var inputController	: InputController;
 		
+		private var _world:World;
+		
 		public var player					: Player;
 		public var players					: SDGroup;
 		
-		public function Game(engine3D:IEngine3D)
+		//TODO : IWorld
+		public function Game(engine3D:IEngine3D, world:World)
 		{
 			_engine3D = engine3D;
+			_world = world;
+			
+			_world.completeSignal.addOnce(onWorldComplete);
+			
 			players = new SDGroup;
 		}
-				
+		
+		private function onWorldComplete():void
+		{
+			DebugUtil.trace(" ! onWorldComplete");
+			_world.area.ground.mouseSignal.add(onGroundClick);
+		}
+		
+		protected function onGroundClick(event:MouseEvent, position:Vector3D, face:Face, point:Point):void
+		{
+			DebugUtil.trace(" ! click : " + position, face, point);
+			_world.area.map.completeSignal.addOnce(onPathComplete);
+			_world.area.map.findPath("", Position.parse(player.position), Position.parse(position));
+		}
+		
+		protected function onPathComplete(id:String, paths:Array):void
+		{
+			DebugUtil.trace(" ! onPathComplete : " + paths);
+			player.walk(paths);
+		}
+
 		public function start() : void
 		{
 			if(_engine3D)
@@ -50,13 +82,13 @@ package com.cutecoma.game.core
 			players.addItem(_player, _player.id);
 			
 			// wait for char model complete and plug to 3d Engine
-			_player.charCompleteSignal.addOnce(addCharacterModelToEngine);
+			_player.playerCompleteSignal.addOnce(addCharacterModelToEngine);
 		}
 		
-		public function addCharacterModelToEngine(model:MovieMeshContainer3D):void
+		public function addCharacterModelToEngine(player:Player):void
 		{
-			_engine3D.scene3D.addChild(model);
-			model.stop();
+			_engine3D.scene3D.addChild(player.model);
+			player.model.stop();
 		}
 		
 		public function removePlayer(_player:Player=null):void
