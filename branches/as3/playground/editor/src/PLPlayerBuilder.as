@@ -80,29 +80,29 @@ package
 			// add custom frame label
 			var _animationDatas:Vector.<AnimationData> = new Vector.<AnimationData>(2, true);
 
-			// define talk
+			// define stand
 			_animationDatas[0] = new AnimationData();
 			_animationDatas[0].name = "stand";
 			_animationDatas[0].start = 0;
 			_animationDatas[0].end = 10;
 
 			// define talk
-			_animationDatas[0] = new AnimationData();
-			_animationDatas[0].name = "talk";
-			_animationDatas[0].start = 10;
-			_animationDatas[0].end = 60;
+			_animationDatas[1] = new AnimationData();
+			_animationDatas[1].name = "talk";
+			_animationDatas[1].start = 10;
+			_animationDatas[1].end = 60;
 
 			// define walk
-			_animationDatas[1] = new AnimationData();
-			_animationDatas[1].name = "walk";
-			_animationDatas[1].start = 65;
-			_animationDatas[1].end = 89;
+			_animationDatas[2] = new AnimationData();
+			_animationDatas[2].name = "walk";
+			_animationDatas[2].start = 65;
+			_animationDatas[2].end = 89;
 
 			//woman
 			if (_sex == "woman")
 			{
-				_animationDatas[0].end = 59;
-				_animationDatas[1].start = 60;
+				_animationDatas[1].end = 59;
+				_animationDatas[2].start = 60;
 			}
 
 			// convert to meshes
