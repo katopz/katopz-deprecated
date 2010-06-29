@@ -19,6 +19,8 @@
 	import flash.ui.ContextMenuItem;
 	import flash.utils.*;
 	
+	import org.osflash.signals.Signal;
+	
 	public class World
 	{
 		protected var _engine3D:IEngine3D;
@@ -30,6 +32,8 @@
 		{
 			return _area;
 		}
+		
+		public var completeSignal:Signal = new Signal();
 		
 		public function World(engine3D:IEngine3D)
 		{
@@ -64,8 +68,15 @@
 		
 		public function createArea(areaData:AreaData, areaPath:String):void
 		{
-			_area = new Area(_engine3D, areaData, areaPath);
+			_area = new Area(_engine3D, areaPath);
+			_area.completeSignal.addOnce(onAreaComplete);
+			_area.update(areaData);
 			//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
+		}
+		
+		protected function onAreaComplete():void
+		{
+			completeSignal.dispatch();
 		}
 		
 		protected function readArea(rawAreaData:ByteArray):void

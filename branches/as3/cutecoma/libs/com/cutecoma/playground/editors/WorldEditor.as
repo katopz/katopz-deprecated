@@ -102,17 +102,18 @@ package com.cutecoma.playground.editors
 
 		override protected function updateArea(areaData:AreaData, areaPath:String):void
 		{
-			if (!area)
+			if (!_area)
 			{
 				// create area
-				_area = new Area(_engine3D, areaData, areaPath);
+				_area = new Area(_engine3D, areaPath);
+				_area.update(areaData);
 
 				// bind to editor
 				areaEditor.setArea(_area);
 			}
 			else
 			{
-				area.update(areaData);
+				_area.update(areaData);
 			}
 		}
 	}

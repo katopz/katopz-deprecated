@@ -16,6 +16,7 @@
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	
 	import flash.events.Event;
+	import flash.geom.Vector3D;
 	
 	import org.osflash.signals.Signal;
 
@@ -28,8 +29,8 @@
 		
 		//private var clip:Clip3D;
 		
-		private var dolly:*;
-		public var decoy:*;
+		public var dolly:Vector3D;
+		public var decoy:Vector3D;
 		
 		public var balloon:SDDialog; 
 		
@@ -45,6 +46,16 @@
 		public function get msg():String
 		{
 			return data.msg;
+		}
+		
+		public function get model():MovieMeshContainer3D
+		{
+			return character.model;
+		}
+		
+		public function get position():Vector3D
+		{
+			return character.model.transform.matrix3D.position;
 		}
 		
 		public function set msg(value:String):void
@@ -100,13 +111,7 @@
 				this.id = playerData.id?playerData.id:String(new Date().valueOf());
 				data = PlayerData(playerData);
 			}
-			init();
-		}
-		
-        // ______________________________ Initialize ______________________________
-        
-		protected function init():void
-		{
+			
 			positions = [];
 			
 			// auto create
@@ -115,28 +120,34 @@
 		
 		// ______________________________ Create ______________________________
 		
-		private var char:Character;
-		public var charCompleteSignal:Signal = new Signal(MovieMeshContainer3D);
+		private var _character:Character;
+
+		public function get character():Character
+		{
+			return _character;
+		}
+
+		public var playerCompleteSignal:Signal = new Signal(Player);
 		
 		public function create(config:Object=null):void
 		{
 			//instance = new Sphere(new WireframeMaterial(0xFF00FF), 50, 2, 2);
 			
-			char =  new Character();
-			char.completeSignal.addOnce(function(model:MovieMeshContainer3D):void{charCompleteSignal.dispatch(model)});
+			_character =  new Character();
+			_character.completeSignal.addOnce(onCharComplete);
 				
 			//instance = char.instance;
 			//instance.alpha = 0;
 			//instance.visible = false;
 			
-			dolly = new Object3D();
-			decoy = new Object3D();
+			dolly = new Vector3D();
+			decoy = new Vector3D();
 			
 			if(config)
 			{
 				//char.addEventListener(SDEvent.COMPLETE, onCharacterComplete);
 				//char.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
-				char.create(config);
+				_character.create(config);
 	
 				//instance.transform = Matrix3D.fromPosition(data.pos);
 				//instance.copyPosition(config.pos);
@@ -144,11 +155,16 @@
 				//decoy.copyPosition(config.des);
 				
 				if(balloonClip)
-					balloonClip.y = char.height;
+					balloonClip.y = character.height;
 			}
 			
 			// ready to roll
 			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, config));
+		}
+		
+		private function onCharComplete(model:MovieMeshContainer3D):void
+		{
+			playerCompleteSignal.dispatch(this);
 		}
 		
 		/*
@@ -219,14 +235,14 @@
 		
 		// TODO : getset
 		public var map:Map;
-		public function walkTo(position:Position):void
+		public function walkTo(targetPosition:Position):void
 		{
-			trace(" ! walkTo : "+position);
+			trace(" ! walkTo : "+targetPosition);
 			if(map)
 			{
 				// Mr. map please find path for "me"
 				//map.addEventListener(SDEvent.UPDATE, onWalkTo);
-				map.findPath(id, Position.parse(dolly), position);
+				//map.findPath(id, Position.parse(position), targetPosition);
 			}else{
 				// no map? wooooot? why????
 			}
@@ -252,13 +268,13 @@
 			
 			if (positions.length>1)
 			{
-				dolly.copyPosition(positions[0]);
-				decoy.copyPosition(positions[1]);
+				model.transform.matrix3D.position = Position.getVector3D(positions[0]);
+				decoy = Position.getVector3D(positions[1]);
 
 				trace(" ! Length : "+ positions.length);
 				
 				var factor:Number = (Map.factorX+Map.factorZ)*.5;
-				var time:Number= dolly.distanceTo(decoy)/speed/factor;
+				var time:Number = Vector3D.distance(position, decoy)/speed/factor;
 				/*
 				if(positions.length==2)
 				{
@@ -271,7 +287,7 @@
 				
 				positions.shift();
 				
-				TweenLite.killTweensOf(dolly);
+				TweenLite.killTweensOf(this);
 				
 				act(PlayerEvent.WALK);
 				
@@ -291,7 +307,7 @@
 				
 				//instance.lookAt(decoy);
 				
-				TweenLite.to(dolly, time, 
+				TweenLite.to(this, time, 
 				{
 					x:decoy.x, y:decoy.y, z:decoy.z,
 					//bezier:positions,
@@ -334,21 +350,23 @@
 				instance.rotationY += (_temp.rotationY - instance.rotationY) * .5;
 			}
 			*/
-			instance.lookAt(dolly);
-			instance.x += (dolly.x - instance.x) * .1;
-			instance.z += (dolly.z - instance.z) * .1;
+			
+			model.lookAt(dolly);
+			
+			position.x += (dolly.x - position.x) * .1;
+			position.z += (dolly.z - position.z) * .1;
 		}
 		
 		private function onWalkComplete():void
 		{
 			trace(" ^ onWalkComplete");
-			dolly.copyPosition(instance);
+			//dolly.copyPosition(instance);
 			act(PlayerEvent.STAND);
 			
 			//dirty = true;
 			
 			// drop command point?
-			var commandData:* = map.getCommand(dolly.position);
+			var commandData:* = map.getCommand(position);
 			
 			if(commandData.args)
 			{
@@ -365,8 +383,8 @@
 			//if (this.action == action)return;
 			
 			///trace(" ! Action	:"+action);
-			if(char.model)
-				char.model.play(action);
+			if(character.model)
+				character.model.play(action);
 			this.action = action;
 		}
 		
@@ -399,7 +417,7 @@
 			act(playerData.act);
 			
 			// position dirty	: position
-			if(playerData.act=="walk")
+			if(playerData.act==PlayerEvent.WALK)
 				walkTo(Position.parse(playerData.des));
 			
 			// message dirty 	: talk, whisper, shout
@@ -408,12 +426,13 @@
 			dirty = true;
 		}
 		
-		public function warp(pos:Position):void
+		public function warp(position:Position):void
 		{
-			dolly.copyPosition(pos);
-			decoy.copyPosition(pos);
+			//dolly.copyPosition(pos);
+			//decoy.copyPosition(pos);
 			
-			instance.copyPosition(pos);
+			//instance.copyPosition(pos);
+			character.model.transform.matrix3D.position = position.clone();
 			
 			dirty = true;
 		}

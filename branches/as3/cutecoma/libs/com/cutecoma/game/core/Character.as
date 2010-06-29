@@ -1,22 +1,26 @@
 package com.cutecoma.game.core
 {
-	import away3dlite.animators.MovieMesh;
 	import away3dlite.animators.MovieMeshContainer3D;
+	import away3dlite.core.base.Object3D;
 	import away3dlite.events.Loader3DEvent;
-	import away3dlite.loaders.Loader3D;
-	import away3dlite.loaders.MDJ;
 	
 	import com.cutecoma.game.data.CharacterData;
-	import com.cutecoma.game.events.PlayerEvent;
-	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	
 	import org.osflash.signals.Signal;
 	
-	public class Character extends AbstractCharacter
+	public class Character extends RemovableEventDispatcher
 	{
 		private var data		:CharacterData;
+		private var _model		:MovieMeshContainer3D;
+		public function get model():MovieMeshContainer3D
+		{
+			return _model;
+		}
 		
+		// TODO : get height from model boundingbox
+		public var height:Number = 0;
+
 		//public var instance		:DisplayObject3D;
 		//public var model		:DisplayObject3D;
 		
@@ -56,7 +60,9 @@ package com.cutecoma.game.core
 		private function onGetModel(event:Loader3DEvent):void
 		{
 			//trace("onAnimationComplete#2");
-			var _model:MovieMeshContainer3D = event.target.handle as MovieMeshContainer3D;
+			if(_model)
+				_model.destroy();
+			_model = event.target.handle as MovieMeshContainer3D;
 			completeSignal.dispatch(_model);
 		}
 	}

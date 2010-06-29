@@ -1,37 +1,39 @@
 ﻿package com.cutecoma.game.core
 {
-	public class Position extends Object
+	import flash.geom.Vector3D;
+
+	public class Position extends Vector3D
 	{
-		public var x:Number;
-		public var y:Number;
-		public var z:Number;
-		
-		public function Position( x:Number=0, y:Number=0, z:Number=0) 
+		public function Position(x:Number = 0, y:Number = 0, z:Number = 0)
 		{
-			this.x = x;
-			this.y = y;
-			this.z = z;
+			super(x, y, z);
 		}
-		
-        public static function parse(raw:*=null):Position
-        {
-			if(!raw)return new Position();
+
+		public static function parse(raw:* = null):Position
+		{
+			if (!raw)
+				return new Position();
 			return new Position(raw.x, raw.y, raw.z);
-        }
-		
-        public function clone():Position
-        {
-			return new Position(x, y, z);
-        }
-		
-		public function toObject(fix:uint = 2):Object 
+		}
+
+		public function copy():Position
 		{
-			return { x:Number(x.toFixed(fix)), y:Number(y.toFixed(fix)), z:Number(z.toFixed(fix)) };
+			return new Position(x, y, z);
 		}
 		
-		public function toString(): String
+		public static function getVector3D(raw:*):Vector3D
 		{
-			return "[Position] : " + x.toFixed(2) + "," + y.toFixed(2)  + "," + z.toFixed(2);
-		}	
+			return new Vector3D(raw.x, raw.y, raw.z);
+		}
+
+		public function toObject(fix:uint = 2):Object
+		{
+			return {x:Number(x.toFixed(fix)), y:Number(y.toFixed(fix)), z:Number(z.toFixed(fix))};
+		}
+
+		override public function toString():String
+		{
+			return "[Position] : " + x.toFixed(2) + "," + y.toFixed(2) + "," + z.toFixed(2);
+		}
 	}
 }

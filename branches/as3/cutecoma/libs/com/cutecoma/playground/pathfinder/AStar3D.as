@@ -55,7 +55,7 @@
 		//debug
 		private var scene:*;
 
-		public static var completeSignal:Signal = new Signal(String, Array, Array, uint, uint, uint);
+		public static var completeSignal:Signal = new Signal(Array);//, uint, uint, uint);
 		public static var errorSignal:Signal = new Signal(String);
 
 		/**
@@ -418,7 +418,7 @@
 
 			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, {id: id, positions: positions, segmentX: segmentX, segmentZ: segmentZ}));
 
-			completeSignal.dispatch(id, positions, segmentX, segmentY, segmentZ);
+			completeSignal.dispatch(positions);//id, positions, segmentX, segmentY, segmentZ);
 		}
 
 		private function onError(id:String):void
