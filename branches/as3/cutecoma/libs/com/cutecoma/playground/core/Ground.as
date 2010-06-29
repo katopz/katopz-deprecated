@@ -6,6 +6,7 @@
 	import away3dlite.core.base.Face;
 	import away3dlite.core.math.Plane3D;
 	import away3dlite.materials.ColorMaterial;
+	import away3dlite.materials.QuadWireframeMaterial;
 	import away3dlite.materials.WireColorMaterial;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Cube6;
@@ -51,7 +52,7 @@
 			_engine3D = engine3D;
 			
 			// dewbug box
-			_engine3D.scene3D.addChild(_box = new Cube6(new WireframeMaterial(0xFFFFFF,.5),100,200,100));
+			_engine3D.scene3D.addChild(_box = new Cube6(new QuadWireframeMaterial(0xFFFFFF,.75,5),100,200,100));
 			_box.bothsides = true;
 			_box.visible = false;
 			_box.y = -_box.height*.5;
