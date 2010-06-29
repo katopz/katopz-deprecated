@@ -1,4 +1,4 @@
-package 
+package
 {
 	import away3dlite.animators.BonesAnimator;
 	import away3dlite.animators.MovieMesh;
@@ -22,8 +22,8 @@ package
 		private var _mdzBuilder:MDZBuilder;
 		private var _meshes:Vector.<MovieMesh>;
 
-		private var _id:String = "2";
-		private var _sex:String = "man";
+		private var _id:String = "4";
+		private var _sex:String = "woman";
 
 		override protected function onInit():void
 		{
@@ -50,7 +50,7 @@ package
 
 			// load target model
 			var _loader3D:Loader3D = new Loader3D();
-			_loader3D.loadGeometry("chars/" + _sex + "/model_" + _id + ".dae", _collada);
+			_loader3D.loadGeometry("../../chars/" + _sex + "/model_" + _id + ".dae", _collada);
 			_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}
 
@@ -75,16 +75,17 @@ package
 			// build as MD2
 			_mdzBuilder = new MDZBuilder();
 			_mdzBuilder.isIncludeMaterial = false;
-			_mdzBuilder.texturePath = "chars/man/";
+			_mdzBuilder.texturePath = "chars/"+_sex+"/";
+			_mdzBuilder.meshNameSuffix = "_" + _id;
 
 			// add custom frame label
-			var _animationDatas:Vector.<AnimationData> = new Vector.<AnimationData>(2, true);
+			var _animationDatas:Vector.<AnimationData> = new Vector.<AnimationData>(3, true);
 
 			// define stand
 			_animationDatas[0] = new AnimationData();
 			_animationDatas[0].name = "stand";
 			_animationDatas[0].start = 0;
-			_animationDatas[0].end = 10;
+			_animationDatas[0].end = 9;
 
 			// define talk
 			_animationDatas[1] = new AnimationData();
