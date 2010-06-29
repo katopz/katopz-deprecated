@@ -192,7 +192,7 @@ package com.cutecoma.playground.core
 			}
 		}
 
-		public var completeSignal:Signal = new Signal(String, Array);
+		public var completeSignal:Signal = new Signal(Array);
 
 		private function onPathComplete(paths:Array):void
 		{
