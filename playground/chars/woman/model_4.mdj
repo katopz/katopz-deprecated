@@ -1,23 +1,18 @@
 {
-	"paths" : 
-	[
-		"chars/woman/",
-		"chars/woman/"
-	],
 	"meshes" : 
 	[
-		"meshes/hair_4.md2",
-		"meshes/head_1.md2",
-		"meshes/shirt_4.md2",
-		"meshes/pant_4.md2",
-		"meshes/shoes_1.md2"
+		"chars/woman/meshes/hair_4.md2",
+		"chars/woman/meshes/head_1.md2",
+		"chars/woman/meshes/shirt_4.md2",
+		"chars/woman/meshes/pant_4.md2",
+		"chars/woman/meshes/shoes_1.md2"
 	],
 	"textures" : 
 	[
-		"texture_4/hair_1.png",
-		"texture_1/head_1.png",
-		"texture_4/shirt_1.png",
-		"texture_4/pant_1.png",
-		"texture_1/shoes_1.png"
+		"chars/woman/texture_4/hair_1.png",
+		"chars/woman/texture_1/head_1.png",
+		"chars/woman/texture_4/shirt_1.png",
+		"chars/woman/texture_4/pant_1.png",
+		"chars/woman/texture_1/shoes_1.png"
 	]
 }
