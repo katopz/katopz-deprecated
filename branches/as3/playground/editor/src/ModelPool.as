@@ -23,7 +23,8 @@ package
 
 		private var _loader3Ds:Array;
 
-		public var path:String = "";
+		public var meshPath:String = "";
+		public var texturePath:String = "";
 
 		// complete
 		public static var signalModel:Signal = new Signal(Vector.<ModelData>);
@@ -81,18 +82,19 @@ package
 				var _src:String = _model.@src.toString();
 
 				var _mdj:MDJ = new MDJ();
-				_mdj.meshPath = _mdj.texturePath = path;
+				_mdj.meshPath = meshPath;
+				_mdj.texturePath = texturePath;
 				_mdj.autoPlay = false;
-				_mdj.scaling = 4;
+				_mdj.scaling = 3;
 
 				var _loader3D:Loader3D = new Loader3D();
 				_loader3D.ignoreParentURL = true;
 				_loader3D.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
-				_loader3D.loadGeometry(path + _src, _mdj);
+				_loader3D.loadGeometry(meshPath + _src, _mdj);
 
 				_loader3Ds.push(_loader3D);
 
-				_models.addItem(new ModelData(_id, _loader3D, _src.slice(0, _src.lastIndexOf("/"))), _loader3D);
+				_models.addItem(new ModelData(_id, _loader3D), _loader3D);
 			}
 		}
 
