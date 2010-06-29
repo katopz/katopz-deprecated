@@ -1,5 +1,6 @@
 package com.cutecoma.playground.components
 {
+    import com.cutecoma.game.events.PlayerEvent;
     import com.cutecoma.playground.events.NetEvent;
     import com.cutecoma.playground.net.SharedObjectConnector;
     import com.sleepydesign.components.SDButton;
@@ -180,7 +181,7 @@ package com.cutecoma.playground.components
 		}
 		
 		// Client
-		public function onClientUpdate(event:SDEvent):void
+		public function onClientUpdate(event:PlayerEvent):void
 		{
 			trace( " ^ onClientUpdate : "+ event.data, event.data.act);
 			if(connector)

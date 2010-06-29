@@ -52,7 +52,7 @@ package com.cutecoma.game.core
 			_world.area.map.findPath("", Position.parse(player.position), Position.parse(position));
 		}
 		
-		protected function onPathComplete(id:String, paths:Array):void
+		protected function onPathComplete(paths:Array):void
 		{
 			DebugUtil.trace(" ! onPathComplete : " + paths);
 			player.walk(paths);

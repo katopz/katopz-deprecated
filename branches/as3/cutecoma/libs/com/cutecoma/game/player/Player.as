@@ -287,7 +287,7 @@
 				
 				positions.shift();
 				
-				TweenLite.killTweensOf(this);
+				TweenLite.killTweensOf(dolly);
 				
 				act(PlayerEvent.WALK);
 				
@@ -307,7 +307,7 @@
 				
 				//instance.lookAt(decoy);
 				
-				TweenLite.to(this, time, 
+				TweenLite.to(dolly, time, 
 				{
 					x:decoy.x, y:decoy.y, z:decoy.z,
 					//bezier:positions,
@@ -353,8 +353,8 @@
 			
 			model.lookAt(dolly);
 			
-			position.x += (dolly.x - position.x) * .1;
-			position.z += (dolly.z - position.z) * .1;
+			model.x += (dolly.x - position.x) * .5;
+			model.z += (dolly.z - position.z) * .5;
 		}
 		
 		private function onWalkComplete():void
