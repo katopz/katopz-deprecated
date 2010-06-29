@@ -58,12 +58,13 @@ package
 	
 	+ chat
 	//- load MDJ 
-	- test path finder 
-	- test action
+	//- test path finder 
+	//- test action
 	- speed, destroy, model pool
 	- test switch between area
 	- login via opensocial
-	- model bounding box
+	- model bounding box, scale to 1px = 1cm
+	- add frames data info to MDJ?
 	- clean up
 	- MVC
 	
@@ -106,7 +107,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			alpha = .1;
+			//alpha = .1;
 		}
 
 		override protected function onInit():void
