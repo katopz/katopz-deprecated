@@ -17,6 +17,8 @@ package com.cutecoma.game.core
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	
+	import org.osflash.signals.Signal;
+	
 	public class Game extends SDSprite
 	{
 		protected var _engine3D:IEngine3D;
@@ -28,13 +30,17 @@ package com.cutecoma.game.core
 		public var player					: Player;
 		public var players					: SDGroup;
 		
+		//public var warpSignal:Signal = new Signal(String/*areaID*/);
+		
 		//TODO : IWorld
 		public function Game(engine3D:IEngine3D, world:World)
 		{
 			_engine3D = engine3D;
 			_world = world;
 			
-			_world.completeSignal.addOnce(onWorldComplete);
+			//_world.completeSignal.addOnce(onWorldComplete);
+			
+			onWorldComplete();
 			
 			players = new SDGroup;
 		}
@@ -101,7 +107,15 @@ package com.cutecoma.game.core
 			// drop command point?
 			var commandData:* = _world.area.map.getCommand(position);
 			
-			DebugUtil.trace(" ! commandData : " + commandData);
+			//DebugUtil.trace(" ! commandData : " + commandData);
+			DebugUtil.extract(commandData);
+			switch(commandData.command)
+			{
+				case "warp" : 
+					//warpSignal.dispatch(commandData.args);
+					_world.gotoAreaID(commandData.args);
+					break;
+			}
 			
 			/*
 			if(commandData.args)
@@ -197,7 +211,7 @@ package com.cutecoma.game.core
 					addPlayer(_player);
 					
 					//plug to current map
-					_player.map = player.map;
+					//_player.map = player.map;
 				}
 				
 				switch(playerData.act)

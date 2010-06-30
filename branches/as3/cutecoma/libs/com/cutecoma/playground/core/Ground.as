@@ -84,6 +84,9 @@
 		
 		private function onMouse(event:MouseEvent):void
 		{
+			if(!_plane)
+				return;
+			
 			var view:View3D = _engine3D.view3D;
 			var camera:Camera3D = _engine3D.view3D.camera;
 			

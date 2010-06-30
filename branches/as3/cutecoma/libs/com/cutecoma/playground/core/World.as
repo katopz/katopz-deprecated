@@ -12,19 +12,19 @@
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.*;
-	
+
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.*;
-	
+
 	import org.osflash.signals.Signal;
-	
+
 	public class World
 	{
 		protected var _engine3D:IEngine3D;
-		
+
 		protected var _area:Area;
 		public var areaPath:String = "";
 
@@ -32,70 +32,88 @@
 		{
 			return _area;
 		}
-		
-		public var completeSignal:Signal = new Signal();
-		
+
+		public var completeSignal:Signal = new Signal(AreaData);
+
+		public var areaCompleteSignal:Signal = new Signal(AreaData);
+
 		public function World(engine3D:IEngine3D)
 		{
 			_engine3D = engine3D;
-			
-			init();
+
+			_area = new Area(_engine3D, areaPath);
 		}
-		
-		protected function init():void
+
+		public function gotoAreaID(id:String):void
 		{
-			onInit();
+			//LoaderUtil.load(_world.areaPath + id + ".ara", onAreaLoad);
+			openArea(id + ".ara");
 		}
-		
-		protected function onInit():void
-		{
-			
-		}
-		
+
 		public function openArea(uri:String):void
 		{
 			LoaderUtil.loadBinary(areaPath + uri, onAreaLoad);
 		}
-		
+
+		private var _areaData:AreaData;
+
+		private var isInit:Boolean = false;
+
 		protected function onAreaLoad(event:Event):void
 		{
-			var areaData:AreaData;
 			if (event.type == "complete")
-				readArea(event.target.data);
+			{
+				IExternalizable(_areaData = new AreaData).readExternal(event.target.data);
+				updateArea();
+			}
 			else if (event.type == IOErrorEvent.IO_ERROR)
-				createArea(new AreaData(_area.data.id, _area.data.id + "_bg.swf", 40, 40), areaPath);
+			{
+				_areaData = new AreaData(_area.data.id, _area.data.id + "_bg.swf", 40, 40);
+				updateArea();
+			}
 		}
-		
-		public function createArea(areaData:AreaData, areaPath:String):void
+
+		protected function updateArea():void
 		{
-			_area = new Area(_engine3D, areaPath);
-			_area.completeSignal.addOnce(onAreaComplete);
-			_area.update(areaData);
-			//TODEV//SDApplication.getInstance()["gotoArea"](areaData);
+			_area.update(_areaData);
+			if (!isInit)
+			{
+				isInit = true;
+				completeSignal.dispatch(_areaData);
+			}
+			areaCompleteSignal.dispatch(_areaData);
 		}
-		
-		protected function onAreaComplete():void
-		{
-			completeSignal.dispatch();
-		}
-		
-		protected function readArea(rawAreaData:ByteArray):void
-		{
-			if (!rawAreaData)
-				return;
-			
-			var areaData:AreaData = new AreaData();
-			IExternalizable(areaData).readExternal(rawAreaData);
-			updateArea(areaData, areaPath);
-			//SDApplication.getInstance()["gotoArea"](areaData);
-		}
-		
-		protected function updateArea(areaData:AreaData, areaPath:String):void
-		{
-			if(!_area)
-				createArea(areaData, areaPath);
-			else
-				_area.update(areaData);
-		}
+	/*
+	   public function createArea(areaData:AreaData, areaPath:String):void
+	   {
+	   //_area = new Area(_engine3D, areaPath);
+	   //_area.completeSignal.addOnce(onAreaComplete);
+	   _area.areaPath = areaPath;
+	   _area.update(areaData);
+
+	   //TODEV//SDApplication.getInstance()["gotoArea"](areaData);
+	   }
+
+	   protected function onAreaComplete():void
+	   {
+	   //completeSignal.dispatch();
+	   }
+
+	   protected function readAreaData(rawAreaData:ByteArray):AreaData
+	   {
+	   return IExternalizable(new AreaData).readExternal(rawAreaData);
+	   //updateArea(_areaData, areaPath);
+
+	   //SDApplication.getInstance()["gotoArea"](areaData);
+	   }
+
+	   protected function updateArea(areaData:AreaData, areaPath:String):void
+	   {
+	   if(!_area)
+	   createArea(areaData, areaPath);
+	   else
+	   _area.update(areaData);
+	   }
+	 */
 	}
 }
