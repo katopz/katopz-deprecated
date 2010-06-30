@@ -58,6 +58,11 @@
 			return character.model.transform.matrix3D.position;
 		}
 		
+		public function set position(value:Vector3D):void
+		{
+			character.model.transform.matrix3D.position = value;
+		}
+		
 		public function set msg(value:String):void
 		{
 			if(!data || data.msg == value)
@@ -112,10 +117,15 @@
 				data = PlayerData(playerData);
 			}
 			
+			// position
+			dolly = Position.getVector3D(data.pos);
+			decoy = Position.getVector3D(data.pos);
+			
+			// paths
 			positions = [];
 			
 			// auto create
-			create(data);
+			initCharacter();
 		}
 		
 		// ______________________________ Create ______________________________
@@ -127,9 +137,10 @@
 			return _character;
 		}
 
+		public var walkCompleteSignal:Signal = new Signal(Vector3D);
 		public var playerCompleteSignal:Signal = new Signal(Player);
 		
-		public function create(config:Object=null):void
+		public function initCharacter():void
 		{
 			//instance = new Sphere(new WireframeMaterial(0xFF00FF), 50, 2, 2);
 			
@@ -140,14 +151,11 @@
 			//instance.alpha = 0;
 			//instance.visible = false;
 			
-			dolly = new Vector3D();
-			decoy = new Vector3D();
-			
-			if(config)
+			if(data)
 			{
 				//char.addEventListener(SDEvent.COMPLETE, onCharacterComplete);
 				//char.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
-				_character.create(config);
+				_character.create(data);
 	
 				//instance.transform = Matrix3D.fromPosition(data.pos);
 				//instance.copyPosition(config.pos);
@@ -164,6 +172,10 @@
 		
 		private function onCharComplete(model:MovieMeshContainer3D):void
 		{
+			// apply spawn point
+			position = dolly.clone();
+			
+			// tell game
 			playerCompleteSignal.dispatch(this);
 		}
 		
@@ -328,29 +340,6 @@
 		
 		private function onWalk():void
 		{
-			/*
-			if(int(_temp.rotationY) != int(instance.rotationY))
-			{
-				trace("rotationY:"+_temp.rotationY);
-				trace("*rotationY:"+instance.rotationY);
-				
-				instance.rotationY += ((instance.rotationY+_temp.rotationY) - instance.rotationY) * .5;
-			}
-			*/
-			
-			//instance.localRotationY += (_temp.localRotationY - instance.localRotationY) * .5;
-			
-
-			/*
-			if(_temp.rotationY > instance.rotationY)
-			{
-				instance.rotationY += (_temp.rotationY - instance.rotationY) * .5;
-				
-			}else{
-				instance.rotationY += (_temp.rotationY - instance.rotationY) * .5;
-			}
-			*/
-			
 			model.lookAt(dolly);
 			
 			model.x += (dolly.x - position.x) * .5;
@@ -360,22 +349,11 @@
 		private function onWalkComplete():void
 		{
 			trace(" ^ onWalkComplete");
-			//dolly.copyPosition(instance);
 			act(PlayerEvent.STAND);
 			
 			//dirty = true;
 			
-			// drop command point?
-			var commandData:* = map.getCommand(position);
-			
-			if(commandData.args)
-			{
-				// it's my command
-				commandData.args.push(this);
-				
-				// apply
-				Game.applyCommand(commandData.command, commandData.args);
-			}
+			walkCompleteSignal.dispatch(position);
 		}
 		
 		public function act(action:String):void
@@ -440,6 +418,13 @@
 		override public function destroy():void
 		{
 			TweenLite.killTweensOf(dolly);
+			
+			walkCompleteSignal.removeAll();
+			playerCompleteSignal.removeAll();
+			
+			walkCompleteSignal = null;
+			playerCompleteSignal = null;
+			
 			/*
 			id = null;
 			instance = null;

@@ -42,12 +42,14 @@ package com.cutecoma.game.core
 		private function onWorldComplete():void
 		{
 			DebugUtil.trace(" ! onWorldComplete");
+			
+			// bind mouse event
 			_world.area.ground.mouseSignal.add(onGroundClick);
 		}
 		
 		protected function onGroundClick(event:MouseEvent, position:Vector3D, face:Face, point:Point):void
 		{
-			DebugUtil.trace(" ! click : " + position, face, point);
+			DebugUtil.trace(" ! Click : " + position, face, point);
 			_world.area.map.completeSignal.addOnce(onPathComplete);
 			_world.area.map.findPath("", Position.parse(player.position), Position.parse(position));
 		}
@@ -89,6 +91,28 @@ package com.cutecoma.game.core
 		{
 			_engine3D.scene3D.addChild(player.model);
 			player.model.stop();
+			
+			// bind player walk event
+			player.walkCompleteSignal.add(onPlayerWalkComplete);
+		}
+		
+		private function onPlayerWalkComplete(position:Vector3D):void
+		{
+			// drop command point?
+			var commandData:* = _world.area.map.getCommand(position);
+			
+			DebugUtil.trace(" ! commandData : " + commandData);
+			
+			/*
+			if(commandData.args)
+			{
+				// it's my command
+				commandData.args.push(this);
+				
+				// apply
+				applyCommand(commandData.command, commandData.args);
+			}
+			*/
 		}
 		
 		public function removePlayer(_player:Player=null):void
@@ -104,6 +128,7 @@ package com.cutecoma.game.core
 				
 				// unplug from game
 				players.removeItem(_player, _player.id);
+				
 				_player.destroy();
 				_player = null;
 			}
@@ -133,6 +158,7 @@ package com.cutecoma.game.core
 		
 		public static function applyCommand(command:String, args:Array):void
 		{
+			DebugUtil.trace("TODO : command warp");
 			//getInstance().engine.update({command:command});
 			//TODEV//SDApplication.getInstance().applyCommand({command:command, args:args});
 		}

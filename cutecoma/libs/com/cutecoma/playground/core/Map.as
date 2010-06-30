@@ -62,71 +62,7 @@ package com.cutecoma.playground.core
 			draw();
 		}
 
-		/*
-		   // ______________________________ Initialize ______________________________
-
-		   public function parse(raw:AreaData):void
-		   {
-		   if(!raw)return;
-
-		   Map.factorX = raw.width;
-		   Map.factorZ = raw.height;
-
-		   create(raw);
-		   }
-
-		   // ______________________________ Create ______________________________
-
-		   override public function create(config:Object=null):void
-		   {
-		   super.create(config);
-
-		   var _areaData:AreaData = config as AreaData;
-
-		   if(!_areaData.map)
-		   data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
-		   else
-		   data = _areaData.map;
-
-		   routes.push(_areaData.id);
-
-		   // _______________________________________________________ MiniMap
-
-		   minimap = new SDSprite();
-		   minimap.mouseEnabled = false;
-		   minimap.mouseChildren = false;
-		   addChild(minimap);
-
-		   bitmap = new Bitmap(data.bitmapData);
-		   minimap.addChild(bitmap);
-
-		   //minimap.addEventListener(MouseEvent.MOUSE_DOWN, onMapClick);
-
-		   line = new Shape();
-		   line.name = "line";
-		   minimap.addChild(line);
-
-		   // AStar3D
-		   pathFinder = new AStar3D();//engine3D.scene);
-		   pathFinder.create(data.bitmapData, factorX, 0, factorZ, 1, 0, 1);
-		   pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
-		   pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
-		   }
-		 */
-
 		public var bitmap:Bitmap;
-
-		/*
-		   private function onMapClick(event:MouseEvent):void
-		   {
-		   trace( " ^ onClick:", event.target, event.currentTarget, scaleX);
-		   trace(event.localX/scaleX,event.localY/scaleY);
-		   trace(data.bitmapData);
-		   trace(data.bitmapData.width, data.bitmapData.height);
-		   trace(data.bitmapData.getPixel(int(event.localX/scaleX),int(event.localY/scaleY)));
-		   data.nodes[0] = 1;
-		   }
-		 */
 
 		// _______________________________________________________ Point
 
@@ -154,7 +90,8 @@ package com.cutecoma.playground.core
 				return getSpawnPoint();
 			}
 		}
-
+		
+		// TODO : move this to game rule?
 		public function getCommand(position:*):*
 		{
 			var color:Number = pathFinder.getColorByPosition(position);
