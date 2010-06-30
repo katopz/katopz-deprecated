@@ -24,11 +24,10 @@ package com.cutecoma.playground.editors
 		public function WorldEditor(engine3D:IEngine3D)
 		{
 			super(engine3D);
-		}
-
-		override protected function onInit():void
-		{
+			
 			areaEditor = new AreaEditor(_engine3D);
+			
+			areaEditor.setArea(_area);
 
 			//systemLayer.addChild(areaEditor);
 			//area.map.visible = engine3D.grid = area.ground.debug = engine3D.axis = true;
@@ -98,23 +97,6 @@ package com.cutecoma.playground.editors
 			if (event.type != "complete")
 				return;
 			area.updateBitmap(Bitmap(event.target["content"]).bitmapData);
-		}
-
-		override protected function updateArea(areaData:AreaData, areaPath:String):void
-		{
-			if (!_area)
-			{
-				// create area
-				_area = new Area(_engine3D, areaPath);
-				_area.update(areaData);
-
-				// bind to editor
-				areaEditor.setArea(_area);
-			}
-			else
-			{
-				_area.update(areaData);
-			}
 		}
 	}
 }

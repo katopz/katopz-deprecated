@@ -12,6 +12,7 @@
 	import com.greensock.easing.Linear;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
+	import com.sleepydesign.system.DebugUtil;
 	
 	import flash.events.Event;
 	import flash.geom.Vector3D;
@@ -238,11 +239,12 @@
 		}
 
 		// TODO : getset
-		public var map:Map;
+		//public var map:Map;
 
 		public function walkTo(targetPosition:Position):void
 		{
-			trace(" ! walkTo : " + targetPosition);
+			DebugUtil.trace(" ! walkTo : " + targetPosition);
+			/*
 			if (map)
 			{
 				// Mr. map please find path for "me"
@@ -253,6 +255,7 @@
 			{
 				// no map? wooooot? why????
 			}
+			*/
 		}
 
 		private function onWalkTo(event:Event):void

@@ -96,7 +96,7 @@ package com.cutecoma.playground.core
 		{
 			var color:Number = pathFinder.getColorByPosition(position);
 
-			trace(" ! Color		: " + color, color.toString(16));
+			DebugUtil.trace(" ! Color		: " + color, color.toString(16));
 
 			var command:String;
 			var args:Array;
