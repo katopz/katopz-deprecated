@@ -23,7 +23,7 @@
 		
 		public static function getVector3D(raw:*):Vector3D
 		{
-			return new Vector3D(raw.x, raw.y, raw.z);
+			return new Vector3D(raw.x || 0, raw.y || 0, raw.z || 0);
 		}
 
 		public function toObject(fix:uint = 2):Object
