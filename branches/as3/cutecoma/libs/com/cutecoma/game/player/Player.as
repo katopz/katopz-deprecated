@@ -10,7 +10,6 @@
 	import com.cutecoma.playground.core.Map;
 	import com.greensock.*;
 	import com.greensock.easing.Linear;
-	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.system.DebugUtil;
 	
@@ -27,7 +26,7 @@
 		public var dolly:Vector3D;
 		public var decoy:Vector3D;
 
-		public var balloon:SDDialog;
+		//public var balloon:SDDialog;
 
 		public var positions:Array;
 
@@ -85,8 +84,6 @@
 
 		public function set dirty(value:Boolean):void
 		{
-			if (!value)
-				return;
 			if (data.act == PlayerEvent.STAND)
 				return;
 
@@ -100,7 +97,7 @@
 			// all clean now
 			_dirty = false;
 		}
-
+		
 		//____________________________________________________________ Contructor
 
 		public function Player(playerData:PlayerData = null) //id:String=null, source:*=null, playerVO:PlayerVO)
@@ -192,9 +189,10 @@
 
 		public function talk(msg:String = ""):void
 		{
-			if (!balloon)
-			{
-				balloon = new SDDialog();
+			//if (!balloon)
+			//{
+				//balloon = new SDDialog();
+				
 				/*
 				   balloon = new SDBalloon(msg?msg:"");
 				   balloon.addEventListener(SDEvent.DRAW, onBalloonChange);
@@ -212,11 +210,13 @@
 				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_OVER, onBalloonClick);
 
 				//instance.addChild(particles3D);
-				act(PlayerEvent.TALK);
-			}
-			else if (msg && balloon.text != msg)
+				//act(PlayerEvent.TALK);
+			//}
+			//else 
+			/*
+			if (msg && balloon.text != msg)
 			{
-				balloonClip.visible = true;
+				//balloonClip.visible = true;
 				balloon.text = msg;
 				act(PlayerEvent.TALK);
 			}
@@ -226,6 +226,11 @@
 			}
 
 			this.msg = msg;
+			*/
+			
+			
+			
+			this.msg = msg;
 		}
 
 		private var balloonClip:Particle;
@@ -234,7 +239,7 @@
 		{
 			if (event.type != Event.CHANGE)
 				return;
-			balloonClip.visible = balloon.visible;
+			//balloonClip.visible = balloon.visible;
 			//balloonClip.material.updateBitmap();
 		}
 
@@ -406,11 +411,13 @@
 			walkCompleteSignal = null;
 			playerCompleteSignal = null;
 			
+			/*
 			if(balloon)
 			{
 				balloon.destroy();
 				balloon = null;
 			}
+			*/
 			
 			positions = null;
 			
