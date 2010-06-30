@@ -16,10 +16,7 @@ package
 	import com.sleepydesign.templates.ApplicationTemplate;
 	
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.net.registerClassAlias;
-	import flash.utils.Dictionary;
-	import flash.utils.IExternalizable;
 
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="480")]
 	
@@ -47,21 +44,14 @@ package
 	TODO :
 	
 	+ editor
-	//- switch between area //reload other area -> destroy -> create
-	//- view FPS controller
+	- test switch between area
 	- flood fill
-	//- import/export external bitmap as map
-	//- load and save as other id
-	//- add wire frame box for estimate scene height
 	- clean up
 	- MVC
 	
 	+ chat
-	//- load MDJ 
-	//- test path finder 
-	//- test action
+	- add ballon to player
 	- speed, destroy, model pool
-	- test switch between area
 	- login via opensocial
 	- model bounding box, scale to 1px = 1cm
 	- add frames data info to MDJ?
@@ -87,8 +77,6 @@ package
 
 		private var areaPanel:AreaPanel;
 
-		private var _isEditArea:Boolean = false;
-
 		private var dialog:SDDialog;
 
 		private var _selectAreaID:String = "00";
@@ -107,7 +95,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			//alpha = .1;
+			alpha = .1;
 		}
 
 		override protected function onInit():void
@@ -148,8 +136,6 @@ package
 
 			switch (action)
 			{
-				case "edit-area":
-					_isEditArea = true;
 				case "enter-area":
 					showAreaPanel(onAreaIDChange);
 					break;
@@ -186,24 +172,28 @@ package
 
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
 			dialog.destroy();
-			gotoAreaID(event.areaID);
+			
+			_world.completeSignal.addOnce(onWolrdComplete);
+			_world.areaCompleteSignal.add(onGotoArea);
+			_world.gotoAreaID(event.areaID);
 		}
 
-		private function gotoAreaID(id:String):void
+		public function onWolrdComplete(areaData:AreaData):void
 		{
-			LoaderUtil.load(_world.areaPath + id + ".ara", onAreaLoad);
+			// init player and connector 
+			initWorld(areaData);
+			
+			/*
+			// area can be change later!
+			_world.areaCompleteSignal.add(onGotoArea);
+			
+			// all set! let's go!
+			onGotoArea(areaData);
+			*/
 		}
-
-		public function gotoArea(areaData:AreaData):void
+		
+		public function onGotoArea(areaData:AreaData):void
 		{
-			if (!_world.area)
-			{
-				//areaData.background = _world.areaPath + areaData.background;
-				createArea(areaData, _world.areaPath);
-				currentRoomID = areaData.id;
-				return;
-			}
-
 			// dirty
 			if (currentRoomID != areaData.id)
 			{
@@ -217,7 +207,7 @@ package
 				connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
 				connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
 				connector.enterRoom(areaData.id);
-
+				
 				// destroy
 				_game.removeOtherPlayer();
 
@@ -239,10 +229,10 @@ package
 			_game.player.enter();
 		}
 
-		public function createArea(areaData:AreaData, areaPath:String):void
+		public function initWorld(areaData:AreaData):void
 		{
 			// world
-			_world.createArea(areaData, areaPath);
+			//_world.createArea(areaData, areaPath);
 			
 			// fake player data, TODO : load from real player data via open social
 			var _playerData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), _world.area.map.getSpawnPoint(), "user.mdj", PlayerEvent.STAND, 3);
@@ -250,19 +240,20 @@ package
 			// player
 			_game.player = new Player(_playerData); //new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
 
-			// read map
-			_game.player.map = _world.area.map;
+			// map
+			//_game.player.map = _world.area.map;
 
 			_game.addPlayer(_game.player);
 			_game.player.talk(VERSION);
 
 			// net	
+			currentRoomID = areaData.id;
 			createConnector(areaData.id);
 			createChatBox();
 
 			// bind player -> connector
 			_game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
-
+			
 			// start
 			_game.start();
 		}
@@ -310,7 +301,7 @@ package
 			trace(" ^ onTalk : " + event);
 			_game.player.update({id: _game.player.id, msg: event.data.msg});
 		}
-
+/*
 		private function onAreaLoad(event:Event):void
 		{
 			var areaData:AreaData
@@ -332,5 +323,6 @@ package
 				gotoArea(areaData);
 			}
 		}
+		*/
 	}
 }
