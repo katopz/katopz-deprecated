@@ -37,7 +37,7 @@
 			dispose();
 
 			LoaderUtil.loadAsset(path+areaData.background, onBackgroundComplete);
-			DebugUtil.trace("load:"+path+areaData.background);
+			DebugUtil.trace(" ! BackGround : "+path+areaData.background);
 			//this._data = areaData;
 		}
 
