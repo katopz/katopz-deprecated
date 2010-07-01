@@ -6,7 +6,7 @@ package com.cutecoma.playground.core
 	import com.cutecoma.playground.pathfinder.AStar3D;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -14,46 +14,30 @@ package com.cutecoma.playground.core
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-	
+
 	import org.osflash.signals.Signal;
 
-	public class Map extends com.sleepydesign.display.SDSprite
+	public class Map extends SDSprite
 	{
-		private var pathFinder:AStar3D;
-
-		private var minimap:SDSprite;
-
-		private var line:Shape;
-
+		//MODEL//
+		private var _data:MapData;
+		
+		public function get data():MapData
+		{
+			return _data;
+		}
 		public static var factorX:Number = 1;
-
 		public static var factorZ:Number = 1;
 
-		public var data:MapData;
-
-		public static const commands:Dictionary = new Dictionary(true);
-
-		//public var pathData:MapData
-
-		// Singleton
-		public static var instance:Map;
-
-		public static function getInstance():Map
-		{
-			if(instance == null)
-				instance = new Map(); //null, factorX, factorZ);
-			return instance as Map;
-		}
+		//VIEW//
+		private var _miniMap:SDSprite;
+		
+		//CONTROL//
+		private var _pathFinder:AStar3D;
 
 		public function Map() //source:*=null, factorX:Number=1, factorZ:Number=1)
 		{
-			instance = this;
-			super();
-
-			//if(!config)
-			//	update(config);
-			//parse(config);
-			addEventListener(Event.ADDED_TO_STAGE, onStage);
+			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 
 		protected function onStage(event:Event):void
@@ -64,13 +48,13 @@ package com.cutecoma.playground.core
 
 		public var bitmap:Bitmap;
 
-		// _______________________________________________________ Point
+		// Point _______________________________________________________
 
 		//TODO : public function getSpawnPointById(position:Position):void
 		public function getSpawnPoint():Position
 		{
 			trace(" ! getSpawnPoint : " + MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y);
-			return pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
+			return _pathFinder.getPositionByNode(MapData(data).spawnPoint.x, 0, MapData(data).spawnPoint.y)
 		}
 
 		public function getWarpPoint(areaID:String):Position
@@ -82,19 +66,19 @@ package com.cutecoma.playground.core
 			var warpRect:Rectangle = MapData(data).bitmapData.getColorBoundsRect(0xFFFFFF, Number("0x00FF" + areaID));
 			var warpPoint:Point = warpRect.topLeft;
 
-			if(warpRect.size.length > 0)
-				return pathFinder.getPositionByNode(warpPoint.x, 0, warpPoint.y);
+			if (warpRect.size.length > 0)
+				return _pathFinder.getPositionByNode(warpPoint.x, 0, warpPoint.y);
 			else
 			{
 				DebugUtil.trace(" ! no warp point for : " + areaID);
 				return getSpawnPoint();
 			}
 		}
-		
+
 		// TODO : move this to game rule?
 		public function getCommand(position:*):*
 		{
-			var color:Number = pathFinder.getColorByPosition(position);
+			var color:Number = _pathFinder.getColorByPosition(position);
 
 			DebugUtil.trace(" ! Color		: " + color, color.toString(16));
 
@@ -102,28 +86,28 @@ package com.cutecoma.playground.core
 			var args:Array;
 
 			// warp color zone
-			if(color >= 0xFF00 && color <= 0xFFFF)
+			if (color >= 0xFF00 && color <= 0xFFFF)
 			{
 				command = "warp";
-				args = [ Number(color - 0xFF00).toString(16).toUpperCase()];
+				args = [Number(color - 0xFF00).toString(16).toUpperCase()];
 			}
 			else
 			{
 				command = "";
 			}
-			return { command: command, args: args };
+			return {command: command, args: args};
 		}
 
-		// _______________________________________________________ Path
-
+		// Path _______________________________________________________
+		
 		public function findPath(id:String, startPosition:Position, finishPosition:Position):void
 		{
 			//var player:Player = Player(this.getElementById(id));
 			try
 			{
-				pathFinder.findPath(startPosition, finishPosition, id);
+				_pathFinder.findPath(startPosition, finishPosition, id);
 			}
-			catch(e:*)
+			catch (e:*)
 			{
 				trace(e)
 			}
@@ -140,7 +124,7 @@ package com.cutecoma.playground.core
 			completeSignal.dispatch(paths);
 		}
 
-		// ______________________________ Update ____________________________
+		// Update _______________________________________________________
 
 		public function update(_areaData:AreaData):void
 		{
@@ -150,27 +134,24 @@ package com.cutecoma.playground.core
 			//if(!_areaData.map)
 			//	data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
 			//else
-			data = _areaData.mapData;
-			
+			_data = _areaData.mapData;
+
 			updateBitmapData(data.bitmapData);
 		}
-		
+
 		public function updateBitmapData(bitmapData:BitmapData):void
 		{
-			// _______________________________________________________ MiniMap
+			// MiniMap _______________________________________________________
 
-			//if(minimap)
-			//minimap.destroy();
-
-			if(!minimap)
+			if (!_miniMap)
 			{
-				minimap = new SDSprite();
-				minimap.mouseEnabled = false;
-				minimap.mouseChildren = false;
-				addChild(minimap);
+				_miniMap = new SDSprite();
+				_miniMap.mouseEnabled = false;
+				_miniMap.mouseChildren = false;
+				addChild(_miniMap);
 
 				bitmap = new Bitmap(bitmapData);
-				minimap.addChild(bitmap);
+				_miniMap.addChild(bitmap);
 			}
 			else
 			{
@@ -179,57 +160,48 @@ package com.cutecoma.playground.core
 
 			draw();
 
-			/*
-			   line = new Shape();
-			   line.name = "line";
-			   minimap.addChild(line);
-			 */
-
-			// AStar3D
-			if(pathFinder)
+			// AStar3D _______________________________________________________
+			
+			if (_pathFinder)
 			{
-				pathFinder.destroy();
-				pathFinder = null;
+				_pathFinder.destroy();
+				_pathFinder = null;
 				AStar3D.completeSignal.removeAll();
-				//pathFinder.removeEventListener(SDEvent.COMPLETE, onPathComplete);
-				//pathFinder.removeEventListener(SDEvent.ERROR, onPathError);
 			}
 
-			pathFinder = new AStar3D(); //engine3D.scene);
-			pathFinder.create(bitmapData, factorX, 0, factorZ, 1, 0, 1);
+			_pathFinder = new AStar3D(); //engine3D.scene);
+			_pathFinder.create(bitmapData, factorX, 0, factorZ, 1, 0, 1);
 			AStar3D.completeSignal.add(onPathComplete);
 			//AStar3D.errorSignal.add(onPathError);
-			
-			//pathFinder.addEventListener(SDEvent.COMPLETE, onPathComplete, false, 0, true);
-			//pathFinder.addEventListener(SDEvent.ERROR, onPathError, false, 0, true);
 		}
-
+		
 		public function draw():void
 		{
-			if(stage && minimap)
-				minimap.x = stage.stageWidth - minimap.width;
+			if (stage && _miniMap)
+				_miniMap.x = stage.stageWidth - _miniMap.width;
 		}
 
-		// ______________________________ Destroy ______________________________
+		// Destroy _______________________________________________________
 
 		override public function destroy():void
 		{
-			//bitmap.removeEventListener(MouseEvent.CLICK, onMapClick);
 			bitmap = null;
 
-			if(minimap)
-				minimap.destroy();
-			minimap = null;
+			if (_miniMap)
+				_miniMap.destroy();
+			_miniMap = null;
 
-			if(pathFinder)
+			if (_pathFinder)
 			{
-				pathFinder.destroy();
+				_pathFinder.destroy();
 				AStar3D.completeSignal.removeAll();
-				pathFinder = null;
+				_pathFinder = null;
 			}
 
 			factorX = 1;
 			factorZ = 1;
+			
+			_data = null;
 
 			super.destroy();
 		}
