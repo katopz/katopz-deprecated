@@ -91,6 +91,15 @@ package com.cutecoma.game.core
 			
 			// wait for char model complete and plug to 3d Engine
 			_player.playerCompleteSignal.addOnce(addCharacterModelToEngine);
+			
+			// bind player state to MODEL
+			_player.positionSignal.add(checkPositionRule);
+		}
+		
+		private function checkPositionRule(position:Vector3D, callback:Function):void
+		{
+			DebugUtil.trace("TODO : bind to baloon");
+			callback();
 		}
 		
 		public function addCharacterModelToEngine(player:Player):void

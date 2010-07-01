@@ -21,7 +21,6 @@
 	public class Player extends RemovableEventDispatcher
 	{
 		public var id:String;
-		public var instance:*;
 
 		public var dolly:Vector3D;
 		public var decoy:Vector3D;
@@ -130,6 +129,8 @@
 			return _character;
 		}
 
+		public var positionSignal:Signal = new Signal(Vector3D, Function);
+		
 		public var walkCompleteSignal:Signal = new Signal(Vector3D);
 		public var playerCompleteSignal:Signal = new Signal(Player);
 
@@ -149,8 +150,8 @@
 				//dolly.copyPosition(config.pos);
 				//decoy.copyPosition(config.des);
 
-				if (balloonClip)
-					balloonClip.y = character.height;
+				//if (balloonClip)
+				//	balloonClip.y = character.height;
 			}
 
 			// ready to roll
@@ -233,7 +234,7 @@
 			this.msg = msg;
 		}
 
-		private var balloonClip:Particle;
+		//private var balloonClip:Particle;
 
 		private function onBalloonChange(event:Event):void
 		{
@@ -325,6 +326,11 @@
 		}
 
 		private function onWalk():void
+		{
+			positionSignal.dispatch(dolly, updatePosition);
+		}
+		
+		private function updatePosition():void
 		{
 			model.lookAt(dolly);
 
