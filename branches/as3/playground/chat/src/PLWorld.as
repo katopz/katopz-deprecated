@@ -28,15 +28,16 @@ package
 	 *	 							     /   .   \ 
 	 *						 	     [Net]   .   [UI]---[Controller]
 	 *						 	       |     .    |
+	 *						 	       |     .    |
 	 *		  [SharedObject]---[MultiPlayer] . [Player]---[Character]---[ModelPool]
-	 *					 		          \  .  /
-	 *					 		//CONTROL//[Game]---[Map]---[PathFinder]
+	 *					 		            \./
+	 *					 		  [Chat]---[Game]---[Map]---[PathFinder]
 	 *					 	 	             |		  |
 	 *					 		 //VIEW//[Engine3D]   |
 	 * 										 |		  |
 	 *							 [Char]---[World]---[Area]---[Ground]
 	 *							  /          |         \
-	 *					  [CharEditor]-[WorldEditor]-[AreaEditor]
+	 *					  [CharEditor] [WorldEditor] [AreaEditor]
 	 * 
 	 */
 	
