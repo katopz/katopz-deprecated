@@ -6,28 +6,43 @@ package com.cutecoma.game.core
 	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.core.World;
 	import com.sleepydesign.core.IDestroyable;
-	import com.sleepydesign.core.SDGroup;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ObjectUtil;
+	import com.sleepydesign.utils.VectorUtil;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	
+	import org.osflash.signals.Signal;
+	
 	public class Game extends SDSprite
 	{
-		protected var _engine3D:IEngine3D;
-		
+		private var _engine3D:IEngine3D;
+
+		public function get engine3D():IEngine3D
+		{
+			return _engine3D;
+		}
+
 		//public static var inputController	: InputController;
 		
 		private var _world:World;
 		
-		public var player					: Player;
-		public var players					: SDGroup;
+		private var _currentPlayer					: Player;
+
+		public function get currentPlayer():Player
+		{
+			return _currentPlayer;
+		}
+
+		private var _players					: Vector.<Player>;
 		
 		//public var warpSignal:Signal = new Signal(String/*areaID*/);
+		
+		public var playerPositionSignal:Signal = new Signal(String/*playerID*/, Vector3D);
 		
 		//TODO : IWorld
 		public function Game(engine3D:IEngine3D, world:World)
@@ -39,7 +54,19 @@ package com.cutecoma.game.core
 			
 			onWorldComplete();
 			
-			players = new SDGroup;
+			_players = new Vector.<Player>();
+		}
+		
+		public function initPlayer(playerData:PlayerData) : void
+		{
+			// player
+			_currentPlayer = new Player(playerData); //new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
+			
+			// map
+			//_game.player.map = _world.area.map;
+			
+			addPlayer(_currentPlayer);
+			//currentPlayer.talk(VERSION);
 		}
 		
 		private function onWorldComplete():void
@@ -54,13 +81,13 @@ package com.cutecoma.game.core
 		{
 			DebugUtil.trace(" ! Click : " + position, face, point);
 			_world.area.map.completeSignal.addOnce(onPathComplete);
-			_world.area.map.findPath("", Position.parse(player.position), Position.parse(position));
+			_world.area.map.findPath("", Position.parse(currentPlayer.position), Position.parse(position));
 		}
 		
 		protected function onPathComplete(paths:Array):void
 		{
 			DebugUtil.trace(" ! onPathComplete : " + paths);
-			player.walk(paths);
+			currentPlayer.walk(paths);
 		}
 
 		public function start() : void
@@ -78,25 +105,37 @@ package com.cutecoma.game.core
 			//draw();
 		}
 		
-		public function addPlayer(_player:Player):void
+		public function addPlayer(player:Player):void
 		{
 			// remove if any
 			//removePlayer(player);
+			VectorUtil.removeItem(_players, player);
 			
 			// plug to gameplayers.addItem
-			players.addItem(_player, _player.id);
+			_players.push(player);//.addItem(player, player.id);
 			
 			// wait for char model complete and plug to 3d Engine
-			_player.playerCompleteSignal.addOnce(addCharacterModelToEngine);
+			player.completeSignal.addOnce(addCharacterModelToEngine);
 			
 			// bind player state to MODEL
-			_player.positionSignal.add(onPlayerPositionChange);
+			player.positionSignal.add(onPlayerPositionChange);
 		}
 		
-		private function onPlayerPositionChange(id:String, position:Vector3D, callback:Function):void
+		/**
+		 * Trigger when player position change.
+		 * Can be add some game rule here before make a move.
+		 * 
+		 * @param id
+		 * @param position
+		 * 
+		 */		
+		private function onPlayerPositionChange(id:String, position:Vector3D):void
 		{
-			DebugUtil.trace("TODO : bind to baloon : "+id, position);
-			callback();
+			// no rule yet, just pass value to MODEL
+			playerPositionSignal.dispatch(id, position);
+			
+			// apply position to player
+			currentPlayer.updatePosition(position);
 		}
 		
 		public function addCharacterModelToEngine(player:Player):void
@@ -135,7 +174,7 @@ package com.cutecoma.game.core
 			*/
 		}
 		
-		public function removePlayer(_player:Player=null):void
+		public function removePlayer(_player:Player):void
 		{
 			// exist?
 			if(_player)
@@ -147,31 +186,29 @@ package com.cutecoma.game.core
 				//TODEV//engine.removeChild(_player.instance);
 				
 				// unplug from game
-				players.removeItem(_player, _player.id);
+				//players.removeItem(_player, _player.id);
+				VectorUtil.removeItem(_players, _player);
 				
 				_player.destroy();
 				_player = null;
 			}
-			else
-			{
-				// remove all player
-				for each(var __player:Player in players.items)
-					removePlayer(__player);
-			}
 		}
-		
+
 		public function removeOtherPlayer():void
 		{
-			for each(var _player:Player in players.items)
+			for each (var _player:Player in _players)
 			{
-				if(_player!=player)
+				if (_player != currentPlayer)
 					removePlayer(_player);
 			}
 		}
 		
 		public function getPlayerByID(id:String):Player
 		{
-			return Player(players.getItemByID(id));
+			for each (var _player:Player in _players)
+				if(_player.id==id)
+					return _player;
+			return null;
 		}
 		
 		// ______________________________ Update ____________________________
@@ -207,14 +244,13 @@ package com.cutecoma.game.core
 			
 			var _player:Player = getPlayerByID(playerData.id);
 			
-			if(_player != player)
+			if(_player != currentPlayer)
 			{
 				// not me maybe new guy
 				if(!_player)
 				{
 					// new guy! not in list
-					_player = new Player(playerData);
-					addPlayer(_player);
+					addPlayer(_player = new Player(playerData));
 					
 					//plug to current map
 					//_player.map = player.map;
@@ -243,7 +279,10 @@ package com.cutecoma.game.core
 		
 		override public function destroy():void
 		{
-			removePlayer();
+			if(_players)
+				for each (var _player:Player in _players)
+					_player.destroy();
+			_players = null;
 			
 			if(IDestroyable(_engine3D))
 				IDestroyable(_engine3D).destroy();

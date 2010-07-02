@@ -23,7 +23,7 @@ package com.cutecoma.playground.editors
 
 		public function WorldEditor(engine3D:IEngine3D)
 		{
-			super(engine3D);
+			super(engine3D, "../../");
 			
 			areaEditor = new AreaEditor(_engine3D);
 			

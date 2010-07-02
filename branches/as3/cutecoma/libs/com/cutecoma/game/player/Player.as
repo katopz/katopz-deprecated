@@ -129,10 +129,10 @@
 			return _character;
 		}
 
-		public var positionSignal:Signal = new Signal(String, Vector3D, Function);
+		public var positionSignal:Signal = new Signal(String, Vector3D);
 		
 		public var walkCompleteSignal:Signal = new Signal(Vector3D);
-		public var playerCompleteSignal:Signal = new Signal(Player);
+		public var completeSignal:Signal = new Signal(Player);
 
 		public function initCharacter():void
 		{
@@ -164,7 +164,7 @@
 			position = dolly.clone();
 
 			// tell game
-			playerCompleteSignal.dispatch(this);
+			completeSignal.dispatch(this);
 		}
 
 		/*
@@ -327,17 +327,9 @@
 
 		private function onWalk():void
 		{
-			positionSignal.dispatch(id, dolly, updatePosition);
+			positionSignal.dispatch(id, dolly);
 		}
 		
-		private function updatePosition():void
-		{
-			model.lookAt(dolly);
-
-			model.x += (dolly.x - position.x) * .5;
-			model.z += (dolly.z - position.z) * .5;
-		}
-
 		private function onWalkComplete():void
 		{
 			trace(" ^ onWalkComplete");
@@ -371,6 +363,14 @@
 		}
 
 		// ______________________________ Update ____________________________
+		
+		public function updatePosition(targetPosition:Vector3D):void
+		{
+			model.lookAt(targetPosition);
+			
+			model.x += (targetPosition.x - position.x) * .5;
+			model.z += (targetPosition.z - position.z) * .5;
+		}
 
 		public function update(data:Object = null):void
 		{
@@ -412,10 +412,10 @@
 			TweenLite.killTweensOf(dolly);
 
 			walkCompleteSignal.removeAll();
-			playerCompleteSignal.removeAll();
+			completeSignal.removeAll();
 
 			walkCompleteSignal = null;
-			playerCompleteSignal = null;
+			completeSignal = null;
 			
 			/*
 			if(balloon)
