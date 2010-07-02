@@ -76,9 +76,9 @@ package com.cutecoma.playground.data
 
 		public function writeExternal(output:IDataOutput):void
 		{
-			output.writeObject({x: x, y: y, z: z,
-					rotationX: rotationX, rotationY: rotationY, rotationZ: rotationZ,
-					focus: focus, zoom: zoom});
+			output.writeObject({x: x.toFixed(2), y: y.toFixed(2), z: z.toFixed(2),
+					rotationX: rotationX.toFixed(2), rotationY: rotationY.toFixed(2), rotationZ: rotationZ.toFixed(2),
+					focus: focus.toFixed(2), zoom: zoom.toFixed(2)});
 		}
 
 		public function readExternal(input:IDataInput):void
