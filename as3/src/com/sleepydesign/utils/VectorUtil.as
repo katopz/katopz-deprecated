@@ -25,7 +25,7 @@ package com.sleepydesign.utils
 			return toArray(vector).sortOn(fieldName, options);
 		}
 		
-		public static function removeItem(tarVector:Vector.<*>, item:*):uint
+		public static function removeItem(tarVector:*, item:*):uint
 		{
 			var i:int = tarVector.indexOf(item);
 			var f:uint = 0;
