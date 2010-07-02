@@ -83,37 +83,5 @@
 			}
 			areaCompleteSignal.dispatch(_areaData);
 		}
-	/*
-	   public function createArea(areaData:AreaData, areaPath:String):void
-	   {
-	   //_area = new Area(_engine3D, areaPath);
-	   //_area.completeSignal.addOnce(onAreaComplete);
-	   _area.areaPath = areaPath;
-	   _area.update(areaData);
-
-	   //TODEV//SDApplication.getInstance()["gotoArea"](areaData);
-	   }
-
-	   protected function onAreaComplete():void
-	   {
-	   //completeSignal.dispatch();
-	   }
-
-	   protected function readAreaData(rawAreaData:ByteArray):AreaData
-	   {
-	   return IExternalizable(new AreaData).readExternal(rawAreaData);
-	   //updateArea(_areaData, areaPath);
-
-	   //SDApplication.getInstance()["gotoArea"](areaData);
-	   }
-
-	   protected function updateArea(areaData:AreaData, areaPath:String):void
-	   {
-	   if(!_area)
-	   createArea(areaData, areaPath);
-	   else
-	   _area.update(areaData);
-	   }
-	 */
 	}
 }
