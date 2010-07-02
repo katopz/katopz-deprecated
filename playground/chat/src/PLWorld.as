@@ -51,10 +51,10 @@ package
 	- MVC
 	
 	+ chat
-	- add ballon to player
 	- speed, destroy, model pool
 	- login via opensocial
 	- model bounding box, scale to 1px = 1cm
+	- apply model height to balloon, particle movie materail
 	- add frames data info to MDJ?
 	- clean up
 	- MVC
@@ -98,29 +98,29 @@ package
 			alpha = .1;
 		}
 
-		override protected function onInit():void
+		override protected function onInitXML():void
+		{
+			initEngine3D();
+		}
+		
+		private function initEngine3D():void
 		{
 			_engine3D = new Engine3D();
 			_engine3D.systemLayer = _systemLayer;
 			_engine3D.contentLayer = _contentLayer;
 			_engine3D.completeSignal.addOnce(onEngineInit);
-
+			
 			addChild(_engine3D);
 		}
-
+		
 		private function onEngineInit():void
 		{
-			_world = new World(_engine3D);
+			_world = new World(_engine3D, String(_xml.world.area.@path));
 			_game = new Game(_engine3D, _world);
 			
 			_chat = new Chat(_game, SERVER_URI);
 			_chat.canvas = _systemLayer;
-		}
-
-		override protected function onInitXML():void
-		{
-			_world.areaPath = String(_xml.world.area.@path);
-
+			
 			initMenu();
 		}
 
@@ -206,7 +206,7 @@ package
 			if (currentRoomID != areaData.id)
 			{
 				// tell everybody i'm exit
-				_game.player.exit();
+				_game.currentPlayer.exit();
 
 				// update server
 				_chat.gotoArea(areaData.id);
@@ -217,7 +217,7 @@ package
 				//update area
 				_world.area.update(areaData);
 				////engine3D.update(areaData.scene);
-				_game.player.warp(_world.area.map.getWarpPoint(currentRoomID));
+				_game.currentPlayer.warp(_world.area.map.getWarpPoint(currentRoomID));
 
 				// TODO : actually we need to wait for connection success?
 				currentRoomID = areaData.id;
@@ -232,14 +232,7 @@ package
 			// fake player data, TODO : load from real player data via open social
 			var _playerData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), _world.area.map.getSpawnPoint(), "user.mdj", PlayerEvent.STAND, 3);
 			
-			// player
-			_game.player = new Player(_playerData); //new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
-
-			// map
-			//_game.player.map = _world.area.map;
-
-			_game.addPlayer(_game.player);
-			_game.player.talk(VERSION);
+			_game.initPlayer(_playerData);
 		}
 		
 		public function initChat(areaData:AreaData):void

@@ -12,22 +12,22 @@
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.utils.*;
-
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.*;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class World
 	{
 		protected var _engine3D:IEngine3D;
-
+		
+		private var _path:String = "";
+		
 		protected var _area:Area;
-		public var areaPath:String = "";
-
 		public function get area():Area
 		{
 			return _area;
@@ -37,11 +37,12 @@
 
 		public var areaCompleteSignal:Signal = new Signal(AreaData);
 
-		public function World(engine3D:IEngine3D)
+		public function World(engine3D:IEngine3D, path:String)
 		{
 			_engine3D = engine3D;
+			_path = path;
 
-			_area = new Area(_engine3D, areaPath);
+			_area = new Area(_engine3D, _path);
 		}
 
 		public function gotoAreaID(id:String):void
@@ -52,7 +53,7 @@
 
 		public function openArea(uri:String):void
 		{
-			LoaderUtil.loadBinary(areaPath + uri, onAreaLoad);
+			LoaderUtil.loadBinary(_path + uri, onAreaLoad);
 		}
 
 		private var _areaData:AreaData;
