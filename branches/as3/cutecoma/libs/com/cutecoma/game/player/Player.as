@@ -129,7 +129,7 @@
 			return _character;
 		}
 
-		public var positionSignal:Signal = new Signal(Vector3D, Function);
+		public var positionSignal:Signal = new Signal(String, Vector3D, Function);
 		
 		public var walkCompleteSignal:Signal = new Signal(Vector3D);
 		public var playerCompleteSignal:Signal = new Signal(Player);
@@ -327,7 +327,7 @@
 
 		private function onWalk():void
 		{
-			positionSignal.dispatch(dolly, updatePosition);
+			positionSignal.dispatch(id, dolly, updatePosition);
 		}
 		
 		private function updatePosition():void

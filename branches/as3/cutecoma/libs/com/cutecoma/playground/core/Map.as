@@ -109,7 +109,7 @@ package com.cutecoma.playground.core
 			}
 			catch (e:*)
 			{
-				trace(e)
+				trace(e);
 			}
 		}
 

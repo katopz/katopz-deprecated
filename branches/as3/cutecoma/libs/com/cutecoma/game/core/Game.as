@@ -1,6 +1,5 @@
 package com.cutecoma.game.core
 {
-	import away3dlite.animators.MovieMeshContainer3D;
 	import away3dlite.core.base.Face;
 	
 	import com.cutecoma.game.data.PlayerData;
@@ -16,8 +15,6 @@ package com.cutecoma.game.core
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
-	
-	import org.osflash.signals.Signal;
 	
 	public class Game extends SDSprite
 	{
@@ -93,12 +90,12 @@ package com.cutecoma.game.core
 			_player.playerCompleteSignal.addOnce(addCharacterModelToEngine);
 			
 			// bind player state to MODEL
-			_player.positionSignal.add(checkPositionRule);
+			_player.positionSignal.add(onPlayerPositionChange);
 		}
 		
-		private function checkPositionRule(position:Vector3D, callback:Function):void
+		private function onPlayerPositionChange(id:String, position:Vector3D, callback:Function):void
 		{
-			DebugUtil.trace("TODO : bind to baloon");
+			DebugUtil.trace("TODO : bind to baloon : "+id, position);
 			callback();
 		}
 		

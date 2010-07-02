@@ -4,8 +4,7 @@ package
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
-	import com.cutecoma.playground.components.SDChatBox;
-	import com.cutecoma.playground.components.SDConnector;
+	import com.cutecoma.playground.core.Chat;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.World;
 	import com.cutecoma.playground.data.*;
@@ -26,11 +25,12 @@ package
 	 *									 \	 .	 /
 	 *							 	  [Authenticate]---[Persistent Data]//MODEL//
 	 *	 							     /   .   \ 
-	 *						 	     [Net]   .   [UI]---[Controller]
-	 *						 	       |     .    |
-	 *						 	       |     .    |
+	 *						 	      [Net]  .  [UI]---[Controller]
+	 *						 	           \ . /  |
+	 *						 	          [Chat]  |
+	 *						 	           / . \  |
 	 *		  [SharedObject]---[MultiPlayer] . [Player]---[Character]---[ModelPool]
-	 *					 		            \./
+	 *					 		           \ . /
 	 *					 		  [Chat]---[Game]---[Map]---[PathFinder]
 	 *					 	 	             |		  |
 	 *					 		 //VIEW//[Engine3D]   |
@@ -82,9 +82,8 @@ package
 
 		private var _selectAreaID:String = "00";
 
-		private var connector:SDConnector;
-
 		private var _game:Game;
+		private var _chat:Chat;
 
 		private var currentRoomID:String = "";
 
@@ -113,6 +112,9 @@ package
 		{
 			_world = new World(_engine3D);
 			_game = new Game(_engine3D, _world);
+			
+			_chat = new Chat(_game, SERVER_URI);
+			_chat.canvas = _systemLayer;
 		}
 
 		override protected function onInitXML():void
@@ -184,6 +186,11 @@ package
 			// init player and connector 
 			initWorld(areaData);
 			
+			initChat(areaData);
+			
+			// start
+			_game.start();
+			
 			/*
 			// area can be change later!
 			_world.areaCompleteSignal.add(onGotoArea);
@@ -202,12 +209,7 @@ package
 				_game.player.exit();
 
 				// update server
-				connector.exitRoom();
-
-				// wait for exit complete?
-				connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
-				connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
-				connector.enterRoom(areaData.id);
+				_chat.gotoArea(areaData.id);
 				
 				// destroy
 				_game.removeOtherPlayer();
@@ -220,14 +222,6 @@ package
 				// TODO : actually we need to wait for connection success?
 				currentRoomID = areaData.id;
 			}
-		}
-
-		private function onEnterRoom(event:SDEvent):void
-		{
-			connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
-			connector.removeEventListener(SDEvent.UPDATE, onEnterRoom);
-			// tell everybody i'm enter
-			_game.player.enter();
 		}
 
 		public function initWorld(areaData:AreaData):void
@@ -246,84 +240,16 @@ package
 
 			_game.addPlayer(_game.player);
 			_game.player.talk(VERSION);
-
+		}
+		
+		public function initChat(areaData:AreaData):void
+		{
 			// net	
 			currentRoomID = areaData.id;
-			createConnector(areaData.id);
-			createChatBox();
-
-			// bind player -> connector
-			_game.player.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
 			
-			// start
-			_game.start();
+			_chat.createConnector(areaData.id);
+			_chat.createChatBox();
+			_chat.bindPlayer();
 		}
-		
-		// _______________________________________________________ Connector
-		
-		private function createConnector(id:String):void
-		{
-			//connector = new SDConnector(this, "rtmp://localhost/SOSample", "lobby");
-			connector = new SDConnector(SERVER_URI, id);
-			connector.x = 100;
-			connector.y = 20;
-			systemLayer.addChild(connector);
-			//connector.visible = false;
-			
-			// bind connector -> game
-			connector.addEventListener(SDEvent.UPDATE, function (event:SDEvent):void
-			{
-				trace(" ^ onUpdate : " + event);
-				try{
-					_game.update(event.data);
-				}catch (e:*){
-					trace(e);
-				}
-			});
-		}
-		
-		// _______________________________________________________ Chat
-		
-		private var chatBox:SDChatBox;
-		
-		private function createChatBox():void
-		{
-			chatBox = new SDChatBox();
-			chatBox.x = 100;
-			chatBox.y = 40;
-			systemLayer.addChild(chatBox);
-			
-			// bind chat -> player
-			chatBox.addEventListener(SDEvent.UPDATE, onTalk);
-		}
-		
-		private function onTalk(event:SDEvent):void
-		{
-			trace(" ^ onTalk : " + event);
-			_game.player.update({id: _game.player.id, msg: event.data.msg});
-		}
-/*
-		private function onAreaLoad(event:Event):void
-		{
-			var areaData:AreaData
-			if (event.type == "complete")
-			{
-				// exist area
-				areaData = new AreaData();
-				IExternalizable(areaData).readExternal(event.target.data);
-
-				// todo dispatch
-				gotoArea(areaData);
-			}
-			else if (event.type == IOErrorEvent.IO_ERROR && _isEditArea)
-			{
-				// new area
-				areaData = new AreaData(_selectAreaID, _world.areaPath + _selectAreaID + "_bg.swf", 40, 40);
-
-				// todo dispatch
-				gotoArea(areaData);
-			}
-		}
-		*/
 	}
 }
