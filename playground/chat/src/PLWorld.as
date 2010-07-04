@@ -3,7 +3,6 @@ package
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.events.PlayerEvent;
-	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.core.Chat;
 	import com.cutecoma.playground.core.Engine3D;
 	import com.cutecoma.playground.core.World;
@@ -15,6 +14,7 @@ package
 	import com.sleepydesign.templates.ApplicationTemplate;
 	
 	import flash.events.Event;
+	import flash.geom.Rectangle;
 	import flash.net.registerClassAlias;
 
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="480")]
@@ -60,6 +60,7 @@ package
 	- MVC
 	
 	+ lite
+	- fix equal w/h particle
 	- heightmap support, test with jiglib
 	- 2.5D Clip, animation controller
 	- infinite loop perlin noise fog, fire
@@ -95,7 +96,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			alpha = .1;
+			//alpha = .1;
 		}
 
 		override protected function onInitXML():void
@@ -106,11 +107,13 @@ package
 		private function initEngine3D():void
 		{
 			_engine3D = new Engine3D();
-			_engine3D.systemLayer = _systemLayer;
-			_engine3D.contentLayer = _contentLayer;
+			//_engine3D.systemLayer = _systemLayer;
+			//_engine3D.contentLayer = _contentLayer;
 			_engine3D.completeSignal.addOnce(onEngineInit);
 			
-			addChild(_engine3D);
+			_engine3D.screenRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+			
+			_contentLayer.addChild(_engine3D);
 		}
 		
 		private function onEngineInit():void
