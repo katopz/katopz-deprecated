@@ -398,8 +398,8 @@
 
 		public function warp(position:Position):void
 		{
-			//dolly.copyPosition(pos);
-			//decoy.copyPosition(pos);
+			dolly = position.clone();
+			decoy = position.clone();
 
 			//instance.copyPosition(pos);
 			character.model.transform.matrix3D.position = position.clone();
