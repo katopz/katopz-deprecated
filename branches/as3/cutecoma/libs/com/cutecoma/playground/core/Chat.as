@@ -1,6 +1,7 @@
 package com.cutecoma.playground.core
 {
 	import away3dlite.containers.Particles;
+	import away3dlite.containers.View3D;
 	import away3dlite.core.base.Particle;
 	import away3dlite.materials.ParticleMaterial;
 	
@@ -10,6 +11,7 @@ package com.cutecoma.playground.core
 	import com.cutecoma.playground.components.SDConnector;
 	import com.sleepydesign.components.SDDialog;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.geom.Vector3D;
@@ -26,6 +28,8 @@ package com.cutecoma.playground.core
 		
 		private var _balloons:Dictionary;
 		private var _balloonParticles:Particles;
+		
+		private var _bitmap:Bitmap;
 
 		public function Chat(game:Game, rtmpURI:String)
 		{
@@ -34,6 +38,12 @@ package com.cutecoma.playground.core
 			
 			_balloons = new Dictionary(true);
 			_balloonParticles = new Particles();
+			_game.engine3D.scene3D.addChild(_balloonParticles);
+			
+			// draw tobitmap
+			var view3D:View3D = _game.engine3D.view3D;
+			_bitmap = _balloonParticles.bitmap = new Bitmap(new BitmapData(_game.engine3D.screenRect.width, _game.engine3D.screenRect.height, true, 0x00000000));
+			_game.engine3D.contentLayer.addChild(_bitmap);
 		}
 
 		public function gotoArea(areaID:String):void
@@ -75,7 +85,7 @@ package com.cutecoma.playground.core
 			
 			if(!_balloon)
 			{
-				_balloon = new SDDialog("test");
+				_balloon = new SDDialog("test balloon");
 				
 				// TODO : ParticleMovieMaterial
 				var _bitmapData:BitmapData = new BitmapData(_balloon.width, _balloon.height);
@@ -86,8 +96,6 @@ package com.cutecoma.playground.core
 				_balloonParticle.id = id;
 				
 				_balloonParticles.addParticle(_balloonParticle);
-				
-				_game.engine3D.scene3D.addChild(_balloonParticles);
 				
 				_balloons[id] = _balloon;
 			}else{
