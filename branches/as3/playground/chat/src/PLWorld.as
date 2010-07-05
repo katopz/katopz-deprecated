@@ -52,10 +52,10 @@ package
 	
 	+ chat
 	- speed, destroy, model pool
-	- login via opensocial
-	- model bounding box, scale to 1px = 1cm
-	- apply model height to balloon, particle movie materail
+	- scale to 1px = 1cm
+	- redo particle movie materail auto update
 	- add frames data info to MDJ?
+	- login via opensocial
 	- clean up
 	- MVC
 	
@@ -96,7 +96,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			//alpha = .1;
+			alpha = .1;
 		}
 
 		override protected function onInitXML():void
