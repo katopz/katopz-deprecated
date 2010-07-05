@@ -21,9 +21,9 @@ package com.cutecoma.playground.editors
 	{
 		public var areaEditor:AreaEditor;
 
-		public function WorldEditor(engine3D:IEngine3D)
+		public function WorldEditor(engine3D:IEngine3D, path:String)
 		{
-			super(engine3D, "../../");
+			super(engine3D, path);
 			
 			areaEditor = new AreaEditor(_engine3D);
 			
