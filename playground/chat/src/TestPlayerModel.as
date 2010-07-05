@@ -5,8 +5,10 @@ package
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.loaders.MDJ;
+	import away3dlite.primitives.BoundingBox;
 	import away3dlite.templates.BasicTemplate;
-
+	
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Vector3D;
@@ -22,9 +24,6 @@ package
 
 		override protected function onInit():void
 		{
-			// add desc
-			title = "Click to toogle animation on/off |";
-
 			// better view angle
 			camera.y = -500;
 			camera.lookAt(new Vector3D());
@@ -44,14 +43,17 @@ package
 			scene.addChild(_loader3D);
 
 			stage.addEventListener(MouseEvent.CLICK, onClick);
-			
-			alpha = .1;
 		}
 
 		private function onSuccess(event:Loader3DEvent):void
 		{
 			_model = event.target.handle as MovieMeshContainer3D;
 			_model.play("talk");
+
+			view.addChild(_model.canvas = new Sprite);
+			_model.canvas.alpha = .05;
+
+			scene.addChild(new BoundingBox(_model));
 		}
 
 		private function onClick(event:Event):void
@@ -59,7 +61,7 @@ package
 			if (!_model)
 				return;
 
-			if (_model.currentLabel!="talk")
+			if (_model.currentLabel != "talk")
 				_model.play("talk");
 			else
 				_model.play("walk");
