@@ -7,6 +7,7 @@ package com.cutecoma.playground.core
 	
 	import com.cutecoma.game.core.Game;
 	import com.cutecoma.game.events.PlayerEvent;
+	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.components.SDChatBox;
 	import com.cutecoma.playground.components.SDConnector;
 	import com.sleepydesign.components.SDDialog;
@@ -105,6 +106,9 @@ package com.cutecoma.playground.core
 			_balloonParticle.x = position.x;
 			_balloonParticle.y = position.y;
 			_balloonParticle.z = position.z;
+			
+			var player:Player = _game.getPlayerByID(id);
+			_balloonParticle.y += player.model.minBounding.y;
 		}
 		
 		public function createConnector(id:String):void
