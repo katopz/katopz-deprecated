@@ -16,13 +16,17 @@ package com.sleepydesign.components
 	import flash.text.TextFieldAutoSize;
 	import flash.xml.XMLDocument;
 
+	/**
+	 * TODO : clean this! 
+	 * @author katopz
+	 * 
+	 */
 	public class SDDialog extends SDComponent
 	{
-		private var _config:Object;
+		private var _bgColor:Number = 0xFFFFFF;
 		
-		private var _header:Sprite;
 		private var _back:Shape;
-		private var content:Object;
+		private var content:XMLDocument;
 		private var label:SDTextField;
 		private var pad:Number = 8;
 		private var length:Number = 8;
@@ -54,14 +58,12 @@ package com.sleepydesign.components
 			this.caller = caller?caller:this.parent;
 			mouseEnabled = true;
 			mouseChildren = true;
-			dragEnabled = true;
+			isDraggable = true;
 		}
 
 		protected function create():void
 		{
 			//default
-			if (!_config)
-				_config = {color: 0xFFFFFF, multiline: true}
 
 			_back = new Shape();
 			_back.filters = [new GlowFilter(0xCCCCCC, 1, 4, 4, 2, 1, true, false)];
@@ -76,11 +78,11 @@ package com.sleepydesign.components
 			content.parseXML(String(iText));
 			
 			// drag
-			_header = new Sprite();
+			_dragArea = new Sprite();
 			
 			addChild(_back);
 			addChild(label);
-			addChild(_header);
+			addChild(_dragArea);
 
 			cacheAsBitmap = true;
 			
@@ -108,7 +110,7 @@ package com.sleepydesign.components
 			label.y = int(pad); //int(-pad - length - h + pad * .25 - 1);
 			
 			_back.graphics.clear();
-			_back.graphics.beginFill(_config.color);
+			_back.graphics.beginFill(_bgColor);
 			_back.graphics.drawRoundRect(0, 0, w + pad * 2, h + pad * 2, pad, pad);
 			
 			/*
@@ -122,9 +124,9 @@ package com.sleepydesign.components
 			
 			_back.graphics.endFill();
 			
-			_header.graphics.beginFill(0xFF00FF, 0);
-			_header.graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
-			_header.graphics.endFill();
+			Sprite(_dragArea).graphics.beginFill(0xFF00FF, 0);
+			Sprite(_dragArea).graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
+			Sprite(_dragArea).graphics.endFill();
 			
 			super.draw();
 
@@ -299,29 +301,6 @@ package com.sleepydesign.components
 				SystemUtil.doCommand(e.text, this);
 			else
 				SystemUtil.doCommand(e.text, caller);
-		}
-		
-		private function set dragEnabled(value:Boolean):void
-		{
-			if(value)
-				_header.addEventListener(MouseEvent.MOUSE_DOWN, onDrag);
-			else
-				_header.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
-		}
-		
-		private function onDrag(event:MouseEvent):void
-		{
-			parent.setChildIndex(this, parent.numChildren-1);
-			startDrag(false);//, root.scrollRect);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
-			stage.addEventListener(Event.MOUSE_LEAVE, onDrop);
-		}
-		
-		private function onDrop(event:MouseEvent):void
-		{
-			stopDrag();
-			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
-			stage.removeEventListener(Event.MOUSE_LEAVE, onDrop);
 		}
 	}
 }

@@ -3,15 +3,18 @@ package com.sleepydesign.components
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TransformEvent;
 	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	public class SDComponent extends SDSprite
 	{
 		protected var _width:Number = SDStyle.SIZE;
 		protected var _height:Number = SDStyle.SIZE;
 		
-		public function SDComponent():void
+		public function SDComponent()
 		{
 			
 		}
@@ -148,5 +151,45 @@ package com.sleepydesign.components
 				
 			super.y = int(value);
 		}
+		
+		// Drag ------------------------------------------------------------------------
+		
+		protected var _dragArea:DisplayObject;
+		
+		private var _isDraggable:Boolean;
+		public function get isDraggable():Boolean
+		{
+			return _isDraggable;
+		}
+		
+		public function set isDraggable(value:Boolean):void
+		{
+			_isDraggable = value;
+			
+			if(!_dragArea)
+				_dragArea = this;
+			
+			_dragArea.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+			
+			if(value)
+				_dragArea.addEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+		}
+		
+		protected function onDrag(event:MouseEvent):void
+		{
+			parent.setChildIndex(this, parent.numChildren-1);
+			startDrag(false);//, root.scrollRect);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
+			stage.addEventListener(Event.MOUSE_LEAVE, onDrop);
+		}
+		
+		protected function onDrop(event:MouseEvent):void
+		{
+			stopDrag();
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
+			stage.removeEventListener(Event.MOUSE_LEAVE, onDrop);
+		}
+		
+		// ------------------------------------------------------------------------ Drag
 	}
 }
