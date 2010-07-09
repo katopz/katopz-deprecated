@@ -51,9 +51,10 @@ package
 	- MVC
 	
 	+ chat
+	- bind to chat
 	- speed, destroy, model pool
 	- scale to 1px = 1cm
-	- redo particle movie materail auto update
+	- redo particle movie material auto update
 	- add frames data info to MDJ?
 	- login via opensocial
 	- clean up

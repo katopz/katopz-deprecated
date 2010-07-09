@@ -1,5 +1,6 @@
-package com.sleepydesign.components
+package com.cutecoma.playground.components
 {
+	import com.sleepydesign.components.SDComponent;
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.text.SDTextField;
 	
@@ -15,34 +16,28 @@ package com.sleepydesign.components
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
 	import flash.xml.XMLDocument;
+	
+	import org.osflash.signals.Signal;
 
-	/**
-	 * TODO : clean this! 
-	 * @author katopz
-	 * 
-	 */
-	public class SDDialog extends SDComponent
+	public class SDChatBubble extends SDComponent
 	{
 		private var _bgColor:Number = 0xFFFFFF;
 		
+		private var _header:Sprite;
 		private var _back:Shape;
-		private var content:XMLDocument;
+		
 		private var label:SDTextField;
 		private var pad:Number = 8;
 		private var length:Number = 8;
 		private var begPoint:Point = new Point(0, 0);
 
 		private var iText:*;
-		private var isTail:Boolean;
 		
-		private var caller:Object
+		public var drawSignal:Signal = new Signal();
 
-		public function SDDialog(iText:* = "", caller:Object = null, align:String = "")
+		public function SDChatBubble(iText:String = "")
 		{
 			this.iText = iText;
-			this.isTail = isTail;
-			
-			this.caller = caller || this;
 			
 			super();
 			
@@ -55,7 +50,6 @@ package com.sleepydesign.components
 		{
 			create();
 			
-			this.caller = caller?caller:this.parent;
 			mouseEnabled = true;
 			mouseChildren = true;
 			isDraggable = true;
@@ -74,15 +68,12 @@ package com.sleepydesign.components
 			label.mouseEnabled = true;
 			label.autoSize = TextFieldAutoSize.LEFT;
 
-			content = new XMLDocument();
-			content.parseXML(String(iText));
-			
 			// drag
-			_dragArea = new Sprite();
+			_header = new Sprite();
 			
 			addChild(_back);
 			addChild(label);
-			addChild(_dragArea);
+			addChild(_header);
 
 			cacheAsBitmap = true;
 			
@@ -124,9 +115,9 @@ package com.sleepydesign.components
 			
 			_back.graphics.endFill();
 			
-			Sprite(_dragArea).graphics.beginFill(0xFF00FF, 0);
-			Sprite(_dragArea).graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
-			Sprite(_dragArea).graphics.endFill();
+			_header.graphics.beginFill(0xFF00FF, 0);
+			_header.graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
+			_header.graphics.endFill();
 			
 			super.draw();
 
@@ -220,87 +211,10 @@ package com.sleepydesign.components
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 
-		public function jump(id:String = "0", nodeName:String = "question"):void
+		private function setLabel(iText:String):void
 		{
-			htmlText = new XML(content.idMap[id]);
-		}
-
-		private function createAnswer(url:String, iText:String):String
-		{
-			var link:String = "";
-			link += " … <font color='#009900'>";
-			link += "<u>";
-			link += '<a href="event:' + url + '">' + iText + "</a>";
-			link += "</u>";
-			link += "</font>";
-			return link;
-		}
-
-		/*
-		 * <question id="0">
-		 * 	<![CDATA[Who say <b>Hello World</b>?<br/>Do you remember?]]>
-		 * 	<answer src="as:jump(1)"><![CDATA[Maybe me]]></answer>
-		 * 	<question id="1">
-		 * 		<![CDATA[Really you?]]>
-		 * 		<answer src="as:jump(2)"><![CDATA[Yes!]]></answer>
-		 * 		<question id="2">
-		 * 			<![CDATA[Are you Sure?]]>
-		 * 			<answer src="as:jump(3)"><![CDATA[Holy Yes!]]></answer>
-		 * 			<question id="3" src="as:hide()"><![CDATA[OK!]]></question>
-		 * 			<answer src="as:jump(1)"><![CDATA[Hell No!]]></answer>
-		 * 		</question>
-		 * 		<answer src="as:jump(0)"><![CDATA[No!]]></answer>
-		 * 	</question>
-		 * 	<answer src="http://www.google.com"><![CDATA[Try ask google!]]></answer>
-		 * </question>;
-		 */
-
-		private function setLabel(iText:*):void
-		{
-			var inputText:String;
-
-			if (typeof(iText) == "string")
-			{
-				inputText = iText;
-
-				inputText = inputText.replace("<img ", "__bug__<img id='imgId' ");
-				label.htmlText = inputText;
-				var loader:Loader = label.getImageReference("imgId") as Loader;
-
-				if (loader)
-				{
-					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
-				}
-			}
-			else
-			{
-				inputText = iText.children()[0].toString()
-				for each (var answer:XML in iText.answer)
-				{
-					inputText += "<br/>" + createAnswer(answer.@src, answer.toString())
-				}
-			}
-
-			//'ve link
-			if (inputText.indexOf("<a") > -1)
-			{
-				label.addEventListener(TextEvent.LINK, linkHandler);
-			}
-
 			label.parseCSS();
-
-			inputText = inputText.replace("__bug__", "");
-			label.htmlText = "<p>" + inputText + "</p>";
-
-		}
-
-		private function linkHandler(e:TextEvent):void
-		{
-			if(e.text.indexOf("as:jump")==0)
-				SystemUtil.doCommand(e.text, this);
-			else
-				SystemUtil.doCommand(e.text, caller);
+			label.htmlText = "<p>" + iText + "</p>";
 		}
 	}
 }
