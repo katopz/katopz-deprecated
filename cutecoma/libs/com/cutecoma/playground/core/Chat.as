@@ -31,7 +31,9 @@ package com.cutecoma.playground.core
 		private var _balloonParticles:Particles;
 		
 		private var _bitmap:Bitmap;
-
+		/**
+		 * TODO : Why i need game as params here huh?
+		 */
 		public function Chat(game:Game, rtmpURI:String)
 		{
 			_game = game;
