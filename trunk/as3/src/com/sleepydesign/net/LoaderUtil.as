@@ -96,14 +96,17 @@ package com.sleepydesign.net
 		public static function loadBytes(byteArray:ByteArray, eventHandler:Function = null):Loader
 		{
 			var _loader:Loader = new Loader();
-			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
+			if(eventHandler is Function)
+				_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, eventHandler);
 			_loader.loadBytes(byteArray);
 
 			// gc
 			var _loaderVO:Object = {loader: null, destroy: null};
 			var _removeEventListeners:Function = function():void
 				{
-					_loader.removeEventListener(Event.COMPLETE, eventHandler);
+					if(eventHandler is Function)
+						_loader.removeEventListener(Event.COMPLETE, eventHandler);
+					
 					if (loaderClip && hideLoader is Function)
 						hideLoader();
 
