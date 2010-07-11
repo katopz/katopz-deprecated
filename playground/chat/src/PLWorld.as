@@ -51,7 +51,8 @@ package
 	- MVC
 	
 	+ chat
-	- bind to chat
+	- test with multiplayer
+	- add bezier speed line to bubble
 	- speed, destroy, model pool
 	- scale to 1px = 1cm
 	- redo particle movie material auto update
@@ -61,7 +62,8 @@ package
 	- MVC
 	
 	+ lite
-	- fix equal w/h particle
+	- rebuild char 2x scale and fix choking stand
+	- test particle position/scale issue?
 	- heightmap support, test with jiglib
 	- 2.5D Clip, animation controller
 	- infinite loop perlin noise fog, fire
@@ -97,7 +99,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			alpha = .1;
+			//alpha = .1;
 		}
 
 		override protected function onInitXML():void
