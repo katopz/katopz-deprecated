@@ -69,7 +69,7 @@ package labs
 		override protected function onPreRender():void
 		{
 			//_chatBubble.text = mouseX + "," + mouseY;
-			//scene.rotationY++;
+			scene.rotationY++;
 		}
 	}
 }
