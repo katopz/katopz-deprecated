@@ -1,16 +1,16 @@
 ﻿package com.cutecoma.playground.core
 {
 	import away3dlite.cameras.Camera3D;
-
+	
 	import com.cutecoma.game.core.Background;
 	import com.cutecoma.game.core.Foreground;
 	import com.cutecoma.game.core.IEngine3D;
 	import com.cutecoma.playground.data.AreaData;
 	import com.cutecoma.playground.data.CameraData;
 	import com.sleepydesign.display.SDSprite;
-
+	
 	import flash.display.BitmapData;
-
+	
 	import org.osflash.signals.Signal;
 
 	/**
@@ -67,7 +67,7 @@
 
 		public var completeSignal:Signal = new Signal();
 
-		public function Area(engine3D:IEngine3D, path:String = "")
+		public function Area(engine3D:IEngine3D, path:String = "", isEditable:Boolean = false)
 		{
 			_engine3D = engine3D;
 			_path = path;
