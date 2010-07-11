@@ -97,7 +97,6 @@
 		public function setArea(area:Area):void
 		{
 			_area = area;
-			_area.ground.visible = true;
 
 			if (_area.ground)
 				_area.ground.mouseSignal.add(onGroundClick);

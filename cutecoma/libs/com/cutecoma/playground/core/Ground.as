@@ -46,26 +46,29 @@
 			return _box;
 		}
 
-		private var _visible:Boolean;
+		private var _isEditable:Boolean;
 
-		public function get visible():Boolean
+		public function get isEditable():Boolean
 		{
-			return _plane.visible;
+			return _isEditable;
 		}
 
-		public function set visible(value:Boolean):void
+		public function set isEditable(value:Boolean):void
 		{
-			_plane.visible = value;
+			_plane.visible = _isEditable = value;
 		}
-
-		public function Ground(engine3D:IEngine3D)
+		
+		public function Ground(engine3D:IEngine3D, isEditable:Boolean = false)
 		{
 			_engine3D = engine3D;
+			_isEditable = isEditable;
 
-			// dewbug box
-			_engine3D.scene3D.addChild(_box = new Cube6(new QuadWireframeMaterial(0xFFFFFF, .75, 5), 100, 200, 100));
-			_box.visible = false;
-			_box.y = -_box.height * .5;
+			// debug box
+			if(isEditable)
+			{
+				_engine3D.scene3D.addChild(_box = new Cube6(new QuadWireframeMaterial(0xFFFFFF, .75, 5), 100, 200, 100));
+				_box.y = -_box.height * .5;
+			}
 
 			_engine3D.view3D.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
 			_engine3D.view3D.stage.addEventListener(MouseEvent.MOUSE_UP, onMouse);
@@ -107,7 +110,8 @@
 			{
 				case MouseEvent.MOUSE_DOWN:
 					_isDrag = true;
-					mouseSignal.dispatch(event, _target, _face, _point);
+					if (_faceIndex != -1)
+						mouseSignal.dispatch(event, _target, _face, _point);
 					break;
 				case MouseEvent.MOUSE_UP:
 					_isDrag = false;
@@ -157,14 +161,23 @@
 			_plane = null;
 
 			// new
-			_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX * w, Map.factorZ * h, w, h));
-			_plane.visible = false;
+			if(_isEditable)
+			{
+				// plane that can be draw on face
+				_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX * w, Map.factorZ * h, w, h));
+				_plane.visible = true;
+				
+				// update size
+				_box.width = _plane.width;
+				_box.depth = _plane.height;
+				_box.visible = true;
+				_box.y = -_box.height * .5;
+			}else{
+				_engine3D.scene3D.addChild(_plane = new Plane(new ColorMaterial(0xFFFFFF), Map.factorX * w, Map.factorZ * h, 1, 1));
+				_plane.visible = false;
+			}
 
-			// update size
-			_box.width = _plane.width;
-			_box.depth = _plane.height;
-			_box.visible = true;
-			_box.y = -_box.height * .5;
+			
 
 			// update material
 			updateMaterial(bitmapData);
@@ -177,7 +190,7 @@
 
 			var _getPixel:Function = bitmapData.getPixel;
 			var _plane_faces:Vector.<Face> = _plane.faces;
-			var _size:int = w * h;
+			var _size:int = _plane_faces.length;
 			for (var k:int = 0; k < _size; k++)
 			{
 				var i:int = int(k % w);
