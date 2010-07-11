@@ -8,6 +8,8 @@ package com.cutecoma.playground.components
     import com.sleepydesign.components.SDTextInput;
     
     import flash.events.MouseEvent;
+    
+    import org.osflash.signals.Signal;
 	
 	public class SDConnector extends SDComponent
 	{
@@ -21,6 +23,18 @@ package com.cutecoma.playground.components
 		private var connectButton:SDButton;
 		
 		private var isConnect:Boolean = false;
+		
+		public function get initSignal():Signal
+		{
+			return connector.initSignal;
+		}
+		
+		public function get updateSignal():Signal
+		{
+			return connector.updateSignal;
+		}
+		
+		public var completeSignal:Signal = new Signal();
 		
 		public function SDConnector(uri:String="rtmp://localhost/SOSample", room:String = "lobby" , autorun:Boolean = true)
 		{
@@ -113,8 +127,11 @@ package com.cutecoma.playground.components
 			
 			if(connector)
 			{
-				connector.addEventListener(SDEvent.INIT, onServerInit);
-				connector.addEventListener(SDEvent.UPDATE, onServerUpdate);
+				//connector.addEventListener(SDEvent.INIT, onServerInit);
+				//connector.addEventListener(SDEvent.UPDATE, onServerUpdate);
+				
+				connector.initSignal.addOnce(onServerInit);
+				connector.updateSignal.add(onServerUpdate);
 				
 				connector.createSharedObject(room);
 			}
@@ -131,8 +148,8 @@ package com.cutecoma.playground.components
 			{
 				connector.removeSharedObject();
 			
-				connector.removeEventListener(SDEvent.INIT, onServerInit);
-				connector.removeEventListener(SDEvent.UPDATE, onServerUpdate);
+				connector.initSignal.removeAll();
+				connector.updateSignal.removeAll();
 			}
 			
 			// debug
@@ -141,10 +158,15 @@ package com.cutecoma.playground.components
 		
 		public function disconnect():void
 		{
-			connector.removeEventListener(SDEvent.INIT, onServerInit);
+			//connector.removeEventListener(SDEvent.INIT, onServerInit);
+			
+			connector.initSignal.removeAll();
+			connector.updateSignal.removeAll();
+			
 			connector.removeEventListener(NetEvent.CONNECT, onConnect);
 			connector.removeEventListener(NetEvent.DISCONNECT, onDisConnect);
 			connector.disconnect();
+			
 			connector = null;
 			isConnect = false;
 		}
@@ -159,28 +181,29 @@ package com.cutecoma.playground.components
 		}
 		
 		// Server
-		private function onServerInit(event:SDEvent):void
+		private function onServerInit():void
 		{
 			trace(" ^ onServerInit");
-			connector.removeEventListener(SDEvent.INIT, onServerInit);
+			//connector.removeEventListener(SDEvent.INIT, onServerInit);
 			
 			// debug
 			serverInputText.text = " ^ onServerInit";
 			connectButton.label = "Disconnect";
 			isConnect = true;
-			dispatchEvent(new SDEvent(SDEvent.COMPLETE));
+			//dispatchEvent(new SDEvent(SDEvent.COMPLETE));
+			completeSignal.dispatch();
 		}
 		
-		private function onServerUpdate(event:SDEvent):void
+		private function onServerUpdate(data:Object):void
 		{
 			trace(" ^ onServerUpdate");
-			dispatchEvent(event.clone());
-			
+			//dispatchEvent(event.clone());
 			// debug
 			serverInputText.text = " ^ onServerUpdate";
 		}
 		
 		// Client
+		// TODO : replace player event with register player data
 		public function onClientUpdate(event:PlayerEvent):void
 		{
 			trace( " ^ onClientUpdate : "+ event.data, event.data.act);

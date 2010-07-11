@@ -11,6 +11,8 @@ package com.cutecoma.playground.net
 	import flash.net.NetConnection;
 	import flash.net.ObjectEncoding;
 	import flash.net.SharedObject;
+	
+	import org.osflash.signals.Signal;
 
 	public class SharedObjectConnector extends RemovableEventDispatcher
 	{
@@ -21,6 +23,9 @@ package com.cutecoma.playground.net
 		private var room:String;
 
 		private var ports:Array = [1935, 80, 443, 8080, 7070];
+		
+		public var initSignal:Signal = new Signal();
+		public var updateSignal:Signal = new Signal(Object);
 
 		public var status:String = NetEvent.DISCONNECT;
 
@@ -130,12 +135,14 @@ package com.cutecoma.playground.net
 			{
 				DebugUtil.trace(" ! ServerUpdate		: " + data);
 				ObjectUtil.print(data);
-				dispatchEvent(new SDEvent(SDEvent.UPDATE, data));
+				//dispatchEvent(new SDEvent(SDEvent.UPDATE, data));
+				updateSignal.dispatch(data);
 			}
 			else
 			{
 				DebugUtil.trace(" ! ServerInit		: " + event);
-				dispatchEvent(new SDEvent(SDEvent.INIT, data));
+				//dispatchEvent(new SDEvent(SDEvent.INIT, data));
+				initSignal.dispatch();
 			}
 		}
 
