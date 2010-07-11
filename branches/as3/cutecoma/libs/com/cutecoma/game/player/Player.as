@@ -130,6 +130,7 @@
 		}
 
 		public var positionSignal:Signal = new Signal(String, Vector3D);
+		public var talkSignal:Signal = new Signal(String, Vector3D, String);
 		
 		public var walkCompleteSignal:Signal = new Signal(Vector3D);
 		public var completeSignal:Signal = new Signal(Player);
@@ -232,6 +233,8 @@
 			
 			
 			this.msg = msg;
+			
+			talkSignal.dispatch(id, dolly, msg);
 		}
 
 		//private var balloonClip:Particle;
@@ -374,7 +377,7 @@
 
 		public function update(data:Object = null):void
 		{
-			trace(" Player.update : " + data);
+			DebugUtil.trace(" ! Player.update : " + data);
 			var playerData:PlayerData = PlayerData(this.data);
 			playerData.parse(data);
 

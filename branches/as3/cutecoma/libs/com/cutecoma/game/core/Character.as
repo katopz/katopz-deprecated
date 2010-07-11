@@ -36,6 +36,7 @@ package com.cutecoma.game.core
 		public function create(config:Object):void
 		{
 			var _mdj:MDJ = new MDJ();
+			_mdj.scaling = 2;
 			_mdj.meshPath = _mdj.texturePath = serverPath;
 			
 			var _loader3D:Loader3D = new Loader3D();

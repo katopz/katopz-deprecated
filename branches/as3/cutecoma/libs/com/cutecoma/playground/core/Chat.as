@@ -9,8 +9,8 @@ package com.cutecoma.playground.core
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.game.player.Player;
 	import com.cutecoma.playground.components.SDChatBox;
+	import com.cutecoma.playground.components.SDChatBubble;
 	import com.cutecoma.playground.components.SDConnector;
-	import com.sleepydesign.components.SDDialog;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -27,8 +27,8 @@ package com.cutecoma.playground.core
 		
 		public var canvas:Sprite;
 		
-		private var _balloons:Dictionary;
-		private var _balloonParticles:Particles;
+		private var _bubbles:Dictionary;
+		private var _bubbleParticles:Particles;
 		
 		private var _bitmap:Bitmap;
 		/**
@@ -39,13 +39,13 @@ package com.cutecoma.playground.core
 			_game = game;
 			_rtmpURI = rtmpURI;
 			
-			_balloons = new Dictionary(true);
-			_balloonParticles = new Particles();
-			_game.engine3D.scene3D.addChild(_balloonParticles);
+			_bubbles = new Dictionary(true);
+			_bubbleParticles = new Particles();
+			_game.engine3D.scene3D.addChild(_bubbleParticles);
 			
 			// draw tobitmap
 			var view3D:View3D = _game.engine3D.view3D;
-			_bitmap = _balloonParticles.bitmap = new Bitmap(new BitmapData(_game.engine3D.screenRect.width, _game.engine3D.screenRect.height, true, 0x00000000));
+			_bitmap = _bubbleParticles.bitmap = new Bitmap(new BitmapData(_game.engine3D.screenRect.width, _game.engine3D.screenRect.height, true, 0x00000000));
 			_game.engine3D.contentLayer.addChild(_bitmap);
 		}
 
@@ -55,15 +55,17 @@ package com.cutecoma.playground.core
 			connector.exitRoom();
 
 			// wait for exit complete?
-			connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
-			connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
+			//connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
+			//connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
+			connector.completeSignal.addOnce(onEnterRoom);
+			
 			connector.enterRoom(areaID);
 		}
 
 		private function onEnterRoom(event:SDEvent):void
 		{
-			connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
-			connector.removeEventListener(SDEvent.UPDATE, onEnterRoom);
+			//connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
+			//connector.removeEventListener(SDEvent.UPDATE, onEnterRoom);
 
 			// tell everybody i'm enter
 			_game.currentPlayer.enter();
@@ -76,41 +78,60 @@ package com.cutecoma.playground.core
 			
 			// bind player position from game model
 			_game.currentPlayer.positionSignal.add(onPlayerPositionChange);
+			_game.currentPlayer.talkSignal.add(onPlayerTalkChange);
 			
 			// add ballon, TODO move to JIT add onTalk
-			//canvas.addChild(_balloons[_game.currentPlayer.id] = new SDDialog("hello"));
+			//canvas.addChild(_bubbles[_game.currentPlayer.id] = new SDDialog("hello"));
 		}
 		
 		private function onPlayerPositionChange(id:String, position:Vector3D):void
 		{
-			var _balloon:SDDialog = _balloons[id];
-			var _balloonParticle:Particle;
+			setBubblePosition(id, position);
+		}
+		
+		private function onPlayerTalkChange(id:String, position:Vector3D, msg:String):void
+		{
+			var _bubble:SDChatBubble = _bubbles[id];
+			var _bubbleParticle:Particle;
 			
-			if(!_balloon)
+			if(!_bubble)
 			{
-				_balloon = new SDDialog("test balloon");
+				_bubble = new SDChatBubble(msg);
 				
 				// TODO : ParticleMovieMaterial
-				var _bitmapData:BitmapData = new BitmapData(_balloon.width, _balloon.height);
-				_bitmapData.draw(_balloon);
+				var _bitmapData:BitmapData = new BitmapData(_bubble.width, _bubble.height, true, 0x00000000);
+				_bitmapData.draw(_bubble);
 				
 				var _particleMaterial:ParticleMaterial = new ParticleMaterial(_bitmapData);
-				_balloonParticle = new Particle(position.x, position.y, position.z, _particleMaterial);
-				_balloonParticle.id = id;
+				_bubbleParticle = new Particle(position.x, position.y, position.z, _particleMaterial);
+				_bubbleParticle.id = id;
 				
-				_balloonParticles.addParticle(_balloonParticle);
+				_bubbleParticles.addParticle(_bubbleParticle);
 				
-				_balloons[id] = _balloon;
+				_bubbles[id] = _bubble;
 			}else{
-				_balloonParticle = _balloonParticles.getParticleByID(id);
+				_bubble.htmlText = msg;
+				_bubbleParticle = _bubbleParticles.getParticleByID(id);
 			}
 			
-			_balloonParticle.x = position.x;
-			_balloonParticle.y = position.y;
-			_balloonParticle.z = position.z;
-			
-			var player:Player = _game.getPlayerByID(id);
-			_balloonParticle.y += player.model.minBounding.y;
+			setBubblePosition(id, position);
+		}
+		
+		private function setBubblePosition(id:String, position:Vector3D):void
+		{
+			var _bubble:SDChatBubble = _bubbles[id];
+			var _bubbleParticle:Particle;
+			if(_bubble)
+			{
+				_bubbleParticle = _bubbleParticles.getParticleByID(id);
+				
+				_bubbleParticle.x = position.x;
+				_bubbleParticle.y = position.y;
+				_bubbleParticle.z = position.z;
+				
+				var player:Player = _game.getPlayerByID(id);
+				_bubbleParticle.y += player.model.minBounding.y -_bubble.height;
+			}
 		}
 		
 		public function createConnector(id:String):void
@@ -124,18 +145,18 @@ package com.cutecoma.playground.core
 			//connector.visible = false;
 
 			// bind connector -> game
-			connector.addEventListener(SDEvent.UPDATE, function(event:SDEvent):void
-				{
-					trace(" ^ onUpdate : " + event);
-					try
-					{
-						_game.update(event.data);
-					}
-					catch (e:*)
-					{
-						trace(e);
-					}
-				});
+			//connector.addEventListener(SDEvent.UPDATE, function(event:SDEvent):void
+			connector.updateSignal.add(onConnectorUpdate);
+		}
+		
+		private function onConnectorUpdate(data:Object):void
+		{
+			trace(" ^ onUpdateFromServer");
+			try{
+				_game.update(data);
+			}catch (e:*){
+				trace(e);
+			}
 		}
 		
 		private var _chatBox:SDChatBox;
@@ -149,6 +170,14 @@ package com.cutecoma.playground.core
 			
 			// bind chat -> player
 			//canvas.addEventListener(SDEvent.UPDATE, onTalk);
+			_chatBox.updateSignal.add(onTalk);
+		}
+		
+		// TODO : define msgData
+		private function onTalk(data:Object):void
+		{
+			trace(" ^ onTalk : " + event);
+			_game.currentPlayer.update({id: _game.currentPlayer.id, msg: data.msg});
 		}
 	}
 }
