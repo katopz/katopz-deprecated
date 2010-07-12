@@ -22,18 +22,18 @@ package
 	/**
 	 *										 .
 	 *					 		[OtherUser]  .  [User]
-	 *									 \	 .	 /
-	 *							 	  [Authenticate]---[Persistent Data]//MODEL//
-	 *	 							     /   .   \ 
+	 *									  \	 .	/
+	 *							 	  [Authenticate]---[Persistent Data]
+	 *	 							      /  .  \ 
 	 *						 	      [Net]  .  [UI]---[Controller]
-	 *						 	           \ . /  |
+	 *						 	          \  .  / |
 	 *						 	          [Chat]  |
-	 *						 	           / . \  |
-	 *		  [SharedObject]---[MultiPlayer] . [Player]---[Character]---[ModelPool]
-	 *					 		           \ . /
-	 *					 		  [Chat]---[Game]---[Map]---[PathFinder]
+	 *						 	             |    |
+	 *		 [SharedObject]---[MultiPlayer]  |  [Player]---[Character]---[ModelPool]
+	 *					 		          \  |  /
+	 *					 		  		  [Game]---[Map]---[PathFinder]
 	 *					 	 	             |		  |
-	 *					 		 //VIEW//[Engine3D]   |
+	 *					 		 		[Engine3D]    |
 	 * 										 |		  |
 	 *							 [Char]---[World]---[Area]---[Ground]
 	 *							  /          |         \
@@ -73,9 +73,9 @@ package
 	public class PLWorld extends ApplicationTemplate
 	{
 		private const VERSION:String = "PlayGround beta 3";
-		private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
+		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
 		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
-		//private const SERVER_URI:String = "rtmp://localhost/SOSample";
+		private const SERVER_URI:String = "rtmp://localhost/SOSample";
 		
 		private var _world:World;
 		private var _engine3D:Engine3D;
@@ -99,7 +99,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			//alpha = .1;
+			alpha = .1;
 		}
 
 		override protected function onInitXML():void
@@ -229,7 +229,7 @@ package
 				currentRoomID = areaData.id;
 			}
 		}
-
+		
 		public function initWorld(areaData:AreaData):void
 		{
 			// world
@@ -238,7 +238,8 @@ package
 			// fake player data, TODO : load from real player data via open social
 			var _playerData:PlayerData = new PlayerData("player_" + (new Date().valueOf()), _world.area.map.getSpawnPoint(), "user.mdj", PlayerEvent.STAND, 3);
 			
-			_game.initPlayer(_playerData);
+			// init current player
+			_game.initCurrentPlayer(_playerData);
 		}
 		
 		public function initChat(areaData:AreaData):void
@@ -248,7 +249,7 @@ package
 			
 			_chat.createConnector(areaData.id);
 			_chat.createChatBox();
-			_chat.bindPlayer();
+			_chat.bindCurrentPlayer();
 		}
 	}
 }

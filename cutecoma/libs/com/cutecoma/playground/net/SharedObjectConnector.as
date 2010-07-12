@@ -134,7 +134,7 @@ package com.cutecoma.playground.net
 			if (data != undefined)
 			{
 				DebugUtil.trace(" ! ServerUpdate		: " + data);
-				ObjectUtil.print(data);
+				//ObjectUtil.print(data);
 				//dispatchEvent(new SDEvent(SDEvent.UPDATE, data));
 				updateSignal.dispatch(data);
 			}

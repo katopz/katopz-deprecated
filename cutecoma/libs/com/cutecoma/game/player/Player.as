@@ -377,7 +377,7 @@
 
 		public function update(data:Object = null):void
 		{
-			DebugUtil.trace(" ! Player.update : " + data);
+			DebugUtil.trace(" ! Player.update");
 			var playerData:PlayerData = PlayerData(this.data);
 			playerData.parse(data);
 

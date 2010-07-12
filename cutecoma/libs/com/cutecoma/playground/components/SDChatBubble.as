@@ -15,19 +15,22 @@ package com.cutecoma.playground.components
 
 	public class SDChatBubble extends SDComponent
 	{
+		public var id:String;
+		
 		private var _bgColor:Number = 0xFFFFFF;
 
 		private var _header:Sprite;
 		private var _back:Shape;
 
-		private var label:SDTextField;
-		private var pad:Number = 8;
-		private var length:Number = 8;
-		private var begPoint:Point = new Point(0, 0);
+		private var _label:SDTextField;
+		private var _pad:Number = 8;
+		private var _length:Number = 8;
+		private var _begPoint:Point = new Point(0, 0);
 
 		private var _currentText:String;
+		private var _CSS:String;
 
-		public var drawSignal:Signal = new Signal();
+		public var drawSignal:Signal = new Signal(SDChatBubble);
 
 		public function SDChatBubble(text:String = "")
 		{
@@ -40,10 +43,10 @@ package com.cutecoma.playground.components
 			_back.filters = [new GlowFilter(0xCCCCCC, 1, 4, 4, 2, 1, true, false)];
 			_back.cacheAsBitmap = true;
 
-			addChild(label = new SDTextField(_currentText));
-			label.multiline = true;
-			label.mouseEnabled = true;
-			label.autoSize = TextFieldAutoSize.LEFT;
+			addChild(_label = new SDTextField(_currentText));
+			_label.multiline = true;
+			_label.mouseEnabled = true;
+			_label.autoSize = TextFieldAutoSize.LEFT;
 
 			// drag
 			addChild(_header = new Sprite());
@@ -57,24 +60,24 @@ package com.cutecoma.playground.components
 
 		override public function draw():void
 		{
-			var w:Number = (label.width > pad) ? label.width : pad;
-			var h:Number = (label.height > pad) ? label.height : pad;
+			var w:Number = (_label.width > _pad) ? _label.width : _pad;
+			var h:Number = (_label.height > _pad) ? _label.height : _pad;
 
-			label.x = int(pad); //int(-w * .5);
-			label.y = int(pad); //int(-pad - length - h + pad * .25 - 1);
+			_label.x = int(_pad); //int(-w * .5);
+			_label.y = int(_pad); //int(-pad - length - h + pad * .25 - 1);
 
 			_back.graphics.clear();
 			_back.graphics.beginFill(_bgColor);
-			_back.graphics.drawRoundRect(0, 0, w + pad * 2, h + pad * 2, pad, pad);
+			_back.graphics.drawRoundRect(0, 0, w + _pad * 2, h + _pad * 2, _pad, _pad);
 			_back.graphics.endFill();
 
 			_header.graphics.beginFill(0xFF00FF, 0);
-			_header.graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
+			_header.graphics.drawRoundRect(0, 0, w + _pad * 2, 20, _pad, _pad);
 			_header.graphics.endFill();
 
 			super.draw();
 
-			drawSignal.dispatch();
+			drawSignal.dispatch(this);
 		}
 
 		override public function get width():Number
@@ -89,18 +92,18 @@ package com.cutecoma.playground.components
 
 		public function get text():String
 		{
-			return label.text;
+			return _label.text;
 		}
 
 		public function set text(value:*):void
 		{
-			label.text = value;
+			_label.text = value;
 			draw();
 		}
 
 		public function get htmlText():String
 		{
-			var _text:String = label.htmlText;
+			var _text:String = _label.htmlText;
 			if ((_text.indexOf("<p>") == 0) && (_text.lastIndexOf("</p>") == _text.length - 4))
 				_text = _text.substring(3, _text.length - 4);
 			
@@ -109,15 +112,19 @@ package com.cutecoma.playground.components
 
 		public function set htmlText(value:*):void
 		{
-			visible = (value != "")
-			label.parseCSS();
-			label.htmlText = "<p>" + value + "</p>";
+			super.visible = (value != "");
+			
+			_label.parseCSS();
+			_label.htmlText = "<p>" + value + "</p>";
+			
 			draw();
 		}
 
-		public function parseCSS(iCSSText:String = null):void
+		public function parseCSS(CSS:String = null):void
 		{
-			label.parseCSS(iCSSText);
+			_CSS = CSS;
+			
+			_label.parseCSS(_CSS);
 			draw();
 		}
 

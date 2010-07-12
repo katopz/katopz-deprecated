@@ -100,11 +100,11 @@
 			// apply face material if face hit
 			var _face:Face;
 			var _point:Point;
-			if (_faceIndex != -1)
-			{
-				_face = _plane.faces[_faceIndex];
-				_point = getPointFromIndex(_faceIndex, _plane.segmentsW);
-			}
+			if (_faceIndex == -1)
+				return;
+
+			_face = _plane.faces[_faceIndex];
+			_point = getPointFromIndex(_faceIndex, _plane.segmentsW);
 
 			switch (event.type)
 			{

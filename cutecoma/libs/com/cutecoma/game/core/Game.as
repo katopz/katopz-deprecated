@@ -43,6 +43,7 @@ package com.cutecoma.game.core
 		//public var warpSignal:Signal = new Signal(String/*areaID*/);
 		
 		public var playerPositionSignal:Signal = new Signal(String/*playerID*/, Vector3D);
+		public var playerRemovedSignal:Signal = new Signal(Player);
 		
 		//TODO : IWorld
 		public function Game(engine3D:IEngine3D, world:World)
@@ -57,7 +58,7 @@ package com.cutecoma.game.core
 			_players = new Vector.<Player>();
 		}
 		
-		public function initPlayer(playerData:PlayerData) : void
+		public function initCurrentPlayer(playerData:PlayerData) : void
 		{
 			// player
 			_currentPlayer = new Player(playerData); //new PlayerData("player_" + (new Date().valueOf()), area.map.getSpawnPoint(), "man1", "stand", 3));
@@ -181,6 +182,9 @@ package com.cutecoma.game.core
 			{
 				//var _player:Player = getElementById(player.id);
 				trace(" - removePlayer	: "+_player.id);
+				
+				// remove from chat
+				playerRemovedSignal.dispatch(_player);
 			
 				// unplug from 3d Engine
 				//TODEV//engine.removeChild(_player.instance);
@@ -224,36 +228,22 @@ package com.cutecoma.game.core
 		{
 			// void null
 			if(!data)return;
-			trace("\n * Game.update", data.act);
+			DebugUtil.trace("\n * Game.update", data.act);
 			ObjectUtil.print(data);
 			
-			/*
 			// parse player data
 			var playerData:PlayerData = new PlayerData();
 			playerData.parse(data);
 			
-			var player:Player = getElementById(playerData.id);
-			if(!player)
-			{
-				player = new Player(playerData);
-				addPlayer(player);
-			}
-			*/
-			var playerData:PlayerData = new PlayerData();
-			playerData.parse(data);
-			
+			// player exist?
 			var _player:Player = getPlayerByID(playerData.id);
-			
 			if(_player != currentPlayer)
 			{
-				// not me maybe new guy
+				// not me? maybe new guy
 				if(!_player)
 				{
-					// new guy! not in list
+					// add them to list then
 					addPlayer(_player = new Player(playerData));
-					
-					//plug to current map
-					//_player.map = player.map;
 				}
 				
 				switch(playerData.act)
