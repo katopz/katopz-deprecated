@@ -81,14 +81,22 @@ package com.cutecoma.game.core
 		protected function onGroundClick(event:MouseEvent, position:Vector3D, face:Face, point:Point):void
 		{
 			DebugUtil.trace(" ! Click : " + position, face, point);
-			_world.area.map.completeSignal.addOnce(onPathComplete);
-			_world.area.map.findPath("", Position.parse(currentPlayer.position), Position.parse(position));
+			letPlayerWalkTo(currentPlayer.id, position);
 		}
 		
-		protected function onPathComplete(paths:Array):void
+		protected function letPlayerWalkTo(id:String, position:Vector3D):void
 		{
-			DebugUtil.trace(" ! onPathComplete : " + paths);
-			currentPlayer.walk(paths);
+			var player:Player = getPlayerByID(id);
+			
+			_world.area.map.completeSignal.addOnce(onPathComplete);
+			_world.area.map.findPath(player.id, Position.parse(player.position), Position.parse(position));
+		}
+		
+		protected function onPathComplete(id:String,paths:Array):void
+		{
+			DebugUtil.trace(" ! onPathComplete : " + id, paths);
+			var player:Player = getPlayerByID(id);
+			player.walk(paths);
 		}
 
 		public function start() : void
@@ -118,7 +126,7 @@ package com.cutecoma.game.core
 			// wait for char model complete and plug to 3d Engine
 			player.completeSignal.addOnce(addCharacterModelToEngine);
 			
-			// bind player state to MODEL
+			// bind player position to MODEL
 			player.positionSignal.add(onPlayerPositionChange);
 		}
 		
@@ -136,7 +144,8 @@ package com.cutecoma.game.core
 			playerPositionSignal.dispatch(id, position);
 			
 			// apply position to player
-			currentPlayer.updatePosition(position);
+			var player:Player = getPlayerByID(id);
+			player.updatePosition(position);
 		}
 		
 		public function addCharacterModelToEngine(player:Player):void
@@ -248,16 +257,20 @@ package com.cutecoma.game.core
 				
 				switch(playerData.act)
 				{
-					// someone enter
 					case "enter":
-						// do something?
-						trace("enter");
+						// someone enter
+						DebugUtil.trace(" ! Someone here : " + _player.id);
 					break;
-					// he's gone!
 					case "exit":
+						// he's gone!
 						removePlayer(_player);
 					break;
+					case "walk":
+						// he's try to walking! let's find path for him 1st
+						letPlayerWalkTo(_player.id, Position.getVector3D(playerData.des));
+						break;
 					default :
+						// data is here apply any rule before send to player?
 						_player.update(playerData);
 					break;
 				}
