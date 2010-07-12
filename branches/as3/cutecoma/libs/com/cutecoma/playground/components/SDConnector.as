@@ -34,7 +34,7 @@ package com.cutecoma.playground.components
 			return connector.updateSignal;
 		}
 		
-		public var completeSignal:Signal = new Signal();
+		//public var completeSignal:Signal = new Signal();
 		
 		public function SDConnector(uri:String="rtmp://localhost/SOSample", room:String = "lobby" , autorun:Boolean = true)
 		{
@@ -191,7 +191,7 @@ package com.cutecoma.playground.components
 			connectButton.label = "Disconnect";
 			isConnect = true;
 			//dispatchEvent(new SDEvent(SDEvent.COMPLETE));
-			completeSignal.dispatch();
+			//completeSignal.dispatch();
 		}
 		
 		private function onServerUpdate(data:Object):void

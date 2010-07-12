@@ -11,10 +11,12 @@ package com.cutecoma.playground.core
 	import com.cutecoma.playground.components.SDChatBox;
 	import com.cutecoma.playground.components.SDChatBubble;
 	import com.cutecoma.playground.components.SDConnector;
+	import com.sleepydesign.system.DebugUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 	import flash.utils.Dictionary;
 
@@ -27,6 +29,7 @@ package com.cutecoma.playground.core
 		
 		public var canvas:Sprite;
 		
+		// TODO replace with linklist
 		private var _bubbles:Dictionary;
 		private var _bubbleParticles:Particles;
 		
@@ -43,10 +46,12 @@ package com.cutecoma.playground.core
 			_bubbleParticles = new Particles();
 			_game.engine3D.scene3D.addChild(_bubbleParticles);
 			
-			// draw tobitmap
+			// draw bubble to bitmap
 			var view3D:View3D = _game.engine3D.view3D;
 			_bitmap = _bubbleParticles.bitmap = new Bitmap(new BitmapData(_game.engine3D.screenRect.width, _game.engine3D.screenRect.height, true, 0x00000000));
 			_game.engine3D.contentLayer.addChild(_bitmap);
+			
+			_game.playerRemovedSignal.add(onPlayerRemoved);
 		}
 
 		public function gotoArea(areaID:String):void
@@ -57,12 +62,12 @@ package com.cutecoma.playground.core
 			// wait for exit complete?
 			//connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
 			//connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
-			connector.completeSignal.addOnce(onEnterRoom);
+			connector.initSignal.addOnce(onEnterRoom);
 			
 			connector.enterRoom(areaID);
 		}
 
-		private function onEnterRoom(event:SDEvent):void
+		private function onEnterRoom():void
 		{
 			//connector.removeEventListener(SDEvent.COMPLETE, onEnterRoom);
 			//connector.removeEventListener(SDEvent.UPDATE, onEnterRoom);
@@ -71,7 +76,7 @@ package com.cutecoma.playground.core
 			_game.currentPlayer.enter();
 		}
 
-		public function bindPlayer():void
+		public function bindCurrentPlayer():void
 		{
 			// bind player -> connector
 			_game.currentPlayer.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
@@ -98,23 +103,44 @@ package com.cutecoma.playground.core
 			{
 				_bubble = new SDChatBubble(msg);
 				
-				// TODO : ParticleMovieMaterial
 				var _bitmapData:BitmapData = new BitmapData(_bubble.width, _bubble.height, true, 0x00000000);
 				_bitmapData.draw(_bubble);
 				
 				var _particleMaterial:ParticleMaterial = new ParticleMaterial(_bitmapData);
 				_bubbleParticle = new Particle(position.x, position.y, position.z, _particleMaterial);
-				_bubbleParticle.id = id;
+				
+				// bind bubble by id
+				_bubbleParticle.id = _bubble.id = id;
 				
 				_bubbleParticles.addParticle(_bubbleParticle);
 				
 				_bubbles[id] = _bubble;
+				
+				// listen for update
+				_bubble.drawSignal.add(onBubbleDraw);
 			}else{
 				_bubble.htmlText = msg;
 				_bubbleParticle = _bubbleParticles.getParticleByID(id);
 			}
 			
 			setBubblePosition(id, position);
+		}
+		
+		private function onBubbleDraw(_bubble:SDChatBubble):void
+		{
+			DebugUtil.trace(" ^ onBubbleDraw");
+			
+			var _bubbleParticle:Particle = _bubbleParticles.getParticleByID(_bubble.id);
+			var _particleMaterial:ParticleMaterial = _bubbleParticle.material;
+			
+			var _bitmapData:BitmapData = _particleMaterial.bitmapData;
+			_bitmapData.dispose();
+			
+			_bitmapData = new BitmapData(_bubble.width, _bubble.height, true, 0x00000000);
+			_particleMaterial.rect = new Rectangle(0, 0, _bitmapData.width, _bitmapData.height);
+			_bitmapData.draw(_bubble);
+			
+			_particleMaterial.bitmapData = _bitmapData;
 		}
 		
 		private function setBubblePosition(id:String, position:Vector3D):void
@@ -170,14 +196,36 @@ package com.cutecoma.playground.core
 			
 			// bind chat -> player
 			//canvas.addEventListener(SDEvent.UPDATE, onTalk);
-			_chatBox.updateSignal.add(onTalk);
+			_chatBox.updateSignal.add(onCurrentPlayerChat);
 		}
 		
 		// TODO : define msgData
-		private function onTalk(data:Object):void
+		private function onCurrentPlayerChat(data:Object):void
 		{
-			trace(" ^ onTalk : " + event);
+			trace(" ^ onTalk");
 			_game.currentPlayer.update({id: _game.currentPlayer.id, msg: data.msg});
 		}
+		
+		// Destroy ---------------------------------------------------
+		
+		private function onPlayerRemoved(player:Player):void
+		{
+			player.removeEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
+			player.positionSignal.remove(onPlayerPositionChange);
+			player.talkSignal.remove(onPlayerTalkChange);
+			
+			// bubble
+			var _bubble:SDChatBubble = _bubbles[player.id];
+			if(_bubble)
+			{
+				_bubble.drawSignal.remove(onBubbleDraw);
+				
+				_bubble.destroy();
+				_bubble = null;
+				_bubbles[player.id] = null;
+			}
+		}
+		
+		// --------------------------------------------------- Destroy
 	}
 }
