@@ -177,7 +177,7 @@ package com.cutecoma.playground.core
 		
 		private function onConnectorUpdate(data:Object):void
 		{
-			trace(" ^ onUpdateFromServer");
+			DebugUtil.trace(" ^ onUpdateFromServer");
 			try{
 				_game.update(data);
 			}catch (e:*){
@@ -202,7 +202,7 @@ package com.cutecoma.playground.core
 		// TODO : define msgData
 		private function onCurrentPlayerChat(data:Object):void
 		{
-			trace(" ^ onTalk");
+			DebugUtil.trace(" ^ onTalk");
 			_game.currentPlayer.update({id: _game.currentPlayer.id, msg: data.msg});
 		}
 		

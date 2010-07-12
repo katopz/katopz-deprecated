@@ -6,7 +6,7 @@ package com.cutecoma.playground.core
 	import com.cutecoma.playground.pathfinder.AStar3D;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.system.DebugUtil;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -14,7 +14,7 @@ package com.cutecoma.playground.core
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class Map extends SDSprite
@@ -113,15 +113,15 @@ package com.cutecoma.playground.core
 			}
 		}
 
-		public var completeSignal:Signal = new Signal(Array);
+		public var completeSignal:Signal = new Signal(String, Array);
 
-		private function onPathComplete(paths:Array):void
+		private function onPathComplete(id:String, paths:Array):void
 		{
 			trace(" ! onPathComplete");
 
 			// player
 			//dispatchEvent(new SDEvent(SDEvent.UPDATE, { id: event.data.id, paths: event.data.paths, positions: event.data.positions }));
-			completeSignal.dispatch(paths);
+			completeSignal.dispatch(id, paths);
 		}
 
 		// Update _______________________________________________________

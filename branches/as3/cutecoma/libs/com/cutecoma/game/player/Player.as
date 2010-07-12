@@ -1,7 +1,6 @@
 ﻿package com.cutecoma.game.player
 {
 	import away3dlite.animators.MovieMeshContainer3D;
-	import away3dlite.core.base.Particle;
 	
 	import com.cutecoma.game.core.Character;
 	import com.cutecoma.game.core.Position;
@@ -191,64 +190,9 @@
 
 		public function talk(msg:String = ""):void
 		{
-			//if (!balloon)
-			//{
-				//balloon = new SDDialog();
-				
-				/*
-				   balloon = new SDBalloon(msg?msg:"");
-				   balloon.addEventListener(SDEvent.DRAW, onBalloonChange);
-
-				   var spm:SDParticleMaterial = new SDParticleMaterial(balloon,"bc");
-				   var particles3D:Particles = new Particles();
-
-				   balloonClip = new Particle(spm, 1, 0, 200, 0);
-				 */
-
-				//particles3D.addParticle(balloonClip);
-				//particles3D.useOwnContainer = true;
-				//particles3D.filters = [ new GlowFilter( 0x999999, 1, 4, 4, 1, 1) ];
-				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_CLICK, onBalloonClick);
-				//particles3D.addEventListener(InteractiveScene3DEvent.OBJECT_OVER, onBalloonClick);
-
-				//instance.addChild(particles3D);
-				//act(PlayerEvent.TALK);
-			//}
-			//else 
-			/*
-			if (msg && balloon.text != msg)
-			{
-				//balloonClip.visible = true;
-				balloon.text = msg;
-				act(PlayerEvent.TALK);
-			}
-			else
-			{
-				balloonClip.visible = false;
-			}
-
 			this.msg = msg;
-			*/
-			
-			
-			
-			this.msg = msg;
-			
 			talkSignal.dispatch(id, dolly, msg);
 		}
-
-		//private var balloonClip:Particle;
-
-		private function onBalloonChange(event:Event):void
-		{
-			if (event.type != Event.CHANGE)
-				return;
-			//balloonClip.visible = balloon.visible;
-			//balloonClip.material.updateBitmap();
-		}
-
-		// TODO : getset
-		//public var map:Map;
 
 		public function walkTo(targetPosition:Position):void
 		{
@@ -377,9 +321,10 @@
 
 		public function update(data:Object = null):void
 		{
-			DebugUtil.trace(" ! Player.update");
 			var playerData:PlayerData = PlayerData(this.data);
 			playerData.parse(data);
+			
+			DebugUtil.trace(" ! Player.update : " + playerData.id);
 
 			// update list?
 			// group dirty		: in, out
@@ -390,8 +335,8 @@
 			act(playerData.act);
 
 			// position dirty	: position
-			if (playerData.act == PlayerEvent.WALK)
-				walkTo(Position.parse(playerData.des));
+			//if (playerData.act == PlayerEvent.WALK)
+			//	walkTo(Position.parse(playerData.des));
 
 			// message dirty 	: talk, whisper, shout
 			talk(playerData.msg);
