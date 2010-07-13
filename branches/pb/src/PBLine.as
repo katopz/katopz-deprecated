@@ -13,15 +13,23 @@ package
 
 		public function PBLine()
 		{
-			drawLine(100, 100, 200, 200, 0xFF0000, .5, 4);
-
 			graphics.clear();
 
 			graphics.beginFill(0x00FF00);
+			
+			// circle
 			graphics.drawCircle(150, 150, 50);
-
+			
+			// line 1
+			drawLine(100, 100, 200, 200, 0xFF0000, .5, 4);
 			graphics.beginShaderFill(shader);
-			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			graphics.drawRect(100, 100, 200, 200);
+			
+			// line 2
+			drawLine(200, 200, 200, 300, 0x0000FF, .75, 1);
+			graphics.beginShaderFill(shader);
+			graphics.drawRect(200, 200, 200, 300);
+			
 			graphics.endFill();
 		}
 
