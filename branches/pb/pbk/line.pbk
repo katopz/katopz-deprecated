@@ -1,0 +1,47 @@
+<languageVersion : 1.0;>
+
+/*
+ * This kernel demonstrates the use of additional parameter
+ * metadata which can be read by a SWF at runtime. The "kind"
+ * property suggests usages for each parameter.
+ */
+
+kernel ViewerDemo<namespace:"ns";vendor:"omino.com";version:1;> 
+{
+    output pixel4 dst;
+
+    // This parameter just gets poked with the rendering dimensions, always
+    // Doesn't get shown to user. In my custom viewer, that is.
+    parameter float2 dims<kind:"dstsize";defaultValue:float2(300,300);>;
+
+    // "point" means it lives somewhere in the image, as a coordinate.
+    parameter float2 x0y0<kind:"point";minValue:float2(0,0);maxValue:float2(400,400);defaultValue:float2(10,10);>;
+    parameter float2 x1y1<kind:"point";minValue:float2(0,0);maxValue:float2(400,400);defaultValue:float2(30,100);>;
+    
+    parameter float4 color<kind:"color";defaultValue:float4(0,0,0,0);>;
+    //parameter float alpha<minValue:0.0;maxValue:1.0;defaultValue:1.0;>;
+    parameter float thickness<minValue:0.5;maxValue:16.0;defaultValue:1.0;>;
+    
+    void evaluatePixel() 
+    {
+        float2 co = outCoord();
+        float2 center = dims / 2.0;
+        
+        // transparent bg
+        float d = distance(co,center);
+        dst = float4(0,0,0,0);
+        
+        // and now, a bit of fun math, as we plot a line between two points.
+        float2 uv = co - x0y0;
+        float2 xy = x1y1 - x0y0;
+        float xy2 = dot(xy,xy);
+        float g = dot(uv,xy) / xy2;
+        // if we are between the two points, then g is between 0 and 1.
+        float dl = abs(dot(uv,float2(-xy.y,xy.x)) / xy2 * length(xy));
+        // dl is now the distance, in pixels, from outCoord to the line
+        
+        // if we're between the endpoints and close enough, draw.
+        if(g >= 0.0 && g <= 1.0 && dl < thickness / 2.0)
+            dst = color;
+    }
+}
