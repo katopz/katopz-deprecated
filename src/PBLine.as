@@ -27,18 +27,20 @@ package
 
 		private function drawLine(x0:Number, y0:Number, x1:Number, y1:Number, color:Number = 0xFF00FF, alpha:Number = 1, thickness:Number = 1):void
 		{
-			shader.data["x0y0"].value[0] = x0;
-			shader.data["x0y0"].value[1] = y0;
+			var shader_data:ShaderData = shader.data;
+			
+			shader_data["x0y0"].value[0] = x0;
+			shader_data["x0y0"].value[1] = y0;
 
-			shader.data["x1y1"].value[0] = x1;
-			shader.data["x1y1"].value[1] = y1;
+			shader_data["x1y1"].value[0] = x1;
+			shader_data["x1y1"].value[1] = y1;
 
-			shader.data["color"].value[0] = color >> 16 & 0xFF;
-			shader.data["color"].value[1] = color >> 8 & 0xFF;
-			shader.data["color"].value[2] = color & 0xFF;
-			shader.data["color"].value[3] = alpha; //color >> 24 & 0xFF;
+			shader_data["color"].value[0] = color >> 16 & 0xFF;
+			shader_data["color"].value[1] = color >> 8 & 0xFF;
+			shader_data["color"].value[2] = color & 0xFF;
+			shader_data["color"].value[3] = alpha; //color >> 24 & 0xFF;
 
-			shader.data["thickness"].value[0] = thickness;
+			shader_data["thickness"].value[0] = thickness;
 		}
 	}
 }
