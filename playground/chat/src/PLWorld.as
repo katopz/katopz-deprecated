@@ -51,7 +51,6 @@ package
 	- MVC
 	
 	+ chat
-	- test with multiplayer
 	- add bezier speed line to bubble
 	- speed, destroy, model pool
 	- scale to 1px = 1cm
@@ -99,7 +98,7 @@ package
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
 			
-			alpha = .1;
+			alpha = 0;
 		}
 
 		override protected function onInitXML():void
