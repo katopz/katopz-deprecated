@@ -12,7 +12,7 @@ package com.cutecoma.effects
 
 	//import sketchbook.colors.ColorUtil;
 
-	public class Flare extends Sprite
+	public class FlareMap extends Sprite
 	{
 		private var rect:Rectangle;
 		private var fire:Rectangle;
@@ -27,10 +27,11 @@ package com.cutecoma.effects
 		private var unit:uint = 8;
 		private var segments:uint = 8;
 		private var blur:BlurFilter;
+		private var mapList:Array;
 		private var faded:uint = 0;
 		public static const COMPLETE:String = Event.COMPLETE;
 
-		public function Flare(r:Rectangle)
+		public function FlareMap(r:Rectangle)
 		{
 			rect = r;
 			initialize();
@@ -42,6 +43,11 @@ package com.cutecoma.effects
 			speed.y = -s;
 			unit = u;
 			segments = seg;
+		}
+
+		public function set map(list:Array):void
+		{
+			mapList = list;
 		}
 
 		private function initialize():void
@@ -67,19 +73,11 @@ package com.cutecoma.effects
 		{
 			fire = new Rectangle(0, 0, rect.width, rect.height + 10);
 			flare = new BitmapData(fire.width, fire.height, false, 0xFF000000);
-			bitmapData = new BitmapData(rect.width, fire.height, false, 0xFF000000);
+			bitmapData = new BitmapData(rect.width, rect.height, false, 0xFF000000);
 			bitmap = new Bitmap(bitmapData);
 			addChild(bitmap);
 			bitmap.x = -rect.width * 0.5;
 			bitmap.y = -rect.height;
-			var _mask:Shape = new Shape();
-			_mask.y = -8;
-			createEggMask(_mask);
-			addChild(_mask);
-			_mask.filters = [new BlurFilter(0, 8, 2)];
-			_mask.cacheAsBitmap = true;
-			bitmap.cacheAsBitmap = true;
-			bitmap.mask = _mask;
 		}
 
 		public function start():void
@@ -87,21 +85,18 @@ package com.cutecoma.effects
 			addEventListener(Event.ENTER_FRAME, apply, false, 0, true);
 		}
 
-		public function stop():void
-		{
-			removeEventListener(Event.ENTER_FRAME, apply);
-			faded = 0;
-			addEventListener(Event.ENTER_FRAME, clear, false, 0, true);
-		}
-
 		private function apply(evt:Event):void
 		{
+			if (!mapList)
+				return;
 			flare.lock();
 			bitmapData.lock();
 			for (var n:uint = 0; n < segments; n++)
 			{
-				var px:Number = Math.random() * (rect.width - 20 - unit) + 10;
-				var range:Rectangle = new Rectangle(px, rect.height, unit, 2)
+				var id:uint = Math.random() * mapList.length;
+				var px:int = mapList[id].x;
+				var py:int = mapList[id].y;
+				var range:Rectangle = new Rectangle(px, py, unit, 2)
 				flare.fillRect(range, 0xFFFFFF);
 			}
 			flare.applyFilter(flare, fire, speed, blur);
@@ -121,7 +116,7 @@ package com.cutecoma.effects
 			{
 				bitmapData.fillRect(rect, 0x000000);
 				removeEventListener(Event.ENTER_FRAME, clear);
-				dispatchEvent(new Event(Flare.COMPLETE));
+				dispatchEvent(new Event(FlareMap.COMPLETE));
 			}
 			flare.unlock();
 			bitmapData.unlock();
@@ -132,14 +127,11 @@ package com.cutecoma.effects
 			var w:Number = rect.width;
 			var h:Number = rect.height * 1.5;
 			target.graphics.beginFill(0xFFFFFF);
-			/*
-			   target.graphics.moveTo(-w * 0.5, -h * 0.2);
-			   target.graphics.curveTo(-w * 0.4, -h, 0, -h);
-			   target.graphics.curveTo(w * 0.4, -h, w * 0.5, -h * 0.2);
-			   target.graphics.curveTo(w * 0.5, 0, 0, 0);
-			   target.graphics.curveTo(-w * 0.5, 0, -w * 0.5, -h * 0.2);
-			 */
-			target.graphics.drawRect(-w * .5, -h, w, h - 16);
+			target.graphics.moveTo(-w * 0.5, -h * 0.2);
+			target.graphics.curveTo(-w * 0.4, -h, 0, -h);
+			target.graphics.curveTo(w * 0.4, -h, w * 0.5, -h * 0.2);
+			target.graphics.curveTo(w * 0.5, 0, 0, 0);
+			target.graphics.curveTo(-w * 0.5, 0, -w * 0.5, -h * 0.2);
 			target.graphics.endFill();
 		}
 
@@ -218,5 +210,6 @@ package com.cutecoma.effects
 			b = Math.min(255, Math.max(0, Math.round(b)));
 			return {r:r, g:g, b:b};
 		}
+
 	}
 }
