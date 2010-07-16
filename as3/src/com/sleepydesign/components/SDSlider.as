@@ -3,7 +3,6 @@ package com.sleepydesign.components
 	import com.sleepydesign.display.SDSprite;
 
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -38,13 +37,13 @@ package com.sleepydesign.components
 			_handle.buttonMode = false;
 			_handle.useHandCursor = false;
 			addChild(_handle);
-			
-			/*
-			if (_orientation == HORIZONTAL)
-				setSize(100, _scrollSize);
-			else
-				setSize(_scrollSize, 100);
-			*/
+
+		/*
+		   if (_orientation == HORIZONTAL)
+		   setSize(100, _scrollSize);
+		   else
+		   setSize(_scrollSize, 100);
+		 */
 		}
 
 		protected function drawTrack():void
@@ -140,7 +139,7 @@ package com.sleepydesign.components
 				dispatchEvent(new Event(Event.CHANGE));
 		}
 
-		protected function onDrag(event:MouseEvent):void
+		override protected function onDrag(event:MouseEvent):void
 		{
 			//click some where on _handle
 			_lastPosition = new Point(DisplayObject(event.target).mouseX, DisplayObject(event.target).mouseY);
@@ -149,7 +148,7 @@ package com.sleepydesign.components
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onSlide, false, 0, true);
 		}
 
-		protected function onDrop(event:MouseEvent):void
+		override protected function onDrop(event:MouseEvent):void
 		{
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onSlide);
