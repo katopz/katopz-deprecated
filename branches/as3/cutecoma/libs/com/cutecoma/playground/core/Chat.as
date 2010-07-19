@@ -25,7 +25,7 @@ package com.cutecoma.playground.core
 		private var _game:Game;
 		private var _rtmpURI:String;
 
-		private var connector:SDConnector;
+		private var _connector:SDConnector;
 		
 		public var canvas:Sprite;
 		
@@ -57,14 +57,14 @@ package com.cutecoma.playground.core
 		public function gotoArea(areaID:String):void
 		{
 			// update server
-			connector.exitRoom();
+			_connector.exitRoom();
 
 			// wait for exit complete?
 			//connector.addEventListener(SDEvent.COMPLETE, onEnterRoom);
 			//connector.addEventListener(SDEvent.UPDATE, onEnterRoom);
-			connector.initSignal.addOnce(onEnterRoom);
+			_connector.initSignal.addOnce(onEnterRoom);
 			
-			connector.enterRoom(areaID);
+			_connector.enterRoom(areaID);
 		}
 
 		private function onEnterRoom():void
@@ -79,7 +79,7 @@ package com.cutecoma.playground.core
 		public function bindCurrentPlayer():void
 		{
 			// bind player -> connector
-			_game.currentPlayer.addEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
+			_game.currentPlayer.addEventListener(PlayerEvent.UPDATE, _connector.onClientUpdate);
 			
 			// bind player position from game model
 			_game.currentPlayer.positionSignal.add(onPlayerPositionChange);
@@ -107,7 +107,7 @@ package com.cutecoma.playground.core
 				_bitmapData.draw(_bubble);
 				
 				var _particleMaterial:ParticleMaterial = new ParticleMaterial(_bitmapData);
-				_bubbleParticle = new Particle(position.x, position.y, position.z, _particleMaterial);
+				_bubbleParticle = new Particle(_particleMaterial, position.x, position.y, position.z);
 				
 				// bind bubble by id
 				_bubbleParticle.id = _bubble.id = id;
@@ -163,16 +163,16 @@ package com.cutecoma.playground.core
 		public function createConnector(id:String):void
 		{
 			//connector = new SDConnector(this, "rtmp://localhost/SOSample", "lobby");
-			connector = new SDConnector(_rtmpURI, id);
-			connector.x = 100;
-			connector.y = 20;
+			_connector = new SDConnector(_rtmpURI, id);
+			_connector.x = 100;
+			_connector.y = 20;
 			
-			canvas.addChild(connector);
+			canvas.addChild(_connector);
 			//connector.visible = false;
 
 			// bind connector -> game
 			//connector.addEventListener(SDEvent.UPDATE, function(event:SDEvent):void
-			connector.updateSignal.add(onConnectorUpdate);
+			_connector.updateSignal.add(onConnectorUpdate);
 		}
 		
 		private function onConnectorUpdate(data:Object):void
@@ -210,7 +210,7 @@ package com.cutecoma.playground.core
 		
 		private function onPlayerRemoved(player:Player):void
 		{
-			player.removeEventListener(PlayerEvent.UPDATE, connector.onClientUpdate);
+			player.removeEventListener(PlayerEvent.UPDATE, _connector.onClientUpdate);
 			player.positionSignal.remove(onPlayerPositionChange);
 			player.talkSignal.remove(onPlayerTalkChange);
 			

@@ -121,6 +121,7 @@
 						mouseSignal.dispatch(event, _target, _face, _point);
 					break;
 			}
+			event.updateAfterEvent();
 		}
 
 		private var _isDrag:Boolean;
