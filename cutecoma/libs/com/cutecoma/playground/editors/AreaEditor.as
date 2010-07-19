@@ -343,6 +343,7 @@
 					}
 					break;
 			}
+			event.updateAfterEvent();
 		}
 
 		override public function destroy():void
