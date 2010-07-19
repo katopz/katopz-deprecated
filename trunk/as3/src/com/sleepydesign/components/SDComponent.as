@@ -181,6 +181,7 @@ package com.sleepydesign.components
 			startDrag(false);//, root.scrollRect);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stage.addEventListener(Event.MOUSE_LEAVE, onDrop);
+			event.updateAfterEvent();
 		}
 		
 		protected function onDrop(event:MouseEvent):void
@@ -188,6 +189,7 @@ package com.sleepydesign.components
 			stopDrag();
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stage.removeEventListener(Event.MOUSE_LEAVE, onDrop);
+			event.updateAfterEvent();
 		}
 		
 		// ------------------------------------------------------------------------ Drag
