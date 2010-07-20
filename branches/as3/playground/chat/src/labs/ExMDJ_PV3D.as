@@ -18,10 +18,10 @@ package labs
 			_mdj.addEventListener(Event.COMPLETE, onComplete);
 			_mdj.load("chars/man/model_1.mdj", null, 24, 10);
 			
-			scene.addChild(_mdj);
+			_scene.addChild(_mdj);
 			
-			camera.y = 500;
-			camera.lookAt(_mdj);
+			_camera.y = 500;
+			_camera.lookAt(_mdj);
 		}
 		
 		private function onComplete(event:Event):void

@@ -21,10 +21,10 @@ package org.papervision3d.templates
 		
 		protected var _screenRect:Rectangle;
 		
-		protected var viewport:Viewport3D;
-		protected var scene:Scene3D;
-		protected var camera:Camera3D;
-		protected var renderer:BasicRenderEngine;
+		protected var _viewport:Viewport3D;
+		protected var _scene:Scene3D;
+		protected var _camera:Camera3D;
+		protected var _renderer:BasicRenderEngine;
 		
 		protected var stats:Stats;
 		
@@ -68,14 +68,14 @@ package org.papervision3d.templates
 
 		protected function init():void
 		{
-			addChild(viewport = new Viewport3D(_stageWidth, _stageHeight));
+			addChild(_viewport = new Viewport3D(_stageWidth, _stageHeight));
 			
 			addChild(stats = new Stats);
 
-			renderer = new BasicRenderEngine();
-			scene = new Scene3D();
-			camera = new Camera3D();
-			camera.lookAt(new DisplayObject3D());
+			_renderer = new BasicRenderEngine();
+			_scene = new Scene3D();
+			_camera = new Camera3D();
+			_camera.lookAt(new DisplayObject3D());
 
 			start();
 
@@ -100,7 +100,7 @@ package org.papervision3d.templates
 		protected function onEnterFrame(event:Event):void
 		{
 			onPreRender();
-			renderer.renderScene(scene, camera, viewport);
+			_renderer.renderScene(_scene, _camera, _viewport);
 		}
 		
 		protected function onPreRender():void
