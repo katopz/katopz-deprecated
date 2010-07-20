@@ -40,15 +40,15 @@ package com.cutecoma.image.editors
 				controls = [];
 
 				// tl
-				var tlSizeHandle:SizeHandle = new SizeHandle(bitmapRectangle.x, bitmapRectangle.y);
+				var tlSizeHandle:SizeHandle = new SizeHandle(_bitmapRectangle.x, _bitmapRectangle.y);
 				controls[0] = addChild(tlSizeHandle);
 
 				// br
-				var brSizeHandle:SizeHandle = new SizeHandle(bitmapRectangle.x + bitmapRectangle.width, bitmapRectangle.y + bitmapRectangle.height);
+				var brSizeHandle:SizeHandle = new SizeHandle(_bitmapRectangle.x + _bitmapRectangle.width, _bitmapRectangle.y + _bitmapRectangle.height);
 				controls[1] = addChild(brSizeHandle);
 
 				// c
-				cHandle = new SizeHandle(bitmapRectangle.x + bitmapRectangle.width / 2, bitmapRectangle.y + bitmapRectangle.height / 2);
+				cHandle = new SizeHandle(_bitmapRectangle.x + _bitmapRectangle.width / 2, _bitmapRectangle.y + _bitmapRectangle.height / 2);
 				controls[2] = addChild(cHandle);
 			}
 		}
@@ -114,8 +114,8 @@ package com.cutecoma.image.editors
 			}
 
 			// scale
-			var _scaleX:Number = (brSizeHandle.x - tlSizeHandle.x) / bitmapRectangle.width;
-			var _scaleY:Number = (brSizeHandle.y - tlSizeHandle.y) / bitmapRectangle.height;
+			var _scaleX:Number = (brSizeHandle.x - tlSizeHandle.x) / _bitmapRectangle.width;
+			var _scaleY:Number = (brSizeHandle.y - tlSizeHandle.y) / _bitmapRectangle.height;
 
 			_bitmap.x = tlSizeHandle.x;
 			_bitmap.y = tlSizeHandle.y;
