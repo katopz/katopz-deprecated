@@ -51,12 +51,12 @@ package
 	- MVC
 	
 	+ chat
+	- login via opensocial and get user char data
 	- add bezier speed line to bubble
 	- speed, destroy, model pool
 	- scale to 1px = 1cm
 	- redo particle movie material auto update
 	- add frames data info to MDJ?
-	- login via opensocial
 	- clean up
 	- MVC
 	
@@ -72,33 +72,35 @@ package
 	public class PLWorld extends ApplicationTemplate
 	{
 		private const VERSION:String = "PlayGround beta 3";
-		//private const SERVER_URI:String = "rtmp://www.digs.jp/SOSample";
-		//private const SERVER_URI:String = "rtmp://pixelliving.com/chat";
-		private const SERVER_URI:String = "rtmp://localhost/SOSample";
 		
 		private var _world:World;
 		private var _engine3D:Engine3D;
 
-		private var areaPanel:AreaPanel;
+		private var _areaPanel:AreaPanel;
 
-		private var dialog:SDDialog;
+		private var _dialog:SDDialog;
 
 		private var _selectAreaID:String = "00";
 
 		private var _game:Game;
 		private var _chat:Chat;
 
-		private var currentRoomID:String = "";
+		private var _currentRoomID:String = "";
 
 		public function PLWorld()
+		{
+			registerDataClassAlias();
+			
+			alpha = 0.1;
+		}
+		
+		private function registerDataClassAlias():void
 		{
 			registerClassAlias("com.cutecoma.playground.data.AreaData", AreaData);
 			registerClassAlias("com.cutecoma.playground.data.MapData", MapData);
 			registerClassAlias("com.cutecoma.playground.data.SceneData", SceneData);
 			registerClassAlias("com.cutecoma.playground.data.ViewData", ViewData);
 			registerClassAlias("com.cutecoma.playground.data.CameraData", CameraData);
-			
-			alpha = 0;
 		}
 
 		override protected function onInitXML():void
@@ -123,16 +125,16 @@ package
 			_world = new World(_engine3D, String(_xml.world.area.@path));
 			_game = new Game(_engine3D, _world);
 			
-			_chat = new Chat(_game, SERVER_URI);
-			_chat.canvas = _systemLayer;
+			_chat = new Chat(_game, String(_xml.server.@url));
+			_chat.layer = _systemLayer;
 			
 			initMenu();
 		}
 
 		private function initMenu():void
 		{
-			addChild(dialog = new SDDialog(<question><![CDATA[Welcome! What you want to do?]]>
-					<!--<answer src="as:onUserSelect('edit-character')"><![CDATA[Select Character.]]></answer>-->
+			addChild(_dialog = new SDDialog(<question><![CDATA[Welcome! What you want to do?]]>
+					<answer src="as:onUserSelect('edit-character')"><![CDATA[Edit Character.]]></answer>
 					<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter Area]]></answer>
 					<answer src="as:onUserSelect('edit-area')"><![CDATA[Edit Area]]>
 					</answer></question>, this, "center"));
@@ -140,7 +142,8 @@ package
 
 		public function onUserSelect(action:String):void
 		{
-			dialog.destroy();
+			_dialog.destroy();
+			_dialog = null;
 
 			switch (action)
 			{
@@ -155,21 +158,21 @@ package
 
 		private function showAreaPanel(callback:Function):void
 		{
-			if (!areaPanel)
+			if (!_areaPanel)
 			{
 				LoaderUtil.loadAsset("AreaPanel.swf", function onAreaPanelLoad(event:Event):void
 					{
 						if (event.type != "complete")
 							return;
 
-						areaPanel = event.target.content as AreaPanel;
-						systemLayer.addChild(areaPanel);
+						_areaPanel = event.target.content as AreaPanel;
+						systemLayer.addChild(_areaPanel);
 						EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
 					});
 			}
 			else
 			{
-				areaPanel.visible = true;
+				_areaPanel.visible = true;
 				EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
 			}
 		}
@@ -179,7 +182,8 @@ package
 			_selectAreaID = event.areaID;
 
 			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
-			dialog.destroy();
+			_dialog.destroy();
+			_dialog = null;
 			
 			_world.completeSignal.addOnce(onWolrdComplete);
 			_world.areaCompleteSignal.add(onGotoArea);
@@ -208,7 +212,7 @@ package
 		public function onGotoArea(areaData:AreaData):void
 		{
 			// dirty
-			if (currentRoomID != areaData.id)
+			if (_currentRoomID != areaData.id)
 			{
 				// tell everybody i'm exit
 				_game.currentPlayer.exit();
@@ -222,10 +226,10 @@ package
 				//update area
 				_world.area.update(areaData);
 				////engine3D.update(areaData.scene);
-				_game.currentPlayer.warp(_world.area.map.getWarpPoint(currentRoomID));
+				_game.currentPlayer.warp(_world.area.map.getWarpPoint(_currentRoomID));
 
 				// TODO : actually we need to wait for connection success?
-				currentRoomID = areaData.id;
+				_currentRoomID = areaData.id;
 			}
 		}
 		
@@ -244,7 +248,7 @@ package
 		public function initChat(areaData:AreaData):void
 		{
 			// net	
-			currentRoomID = areaData.id;
+			_currentRoomID = areaData.id;
 			
 			_chat.createConnector(areaData.id);
 			_chat.createChatBox();

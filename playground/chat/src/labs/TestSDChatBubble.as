@@ -31,7 +31,7 @@ package labs
 			_bitmapData.draw(_chatBubble);
 			_particleMaterial = new ParticleMaterial(_bitmapData);
 
-			var _chatBubbleParticle:Particle = new Particle(position.x, position.y, position.z, _particleMaterial);
+			var _chatBubbleParticle:Particle = new Particle(_particleMaterial, position.x, position.y, position.z);
 			_chatBubbleParticle.id = "0";
 
 			_balloonParticles = new Particles();
