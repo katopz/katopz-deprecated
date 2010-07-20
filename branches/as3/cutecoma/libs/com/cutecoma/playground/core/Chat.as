@@ -27,7 +27,7 @@ package com.cutecoma.playground.core
 
 		private var _connector:SDConnector;
 		
-		public var canvas:Sprite;
+		public var layer:Sprite;
 		
 		// TODO replace with linklist
 		private var _bubbles:Dictionary;
@@ -167,7 +167,7 @@ package com.cutecoma.playground.core
 			_connector.x = 100;
 			_connector.y = 20;
 			
-			canvas.addChild(_connector);
+			layer.addChild(_connector);
 			//connector.visible = false;
 
 			// bind connector -> game
@@ -192,7 +192,7 @@ package com.cutecoma.playground.core
 			_chatBox = new SDChatBox();
 			_chatBox.x = 100;
 			_chatBox.y = 40;
-			canvas.addChild(_chatBox);
+			layer.addChild(_chatBox);
 			
 			// bind chat -> player
 			//canvas.addEventListener(SDEvent.UPDATE, onTalk);
