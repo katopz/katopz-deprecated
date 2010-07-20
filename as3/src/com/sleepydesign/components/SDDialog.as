@@ -26,23 +26,23 @@ package com.sleepydesign.components
 		private var _bgColor:Number = 0xFFFFFF;
 		
 		private var _back:Shape;
-		private var content:XMLDocument;
-		private var label:SDTextField;
-		private var pad:Number = 8;
-		private var length:Number = 8;
-		private var begPoint:Point = new Point(0, 0);
+		private var _content:XMLDocument;
+		private var _label:SDTextField;
+		private var _pad:Number = 8;
+		private var _length:Number = 8;
+		private var _begPoint:Point = new Point(0, 0);
 
-		private var iText:*;
-		private var isTail:Boolean;
+		private var _iText:*;
+		private var _isTail:Boolean;
 		
-		private var caller:Object
+		private var _caller:Object
 
 		public function SDDialog(iText:* = "", caller:Object = null, align:String = "")
 		{
-			this.iText = iText;
-			this.isTail = isTail;
+			this._iText = iText;
+			this._isTail = _isTail;
 			
-			this.caller = caller || this;
+			this._caller = caller || this;
 			
 			super();
 			
@@ -55,7 +55,7 @@ package com.sleepydesign.components
 		{
 			create();
 			
-			this.caller = caller?caller:this.parent;
+			this._caller = _caller?_caller:this.parent;
 			mouseEnabled = true;
 			mouseChildren = true;
 			isDraggable = true;
@@ -69,24 +69,24 @@ package com.sleepydesign.components
 			_back.filters = [new GlowFilter(0xCCCCCC, 1, 4, 4, 2, 1, true, false)];
 			_back.cacheAsBitmap = true;
 
-			label = new SDTextField(iText);
-			label.multiline = true;
-			label.mouseEnabled = true;
-			label.autoSize = TextFieldAutoSize.LEFT;
+			_label = new SDTextField(_iText);
+			_label.multiline = true;
+			_label.mouseEnabled = true;
+			_label.autoSize = TextFieldAutoSize.LEFT;
 
-			content = new XMLDocument();
-			content.parseXML(String(iText));
+			_content = new XMLDocument();
+			_content.parseXML(String(_iText));
 			
 			// drag
 			_dragArea = new Sprite();
 			
 			addChild(_back);
-			addChild(label);
+			addChild(_label);
 			addChild(_dragArea);
 
 			cacheAsBitmap = true;
 			
-			htmlText = iText;
+			htmlText = _iText;
 		}
 
 		private function onComplete(event:Event):void
@@ -103,15 +103,15 @@ package com.sleepydesign.components
 
 		override public function draw():void
 		{
-			var w:Number = (label.width > pad) ? label.width : pad;
-			var h:Number = (label.height > pad) ? label.height : pad;
+			var w:Number = (_label.width > _pad) ? _label.width : _pad;
+			var h:Number = (_label.height > _pad) ? _label.height : _pad;
 			
-			label.x = int(pad); //int(-w * .5);
-			label.y = int(pad); //int(-pad - length - h + pad * .25 - 1);
+			_label.x = int(_pad); //int(-w * .5);
+			_label.y = int(_pad); //int(-pad - length - h + pad * .25 - 1);
 			
 			_back.graphics.clear();
 			_back.graphics.beginFill(_bgColor);
-			_back.graphics.drawRoundRect(0, 0, w + pad * 2, h + pad * 2, pad, pad);
+			_back.graphics.drawRoundRect(0, 0, w + _pad * 2, h + _pad * 2, _pad, _pad);
 			
 			/*
 			if(isTail)
@@ -125,7 +125,7 @@ package com.sleepydesign.components
 			_back.graphics.endFill();
 			
 			Sprite(_dragArea).graphics.beginFill(0xFF00FF, 0);
-			Sprite(_dragArea).graphics.drawRoundRect(0, 0, w + pad * 2, 20, pad, pad);
+			Sprite(_dragArea).graphics.drawRoundRect(0, 0, w + _pad * 2, 20, _pad, _pad);
 			Sprite(_dragArea).graphics.endFill();
 			
 			super.draw();
@@ -156,18 +156,18 @@ package com.sleepydesign.components
 		
 		public function get text():String
 		{
-			return label.text;
+			return _label.text;
 		}
 		
 		public function set text(iText:*):void
 		{
-			label.text = iText;
+			_label.text = iText;
 			draw();
 		}
 
 		public function get htmlText():String
 		{
-			var iText:String = label.htmlText;
+			var iText:String = _label.htmlText;
 			if ((iText.indexOf("<p>") == 0) && (iText.lastIndexOf("</p>") == iText.length - 4))
 			{
 				iText = iText.substring(3, iText.length - 4);
@@ -210,7 +210,7 @@ package com.sleepydesign.components
 
 		public function parseCSS(iCSSText:String = null):void
 		{
-			label.parseCSS(iCSSText);
+			_label.parseCSS(iCSSText);
 			draw();
 		}
 
@@ -222,7 +222,7 @@ package com.sleepydesign.components
 
 		public function jump(id:String = "0", nodeName:String = "question"):void
 		{
-			htmlText = new XML(content.idMap[id]);
+			htmlText = new XML(_content.idMap[id]);
 		}
 
 		private function createAnswer(url:String, iText:String):String
@@ -264,8 +264,8 @@ package com.sleepydesign.components
 				inputText = iText;
 
 				inputText = inputText.replace("<img ", "__bug__<img id='imgId' ");
-				label.htmlText = inputText;
-				var loader:Loader = label.getImageReference("imgId") as Loader;
+				_label.htmlText = inputText;
+				var loader:Loader = _label.getImageReference("imgId") as Loader;
 
 				if (loader)
 				{
@@ -285,13 +285,13 @@ package com.sleepydesign.components
 			//'ve link
 			if (inputText.indexOf("<a") > -1)
 			{
-				label.addEventListener(TextEvent.LINK, linkHandler);
+				_label.addEventListener(TextEvent.LINK, linkHandler);
 			}
 
-			label.parseCSS();
+			_label.parseCSS();
 
 			inputText = inputText.replace("__bug__", "");
-			label.htmlText = "<p>" + inputText + "</p>";
+			_label.htmlText = "<p>" + inputText + "</p>";
 
 		}
 
@@ -300,7 +300,7 @@ package com.sleepydesign.components
 			if(e.text.indexOf("as:jump")==0)
 				SystemUtil.doCommand(e.text, this);
 			else
-				SystemUtil.doCommand(e.text, caller);
+				SystemUtil.doCommand(e.text, _caller);
 		}
 	}
 }

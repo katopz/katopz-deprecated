@@ -9,18 +9,18 @@ package com.sleepydesign.skins
 
 	public class MacLoadingClip extends SDSprite
 	{
-		protected var timer:Timer;
-		protected var slices:int;
-		protected var radius:int;
-		protected var colorValue:Number;
+		protected var _timer:Timer;
+		protected var _slices:int;
+		protected var _radius:int;
+		protected var _colorValue:Number;
 		
 		protected var _canvas:SDSprite;
 
 		public function MacLoadingClip(colorValue:Number = 0x666666, slices:int = 12, radius:int = 6)
 		{
-			this.slices = slices;
-			this.radius = radius;
-			this.colorValue = colorValue;
+			this._slices = slices;
+			this._radius = radius;
+			this._colorValue = colorValue;
 			
 			_canvas = new SDSprite();
 			addChild(_canvas);
@@ -33,37 +33,37 @@ package com.sleepydesign.skins
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			timer = new Timer(65);
-			timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
-			timer.start();
+			_timer = new Timer(65);
+			_timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+			_timer.start();
 		}
 
 		protected function onRemovedFromStage(event:Event):void
 		{
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			timer.reset();
-			timer.removeEventListener(TimerEvent.TIMER, onTimer);
-			timer = null;
+			_timer.reset();
+			_timer.removeEventListener(TimerEvent.TIMER, onTimer);
+			_timer = null;
 		}
 
 		protected function onTimer(event:TimerEvent):void
 		{
-			_canvas.rotation = (_canvas.rotation + (360 / slices)) % 360;
+			_canvas.rotation = (_canvas.rotation + (360 / _slices)) % 360;
 		}
 
 		protected function draw():void
 		{
-			var i:int = slices;
-			var degrees:int = 360 / slices;
+			var i:int = _slices;
+			var degrees:int = 360 / _slices;
 			while (i--)
 			{
 				var slice:Shape = getSlice();
 				slice.alpha = Math.max(0.2, 1 - (0.1 * i));
 				var radianAngle:Number = (degrees * i) * Math.PI / 180;
 				slice.rotation = -degrees * i;
-				slice.x = Math.sin(radianAngle) * radius;
-				slice.y = Math.cos(radianAngle) * radius;
+				slice.x = Math.sin(radianAngle) * _radius;
+				slice.y = Math.cos(radianAngle) * _radius;
 				_canvas.addChild(slice);
 			}
 		}
@@ -71,7 +71,7 @@ package com.sleepydesign.skins
 		protected function getSlice():Shape
 		{
 			var slice:Shape = new Shape();
-			slice.graphics.beginFill(colorValue);
+			slice.graphics.beginFill(_colorValue);
 			slice.graphics.drawRoundRect(-1, 0, 2, 6, 12, 12);
 			slice.graphics.endFill();
 			return slice;

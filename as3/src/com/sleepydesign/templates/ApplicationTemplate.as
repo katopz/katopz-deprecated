@@ -39,7 +39,7 @@ package com.sleepydesign.templates
 		//nav
 		protected var _site:SiteTool;
 		protected var _tree:SDTree;
-		protected var isSiteMap:Boolean;
+		protected var _isSiteMap:Boolean;
 		
 		public var path:String;
 
@@ -129,7 +129,7 @@ package com.sleepydesign.templates
 			_systemLayer.addChild(_tree);
 			_tree.x = 10;
 			_tree.y = 10;
-			_tree.visible = isSiteMap;
+			_tree.visible = _isSiteMap;
 			
 			_tree.addEventListener(TreeEvent.CHANGE_NODE_FOCUS, onTreeChangeFocus);
 		}

@@ -27,18 +27,18 @@ package com.sleepydesign.ui
 		public static var isSPACE		:Boolean = false;
 		public static var isCAPLOCK		:Boolean = false;
 		
-		private var target:InteractiveObject;
+		private var _target:InteractiveObject;
 		
 		public function SDKeyBoard(target:InteractiveObject)
 		{
-			this.target = target;
+			this._target = target;
 			create();
 		}
 		
 		public function create(config:Object=null):void
 		{
-			target.addEventListener(KeyboardEvent.KEY_DOWN, onInnerKey, false, 0, true);
-			target.addEventListener(KeyboardEvent.KEY_UP, onInnerKey, false, 0, true);
+			_target.addEventListener(KeyboardEvent.KEY_DOWN, onInnerKey, false, 0, true);
+			_target.addEventListener(KeyboardEvent.KEY_UP, onInnerKey, false, 0, true);
 		}
 			
 		private function onKey( event:Event ):void
@@ -144,7 +144,7 @@ package com.sleepydesign.ui
 							break;
 					}
 					if(keyForward || keyBackward || keyLeft || keyRight || keyUp || keyDown || keyPeekLeft || keyPeekRight)
-						target.addEventListener(Event.ENTER_FRAME, onKey, false, 0, true);
+						_target.addEventListener(Event.ENTER_FRAME, onKey, false, 0, true);
 				break;
 				case KeyboardEvent.KEY_UP:
 					switch( event.keyCode )
@@ -192,7 +192,7 @@ package com.sleepydesign.ui
 							break;
 					}
 					if(!keyForward && !keyBackward && !keyLeft && !keyRight && !keyPeekLeft && !keyPeekRight && !keyUp && !keyDown)
-						target.removeEventListener(Event.ENTER_FRAME, onKey);
+						_target.removeEventListener(Event.ENTER_FRAME, onKey);
 				break;
 			}
 			
@@ -201,9 +201,9 @@ package com.sleepydesign.ui
 		
 		override public function destroy():void
 		{
-			target.removeEventListener(KeyboardEvent.KEY_DOWN, onInnerKey);
-			target.removeEventListener(KeyboardEvent.KEY_UP, onInnerKey);
-			target.removeEventListener(Event.ENTER_FRAME, onKey);
+			_target.removeEventListener(KeyboardEvent.KEY_DOWN, onInnerKey);
+			_target.removeEventListener(KeyboardEvent.KEY_UP, onInnerKey);
+			_target.removeEventListener(Event.ENTER_FRAME, onKey);
 			
 			super.destroy();
 		}

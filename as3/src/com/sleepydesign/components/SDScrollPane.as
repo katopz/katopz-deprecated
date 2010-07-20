@@ -13,19 +13,19 @@ package com.sleepydesign.components
 		
 		public var pad :uint = 0;
 		
-		private var vscrollBar:SDScrollBar;
-		private var hscrollBar:SDScrollBar;
+		private var _vscrollBar:SDScrollBar;
+		private var _hscrollBar:SDScrollBar;
 		
 		public function SDScrollPane()
 		{
 			_back = new Shape();
 			addChild(_back);
 			
-			vscrollBar = new SDScrollBar(SDSlider.VERTICAL);
-			addChild(vscrollBar);
+			_vscrollBar = new SDScrollBar(SDSlider.VERTICAL);
+			addChild(_vscrollBar);
 			
-			hscrollBar = new SDScrollBar(SDSlider.HORIZONTAL);
-			addChild(hscrollBar);
+			_hscrollBar = new SDScrollBar(SDSlider.HORIZONTAL);
+			addChild(_hscrollBar);
 			
 			panel = new SDPanel();
 			addChild(panel);
@@ -36,8 +36,8 @@ package com.sleepydesign.components
 		
 		public function set target(value:SDPanel):void
 		{
-			vscrollBar.scrollTarget = value;
-			hscrollBar.scrollTarget = value;
+			_vscrollBar.scrollTarget = value;
+			_hscrollBar.scrollTarget = value;
 			draw();
 		}
 		
@@ -72,13 +72,13 @@ package com.sleepydesign.components
 		
 		override public function draw():void
 		{
-			vscrollBar.draw();
-			hscrollBar.draw();
+			_vscrollBar.draw();
+			_hscrollBar.draw();
 			
 			_back.graphics.clear();
 			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true );
 			_back.graphics.beginFill(SDStyle.BACKGROUND);
-			_back.graphics.drawRoundRect(-pad/2, -pad/2, vscrollBar.visible?vscrollBar.width+_width+pad:_width+pad, hscrollBar.visible?hscrollBar.height+_height+pad:_height+pad, pad);
+			_back.graphics.drawRoundRect(-pad/2, -pad/2, _vscrollBar.visible?_vscrollBar.width+_width+pad:_width+pad, _hscrollBar.visible?_hscrollBar.height+_height+pad:_height+pad, pad);
 			_back.graphics.endFill();
 			
 			super.draw();
