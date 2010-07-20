@@ -10,20 +10,20 @@ package com.cutecoma.image.editors
 	public class Tools extends Sprite
 	{
 		protected var _bitmap:Bitmap;
-		protected var canvas:Sprite;
+		protected var _canvas:Sprite;
 
-		protected var bitmapLayer:BitmapLayer;
+		protected var _bitmapLayer:BitmapLayer;
 
-		protected var bitmapRectangle:Rectangle;
-		protected var canvasRectangle:Rectangle;
+		protected var _bitmapRectangle:Rectangle;
+		protected var _canvasRectangle:Rectangle;
 
 		public static var isCTRL:Boolean = false;
 
 		public function Tools(bitmapLayer:BitmapLayer, canvas:Sprite)
 		{
-			this.bitmapLayer = bitmapLayer;
+			this._bitmapLayer = bitmapLayer;
 
-			this.canvas = canvas;
+			this._canvas = canvas;
 			this.bitmap = bitmapLayer.bitmap;
 
 			bitmapLayer.addEventListener(Event.CHANGE, onBitmapChange);
@@ -33,7 +33,7 @@ package com.cutecoma.image.editors
 
 		private function onBitmapChange(event:Event):void
 		{
-			bitmap = bitmapLayer.bitmap;
+			bitmap = _bitmapLayer.bitmap;
 		}
 
 		public function get bitmap():Bitmap
@@ -46,9 +46,9 @@ package com.cutecoma.image.editors
 			if (value)
 			{
 				_bitmap = value;
-				bitmapRectangle = bitmap.getRect(_bitmap.parent);
-				canvasRectangle = canvas.getRect(canvas.parent);
-				canvasRectangle.inflate(-6, -6);
+				_bitmapRectangle = bitmap.getRect(_bitmap.parent);
+				_canvasRectangle = _canvas.getRect(_canvas.parent);
+				_canvasRectangle.inflate(-6, -6);
 			}
 		}
 

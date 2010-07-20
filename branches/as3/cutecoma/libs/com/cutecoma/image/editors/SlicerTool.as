@@ -38,7 +38,7 @@ package com.cutecoma.image.editors
 					handle.parent.removeChild(handle);
 
 				// create
-				createCircle(bitmapRectangle.x + bitmapRectangle.width / 2, bitmapRectangle.y + bitmapRectangle.height / 2, 50, 50, _segment);
+				createCircle(_bitmapRectangle.x + _bitmapRectangle.width / 2, _bitmapRectangle.y + _bitmapRectangle.height / 2, 50, 50, _segment);
 				drawSegments();
 			}
 		}
