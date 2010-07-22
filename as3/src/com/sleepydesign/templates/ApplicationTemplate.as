@@ -20,6 +20,12 @@ package com.sleepydesign.templates
 		protected var _configURI:String;
 
 		protected var _xml:XML;
+		
+		protected static var _globalXML:XML;
+		public static function getXML():XML
+		{
+			return _globalXML;
+		}
 
 		protected var _systemLayer:SDSprite;
 
@@ -96,7 +102,7 @@ package com.sleepydesign.templates
 		{
 			if (event.type != "complete")
 				return;
-			_xml = new XML(event.target.data);
+			_globalXML = _xml = new XML(event.target.data);
 
 			onInitXML();
 		}
