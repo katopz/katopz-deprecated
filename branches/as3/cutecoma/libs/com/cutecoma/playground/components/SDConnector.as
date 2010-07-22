@@ -1,245 +1,212 @@
 package com.cutecoma.playground.components
 {
-    import com.cutecoma.game.events.PlayerEvent;
-    import com.cutecoma.playground.events.NetEvent;
-    import com.cutecoma.playground.net.SharedObjectConnector;
-    import com.sleepydesign.components.SDButton;
-    import com.sleepydesign.components.SDComponent;
-    import com.sleepydesign.components.SDTextInput;
-    
-    import flash.events.MouseEvent;
-    
-    import org.osflash.signals.Signal;
-	
+	import com.cutecoma.game.events.PlayerEvent;
+	import com.cutecoma.playground.events.NetEvent;
+	import com.cutecoma.playground.net.SharedObjectConnector;
+	import com.sleepydesign.components.SDButton;
+	import com.sleepydesign.components.SDComponent;
+	import com.sleepydesign.components.SDTextInput;
+
+	import flash.events.MouseEvent;
+
+	import org.osflash.signals.Signal;
+
 	public class SDConnector extends SDComponent
 	{
 		public var uri:String;
 		private var room:String;
-		private var currentRoom:String="";
-		
+		private var currentRoom:String = "";
+
 		private var connector:SharedObjectConnector;
-		
+
 		private var serverInputText:SDTextInput;
 		private var connectButton:SDButton;
-		
+
 		private var isConnect:Boolean = false;
-		
+
 		public function get initSignal():Signal
 		{
 			return connector.initSignal;
 		}
-		
+
 		public function get updateSignal():Signal
 		{
 			return connector.updateSignal;
 		}
-		
+
 		//public var completeSignal:Signal = new Signal();
-		
-		public function SDConnector(uri:String="rtmp://localhost/SOSample", room:String = "lobby" , autorun:Boolean = true)
+
+		public function SDConnector(uri:String = "rtmp://localhost/SOSample", room:String = "lobby", autorun:Boolean = true)
 		{
 			this.uri = uri;
 			this.room = room;
-			
-			//[1935, 80, 443, 8080, 7070];
-			//var uri:String = "rtmp://dedibox1.free.new-net.net/SOSample";
-			//var uri:String = "rtmp://140.110.240.196/SOSample";
-			//var uri:String = "rtmp://tomfmason.net/SOSample";
-			//var uri:String = "rtmpt://red5.fatdot.com/SOSample";
-			//var uri:String = "rtmp://red5.4ng.net/SOSample";
-			//var uri:String = "rtmpt://217.29.160.103:5080/SOSample";
-			//var uri:String = "rtmp://www.digs.jp/SOSample";
-			
+
 			// TODO : apply from config ?
 			serverInputText = new SDTextInput(uri);
 			serverInputText.width = 200;
 			addChild(serverInputText);
-			
+
 			// TODO : Toggle Button
 			connectButton = new SDButton("Connect");
 			connectButton.setSize(64, connectButton.height);
 			connectButton.x = serverInputText.width;
 			addChild(connectButton);
 			connectButton.addEventListener(MouseEvent.CLICK, onClick);
-			
+
 			super();
-			
-			if(autorun)
+
+			if (autorun)
 			{
 				connect(uri, room);
 			}
 		}
-		
+
 		private function onClick(event:MouseEvent):void
 		{
-			trace( " ^ onClick : "+isConnect);
-			if(!isConnect)
+			trace(" ^ onClick : " + isConnect);
+			if (!isConnect)
 			{
 				connect(uri, room);
-			}else{
+			}
+			else
+			{
 				disconnect();
 				connectButton.label = "Connect";
 			}
 		}
-		
+
 		public function connect(uri:String, room:String = "lobby"):SharedObjectConnector
 		{
-			trace( " * Connect		: "+uri, room);
+			trace(" * Connect		: " + uri, room);
 			this.uri = uri;
 			this.room = room;
-			
+
 			// debug
 			serverInputText.text = "Try Connecting...";
-			
+
 			// dispose
-			if(connector)disconnect();
-			
+			if (connector)
+				disconnect();
+
 			// new
 			connector = new SharedObjectConnector(uri);
 			connector.addEventListener(NetEvent.CONNECT, onConnect);
 			connector.addEventListener(NetEvent.DISCONNECT, onDisConnect);
 			connector.connect();
-			
+
 			return connector;
 		}
-		
+
 		private function onConnect(event:NetEvent):void
 		{
-			trace( " ^ onConnect");
-			/*
-			// go out
-			if(currentRoom==room)
-			{
-				exitRoom(room);
-			}
-			
-			// go in
-			currentRoom = room;
-			*/
+			trace(" ^ onConnect");
 			enterRoom(room);
 		}
-		
+
 		public function enterRoom(room:String):void
 		{
 			this.room = room;
-			
-			trace( " * Enter		: "+room);
-			
-			if(connector)
+
+			trace(" * Enter		: " + room);
+
+			if (connector)
 			{
-				//connector.addEventListener(SDEvent.INIT, onServerInit);
-				//connector.addEventListener(SDEvent.UPDATE, onServerUpdate);
-				
 				connector.initSignal.addOnce(onServerInit);
 				connector.updateSignal.add(onServerUpdate);
-				
+
 				connector.createSharedObject(room);
 			}
-			
+
 			// debug
-			serverInputText.text = "Enter		: "+room;
+			serverInputText.text = "Enter		: " + room;
 		}
-		
+
 		public function exitRoom():void
 		{
-			trace( " * Exit			: "+room);
-			
-			if(connector)
+			trace(" * Exit			: " + room);
+
+			if (connector)
 			{
 				connector.removeSharedObject();
-			
+
 				connector.initSignal.removeAll();
 				connector.updateSignal.removeAll();
 			}
-			
+
 			// debug
-			serverInputText.text = "Exit		: "+room;
+			serverInputText.text = "Exit		: " + room;
 		}
-		
+
 		public function disconnect():void
 		{
-			//connector.removeEventListener(SDEvent.INIT, onServerInit);
-			
 			connector.initSignal.removeAll();
 			connector.updateSignal.removeAll();
-			
+
 			connector.removeEventListener(NetEvent.CONNECT, onConnect);
 			connector.removeEventListener(NetEvent.DISCONNECT, onDisConnect);
 			connector.disconnect();
-			
+
 			connector = null;
 			isConnect = false;
 		}
-		
+
 		private function onDisConnect(event:NetEvent):void
 		{
-			trace( " ^ onDisConnect");
+			trace(" ^ onDisConnect");
 			connector.removeEventListener(NetEvent.DISCONNECT, onDisConnect);
-			
+
 			// debug
 			serverInputText.text = serverInputText.defaultText;
 		}
-		
+
 		// Server
 		private function onServerInit():void
 		{
-			trace(" ^ onServerInit");
-			//connector.removeEventListener(SDEvent.INIT, onServerInit);
-			
 			// debug
 			serverInputText.text = " ^ onServerInit";
 			connectButton.label = "Disconnect";
 			isConnect = true;
-			//dispatchEvent(new SDEvent(SDEvent.COMPLETE));
-			//completeSignal.dispatch();
 		}
-		
+
 		private function onServerUpdate(data:Object):void
 		{
 			trace(" ^ onServerUpdate");
-			//dispatchEvent(event.clone());
 			// debug
 			serverInputText.text = " ^ onServerUpdate";
 		}
-		
+
 		// Client
 		// TODO : replace player event with register player data
 		public function onClientUpdate(event:PlayerEvent):void
 		{
-			trace( " ^ onClientUpdate : "+ event.data, event.data.act);
-			if(connector)
+			trace(" ^ onClientUpdate : " + event.data, event.data.act);
+			if (connector)
 			{
 				var domain:String = String(stage.loaderInfo.applicationDomain.parentDomain);
-				domain = (domain!="null")?domain:"127.0.0.1";
-				
-				var sid:String = String(event.data.ms+"@"+domain);
-				
+				domain = (domain != "null") ? domain : "127.0.0.1";
+
+				var sid:String = String(event.data.ms + "@" + domain);
+
 				/*
-				connector.send( 
-				{
-					// time stamp, TODO : ip
-					sid:sid,
-					
-					// data
-					data:event.data
-				});
-				
-				trace( " ! sid : "+sid);
-				trace( " ! data : "+event.data);
-				*/
-				
+				   connector.send(
+				   {
+				   // time stamp, TODO : ip
+				   sid:sid,
+
+				   // data
+				   data:event.data
+				   });
+
+				   trace( " ! sid : "+sid);
+				   trace( " ! data : "+event.data);
+				 */
+
 				connector.send(event.data);
-			}else{
-				trace( " ! Not Connect yet");
+			}
+			else
+			{
+				trace(" ! Not Connect yet");
 			}
 		}
-		/*
-		public function onClientRemove(event:SDEvent):void
-		{
-			trace( " ^ onClientRemove : "+ event.data);
-			if(connector)
-				connector.send(event.data);
-		}
-		*/
 	}
 }

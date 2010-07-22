@@ -7,7 +7,7 @@
 	import com.cutecoma.game.data.PlayerData;
 	import com.cutecoma.game.events.PlayerEvent;
 	import com.cutecoma.playground.core.Map;
-	import com.greensock.*;
+	import com.greensock.TweenLite;
 	import com.greensock.easing.Linear;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.system.DebugUtil;
@@ -23,8 +23,6 @@
 
 		public var dolly:Vector3D;
 		public var decoy:Vector3D;
-
-		//public var balloon:SDDialog;
 
 		public var positions:Array;
 
@@ -140,22 +138,7 @@
 			_character.completeSignal.addOnce(onCharComplete);
 
 			if (data)
-			{
-				//char.addEventListener(SDEvent.COMPLETE, onCharacterComplete);
-				//char.addEventListener(PlayerEvent.ANIMATIONS_COMPLETE, onAnimationComplete);
 				_character.create(data);
-
-				//instance.transform = Matrix3D.fromPosition(data.pos);
-				//instance.copyPosition(config.pos);
-				//dolly.copyPosition(config.pos);
-				//decoy.copyPosition(config.des);
-
-				//if (balloonClip)
-				//	balloonClip.y = character.height;
-			}
-
-			// ready to roll
-			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, config));
 		}
 
 		private function onCharComplete(model:MovieMeshContainer3D):void
@@ -166,25 +149,6 @@
 			// tell game
 			completeSignal.dispatch(this);
 		}
-
-		/*
-		   private function onCharacterComplete(event:SDEvent):void
-		   {
-		   // i'm taller?
-		   if(balloonClip)
-		   balloonClip.y = char.height;
-
-		   //trace("onCharacterComplete");
-		   }
-
-		   private function onAnimationComplete(event:*):void
-		   {
-		   //trace("onAnimationComplete#3");
-		   //balloonClip.y = 70;
-		   TweenLite.to(instance, 1, {autoAlpha:1});
-		   dispatchEvent(event.clone());
-		   }
-		 */
 
 		// ______________________________ Action ______________________________
 
@@ -197,30 +161,11 @@
 		public function walkTo(targetPosition:Position):void
 		{
 			DebugUtil.trace(" ! walkTo : " + targetPosition);
-			/*
-			if (map)
-			{
-				// Mr. map please find path for "me"
-				//map.addEventListener(SDEvent.UPDATE, onWalkTo);
-				//map.findPath(id, Position.parse(position), targetPosition);
-			}
-			else
-			{
-				// no map? wooooot? why????
-			}
-			*/
 		}
 
 		private function onWalkTo(event:Event):void
 		{
-		/*
-		   if(event.data.id == id)
-		   {
-		   trace(" ! onWalkTo : "+event.data.id);
-		   map.removeEventListener(SDEvent.UPDATE, onWalkTo);
-		   walk(event.data.positions);
-		   }
-		 */
+			
 		}
 
 		public function walk(positions:Array):void
@@ -364,15 +309,6 @@
 
 			walkCompleteSignal = null;
 			completeSignal = null;
-			
-			/*
-			if(balloon)
-			{
-				balloon.destroy();
-				balloon = null;
-			}
-			*/
-			
 			positions = null;
 			
 			super.destroy();

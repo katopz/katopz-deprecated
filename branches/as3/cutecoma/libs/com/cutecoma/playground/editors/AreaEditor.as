@@ -12,6 +12,7 @@
 	import com.cutecoma.playground.events.AreaEditorEvent;
 	import com.cutecoma.playground.events.GroundEvent;
 	import com.cutecoma.playground.events.SDMouseEvent;
+	import com.cutecoma.playground.panels.AreaPanel;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.events.EventManager;
 	import com.sleepydesign.events.RemovableEventDispatcher;
@@ -30,6 +31,8 @@
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
+	
+	import org.osflash.signals.Signal;
 
 	use namespace arcane;
 
@@ -108,7 +111,11 @@
 		private var _buildToolDialog:SDDialog;
 		private var _codeText:SDTextField;
 
-		private var areaPanel:AreaPanel;
+		private var _areaPanel:AreaPanel;
+		/**
+		 * id	Area id as String
+		 */		
+		public var changeSignal:Signal = new Signal(/*id*/String);
 
 		public function onSelectType(colorID:String):void
 		{
@@ -125,37 +132,29 @@
 					break;
 				default:
 					// wait for user select area
-					showAreaPanel(onAreaIDChange);
+					showAreaPanel();
 					break;
 			}
 		}
 
-		private function onAreaIDChange(event:AreaEditorEvent):void
+		private function onAreaIDChange(areaID:String):void
 		{
-			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
-			areaPanel.visible = false;
-			paintColor = "0x00FF" + event.areaID;
+			if(_areaPanel)
+				_areaPanel.destroy();
+			_areaPanel = null;
+			
+			paintColor = "0x00FF" + areaID;
+			
+			changeSignal.dispatch(areaID);
 		}
 
-		public function showAreaPanel(callback:Function):void
+		public function showAreaPanel():void
 		{
-			if (!areaPanel)
-			{
-				LoaderUtil.loadAsset("AreaPanel.swf", function onAreaPanelLoad(event:Event):void
-					{
-						if (event.type != "complete")
-							return;
-
-						areaPanel = event.target.content as AreaPanel;
-						_engine3D.systemLayer.addChild(areaPanel);
-						EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
-					});
-			}
-			else
-			{
-				areaPanel.visible = true;
-				EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
-			}
+			if (!_areaPanel)
+				_engine3D.systemLayer.addChild(_areaPanel = new AreaPanel());
+			
+			_areaPanel.changeSignal.addOnce(onAreaIDChange);
+			_areaPanel.visible = true;
 		}
 
 		public function setupBackground():void
@@ -232,7 +231,7 @@
 		private function onKeyIsPress(event:Keyboard3DEvent):void
 		{
 			// void while select area
-			if (areaPanel && areaPanel.visible)
+			if (_areaPanel && _areaPanel.visible)
 				return;
 
 			var _camera3D:Camera3D = _engine3D.view3D.camera;
@@ -255,7 +254,7 @@
 		private function onMouseIsDrag(event:SDMouseEvent):void
 		{
 			// void while select area
-			if (areaPanel && areaPanel.visible)
+			if (_areaPanel && _areaPanel.visible)
 				return;
 
 			if (!Keyboard3D.isCTRL)
@@ -273,7 +272,7 @@
 		private function onMouseWheel(event:MouseEvent):void
 		{
 			// void while select area
-			if (areaPanel && areaPanel.visible)
+			if (_areaPanel && _areaPanel.visible)
 				return;
 
 			zoom(event.delta * (event.shiftKey ? 10 : 1) / 5);
@@ -299,7 +298,7 @@
 		private function onMouseMove(event:MouseEvent):void
 		{
 			// void while select area
-			if (areaPanel && areaPanel.visible)
+			if (_areaPanel && _areaPanel.visible)
 				return;
 
 			if (!event.relatedObject)
@@ -321,7 +320,7 @@
 
 		private function onGroundClick(event:MouseEvent, position:Vector3D, face:Face, point:Point):void
 		{
-			if (areaPanel && areaPanel.visible)
+			if (_areaPanel && _areaPanel.visible)
 				return;
 
 			// camera mode

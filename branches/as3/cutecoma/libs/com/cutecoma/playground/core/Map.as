@@ -120,7 +120,6 @@ package com.cutecoma.playground.core
 			trace(" ! onPathComplete");
 
 			// player
-			//dispatchEvent(new SDEvent(SDEvent.UPDATE, { id: event.data.id, paths: event.data.paths, positions: event.data.positions }));
 			completeSignal.dispatch(id, paths);
 		}
 
@@ -131,9 +130,6 @@ package com.cutecoma.playground.core
 			Map.factorX = _areaData.width;
 			Map.factorZ = _areaData.height;
 
-			//if(!_areaData.map)
-			//	data = new MapData(_areaData.map.nodes, _areaData.map.width, _areaData.map.scaleX, _areaData.map.scaleZ);
-			//else
 			_data = _areaData.mapData;
 
 			updateBitmapData(data.bitmapData);
@@ -169,10 +165,9 @@ package com.cutecoma.playground.core
 				AStar3D.completeSignal.removeAll();
 			}
 
-			_pathFinder = new AStar3D(); //engine3D.scene);
+			_pathFinder = new AStar3D();
 			_pathFinder.create(bitmapData, factorX, 0, factorZ, 1, 0, 1);
 			AStar3D.completeSignal.add(onPathComplete);
-			//AStar3D.errorSignal.add(onPathError);
 		}
 		
 		public function draw():void
