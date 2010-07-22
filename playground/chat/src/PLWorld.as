@@ -16,6 +16,7 @@ package
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import flash.net.registerClassAlias;
+	import com.cutecoma.playground.panels.AreaPanel;
 
 	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="800", height="480")]
 	
@@ -134,7 +135,7 @@ package
 		private function initMenu():void
 		{
 			addChild(_dialog = new SDDialog(<question><![CDATA[Welcome! What you want to do?]]>
-					<answer src="as:onUserSelect('edit-character')"><![CDATA[Edit Character.]]></answer>
+					<answer src="as:onUserSelect('select-character')"><![CDATA[Select Character.]]></answer>
 					<answer src="as:onUserSelect('enter-area')"><![CDATA[Enter Area]]></answer>
 					<answer src="as:onUserSelect('edit-area')"><![CDATA[Edit Area]]>
 					</answer></question>, this, "center"));
@@ -142,52 +143,53 @@ package
 
 		public function onUserSelect(action:String):void
 		{
-			_dialog.destroy();
+			if(_dialog)
+				_dialog.destroy();
 			_dialog = null;
 
 			switch (action)
 			{
-				case "enter-area":
-					showAreaPanel(onAreaIDChange);
+				case "select-character":
+					showCharacterPanel();
 					break;
-				case "edit-character":
-
+				case "enter-area":
+					showAreaPanel();
+					break;
+				case "edit-area":
+			
 					break;
 			}
 		}
 
-		private function showAreaPanel(callback:Function):void
+		private function showCharacterPanel():void
+		{
+			
+		}
+		
+		private function showAreaPanel():void
 		{
 			if (!_areaPanel)
-			{
-				LoaderUtil.loadAsset("AreaPanel.swf", function onAreaPanelLoad(event:Event):void
-					{
-						if (event.type != "complete")
-							return;
-
-						_areaPanel = event.target.content as AreaPanel;
-						systemLayer.addChild(_areaPanel);
-						EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
-					});
-			}
-			else
-			{
-				_areaPanel.visible = true;
-				EventManager.addEventListener(AreaEditorEvent.AREA_ID_CHANGE, callback);
-			}
+				addChild(_areaPanel = new AreaPanel());
+			
+			_areaPanel.changeSignal.addOnce(onAreaIDChange);
+			_areaPanel.visible = true;
 		}
 
-		private function onAreaIDChange(event:AreaEditorEvent):void
+		private function onAreaIDChange(areaID:String):void
 		{
-			_selectAreaID = event.areaID;
+			if(_areaPanel)
+				_areaPanel.destroy();
+			_areaPanel = null;
+			
+			_selectAreaID = areaID;
 
-			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
-			_dialog.destroy();
+			if(_dialog)
+				_dialog.destroy();
 			_dialog = null;
 			
 			_world.completeSignal.addOnce(onWolrdComplete);
 			_world.areaCompleteSignal.add(onGotoArea);
-			_world.gotoAreaID(event.areaID);
+			_world.gotoAreaID(_selectAreaID);
 		}
 
 		public function onWolrdComplete(areaData:AreaData):void
