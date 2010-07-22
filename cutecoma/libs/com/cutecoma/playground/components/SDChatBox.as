@@ -4,16 +4,16 @@ package com.cutecoma.playground.components
 	import com.sleepydesign.components.SDComponent;
 	import com.sleepydesign.components.SDTextInput;
 	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class SDChatBox extends SDComponent
 	{
 		private var chatInputText:SDTextInput;
-		
+
 		public var updateSignal:Signal = new Signal(Object);
 
 		public function SDChatBox()
@@ -45,7 +45,6 @@ package com.cutecoma.playground.components
 		private function submit():void
 		{
 			DebugUtil.trace(" * Submit");
-			//dispatchEvent(new SDEvent(SDEvent.UPDATE, {msg: chatInputText.text}));
 			updateSignal.dispatch({msg: chatInputText.text});
 		}
 	}

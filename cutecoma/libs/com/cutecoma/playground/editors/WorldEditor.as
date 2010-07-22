@@ -57,7 +57,8 @@ package com.cutecoma.playground.editors
 					break;
 
 				case "Change ID":
-					areaEditor.showAreaPanel(onAreaIDChange);
+					areaEditor.showAreaPanel();
+					areaEditor.changeSignal.addOnce(onAreaIDChange);
 					break;
 
 				case "Change Background":
@@ -86,10 +87,10 @@ package com.cutecoma.playground.editors
 			}
 		}
 
-		private function onAreaIDChange(event:AreaEditorEvent):void
+		private function onAreaIDChange(areaID:String):void
 		{
-			EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
-			area.data.id = event.areaID;
+			//EventManager.removeEventListener(AreaEditorEvent.AREA_ID_CHANGE, onAreaIDChange);
+			area.data.id = areaID;
 		}
 
 		private function onImportBitmap(event:Event):void

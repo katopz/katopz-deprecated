@@ -135,13 +135,11 @@ package com.cutecoma.playground.net
 			{
 				DebugUtil.trace(" ! ServerUpdate		: " + data);
 				//ObjectUtil.print(data);
-				//dispatchEvent(new SDEvent(SDEvent.UPDATE, data));
 				updateSignal.dispatch(data);
 			}
 			else
 			{
 				DebugUtil.trace(" ! ServerInit		: " + event);
-				//dispatchEvent(new SDEvent(SDEvent.INIT, data));
 				initSignal.dispatch();
 			}
 		}

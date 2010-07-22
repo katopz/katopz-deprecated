@@ -416,15 +416,12 @@
 				positions[i] = new Position(positions[i].x, positions[i].y, positions[i].z);
 			}
 
-			//dispatchEvent(new SDEvent(SDEvent.COMPLETE, {id: id, positions: positions, segmentX: segmentX, segmentZ: segmentZ}));
-
 			completeSignal.dispatch(id, positions);//id, positions, segmentX, segmentY, segmentZ);
 		}
 
 		private function onError(id:String):void
 		{
 			DebugUtil.trace(" * Error Occur");
-			//dispatchEvent(new SDEvent(SDEvent.ERROR, {id: id}));
 			errorSignal.dispatch(id);
 		}
 
