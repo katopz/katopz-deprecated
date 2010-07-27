@@ -16,6 +16,8 @@ package com.sleepydesign.skins
 
 	public class Preloader extends SDSprite
 	{
+		public static var backgroundColor:Number = 0xFFFFFF;
+		
 		private var _loader:Sprite;
 		private var _bg:Sprite;
 		private var _containter:DisplayObjectContainer;
@@ -77,7 +79,7 @@ package com.sleepydesign.skins
 			var _y0:Number = Number((_customSize.height - _stage.stageHeight) / 2);
 
 			_bg.graphics.clear();
-			_bg.graphics.beginFill(0x000000, 0.75);
+			_bg.graphics.beginFill(backgroundColor, 0.75);
 			//_bg.graphics.drawRect(-_stage.stageWidth/2-_stageWidth/2, 0, _stage.stageWidth+_stageWidth, _stage.stageHeight);
 			_bg.graphics.drawRect(0, 0, _stage.stageWidth, _stage.stageHeight);
 			_bg.graphics.endFill();
