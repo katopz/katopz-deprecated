@@ -7,6 +7,12 @@ package com.sleepydesign.net
 
 	public class URLUtil
 	{
+		public static function getPopup(url:String, windowName:String = "", option:String = "width=320,height=240,toolbar=no,scrollbars=no"):void
+		{
+			var jsCommand:String = "javascript:window.open('" + url + "','" + windowName + "','" + option + "');void(0);";
+			getURL(jsCommand, "_self");
+		}
+
 		public static function getURL(url:String, window:String = "_blank"):void
 		{
 			if (url.indexOf("javascript:") != 0)
@@ -31,7 +37,7 @@ package com.sleepydesign.net
 		{
 			return (url.indexOf("http://") == 0 || url.indexOf("javascript:") == 0)
 		}
-		
+
 		public static function killCache(value:String, isNeed:Boolean = false):String
 		{
 			var result:String = "";
