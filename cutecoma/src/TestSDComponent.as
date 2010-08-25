@@ -1,14 +1,13 @@
 package
 {
-	import com.sleepydesign.components.SDBalloon;
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDDialog;
-	import com.sleepydesign.components.SDInputText;
 	import com.sleepydesign.components.SDScrollPane;
-	import com.sleepydesign.core.SDSprite;
-	import com.sleepydesign.draw.SDSquare;
+	import com.sleepydesign.components.SDSpeechBalloon;
+	import com.sleepydesign.components.SDTextInput;
+	import com.sleepydesign.display.SDSprite;
+	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.text.SDTextField;
-	import com.sleepydesign.utils.SystemUtil;
 	
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
@@ -37,15 +36,11 @@ package
 			// create content
 			var content:SDSprite = new SDSprite();
 
-			// SDSquare
-			var _SDSquare:SDSquare = new SDSquare(100, 100, 0xFF0000);
-			content.addChild(_SDSquare);
-
-			// SDInputText
-			var _SDInputText:SDInputText = new SDInputText("<b>t</b>estttttttttttttttttttttttttttttttttty");
-			_SDInputText.label.autoSize = "left";
-			_SDInputText.y = 10;
-			content.addChild(_SDInputText);
+			// SDTextInput
+			var _SDTextInput:SDTextInput = new SDTextInput("<b>t</b>estttttttttttttttttttttttttttttttttty");
+			_SDTextInput.label.autoSize = "left";
+			_SDTextInput.y = 10;
+			content.addChild(_SDTextInput);
 
 			// SDButton
 			var _SDButton:SDButton = new SDButton("test");
@@ -53,11 +48,11 @@ package
 			_SDButton.y = 30;
 			content.addChild(_SDButton);
 
-			// SDBalloon
-			var _SDBalloon:SDBalloon = new SDBalloon("SDBalloon test");
-			_SDBalloon.x = 100;
-			_SDBalloon.y = 100;
-			addChild(_SDBalloon);
+			// SDSpeechBalloon
+			var _SDSpeechBalloon:SDSpeechBalloon = new SDSpeechBalloon("SDSpeechBalloon test");
+			_SDSpeechBalloon.x = 100;
+			_SDSpeechBalloon.y = 100;
+			addChild(_SDSpeechBalloon);
 
 			// SDDialog
 			var _SDDialog:SDDialog = new SDDialog(
