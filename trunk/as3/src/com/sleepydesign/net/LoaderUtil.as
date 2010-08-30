@@ -48,7 +48,9 @@ package com.sleepydesign.net
 		{
 			var _loader:URLLoader = new URLLoader();
 			_loader.dataFormat = URLLoaderDataFormat.BINARY;
-			_loader.addEventListener(Event.COMPLETE, eventHandler);
+			
+			if(eventHandler is Function)
+				_loader.addEventListener(Event.COMPLETE, eventHandler);
 
 			var request:URLRequest = new URLRequest(uri);
 			request.contentType = contentType;
@@ -58,7 +60,9 @@ package com.sleepydesign.net
 			// gc
 			var _removeEventListeners:Function = function():void
 				{
-					_loader.removeEventListener(Event.COMPLETE, eventHandler);
+					if(eventHandler is Function)	
+						_loader.removeEventListener(Event.COMPLETE, eventHandler);
+					
 					if (loaderClip && hideLoader is Function)
 						hideLoader();
 
@@ -320,11 +324,14 @@ package com.sleepydesign.net
 			_loader.addEventListener(Event.COMPLETE, _removeEventListeners);
 
 			// 404
-			var _404:Function = function():void
+			var _404:Function = function(event:Event):void
 				{
 					_loader.removeEventListener(IOErrorEvent.IO_ERROR, _404);
 					if (useDebug)
-						trace(" ! Not found : " + uri);
+					{
+						trace(" ! Error : " + event);
+						trace(" ! Not found? : " + uri);
+					}
 					_removeEventListeners();
 				}
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, _404);
@@ -368,6 +375,18 @@ package com.sleepydesign.net
 			return load(uri, eventHandler, type, _urlRequest);
 		}
 
+		public static function requestText(uri:String, data:*, eventHandler:Function = null, method:String = URLRequestMethod.POST):URLLoader
+		{
+			return request(uri, data, function(event:Event):void
+				{
+					if (event.type == "complete")
+						event.target.data = String(event.target.data);
+
+					if (eventHandler is Function)
+						eventHandler(event);
+				}, URLLoaderDataFormat.TEXT, method) as URLLoader;
+		}
+		
 		public static function requestVars(uri:String, data:*, eventHandler:Function = null, method:String = URLRequestMethod.POST):URLLoader
 		{
 			return request(uri, data, function(event:Event):void
