@@ -127,7 +127,7 @@ package com.sleepydesign.system
 			}
 		}
 
-		public static function callJS(functionName:String, argument:* = null):Boolean
+		public static function callJS(functionName:String, argument1:* = null, argument2:* = null, argument3:* = null):Boolean
 		{
 			var isDone:Boolean = false;
 			if (isExternal())
@@ -136,7 +136,15 @@ package com.sleepydesign.system
 
 				try
 				{
-					ExternalInterface.call(functionName, argument);
+					if(argument3)
+						ExternalInterface.call(functionName, argument1, argument2, argument3 );
+					else if(argument2)
+						ExternalInterface.call(functionName, argument1, argument2);
+					else if(argument1)
+						ExternalInterface.call(functionName, argument1);
+					else
+						ExternalInterface.call(functionName);
+					
 					isDone = true;
 				}
 				catch (e:Error)
