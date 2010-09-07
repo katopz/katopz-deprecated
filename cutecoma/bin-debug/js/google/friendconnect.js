@@ -108,8 +108,6 @@
 		
 	function saveData(data)
 	{
-		alert(data);
-		
 		// debug
 		setDataContent("saveData");
 		
