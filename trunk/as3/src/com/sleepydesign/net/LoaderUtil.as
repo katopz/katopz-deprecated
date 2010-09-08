@@ -374,18 +374,6 @@ package com.sleepydesign.net
 
 			return load(uri, eventHandler, type, _urlRequest);
 		}
-
-		public static function requestText(uri:String, data:*, eventHandler:Function = null, method:String = URLRequestMethod.POST):URLLoader
-		{
-			return request(uri, data, function(event:Event):void
-				{
-					if (event.type == "complete")
-						event.target.data = String(event.target.data);
-
-					if (eventHandler is Function)
-						eventHandler(event);
-				}, URLLoaderDataFormat.TEXT, method) as URLLoader;
-		}
 		
 		public static function requestVars(uri:String, data:*, eventHandler:Function = null, method:String = URLRequestMethod.POST):URLLoader
 		{
