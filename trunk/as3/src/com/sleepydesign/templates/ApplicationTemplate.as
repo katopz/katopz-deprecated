@@ -41,6 +41,18 @@ package com.sleepydesign.templates
 		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
 
 		protected var _screenRectangle:Rectangle;
+
+		public function get screenRectangle():Rectangle
+		{
+			return _screenRectangle;
+		}
+		
+		public static var _instance:ApplicationTemplate;
+		
+		public static function getInstance():ApplicationTemplate
+		{
+			return _instance;
+		}
 		
 		//nav
 		protected var _site:SiteTool;
@@ -51,6 +63,9 @@ package com.sleepydesign.templates
 
 		public function ApplicationTemplate()
 		{
+			if(!_instance)
+				_instance = this;
+			
 			super();
 			
 			_configURI = "app.xml";
