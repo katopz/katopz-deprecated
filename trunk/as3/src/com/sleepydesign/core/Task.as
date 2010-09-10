@@ -2,25 +2,43 @@ package com.sleepydesign.core
 {
 	import org.osflash.signals.Signal;
 
-	public class SDCommand implements ICommand, IDestroyable
+	public class Task implements ITask, IDestroyable
 	{
 		protected var _isDestroyed:Boolean;
 		protected var _completeSignal:Signal = new Signal();
+		
+		protected var task:Function;
+		protected var callBack:Function;
 
+		public function Task(task:Function = null, callBack:Function = null)
+		{
+			if(task is Function)
+				this.task = task;
+			
+			if(callBack is Function)
+				this.callBack = callBack;
+		}
+		
 		public function get completeSignal():Signal
 		{
 			return _completeSignal;
 		}
 
-		public function doCommand():void
+		public function doTask():void
 		{
-			command();
+			run();
+			
+			if(callBack is Function)
+				callBack();
+			
 			_completeSignal.dispatch();
 		}
 
-		public function command():void
+		public function run():void
 		{
 			// override me
+			if(task is Function)
+				task();
 		}
 		
 		public function get destroyed():Boolean
@@ -34,6 +52,9 @@ package com.sleepydesign.core
 			
 			_completeSignal.removeAll();
 			_completeSignal = null;
+			
+			task = null;
+			callBack = null;
 		}
 	}
 }

@@ -10,10 +10,20 @@ package com.sleepydesign.templates
 
 	public class WebTemplate extends ApplicationTemplate
 	{
+		protected var _flashvars:Object;
+		
+		public function get flashvars():Object
+		{
+			return _flashvars;
+		}
+		
 		public function WebTemplate()
 		{
 			if (loaderInfo && loaderInfo.parameters)
+			{
 				DataProxy.setData("FLASH_VARS", loaderInfo.parameters);
+				_flashvars = loaderInfo.parameters;
+			}
 			
 			super();
 			_configURI = "site.xml";

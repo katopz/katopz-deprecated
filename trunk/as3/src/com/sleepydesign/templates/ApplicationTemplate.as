@@ -36,6 +36,11 @@ package com.sleepydesign.templates
 
 		protected var _contentLayer:SDSprite;
 
+		public function get contentLayer():SDSprite
+		{
+			return _contentLayer;
+		}
+
 		// app
 		protected var _stageWidth:Number = stage ? stage.stageWidth : NaN;
 		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
