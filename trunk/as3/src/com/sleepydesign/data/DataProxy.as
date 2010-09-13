@@ -5,6 +5,8 @@ package com.sleepydesign.data
 
 	public class DataProxy
 	{
+		public static var FLASH_VARS:String = "FLASH_VARS";
+		
 		private static var _datas:Dictionary;
 
 		public static function setData(id:String, data:*):*
