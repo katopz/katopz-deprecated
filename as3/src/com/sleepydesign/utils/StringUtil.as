@@ -2,6 +2,17 @@ package com.sleepydesign.utils
 {
 	public class StringUtil
 	{
+		public static function createLink(url:String, text:String, color:String = "#666666"):String
+		{
+			var str:String = "";
+			str += "<font color='" + color + "'>";
+			str += "<u>";
+			str += '<a href="event:' + url + '">' + text + "</a>";
+			str += "</u>";
+			str += "</font>";
+			return str;
+		}
+		
 		public static function replace(source:String, findString:String, replaceString:String, pattern:String = "g"):String
 		{
 			return source.split(findString).join(replaceString); 
