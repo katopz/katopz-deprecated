@@ -1,7 +1,7 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.events.TransformEvent;
-	
+
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
@@ -10,6 +10,8 @@ package com.sleepydesign.components
 	{
 		private var _scrollTarget:DisplayObject;
 		public var lineScrollSize:Number = 10;
+
+		public var enableHorizonWheel:Boolean;
 
 		public function SDScrollBar(orientation:String = SDSlider.VERTICAL)
 		{
@@ -20,12 +22,15 @@ package com.sleepydesign.components
 		{
 			if (!_scrollTarget || !_scrollTarget.scrollRect)
 				return;
-				
+
 			//var _contentRect:Rectangle = _scrollTarget.getRect(_scrollTarget.parent);
 			var _content:DisplayObject;
-			try{
+			try
+			{
 				_content = _scrollTarget["content"];
-			}catch(e:*){
+			}
+			catch (e:*)
+			{
 				_content = _scrollTarget;
 			}
 			var _contentRect:Rectangle = _content.getRect(_content.parent);
@@ -56,12 +61,12 @@ package com.sleepydesign.components
 				// full bar -> disable?
 				visible = (_scrollTarget.scrollRect.height < _contentRect.height);
 			}
-			
+
 			// draw
 			super.draw();
 		}
 
-		private function _onResize(event:TransformEvent):void
+		private function onResize(event:TransformEvent):void
 		{
 			draw();
 		}
@@ -70,9 +75,9 @@ package com.sleepydesign.components
 		{
 			if (!_scrollTarget || !_scrollTarget.scrollRect)
 				return true;
-				
+
 			var _contentRect:Rectangle = _scrollTarget.getRect(_scrollTarget.parent);
-			
+
 			if (_orientation == HORIZONTAL)
 				return Boolean(_scrollTarget.scrollRect.width < _contentRect.width);
 			else
@@ -83,8 +88,8 @@ package com.sleepydesign.components
 		{
 			if (_orientation == HORIZONTAL)
 			{
-				// not scroll content for HORIZONTAL
-				if (event.currentTarget == this)
+				// not scroll content for HORIZONTAL if VERTICAL not exist
+				if (event.currentTarget == this || enableHorizonWheel)
 					scrollPosition -= int(event.delta * lineScrollSize);
 			}
 			else
@@ -94,21 +99,24 @@ package com.sleepydesign.components
 		}
 
 		override protected function positionHandle():void
-		{			
+		{
 			super.positionHandle();
-			
+
 			if (!_scrollTarget || !_scrollTarget.scrollRect)
 				return;
-			
+
 			var gap:Number;
 			var _content:DisplayObject;
-			try{
+			try
+			{
 				_content = _scrollTarget["content"];
-			}catch(e:*){
+			}
+			catch (e:*)
+			{
 				_content = _scrollTarget;
 			}
 			var _contentRect:Rectangle = _content.getRect(_content.parent);
-			
+
 			if (_orientation == HORIZONTAL)
 			{
 				gap = Math.max(0, _contentRect.width - _scrollTarget.scrollRect.width);
@@ -120,7 +128,7 @@ package com.sleepydesign.components
 				_content.y = -_scrollPosition * gap / 100;
 			}
 		}
-		
+
 		public function get scrollTarget():DisplayObject
 		{
 			return _scrollTarget;
@@ -129,7 +137,7 @@ package com.sleepydesign.components
 		public function set scrollTarget(value:DisplayObject):void
 		{
 			// Remove event
-			value.removeEventListener(TransformEvent.RESIZE, _onResize);
+			value.removeEventListener(TransformEvent.RESIZE, onResize);
 			value.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
@@ -140,7 +148,7 @@ package com.sleepydesign.components
 			draw();
 
 			// Add event
-			value.addEventListener(TransformEvent.RESIZE, _onResize, false, 0, true);
+			value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
 			value.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 			addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 		}
