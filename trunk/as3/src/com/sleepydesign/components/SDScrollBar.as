@@ -22,7 +22,12 @@ package com.sleepydesign.components
 				return;
 				
 			//var _contentRect:Rectangle = _scrollTarget.getRect(_scrollTarget.parent);
-			var _content:DisplayObject = _scrollTarget["content"] || _scrollTarget;
+			var _content:DisplayObject;
+			try{
+				_content = _scrollTarget["content"];
+			}catch(e:*){
+				_content = _scrollTarget;
+			}
 			var _contentRect:Rectangle = _content.getRect(_content.parent);
 
 			if (_orientation == HORIZONTAL)
@@ -96,7 +101,12 @@ package com.sleepydesign.components
 				return;
 			
 			var gap:Number;
-			var _content:DisplayObject = _scrollTarget["content"] || _scrollTarget;
+			var _content:DisplayObject;
+			try{
+				_content = _scrollTarget["content"];
+			}catch(e:*){
+				_content = _scrollTarget;
+			}
 			var _contentRect:Rectangle = _content.getRect(_content.parent);
 			
 			if (_orientation == HORIZONTAL)
