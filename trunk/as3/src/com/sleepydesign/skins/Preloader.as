@@ -53,27 +53,27 @@ package com.sleepydesign.skins
 			LoaderUtil.showLoader = function():void
 			{
 				mouseEnabled = true;
-				draw();
+				create();
 				TweenLite.killTweensOf(LoaderUtil.loaderClip);
 				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha: 1});
-				DebugUtil.trace( " ! Show loader");
+				//DebugUtil.trace( " ! Show loader");
 			};
 
 			LoaderUtil.hideLoader = function():void
 			{
 				mouseEnabled = false;
-				draw();
+				create();
 				TweenLite.killTweensOf(LoaderUtil.loaderClip);
 				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha: 0});
-				DebugUtil.trace( " ! Hide loader");
+				//DebugUtil.trace( " ! Hide loader");
 			};
 
 			// resize
 			_stage.addEventListener(Event.RESIZE, onResize, false, 0, true);
-			draw();
+			create();
 		}
 
-		private function draw():void
+		private function create():void
 		{
 			var _x0:Number = Number((_customSize.width - _stage.stageWidth) / 2);
 			var _y0:Number = Number((_customSize.height - _stage.stageHeight) / 2);
@@ -89,7 +89,7 @@ package com.sleepydesign.skins
 
 		private function onResize(event:Event):void
 		{
-			draw();
+			create();
 		}
 
 		override public function destroy():void
@@ -97,10 +97,17 @@ package com.sleepydesign.skins
 			_stage.removeEventListener(Event.RESIZE, onResize);
 
 			if (_loader)
+			{
+				TweenLite.killTweensOf(_loader);
+				_loader.visible = false;
 				_loader.parent.removeChild(_loader);
+			}
 
 			if (_bg)
+			{
+				_bg.graphics.clear();
 				_bg.parent.removeChild(_bg);
+			}
 
 			if (LoaderUtil.loaderClip == _loader)
 				LoaderUtil.loaderClip = null;
