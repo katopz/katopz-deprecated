@@ -53,7 +53,8 @@ package com.sleepydesign.components
 			_track.graphics.beginFill(SDStyle.BACKGROUND);
 			_track.graphics.drawRect(0, 0, _width, _height);
 			_track.graphics.endFill();
-
+			
+			_track.removeEventListener(MouseEvent.MOUSE_DOWN, onTrackClick);
 			_track.addEventListener(MouseEvent.MOUSE_DOWN, onTrackClick, false, 0, true);
 		}
 
