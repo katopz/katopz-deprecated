@@ -60,7 +60,7 @@ package com.sleepydesign.display
 					bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
 				}
 
-				bitmapData.draw(asset, matrix, asset.transform.colorTransform);
+				bitmapData.draw(asset, matrix, asset.transform.colorTransform, null, rectangle);
 
 				return bitmapData;
 			}
