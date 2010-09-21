@@ -573,7 +573,7 @@ package com.adobe.images
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */		
-		public function JPGEncoder(quality:Number = 50)
+		public function JPGEncoder(quality:Number = 75)
 		{
 			if (quality <= 0) {
 				quality = 1;
