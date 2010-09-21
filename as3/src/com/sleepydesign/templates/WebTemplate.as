@@ -21,7 +21,7 @@ package com.sleepydesign.templates
 		{
 			if (loaderInfo && loaderInfo.parameters)
 			{
-				DataProxy.setData("FLASH_VARS", loaderInfo.parameters);
+				DataProxy.setData(DataProxy.FLASH_VARS, loaderInfo.parameters);
 				_flashvars = loaderInfo.parameters;
 			}
 			

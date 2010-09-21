@@ -49,8 +49,8 @@ package com.sleepydesign.components
 		protected function drawTrack():void
 		{
 			_track.graphics.clear();
-			_track.graphics.lineStyle(.25, 0x000000, 1);
-			_track.graphics.beginFill(SDStyle.BACKGROUND);
+			_track.graphics.lineStyle();//.25, 0x000000, 1);
+			_track.graphics.beginFill(0x000000, .5);
 			_track.graphics.drawRect(0, 0, _width, _height);
 			_track.graphics.endFill();
 			
@@ -63,7 +63,7 @@ package com.sleepydesign.components
 			_handle.graphics.clear();
 			_scrollSize = size;
 
-			_handle.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA);
+			_handle.graphics.lineStyle();//SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA);
 			_handle.graphics.beginFill(SDStyle.BUTTON_COLOR);
 
 			if (_orientation == HORIZONTAL)

@@ -34,6 +34,13 @@ package com.sleepydesign.templates
 			return _systemLayer;
 		}
 
+		protected var _popupLayer:SDSprite;
+
+		public function get popupLayer():SDSprite
+		{
+			return _popupLayer;
+		}
+		
 		protected var _contentLayer:SDSprite;
 
 		public function get contentLayer():SDSprite
@@ -98,6 +105,7 @@ package com.sleepydesign.templates
 		protected function initLayer():void
 		{
 			addChild(_contentLayer = new SDSprite).name = "$content";
+			addChild(_popupLayer = new SDSprite).name = "$lightbox";
 			addChild(_systemLayer = new SDSprite).name = "$system";
 		}
 
