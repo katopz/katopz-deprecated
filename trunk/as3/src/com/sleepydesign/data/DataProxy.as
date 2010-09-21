@@ -2,12 +2,16 @@ package com.sleepydesign.data
 {
 	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
+	
+	import org.osflash.signals.Signal;
 
 	public class DataProxy
 	{
 		public static var FLASH_VARS:String = "FLASH_VARS";
 		
 		private static var _datas:Dictionary;
+		
+		public static var dataSignal:Signal = new Signal(String, Object);
 
 		public static function setData(id:String, data:*):*
 		{
@@ -16,6 +20,8 @@ package com.sleepydesign.data
 
 			_datas[id] = data;
 
+			dataSignal.dispatch(id, data);
+			
 			return data;
 		}
 

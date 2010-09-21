@@ -57,10 +57,11 @@ package com.sleepydesign.display
 				}
 				else
 				{
-					bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
+					//bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
+					bitmapData = new BitmapData(rectangle.width, rectangle.height, true, 0x00000000);
 				}
 
-				bitmapData.draw(asset, matrix, asset.transform.colorTransform, null, rectangle);
+				bitmapData.draw(asset, matrix, asset.transform.colorTransform);//, null, rectangle, true);
 
 				return bitmapData;
 			}
