@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.3
- * DATE: 2010-08-09
+ * VERSION: 1.47
+ * DATE: 2010-09-18
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -41,7 +41,7 @@ package com.greensock.loading.core {
  */	
 	public class LoaderCore extends EventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.3;
+		public static const version:Number = 1.47;
 		
 		/** @private **/
 		protected static var _loaderCount:uint = 0;
@@ -112,7 +112,7 @@ package com.greensock.loading.core {
 		 */
 		public function LoaderCore(vars:Object=null) {
 			this.vars = (vars != null) ? vars : {};
-			this.name = (this.vars.name != undefined && this.vars.name != "") ? this.vars.name : "loader" + (_loaderCount++);
+			this.name = (this.vars.name != undefined && String(this.vars.name) != "") ? this.vars.name : "loader" + (_loaderCount++);
 			_cachedBytesLoaded = 0;
 			_cachedBytesTotal = (uint(this.vars.estimatedBytes) != 0) ? uint(this.vars.estimatedBytes) : LoaderMax.defaultEstimatedBytes;
 			this.autoDispose = Boolean(this.vars.autoDispose == true);
@@ -291,7 +291,12 @@ package com.greensock.loading.core {
 		 * So even if your LoaderMax hasn't begun loading yet, you could <code>prioritize(false)</code> 
 		 * a loader and it will rise to the top of all LoaderMax instances to which it belongs, but not 
 		 * start loading yet. If the goal is to load something immediately, you can just use the 
-		 * <code>load()</code> method.
+		 * <code>load()</code> method.<br /><br />
+		 * 
+		 * You may use the static <code>LoaderMax.prioritize()</code> method instead and simply pass 
+		 * the name or url of the loader as the first parameter like:<br /><br /><code>
+		 * 
+		 * LoaderMax.prioritize("myLoaderName", true);</code><br /><br />
 		 * 
 		 * @param loadNow If <code>true</code> (the default), the loader will start loading immediately (otherwise it is simply placed at the top the queue in any LoaderMax instances to which it belongs).
 		 * @see #load()
