@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.46
- * DATE: 2010-09-15
+ * VERSION: 1.472
+ * DATE: 2010-09-22
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -106,6 +106,7 @@ LoaderMax.contentDisplayClass = FlexContentDisplay;
 		protected function _update():void {
 			var left:Number = (_centerRegistration && _fitWidth > 0) ? _fitWidth / -2 : 0;
 			var top:Number = (_centerRegistration && _fitHeight > 0) ? _fitHeight / -2 : 0;
+			graphics.clear();
 			if (_fitWidth > 0 && _fitHeight > 0) {
 				graphics.beginFill(_bgColor, _bgAlpha);
 				graphics.drawRect(left, top, _fitWidth, _fitHeight);

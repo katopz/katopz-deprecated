@@ -1,5 +1,5 @@
 /**
- * VERSION: 1.4
+ * VERSION: 1.47
  * DATE: 2010-09-14
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
@@ -223,6 +223,8 @@ package com.greensock.loading {
 		protected var _hasRSL:Boolean;
 		/** @private **/
 		protected var _rslAddedCount:uint;
+		/** @private In certain browsers, there's a bug in the Flash Player that incorrectly reports the Loader's bytesLoaded as never reaching bytesTotal even AFTER the Loader completes (only when gzip is enabled on the server). This helps us get around that bug. **/
+		protected var _loaderCompleted:Boolean;
 		
 		/**
 		 * Constructor
@@ -319,6 +321,12 @@ package com.greensock.loading {
 		}
 		
 		/** @private **/
+		override protected function _refreshLoader(unloadContent:Boolean=true):void {
+			super._refreshLoader(unloadContent);
+			_loaderCompleted = false;
+		}
+		
+		/** @private **/
 		protected function _changeQueueListeners(add:Boolean):void {
 			if (_queue != null) {
 				var p:String;
@@ -379,7 +387,7 @@ package com.greensock.loading {
 			_cacheIsDirty = true;
 			if (scrubLevel >= 1) {
 				_queue = null;
-				_initted = false;
+				_initted = _loaderCompleted = false;
 				super._dump(scrubLevel, newStatus, suppressEvents);
 			} else {
 				var content:* = _content;
@@ -422,7 +430,7 @@ package com.greensock.loading {
 		override protected function _calculateProgress():void { 
 			_cachedBytesLoaded = (_stealthMode) ? 0 : _loader.contentLoaderInfo.bytesLoaded;
 			_cachedBytesTotal =  _loader.contentLoaderInfo.bytesTotal;
-			if (_cachedBytesTotal < _cachedBytesLoaded || _initted) {
+			if (_cachedBytesTotal < _cachedBytesLoaded || _loaderCompleted) {
 				//In Chrome when the file exceeds a certain size and gzip is enabled on the server, Adobe's Loader reports bytesTotal as 0!!!
 				//and in Firefox, if gzip was enabled, on very small files the Loader's bytesLoaded would never quite reach the bytesTotal even after the COMPLETE event fired!
 				_cachedBytesTotal = _cachedBytesLoaded; 
@@ -645,6 +653,7 @@ package com.greensock.loading {
 		
 		/** @private **/
 		override protected function _completeHandler(event:Event=null):void {
+			_loaderCompleted = true;
 			_checkRequiredLoaders();
 			_calculateProgress();
 			if (this.progress == 1) {

@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.3
- * DATE: 2010-08-09
+ * VERSION: 1.472
+ * DATE: 2010-09-22
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -130,7 +130,7 @@ function completeHandler(event:LoaderEvent):void {
  * <ul>
  * 		<li><strong>load="true | false"</strong> - If <code>load</code> is <code>"true"</code>, the loader will be loaded by the XMLLoader and its progress will be integrated with the XMLLoader's overall progress.</li>
  * 		<li><strong>prependURLs</strong> (&lt;LoaderMax&gt; nodes only) - To prepend a certain String value to the beginning of all children of a &lt;LoaderMax&gt;, use <code>prependURLs</code>. For example, <code>&lt;LoaderMax name="mainQueue" prependURLs="http://www.greensock.com/images/"&gt;&lt;ImageLoader url="image1.jpg" /&gt;&lt;/LoaderMax&gt;</code> would cause the ImageLoader's url to become "http://www.greensock.com/images/image1.jpg". </li>
- * 		<li><strong>replaceURLText</strong> (&lt;LoaderMax&gt; nodes only) - To replace a certain substring in all child loaders of a &lt;LoaderMax&gt; with another value, use <code>replaceURLText</code>. Separate the old value that should be replaced from the new one that should replace it with a comma (","). For example, <code>&lt;LoaderMax name="mainQueue" replaceURLText="{imageDirectory},http://www.greensock.com/images/"&gt;&lt;ImageLoader url="{imageDirectory}image1.jpg" /&gt;&lt;/LoaderMax&gt;</code> would cause the ImageLoader's <code>url</code> to become "http://www.greensock.com/images/image1.jpg". </li>
+ * 		<li><strong>replaceURLText</strong> (&lt;LoaderMax&gt; nodes only) - To replace certain substrings in all child loaders of a &lt;LoaderMax&gt; with other values, use <code>replaceURLText</code>. Separate the old value that should be replaced from the new one that should replace it with a comma (","). The list can be as long as you want. For example, <code>&lt;LoaderMax name="mainQueue" replaceURLText="{imageDirectory},http://www.greensock.com/images/,{language},_en"&gt;&lt;ImageLoader url="{imageDirectory}image1{language}.jpg" /&gt;&lt;/LoaderMax&gt;</code> would cause the ImageLoader's <code>url</code> to become "http://www.greensock.com/images/image1_en.jpg". </li>
  * 		<li><strong>context="child | separate | own"</strong> - Only valid for <code>&lt;ImageLoader&gt;</code> and <code>&lt;SWFLoader&gt;</code> loaders. It defines the LoaderContext's ApplicationDomain (see Adobe's <code>LoaderContext</code> docs for details). <code>"child"</code> is the default.</li>
  * </ul><br />
  * 
@@ -419,7 +419,7 @@ function completeHandler(event:LoaderEvent):void {
 		 * @param toLoad The LoaderMax instance to which <strong>ONLY</strong> parsed loaders that have a <code>load="true"</code> attribute defined in the XML should be appended. These loaders will also be appended to the LoaderMax defined in the <code>all</code> parameter.
 		 */
 		public static function parseLoaders(xml:XML, all:LoaderMax, toLoad:LoaderMax=null):void {
-			var loader:LoaderCore, queue:LoaderMax, curName:String, replaceText:Array, loaderClass:Class;
+			var loader:LoaderCore, queue:LoaderMax, curName:String, replaceText:Array, loaderClass:Class, i:int;
 			for each (var node:XML in xml.children()) {
 				curName = node.name();
 				if (curName == "LoaderMax") {
@@ -430,8 +430,8 @@ function completeHandler(event:LoaderEvent):void {
 					parseLoaders(node, queue, toLoad);
 					if ("replaceURLText" in queue.vars) {
 						replaceText = queue.vars.replaceURLText.split(",");
-						if (replaceText.length == 2) {
-							queue.replaceURLText(replaceText[0], replaceText[1], false);
+						for (i = 0; i < replaceText.length; i+=2) {
+							queue.replaceURLText(replaceText[i], replaceText[i+1], false);
 						}
 					}
 					if ("prependURLs" in queue.vars) {

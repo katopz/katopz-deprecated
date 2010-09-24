@@ -1,13 +1,12 @@
 /**
  * VERSION: 0.96
- * DATE: 1/9/2010
+ * DATE: 2010-09-21
  * ACTIONSCRIPT VERSION: 3.0 
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
 	import com.greensock.*;
 	
-	import flash.display.*;
 	import flash.geom.Matrix;
 	import flash.geom.Transform;
 /**
@@ -19,8 +18,7 @@ package com.greensock.plugins {
  * <b>USAGE:</b><br /><br />
  * <code>
  * 		import com.greensock.TweenLite; <br />
- * 		import com.greensock.plugins.TweenPlugin; <br />
- * 		import com.greensock.plugins.TransformMatrixPlugin; <br />
+ * 		import com.greensock.plugins.~~; <br />
  * 		TweenPlugin.activate([TransformMatrixPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
  * 
  * 		TweenLite.to(mc, 1, {transformMatrix:{x:50, y:300, scaleX:2, scaleY:2}}); <br /><br />
@@ -40,8 +38,6 @@ package com.greensock.plugins {
 		public static const API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		/** @private **/
 		private static const _DEG2RAD:Number = Math.PI / 180;
-		/** @private **/
-		private static const _RAD2DEG:Number = 180 / Math.PI;
 		
 		/** @private **/
 		protected var _transform:Transform;
@@ -131,7 +127,7 @@ package com.greensock.plugins {
 				var finalAngle:Number = ("rotation" in value) ? (typeof(value.rotation) == "number") ? value.rotation * _DEG2RAD : Number(value.rotation) * _DEG2RAD + angle : angle;
 				var finalSkewX:Number = ("skewX" in value) ? (typeof(value.skewX) == "number") ? Number(value.skewX) * _DEG2RAD : Number(value.skewX) * _DEG2RAD + skewX : 0;
 				
-				if ("skewY" in value) { //skewY is just a combonation of rotation and skewX
+				if ("skewY" in value) { //skewY is just a combination of rotation and skewX
 					var skewY:Number = (typeof(value.skewY) == "number") ? value.skewY * _DEG2RAD : Number(value.skewY) * _DEG2RAD - skewX;
 					finalAngle += skewY + skewX;
 					finalSkewX -= skewY;
@@ -213,7 +209,15 @@ package com.greensock.plugins {
 			_matrix.c = _cStart + (n * _cChange);
 			_matrix.d = _dStart + (n * _dChange);
 			if (_angleChange) {
-				_matrix.rotate(_angleChange * n);
+				//about 3-4 times faster than _matrix.rotate(_angleChange * n);
+				var cos:Number = Math.cos(_angleChange * n);
+				var sin:Number = Math.sin(_angleChange * n);
+				var a:Number = _matrix.a;
+				var c:Number = _matrix.c;
+				_matrix.a = a * cos - _matrix.b * sin;
+				_matrix.b = a * sin + _matrix.b * cos;
+				_matrix.c = c * cos - _matrix.d * sin;
+				_matrix.d = c * sin + _matrix.d * cos;
 			}
 			_matrix.tx = _txStart + (n * _txChange);
 			_matrix.ty = _tyStart + (n * _tyChange);
