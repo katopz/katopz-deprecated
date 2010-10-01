@@ -488,7 +488,10 @@ package
 			iE00.DO.gotoAndStop(2 - Number(item.DO))
 			iE00.BT.gotoAndStop(2 - Number(item.BT))
 
-			iE00.CM.gotoAndStop(2 - Number(item.STATUS))
+			// 2010/10/01 add fiber optic 
+			// radio : 0, 1 (on/off)
+			// fiber : 2, 3 (on/off)
+			iE00.CM.gotoAndStop(1+Number(item.STATUS));
 
 			var stationXML = xml.children()[1];
 			var total = stationXML.children().length();
@@ -599,7 +602,10 @@ package
 				popup.DO.gotoAndStop(2 - Number(item.DO))
 				popup.BT.gotoAndStop(2 - Number(item.BT))
 
-				popup.CM.gotoAndStop(2 - Number(item.STATUS))
+				// 2010/10/01 add fiber optic 
+				// radio : 0, 1 (on/off)
+				// fiber : 2, 3 (on/off)
+				popup.CM.gotoAndStop(1+Number(item.STATUS));
 
 				//setGraph
 				if (section.extra.fake2D)

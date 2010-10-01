@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <SCADA>
   <STATION id="E02">
     <NAME>ปตร. คลองพระยาสุเรนทร์</NAME>
@@ -11,7 +11,7 @@
     <WQDO>0</WQDO>
     <WQPH>0</WQPH>
     <WQEC>0</WQEC>
-    <STATUS>0</STATUS>
+    <STATUS>1</STATUS>
     <RAIN_15MIN>0</RAIN_15MIN>
     <RAIN_1HOUR>0</RAIN_1HOUR>
     <RAIN_24HOUR>0</RAIN_24HOUR>
