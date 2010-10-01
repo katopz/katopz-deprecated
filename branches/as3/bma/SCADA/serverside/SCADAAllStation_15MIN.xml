@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <SCADA>
   <STATION id="E00">
-    <LABEL>ศูนย์ฯ</LABEL>
+    <LABEL>ศูนย์ฯ000</LABEL>
     <NAME>Flood Control Center</NAME>
     <STATUS>0</STATUS>
     <RAIN_15MIN>59.00</RAIN_15MIN>
   </STATION>
   <STATION id="E01">
+    <LABEL>ศูนย์ฯ5555</LABEL>
     <NAME>ปตร. คลองสองสายใต้</NAME>
     <STATUS>1</STATUS>
     <RAIN_15MIN>50.00</RAIN_15MIN>

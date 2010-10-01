@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <SCADA>
   <STATION id="E00">
     <NAME>Flood Control Center (FCC)</NAME>
@@ -28,7 +28,7 @@
   </STATION>
   <ALLSTATION>
     <E01>
-      <LABEL>ศูนย์ฯ</LABEL>
+      <LABEL>ศูนย์ฯ1111</LABEL>
       <POWER>0</POWER>
       <BATTERY>0</BATTERY>
       <DOOR>0</DOOR>
@@ -36,6 +36,7 @@
       <RADIO>0</RADIO>
     </E01>
     <E02>
+      <LABEL>ศูนย์ฯ2</LABEL>
       <POWER>0</POWER>
       <BATTERY>0</BATTERY>
       <DOOR>0</DOOR>
