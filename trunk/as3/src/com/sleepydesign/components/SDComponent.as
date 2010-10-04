@@ -4,13 +4,22 @@ package com.sleepydesign.components
 	import com.sleepydesign.events.TransformEvent;
 	
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	public class SDComponent extends SDSprite
 	{
+		public static const ALIGN_TOP_LEFT:String = "ALIGN_TOP_LEFT";
+		public static const ALIGN_TOP_RIGHT:String = "ALIGN_TOP_RIGHT";
+		public static const ALIGN_CENTER:String = "ALIGN_CENTER";
+		public static const ALIGN_CENTER_STAGE:String = "ALIGN_CENTER_STAGE";
+		public static const ALIGN_BOTTOM_LEFT:String = "ALIGN_BOTTOM_LEFT";
+		public static const ALIGN_BOTTOM_RIGHT:String = "ALIGN_BOTTOM_RIGHT";
+		
 		protected var _width:Number = SDStyle.SIZE;
 		protected var _height:Number = SDStyle.SIZE;
 		
@@ -41,28 +50,36 @@ package com.sleepydesign.components
 			
 			// align
 			if(stage)
+			{
+				var _parent:DisplayObjectContainer = parent;
+				var _stage:Stage = stage;
 				switch (_align)
 				{
-					case StageAlign.TOP_LEFT:
+					case ALIGN_TOP_LEFT:
 						setPosition(0, 0);
 						break;
-					case StageAlign.TOP_RIGHT:
-						setPosition(stage.stageWidth - width, 0);
+					case ALIGN_TOP_RIGHT:
+						setPosition(_stage.stageWidth - width, 0);
 						break;
-					case "center-container":
-						var _parent:DisplayObjectContainer = parent;
+					case ALIGN_CENTER:
 						_parent.removeChild(this);
-						setPosition((width == 0 ? stage.stageWidth : width) / 2 - width / 2,
-						(height == 0 ? stage.stageHeight : height) / 2 - height / 2);
+						setPosition((width == 0 ? _stage.stageWidth : width) / 2 - width / 2,
+						(height == 0 ? _stage.stageHeight : height) / 2 - height / 2);
 						_parent.addChild(this);
 						break;
-					case "center":
-						setPosition(stage.stageWidth / 2 - width / 2, stage.stageHeight / 2 - height / 2);
+					case ALIGN_BOTTOM_LEFT:
+						_parent.removeChild(this);
+						setPosition(0, _stage.stageHeight - height);
+						_parent.addChild(this);
+						break;
+					case ALIGN_CENTER_STAGE:
+						setPosition(_stage.stageWidth / 2 - width / 2, _stage.stageHeight / 2 - height / 2);
 						break;
 				}
+			}
 		}
 		
-		protected var _align:String;
+		protected var _align:String = ALIGN_TOP_LEFT;
 		public function get align():String
 		{
 			return _align;
