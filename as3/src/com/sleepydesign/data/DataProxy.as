@@ -2,16 +2,24 @@ package com.sleepydesign.data
 {
 	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class DataProxy
 	{
 		public static var FLASH_VARS:String = "FLASH_VARS";
-		
+
 		private static var _datas:Dictionary;
-		
+
 		public static var dataSignal:Signal = new Signal(String, Object);
+
+		public static function getData(id:String):*
+		{
+			if (_datas)
+				return _datas[id];
+			else
+				return null;
+		}
 
 		public static function setData(id:String, data:*):*
 		{
@@ -21,7 +29,7 @@ package com.sleepydesign.data
 			_datas[id] = data;
 
 			dataSignal.dispatch(id, data);
-			
+
 			return data;
 		}
 
@@ -39,14 +47,6 @@ package com.sleepydesign.data
 				if (_datas[_item])
 					_tempDatas[_item] = _datas[_item];
 			_datas = _tempDatas;
-		}
-
-		public static function getDataByID(id:String):*
-		{
-			if (_datas)
-				return _datas[id];
-			else
-				return null;
 		}
 
 		public static function removeAllData():void
@@ -69,7 +69,7 @@ package com.sleepydesign.data
 			var _resultURLVariables:URLVariables = new URLVariables();
 
 			for (var _name:String in _URLVariables)
-				_resultURLVariables[_name] = getDataByID(_URLVariables[_name]);
+				_resultURLVariables[_name] = getData(_URLVariables[_name]);
 
 			return _resultURLVariables;
 		}
