@@ -1,7 +1,5 @@
 package com.sleepydesign.core
 {
-	import org.osflash.signals.Signal;
-
 	/**
 	 * hidden -> show -> shown
 	 * shown  -> hide -> hidden
@@ -11,21 +9,21 @@ package com.sleepydesign.core
 		/**
 		 * enable mouse, visible, alpha 1
 		 */		
-		function shown():void;
+		function activate():void;
 		
 		/**
 		 * disable mouse, not visible, alpha 0
 		 */
-		function hidden():void;
+		function deactivate():void;
 		
 		/**
 		 * auto alpha 1 -> shown -> dispatch complete
 		 */
-		function show():Signal;
+		function show():void;
 		
 		/**
 		 * auto alpha 0 -> hidden -> dispatch complete
 		 */
-		function hide():Signal;
+		function hide():void;
 	}
 }

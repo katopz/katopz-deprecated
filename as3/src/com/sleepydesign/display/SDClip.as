@@ -13,7 +13,7 @@ package com.sleepydesign.display
 	
 	import org.osflash.signals.Signal;
 
-	public class SDClip extends SDSprite implements IRemovableEventDispatcher, IDestroyable, ITransitionable
+	public class SDClip extends SDSprite implements IDestroyable, ITransitionable
 	{
 		public static const IS_SHOWN:String = "IS_SHOWN";
 		public static const IS_HIDDEN:String = "IS_HIDDEN";
@@ -22,7 +22,7 @@ package com.sleepydesign.display
 		
 		public function SDClip()
 		{
-			super();
+			deactivate();
 		}
 		
 		public function show():void
@@ -35,33 +35,41 @@ package com.sleepydesign.display
 			TweenLite.to(this, .25, {autoAlpha:0, onComplete:hidden});
 		}
 		
-		public function shown():void
+		protected function shown():void
+		{
+			activate();
+			transitionSignal.dispatch(IS_SHOWN);
+		}
+		
+		protected function hidden():void
+		{
+			deactivate();
+			transitionSignal.dispatch(IS_HIDDEN);
+		}
+		
+		public function activate():void
 		{
 			mouseEnabled = true;
 			mouseChildren = true;
 			
-			visble = false;
-			alpha = 0;
-			
-			transitionSignal.dispatch(IS_SHOWN);
+			visible = true;
+			alpha = 1;
 		}
 		
-		public function hidden():void
+		public function deactivate():void
 		{
 			mouseEnabled = false;
 			mouseChildren = false;
 			
-			visble = false;
+			visible = false;
 			alpha = 0;
-			
-			transitionSignal.dispatch(IS_HIDDEN);
 		}
 
-		public function destroy():void
+		override public function destroy():void
 		{
 			TweenLite.killTweensOf(this);
 			
-			super();
+			super.destroy();
 		}
 	}
 }
