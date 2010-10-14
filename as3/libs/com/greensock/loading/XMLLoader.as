@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.472
- * DATE: 2010-09-22
+ * VERSION: 1.631
+ * DATE: 2010-10-13
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -17,6 +17,8 @@ package com.greensock.loading {
 	import flash.system.LoaderContext;
 	import flash.system.SecurityDomain;
 	
+	/** Dispatched when the XML finishes loading and its contents are parsed (creating any dynamic XML-driven loader instances necessary). If any dynamic loaders are created and have a <code>load="true"</code> attribute, they will begin loading at this point and the XMLLoader's <code>COMPLETE</code> will not be dispatched until the loaders have completed as well. **/
+	[Event(name="init", 				type="com.greensock.events.LoaderEvent")]
 	/** Dispatched when any loader that the XMLLoader discovered in the XML dispatches an OPEN event. **/
 	[Event(name="childOpen", 			type="com.greensock.events.LoaderEvent")]
 	/** Dispatched when any loader that the XMLLoader discovered in the XML dispatches a PROGRESS event. **/
@@ -188,7 +190,7 @@ function completeHandler(event:LoaderEvent):void {
 		/** @private **/
 		private static var _classActivated:Boolean = _activateClass("XMLLoader", XMLLoader, "xml,php,jsp,asp,cfm,cfml,aspx");
 		/** @private Any non-String variable types that XMLLoader should recognized in loader nodes like <ImageLoader>, <VideoLoader>, etc. **/
-		protected static var _varTypes:Object = {skipFailed:true, skipPaused:true, paused:false, load:false, noCache:false, maxConnections:2, autoPlay:false, autoDispose:false, smoothing:false, estimatedBytes:1, x:1, y:1, width:1, height:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, bgColor:0, bgAlpha:0, deblocking:1, repeat:1, checkPolicyFile:false, centerRegistration:false, bufferTime:5, volume:1, bufferMode:false, estimatedDuration:200, crop:false};
+		protected static var _varTypes:Object = {skipFailed:true, skipPaused:true, paused:false, load:false, noCache:false, maxConnections:2, autoPlay:false, autoDispose:false, smoothing:false, estimatedBytes:1, x:1, y:1, width:1, height:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, bgColor:0, bgAlpha:0, deblocking:1, repeat:1, checkPolicyFile:false, centerRegistration:false, bufferTime:5, volume:1, bufferMode:false, estimatedDuration:200, crop:false, autoAdjustBuffer:true};
 		/** @private contains only the parsed loaders that had the load="true" XML attribute. It also contains the _parsed LoaderMax which is paused, so it won't load (we put it in there for easy searching). **/
 		protected var _loadingQueue:LoaderMax;
 		/** @private contains all the parsed loaders (<ImageLoader>, <SWFLoader>, <MP3Loader>, <XMLLoader>, etc.) but it is paused. Any loaders that have the load="true" XML attribute will be put into the _loadingQueue. _parsed is also put into the _loadingQueue for easy searching. **/
@@ -388,9 +390,9 @@ function completeHandler(event:LoaderEvent):void {
 				value = attribute.toString();
 				if (s == "url") {
 					continue;
-				} else if (s == "domain") {
+				} else if (s == "context") {
 					v.context = new LoaderContext(true, 
-												  (value == "child") ? new ApplicationDomain(ApplicationDomain.currentDomain) : (value == "separate") ? new ApplicationDomain() : ApplicationDomain.currentDomain,
+												  (value == "own") ? ApplicationDomain.currentDomain : (value == "separate") ? new ApplicationDomain() : new ApplicationDomain(ApplicationDomain.currentDomain),
 												  SecurityDomain.currentDomain);
 					continue;
 				}
@@ -421,8 +423,8 @@ function completeHandler(event:LoaderEvent):void {
 		public static function parseLoaders(xml:XML, all:LoaderMax, toLoad:LoaderMax=null):void {
 			var loader:LoaderCore, queue:LoaderMax, curName:String, replaceText:Array, loaderClass:Class, i:int;
 			for each (var node:XML in xml.children()) {
-				curName = node.name();
-				if (curName == "LoaderMax") {
+				curName = String(node.name()).toLowerCase();
+				if (curName == "loadermax") {
 					queue = all.append(new LoaderMax(_parseVars(node))) as LoaderMax;
 					if (toLoad != null && queue.vars.load) {
 						toLoad.append(queue);

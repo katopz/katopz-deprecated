@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.47
- * DATE: 2010-09-14
+ * VERSION: 1.6
+ * DATE: 2010-10-02
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
