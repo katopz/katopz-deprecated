@@ -1,8 +1,8 @@
 /**
- * VERSION: 0.91
- * DATE: 2010-09-01
+ * VERSION: 1.0
+ * DATE: 2010-10-02
  * AS3
- * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com/LoaderMax/
+ * UPDATES AND DOCUMENTATION AT: http://www.greensock.com/loadermax/
  **/
 package com.greensock.loading.data {
 	import com.greensock.loading.data.core.DisplayObjectLoaderVars;
@@ -55,7 +55,8 @@ package com.greensock.loading.data {
 										  "estimatedDuration",
 										  "deblocking",
 										  "bufferMode",
-										  "volume"];
+										  "volume",
+										  "autoAdjustBuffer"];
 		
 		/** The amount of time (in seconds) that should be buffered before the video can begin playing (set <code>autoPlay</code> to <code>false</code> to pause the video initially).**/
 		public var bufferTime:Number = 5;
@@ -75,6 +76,8 @@ package com.greensock.loading.data {
 		public var bufferMode:Boolean;
 		/** A value between 0 and 1 indicating the volume at which the video should play (default is 1).**/
 		public var volume:Number = 1;
+		/** If the buffer becomes empty during playback and <code>autoAdjustBuffer</code> is <code>true</code> (the default), it will automatically attempt to adjust the NetStream's <code>bufferTime</code> based on the rate at which the video has been loading, estimating what it needs to be in order to play the rest of the video without emptying the buffer again. This can prevent the annoying problem of video playback start/stopping/starting/stopping on a system tht doesn't have enough bandwidth to adequately buffer the video. You may also set the <code>bufferTime</code> in the constructor's <code>vars</code> parameter to set the initial value. **/
+		public var autoAdjustBuffer:Boolean = true;
 		
 		/**
 		 * Constructor 

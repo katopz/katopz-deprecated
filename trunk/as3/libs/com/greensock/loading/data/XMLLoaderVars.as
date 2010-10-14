@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.9
- * DATE: 2010-08-09
+ * VERSION: 0.91
+ * DATE: 2010-10-13
  * AS3
  * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com/LoaderMax/
  **/
@@ -48,7 +48,8 @@ package com.greensock.loading.data {
 										  "onChildProgress",
 										  "onChildComplete",
 										  "onChildCancel",
-										  "onChildFail"];
+										  "onChildFail",
+										  "onInit"];
 		
 		/** By default, the XMLLoader will automatically look for LoaderMax-related nodes like <code>&lt;LoaderMax&gt;, &lt;ImageLoader&gt;, &lt;SWFLoader&gt;, &lt;XMLLoader&gt;, &lt;MP3Loader&gt;, &lt;DataLoader&gt;</code>, and <code>&lt;CSSLoader&gt;</code> inside the XML when it inits. If it finds any that have a <code>load="true"</code> attribute, it will begin loading them and integrate their progress into the XMLLoader's overall progress. Its <code>COMPLETE</code> event won't fire until all of these loaders have completed as well. If you prefer NOT to integrate the dynamically-created loader instances into the XMLLoader's overall <code>progress</code>, set <code>integrateProgress</code> to <code>false</code>. **/
 		public var integrateProgress:Boolean=true;
@@ -62,6 +63,8 @@ package com.greensock.loading.data {
 		public var onChildCancel:Function;
 		/** A handler function for <code>LoaderEvent.CHILD_FAIL</code> events which are dispatched each time any nested LoaderMax-related loaders that were defined in the XML fails (and its <code>status</code> chances to <code>LoaderStatus.FAILED</code>). Make sure your onChildFail function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>). **/
  		public var onChildFail:Function;
+		/** A handler function for <code>LoaderEvent.INIT</code> events which are dispatched when the XML finishes loading and its contents are parsed (creating any dynamic XML-driven loader instances necessary). If any dynamic loaders are created and have a <code>load="true"</code> attribute, they will begin loading at this point and the XMLLoader's <code>COMPLETE</code> will not be dispatched until the loaders have completed as well. **/
+		public var onInit:Function;
 		
 		/**
 		 * Constructor 

@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.472
- * DATE: 2010-09-22
+ * VERSION: 1.5
+ * DATE: 2010-09-27
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -378,9 +378,6 @@ LoaderMax.contentDisplayClass = FlexContentDisplay;
 				throw new Error("Incompatible loader used for a ContentDisplay");
 			}
 			this.name = _loader.name;
-			if (_loader.vars.container is DisplayObjectContainer) {
-				(_loader.vars.container as DisplayObjectContainer).addChild(this);
-			}
 			var type:String;
 			for (var p:String in _transformProps) {
 				if (p in _loader.vars) {
@@ -393,6 +390,9 @@ LoaderMax.contentDisplayClass = FlexContentDisplay;
 			_fitWidth = ("fitWidth" in _loader.vars) ? Number(_loader.vars.fitWidth) : Number(_loader.vars.width);
 			_fitHeight = ("fitHeight" in _loader.vars) ? Number(_loader.vars.fitHeight) : Number(_loader.vars.height);
 			_update();
+			if (_loader.vars.container is DisplayObjectContainer) {
+				(_loader.vars.container as DisplayObjectContainer).addChild(this);
+			}
 			if (_loader.content != this) {
 				(_loader as Object).setContentDisplay(this);
 			}

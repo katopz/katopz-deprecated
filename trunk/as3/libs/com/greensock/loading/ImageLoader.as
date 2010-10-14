@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.3
- * DATE: 2010-08-10
+ * VERSION: 1.6
+ * DATE: 2010-10-02
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -117,6 +117,11 @@ package com.greensock.loading {
  * <strong>Note:</strong> Using a <code><a href="data/ImageLoaderVars.html">ImageLoaderVars</a></code> instance 
  * instead of a generic object to define your <code>vars</code> is a bit more verbose but provides 
  * code hinting and improved debugging because it enforces strict data typing. Use whichever one you prefer.<br /><br />
+ * 
+ * <strong>Jerky animation?</strong> If you animate the image after loading it and you notice that the movement 
+ * is rather jerky, try setting the scaleX and/or scaleY to something other than 1, like 1.001 because there is 
+ * a bug in Flash that forces Bitmaps to always act like their <code>pixelSnapping</code> is <code>"auto"</code> 
+ * when their scaleX/scaleY are 1.<br /><br />
  * 
  * <code>content</code> data type: <strong><code>com.greensock.loading.display.ContentDisplay</code></strong> (a Sprite). 
  * When the image has finished loading, the <code>rawContent</code> will be added to the <code>ContentDisplay</code> Sprite 

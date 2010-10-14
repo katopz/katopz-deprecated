@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.472
- * DATE: 2010-09-22
+ * VERSION: 1.5
+ * DATE: 2010-09-27
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -91,7 +91,7 @@ package com.greensock.loading.display {
 		 */
 		public function dispose(unloadLoader:Boolean=true, disposeLoader:Boolean=true):void {
 			if (this.parent != null) {
-				if (this.parent.hasOwnProperty("addElement")) {
+				if (this.parent.hasOwnProperty("removeElement")) {
 					(this.parent as Object).removeElement(this);
 				} else {
 					this.parent.removeChild(this);
@@ -399,13 +399,6 @@ package com.greensock.loading.display {
 				throw new Error("Incompatible loader used for a FlexContentDisplay");
 			}
 			this.name = _loader.name;
-			if (_loader.vars.container is DisplayObjectContainer) {
-				if (_loader.vars.container.hasOwnProperty("addElement")) {
-					(_loader.vars.container as Object).addElement(this);
-				} else {
-					(_loader.vars.container as DisplayObjectContainer).addChild(this);
-				}
-			}
 			var type:String;
 			for (var p:String in _transformProps) {
 				if (p in _loader.vars) {
@@ -418,6 +411,13 @@ package com.greensock.loading.display {
 			_fitWidth = ("fitWidth" in _loader.vars) ? Number(_loader.vars.fitWidth) : Number(_loader.vars.width);
 			_fitHeight = ("fitHeight" in _loader.vars) ? Number(_loader.vars.fitHeight) : Number(_loader.vars.height);
 			_update();
+			if (_loader.vars.container is DisplayObjectContainer) {
+				if (_loader.vars.container.hasOwnProperty("addElement")) {
+					(_loader.vars.container as Object).addElement(this);
+				} else {
+					(_loader.vars.container as DisplayObjectContainer).addChild(this);
+				}
+			}
 			if (_loader.content != this) {
 				(_loader as Object).setContentDisplay(this);
 			}

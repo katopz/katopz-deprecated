@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.47
- * DATE: 2010-09-18
+ * VERSION: 1.62
+ * DATE: 2010-10-07
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -41,7 +41,7 @@ package com.greensock.loading.core {
  */	
 	public class LoaderCore extends EventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.47;
+		public static const version:Number = 1.62;
 		
 		/** @private **/
 		protected static var _loaderCount:uint = 0;
@@ -168,7 +168,9 @@ package com.greensock.loading.core {
 				_status = LoaderStatus.LOADING;
 				_time = time;
 				_load();
-				dispatchEvent(new LoaderEvent(LoaderEvent.OPEN, this));
+				if (this.progress < 1) { //in some cases, an OPEN event should be dispatched, like if load() is called on an empty LoaderMax, it will just dispatch a PROGRESS and COMPLETE event right away. It wouldn't make sense to dispatch an OPEN event right after that.
+					dispatchEvent(new LoaderEvent(LoaderEvent.OPEN, this));
+				}
 			} else if (_status == LoaderStatus.COMPLETED) {
 				_completeHandler(null);
 			}
@@ -344,7 +346,7 @@ package com.greensock.loading.core {
 		
 		/** @private **/
 		protected static function _activateClass(type:String, loaderClass:Class, extensions:String):Boolean {
-			_types[type] = loaderClass;
+			_types[type.toLowerCase()] = loaderClass;
 			var a:Array = extensions.split(",");
 			var i:int = a.length;
 			while (--i > -1) {
@@ -361,7 +363,10 @@ package com.greensock.loading.core {
 			if (event is ProgressEvent) {
 				_cachedBytesLoaded = (event as ProgressEvent).bytesLoaded;
 				_cachedBytesTotal = (event as ProgressEvent).bytesTotal;
-				_auditedSize = true;
+				if (!_auditedSize) {
+					_auditedSize = true;
+					dispatchEvent(new Event("auditedSize"));
+				}
 			}
 			if (_dispatchProgress && _status == LoaderStatus.LOADING && _cachedBytesLoaded != _cachedBytesTotal) { 
 				dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));

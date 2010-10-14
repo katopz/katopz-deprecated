@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.3
- * DATE: 2010-08-09
+ * VERSION: 1.62
+ * DATE: 2010-10-07
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -12,6 +12,7 @@ package com.greensock.loading.core {
 	import flash.events.ProgressEvent;
 	import flash.net.URLRequest;
 	import flash.net.URLStream;
+	import flash.net.URLVariables;
 	
 	/** Dispatched when the loader experiences an IO_ERROR while loading or auditing its size. **/
 	[Event(name="ioError", type="com.greensock.events.LoaderEvent")]
@@ -27,7 +28,7 @@ package com.greensock.loading.core {
  */	
 	public class LoaderItem extends LoaderCore {
 		/** @private **/
-		protected static var _cacheID:uint = uint(Math.random() * 100000000) * int(Math.random() * 1000);
+		protected static var _cacheID:Number = new Date().getTime();
 		
 		/** @private **/
 		protected var _url:String;
@@ -60,7 +61,10 @@ package com.greensock.loading.core {
 			_httpStatus = 0;
 			_closeStream();
 			if (this.vars.noCache && (!_isLocal || _url.substr(0, 4) == "http")) {
-				_request.url = _url + ((_url.indexOf("?") == -1) ? "?" : "&") + "cacheBusterID=" + (_cacheID++);
+				if (_request.data == null) {
+					_request.data = new URLVariables();
+				}
+				_request.data.cacheBusterID = _cacheID++;
 			}
 		}
 		
@@ -78,7 +82,11 @@ package com.greensock.loading.core {
 				_auditStream.addEventListener(Event.COMPLETE, _auditStreamHandler, false, 0, true);
 				_auditStream.addEventListener("ioError", _auditStreamHandler, false, 0, true);
 				_auditStream.addEventListener("securityError", _auditStreamHandler, false, 0, true);
-				_auditStream.load(_request);
+				var request:URLRequest = new URLRequest(_url);
+				if (!_isLocal || _url.substr(0, 4) == "http") {
+					request.data = new URLVariables("cacheBusterID=" + (_cacheID++) + "&purpose=audit"); //to work around bugs in Chrome and Firefox that can cause them to use the partially-loaded audit file in the cache instead of loading the full file normally.
+				}
+				_auditStream.load(request);  
 			}
 		}
 		
