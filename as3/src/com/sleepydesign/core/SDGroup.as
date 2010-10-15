@@ -9,10 +9,11 @@ package com.sleepydesign.core
 		public var items:Dictionary = new Dictionary(true);
 		private var _length:int = 0;
 
+		private var _itemType:*;
 
-		public function SDGroup()
+		public function SDGroup(itemType:* = null)
 		{
-
+			_itemType = itemType;
 		}
 
 		public function get length():int
@@ -24,6 +25,9 @@ package com.sleepydesign.core
 		{
 			if (!item)
 				return;
+			
+			if(!(item is _itemType))
+				throw new Error("[Error] Type miss match. Required " + _itemType);
 
 			if (key)
 				items[key] = item;
