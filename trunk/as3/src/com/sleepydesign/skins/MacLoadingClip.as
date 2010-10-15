@@ -18,12 +18,15 @@ package com.sleepydesign.skins
 
 		public function MacLoadingClip(colorValue:Number = 0x666666, slices:int = 12, radius:int = 6)
 		{
-			this._slices = slices;
-			this._radius = radius;
-			this._colorValue = colorValue;
+			_slices = slices;
+			_radius = radius;
+			_colorValue = colorValue;
 			
 			_canvas = new SDSprite();
 			addChild(_canvas);
+			
+			cacheAsBitmap = true;
+			mouseEnabled = false;
 			
 			draw();
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -33,7 +36,8 @@ package com.sleepydesign.skins
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			_timer = new Timer(65);
+			
+			_timer = new Timer(64);
 			_timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
 			_timer.start();
 		}
@@ -42,6 +46,7 @@ package com.sleepydesign.skins
 		{
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
 			_timer.reset();
 			_timer.removeEventListener(TimerEvent.TIMER, onTimer);
 			_timer = null;
@@ -49,11 +54,17 @@ package com.sleepydesign.skins
 
 		protected function onTimer(event:TimerEvent):void
 		{
+			if(!visible)
+				return;
+			
 			_canvas.rotation = (_canvas.rotation + (360 / _slices)) % 360;
 		}
 
 		protected function draw():void
 		{
+			if(!visible)
+				return;
+				
 			var i:int = _slices;
 			var degrees:int = 360 / _slices;
 			while (i--)
