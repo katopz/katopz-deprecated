@@ -12,19 +12,19 @@ package com.sleepydesign.components
 
 		public var pad:uint = 0;
 
-		private var _vscrollBar:SDScrollBar;
-		private var _hscrollBar:SDScrollBar;
+		private var _vScrollBar:SDScrollBar;
+		private var _hScrollBar:SDScrollBar;
 
 		public function SDScrollPane()
 		{
 			_back = new Shape();
 			addChild(_back);
 
-			_vscrollBar = new SDScrollBar(SDSlider.VERTICAL);
-			addChild(_vscrollBar);
+			_vScrollBar = new SDScrollBar(SDSlider.VERTICAL);
+			addChild(_vScrollBar);
 
-			_hscrollBar = new SDScrollBar(SDSlider.HORIZONTAL);
-			addChild(_hscrollBar);
+			_hScrollBar = new SDScrollBar(SDSlider.HORIZONTAL);
+			addChild(_hScrollBar);
 
 			panel = new SDPanel();
 			addChild(panel);
@@ -35,8 +35,9 @@ package com.sleepydesign.components
 
 		public function set target(value:SDPanel):void
 		{
-			_vscrollBar.scrollTarget = value;
-			_hscrollBar.scrollTarget = value;
+			_vScrollBar.scrollTarget = value;
+			_hScrollBar.scrollTarget = value;
+
 			draw();
 		}
 
@@ -69,17 +70,37 @@ package com.sleepydesign.components
 			}
 		}
 
+		public function setPage(hPageNum:int, vPageNum:int = 0):void
+		{
+			contentX = -_hScrollBar.scrollTarget.scrollRect.width * hPageNum;
+			contentY = -_vScrollBar.scrollTarget.scrollRect.height * vPageNum;
+		}
+
+		public function set contentX(value:Number):void
+		{
+			_hScrollBar.contentX = value;
+
+			draw();
+		}
+
+		public function set contentY(value:Number):void
+		{
+			_vScrollBar.contentY = value;
+
+			draw();
+		}
+
 		override public function draw():void
 		{
-			_vscrollBar.draw();
-			_hscrollBar.draw();
+			_vScrollBar.draw();
+			_hScrollBar.draw();
 
-			_hscrollBar.enableHorizonWheel = !_vscrollBar.visible;
+			_hScrollBar.enableHorizonWheel = !_vScrollBar.visible;
 
 			_back.graphics.clear();
 			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true);
 			_back.graphics.beginFill(SDStyle.BACKGROUND);
-			_back.graphics.drawRoundRect(-pad / 2, -pad / 2, _vscrollBar.visible ? _vscrollBar.width + _width + pad : _width + pad, _hscrollBar.visible ? _hscrollBar.height + _height + pad : _height + pad, pad);
+			_back.graphics.drawRoundRect(-pad / 2, -pad / 2, _vScrollBar.visible ? _vScrollBar.width + _width + pad : _width + pad, _hScrollBar.visible ? _hScrollBar.height + _height + pad : _height + pad, pad);
 			_back.graphics.endFill();
 
 			super.draw();

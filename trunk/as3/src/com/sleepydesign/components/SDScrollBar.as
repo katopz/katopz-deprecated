@@ -1,7 +1,8 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.events.TransformEvent;
-
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
@@ -13,6 +14,25 @@ package com.sleepydesign.components
 
 		public var enableHorizonWheel:Boolean;
 
+		private function get _content():DisplayObject
+		{
+			try
+			{
+				return _scrollTarget["content"];
+			}
+			catch (e:*)
+			{
+				return _scrollTarget;
+			}
+
+			return _scrollTarget;
+		}
+
+		private function get _contentRect():Rectangle
+		{
+			return _content.getRect(_content.parent);
+		}
+
 		public function SDScrollBar(orientation:String = SDSlider.VERTICAL)
 		{
 			super(orientation);
@@ -23,23 +43,11 @@ package com.sleepydesign.components
 			if (!_scrollTarget || !_scrollTarget.scrollRect)
 				return;
 
-			//var _contentRect:Rectangle = _scrollTarget.getRect(_scrollTarget.parent);
-			var _content:DisplayObject;
-			try
-			{
-				_content = _scrollTarget["content"];
-			}
-			catch (e:*)
-			{
-				_content = _scrollTarget;
-			}
-			var _contentRect:Rectangle = _content.getRect(_content.parent);
-
 			if (_orientation == HORIZONTAL)
 			{
 				// auto align
-				this.x = 0;
-				this.y = _scrollTarget.height;
+				//this.x = 0;
+				//this.y = _scrollTarget.height;
 
 				// auto size
 				_scrollSize = Math.max(SDStyle.SIZE, _width * _scrollTarget.scrollRect.width / _contentRect.width);
@@ -51,8 +59,8 @@ package com.sleepydesign.components
 			else
 			{
 				// auto align
-				this.x = _scrollTarget.width;
-				this.y = 0;
+				//this.x = _scrollTarget.width;
+				//this.y = 0;
 
 				// auto size
 				_scrollSize = Math.max(SDStyle.SIZE, _height * _scrollTarget.scrollRect.height / _contentRect.height);
@@ -106,16 +114,6 @@ package com.sleepydesign.components
 				return;
 
 			var gap:Number;
-			var _content:DisplayObject;
-			try
-			{
-				_content = _scrollTarget["content"];
-			}
-			catch (e:*)
-			{
-				_content = _scrollTarget;
-			}
-			var _contentRect:Rectangle = _content.getRect(_content.parent);
 
 			if (_orientation == HORIZONTAL)
 			{
@@ -143,7 +141,21 @@ package com.sleepydesign.components
 
 			// Setup
 			_scrollTarget = value;
-
+			
+			// auto align
+			if (_orientation == HORIZONTAL)
+			{
+				// auto align
+				this.x = 0;
+				this.y = _scrollTarget.height;
+			}
+			else
+			{
+				// auto align
+				this.x = _scrollTarget.width;
+				this.y = 0;
+			}
+			
 			// View
 			draw();
 
@@ -151,6 +163,22 @@ package com.sleepydesign.components
 			value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
 			value.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 			addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
+		}
+
+		public function set contentX(value:Number):void
+		{
+			var gap:Number = Math.max(0, _contentRect.width - _scrollTarget.scrollRect.width);
+			_scrollPosition = (- value * 100 / gap) || 0;
+
+			draw();
+		}
+
+		public function set contentY(value:Number):void
+		{
+			var gap:Number = Math.max(0, _contentRect.height - _scrollTarget.scrollRect.height);
+			_scrollPosition = (- value * 100 / gap) || 0;
+
+			draw();
 		}
 	}
 }
