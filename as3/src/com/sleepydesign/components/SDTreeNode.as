@@ -26,8 +26,10 @@ package com.sleepydesign.components
 		
 		public var data:XML;
 		
-		public function SDTreeNode(label:String = "")
+		public function SDTreeNode(label:String = "", style:ISDStyle = null)
 		{
+			super(style);
+			
 			_labelText = label;
 			
 			buttonMode = true;
@@ -64,7 +66,7 @@ package com.sleepydesign.components
 				
 				/*
 				_button.graphics.clear();
-				_button.graphics.beginFill(SDStyle.BUTTON_COLOR);
+				_button.graphics.beginFill(_style.BUTTON_COLOR);
 				_button.graphics.drawRect(2, 2, _width - 4, _height - 4);
 				_button.graphics.endFill();
 				*/
@@ -80,7 +82,7 @@ package com.sleepydesign.components
 				
 				/*
 				_button.graphics.clear();
-				_button.graphics.beginFill(SDStyle.BUTTON_COLOR);
+				_button.graphics.beginFill(_style.BUTTON_COLOR);
 				_button.graphics.drawRect(2, 2, _width - 4, _height - 4);
 				_button.graphics.endFill();
 				*/

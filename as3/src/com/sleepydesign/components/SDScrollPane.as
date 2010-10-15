@@ -17,9 +17,27 @@ package com.sleepydesign.components
 
 		private var _vScrollBar:SDScrollBar;
 		private var _hScrollBar:SDScrollBar;
+		
+		public var scrollBarVisible:Boolean = true;
+		private var _useMouseWheel:Boolean = true;
 
-		public function SDScrollPane()
+		public function get useMouseWheel():Boolean
 		{
+			return _useMouseWheel;
+		}
+
+		public function set useMouseWheel(value:Boolean):void
+		{
+			_useMouseWheel = value;
+			
+			_vScrollBar.useMouseWheel = value;
+			_hScrollBar.useMouseWheel = value;
+		}
+		
+		public function SDScrollPane(style:ISDStyle = null)
+		{
+			super(_style);
+			
 			_back = new Shape();
 			addChild(_back);
 
@@ -124,12 +142,19 @@ package com.sleepydesign.components
 			_hScrollBar.draw();
 
 			_hScrollBar.enableHorizonWheel = !_vScrollBar.visible;
+			
+			_hScrollBar.enableHorizonWheel = _hScrollBar.enableHorizonWheel && useMouseWheel;
+			
+			_vScrollBar.visible = _vScrollBar.visible && scrollBarVisible;
+			_hScrollBar.visible = _hScrollBar.visible && scrollBarVisible;
 
+			/*
 			_back.graphics.clear();
-			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true);
-			_back.graphics.beginFill(SDStyle.BACKGROUND);
+			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
+			_back.graphics.beginFill(0xFF0000, .5);//_style.BACKGROUND, _style.BACKGROUND_ALPHA);
 			_back.graphics.drawRoundRect(-pad / 2, -pad / 2, _vScrollBar.visible ? _vScrollBar.width + _width + pad : _width + pad, _hScrollBar.visible ? _hScrollBar.height + _height + pad : _height + pad, pad);
 			_back.graphics.endFill();
+			*/
 
 			super.draw();
 		}

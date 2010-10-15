@@ -18,8 +18,10 @@ package com.sleepydesign.components
 		private var _selected:Boolean = false;
 		private var _toggle:Boolean = false;
 
-		public function SDButton(text:String = "")
+		public function SDButton(text:String = "", style:ISDStyle = null)
 		{
+			 super(style);
+			 
 			_labelText = text;
 			
 			_back = new Shape();
@@ -58,9 +60,9 @@ package com.sleepydesign.components
 				setSize(_label.width+4, _height);
 			
 			_back.graphics.clear();
-			_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true);
-			_back.graphics.beginFill(SDStyle.BUTTON_COLOR, SDStyle.BUTTON_ALPHA);
-			_back.graphics.drawRoundRect(0, 0, _width, _height, SDStyle.SIZE * .75, SDStyle.SIZE * .75);
+			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
+			_back.graphics.beginFill(_style.BUTTON_COLOR, _style.BUTTON_ALPHA);
+			_back.graphics.drawRoundRect(0, 0, _width, _height, _style.SIZE * .75, _style.SIZE * .75);
 			_back.graphics.endFill();
 			
 			super.draw();
@@ -69,7 +71,7 @@ package com.sleepydesign.components
 		protected function onMouseOver(event:MouseEvent):void
 		{
 			_over = true;
-			TweenLite.to(_back, .25, SDStyle.BUTTON_OVER_TWEEN);
+			TweenLite.to(_back, .25, _style.BUTTON_OVER_TWEEN);
 			addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 		}
 
@@ -79,18 +81,18 @@ package com.sleepydesign.components
 			_over = false;
 			if (!_down)
 			{
-				TweenLite.to(_back, .25, SDStyle.BUTTON_UP_TWEEN);
+				TweenLite.to(_back, .25, _style.BUTTON_UP_TWEEN);
 			}
 			else
 			{
-				TweenLite.to(_back, .25, SDStyle.BUTTON_DOWN_TWEEN);
+				TweenLite.to(_back, .25, _style.BUTTON_DOWN_TWEEN);
 			}
 		}
 
 		protected function onMouseDown(event:MouseEvent):void
 		{
 			_down = true;
-			TweenLite.to(_back, .1, SDStyle.BUTTON_DOWN_TWEEN);
+			TweenLite.to(_back, .1, _style.BUTTON_DOWN_TWEEN);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 		}
 
@@ -104,11 +106,11 @@ package com.sleepydesign.components
 			_down = _selected;
 			if (_over)
 			{
-				TweenLite.to(_back, .1, SDStyle.BUTTON_OVER_TWEEN);
+				TweenLite.to(_back, .1, _style.BUTTON_OVER_TWEEN);
 			}
 			else
 			{
-				TweenLite.to(_back, .1, SDStyle.BUTTON_UP_TWEEN);
+				TweenLite.to(_back, .1, _style.BUTTON_UP_TWEEN);
 			}
 		}
 
