@@ -165,6 +165,11 @@ package com.sleepydesign.components
 			addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 		}
 
+		public function get contentX():Number
+		{
+			return _content.x;
+		}
+		
 		public function set contentX(value:Number):void
 		{
 			var gap:Number = Math.max(0, _contentRect.width - _scrollTarget.scrollRect.width);
@@ -173,6 +178,11 @@ package com.sleepydesign.components
 			draw();
 		}
 
+		public function get contentY():Number
+		{
+			return _content.y;
+		}
+		
 		public function set contentY(value:Number):void
 		{
 			var gap:Number = Math.max(0, _contentRect.height - _scrollTarget.scrollRect.height);

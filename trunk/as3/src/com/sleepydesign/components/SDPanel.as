@@ -40,8 +40,8 @@ package com.sleepydesign.components
 			_back.graphics.endFill();
 
 			var _scrollRect:Rectangle = _back.getRect(_back.parent);
-			_scrollRect.width += SDStyle.BORDER_THICK;
-			_scrollRect.height += SDStyle.BORDER_THICK;
+			//_scrollRect.width += SDStyle.BORDER_THICK;
+			//_scrollRect.height += SDStyle.BORDER_THICK;
 			scrollRect = _scrollRect;
 
 			super.draw();
