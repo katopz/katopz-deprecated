@@ -1,7 +1,10 @@
 package com.sleepydesign.components
 {
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Quad;
 	import com.sleepydesign.events.TransformEvent;
-
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 
@@ -70,24 +73,49 @@ package com.sleepydesign.components
 			}
 		}
 
+		public function slidePage(hPageNum:int, vPageNum:int = 0):void
+		{
+			// todo : custom slide tween
+			
+			var contentX:Number = -_hScrollBar.scrollTarget.scrollRect.width * hPageNum;
+			if(_hScrollBar.contentX != contentX)
+				TweenLite.to(_hScrollBar, 0.5, {contentX: contentX, onUpdate:draw, ease:Quad.easeOut});
+			
+			var contentY:Number = -_vScrollBar.scrollTarget.scrollRect.height * vPageNum;
+			if(_vScrollBar.contentY != contentY)
+				TweenLite.to(_vScrollBar, 0.5, {contentY: contentY, onUpdate:draw, ease:Quad.easeOut});
+		}
+
 		public function setPage(hPageNum:int, vPageNum:int = 0):void
 		{
-			contentX = -_hScrollBar.scrollTarget.scrollRect.width * hPageNum;
-			contentY = -_vScrollBar.scrollTarget.scrollRect.height * vPageNum;
+			var isDirty:Boolean = false;
+			
+			var contentX:Number = -_hScrollBar.scrollTarget.scrollRect.width * hPageNum;
+			if(_hScrollBar.contentX != contentX)
+			{
+				_hScrollBar.contentX = contentX;
+				isDirty = true;
+			}
+			
+			var contentY:Number = -_vScrollBar.scrollTarget.scrollRect.height * vPageNum;
+			if(_vScrollBar.contentY != contentY)
+			{
+				_vScrollBar.contentY = contentY;
+				isDirty = true;
+			}
+			
+			if(isDirty)
+				draw();
 		}
-
-		public function set contentX(value:Number):void
+		
+		public function get hPageNum():int
 		{
-			_hScrollBar.contentX = value;
-
-			draw();
+			return Math.ceil(_hScrollBar.scrollTarget.width / _hScrollBar.scrollTarget.scrollRect.width);
 		}
-
-		public function set contentY(value:Number):void
+		
+		public function get vPageNum():int
 		{
-			_vScrollBar.contentY = value;
-
-			draw();
+			return Math.ceil(_hScrollBar.scrollTarget.height / _vScrollBar.scrollTarget.scrollRect.height);
 		}
 
 		override public function draw():void
