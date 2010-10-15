@@ -18,15 +18,19 @@ package com.sleepydesign.components
 		protected var _min:Number = 0;
 		protected var _orientation:String;
 
-		protected var _scrollSize:Number = SDStyle.SIZE;
+		protected var _scrollSize:Number;
 		private var _pageSize:Number = 0;
 		private var _lastPosition:Point;
 
 		public static const HORIZONTAL:String = "horizontal";
 		public static const VERTICAL:String = "vertical";
 
-		public function SDSlider(orientation:String = SDSlider.HORIZONTAL)
+		public function SDSlider(orientation:String = SDSlider.HORIZONTAL, style:ISDStyle = null)
 		{
+			super(style);
+			
+			_scrollSize = _style.SIZE;
+			
 			_orientation = orientation;
 
 			_track = new SDSprite();
@@ -60,11 +64,14 @@ package com.sleepydesign.components
 
 		protected function drawHandle(size:Number = 0):void
 		{
+			if(isNaN(size))
+				return;
+				
 			_handle.graphics.clear();
 			_scrollSize = size;
 
-			_handle.graphics.lineStyle();//SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA);
-			_handle.graphics.beginFill(SDStyle.BUTTON_COLOR);
+			_handle.graphics.lineStyle();//_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA);
+			_handle.graphics.beginFill(_style.BUTTON_COLOR);
 
 			if (_orientation == HORIZONTAL)
 				_handle.graphics.drawRect(0, 0, _scrollSize, _height);

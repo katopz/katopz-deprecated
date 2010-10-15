@@ -42,8 +42,10 @@ package com.sleepydesign.components
 			}
 		}
 		
-		public function SDTextInput(text:String = "" , textField:TextField = null)
+		public function SDTextInput(text:String = "" , textField:TextField = null, style:ISDStyle = null)
 		{
+			super(style);
+			
 			_text = this.defaultText = text;
 			
 			if(textField)
@@ -117,8 +119,8 @@ package com.sleepydesign.components
 			if(!_isFlash)
 			{
 				_back.graphics.clear();
-				_back.graphics.lineStyle(SDStyle.BORDER_THICK, SDStyle.BORDER_COLOR, SDStyle.BORDER_ALPHA, true );
-				_back.graphics.beginFill(SDStyle.INPUT_BG_COLOR, SDStyle.INPUT_BG_COLOR);
+				_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true );
+				_back.graphics.beginFill(_style.INPUT_BG_COLOR, _style.INPUT_BG_COLOR);
 				_back.graphics.drawRect(0, 0, _width, _height);
 				
 				_tf.width = _width;

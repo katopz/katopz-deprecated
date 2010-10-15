@@ -13,6 +13,31 @@ package com.sleepydesign.components
 		public var lineScrollSize:Number = 10;
 
 		public var enableHorizonWheel:Boolean;
+		
+		private var _useMouseWheel:Boolean = true;
+
+		public function get useMouseWheel():Boolean
+		{
+			return _useMouseWheel;
+		}
+
+		public function set useMouseWheel(value:Boolean):void
+		{
+			_useMouseWheel = value;
+			
+			// Remove event
+			_scrollTarget.removeEventListener(TransformEvent.RESIZE, onResize);
+			_scrollTarget.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
+			removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
+			
+			// Add event
+			if(value)
+			{
+				_scrollTarget.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
+				_scrollTarget.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
+				addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
+			}
+		}
 
 		private function get _content():DisplayObject
 		{
@@ -50,8 +75,8 @@ package com.sleepydesign.components
 				//this.y = _scrollTarget.height;
 
 				// auto size
-				_scrollSize = Math.max(SDStyle.SIZE, _width * _scrollTarget.scrollRect.width / _contentRect.width);
-				setSize(_scrollTarget.scrollRect.width, SDStyle.SIZE);
+				_scrollSize = Math.max(_style.SIZE, _width * _scrollTarget.scrollRect.width / _contentRect.width);
+				setSize(_scrollTarget.scrollRect.width, _style.SIZE);
 
 				// full bar -> disable?
 				visible = (_scrollTarget.scrollRect.width < _contentRect.width);
@@ -63,8 +88,8 @@ package com.sleepydesign.components
 				//this.y = 0;
 
 				// auto size
-				_scrollSize = Math.max(SDStyle.SIZE, _height * _scrollTarget.scrollRect.height / _contentRect.height);
-				setSize(SDStyle.SIZE, _scrollTarget.scrollRect.height);
+				_scrollSize = Math.max(_style.SIZE, _height * _scrollTarget.scrollRect.height / _contentRect.height);
+				setSize(_style.SIZE, _scrollTarget.scrollRect.height);
 
 				// full bar -> disable?
 				visible = (_scrollTarget.scrollRect.height < _contentRect.height);
@@ -160,9 +185,12 @@ package com.sleepydesign.components
 			draw();
 
 			// Add event
-			value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
-			value.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
-			addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
+			if(_useMouseWheel)
+			{
+				value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
+				value.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
+				addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
+			}
 		}
 
 		public function get contentX():Number

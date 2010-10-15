@@ -20,12 +20,17 @@ package com.sleepydesign.components
 		public static const ALIGN_BOTTOM_LEFT:String = "ALIGN_BOTTOM_LEFT";
 		public static const ALIGN_BOTTOM_RIGHT:String = "ALIGN_BOTTOM_RIGHT";
 		
-		protected var _width:Number = SDStyle.SIZE;
-		protected var _height:Number = SDStyle.SIZE;
+		protected var _width:Number;
+		protected var _height:Number;
 		
-		public function SDComponent()
+		protected var _style:ISDStyle = new SDStyle;
+		
+		public function SDComponent(style:ISDStyle = null)
 		{
+			_style = style?style:_style;
 			
+			_width = _style.SIZE;
+			_height = _style.SIZE;
 		}
 		
 		public function draw():void

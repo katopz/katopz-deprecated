@@ -37,8 +37,10 @@ package com.sleepydesign.components
 		
 		private var _caller:Object
 
-		public function SDDialog(iText:* = "", caller:Object = null, align:String = "")
+		public function SDDialog(iText:* = "", caller:Object = null, align:String = "", style:ISDStyle = null)
 		{
+			super(style);
+			
 			this._iText = iText;
 			this._isTail = _isTail;
 			

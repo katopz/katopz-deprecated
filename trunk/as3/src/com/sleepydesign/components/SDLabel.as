@@ -14,14 +14,16 @@ package com.sleepydesign.components
 			return _tf;
 		}
 		
-		public function SDLabel(text:String = "")
+		public function SDLabel(text:String = "", style:ISDStyle = null)
 		{
+			super(style);
+			
 			_text = text;
 			
 			mouseEnabled = false;
 			mouseChildren = false;
 			
-			_height = SDStyle.SIZE;
+			_height = _style.SIZE;
 			_tf = new SDTextField(_text);
 			_tf.autoSize = TextFieldAutoSize.LEFT;
 			addChild(_tf);
@@ -41,7 +43,7 @@ package com.sleepydesign.components
 			{
 				_tf.autoSize = TextFieldAutoSize.NONE;
 			}
-			_height = SDStyle.SIZE;
+			_height = _style.SIZE;
 			super.draw();
 		}
 		

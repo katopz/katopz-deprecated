@@ -33,21 +33,27 @@ package com.sleepydesign.components
 		
 		public static var rowCount:int = 1;
 
-		public static var nodeWidth:int = SDStyle.SIZE + SDStyle.SIZE * .5;
-		public static var nodeHeight:int = SDStyle.SIZE + SDStyle.SIZE * .5;
+		public static var nodeWidth:int;
+		public static var nodeHeight:int;
 		
 		private var _needLabel:Boolean;
 		private var _isRadio:Boolean;
 		private var _isOpen:Boolean;
 		
-		public function SDTree(xml:XML = null, isOpen:Boolean = false, needLabel:Boolean = true, isRadio:Boolean = false)
+		public function SDTree(xml:XML = null, isOpen:Boolean = false, needLabel:Boolean = true, isRadio:Boolean = false, style:ISDStyle = null)
 		{
+			super(style);
+			
 			_xml = xml;
 			_needLabel = needLabel;
 			_isRadio = isRadio;
 			_isOpen = isOpen;
 			
-			if(!_xml)return;
+			if(!_xml)
+				return;
+			
+			nodeWidth = _style.SIZE + _style.SIZE * .5;
+			nodeHeight = _style.SIZE + _style.SIZE * .5;
 			
 			_root = parseXMLNode(_xml);
 			
