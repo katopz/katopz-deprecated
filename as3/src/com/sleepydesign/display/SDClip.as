@@ -15,16 +15,16 @@ package com.sleepydesign.display
 
 	public class SDClip extends SDSprite implements IDestroyable, ITransitionable
 	{
-		private const STATUS_INIT:String = "STATUS_INIT";
+		public static const STATUS_INIT:String = "STATUS_INIT";
 		
-		private const STATUS_SHOW:String = "STATUS_SHOW";
-		private const STATUS_HIDE:String = "STATUS_HIDE";
+		public static const STATUS_SHOW:String = "STATUS_SHOW";
+		public static const STATUS_HIDE:String = "STATUS_HIDE";
 		
-		private const STATUS_ACTIVATE:String = "STATUS_ACTIVATE";
-		private const STATUS_DEACTIVATE:String = "STATUS_DEACTIVATE";
+		public static const STATUS_ACTIVATE:String = "STATUS_ACTIVATE";
+		public static const STATUS_DEACTIVATE:String = "STATUS_DEACTIVATE";
 		
-		private const STATUS_SHOWN:String = "STATUS_SHOWN";
-		private const STATUS_HIDDEN:String = "STATUS_HIDDEN";
+		public static const STATUS_SHOWN:String = "STATUS_SHOWN";
+		public static const STATUS_HIDDEN:String = "STATUS_HIDDEN";
 		
 		private var _status:String = STATUS_INIT;
 		
@@ -33,33 +33,42 @@ package com.sleepydesign.display
 			return _status;
 		}
 		
-		public var statusSignal:Signal = new Signal(String);
+		private var _statusSignal:Signal = new Signal(SDClip, String);
+
+		public function get statusSignal():Signal
+		{
+			return _statusSignal;
+		}
 		
 		public function SDClip()
 		{
-			
+			_statusSignal.dispatch(this, _status = STATUS_INIT);
 		}
 		
 		public function show():void
 		{
 			TweenLite.to(this, .25, {autoAlpha:1, onComplete:shown});
+			
+			_statusSignal.dispatch(this, _status = STATUS_SHOW);
 		}
 		
 		public function hide():void
 		{
 			TweenLite.to(this, .25, {autoAlpha:0, onComplete:hidden});
+			
+			_statusSignal.dispatch(this, _status = STATUS_HIDE);
 		}
 		
 		protected function shown():void
 		{
 			activate();
-			statusSignal.dispatch(_status);
+			_statusSignal.dispatch(this, _status = STATUS_SHOWN);
 		}
 		
 		protected function hidden():void
 		{
 			deactivate();
-			statusSignal.dispatch(_status);
+			_statusSignal.dispatch(this, _status = STATUS_HIDDEN);
 		}
 		
 		public function activate():void
@@ -69,6 +78,8 @@ package com.sleepydesign.display
 			
 			visible = true;
 			alpha = 1;
+			
+			_statusSignal.dispatch(this, _status = STATUS_ACTIVATE);
 		}
 		
 		public function deactivate():void
@@ -78,8 +89,10 @@ package com.sleepydesign.display
 			
 			visible = false;
 			alpha = 0;
+			
+			_statusSignal.dispatch(this, _status = STATUS_DEACTIVATE);
 		}
-
+		
 		override public function destroy():void
 		{
 			TweenLite.killTweensOf(this);
