@@ -15,14 +15,29 @@ package com.sleepydesign.display
 
 	public class SDClip extends SDSprite implements IDestroyable, ITransitionable
 	{
-		public static const IS_SHOWN:String = "IS_SHOWN";
-		public static const IS_HIDDEN:String = "IS_HIDDEN";
+		private const STATUS_INIT:String = "STATUS_INIT";
 		
-		public var transitionSignal:Signal = new Signal(String);
+		private const STATUS_SHOW:String = "STATUS_SHOW";
+		private const STATUS_HIDE:String = "STATUS_HIDE";
+		
+		private const STATUS_ACTIVATE:String = "STATUS_ACTIVATE";
+		private const STATUS_DEACTIVATE:String = "STATUS_DEACTIVATE";
+		
+		private const STATUS_SHOWN:String = "STATUS_SHOWN";
+		private const STATUS_HIDDEN:String = "STATUS_HIDDEN";
+		
+		private var _status:String = STATUS_INIT;
+		
+		public function get status():String
+		{
+			return _status;
+		}
+		
+		public var statusSignal:Signal = new Signal(String);
 		
 		public function SDClip()
 		{
-			deactivate();
+			
 		}
 		
 		public function show():void
@@ -38,13 +53,13 @@ package com.sleepydesign.display
 		protected function shown():void
 		{
 			activate();
-			transitionSignal.dispatch(IS_SHOWN);
+			statusSignal.dispatch(_status);
 		}
 		
 		protected function hidden():void
 		{
 			deactivate();
-			transitionSignal.dispatch(IS_HIDDEN);
+			statusSignal.dispatch(_status);
 		}
 		
 		public function activate():void
