@@ -2,7 +2,7 @@ package com.sleepydesign.site
 {
 	import org.osflash.signals.Signal;
 	
-	public class NavigationTool
+	public class NavigationProxy
 	{
 		/* path */
 		public static var signal:Signal = new Signal(String); 
