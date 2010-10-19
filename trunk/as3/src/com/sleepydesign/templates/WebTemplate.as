@@ -4,7 +4,7 @@ package com.sleepydesign.templates
 	import com.asual.SWFAddressEvent;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.events.TreeEvent;
-	import com.sleepydesign.site.NavigationTool;
+	import com.sleepydesign.site.NavigationProxy;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
 
@@ -59,7 +59,7 @@ package com.sleepydesign.templates
 				_xml.@focus = _focus;
 			
 			_site = new SiteTool(_contentLayer, _xml);
-			NavigationTool.signal.add(setFocus);
+			NavigationProxy.signal.add(setFocus);
 		}
 
 		private function handleSWFAddress(e:SWFAddressEvent):void

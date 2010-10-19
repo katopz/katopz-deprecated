@@ -4,7 +4,7 @@ package com.sleepydesign.templates
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.site.NavigationTool;
+	import com.sleepydesign.site.NavigationProxy;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.skins.Preloader;
 	import com.sleepydesign.system.DebugUtil;
@@ -152,9 +152,9 @@ package com.sleepydesign.templates
 			DebugUtil.trace(" ! xml.@focus : " + _xml.@focus);
 			
 			_site = new SiteTool(_contentLayer, _xml);
-			NavigationTool.signal.add(setFocus);
+			NavigationProxy.signal.add(setFocus);
 			
-			NavigationTool.setFocusByPath(path = String(_xml.@focus));
+			NavigationProxy.setFocusByPath(path = String(_xml.@focus));
 		}
 		
 		protected function createSiteMap():void
