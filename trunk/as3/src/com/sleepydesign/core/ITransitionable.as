@@ -1,8 +1,10 @@
 package com.sleepydesign.core
 {
+	import org.osflash.signals.Signal;
+
 	/**
-	 * hidden -> show -> shown
-	 * shown  -> hide -> hidden
+	 * show -> shown
+	 * hide -> hidden
 	 */
 	public interface ITransitionable
 	{
@@ -25,5 +27,7 @@ package com.sleepydesign.core
 		 * auto alpha 0 -> hidden -> dispatch complete
 		 */
 		function hide():void;
+		
+		function get statusSignal():Signal;
 	}
 }
