@@ -31,14 +31,19 @@ package com.sleepydesign.core
 			if(callBack is Function)
 				callBack();
 			
-			_completeSignal.dispatch();
+			complete();
 		}
-
+		
 		public function run():void
 		{
 			// override me
 			if(task is Function)
 				task();
+		}
+		
+		public function complete():void
+		{
+			_completeSignal.dispatch();
 		}
 		
 		public function get destroyed():Boolean
