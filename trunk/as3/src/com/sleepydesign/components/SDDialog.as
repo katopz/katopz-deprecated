@@ -43,11 +43,7 @@ package com.sleepydesign.components
 			
 			this._iText = iText;
 			this._isTail = _isTail;
-			
 			this._caller = caller || this;
-			
-			super();
-			
 			this.align = align;
 			
 			init();
