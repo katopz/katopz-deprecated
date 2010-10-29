@@ -27,33 +27,26 @@ package com.cutecoma.image.editors
 
 		public static function getBitmapData(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle = null):BitmapData
 		{
-			if (asset.width + asset.height > 0)
+			if (!rectangle)
+				rectangle = asset.getBounds(asset);
+
+			var bitmapData:BitmapData;
+
+			var matrix:Matrix = new Matrix();
+
+			if (isTranslate)
 			{
-				if (!rectangle)
-					rectangle = asset.getBounds(asset);
-
-				var bitmapData:BitmapData;
-
-				var matrix:Matrix = new Matrix();
-
-				if (isTranslate)
-				{
-					bitmapData = new BitmapData(rectangle.width, rectangle.height, true, 0x00000000);
-					matrix.translate(-rectangle.x, -rectangle.y);
-				}
-				else
-				{
-					bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
-				}
-
-				bitmapData.draw(asset, matrix, asset.transform.colorTransform,null,null,true);
-
-				return bitmapData;
+				bitmapData = new BitmapData(rectangle.width, rectangle.height, true, 0x00000000);
+				matrix.translate(-rectangle.x, -rectangle.y);
 			}
 			else
 			{
-				return null;
+				bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
 			}
+
+			bitmapData.draw(asset, matrix, asset.transform.colorTransform, null, null, true);
+
+			return bitmapData;
 		}
 	}
 }
