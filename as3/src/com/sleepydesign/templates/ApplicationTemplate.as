@@ -49,8 +49,19 @@ package com.sleepydesign.templates
 		}
 
 		// app
-		protected var _stageWidth:Number = stage ? stage.stageWidth : NaN;
-		protected var _stageHeight:Number = stage ? stage.stageHeight : NaN;
+		private var _stageWidth:Number = stage ? stage.stageWidth : NaN;
+
+		public function get stageWidth():Number
+		{
+			return _stageWidth;
+		}
+
+		private var _stageHeight:Number = stage ? stage.stageHeight : NaN;
+
+		public function get stageHeight():Number
+		{
+			return _stageHeight;
+		}
 
 		protected var _screenRectangle:Rectangle;
 

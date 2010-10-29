@@ -26,14 +26,14 @@ package com.sleepydesign.display
 		public static const STATUS_SHOWN:String = "STATUS_SHOWN";
 		public static const STATUS_HIDDEN:String = "STATUS_HIDDEN";
 		
-		private var _status:String = STATUS_INIT;
+		protected var _status:String = STATUS_INIT;
 		
 		public function get status():String
 		{
 			return _status;
 		}
 		
-		private var _statusSignal:Signal = new Signal(SDClip, String);
+		protected var _statusSignal:Signal = new Signal(SDClip, String);
 
 		public function get statusSignal():Signal
 		{
