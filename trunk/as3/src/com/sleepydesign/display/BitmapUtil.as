@@ -23,17 +23,13 @@ package com.sleepydesign.display
 			return c;
 		}
 
-		public static function getBitmap(asset:DisplayObject, isTranslate:Boolean = true):Bitmap
+		public static function getBitmap(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle = null):Bitmap
 		{
 			var bitmap:Bitmap;
 			if (!(asset is Bitmap))
-			{
-				bitmap = new Bitmap(getBitmapData(asset, isTranslate));
-			}
+				bitmap = new Bitmap(getBitmapData(asset, isTranslate, rectangle));
 			else
-			{
 				bitmap = new Bitmap(Bitmap(asset).bitmapData);
-			}
 
 			bitmap.transform.matrix = asset.transform.matrix;
 			return bitmap;
@@ -41,7 +37,7 @@ package com.sleepydesign.display
 
 		public static function getBitmapData(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle = null):BitmapData
 		{
-			if (asset.width + asset.height > 0)
+			if (asset.width !=0 || asset.height != 0)
 			{
 				if (!rectangle)
 					rectangle = asset.getBounds(asset);
