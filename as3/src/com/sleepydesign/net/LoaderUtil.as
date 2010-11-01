@@ -1,5 +1,7 @@
 package com.sleepydesign.net
 {
+	import com.sleepydesign.system.DebugUtil;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -254,7 +256,7 @@ package com.sleepydesign.net
 			}
 
 			if (useDebug)
-				trace(" ! Load [" + type + "] : " + uri);
+				DebugUtil.trace(" ! Load [" + type + "] : " + uri);
 
 			// select loader
 			var _loader:*;
@@ -329,8 +331,8 @@ package com.sleepydesign.net
 					_loader.removeEventListener(IOErrorEvent.IO_ERROR, _404);
 					if (useDebug)
 					{
-						trace(" ! Error : " + event);
-						trace(" ! Not found? : " + uri);
+						DebugUtil.trace(" ! Error : " + event);
+						DebugUtil.trace(" ! Not found? : " + uri);
 					}
 					_removeEventListeners();
 				}
@@ -360,7 +362,7 @@ package com.sleepydesign.net
 			catch (e:Error)
 			{
 				if (useDebug)
-					trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
+					DebugUtil.trace(" ! Error in loading file (" + uri + "): \n" + e.message + "\n" + e.getStackTrace());
 			}
 
 			return null;
