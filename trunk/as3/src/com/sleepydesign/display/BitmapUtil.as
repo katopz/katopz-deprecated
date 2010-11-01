@@ -25,6 +25,9 @@ package com.sleepydesign.display
 
 		public static function getBitmap(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle = null):Bitmap
 		{
+			if(!asset)
+				throw new Error("Required asset!");
+			
 			var bitmap:Bitmap;
 			if (!(asset is Bitmap))
 				bitmap = new Bitmap(getBitmapData(asset, isTranslate, rectangle));
@@ -37,6 +40,9 @@ package com.sleepydesign.display
 
 		public static function getBitmapData(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle = null):BitmapData
 		{
+			if(!asset)
+				throw new Error("Required asset!");
+			
 			if (asset.width !=0 || asset.height != 0)
 			{
 				if (!rectangle)
@@ -53,8 +59,8 @@ package com.sleepydesign.display
 				}
 				else
 				{
-					//bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
-					bitmapData = new BitmapData(rectangle.width, rectangle.height, true, 0x00000000);
+					bitmapData = new BitmapData(rectangle.x + rectangle.width, rectangle.y + rectangle.height, true, 0x00000000);
+					//bitmapData = new BitmapData(rectangle.width, rectangle.height, true, 0x00000000);
 				}
 
 				bitmapData.draw(asset, matrix, asset.transform.colorTransform);//, null, rectangle, true);
