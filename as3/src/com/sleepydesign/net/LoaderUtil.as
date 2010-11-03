@@ -15,6 +15,7 @@ package com.sleepydesign.net
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 
 	/**
 	 * @example
@@ -32,7 +33,14 @@ package com.sleepydesign.net
 		public static var showLoader:Function = new Function();
 		public static var hideLoader:Function = new Function();
 
-		public static var loaderClip:DisplayObject;
+		public static var defaultLoaderClip:DisplayObject;
+		
+		public static var loaderDict:Dictionary = new Dictionary(true);
+		
+		public static function setLoader(uri:String, loaderClip:DisplayObject):void
+		{
+			loaderDict[uri] = loaderClip;
+		}
 
 		private static var loaders:Array = [];
 
@@ -64,8 +72,11 @@ package com.sleepydesign.net
 				{
 					if(eventHandler is Function)	
 						_loader.removeEventListener(Event.COMPLETE, eventHandler);
+
+					if(loaderDict[uri])
+						loaderDict[uri].visible = false;
 					
-					if (loaderClip && hideLoader is Function)
+					if (defaultLoaderClip && hideLoader is Function)
 						hideLoader();
 
 					// gc
@@ -113,7 +124,10 @@ package com.sleepydesign.net
 					if(eventHandler is Function)
 						_loader.removeEventListener(Event.COMPLETE, eventHandler);
 					
-					if (loaderClip && hideLoader is Function)
+					if(loaderDict[_loader.contentLoaderInfo.url])
+						loaderDict[_loader.contentLoaderInfo.url].visible = false;
+					
+					if (defaultLoaderClip && hideLoader is Function)
 						hideLoader();
 
 					// gc
@@ -230,7 +244,9 @@ package com.sleepydesign.net
 		 */
 		public static function load(uri:String, eventHandler:Function = null, type:String = "auto", urlRequest:URLRequest = null, isQueue:Boolean = false):Object
 		{
-			if (loaderClip && showLoader is Function)
+			if(loaderDict[uri])
+				loaderDict[uri].visible = true;
+			else if (defaultLoaderClip && showLoader is Function)
 				showLoader();
 
 			// select type
@@ -309,8 +325,11 @@ package com.sleepydesign.net
 						_loaderVO.info = null;
 						_loaderVO.loader = null;
 					}
+					
+					if(loaderDict[uri])
+						loaderDict[uri].visible = false;
 
-					if (loaderClip && hideLoader is Function && loaders && loaders.length == 0)
+					if (defaultLoaderClip && hideLoader is Function && loaders && loaders.length == 0)
 						hideLoader();
 
 					_loaderVO = null;
