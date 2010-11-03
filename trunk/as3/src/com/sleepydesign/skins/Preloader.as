@@ -40,7 +40,7 @@ package com.sleepydesign.skins
 			addChild(_bg);
 
 			// loader
-			LoaderUtil.loaderClip = _loader = addChild(loaderClip || new MacLoadingClip()) as Sprite;
+			LoaderUtil.defaultLoaderClip = _loader = addChild(loaderClip || new MacLoadingClip()) as Sprite;
 			_loader.x = _customSize.width / 2;
 			_loader.y = _customSize.height / 2;
 
@@ -54,8 +54,8 @@ package com.sleepydesign.skins
 			{
 				mouseEnabled = true;
 				create();
-				TweenLite.killTweensOf(LoaderUtil.loaderClip);
-				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha: 1});
+				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
+				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 1});
 				//DebugUtil.trace( " ! Show loader");
 			};
 
@@ -63,8 +63,8 @@ package com.sleepydesign.skins
 			{
 				mouseEnabled = false;
 				create();
-				TweenLite.killTweensOf(LoaderUtil.loaderClip);
-				TweenLite.to(LoaderUtil.loaderClip, 0.5, {autoAlpha: 0});
+				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
+				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 0});
 				//DebugUtil.trace( " ! Hide loader");
 			};
 
@@ -109,8 +109,8 @@ package com.sleepydesign.skins
 				_bg.parent.removeChild(_bg);
 			}
 
-			if (LoaderUtil.loaderClip == _loader)
-				LoaderUtil.loaderClip = null;
+			if (LoaderUtil.defaultLoaderClip == _loader)
+				LoaderUtil.defaultLoaderClip = null;
 
 			super.destroy()
 		}
