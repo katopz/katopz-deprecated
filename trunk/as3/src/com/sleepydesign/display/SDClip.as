@@ -3,13 +3,6 @@ package com.sleepydesign.display
 	import com.greensock.TweenLite;
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.core.ITransitionable;
-	import com.sleepydesign.events.IRemovableEventDispatcher;
-	import com.sleepydesign.events.ListenerManager;
-	import com.sleepydesign.utils.DisplayObjectUtil;
-	
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
-	import flash.events.Event;
 	
 	import org.osflash.signals.Signal;
 
@@ -48,14 +41,12 @@ package com.sleepydesign.display
 		public function show():void
 		{
 			TweenLite.to(this, .25, {autoAlpha:1, onComplete:shown});
-			
 			_statusSignal.dispatch(this, _status = STATUS_SHOW);
 		}
 		
 		public function hide():void
 		{
-			TweenLite.to(this, .25, {autoAlpha:0, onComplete:hidden});
-			
+			TweenLite.to(this, .1, {autoAlpha:0, onComplete:hidden});
 			_statusSignal.dispatch(this, _status = STATUS_HIDE);
 		}
 		
@@ -96,6 +87,8 @@ package com.sleepydesign.display
 		override public function destroy():void
 		{
 			TweenLite.killTweensOf(this);
+			
+			_statusSignal = null;
 			
 			super.destroy();
 		}

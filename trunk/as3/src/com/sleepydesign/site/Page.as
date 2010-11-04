@@ -157,6 +157,7 @@ package com.sleepydesign.site
 					_parent.content = event.target.content;
 
 					// inherit from content
+					/*
 					try
 					{
 						_parent.mouseEnabled = _parent.content["mouseEnabled"];
@@ -171,6 +172,7 @@ package com.sleepydesign.site
 					catch (e:*)
 					{
 					}
+					*/
 					
 					visible = _visible;
 				}
