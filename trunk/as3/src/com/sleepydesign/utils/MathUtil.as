@@ -10,7 +10,7 @@ package com.sleepydesign.utils
 			return new Point(int(index % size), int(index / size));
 		}
 		
-		public static function getRectFromIndex(index:int, size:uint, width:uint, height:uint, gapX:uint = 0, gapY:uint = 0):Point
+		public static function getRectFromIndex(index:int, size:uint, width:uint, height:uint, gapX:uint = 0, gapY:uint = 0):Rectangle
 		{
 			var point:Point = getPointFromIndex(index, width);
 			// add gap

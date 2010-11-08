@@ -4,6 +4,8 @@ package com.sleepydesign.display
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.core.ITransitionable;
 	
+	import flash.events.Event;
+	
 	import org.osflash.signals.Signal;
 
 	public class SDClip extends SDSprite implements IDestroyable, ITransitionable
@@ -36,6 +38,18 @@ package com.sleepydesign.display
 		public function SDClip()
 		{
 			_statusSignal.dispatch(this, _status = STATUS_INIT);
+			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
+		}
+		
+		protected function onStage(event:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			onInit();
+		}
+		
+		protected function onInit():void
+		{
+			
 		}
 		
 		public function show():void
@@ -86,6 +100,8 @@ package com.sleepydesign.display
 		
 		override public function destroy():void
 		{
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			
 			TweenLite.killTweensOf(this);
 			
 			_statusSignal = null;
