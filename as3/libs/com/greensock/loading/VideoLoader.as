@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.62
- * DATE: 2010-10-02
+ * VERSION: 1.652
+ * DATE: 2010-11-02
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -318,7 +318,7 @@ function errorHandler(event:LoaderEvent):void {
 			_nc.addEventListener("asyncError", _failHandler, false, 0, true);
 			_nc.addEventListener("securityError", _failHandler, false, 0, true);
 			
-			_video = _content = new Video(320, 160);
+			_video = _content = new Video(this.vars.width || 320, this.vars.height || 240);
 			_video.smoothing = Boolean(this.vars.smoothing != false);
 			_video.deblocking = uint(this.vars.deblocking);
 			
@@ -339,6 +339,7 @@ function errorHandler(event:LoaderEvent):void {
 			} else {
 				_sprite = new ContentDisplay(this);
 			}
+			Object(_sprite).rawContent = null; //so that the video doesn't initially show at the wrong size before the metaData is received at which point we can accurately determine the aspect ratio.
 		}
 		
 		/** @private **/
@@ -665,8 +666,8 @@ function errorHandler(event:LoaderEvent):void {
 			this.metaData = info;
 			_duration = info.duration;
 			if ("width" in info) {
-				_video.scaleX = info.width / 320; 
-				_video.scaleY = info.height / 160; //MUST use 160 as the base width and adjust the scale because of the way Flash reports width/height/scaleX/scaleY on Video objects (it can cause problems when using the scrollRect otherwise)
+				_video.width = Number(info.width); 
+				_video.height = Number(info.height);
 			}
 			_forceInit();
 			dispatchEvent(new LoaderEvent(LoaderEvent.INIT, this, "", info));

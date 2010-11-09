@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.631
- * DATE: 2010-10-13
+ * VERSION: 1.652
+ * DATE: 2010-11-03
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -393,7 +393,7 @@ function completeHandler(event:LoaderEvent):void {
 				} else if (s == "context") {
 					v.context = new LoaderContext(true, 
 												  (value == "own") ? ApplicationDomain.currentDomain : (value == "separate") ? new ApplicationDomain() : new ApplicationDomain(ApplicationDomain.currentDomain),
-												  SecurityDomain.currentDomain);
+												  (!_isLocal) ? SecurityDomain.currentDomain : null);
 					continue;
 				}
 				type = typeof(_varTypes[s]);
