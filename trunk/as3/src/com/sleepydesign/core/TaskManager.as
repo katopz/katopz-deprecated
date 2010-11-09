@@ -8,7 +8,12 @@ package com.sleepydesign.core
 	public class TaskManager implements IDestroyable
 	{
 		private var _isDestroyed:Boolean;
-		protected var _tasks:Vector.<ITask> = new Vector.<ITask>();
+		private var _tasks:Vector.<ITask> = new Vector.<ITask>();
+		public function get tasks():Vector.<ITask>
+		{
+			return _tasks;
+		}
+		
 		protected var _totalTasks:int;
 
 		private var _timer:Timer;
