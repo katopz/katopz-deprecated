@@ -1,8 +1,8 @@
 package org.robotlegs.demos.helloflash.model
 {
-	import flash.events.EventDispatcher;
+	import org.robotlegs.mvcs.Actor;
 	
-	public class SomeModel extends EventDispatcher
+	public class SomeModel extends Actor
 	{
 		private var _someValue:Vector.<SomeVO>;
 		
