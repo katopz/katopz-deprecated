@@ -1,10 +1,10 @@
 package com.sleepydesign.components
 {
 	import com.greensock.TweenLite;
-	
+
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
-	
+
 	import flashx.textLayout.formats.TextAlign;
 
 	public class SDButton extends SDComponent
@@ -20,21 +20,21 @@ package com.sleepydesign.components
 
 		public function SDButton(text:String = "", style:ISDStyle = null)
 		{
-			 super(style);
-			 
+			super(style);
+
 			_labelText = text;
-			
+
 			_back = new Shape();
 			addChild(_back);
 
 			_label = new SDLabel(_labelText);
 			addChild(_label);
-			
+
 			_label.autoSize = TextAlign.CENTER;
 
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 			addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-			
+
 			buttonMode = true;
 			useHandCursor = true;
 			setSize(48, 18);
@@ -55,16 +55,16 @@ package com.sleepydesign.components
 			}
 			_label.draw();
 			_label.x = _width / 2 - _label.width / 2;
-			
-			if(_width<_label.width+4)
-				setSize(_label.width+4, _height);
-			
+
+			if (_width < _label.width + 4)
+				setSize(_label.width + 4, _height);
+
 			_back.graphics.clear();
 			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
 			_back.graphics.beginFill(_style.BUTTON_COLOR, _style.BUTTON_ALPHA);
 			_back.graphics.drawRoundRect(0, 0, _width, _height, _style.SIZE * .75, _style.SIZE * .75);
 			_back.graphics.endFill();
-			
+
 			super.draw();
 		}
 

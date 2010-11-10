@@ -12,7 +12,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
-	
+
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
 	import flash.events.DataEvent;
@@ -32,7 +32,7 @@ package com.sleepydesign.site
 
 		private var _loader:Object /*URLLoader, Loader*/;
 		private var _data:Object /*FormData*/;
-		
+
 		public function get data():*
 		{
 			return _data;
@@ -50,7 +50,7 @@ package com.sleepydesign.site
 		public var isSubmit:Boolean = true;
 		public var action:String;
 		public var method:String = "POST";
-		
+
 		public function FormTool(container:DisplayObjectContainer, xml:XML = null, eventHandler:Function = null)
 		{
 			DebugUtil.trace("\n / [Form] ------------------------------- ");
@@ -58,15 +58,15 @@ package com.sleepydesign.site
 			_container = container;
 			_xml = xml;
 			_eventHandler = eventHandler || trace;
-			
+
 			create();
 		}
-							
+
 		public function create():void
 		{
 			action = _xml.@action;
 			method = _xml.@method;
-			
+
 			_onInvalidCommand = String(_xml.@onInvalid);
 			_onIncompleteCommand = String(_xml.@onIncomplete);
 
@@ -140,7 +140,7 @@ package com.sleepydesign.site
 			}
 			DebugUtil.trace(" ------------------------------- [Form] /\n");
 		}
-		
+
 		// ____________________________________________ Field ____________________________________________
 
 		private function focusListener(event:FocusEvent):void
@@ -340,11 +340,11 @@ package com.sleepydesign.site
 
 		// ____________________________________________ Action ____________________________________________
 
-		public function submit(data:Object=null):void
+		public function submit(data:Object = null):void
 		{
-			if(!_data)
+			if (!_data)
 				_data = data;
-			
+
 			var url:String = action;
 
 			//external get data
@@ -366,7 +366,7 @@ package com.sleepydesign.site
 
 			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data);
 			dispatchEvent(_formEvent);
-			if(_eventHandler is Function)
+			if (_eventHandler is Function)
 				_eventHandler(_formEvent);
 
 			if (isSubmit)
@@ -383,7 +383,7 @@ package com.sleepydesign.site
 
 				_formEvent = new FormEvent(FormEvent.SUBMIT, _data);
 				dispatchEvent(_formEvent);
-				if(_eventHandler is Function)
+				if (_eventHandler is Function)
 					_eventHandler(_formEvent);
 			}
 		}
@@ -398,14 +398,14 @@ package com.sleepydesign.site
 				return;
 
 			// reset?
-			for each (var input:*in _items)
+			for each (var input:* in _items)
 				if (input.isReset)
 					input.text = input.defaultText;
 
 			// form data event
 			//var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
 			dispatchEvent(event);
-			if(_eventHandler is Function)
+			if (_eventHandler is Function)
 				_eventHandler(event);
 		}
 
@@ -453,21 +453,21 @@ package com.sleepydesign.site
 			}
 			_textField = null;
 			_item = null;
-			
+
 			_items = null;
 			_xml = null;
 			_xmlList = null;
 			returnType = null;
-			
+
 			_container = null;
 			_eventHandler = null;
-			
+
 			LoaderUtil.cancel(_loader);
 			_loader = null;
 			_data = null;
-			
+
 			DisplayObjectUtil.removeChildren(_container, true, true);
-			
+
 			super.destroy();
 		}
 	}

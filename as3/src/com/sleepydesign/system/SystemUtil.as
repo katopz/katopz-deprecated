@@ -62,20 +62,21 @@ package com.sleepydesign.system
 
 		public static function addContext(container:DisplayObjectContainer, label:String, eventHandler:Function = null, separatorBefore:Boolean = false, enabled:Boolean = true, visible:Boolean = true):void
 		{
-			try{
-			var _oldItems:Array = container["contextMenu"] ? container["contextMenu"].customItems.concat() : [];
-			var _contextMenu:ContextMenu = container["contextMenu"] = new ContextMenu();
-			_contextMenu.hideBuiltInItems();
+			try
+			{
+				var _oldItems:Array = container["contextMenu"] ? container["contextMenu"].customItems.concat() : [];
+				var _contextMenu:ContextMenu = container["contextMenu"] = new ContextMenu();
+				_contextMenu.hideBuiltInItems();
 
-			_contextMenu.customItems = _contextMenu.customItems.concat(_oldItems);
+				_contextMenu.customItems = _contextMenu.customItems.concat(_oldItems);
 
-			var item:ContextMenuItem = new ContextMenuItem(label, separatorBefore, enabled, visible);
-			_contextMenu.customItems.push(item);
+				var item:ContextMenuItem = new ContextMenuItem(label, separatorBefore, enabled, visible);
+				_contextMenu.customItems.push(item);
 
-			if (eventHandler is Function)
-				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, eventHandler);
+				if (eventHandler is Function)
+					item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, eventHandler);
 			}
-			catch(e:*)
+			catch (e:*)
 			{
 				//TODO AIR
 				trace(" ! playerType : " + Capabilities.playerType)
@@ -136,15 +137,15 @@ package com.sleepydesign.system
 
 				try
 				{
-					if(argument3)
-						ExternalInterface.call(functionName, argument1, argument2, argument3 );
-					else if(argument2)
+					if (argument3)
+						ExternalInterface.call(functionName, argument1, argument2, argument3);
+					else if (argument2)
 						ExternalInterface.call(functionName, argument1, argument2);
-					else if(argument1)
+					else if (argument1)
 						ExternalInterface.call(functionName, argument1);
 					else
 						ExternalInterface.call(functionName);
-					
+
 					isDone = true;
 				}
 				catch (e:Error)
@@ -167,7 +168,7 @@ package com.sleepydesign.system
 			var argumentArray:Array = argumentString.split(",");
 			var argument:Object;
 			var _args:Array = [];
-			for each(var arg:String in argumentArray)
+			for each (var arg:String in argumentArray)
 			{
 				//TODO : RegExp
 				if ((arg.indexOf("'") == 0) && (arg.lastIndexOf("'") == arg.length - 1))
@@ -183,8 +184,8 @@ package com.sleepydesign.system
 				else
 				{
 					//boolean? number?
-					if(arg=="true" || arg=="false")
-						argument = (arg=="true");
+					if (arg == "true" || arg == "false")
+						argument = (arg == "true");
 					else
 						argument = Number(arg);
 				}

@@ -1,5 +1,6 @@
 package com.sleepydesign.utils
 {
+
 	public class ArrayUtil
 	{
 		public static function removeItem(tarArray:Array, item:*):uint

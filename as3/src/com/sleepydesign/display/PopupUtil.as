@@ -5,7 +5,7 @@ package com.sleepydesign.display
 	import com.greensock.plugins.BlurFilterPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.core.ITransitionable;
-	
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
@@ -17,9 +17,9 @@ package com.sleepydesign.display
 		private static var bitmap:Bitmap;
 		private static var container:DisplayObjectContainer;
 		private static var currentPopup:DisplayObjectContainer;
-		
+
 		private static var _handler:Function;
-		
+
 		private static var _tweenObject:Object = {};
 
 		public static function init(popupObject:DisplayObjectContainer):void
@@ -42,7 +42,7 @@ package com.sleepydesign.display
 		{
 			if (currentPopup == popupObject)
 				return;
-			
+
 			_handler = handler;
 
 			//down
@@ -67,8 +67,8 @@ package com.sleepydesign.display
 			container.stage.addChild(popupObject);
 
 			TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
-			
-			if(popupObject is ITransitionable)
+
+			if (popupObject is ITransitionable)
 				ITransitionable(popupObject).show();
 			else
 				TweenLite.to(popupObject, .5, {autoAlpha: 1});
@@ -107,14 +107,16 @@ package com.sleepydesign.display
 
 			TweenPlugin.activate([AutoAlphaPlugin, BlurFilterPlugin]);
 			TweenLite.to(bitmap, .25, {autoAlpha: 0, blurFilter: {blurX: 0, blurY: 0}});
-			
-			if(currentPopup is ITransitionable)
+
+			if (currentPopup is ITransitionable)
 			{
 				ITransitionable(currentPopup).hide();
-			}else{
+			}
+			else
+			{
 				TweenLite.to(currentPopup, .25, {autoAlpha: 0});
 			}
-			
+
 			TweenLite.to(_tweenObject, .25, {onComplete: popdownComplete, onCompleteParams: [handler]});
 		}
 
@@ -122,10 +124,10 @@ package com.sleepydesign.display
 		{
 			if (handler is Function)
 				handler();
-			
+
 			if (_handler is Function)
 				_handler();
-			
+
 			destroy();
 		}
 
@@ -144,7 +146,7 @@ package com.sleepydesign.display
 					//stage!
 				}
 			}
-			
+
 			TweenLite.killTweensOf(_tweenObject);
 
 			if (bitmap && bitmap.parent && bitmap.parent.contains(bitmap))

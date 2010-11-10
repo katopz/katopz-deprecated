@@ -297,7 +297,7 @@ package com.sleepydesign.components
 			//child
 			for each (var child:SDTreeNode in _root.childs)
 				child.destroy();
-			
+
 			//signal
 			nodeSignal.removeAll();
 			nodeSignal = null;

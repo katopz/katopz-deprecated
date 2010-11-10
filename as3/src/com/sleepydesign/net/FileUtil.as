@@ -29,17 +29,17 @@ package com.sleepydesign.net
 		 * Limit your upload size
 		 */
 		public static var UPLOAD_LIMIT:Number = 200000;
-		
+
 		/**
-		 * prevent gc 
-		 */		
+		 * prevent gc
+		 */
 		private static var _file:FileReference;
-		
+
 		/**
 		 * Your upload path
 		 */
 		public static var UPLOAD_URL:String;
-		
+
 		/**
 		 * Browse with any file type and listen
 		 * @param eventHandler
@@ -52,9 +52,9 @@ package com.sleepydesign.net
 
 			_file = new FileReference();
 			var typeFilter:Array = [new FileFilter(fileTypes.join(",").toString(), fileTypes.join(";").toString())];
-			
+
 			_file.addEventListener(Event.COMPLETE, eventHandler);
-			
+
 			_file.addEventListener(Event.CANCEL, eventHandler);
 			_file.addEventListener(Event.SELECT, eventHandler);
 			var _onCompleteFunction:Function;
@@ -71,8 +71,8 @@ package com.sleepydesign.net
 					trace(e);
 					//FP9
 					var request:URLRequest = new URLRequest();
-					
-					if(UPLOAD_URL)
+
+					if (UPLOAD_URL)
 					{
 						request.url = UPLOAD_URL;
 
@@ -87,7 +87,7 @@ package com.sleepydesign.net
 							_file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, eventHandler);
 							_file.addEventListener(Event.SELECT, eventHandler);
 							_file.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, eventHandler);
-	
+
 							// TODO : gc
 							_file.upload(request);
 						}
@@ -95,7 +95,9 @@ package com.sleepydesign.net
 						{
 							trace("File is too large : " + int(_file.size / 1024) + "KB");
 						}
-					}else{
+					}
+					else
+					{
 						trace("Need upload URL!");
 					}
 				}
@@ -134,7 +136,7 @@ package com.sleepydesign.net
 				}
 			});
 		}
-		
+
 		/**
 		 * Browse image and listen
 		 * @param eventHandler
@@ -142,7 +144,7 @@ package com.sleepydesign.net
 		 */
 		public static function openImage(eventHandler:Function, fileTypes:Array = null):FileReference
 		{
-			return open(fileTypes || ["*.jpg", "*.jpeg", "*.gif", "*.png"] , function(event:Event):void
+			return open(fileTypes || ["*.jpg", "*.jpeg", "*.gif", "*.png"], function(event:Event):void
 			{
 				if (event.type == Event.COMPLETE || event.type == DataEvent.UPLOAD_COMPLETE_DATA)
 				{

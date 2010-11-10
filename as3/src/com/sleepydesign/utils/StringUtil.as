@@ -1,5 +1,6 @@
 package com.sleepydesign.utils
 {
+
 	public class StringUtil
 	{
 		public static function createLink(url:String, text:String, color:String = "#666666"):String
@@ -12,10 +13,10 @@ package com.sleepydesign.utils
 			str += "</font>";
 			return str;
 		}
-		
+
 		public static function replace(source:String, findString:String, replaceString:String, pattern:String = "g"):String
 		{
-			return source.split(findString).join(replaceString); 
+			return source.split(findString).join(replaceString);
 			//return source.replace(new RegExp(oldString, pattern), newString);
 		}
 
@@ -23,7 +24,7 @@ package com.sleepydesign.utils
 		{
 			return !isNull(newValue) ? newValue : defaultValue;
 		}
-		
+
 		public static function leadingZero(source:*, length:Number = 2):String
 		{
 			if (isNaN(Number(source)))
@@ -36,7 +37,7 @@ package com.sleepydesign.utils
 
 		public static function newlineToBR(source:String):String
 		{
-			return source.replace( /\r\n/g, "<br/>");
+			return source.replace(/\r\n/g, "<br/>");
 		}
 
 		public static function toHEX(num:Number):String

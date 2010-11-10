@@ -3,7 +3,7 @@ package com.sleepydesign.text
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.events.IRemovableEventDispatcher;
 	import com.sleepydesign.events.ListenerManager;
-	
+
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.text.StyleSheet;

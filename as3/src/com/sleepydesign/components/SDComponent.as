@@ -2,14 +2,14 @@ package com.sleepydesign.components
 {
 	import com.sleepydesign.core.ITransformable;
 	import com.sleepydesign.display.SDSprite;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Transform;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class SDComponent extends SDSprite implements ITransformable
@@ -226,29 +226,29 @@ package com.sleepydesign.components
 		}
 
 		// ------------------------------------------------------------------------ Drag
-		
+
 		override public function destroy():void
 		{
 			// event
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			
-			if(_dragArea)
+
+			if (_dragArea)
 				_dragArea.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
-			
-			if(stage)
+
+			if (stage)
 			{
 				stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 				stage.removeEventListener(Event.MOUSE_LEAVE, onDrop);
 			}
-			
+
 			//signal
 			_transformSignal.removeAll();
 			_transformSignal = null;
-			
+
 			// referer
 			_style = null;
-			
-			super.destroy();	
+
+			super.destroy();
 		}
 	}
 }

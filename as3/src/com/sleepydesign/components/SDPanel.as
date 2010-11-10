@@ -13,7 +13,7 @@ package com.sleepydesign.components
 		public function SDPanel(style:ISDStyle = null)
 		{
 			super(style);
-			
+
 			_back = new Shape();
 			addChild(_back);
 
@@ -35,8 +35,8 @@ package com.sleepydesign.components
 		override public function draw():void
 		{
 			_back.graphics.clear();
-			_back.graphics.lineStyle();//_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
-			_back.graphics.beginFill(_style.BACKGROUND, 0*_style.BACKGROUND_ALPHA);
+			_back.graphics.lineStyle(); //_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
+			_back.graphics.beginFill(_style.BACKGROUND, 0 * _style.BACKGROUND_ALPHA);
 
 			_back.graphics.drawRect(0, 0, _width, _height);
 			_back.graphics.endFill();

@@ -6,7 +6,7 @@ package com.sleepydesign.skins
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
@@ -17,7 +17,7 @@ package com.sleepydesign.skins
 	public class Preloader extends SDSprite
 	{
 		public static var backgroundColor:Number = 0xFFFFFF;
-		
+
 		private var _loader:Sprite;
 		private var _bg:Sprite;
 		private var _containter:DisplayObjectContainer;
@@ -56,7 +56,7 @@ package com.sleepydesign.skins
 				create();
 				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
 				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 1});
-				//DebugUtil.trace( " ! Show loader");
+					//DebugUtil.trace( " ! Show loader");
 			};
 
 			LoaderUtil.hideLoader = function():void
@@ -65,7 +65,7 @@ package com.sleepydesign.skins
 				create();
 				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
 				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 0});
-				//DebugUtil.trace( " ! Hide loader");
+					//DebugUtil.trace( " ! Hide loader");
 			};
 
 			// resize

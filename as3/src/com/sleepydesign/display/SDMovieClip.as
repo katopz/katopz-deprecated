@@ -2,7 +2,7 @@ package com.sleepydesign.display
 {
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.utils.DisplayObjectUtil;
-	
+
 	import flash.display.MovieClip;
 
 	dynamic public class SDMovieClip extends MovieClip implements IDestroyable
@@ -17,7 +17,7 @@ package com.sleepydesign.display
 		public function destroy():void
 		{
 			_isDestroyed = true;
-			
+
 			DisplayObjectUtil.removeChildren(this, true, true);
 
 			try
