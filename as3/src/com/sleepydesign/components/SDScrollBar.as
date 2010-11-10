@@ -1,8 +1,7 @@
 package com.sleepydesign.components
 {
 	import com.sleepydesign.events.TransformEvent;
-	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
@@ -13,7 +12,7 @@ package com.sleepydesign.components
 		public var lineScrollSize:Number = 10;
 
 		public var enableHorizonWheel:Boolean;
-		
+
 		private var _useMouseWheel:Boolean = true;
 
 		public function get useMouseWheel():Boolean
@@ -24,14 +23,14 @@ package com.sleepydesign.components
 		public function set useMouseWheel(value:Boolean):void
 		{
 			_useMouseWheel = value;
-			
+
 			// Remove event
 			_scrollTarget.removeEventListener(TransformEvent.RESIZE, onResize);
 			_scrollTarget.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
-			
+
 			// Add event
-			if(value)
+			if (value)
 			{
 				_scrollTarget.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
 				_scrollTarget.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
@@ -166,26 +165,24 @@ package com.sleepydesign.components
 
 			// Setup
 			_scrollTarget = value;
-			
+
 			// auto align
 			if (_orientation == HORIZONTAL)
 			{
-				// auto align
-				this.x = 0;
-				this.y = _scrollTarget.height;
+				x = 0;
+				y = _scrollTarget.height;
 			}
 			else
 			{
-				// auto align
-				this.x = _scrollTarget.width;
-				this.y = 0;
+				x = _scrollTarget.width;
+				y = 0;
 			}
-			
+
 			// View
 			draw();
 
 			// Add event
-			if(_useMouseWheel)
+			if (_useMouseWheel)
 			{
 				value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
 				value.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
@@ -197,11 +194,11 @@ package com.sleepydesign.components
 		{
 			return _content.x;
 		}
-		
+
 		public function set contentX(value:Number):void
 		{
 			var gap:Number = Math.max(0, _contentRect.width - _scrollTarget.scrollRect.width);
-			_scrollPosition = (- value * 100 / gap) || 0;
+			_scrollPosition = (-value * 100 / gap) || 0;
 
 			draw();
 		}
@@ -210,11 +207,11 @@ package com.sleepydesign.components
 		{
 			return _content.y;
 		}
-		
+
 		public function set contentY(value:Number):void
 		{
 			var gap:Number = Math.max(0, _contentRect.height - _scrollTarget.scrollRect.height);
-			_scrollPosition = (- value * 100 / gap) || 0;
+			_scrollPosition = (-value * 100 / gap) || 0;
 
 			draw();
 		}
