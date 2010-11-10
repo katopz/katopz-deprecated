@@ -114,7 +114,7 @@ package com.sleepydesign.components
 		{
 			drawTrack();
 			drawHandle(_scrollSize);
-			super.draw();
+			//super.draw();
 		}
 
 		public function setSliderParams(min:Number, max:Number, scrollPosition:Number, pageSize:Number = 10):void
