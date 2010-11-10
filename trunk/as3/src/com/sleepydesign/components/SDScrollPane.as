@@ -2,7 +2,6 @@ package com.sleepydesign.components
 {
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Quad;
-	import com.sleepydesign.events.TransformEvent;
 
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
@@ -49,7 +48,7 @@ package com.sleepydesign.components
 			panel = new SDPanel();
 			addChild(panel);
 			target = panel;
-
+			
 			setSize(100, 100);
 		}
 
@@ -60,12 +59,16 @@ package com.sleepydesign.components
 
 			draw();
 		}
+		
+		public function redraw():void
+		{
+			target = panel;
+		}
 
 		public function addContent(child:DisplayObject):DisplayObject
 		{
 			panel.addChild(child);
 			target = panel;
-			draw();
 			return child;
 		}
 
@@ -86,7 +89,8 @@ package com.sleepydesign.components
 				panel.setSize(w, h);
 
 				draw();
-				dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+				//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+				transformSignal.dispatch(transform);
 			}
 		}
 
@@ -149,14 +153,14 @@ package com.sleepydesign.components
 		{
 			_vScrollBar.draw();
 			_hScrollBar.draw();
-
+			
 			_hScrollBar.enableHorizonWheel = !_vScrollBar.visible;
 
 			_hScrollBar.enableHorizonWheel = _hScrollBar.enableHorizonWheel && useMouseWheel;
 
 			_vScrollBar.visible = _vScrollBar.visible && scrollBarVisible;
 			_hScrollBar.visible = _hScrollBar.visible && scrollBarVisible;
-
+			
 		   _back.graphics.clear();
 		   _back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
 		   _back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
