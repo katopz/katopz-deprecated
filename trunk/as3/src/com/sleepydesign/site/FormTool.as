@@ -4,7 +4,6 @@ package com.sleepydesign.site
 	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.events.FormEvent;
-	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.system.SystemUtil;
@@ -12,7 +11,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
-
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
 	import flash.events.DataEvent;
@@ -23,9 +22,34 @@ package com.sleepydesign.site
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
+	
+	import org.osflash.signals.Signal;
 
-	public class FormTool extends RemovableEventDispatcher implements IDestroyable
+	public class FormTool implements IDestroyable
 	{
+		// --------------------------------------------------------------------
+		
+		// data is complete
+		public static const COMPLETE:String = "sd-form-complete";
+		
+		// data is incomplete
+		public static const INCOMPLETE:String = "sd-form-incomplete";
+		
+		// data out is invalid
+		public static const INVALID:String = "sd-form-invalid";
+		
+		// data out is valid
+		public static const VALID:String = "sd-form-valid";
+		
+		// submit
+		public static const SUBMIT:String = "sd-form-submit";
+		public static const EXTERNAL_SUBMIT:String = "sd-external-form-submit";
+		public static const DATA_CHANGE:String = "sd-data-change-submit";
+		
+		public var formSignal:Signal = new Signal(String, Object);
+		
+		// --------------------------------------------------------------------
+		
 		private var _container:DisplayObjectContainer;
 		private var _xml:XML;
 		private var _eventHandler:Function;
@@ -320,9 +344,7 @@ package com.sleepydesign.site
 			if (_onIncompleteCommand)
 				SystemUtil.doCommand(_onIncompleteCommand, this);
 
-			var _formEvent:FormEvent = new FormEvent(FormEvent.INCOMPLETE, {items: items});
-			dispatchEvent(_formEvent);
-			_eventHandler(_formEvent);
+			formSignal.dispatch(FormEvent.INCOMPLETE, {items: items});
 
 		}
 
@@ -333,9 +355,7 @@ package com.sleepydesign.site
 			if (_onInvalidCommand)
 				SystemUtil.doCommand(StringUtil.replace(_onInvalidCommand, "$invalid_list", items.join(",")), this);
 
-			var _formEvent:FormEvent = new FormEvent(FormEvent.INVALID, {items: items});
-			dispatchEvent(_formEvent);
-			_eventHandler(_formEvent);
+			formSignal.dispatch(FormEvent.INVALID, {items: items});
 		}
 
 		// ____________________________________________ Action ____________________________________________
@@ -365,7 +385,8 @@ package com.sleepydesign.site
 			DebugUtil.trace(ObjectUtil.toString(_data));
 
 			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data);
-			dispatchEvent(_formEvent);
+			formSignal.dispatch(FormEvent.COMPLETE, _data);
+			
 			if (_eventHandler is Function)
 				_eventHandler(_formEvent);
 
@@ -381,8 +402,7 @@ package com.sleepydesign.site
 					_loader = LoaderUtil.request(url, _data, onGetFormData, URLRequestMethod.GET);
 				}
 
-				_formEvent = new FormEvent(FormEvent.SUBMIT, _data);
-				dispatchEvent(_formEvent);
+				formSignal.dispatch(FormEvent.SUBMIT, _data);
 				if (_eventHandler is Function)
 					_eventHandler(_formEvent);
 			}
@@ -404,14 +424,22 @@ package com.sleepydesign.site
 
 			// form data event
 			//var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
-			dispatchEvent(event);
+			formSignal.dispatch(event.type);
+			
 			if (_eventHandler is Function)
 				_eventHandler(event);
 		}
 
 		// ____________________________________________ Destroy ____________________________________________
 
-		override public function destroy():void
+		private var _isDestroyed:Boolean;
+		
+		public function get destroyed():Boolean
+		{
+			return this._isDestroyed;
+		}
+		
+		public function destroy():void
 		{
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();

@@ -9,14 +9,14 @@ package
 	import flash.events.Event;
 	import flash.net.URLVariables;
 
-	public class authen extends SDSprite
+	public class TestAuthen extends SDSprite
 	{
 		[Embed(source="assets/simple-authen.swf", symbol="FormClip")]
 		private var FormClip:Class;
 		public var logInClip:Sprite = new FormClip() as Sprite;
 		private var _form:FormTool;
 
-		public function authen()
+		public function TestAuthen()
 		{
 			// asset
 			addChild(logInClip);
