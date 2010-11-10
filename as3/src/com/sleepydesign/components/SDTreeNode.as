@@ -103,8 +103,6 @@ package com.sleepydesign.components
 					visible = false
 				}
 			}
-			
-			super.draw();
 		}
 
 		public function open():void
@@ -171,6 +169,22 @@ package com.sleepydesign.components
 		public function get selectedNode():SDTreeNode
 		{
 			return _selectedNode;
+		}
+		
+		override public function destroy():void
+		{
+			// referer
+			_back = null;
+			_button = null;
+			_label = null;
+			_selectedNode = null;
+			
+			childs = null;
+			parentNode = null;
+			
+			data = null;
+			
+			super.destroy();
 		}
 	}
 }

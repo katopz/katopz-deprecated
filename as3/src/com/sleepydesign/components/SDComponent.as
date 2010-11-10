@@ -88,7 +88,7 @@ package com.sleepydesign.components
 			{
 				if (hasEventListener(Event.ADDED_TO_STAGE))
 					removeEventListener(Event.ADDED_TO_STAGE, onStage);
-				addEventListener(Event.ADDED_TO_STAGE, onStage);
+				addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 				return;
 			}
 			else
@@ -226,5 +226,29 @@ package com.sleepydesign.components
 		}
 
 		// ------------------------------------------------------------------------ Drag
+		
+		override public function destroy():void
+		{
+			// event
+			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			
+			if(_dragArea)
+				_dragArea.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+			
+			if(stage)
+			{
+				stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
+				stage.removeEventListener(Event.MOUSE_LEAVE, onDrop);
+			}
+			
+			//signal
+			_transformSignal.removeAll();
+			_transformSignal = null;
+			
+			// referer
+			_style = null;
+			
+			super.destroy();	
+		}
 	}
 }
