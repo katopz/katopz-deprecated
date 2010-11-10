@@ -10,7 +10,7 @@
 			<page id="deep-child" label="Deep Child" src="deep-child.swf"/>
 		</page>
 	</page>
-	<page id="parent-focus-swf" label="Parent Focus SWF" src="animated-loop.swf" focus="focused-child">
+	<page id="parent-focus-swf" label="Parent Focus SWF" src="parent-swf.swf" focus="focused-child">
 		<page id="focused-child" label="Focused Child" src="child-swf.swf"/>
 		<page id="not-focused-child" label="Not Focused Child" src="deep-child.swf"/>
 	</page>
