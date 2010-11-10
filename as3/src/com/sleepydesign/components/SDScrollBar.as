@@ -1,10 +1,11 @@
 package com.sleepydesign.components
 {
-	import com.sleepydesign.events.TransformEvent;
+	import com.sleepydesign.core.ITransformable;
 
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.geom.Transform;
 
 	public class SDScrollBar extends SDSlider
 	{
@@ -25,14 +26,19 @@ package com.sleepydesign.components
 			_useMouseWheel = value;
 
 			// Remove event
-			_scrollTarget.removeEventListener(TransformEvent.RESIZE, onResize);
+			//_scrollTarget.removeEventListener(TransformEvent.RESIZE, onResize);
+			if (_scrollTarget is ITransformable)
+				ITransformable(_scrollTarget).transformSignal.remove(onResize);
+
 			_scrollTarget.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
 			// Add event
 			if (value)
 			{
-				_scrollTarget.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
+				//_scrollTarget.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
+				if (_scrollTarget is ITransformable)
+					ITransformable(_scrollTarget).transformSignal.add(onResize);
 				_scrollTarget.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 				addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 			}
@@ -98,8 +104,14 @@ package com.sleepydesign.components
 			super.draw();
 		}
 
-		private function onResize(event:TransformEvent):void
+		private var _cachedTransform:String;
+
+		private function onResize(transform:Transform):void
 		{
+			if (_scrollTarget.transform.matrix.toString() == _cachedTransform)
+				return;
+
+			_cachedTransform = _scrollTarget.transform.matrix.toString();
 			draw();
 		}
 
@@ -107,8 +119,6 @@ package com.sleepydesign.components
 		{
 			if (!_scrollTarget || !_scrollTarget.scrollRect)
 				return true;
-
-			var _contentRect:Rectangle = _scrollTarget.getRect(_scrollTarget.parent);
 
 			if (_orientation == HORIZONTAL)
 				return Boolean(_scrollTarget.scrollRect.width < _contentRect.width);
@@ -159,7 +169,10 @@ package com.sleepydesign.components
 		public function set scrollTarget(value:DisplayObject):void
 		{
 			// Remove event
-			value.removeEventListener(TransformEvent.RESIZE, onResize);
+			//value.removeEventListener(TransformEvent.RESIZE, onResize);
+			if (_scrollTarget is ITransformable)
+				ITransformable(_scrollTarget).transformSignal.remove(onResize);
+
 			value.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			removeEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
@@ -184,7 +197,10 @@ package com.sleepydesign.components
 			// Add event
 			if (_useMouseWheel)
 			{
-				value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
+				//value.addEventListener(TransformEvent.RESIZE, onResize, false, 0, true);
+				if (_scrollTarget is ITransformable)
+					ITransformable(_scrollTarget).transformSignal.add(onResize);
+
 				value.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 				addEventListener(MouseEvent.MOUSE_WHEEL, onWheel, false, 0, true);
 			}

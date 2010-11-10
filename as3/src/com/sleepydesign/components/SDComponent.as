@@ -1,15 +1,18 @@
 package com.sleepydesign.components
 {
+	import com.sleepydesign.core.ITransformable;
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.events.TransformEvent;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Transform;
+	
+	import org.osflash.signals.Signal;
 
-	public class SDComponent extends SDSprite
+	public class SDComponent extends SDSprite implements ITransformable
 	{
 		public static const ALIGN_TOP_LEFT:String = "ALIGN_TOP_LEFT";
 		public static const ALIGN_TOP_RIGHT:String = "ALIGN_TOP_RIGHT";
@@ -23,6 +26,13 @@ package com.sleepydesign.components
 
 		protected var _style:ISDStyle = new SDStyle;
 
+		private var _transformSignal:Signal = new Signal(Transform);
+
+		public function get transformSignal():Signal
+		{
+			return _transformSignal;
+		}
+
 		public function SDComponent(style:ISDStyle = null)
 		{
 			_style = style ? style : _style;
@@ -30,7 +40,7 @@ package com.sleepydesign.components
 			_width = _style.SIZE;
 			_height = _style.SIZE;
 		}
-		
+
 		public function draw():void
 		{
 			// align
@@ -86,13 +96,13 @@ package com.sleepydesign.components
 				draw();
 			}
 		}
-		
+
 		private function onStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 			draw();
 		}
-		
+
 		// Transform ------------------------------------------------------------------------
 
 		public function setPosition(x:int, y:int):void
@@ -120,7 +130,8 @@ package com.sleepydesign.components
 				return;
 
 			draw();
-			dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+			//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+			transformSignal.dispatch(transform);
 		}
 
 		override public function set width(w:Number):void
@@ -130,7 +141,8 @@ package com.sleepydesign.components
 
 			_width = w;
 			draw();
-			dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+			//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+			transformSignal.dispatch(transform);
 		}
 
 		override public function get width():Number
@@ -145,7 +157,8 @@ package com.sleepydesign.components
 
 			_height = h;
 			draw();
-			dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+			//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
+			transformSignal.dispatch(transform);
 		}
 
 		override public function get height():Number
@@ -168,7 +181,7 @@ package com.sleepydesign.components
 
 			super.y = int(value);
 		}
-		
+
 		// ------------------------------------------------------------------------ Transform
 
 		// Drag ------------------------------------------------------------------------
