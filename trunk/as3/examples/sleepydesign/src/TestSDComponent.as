@@ -3,6 +3,7 @@ package
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDScrollPane;
+	import com.sleepydesign.components.SDSlider;
 	import com.sleepydesign.components.SDSpeechBalloon;
 	import com.sleepydesign.components.SDTextInput;
 	import com.sleepydesign.display.SDSprite;

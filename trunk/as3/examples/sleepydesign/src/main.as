@@ -7,7 +7,7 @@ package
 	{
 		public function main()
 		{
-			isSiteMap = true;
+			_isSiteMap = true;
 		}
 	}
 }
