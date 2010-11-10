@@ -2,8 +2,8 @@ package com.sleepydesign.templates
 {
 	import com.asual.SWFAddress;
 	import com.asual.SWFAddressEvent;
+	import com.sleepydesign.components.SDTreeNode;
 	import com.sleepydesign.data.DataProxy;
-	import com.sleepydesign.events.TreeEvent;
 	import com.sleepydesign.site.NavigationProxy;
 	import com.sleepydesign.site.SiteTool;
 	import com.sleepydesign.utils.StringUtil;
@@ -11,12 +11,12 @@ package com.sleepydesign.templates
 	public class WebTemplate extends ApplicationTemplate
 	{
 		protected var _flashvars:Object;
-		
+
 		public function get flashvars():Object
 		{
 			return _flashvars;
 		}
-		
+
 		public function WebTemplate()
 		{
 			if (loaderInfo && loaderInfo.parameters)
@@ -24,7 +24,7 @@ package com.sleepydesign.templates
 				DataProxy.setData(DataProxy.FLASH_VARS, loaderInfo.parameters);
 				_flashvars = loaderInfo.parameters;
 			}
-			
+
 			super();
 			_configURI = "site.xml";
 		}
@@ -33,13 +33,13 @@ package com.sleepydesign.templates
 		{
 			SWFAddress.addEventListener(SWFAddressEvent.INIT, onSWFAddressInit);
 			SWFAddress.addEventListener(SWFAddressEvent.CHANGE, handleSWFAddress);
-			
+
 			createSiteMap();
 		}
 
-		override protected function onTreeChangeFocus(event:TreeEvent):void
+		override protected function onTreeChangeFocus(node:SDTreeNode):void
 		{
-			var _path:String = String("/" + event.node.path).split("/$").join("/");
+			var _path:String = String("/" + node.path).split("/$").join("/");
 			if (SWFAddress.getPath() != _path)
 				SWFAddress.setValue(_path);
 		}
@@ -48,16 +48,16 @@ package com.sleepydesign.templates
 		{
 			initNavigation();
 		}
-		
+
 		override protected function initNavigation():void
 		{
 			var _focus:String = SWFAddress.getPath();
 			trace(" ! path : " + _focus);
 			trace(" ! xml.@focus : " + _xml.@focus);
-			
-			if(_focus!="/")
+
+			if (_focus != "/")
 				_xml.@focus = _focus;
-			
+
 			_site = new SiteTool(_contentLayer, _xml);
 			NavigationProxy.signal.add(setFocus);
 		}
@@ -80,7 +80,7 @@ package com.sleepydesign.templates
 				SWFAddress.setValue(String(_xml.@focus));
 			}
 		}
-		
+
 		// TODO:destroy
 	}
 }
