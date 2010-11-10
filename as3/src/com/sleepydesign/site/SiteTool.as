@@ -1,7 +1,6 @@
 package com.sleepydesign.site
 {
 	import com.sleepydesign.core.IDestroyable;
-	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.net.URLUtil;
 	import com.sleepydesign.system.DebugUtil;
@@ -9,11 +8,10 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
-
+	
 	import flash.display.DisplayObjectContainer;
 
-
-	public class SiteTool extends RemovableEventDispatcher implements IDestroyable
+	public class SiteTool implements IDestroyable
 	{
 		private var _xml:XML;
 		private var _container:DisplayObjectContainer;
@@ -179,7 +177,13 @@ package com.sleepydesign.site
 
 		// ____________________________________________ Destroy ____________________________________________
 
-		override public function destroy():void
+		private var _isDestroyed:Boolean;
+		public function get destroyed():Boolean
+		{
+			return this._isDestroyed;
+		}
+		
+		public function destroy():void
 		{
 			super.destroy();
 
