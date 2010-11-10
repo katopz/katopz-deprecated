@@ -3,17 +3,15 @@ package
 	import com.sleepydesign.components.SDButton;
 	import com.sleepydesign.components.SDDialog;
 	import com.sleepydesign.components.SDScrollPane;
-	import com.sleepydesign.components.SDSlider;
 	import com.sleepydesign.components.SDSpeechBalloon;
 	import com.sleepydesign.components.SDTextInput;
 	import com.sleepydesign.display.SDSprite;
-	import com.sleepydesign.text.SDTextField;
 	
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 
-	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "400", height = "300")]
+	[SWF(backgroundColor="0xCCCCCC", frameRate = "30", width = "640", height = "480")]
 	public class TestSDComponent extends Sprite
 	{	
 		public function TestSDComponent()
