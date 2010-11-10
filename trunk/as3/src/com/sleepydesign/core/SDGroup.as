@@ -25,8 +25,8 @@ package com.sleepydesign.core
 		{
 			if (!item)
 				return;
-			
-			if(!(item is _itemType))
+
+			if (!(item is _itemType))
 				throw new Error("[Error] Type miss match. Required " + _itemType);
 
 			if (key)

@@ -9,11 +9,12 @@ package com.sleepydesign.core
 	{
 		private var _isDestroyed:Boolean;
 		private var _tasks:Vector.<ITask> = new Vector.<ITask>();
+
 		public function get tasks():Vector.<ITask>
 		{
 			return _tasks;
 		}
-		
+
 		protected var _totalTasks:int;
 
 		private var _timer:Timer;
@@ -51,10 +52,10 @@ package com.sleepydesign.core
 				i = _tasks.indexOf(task, i);
 				f++;
 			}
-			
+
 			_tasks.fixed = true;
 			_totalTasks = _tasks.length;
-				
+
 			return task;
 		}
 
@@ -141,7 +142,7 @@ package com.sleepydesign.core
 				_timer.stop();
 				_timer = null;
 			}
-			
+
 			_tasks = new Vector.<ITask>();
 			_totalTasks = 0;
 		}
@@ -155,7 +156,7 @@ package com.sleepydesign.core
 		{
 			_isDestroyed = true;
 			stop();
-			
+
 			_tasks = null;
 
 			completeSignal.removeAll();

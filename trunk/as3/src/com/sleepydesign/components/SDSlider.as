@@ -28,9 +28,9 @@ package com.sleepydesign.components
 		public function SDSlider(orientation:String = SDSlider.HORIZONTAL, style:ISDStyle = null)
 		{
 			super(style);
-			
+
 			_scrollSize = _style.SIZE;
-			
+
 			_orientation = orientation;
 
 			_track = new SDSprite();
@@ -53,24 +53,24 @@ package com.sleepydesign.components
 		protected function drawTrack():void
 		{
 			_track.graphics.clear();
-			_track.graphics.lineStyle();//.25, 0x000000, 1);
+			_track.graphics.lineStyle(); //.25, 0x000000, 1);
 			_track.graphics.beginFill(0x000000, .5);
 			_track.graphics.drawRect(0, 0, _width, _height);
 			_track.graphics.endFill();
-			
+
 			_track.removeEventListener(MouseEvent.MOUSE_DOWN, onTrackClick);
 			_track.addEventListener(MouseEvent.MOUSE_DOWN, onTrackClick, false, 0, true);
 		}
 
 		protected function drawHandle(size:Number = 0):void
 		{
-			if(isNaN(size))
+			if (isNaN(size))
 				return;
-				
+
 			_handle.graphics.clear();
 			_scrollSize = size;
 
-			_handle.graphics.lineStyle();//_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA);
+			_handle.graphics.lineStyle(); //_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA);
 			_handle.graphics.beginFill(_style.BUTTON_COLOR);
 
 			if (_orientation == HORIZONTAL)

@@ -13,11 +13,7 @@ package com.sleepydesign.display
 			{
 				var sprite:Sprite = clip.getChildAt(i) as Sprite;
 				if (sprite)
-					list[i] = {
-						x:sprite.x, y:sprite.y, 
-						scaleX:sprite.scaleX, scaleY:sprite.scaleY,
-						alpha:sprite.alpha
-					};
+					list[i] = {x: sprite.x, y: sprite.y, scaleX: sprite.scaleX, scaleY: sprite.scaleY, alpha: sprite.alpha};
 			}
 			return list;
 		}

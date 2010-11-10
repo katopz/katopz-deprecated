@@ -3,7 +3,7 @@ package com.sleepydesign.ui
 	import com.cutecoma.playground.events.SDKeyboardEvent;
 	import com.sleepydesign.events.RemovableEventDispatcher;
 	import com.cutecoma.playground.events.SDKeyboardEvent;
-	
+
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -11,89 +11,101 @@ package com.sleepydesign.ui
 
 	public class SDKeyBoard extends RemovableEventDispatcher
 	{
-		public static var keyRight 		:Boolean = false;
-		public static var keyLeft    	:Boolean = false;
-		public static var keyForward 	:Boolean = false;
-		public static var keyBackward 	:Boolean = false;
-		public static var keyUp 		:Boolean = false;
-		public static var keyDown 		:Boolean = false;
-		
-		public static var keyPeekLeft 	:Boolean = false;
-		public static var keyPeekRight	:Boolean = false;
-		
-		public static var isCTRL		:Boolean = false;
-		public static var isALT			:Boolean = false;
-		public static var isSHIFT		:Boolean = false;
-		public static var isSPACE		:Boolean = false;
-		public static var isCAPLOCK		:Boolean = false;
-		
+		public static var keyRight:Boolean = false;
+		public static var keyLeft:Boolean = false;
+		public static var keyForward:Boolean = false;
+		public static var keyBackward:Boolean = false;
+		public static var keyUp:Boolean = false;
+		public static var keyDown:Boolean = false;
+
+		public static var keyPeekLeft:Boolean = false;
+		public static var keyPeekRight:Boolean = false;
+
+		public static var isCTRL:Boolean = false;
+		public static var isALT:Boolean = false;
+		public static var isSHIFT:Boolean = false;
+		public static var isSPACE:Boolean = false;
+		public static var isCAPLOCK:Boolean = false;
+
 		private var _target:InteractiveObject;
-		
+
 		public function SDKeyBoard(target:InteractiveObject)
 		{
 			this._target = target;
 			create();
 		}
-		
-		public function create(config:Object=null):void
+
+		public function create(config:Object = null):void
 		{
 			_target.addEventListener(KeyboardEvent.KEY_DOWN, onInnerKey, false, 0, true);
 			_target.addEventListener(KeyboardEvent.KEY_UP, onInnerKey, false, 0, true);
 		}
-			
-		private function onKey( event:Event ):void
+
+		private function onKey(event:Event):void
 		{
-			var dx :int = 0;
-			var dy :int = 0;
-			var dz :int = 0;
-			var dr :int = 0;
-			
-			var factor:Number = isSHIFT?10:1;
-			
+			var dx:int = 0;
+			var dy:int = 0;
+			var dz:int = 0;
+			var dr:int = 0;
+
+			var factor:Number = isSHIFT ? 10 : 1;
+
 			//up,down
-			if( keyForward ){
-				dz=factor;
-			}else if ( keyBackward ){
-				dz=-factor;
+			if (keyForward)
+			{
+				dz = factor;
 			}
-			
+			else if (keyBackward)
+			{
+				dz = -factor;
+			}
+
 			//left,right
-			if( keyRight ){
-				dx=factor;
-			}else if ( keyLeft ){
-				dx=-factor;
+			if (keyRight)
+			{
+				dx = factor;
 			}
-			
+			else if (keyLeft)
+			{
+				dx = -factor;
+			}
+
 			//up,down
-			if( keyUp ){
-				dy=factor;
-			}else if ( keyDown ){
-				dy=-factor;
+			if (keyUp)
+			{
+				dy = factor;
 			}
-			
+			else if (keyDown)
+			{
+				dy = -factor;
+			}
+
 			//peek left, peek right
-			if( keyPeekLeft ){
-				dr=-factor
-			}else if ( keyPeekRight ){
-				dr=factor;
-			}			
-			
-			dispatchEvent(new SDKeyboardEvent(SDKeyboardEvent.KEY_PRESS,{dx:dx, dy:dy, dz:dz, dr:dr}))
+			if (keyPeekLeft)
+			{
+				dr = -factor
+			}
+			else if (keyPeekRight)
+			{
+				dr = factor;
+			}
+
+			dispatchEvent(new SDKeyboardEvent(SDKeyboardEvent.KEY_PRESS, {dx: dx, dy: dy, dz: dz, dr: dr}))
 		}
-		
-		private function onInnerKey( event:KeyboardEvent ):void
+
+		private function onInnerKey(event:KeyboardEvent):void
 		{
 			isCTRL = event.ctrlKey;
 			isALT = event.altKey;
 			isSHIFT = event.shiftKey;
 			isSPACE = (event.keyCode == Keyboard.SPACE);
-			
+
 			//trace("event.ctrlKey:"+event.ctrlKey)
-			
-			switch(event.type) 
+
+			switch (event.type)
 			{
 				case KeyboardEvent.KEY_DOWN:
-					switch(event.keyCode)
+					switch (event.keyCode)
 					{
 						case "W".charCodeAt():
 						case Keyboard.UP:
@@ -130,7 +142,7 @@ package com.sleepydesign.ui
 							keyUp = true;
 							keyDown = false;
 							break;
-							
+
 						case "Q".charCodeAt():
 						case "[".charCodeAt():
 							keyPeekLeft = true;
@@ -143,11 +155,11 @@ package com.sleepydesign.ui
 							keyPeekLeft = false;
 							break;
 					}
-					if(keyForward || keyBackward || keyLeft || keyRight || keyUp || keyDown || keyPeekLeft || keyPeekRight)
+					if (keyForward || keyBackward || keyLeft || keyRight || keyUp || keyDown || keyPeekLeft || keyPeekRight)
 						_target.addEventListener(Event.ENTER_FRAME, onKey, false, 0, true);
-				break;
+					break;
 				case KeyboardEvent.KEY_UP:
-					switch( event.keyCode )
+					switch (event.keyCode)
 					{
 						case "W".charCodeAt():
 						case Keyboard.UP:
@@ -168,7 +180,7 @@ package com.sleepydesign.ui
 						case Keyboard.RIGHT:
 							keyRight = false;
 							break;
-							
+
 						case "C".charCodeAt():
 						case Keyboard.PAGE_UP:
 							keyDown = false;
@@ -178,7 +190,7 @@ package com.sleepydesign.ui
 						case Keyboard.PAGE_DOWN:
 							keyUp = false;
 							break;
-							
+
 						case "Q".charCodeAt():
 						case "[".charCodeAt():
 							keyPeekLeft = false;
@@ -191,20 +203,20 @@ package com.sleepydesign.ui
 							keyPeekLeft = false;
 							break;
 					}
-					if(!keyForward && !keyBackward && !keyLeft && !keyRight && !keyPeekLeft && !keyPeekRight && !keyUp && !keyDown)
+					if (!keyForward && !keyBackward && !keyLeft && !keyRight && !keyPeekLeft && !keyPeekRight && !keyUp && !keyDown)
 						_target.removeEventListener(Event.ENTER_FRAME, onKey);
-				break;
+					break;
 			}
-			
+
 			dispatchEvent(event.clone());
 		}
-		
+
 		override public function destroy():void
 		{
 			_target.removeEventListener(KeyboardEvent.KEY_DOWN, onInnerKey);
 			_target.removeEventListener(KeyboardEvent.KEY_UP, onInnerKey);
 			_target.removeEventListener(Event.ENTER_FRAME, onKey);
-			
+
 			super.destroy();
 		}
 	}

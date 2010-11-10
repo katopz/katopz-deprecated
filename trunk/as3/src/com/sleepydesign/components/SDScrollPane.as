@@ -48,7 +48,7 @@ package com.sleepydesign.components
 			panel = new SDPanel();
 			addChild(panel);
 			target = panel;
-			
+
 			setSize(100, 100);
 		}
 
@@ -59,7 +59,7 @@ package com.sleepydesign.components
 
 			draw();
 		}
-		
+
 		public function redraw():void
 		{
 			target = panel;
@@ -153,19 +153,19 @@ package com.sleepydesign.components
 		{
 			_vScrollBar.draw();
 			_hScrollBar.draw();
-			
+
 			_hScrollBar.enableHorizonWheel = !_vScrollBar.visible;
 
 			_hScrollBar.enableHorizonWheel = _hScrollBar.enableHorizonWheel && useMouseWheel;
 
 			_vScrollBar.visible = _vScrollBar.visible && scrollBarVisible;
 			_hScrollBar.visible = _hScrollBar.visible && scrollBarVisible;
-			
-		   _back.graphics.clear();
-		   _back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
-		   _back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
-		   _back.graphics.drawRoundRect(-pad / 2, -pad / 2, _vScrollBar.visible ? _vScrollBar.width + _width + pad : _width + pad, _hScrollBar.visible ? _hScrollBar.height + _height + pad : _height + pad, pad);
-		   _back.graphics.endFill();
+
+			_back.graphics.clear();
+			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
+			_back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
+			_back.graphics.drawRoundRect(-pad / 2, -pad / 2, _vScrollBar.visible ? _vScrollBar.width + _width + pad : _width + pad, _hScrollBar.visible ? _hScrollBar.height + _height + pad : _height + pad, pad);
+			_back.graphics.endFill();
 
 			super.draw();
 		}

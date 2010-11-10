@@ -9,7 +9,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
-	
+
 	import flash.display.DisplayObjectContainer;
 
 
@@ -22,7 +22,7 @@ package com.sleepydesign.site
 
 		private var _page:Page;
 		private static var _currentPage:Page;
-		
+
 		private var _currentPageID:String;
 
 		private static var _instance:SiteTool;
@@ -31,7 +31,7 @@ package com.sleepydesign.site
 		{
 			return _currentPage;
 		}
-		
+
 		public static function getInstance():SiteTool
 		{
 			if (_instance)
@@ -56,7 +56,7 @@ package com.sleepydesign.site
 		{
 			DebugUtil.trace(" ! setFocusByPath : " + path);
 			DebugUtil.trace(" ! currentPaths : " + _currentPaths);
-			
+
 			var _paths:Array = path.split("/");
 			if (_paths[0] == "")
 				_paths.shift();
@@ -64,10 +64,10 @@ package com.sleepydesign.site
 			var _basePage:Page = _page;
 
 			/*
-			var j:int = _basePage.numChildren;
-			while (j--)
-				DebugUtil.trace("*"+_basePage.getChildAt(j).name);
-			*/
+			   var j:int = _basePage.numChildren;
+			   while (j--)
+			   DebugUtil.trace("*"+_basePage.getChildAt(j).name);
+			 */
 
 			// not dirty yet
 			Page.preferPaths = Page.offerPaths = _paths.slice();
@@ -104,11 +104,11 @@ package com.sleepydesign.site
 				if (_currentPaths.length > 0 && _currentPaths[i] && _paths[i] != _currentPaths[i])
 				{
 					/*
-					var j:int = _basePage.numChildren;
-					while (j--)
-				   		DebugUtil.trace(_basePage.getChildAt(j).name);
-				   	*/
-					   
+					   var j:int = _basePage.numChildren;
+					   while (j--)
+					   DebugUtil.trace(_basePage.getChildAt(j).name);
+					 */
+
 					DebugUtil.trace(" - remove Page : " + _currentPaths[i]);
 
 					var _oldPage:Page = _basePage.getChildByName(_currentPaths[i]) as Page;
@@ -119,14 +119,14 @@ package com.sleepydesign.site
 						_oldPage = _basePage.getChildByName(_prevPageID) as Page;
 					}
 
-					if(_oldPage)
+					if (_oldPage)
 					{
 						_childIndex = _oldPage.parent.getChildIndex(_oldPage);
 						DisplayObjectUtil.removeChildren(_oldPage, true, true);
-						
+
 						_oldPage.destroy();
 						_oldPage = null;
-	
+
 						SystemUtil.gc();
 					}
 				}
@@ -135,16 +135,16 @@ package com.sleepydesign.site
 				{
 					// new page
 					var _itemXML:XML = XMLUtil.getXMLById(_xml, _pathID);
-					
-					if(StringUtil.isNull(_itemXML))
+
+					if (StringUtil.isNull(_itemXML))
 					{
 						_basePage.focus = _pathID;
 						continue;
 					}
-					
+
 					DebugUtil.trace(" + add Page : ", _childIndex, _pathID);
 
-					_subPage = new Page(_basePage, _itemXML, _paths.slice(i+1).join("/"));
+					_subPage = new Page(_basePage, _itemXML, _paths.slice(i + 1).join("/"));
 					_subPage.name = _pathID;
 
 					if (_childIndex >= 0)
@@ -153,16 +153,16 @@ package com.sleepydesign.site
 						_basePage.addChildAt(_subPage, _childIndex);
 					}
 
-					DebugUtil.trace(" to : "+ _basePage.name );
+					DebugUtil.trace(" to : " + _basePage.name);
 				}
 
 				// reparent
-				if(_subPage)
+				if (_subPage)
 					_basePage = _subPage;
 
 				// for destroy later
 				_currentPageID = _pathID;
-				
+
 				// for referer from other
 				_currentPage = _basePage;
 			}

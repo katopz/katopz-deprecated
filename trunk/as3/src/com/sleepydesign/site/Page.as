@@ -5,7 +5,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.net.LoaderUtil;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.StringUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -32,7 +32,7 @@ package com.sleepydesign.site
 		//path dirty occur by focus or restrict redirect
 		public static var offerPaths:Array;
 		public static var preferPaths:Array;
-		
+
 		private var _visible:Boolean = true;
 
 		private var _data:PageData;
@@ -63,17 +63,17 @@ package com.sleepydesign.site
 			var _xmlList:XMLList = _xml.children();
 			var _xmlList_length:int = _xmlList.length();
 			var _xmlFocus:String;
-			
+
 			// only page tag
-			if(_xmlList[0] && _xmlList[0].name()=="page")
+			if (_xmlList[0] && _xmlList[0].name() == "page")
 				_xmlFocus = StringUtil.getDefaultIfNull(_xml.@focus, (_xmlList_length > 0) ? _xmlList[0].@id : "");
 			else
 				_xmlFocus = StringUtil.getDefaultIfNull(_xmlFocus, "");
 
 			_data = new PageData(_xml);
-			_visible = Boolean(_xml.@visible!="false");
+			_visible = Boolean(_xml.@visible != "false");
 
-			DebugUtil.trace("\n / [Page:" + _data.id ,_visible, "] ------------------------------- ");
+			DebugUtil.trace("\n / [Page:" + _data.id, _visible, "] ------------------------------- ");
 
 			// got something to load?
 			if (_data.src)
@@ -109,9 +109,9 @@ package com.sleepydesign.site
 			for (var i:int = _xmlList_length - 1; i >= 0; i--)
 			{
 				// only page tag
-				if(_xmlList[i].name()!="page")
+				if (_xmlList[i].name() != "page")
 					continue;
-				
+
 				var _subPageData:PageData = new PageData(_xmlList[i]);
 				var _focuses:Array = _focus.split("/");
 
@@ -158,22 +158,22 @@ package com.sleepydesign.site
 
 					// inherit from content
 					/*
-					try
-					{
-						_parent.mouseEnabled = _parent.content["mouseEnabled"];
-					}
-					catch (e:*)
-					{
-					}
-					try
-					{
-						_parent.mouseChildren = _parent.content["mouseChildren"];
-					}
-					catch (e:*)
-					{
-					}
-					*/
-					
+					   try
+					   {
+					   _parent.mouseEnabled = _parent.content["mouseEnabled"];
+					   }
+					   catch (e:*)
+					   {
+					   }
+					   try
+					   {
+					   _parent.mouseChildren = _parent.content["mouseChildren"];
+					   }
+					   catch (e:*)
+					   {
+					   }
+					 */
+
 					visible = _visible;
 				}
 
@@ -189,7 +189,9 @@ package com.sleepydesign.site
 					// reset
 					_totalLoaded = 0;
 					_pageLoaders = [];
-				}else{
+				}
+				else
+				{
 					LoaderUtil.showLoader();
 				}
 			}
@@ -207,7 +209,7 @@ package com.sleepydesign.site
 			content = null;
 			_container = null;
 			_xml = null;
-			
+
 			_data.vars = null;
 			_data = null;
 

@@ -8,7 +8,7 @@ package com.sleepydesign.display
 		public static function drawRect(rect:Rectangle, color:int = 0x000000, alpha:Number = 1.0, lineColor:int = -1):Sprite
 		{
 			var containter:Sprite = new Sprite();
-			
+
 			if (lineColor != -1)
 				containter.graphics.lineStyle(1, lineColor);
 			else

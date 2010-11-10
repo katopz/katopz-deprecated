@@ -2,7 +2,7 @@ package com.sleepydesign.components
 {
 	import com.sleepydesign.system.SystemUtil;
 	import com.sleepydesign.text.SDTextField;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.Shape;
@@ -17,14 +17,14 @@ package com.sleepydesign.components
 	import flash.xml.XMLDocument;
 
 	/**
-	 * TODO : clean this! 
+	 * TODO : clean this!
 	 * @author katopz
-	 * 
+	 *
 	 */
 	public class SDDialog extends SDComponent
 	{
 		private var _bgColor:Number = 0xFFFFFF;
-		
+
 		private var _back:Shape;
 		private var _content:XMLDocument;
 		private var _label:SDTextField;
@@ -34,26 +34,26 @@ package com.sleepydesign.components
 
 		private var _iText:*;
 		private var _isTail:Boolean;
-		
+
 		private var _caller:Object
 
 		public function SDDialog(iText:* = "", caller:Object = null, align:String = "", style:ISDStyle = null)
 		{
 			super(style);
-			
+
 			this._iText = iText;
 			this._isTail = _isTail;
 			this._caller = caller || this;
 			this.align = align;
-			
+
 			init();
 		}
-		
+
 		protected function init():void
 		{
 			create();
-			
-			this._caller = _caller?_caller:this.parent;
+
+			this._caller = _caller ? _caller : this.parent;
 			mouseEnabled = true;
 			mouseChildren = true;
 			isDraggable = true;
@@ -74,16 +74,16 @@ package com.sleepydesign.components
 
 			_content = new XMLDocument();
 			_content.parseXML(String(_iText));
-			
+
 			// drag
 			_dragArea = new Sprite();
-			
+
 			addChild(_back);
 			addChild(_label);
 			addChild(_dragArea);
 
 			cacheAsBitmap = true;
-			
+
 			htmlText = _iText;
 		}
 
@@ -103,29 +103,29 @@ package com.sleepydesign.components
 		{
 			var w:Number = (_label.width > _pad) ? _label.width : _pad;
 			var h:Number = (_label.height > _pad) ? _label.height : _pad;
-			
+
 			_label.x = int(_pad); //int(-w * .5);
 			_label.y = int(_pad); //int(-pad - length - h + pad * .25 - 1);
-			
+
 			_back.graphics.clear();
 			_back.graphics.beginFill(_bgColor);
 			_back.graphics.drawRoundRect(0, 0, w + _pad * 2, h + _pad * 2, _pad, _pad);
-			
+
 			/*
-			if(isTail)
-			{
-			_back.graphics.moveTo(0, 0);
-			_back.graphics.lineTo(-4, -length - pad * .5);
-			_back.graphics.lineTo(4, -length - pad * .5);
-			}
-			*/
-			
+			   if(isTail)
+			   {
+			   _back.graphics.moveTo(0, 0);
+			   _back.graphics.lineTo(-4, -length - pad * .5);
+			   _back.graphics.lineTo(4, -length - pad * .5);
+			   }
+			 */
+
 			_back.graphics.endFill();
-			
+
 			Sprite(_dragArea).graphics.beginFill(0xFF00FF, 0);
 			Sprite(_dragArea).graphics.drawRoundRect(0, 0, w + _pad * 2, 20, _pad, _pad);
 			Sprite(_dragArea).graphics.endFill();
-			
+
 			super.draw();
 
 			dispatchEvent(new Event(Event.CHANGE));
@@ -146,17 +146,17 @@ package com.sleepydesign.components
 		{
 			return _back.width;
 		}
-		
+
 		override public function get height():Number
 		{
 			return _back.height;
 		}
-		
+
 		public function get text():String
 		{
 			return _label.text;
 		}
-		
+
 		public function set text(iText:*):void
 		{
 			_label.text = iText;
@@ -179,32 +179,32 @@ package com.sleepydesign.components
 			setLabel(iText);
 			draw();
 		}
-		
+
 		public function set xmlText(iText:*):void
 		{
 			htmlText = XML(iText);
 		}
-		
+
 		/*
-		private var _align:String = "center";
-		public function get align():String
-		{
-			return _align;
-		}
-		
-		public function set align(value:String):void
-		{
-			_align = value;
-			switch(_align)
-			{
-				case "center" :
-					begPoint.x = _container.stage.stageWidth/2 - width/2;
-					begPoint.y = _container.stage.stageHeight/2 - height/2;
-				break;
-			}
-			setPosition();
-		}
-		*/
+		   private var _align:String = "center";
+		   public function get align():String
+		   {
+		   return _align;
+		   }
+
+		   public function set align(value:String):void
+		   {
+		   _align = value;
+		   switch(_align)
+		   {
+		   case "center" :
+		   begPoint.x = _container.stage.stageWidth/2 - width/2;
+		   begPoint.y = _container.stage.stageHeight/2 - height/2;
+		   break;
+		   }
+		   setPosition();
+		   }
+		 */
 
 		public function parseCSS(iCSSText:String = null):void
 		{
@@ -295,7 +295,7 @@ package com.sleepydesign.components
 
 		private function linkHandler(e:TextEvent):void
 		{
-			if(e.text.indexOf("as:jump")==0)
+			if (e.text.indexOf("as:jump") == 0)
 				SystemUtil.doCommand(e.text, this);
 			else
 				SystemUtil.doCommand(e.text, _caller);

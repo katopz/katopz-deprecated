@@ -8,16 +8,16 @@ package com.sleepydesign.events
 
 		// data is complete
 		public static const COMPLETE:String = "sd-form-complete";
-		
+
 		// data is incomplete
 		public static const INCOMPLETE:String = "sd-form-incomplete";
-		
+
 		// data out is invalid
 		public static const INVALID:String = "sd-form-invalid";
 
 		// data out is valid
 		public static const VALID:String = "sd-form-valid";
-		
+
 		// submit
 		public static const SUBMIT:String = "sd-form-submit";
 		public static const EXTERNAL_SUBMIT:String = "sd-external-form-submit";
