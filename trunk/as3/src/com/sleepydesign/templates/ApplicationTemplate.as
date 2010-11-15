@@ -99,7 +99,7 @@ package com.sleepydesign.templates
 			else
 				scrollRect = new Rectangle(0, 0, _screenRectangle.width, _screenRectangle.height);
 
-			addEventListener(Event.ADDED_TO_STAGE, onStage);
+			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 
 		protected function onStage(event:Event):void

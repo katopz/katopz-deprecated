@@ -28,7 +28,7 @@ package com.sleepydesign.display
 			return _status;
 		}
 
-		protected var _statusSignal:Signal = new Signal(SDClip, String);
+		protected var _statusSignal:Signal = new Signal(String, SDClip);
 
 		public function get statusSignal():Signal
 		{
@@ -37,7 +37,7 @@ package com.sleepydesign.display
 
 		public function SDClip()
 		{
-			_statusSignal.dispatch(this, _status = STATUS_INIT);
+			_statusSignal.dispatch(_status = STATUS_INIT, this);
 			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 
@@ -55,25 +55,25 @@ package com.sleepydesign.display
 		public function show():void
 		{
 			TweenLite.to(this, .25, {autoAlpha: 1, onComplete: shown});
-			_statusSignal.dispatch(this, _status = STATUS_SHOW);
+			_statusSignal.dispatch(_status = STATUS_SHOW, this);
 		}
 
 		public function hide():void
 		{
 			TweenLite.to(this, .1, {autoAlpha: 0, onComplete: hidden});
-			_statusSignal.dispatch(this, _status = STATUS_HIDE);
+			_statusSignal.dispatch(_status = STATUS_HIDE, this);
 		}
 
 		protected function shown():void
 		{
 			activate();
-			_statusSignal.dispatch(this, _status = STATUS_SHOWN);
+			_statusSignal.dispatch(_status = STATUS_SHOWN, this);
 		}
 
 		protected function hidden():void
 		{
 			deactivate();
-			_statusSignal.dispatch(this, _status = STATUS_HIDDEN);
+			_statusSignal.dispatch(_status = STATUS_HIDDEN, this);
 		}
 
 		public function activate():void
@@ -84,7 +84,7 @@ package com.sleepydesign.display
 			visible = true;
 			alpha = 1;
 
-			_statusSignal.dispatch(this, _status = STATUS_ACTIVATE);
+			_statusSignal.dispatch(_status = STATUS_ACTIVATE, this);
 		}
 
 		public function deactivate():void
@@ -95,7 +95,7 @@ package com.sleepydesign.display
 			visible = false;
 			alpha = 0;
 
-			_statusSignal.dispatch(this, _status = STATUS_DEACTIVATE);
+			_statusSignal.dispatch(_status = STATUS_DEACTIVATE, this);
 		}
 
 		override public function destroy():void
