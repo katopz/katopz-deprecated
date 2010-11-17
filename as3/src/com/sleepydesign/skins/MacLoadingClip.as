@@ -29,13 +29,13 @@ package com.sleepydesign.skins
 			mouseEnabled = false;
 
 			draw();
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 		}
 
 		protected function onAddedToStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 
 			_timer = new Timer(64);
 			_timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
@@ -45,7 +45,7 @@ package com.sleepydesign.skins
 		protected function onRemovedFromStage(event:Event):void
 		{
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 
 			_timer.reset();
 			_timer.removeEventListener(TimerEvent.TIMER, onTimer);

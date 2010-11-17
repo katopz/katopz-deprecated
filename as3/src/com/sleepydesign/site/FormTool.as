@@ -139,7 +139,7 @@ package com.sleepydesign.site
 							item.restrict = !StringUtil.isNull(_itemXML.@restrict) ? String(_itemXML.@restrict) : null;
 
 							item.label.removeEventListener(FocusEvent.FOCUS_IN, focusListener);
-							item.label.addEventListener(FocusEvent.FOCUS_IN, focusListener);
+							item.label.addEventListener(FocusEvent.FOCUS_IN, focusListener, false, 0, true);
 
 							//reg
 							_items[String(_itemXML.@id)] = item;
@@ -154,7 +154,7 @@ package com.sleepydesign.site
 								isSubmit = false;
 							case "submit":
 								button.removeEventListener(MouseEvent.CLICK, buttonHandler);
-								button.addEventListener(MouseEvent.CLICK, buttonHandler);
+								button.addEventListener(MouseEvent.CLICK, buttonHandler, false, 0, true);
 								break;
 						}
 
@@ -185,7 +185,7 @@ package com.sleepydesign.site
 							break;
 					}
 					item.parent.setText(item.text);
-					item.addEventListener(FocusEvent.FOCUS_OUT, focusListener);
+					item.addEventListener(FocusEvent.FOCUS_OUT, focusListener, false, 0, true);
 					break;
 				case FocusEvent.FOCUS_OUT:
 
