@@ -11,7 +11,7 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.ObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.ValidationUtil;
-	
+
 	import flash.display.DisplayObjectContainer;
 	import flash.display.SimpleButton;
 	import flash.events.DataEvent;
@@ -22,34 +22,34 @@ package com.sleepydesign.site
 	import flash.net.URLVariables;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class FormTool implements IDestroyable
 	{
 		// --------------------------------------------------------------------
-		
+
 		// data is complete
 		public static const COMPLETE:String = "sd-form-complete";
-		
+
 		// data is incomplete
 		public static const INCOMPLETE:String = "sd-form-incomplete";
-		
+
 		// data out is invalid
 		public static const INVALID:String = "sd-form-invalid";
-		
+
 		// data out is valid
 		public static const VALID:String = "sd-form-valid";
-		
+
 		// submit
 		public static const SUBMIT:String = "sd-form-submit";
 		public static const EXTERNAL_SUBMIT:String = "sd-external-form-submit";
 		public static const DATA_CHANGE:String = "sd-data-change-submit";
-		
+
 		public var formSignal:Signal = new Signal(String, Object);
-		
+
 		// --------------------------------------------------------------------
-		
+
 		private var _container:DisplayObjectContainer;
 		private var _xml:XML;
 		private var _eventHandler:Function;
@@ -386,7 +386,7 @@ package com.sleepydesign.site
 
 			var _formEvent:FormEvent = new FormEvent(FormEvent.COMPLETE, _data);
 			formSignal.dispatch(FormEvent.COMPLETE, _data);
-			
+
 			if (_eventHandler is Function)
 				_eventHandler(_formEvent);
 
@@ -425,7 +425,7 @@ package com.sleepydesign.site
 			// form data event
 			//var _dataEvent:DataEvent = new DataEvent(DataEvent.DATA, false, false, event.target.data);
 			formSignal.dispatch(event.type);
-			
+
 			if (_eventHandler is Function)
 				_eventHandler(event);
 		}
@@ -433,12 +433,12 @@ package com.sleepydesign.site
 		// ____________________________________________ Destroy ____________________________________________
 
 		private var _isDestroyed:Boolean;
-		
+
 		public function get destroyed():Boolean
 		{
 			return this._isDestroyed;
 		}
-		
+
 		public function destroy():void
 		{
 			var _xmlList:XMLList = _xml.children();
@@ -459,12 +459,14 @@ package com.sleepydesign.site
 				{
 					case "textfield":
 						_textField = _container.getChildByName(_containerID) as TextField;
-						_textField.parent.removeChild(_textField);
+						if (_textField.parent)
+							_textField.parent.removeChild(_textField);
 						_alertText = null;
 						break;
 					case "textinput":
 						_textField = _container[_containerID] as TextField;
-						_textField.parent.removeChild(_textField);
+						if (_textField.parent)
+							_textField.parent.removeChild(_textField);
 						_item = _items[String(_itemXML.@id)];
 						_item.label.removeEventListener(FocusEvent.FOCUS_IN, focusListener);
 						_item.label.removeEventListener(FocusEvent.FOCUS_OUT, focusListener);
@@ -473,12 +475,14 @@ package com.sleepydesign.site
 						break;
 					case "button":
 						var button:SimpleButton = SimpleButton(_container.getChildByName(_containerID));
-						button.parent.removeChild(button);
+						if (button.parent)
+							button.parent.removeChild(button);
 						button.removeEventListener(MouseEvent.CLICK, buttonHandler);
 						button = null;
 						break;
 				}
 			}
+
 			_textField = null;
 			_item = null;
 
@@ -487,7 +491,6 @@ package com.sleepydesign.site
 			_xmlList = null;
 			returnType = null;
 
-			_container = null;
 			_eventHandler = null;
 
 			LoaderUtil.cancel(_loader);
@@ -495,6 +498,7 @@ package com.sleepydesign.site
 			_data = null;
 
 			DisplayObjectUtil.removeChildren(_container, true, true);
+			_container = null;
 
 			super.destroy();
 		}
