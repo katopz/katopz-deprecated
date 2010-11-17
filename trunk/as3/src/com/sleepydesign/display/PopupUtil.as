@@ -81,7 +81,7 @@ package com.sleepydesign.display
 				_listener = null;
 				destroy();
 			}
-			popupObject.addEventListener(Event.REMOVED_FROM_STAGE, _listener);
+			popupObject.addEventListener(Event.REMOVED_FROM_STAGE, _listener, false, 0, true);
 
 			// deactivate
 			try

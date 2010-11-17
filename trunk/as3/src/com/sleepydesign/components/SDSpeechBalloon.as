@@ -66,7 +66,7 @@ package com.sleepydesign.components
 
 			draw();
 
-			_tf.addEventListener(Event.CHANGE, onChange);
+			_tf.addEventListener(Event.CHANGE, onChange, false, 0, true);
 		}
 
 		override public function draw():void

@@ -205,15 +205,15 @@ package com.sleepydesign.components
 			_dragArea.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
 
 			if (value)
-				_dragArea.addEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+				_dragArea.addEventListener(MouseEvent.MOUSE_DOWN, onDrag, false, 0, true);
 		}
 
 		protected function onDrag(event:MouseEvent):void
 		{
 			parent.setChildIndex(this, parent.numChildren - 1);
 			startDrag(false); //, root.scrollRect);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
-			stage.addEventListener(Event.MOUSE_LEAVE, onDrop);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop, false, 0, true);
+			stage.addEventListener(Event.MOUSE_LEAVE, onDrop, false, 0, true);
 			event.updateAfterEvent();
 		}
 

@@ -102,7 +102,7 @@ package com.sleepydesign.components
 				setSize(100, 18);
 			}
 
-			_tf.addEventListener(Event.CHANGE, onChange);
+			_tf.addEventListener(Event.CHANGE, onChange, false, 0, true);
 		}
 
 		override public function destroy():void

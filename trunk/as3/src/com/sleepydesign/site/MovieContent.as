@@ -50,7 +50,7 @@ package com.sleepydesign.site
 			TweenPlugin.activate([FramePlugin, AutoAlphaPlugin]);
 
 			_embedClip = new SDMovieClip(Clip);
-			_embedClip.addEventListener(Event.COMPLETE, onClipConstruct);
+			_embedClip.addEventListener(Event.COMPLETE, onClipConstruct, false, 0, true);
 			addChild(_embedClip);
 			
 			cacheAsBitmap = true;
@@ -58,7 +58,7 @@ package com.sleepydesign.site
 
 		protected function onClipConstruct(event:Event):void
 		{
-			
+			_embedClip.removeEventListener(Event.COMPLETE, onClipConstruct);
 		}
 		
 		protected function onClick(event:MouseEvent):void
