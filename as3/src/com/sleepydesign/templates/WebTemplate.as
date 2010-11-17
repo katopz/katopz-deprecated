@@ -6,6 +6,7 @@ package com.sleepydesign.templates
 	import com.sleepydesign.data.DataProxy;
 	import com.sleepydesign.site.NavigationProxy;
 	import com.sleepydesign.site.SiteTool;
+	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.StringUtil;
 
 	public class WebTemplate extends ApplicationTemplate
@@ -51,12 +52,17 @@ package com.sleepydesign.templates
 
 		override protected function initNavigation():void
 		{
-			var _focus:String = SWFAddress.getPath();
-			trace(" ! path : " + _focus);
-			trace(" ! xml.@focus : " + _xml.@focus);
+			var path:String = SWFAddress.getPath();
+			DebugUtil.trace(" ! # : " + path);
+			DebugUtil.trace(" ! xml.@focus : " + _xml.@focus);
 
-			if (_focus != "/")
-				_xml.@focus = _focus;
+			if (path.indexOf("/") == 0)
+				path = path.substring(1);
+
+			if (path != "")
+				_xml.@focus = path;
+
+			DebugUtil.trace(" ! focus : " + _xml.@focus);
 
 			_site = new SiteTool(_contentLayer, _xml);
 			NavigationProxy.signal.add(setFocus);

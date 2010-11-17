@@ -2,6 +2,7 @@ package com.sleepydesign.site
 {
 	import com.sleepydesign.utils.StringUtil;
 
+	import flash.display.Sprite;
 	import flash.utils.Dictionary;
 
 	public class PageData
@@ -13,6 +14,8 @@ package com.sleepydesign.site
 		public var src:String;
 
 		public var layer:String;
+
+		//public var depth:int;
 
 		public var vars:Dictionary;
 
@@ -26,6 +29,7 @@ package com.sleepydesign.site
 			this.name = String(xml.name()).toLowerCase();
 			this.src = String(xml.@src);
 			this.layer = StringUtil.getDefaultIfNull(xml.@layer, "$layer");
+			//this.depth = int(StringUtil.getDefaultIfNull(xml.@depth, "-1"));
 
 			for each (var child:XML in xml.children())
 			{

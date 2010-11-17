@@ -10,7 +10,6 @@ package com.sleepydesign.site
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.events.Event;
-	import flash.utils.Dictionary;
 
 	public class Page extends SDSprite
 	{
@@ -73,7 +72,7 @@ package com.sleepydesign.site
 			_data = new PageData(_xml);
 			_visible = Boolean(_xml.@visible != "false");
 
-			DebugUtil.trace("\n / [Page:" + _data.id, _visible, "] ------------------------------- ");
+			DebugUtil.trace("\n / [Page:" + _data.layer + "/" + _data.id + "] ------------------------------- ");
 
 			// got something to load?
 			if (_data.src)
@@ -82,7 +81,7 @@ package com.sleepydesign.site
 				if (_data.layer != "$layer" || !getChildByName(_data.layer))
 				{
 					var _loader:Loader = LoaderUtil.queue(_data.src, onLoad, "asset");
-					_xml.name = name + "-loader";
+					_loader.name = _data.id + "-loader";
 					addChild(_loader);
 
 					_pageLoaders.push(_loader);
@@ -106,6 +105,7 @@ package com.sleepydesign.site
 				}
 			}
 
+			// create child
 			for (var i:int = _xmlList_length - 1; i >= 0; i--)
 			{
 				// only page tag
@@ -125,14 +125,15 @@ package com.sleepydesign.site
 					if (_focuses[0] == _subPageData.id)
 					{
 						// it's got focus
-						DebugUtil.trace("   + " + _subPageData.id);
+						DebugUtil.trace("   + " + _subPageData.layer + "/" + _subPageData.id);
 						_page = new Page(this, _subPageData.xml, _subFocuses.join("/"));
 						_page.name = _subPageData.id;
 					}
-					else if (_subPageData.layer != "$layer" && !getChildByName(_subPageData.layer))
+					else if ((_subPageData.layer != "$layer") && !getChildByName(_subPageData.layer))
 					{
-						// layer
-						DebugUtil.trace("   + " + _subPageData.id);
+						// other page
+						DebugUtil.trace("	+ " + _subPageData.layer + "/" + _subPageData.id);
+
 						_page = new Page(this, _subPageData.xml, _subFocuses.join("/"));
 						_page.name = _subPageData.layer;
 					}
@@ -141,6 +142,57 @@ package com.sleepydesign.site
 
 			DebugUtil.trace(" ------------------------------- [Page] /\n");
 		}
+
+		/*
+		override public function addChild(child:DisplayObject):DisplayObject
+		{
+			//no need to sort
+			if (numChildren == 0)
+				return super.addChild(child);
+
+			var zSorts:Array = [];
+
+			var _xmlList:XMLList = _xml.children();
+			var _xmlList_length:int = _xmlList.length();
+			for (var i:int = _xmlList_length - 1; i >= 0; i--)
+			{
+				// only page tag
+				if (_xmlList[i].name() != "page")
+					continue;
+
+				var _subPageData:PageData = new PageData(_xmlList[i]);
+				_subPageData.depth = (_subPageData.depth == -1) ? i : _subPageData.depth;
+
+				//var zcontent:DisplayObject = getChildByName(_subPageData.layer);
+				if (_subPageData.layerSprite)
+				{
+					DebugUtil.trace(" ! depth : " + _subPageData.depth);
+					zSorts.push({id: _subPageData.id, screenZ: _subPageData.depth, layerSprite: _subPageData.layerSprite});
+				}
+			}
+
+			// sort
+			zSorts.sortOn("screenZ", 18);
+
+			// dispose
+			for (i = 0; i < zSorts.length; i++)
+			{
+				super.removeChild(zSorts[i].layerSprite);
+			}
+
+			for (i = 0; i < zSorts.length; i++)
+			{
+				super.addChild(zSorts[i].layerSprite);
+			}
+
+			for (i = 0; i < zSorts.length; i++)
+			{
+				DebugUtil.trace(zSorts[i].layerSprite.name + "." + zSorts[i].id);
+			}
+
+			return super.addChild(child);
+		}
+		*/
 
 		protected function onLoad(event:Event):void
 		{
@@ -201,10 +253,14 @@ package com.sleepydesign.site
 
 		override public function destroy():void
 		{
-			super.destroy();
-
-			if (content is IDestroyable)
-				IDestroyable(content).destroy();
+			try
+			{
+				if (content is IDestroyable)
+					IDestroyable(content).destroy();
+			}
+			catch (e:*)
+			{
+			}
 
 			content = null;
 			_container = null;
@@ -215,6 +271,8 @@ package com.sleepydesign.site
 
 			for each (var loader:Loader in _pageLoaders)
 				LoaderUtil.cancel(loader);
+
+			super.destroy();
 		}
 	}
 }
