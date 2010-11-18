@@ -21,6 +21,7 @@ package com.sleepydesign.display
 
 			if (child is ITransitionable)
 			{
+				// TODO : task -> dispatch complete when hide all
 				ITransitionable(child).hide();
 			}
 			else
@@ -42,6 +43,7 @@ package com.sleepydesign.display
 
 				if (child is ITransitionable)
 				{
+					// TODO : task -> dispatch complete when hide all
 					ITransitionable(child).hide();
 				}
 				else
@@ -59,6 +61,7 @@ package com.sleepydesign.display
 
 			if (child is ITransitionable)
 			{
+				// TODO : task -> dispatch complete when shown
 				ITransitionable(child).show();
 			}
 			else
