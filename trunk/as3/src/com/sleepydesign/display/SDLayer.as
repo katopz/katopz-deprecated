@@ -11,7 +11,7 @@ package com.sleepydesign.display
 	{
 		private var iterator:DisplayObjectContainerIterator;
 
-		public static var focusSignal:Signal = new Signal(String /*canvas name*/, Object /*canvas data*/);
+		//TOUSE?//public static var focusSignal:Signal = new Signal(String /*canvas name*/, Object /*canvas data*/);
 
 		//TODO : remove child for better speed?
 		public function SDLayer()
@@ -51,13 +51,16 @@ package com.sleepydesign.display
 
 		public function focus(name:String):void
 		{
-			while (iterator.hasNext())
+			iterator.currentIndex = 0;
+			var child:DisplayObject = iterator.current as DisplayObject;
+			while (child)
 			{
-				var child:DisplayObject = iterator.next() as DisplayObject;
 				if (child.name == name)
 					show(child);
 				else
 					hide(child);
+
+				child = iterator.next() as DisplayObject;
 			}
 		}
 
