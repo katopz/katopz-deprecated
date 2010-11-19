@@ -49,7 +49,7 @@ package com.sleepydesign.display
 			}
 		}
 
-		public function focus(name:String):void
+		public function setFocus(name:String):void
 		{
 			iterator.currentIndex = 0;
 			var child:DisplayObject = iterator.current as DisplayObject;
