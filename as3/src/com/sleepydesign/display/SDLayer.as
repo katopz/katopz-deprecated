@@ -5,9 +5,13 @@ package com.sleepydesign.display
 
 	import flash.display.DisplayObject;
 
+	import org.osflash.signals.Signal;
+
 	public class SDLayer extends SDSprite
 	{
 		private var iterator:DisplayObjectContainerIterator;
+
+		public static var focusSignal:Signal = new Signal(String /*canvas name*/, Object /*canvas data*/);
 
 		//TODO : remove child for better speed?
 		public function SDLayer()
@@ -15,10 +19,24 @@ package com.sleepydesign.display
 			iterator = new DisplayObjectContainerIterator(this);
 		}
 
-		public function swapTo(index:int):void
+		public function show(child:DisplayObject):void
 		{
-			var child:DisplayObject = iterator.current as DisplayObject;
+			if (child is ITransitionable)
+			{
+				// TODO : task -> dispatch complete when hide all
+				ITransitionable(child).show();
+			}
+			else
+			{
+				child.visible = true;
+				child.alpha = 1;
+			}
 
+			iterator.currentIndex = getChildIndex(child);
+		}
+
+		public function hide(child:DisplayObject):void
+		{
 			if (child is ITransitionable)
 			{
 				// TODO : task -> dispatch complete when hide all
@@ -29,46 +47,41 @@ package com.sleepydesign.display
 				child.visible = false;
 				child.alpha = 0;
 			}
-
-			iterator.currentIndex = index;
-
-			showLayerByIndex(index);
 		}
 
-		public function hideAll():void
+		public function focus(name:String):void
 		{
 			while (iterator.hasNext())
 			{
 				var child:DisplayObject = iterator.next() as DisplayObject;
-
-				if (child is ITransitionable)
-				{
-					// TODO : task -> dispatch complete when hide all
-					ITransitionable(child).hide();
-				}
+				if (child.name == name)
+					show(child);
 				else
-				{
-					child.visible = false;
-					child.alpha = 0;
-				}
+					hide(child);
 			}
+		}
+
+		/*
+		public function swapTo(index:int):void
+		{
+			var child:DisplayObject = iterator.current as DisplayObject;
+			hide(child);
+			iterator.currentIndex = index;
+			showLayerByIndex(index);
+		}
+		*/
+
+		public function hideAll():void
+		{
+			while (iterator.hasNext())
+				hide(iterator.next() as DisplayObject);
 		}
 
 		public function showLayerByIndex(index:int):void
 		{
 			iterator.currentIndex = index;
 			var child:DisplayObject = iterator.current as DisplayObject;
-
-			if (child is ITransitionable)
-			{
-				// TODO : task -> dispatch complete when shown
-				ITransitionable(child).show();
-			}
-			else
-			{
-				child.visible = true;
-				child.alpha = 1;
-			}
+			show(child);
 		}
 	}
 }
