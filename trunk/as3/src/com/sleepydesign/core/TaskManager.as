@@ -72,14 +72,14 @@ package com.sleepydesign.core
 			var _tasks_length:int = _totalTasks = _tasks.length;
 			if (!_isParallel)
 			{
-				// link list serial eg. [task1 - complete] -> [task2 - complete] -> ... -> [task3 - complete]
+				// make a serial link list eg. [task_0 - complete] -> [task_1 - complete] -> ... -> [task_n - complete]
 				while (--_tasks_length > 0)
-					_tasks[_tasks_length - 1].completeSignal.addOnce(_tasks[_tasks_length].doTask);
+					_tasks[int(_tasks_length - 1)].completeSignal.addOnce(_tasks[int(_tasks_length)].doTask);
 
-				// stop
-				_tasks[_tasks.length - 1].completeSignal.addOnce(onTaskComplete);
+				// stop at last node
+				_tasks[int(_totalTasks - 1)].completeSignal.addOnce(onTaskComplete);
 
-				// start
+				// start at head node
 				_tasks[0].doTask();
 			}
 			else
@@ -108,7 +108,7 @@ package com.sleepydesign.core
 		private function onTimer(event:TimerEvent):void
 		{
 			var _timer:Timer = event.target as Timer;
-			var _task:ITask = _tasks[_timer.currentCount - 1];
+			var _task:ITask = _tasks[int(_timer.currentCount - 1)];
 			_task.doTask();
 		}
 
@@ -132,9 +132,9 @@ package com.sleepydesign.core
 				return;
 
 			// destroy link list
-			var _tasks_length:int = _tasks.length;
-			while (--_tasks_length > 0)
-				IDestroyable(_tasks[_tasks_length]).destroy();
+			var i:int = _tasks.length;
+			while (i--)
+				IDestroyable(_tasks[int(i)]).destroy();
 
 			// destroy parallel
 			if (_timer)
