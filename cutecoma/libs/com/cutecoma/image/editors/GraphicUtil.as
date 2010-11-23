@@ -11,6 +11,9 @@ package com.cutecoma.image.editors
 	{
 		public static function getBitmap(asset:DisplayObject, isTranslate:Boolean = true):Bitmap
 		{
+			if(!asset)
+				throw new Error("Required asset!");
+				
 			var bitmap:Bitmap;
 			if (!(asset is Bitmap))
 			{
@@ -27,6 +30,9 @@ package com.cutecoma.image.editors
 
 		public static function getBitmapData(asset:DisplayObject, isTranslate:Boolean = true, rectangle:Rectangle = null):BitmapData
 		{
+			if(!asset)
+				throw new Error("Required asset!");
+			
 			if (!rectangle)
 				rectangle = asset.getBounds(asset);
 
