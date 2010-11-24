@@ -64,6 +64,23 @@ package com.sleepydesign.display
 			}
 		}
 
+		public function setFocusByIndex(index:int):void
+		{
+			iterator.currentIndex = 0;
+			var child:DisplayObject = iterator.current as DisplayObject;
+			while (child)
+			{
+				if (iterator.currentIndex == index)
+					show(child);
+				else
+					hide(child);
+
+				child = iterator.next() as DisplayObject;
+			}
+
+			iterator.currentIndex = index;
+		}
+
 		/*
 		public function swapTo(index:int):void
 		{
