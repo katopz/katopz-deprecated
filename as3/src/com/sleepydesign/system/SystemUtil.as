@@ -79,7 +79,7 @@ package com.sleepydesign.system
 			catch (e:*)
 			{
 				//TODO AIR
-				trace(" ! playerType : " + Capabilities.playerType)
+				DebugUtil.trace(" ! playerType : " + Capabilities.playerType)
 			}
 		}
 
