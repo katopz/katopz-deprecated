@@ -257,7 +257,6 @@ package com.sleepydesign.components
 			draw();
 
 			// tell someone?
-			//dispatchEvent(new TreeEvent(TreeEvent.CHANGE_NODE_FOCUS, node));
 			nodeSignal.dispatch(node);
 			return node;
 		}

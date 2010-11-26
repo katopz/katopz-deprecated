@@ -130,7 +130,6 @@ package com.sleepydesign.components
 				return;
 
 			draw();
-			//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
 			transformSignal.dispatch(transform);
 		}
 
@@ -141,7 +140,6 @@ package com.sleepydesign.components
 
 			_width = w;
 			draw();
-			//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
 			transformSignal.dispatch(transform);
 		}
 
@@ -157,7 +155,6 @@ package com.sleepydesign.components
 
 			_height = h;
 			draw();
-			//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
 			transformSignal.dispatch(transform);
 		}
 
