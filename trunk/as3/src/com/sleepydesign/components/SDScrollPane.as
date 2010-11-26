@@ -89,7 +89,6 @@ package com.sleepydesign.components
 				panel.setSize(w, h);
 
 				draw();
-				//dispatchEvent(new TransformEvent(TransformEvent.RESIZE));
 				transformSignal.dispatch(transform);
 			}
 		}
