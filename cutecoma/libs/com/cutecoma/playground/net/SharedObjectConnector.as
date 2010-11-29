@@ -1,20 +1,19 @@
 package com.cutecoma.playground.net
 {
 	import com.cutecoma.playground.events.NetEvent;
-	import com.sleepydesign.events.RemovableEventDispatcher;
+	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.system.DebugUtil;
-	import com.sleepydesign.utils.ObjectUtil;
-	
+
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.events.SyncEvent;
 	import flash.net.NetConnection;
 	import flash.net.ObjectEncoding;
 	import flash.net.SharedObject;
-	
+
 	import org.osflash.signals.Signal;
 
-	public class SharedObjectConnector extends RemovableEventDispatcher
+	public class SharedObjectConnector implements IDestroyable
 	{
 		private var uri:String;
 
@@ -23,11 +22,15 @@ package com.cutecoma.playground.net
 		private var room:String;
 
 		private var ports:Array = [1935, 80, 443, 8080, 7070];
-		
+
 		public var initSignal:Signal = new Signal();
 		public var updateSignal:Signal = new Signal(Object);
 
 		public var status:String = NetEvent.DISCONNECT;
+
+		// _______________________________________________________ Signals
+
+		public var connectSignal:Signal = new Signal(String);
 
 		// _______________________________________________________ Main
 
@@ -74,11 +77,13 @@ package com.cutecoma.playground.net
 			{
 				case "NetConnection.Connect.Success":
 					status = NetEvent.CONNECT;
-					dispatchEvent(new NetEvent(NetEvent.CONNECT));
+					//dispatchEvent(new NetEvent(NetEvent.CONNECT));
+					connectSignal.dispatch(NetEvent.CONNECT);
 					break;
 				default:
 					status = NetEvent.DISCONNECT;
-					dispatchEvent(new NetEvent(NetEvent.DISCONNECT));
+					//dispatchEvent(new NetEvent(NetEvent.DISCONNECT));
+					connectSignal.dispatch(NetEvent.DISCONNECT);
 					break;
 			}
 		}
@@ -159,6 +164,31 @@ package com.cutecoma.playground.net
 			{
 				trace(e);
 			}
+		}
+
+		//____________________________________________________________ DESTROY
+
+		/** @private */
+		protected var _isDestroyed:Boolean;
+
+		public function get destroyed():Boolean
+		{
+			return _isDestroyed;
+		}
+
+		public function destroy():void
+		{
+			disconnect();
+
+			nc = null;
+			so = null;
+
+			ports = null;
+
+			initSignal.removeAll();
+			updateSignal.removeAll();
+
+			_isDestroyed = true;
 		}
 	}
 }

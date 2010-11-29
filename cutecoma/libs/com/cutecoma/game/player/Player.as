@@ -1,7 +1,7 @@
 ﻿package com.cutecoma.game.player
 {
 	import away3dlite.animators.MovieMeshContainer3D;
-	
+
 	import com.cutecoma.game.core.Character;
 	import com.cutecoma.game.core.Position;
 	import com.cutecoma.game.data.PlayerData;
@@ -9,15 +9,15 @@
 	import com.cutecoma.playground.core.Map;
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Linear;
-	import com.sleepydesign.events.RemovableEventDispatcher;
+	import com.sleepydesign.core.IDestroyable;
 	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.events.Event;
 	import flash.geom.Vector3D;
-	
+
 	import org.osflash.signals.Signal;
 
-	public class Player extends RemovableEventDispatcher
+	public class Player implements IDestroyable
 	{
 		public var id:String;
 
@@ -88,12 +88,17 @@
 			data.des = Position.parse(decoy).toObject();
 
 			// tell mom i'm dirty!
-			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+			//dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+			updateSignal.dispatch(PlayerData(data).toObject());
 
 			// all clean now
 			_dirty = false;
 		}
-		
+
+		//____________________________________________________________ Signals
+
+		public var updateSignal:Signal = new Signal(Object);
+
 		//____________________________________________________________ Contructor
 
 		public function Player(playerData:PlayerData = null) //id:String=null, source:*=null, playerVO:PlayerVO)
@@ -128,7 +133,7 @@
 
 		public var positionSignal:Signal = new Signal(String, Vector3D);
 		public var talkSignal:Signal = new Signal(String, Vector3D, String);
-		
+
 		public var walkCompleteSignal:Signal = new Signal(Vector3D);
 		public var completeSignal:Signal = new Signal(Player);
 
@@ -165,7 +170,7 @@
 
 		private function onWalkTo(event:Event):void
 		{
-			
+
 		}
 
 		public function walk(positions:Array):void
@@ -199,13 +204,10 @@
 
 				act(PlayerEvent.WALK);
 
-				TweenLite.to(dolly, time, {x:decoy.x, y:decoy.y, z:decoy.z,
+				TweenLite.to(dolly, time, {x: decoy.x, y: decoy.y, z: decoy.z,
 					//bezier:positions,
 					//onStart:function():void { act(PlayerEvent.WALK) },
-						onUpdate:onWalk,
-						onComplete:walk,
-						onCompleteParams:[positions],
-						ease:Linear.easeNone});
+						onUpdate: onWalk, onComplete: walk, onCompleteParams: [positions], ease: Linear.easeNone});
 
 			}
 			else
@@ -221,7 +223,7 @@
 		{
 			positionSignal.dispatch(id, dolly);
 		}
-		
+
 		private function onWalkComplete():void
 		{
 			trace(" ^ onWalkComplete");
@@ -245,21 +247,23 @@
 		public function enter():void
 		{
 			data.act = PlayerEvent.ENTER;
-			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+			//dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+			updateSignal.dispatch(PlayerData(data).toObject());
 		}
 
 		public function exit():void
 		{
 			data.act = PlayerEvent.EXIT;
-			dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+			//dispatchEvent(new PlayerEvent(PlayerEvent.UPDATE, PlayerData(data).toObject()));
+			updateSignal.dispatch(PlayerData(data).toObject());
 		}
 
 		// ______________________________ Update ____________________________
-		
+
 		public function updatePosition(targetPosition:Vector3D):void
 		{
 			model.lookAt(targetPosition);
-			
+
 			model.x += (targetPosition.x - position.x) * .5;
 			model.z += (targetPosition.z - position.z) * .5;
 		}
@@ -268,7 +272,7 @@
 		{
 			var playerData:PlayerData = PlayerData(this.data);
 			playerData.parse(data);
-			
+
 			DebugUtil.trace(" ! Player.update : " + playerData.id);
 
 			// update list?
@@ -300,7 +304,17 @@
 			dirty = true;
 		}
 
-		override public function destroy():void
+		//____________________________________________________________ DESTROY
+
+		/** @private */
+		protected var _isDestroyed:Boolean;
+
+		public function get destroyed():Boolean
+		{
+			return _isDestroyed;
+		}
+
+		public function destroy():void
 		{
 			TweenLite.killTweensOf(dolly);
 
@@ -310,8 +324,8 @@
 			walkCompleteSignal = null;
 			completeSignal = null;
 			positions = null;
-			
-			super.destroy();
+
+			_isDestroyed = true;
 		}
 	}
 }
