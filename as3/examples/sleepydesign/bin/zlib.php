@@ -1,1 +1,0 @@
-<?=gzuncompress(file_get_contents("foo.zip"));?>
