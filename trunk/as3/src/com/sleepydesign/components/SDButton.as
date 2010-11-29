@@ -78,6 +78,11 @@ package com.sleepydesign.components
 		protected function onMouseOut(event:MouseEvent):void
 		{
 			removeEventListener(MouseEvent.ROLL_OUT, onMouseOut);
+
+			// destroyed?
+			if (!_style)
+				return;
+
 			_over = false;
 			if (!_down)
 			{
