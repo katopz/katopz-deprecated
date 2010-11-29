@@ -1,13 +1,17 @@
 package com.sleepydesign.ui
 {
 	import com.cutecoma.playground.events.SDMouseEvent;
-	import com.sleepydesign.events.RemovableEventDispatcher;
+	import com.sleepydesign.core.IDestroyable;
 
 	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	public class SDMouse extends RemovableEventDispatcher
+	import org.osflash.signals.DeluxeSignal;
+	import org.osflash.signals.Signal;
+	import org.osflash.signals.natives.NativeSignal;
+
+	public class SDMouse implements IDestroyable
 	{
 		private var _target:InteractiveObject;
 		private var _dragTarget:*;
@@ -18,6 +22,12 @@ package com.sleepydesign.ui
 		public static var distance:Number = 0;
 
 		public var yUp:Boolean = true;
+
+		public var mouseSignal:Signal = new Signal(MouseEvent);
+		public var wheelSignal:Signal = new Signal(MouseEvent);
+
+		public var dragSignal:Signal = new Signal(Object);
+		public var dropSignal:Signal = new Signal(Object);
 
 		public function SDMouse(target:InteractiveObject)
 		{
@@ -31,24 +41,6 @@ package com.sleepydesign.ui
 			_target.addEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
 			_target.addEventListener(MouseEvent.ROLL_OUT, onMouseHandler);
 			_target.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-		}
-
-		override public function destroy():void
-		{
-			super.destroy();
-
-			/*
-			   _target.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseHandler);
-			   _target.removeEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
-			   _target.removeEventListener(MouseEvent.MOUSE_OUT, onMouseHandler);
-			   _target.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-
-			   _target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
-			 */
-
-			_target = null;
-			_dragTarget = null;
-			_lastPosition = null;
 		}
 
 		private function onMouseHandler(event:MouseEvent):void
@@ -73,7 +65,8 @@ package com.sleepydesign.ui
 					_dragTarget = null;
 
 					_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
-					dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DROP, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+					//dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DROP, {target: _dragTarget, dx: dx, dy: dy, distance: distance}, event));
+					dropSignal.dispatch({target: _dragTarget, dx: dx, dy: dy, distance: distance});
 					break;
 				case MouseEvent.MOUSE_MOVE:
 					_target["mouseChildren"] = false;
@@ -83,7 +76,8 @@ package com.sleepydesign.ui
 						var dy:Number = event.stageY - _lastPosition.y;
 						distance = Point.distance(new Point(event.stageX, event.stageY), _lastPosition);
 
-						dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: yUp ? -dy : dy, distance: distance}, event));
+						//dispatchEvent(new SDMouseEvent(SDMouseEvent.MOUSE_DRAG, {target: _dragTarget, dx: dx, dy: yUp ? -dy : dy, distance: distance}, event));
+						dragSignal.dispatch({target: _dragTarget, dx: dx, dy: yUp ? -dy : dy, distance: distance});
 
 						_lastPosition.x = event.stageX;
 						_lastPosition.y = event.stageY;
@@ -101,12 +95,39 @@ package com.sleepydesign.ui
 					 */
 					break;
 			}
-			dispatchEvent(event.clone());
+			//dispatchEvent(event.clone());
+			mouseSignal.dispatch(event);
 		}
 
 		private function onMouseWheel(event:MouseEvent):void
 		{
-			dispatchEvent(event.clone());
+			//dispatchEvent(event.clone());
+			wheelSignal.dispatch(event);
+		}
+
+		protected var _isDestroyed:Boolean;
+
+		public function get destroyed():Boolean
+		{
+			return _isDestroyed;
+		}
+
+		public function destroy():void
+		{
+			_isDestroyed = true;
+
+			/*
+			_target.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseHandler);
+			_target.removeEventListener(MouseEvent.MOUSE_UP, onMouseHandler);
+			_target.removeEventListener(MouseEvent.MOUSE_OUT, onMouseHandler);
+			_target.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+
+			_target.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseHandler);
+			*/
+
+			_target = null;
+			_dragTarget = null;
+			_lastPosition = null;
 		}
 	}
 }
