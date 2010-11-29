@@ -34,7 +34,7 @@ package com.sleepydesign.components
 
 		public function SDScrollPane(style:ISDStyle = null)
 		{
-			super(_style);
+			super(style);
 
 			_back = new Shape();
 			addChild(_back);
@@ -45,7 +45,7 @@ package com.sleepydesign.components
 			_hScrollBar = new SDScrollBar(SDSlider.HORIZONTAL);
 			addChild(_hScrollBar);
 
-			panel = new SDPanel();
+			panel = new SDPanel(style);
 			addChild(panel);
 			target = panel;
 
