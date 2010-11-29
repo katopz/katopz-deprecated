@@ -74,7 +74,8 @@ package com.cutecoma.playground.core
 		public function bindCurrentPlayer():void
 		{
 			// bind player -> connector
-			_game.currentPlayer.addEventListener(PlayerEvent.UPDATE, _connector.onClientUpdate);
+			//_game.currentPlayer.addEventListener(PlayerEvent.UPDATE, _connector.onClientUpdate);
+			_game.currentPlayer.updateSignal.add(_connector.onClientUpdate);
 
 			// bind player position from game model
 			_game.currentPlayer.positionSignal.add(onPlayerPositionChange);
@@ -203,7 +204,8 @@ package com.cutecoma.playground.core
 
 		private function onPlayerRemoved(player:Player):void
 		{
-			player.removeEventListener(PlayerEvent.UPDATE, _connector.onClientUpdate);
+			//player.removeEventListener(PlayerEvent.UPDATE, _connector.onClientUpdate);
+			player.updateSignal.remove(_connector.onClientUpdate);
 			player.positionSignal.remove(onPlayerPositionChange);
 			player.talkSignal.remove(onPlayerTalkChange);
 

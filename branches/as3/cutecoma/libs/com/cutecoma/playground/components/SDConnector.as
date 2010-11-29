@@ -90,17 +90,26 @@ package com.cutecoma.playground.components
 
 			// new
 			connector = new SharedObjectConnector(uri);
-			connector.addEventListener(NetEvent.CONNECT, onConnect);
-			connector.addEventListener(NetEvent.DISCONNECT, onDisConnect);
+			connector.connectSignal.add(onConnect);
+			//connector.addEventListener(NetEvent.CONNECT, onConnect);
+			//connector.addEventListener(NetEvent.DISCONNECT, onDisConnect);
 			connector.connect();
 
 			return connector;
 		}
 
-		private function onConnect(event:NetEvent):void
+		private function onConnect(type:String):void
 		{
-			trace(" ^ onConnect");
-			enterRoom(room);
+			if (type == NetEvent.CONNECT)
+			{
+				trace(" ^ onConnect");
+				enterRoom(room);
+			}
+			else
+			{
+				trace(" ^ onDisConnect");
+				serverInputText.text = serverInputText.defaultText;
+			}
 		}
 
 		public function enterRoom(room:String):void
@@ -142,21 +151,13 @@ package com.cutecoma.playground.components
 			connector.initSignal.removeAll();
 			connector.updateSignal.removeAll();
 
-			connector.removeEventListener(NetEvent.CONNECT, onConnect);
-			connector.removeEventListener(NetEvent.DISCONNECT, onDisConnect);
+			//connector.removeEventListener(NetEvent.CONNECT, onConnect);
+			//connector.removeEventListener(NetEvent.DISCONNECT, onDisConnect);
+			connector.connectSignal.removeAll();
 			connector.disconnect();
 
 			connector = null;
 			isConnect = false;
-		}
-
-		private function onDisConnect(event:NetEvent):void
-		{
-			trace(" ^ onDisConnect");
-			connector.removeEventListener(NetEvent.DISCONNECT, onDisConnect);
-
-			// debug
-			serverInputText.text = serverInputText.defaultText;
 		}
 
 		// Server
@@ -177,15 +178,15 @@ package com.cutecoma.playground.components
 
 		// Client
 		// TODO : replace player event with register player data
-		public function onClientUpdate(event:PlayerEvent):void
+		public function onClientUpdate(data:Object):void
 		{
-			trace(" ^ onClientUpdate : " + event.data, event.data.act);
+			trace(" ^ onClientUpdate : " + data, data.act);
 			if (connector)
 			{
 				var domain:String = String(stage.loaderInfo.applicationDomain.parentDomain);
 				domain = (domain != "null") ? domain : "127.0.0.1";
 
-				var sid:String = String(event.data.ms + "@" + domain);
+				var sid:String = String(data.ms + "@" + domain);
 
 				/*
 				   connector.send(
@@ -194,14 +195,14 @@ package com.cutecoma.playground.components
 				   sid:sid,
 
 				   // data
-				   data:event.data
+				   data:data
 				   });
 
 				   trace( " ! sid : "+sid);
-				   trace( " ! data : "+event.data);
+				   trace( " ! data : "+data);
 				 */
 
-				connector.send(event.data);
+				connector.send(data);
 			}
 			else
 			{
