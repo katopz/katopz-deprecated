@@ -37,13 +37,13 @@ package com.sleepydesign.display
 
 		public function SDClip()
 		{
-			_statusSignal.dispatch(_status = STATUS_INIT, this);
 			addEventListener(Event.ADDED_TO_STAGE, onStage, false, 0, true);
 		}
 
 		protected function onStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			_statusSignal.dispatch(_status = STATUS_INIT, this);
 			onInit();
 		}
 
