@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.651
- * DATE: 2010-11-01
+ * VERSION: 1.72
+ * DATE: 2010-11-17
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -72,6 +72,8 @@ package com.greensock.loading.display {
 		
 		/** @private A place to reference an object that should be protected from gc - this is used in VideoLoader in order to protect the NetStream object when the loader is disposed. **/
 		public var gcProtect:*;
+		/** Arbitrary data that you can associate with the FlexContentDisplay instance. For example, you could set <code>data</code> to be an object containing various other properties or set it to an index number related to an array in your application. It is completely optional and arbitrary. **/
+		public var data:*;
 		
 		/**
 		 * Constructor

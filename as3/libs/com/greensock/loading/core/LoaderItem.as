@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.642
- * DATE: 2010-10-23
+ * VERSION: 1.74
+ * DATE: 2010-11-21
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -64,11 +64,11 @@ package com.greensock.loading.core {
 			_httpStatus = 0;
 			_closeStream();
 			if (this.vars.noCache && (!_isLocal || _url.substr(0, 4) == "http")) {
-				_setRequestURL(_request, _url, "cacheBusterID=" + (_cacheID++));
+				_setRequestURL(_request, _url, "gsCacheBusterID=" + (_cacheID++));
 			}
 		}
 		
-		/** @private Flash doesn't properly apply extra GET url parameters when the URL contains them already (like "http://www.greensock.com?id=2") - it ends up missing an "&" delimiter so this method splits any that exist out into a URLVariables object and optionally adds extra parameters like cacheBusterID, etc. **/
+		/** @private Flash doesn't properly apply extra GET url parameters when the URL contains them already (like "http://www.greensock.com?id=2") - it ends up missing an "&" delimiter so this method splits any that exist out into a URLVariables object and optionally adds extra parameters like gsCacheBusterID, etc. **/
 		protected function _setRequestURL(request:URLRequest, url:String, extraParams:String=""):void {
 			var a:Array = url.split("?");
 			
@@ -112,7 +112,7 @@ package com.greensock.loading.core {
 				_auditStream.addEventListener("securityError", _auditStreamHandler, false, 0, true);
 				var request:URLRequest = new URLRequest();
 				request.data = _request.data;
-				_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "cacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
+				_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "gsCacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
 				_auditStream.load(request);  
 			}
 		}
@@ -148,7 +148,7 @@ package com.greensock.loading.core {
 					_setRequestURL(_request, _url);
 					var request:URLRequest = new URLRequest();
 					request.data = _request.data;
-					_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "cacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
+					_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "gsCacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
 					_auditStream.load(request);
 					_errorHandler(event);
 					return;
