@@ -1,15 +1,12 @@
 package com.sleepydesign.ui
 {
-	import com.cutecoma.playground.events.SDMouseEvent;
 	import com.sleepydesign.core.IDestroyable;
 
 	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-	import org.osflash.signals.DeluxeSignal;
 	import org.osflash.signals.Signal;
-	import org.osflash.signals.natives.NativeSignal;
 
 	public class SDMouse implements IDestroyable
 	{
