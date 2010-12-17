@@ -35,7 +35,7 @@ package com.sleepydesign.components
 		override public function draw():void
 		{
 			_back.graphics.clear();
-			_back.graphics.lineStyle(); //_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
+			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
 			_back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
 
 			_back.graphics.drawRect(0, 0, _width, _height);
