@@ -71,7 +71,7 @@ package com.sleepydesign.templates
 			return _screenRectangle;
 		}
 
-		public static var _instance:ApplicationTemplate;
+		private static var _instance:ApplicationTemplate;
 
 		public static function getInstance():ApplicationTemplate
 		{
