@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:fx="http://ns.adobe.com/mxml/2009" 
+           xmlns:s="library://ns.adobe.com/flex/spark" implements="org.robotlegs.utilities.modular.core.IModule"
+           xmlns:mx="library://ns.adobe.com/flex/mx" layout="absolute" width="100" height="100">
+
+    <fx:Declarations>
+        <!-- Place non-visual elements (e.g., services, value objects) here -->
+    </fx:Declarations>
+    <fx:Script>
+        <![CDATA[
+            import mx.core.IVisualElementContainer;
+            
+            import org.robotlegs.core.IContext;
+            import org.robotlegs.core.IInjector;
+            import org.robotlegs.utilities.modular.core.IModule;
+            import org.robotlegs.utilities.modular.core.IModuleContext;
+            
+            import robotlegs.examples.modulardoodads.modules.doodad.events.DoodadModuleEvent;
+            
+            [Bindable]
+            public var color:uint = 0x000000;
+            
+            protected var colorCache:uint;
+            
+            protected var context:IModuleContext;
+            protected var flashTimer:Timer;
+            
+            /**
+             * We need to initialize our context by setting the parent
+             * injector for the module. This is actually injected by the
+             * shell, so no need to worry about it!
+             */
+            [Inject]
+            public function set parentInjector(value:IInjector):void
+            {
+                context = new DoodadModuleContext(this,value);
+            }
+            
+            protected function doStuff_clickHandler(event:MouseEvent):void
+            {
+                dispatchEvent(new DoodadModuleEvent(DoodadModuleEvent.DO_STUFF_REQUESTED));
+            }
+
+            protected function killModule_clickHandler(event:MouseEvent):void
+            {
+                dispatchEvent(new DoodadModuleEvent(DoodadModuleEvent.REMOVE));
+            }
+            
+            public function dispose():void
+            {
+                if(parent && parent.contains(this))
+                    IVisualElementContainer(parent).removeElement(this);
+                context.dispose();
+                context = null;       
+                flashTimer = null;
+            }
+            
+            public function flashIt():void
+            {
+                colorCache = color;
+                flashTimer = new Timer(50,4);
+                flashTimer.addEventListener(TimerEvent.TIMER, handleFlashTimer, false, 0, true);
+                flashTimer.addEventListener(TimerEvent.TIMER_COMPLETE, handleFlashTimerComplete, false, 0, true);
+                flashTimer.start();
+            }
+            
+            private function handleFlashTimer(event:TimerEvent):void
+            {
+                if(color == colorCache)
+                    color = 0xFF0000;
+                else
+                    color = colorCache;
+            }
+            
+            private function handleFlashTimerComplete(event:TimerEvent):void
+            {
+                flashTimer.removeEventListener(TimerEvent.TIMER, handleFlashTimer);
+                flashTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, handleFlashTimerComplete);    
+                color = colorCache;
+                flashTimer = null;
+            }
+
+        ]]>
+    </fx:Script>
+    <s:Group width="100%" height="100%">
+        <s:Rect width="100%" height="100%">
+            <s:fill>
+                <s:SolidColor color="{color}"/>
+            </s:fill>
+        </s:Rect>
+    </s:Group>
+    <s:Button id="killModule" label="x" right="2" top="2" width="30" click="killModule_clickHandler(event)"/>
+    <s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+        <s:Button id="doStuff" label="request" click="doStuff_clickHandler(event)"/>
+    </s:VGroup>
+</mx:Module>
