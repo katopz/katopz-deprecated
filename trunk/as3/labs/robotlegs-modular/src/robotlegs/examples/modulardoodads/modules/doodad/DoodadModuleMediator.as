@@ -34,6 +34,9 @@ package robotlegs.examples.modulardoodads.modules.doodad
         {
             dispatchToModules(new LoggingEvent(LoggingEvent.MESSAGE, "Removing DoodadModule"));
             dispatchToModules(event);
+			
+			doodadModuleSignal.remove(handleDoodadFlashRequest2);
+			
             view.dispose();
         }
         
@@ -59,9 +62,9 @@ package robotlegs.examples.modulardoodads.modules.doodad
             view.flashIt();
         }
 		
-        private function handleDoodadFlashRequest2(event:String):void
+        private function handleDoodadFlashRequest2(wtf:String):void
         {
-           DebugUtil.trace("handleDoodadFlashRequest2");
+           DebugUtil.trace("wtf : " + wtf);
         }
     }
 }

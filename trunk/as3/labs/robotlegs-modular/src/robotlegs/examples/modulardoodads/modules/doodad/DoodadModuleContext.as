@@ -18,7 +18,7 @@ package robotlegs.examples.modulardoodads.modules.doodad
         
         override public function startup():void
         {
-			injector.mapSingleton(DoodadModuleSignal);
+			//injector.mapSingleton(DoodadModuleSignal);
 			
             mediatorMap.mapView(DoodadModule, DoodadModuleMediator);
             moduleCommandMap.mapEvent(ModuleCommandTriggerEvent.TRIGGER_MODULE_COMMAND, DoodadModuleCommand);

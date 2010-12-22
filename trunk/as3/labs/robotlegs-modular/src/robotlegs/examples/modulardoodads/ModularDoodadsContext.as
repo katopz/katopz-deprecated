@@ -6,6 +6,7 @@ package robotlegs.examples.modulardoodads
     import org.robotlegs.utilities.modular.mvcs.ModuleContext;
     
     import robotlegs.examples.modulardoodads.modules.doodad.DoodadModule;
+    import robotlegs.examples.modulardoodads.modules.doodad.signals.DoodadModuleSignal;
     import robotlegs.examples.modulardoodads.modules.logger.LoggerModule;
     import robotlegs.examples.modulardoodads.view.ModuleDoodadsMediator;
     
@@ -23,6 +24,8 @@ package robotlegs.examples.modulardoodads
             //map the modules so that instances will be properly supplied (injected) with an injector.
             viewMap.mapType(LoggerModule);
             viewMap.mapType(DoodadModule);
+			
+			injector.mapSingleton(DoodadModuleSignal);
             
             mediatorMap.mapView(ModularDoodads, ModuleDoodadsMediator);
         }
