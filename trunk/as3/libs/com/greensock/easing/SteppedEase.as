@@ -23,7 +23,10 @@ package com.greensock.easing {
  * TweenLite.to(mc, 3, {y:300, ease:steppedEase.ease});
  * </code><br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * Note: SteppedEase is optimized for use with the GreenSock tweenining platform, so it isn't intended to be used with other engines. 
+ * Specifically, its easing equation always returns values between 0 and 1.<br /><br />
+ * 
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	 
@@ -59,11 +62,11 @@ package com.greensock.easing {
 		}
 		
 		/**
-		 * Easing function that interpolates values
+		 * Easing function that interpolates values. 
 		 * 
 		 * @param t time
-		 * @param b start
-		 * @param c change
+		 * @param b start (should always be 0)
+		 * @param c change (should always be 1)
 		 * @param d duration
 		 * @return Result of the ease
 		 */

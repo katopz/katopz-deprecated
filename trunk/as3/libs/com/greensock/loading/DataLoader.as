@@ -1,12 +1,11 @@
 /**
- * VERSION: 1.7
- * DATE: 2010-11-13
+ * VERSION: 1.83
+ * DATE: 2011-02-15
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
 package com.greensock.loading {
 	import com.greensock.loading.core.LoaderItem;
-	import com.greensock.loading.LoaderStatus;
 	
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
@@ -20,7 +19,7 @@ package com.greensock.loading {
  * Loads generic data which can be text (the default), binary data, or URL-encoded variables. <br /><br />
  * 
  * If the <code>format</code> vars property is "text", the <code>content</code> will be a String containing the text of the loaded file.<br /><br />
- * If the <code>format</code> vars property is "binary", the <code>content</code> will be a <code>ByteArray</code> object containing the raw binary data.<br /><br />
+ * If the <code>format</code> vars property is "binary", the <code>content</code> will be a <code>ByteArray</code> object containing the raw binary data. (See also: BinaryDataLoader)<br /><br />
  * If the <code>format</code> vars property is "variables", the <code>content</code> will be a <code>URLVariables</code> object containing the URL-encoded variables<br /><br />
  * 
  * <strong>OPTIONAL VARS PROPERTIES</strong><br />
@@ -89,7 +88,7 @@ function errorHandler(event:LoaderEvent):void {
 }
  </listing>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @see com.greensock.loading.data.DataLoaderVars
  * 

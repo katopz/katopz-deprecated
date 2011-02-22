@@ -2,7 +2,7 @@
  * VERSION: 0.61
  * DATE: 2010-10-13
  * AS3
- * UPDATES AND DOCS AT: http://www.grensock.com/roughease/
+ * UPDATES AND DOCS AT: http://www.greensock.com/roughease/
  **/
 package com.greensock.easing {
 /**
@@ -29,7 +29,7 @@ package com.greensock.easing {
  * TweenLite.to(mc, 3, {y:300, ease:RoughEase.byName("superRoughEase")});
  * </code><br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	 

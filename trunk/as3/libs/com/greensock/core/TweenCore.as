@@ -1,23 +1,22 @@
 /**
- * VERSION: 1.4
- * DATE: 2010-11-12
+ * VERSION: 1.64
+ * DATE: 2011-01-06
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com
  **/
-
 package com.greensock.core {
 	import com.greensock.*;
 /**
  * TweenCore is the base class for all TweenLite, TweenMax, TimelineLite, and TimelineMax classes and 
  * provides core functionality and properties. There is no reason to use this class directly.<br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 	public class TweenCore {
 		/** @private **/
-		public static const version:Number = 1.4;
+		public static const version:Number = 1.64;
 		
 		/** @private **/
 		protected static var _classInitted:Boolean;
@@ -90,8 +89,7 @@ package com.greensock.core {
 			}
 			
 			var tl:SimpleTimeline = (this.vars.timeline is SimpleTimeline) ? this.vars.timeline : (this.vars.useFrames) ? TweenLite.rootFramesTimeline : TweenLite.rootTimeline;
-			this.cachedStartTime = tl.cachedTotalTime + _delay;
-			tl.addChild(this);
+			tl.insert(this, tl.cachedTotalTime);
 			if (this.vars.reversed) {
 				this.cachedReversed = true;
 			}
@@ -213,7 +211,7 @@ package com.greensock.core {
 			if (enabled) {
 				this.active = Boolean(!this.cachedPaused && this.cachedTotalTime > 0 && this.cachedTotalTime < this.cachedTotalDuration);
 				if (!ignoreTimeline && this.cachedOrphan) {
-					this.timeline.addChild(this);
+					this.timeline.insert(this, this.cachedStartTime - _delay);
 				}
 			} else {
 				this.active = false;
@@ -258,7 +256,7 @@ package com.greensock.core {
 		 **/
 		protected function setTotalTime(time:Number, suppressEvents:Boolean=false):void {
 			if (this.timeline) {
-				var tlTime:Number = (this.cachedPauseTime || this.cachedPauseTime == 0) ? this.cachedPauseTime : this.timeline.cachedTotalTime;
+				var tlTime:Number = (this.cachedPaused) ? this.cachedPauseTime : this.timeline.cachedTotalTime;
 				if (this.cachedReversed) {
 					var dur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration;
 					this.cachedStartTime = tlTime - ((dur - time) / this.cachedTimeScale);
@@ -292,21 +290,28 @@ package com.greensock.core {
 		
 		/**
 		 * Duration of the tween in seconds (or frames for frames-based tweens/timelines) not including any repeats
-		 * or repeatDelays. <code>totalDuration</code>, by contrast, does include repeats and repeatDelays.
+		 * or repeatDelays. <code>totalDuration</code>, by contrast, does include repeats and repeatDelays. If you alter
+		 * the <code>duration</code> of a tween while it is in-progress (active), its <code>startTime</code> will automatically 
+		 * be adjusted in order to make the transition smoothly (without a sudden skip). 
 		 **/
 		public function get duration():Number {
 			return this.cachedDuration;
 		}
 		
 		public function set duration(n:Number):void {
+			var ratio:Number = n / this.cachedDuration;
 			this.cachedDuration = this.cachedTotalDuration = n;
+			if (this.active && !this.cachedPaused && n != 0) {
+				this.setTotalTime(this.cachedTotalTime * ratio, true);
+			}
 			setDirtyCache(false);
 		}
 		
 		/**
 		 * Duration of the tween in seconds (or frames for frames-based tweens/timelines) including any repeats
 		 * or repeatDelays (which are only available on TweenMax and TimelineMax). <code>duration</code>, by contrast, does 
-		 * <b>NOT</b> include repeats and repeatDelays. So if a TweenMax's <code>duration</code> is 1 and it has a repeat of 2, the <code>totalDuration</code> would be 3.
+		 * <b>NOT</b> include repeats and repeatDelays. So if a TweenMax's <code>duration</code> is 1 and it has a repeat of 2, 
+		 * the <code>totalDuration</code> would be 3.
 		 **/ 
 		public function get totalDuration():Number {
 			return this.cachedTotalDuration;
@@ -362,10 +367,10 @@ package com.greensock.core {
 		}
 		
 		public function set startTime(n:Number):void {
-			var adjust:Boolean = Boolean(this.timeline != null && (n != this.cachedStartTime || this.gc));
-			this.cachedStartTime = n;
-			if (adjust) {
-				this.timeline.addChild(this); //ensures that any necessary re-sequencing of TweenCores in the timeline occurs to make sure the rendering order is correct.
+			if (this.timeline != null && (n != this.cachedStartTime || this.gc)) {
+				this.timeline.insert(this, n - _delay); //ensures that any necessary re-sequencing of TweenCores in the timeline occurs to make sure the rendering order is correct.
+			} else {
+				this.cachedStartTime = n;
 			}
 		}
 		

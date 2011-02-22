@@ -1,7 +1,6 @@
-/**
- * VERSION: 1.742
- * DATE: 2010-11-29
- * AS3
+﻿/**
+ * VERSION: 1.831
+ * DATE: 2011-02-16
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
 package com.greensock.loading {
@@ -10,9 +9,7 @@ package com.greensock.loading {
 	import com.greensock.loading.core.LoaderItem;
 	
 	import flash.display.DisplayObject;
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	import flash.events.ProgressEvent;
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	import flash.utils.Dictionary;
@@ -136,7 +133,7 @@ function errorHandler(event:LoaderEvent):void {
  * instead of a generic object to define your <code>vars</code> is a bit more verbose but provides 
  * code hinting and improved debugging because it enforces strict data typing. Use whichever one you prefer.<br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @see com.greensock.loading.data.LoaderMaxVars
  * 
@@ -144,7 +141,7 @@ function errorHandler(event:LoaderEvent):void {
  */	
 	public class LoaderMax extends LoaderCore {		
 		/** @private **/
-		public static const version:Number = 1.742;
+		public static const version:Number = 1.831;
 		/** The default value that will be used for the <code>estimatedBytes</code> on loaders that don't declare one in the <code>vars</code> parameter of the constructor. **/
 		public static var defaultEstimatedBytes:uint = 20000;
 		/** Controls the default value of <code>auditSize</code> in LoaderMax instances (normally <code>true</code>). For most situations, the auditSize feature is very convenient for ensuring that the overall progress of LoaderMax instances is reported accurately, but when working with very large quantities of files that have no <code>estimatedBytes</code> defined, some developers prefer to turn auditSize off by default. Of course you can always override the default for individual LoaderMax instances by defining an <code>auditSize</code> value in the <code>vars</code> parameter of the constructor. **/
@@ -344,7 +341,9 @@ function completeHandler(event:LoaderEvent):void {
 			if (this != loader.rootLoader) {
 				_removeLoader(loader, false); //in case it was already added.
 			}
-			loader.rootLoader.remove(loader);
+			if (loader.rootLoader == _globalRootLoader) { //don't remove from rootLoaders other than _globalRootLoader, otherwise subloading swfs with loaders that contain LoaderMax instances with nested loaders that have requiredWithRoot set to the associated rootLoader won't be able to be found inside that rootLoader. We could of course leave loaders in _globalRootLoader, but that we get a performance benefit from removing them (fewer event listeners getting called).
+				loader.rootLoader.remove(loader);
+			}
 			
 			if (index > _loaders.length) {
 				index = _loaders.length;
@@ -352,15 +351,15 @@ function completeHandler(event:LoaderEvent):void {
 			
 			_loaders.splice(index, 0, loader);
 			if (this != _globalRootLoader) {
-				loader.addEventListener(LoaderEvent.PROGRESS, _progressHandler, false, 0, true);
-				loader.addEventListener("prioritize", _prioritizeHandler, false, 0, true);
 				for (var p:String in _listenerTypes) {
 					if (p != "onProgress" && p != "onInit") {
-						loader.addEventListener(_listenerTypes[p], _passThroughEvent, false, 0, true);
+						loader.addEventListener(_listenerTypes[p], _passThroughEvent, false, -100, true);
 					}
 				}
+				loader.addEventListener(LoaderEvent.PROGRESS, _progressHandler, false, -100, true); //use -1 so that if the user adds an event listener, it gets called before LoaderMax is notified. Otherwise bubbling behavior doesn't go in the proper order.
+				loader.addEventListener("prioritize", _prioritizeHandler, false, -100, true);
 			}
-			loader.addEventListener("dispose", _disposeHandler, false, 0, true);
+			loader.addEventListener("dispose", _disposeHandler, false, -100, true);
 			_cacheIsDirty = true;
 			if (_status == LoaderStatus.LOADING) {
 				//do nothing 
@@ -401,6 +400,8 @@ function completeHandler(event:LoaderEvent):void {
 					_loadNext(null);
 				}
 			}
+			_cacheIsDirty = true;
+			_progressHandler(null); //has conditional logic that will only dispatch a PROGRESS event if bytesLoaded or bytesTotal has changed.
 		}
 		
 		/**
@@ -500,7 +501,7 @@ function completeHandler(event:LoaderEvent):void {
 		 * 
 		 * loader.getChildrenByStatus(LoaderStatus.LOADING, false); </code>
 		 * 
-		 * @param status Status code like <code>LoaderStatus.READY, LoaderStatus.LOADING, LoaderStatus.COMPLETE, LoaderStatus.PAUSED,</code> or <code>LoaderStatus.FAILED</code>.
+		 * @param status Status code like <code>LoaderStatus.READY, LoaderStatus.LOADING, LoaderStatus.COMPLETED, LoaderStatus.PAUSED,</code> or <code>LoaderStatus.FAILED</code>.
 		 * @param includeNested If <code>true</code>, loaders that are nested inside other loaders (like LoaderMax instances or XMLLoaders or SWFLoaders) will be returned in the array.
 		 * @return An array of loaders that match the defined <code>status</code>. 
 		 * @see #getChildren()
@@ -717,6 +718,7 @@ function completeHandler(event:LoaderEvent):void {
 		protected function _auditSize(event:Event=null):void {
 			if (event != null) {
 				event.target.removeEventListener("auditedSize", _auditSize);
+				event.target.removeEventListener(LoaderEvent.FAIL, _auditSize);
 			}
 			var l:uint = _loaders.length;
 			var maxStatus:int = (this.skipPaused) ? LoaderStatus.COMPLETED : LoaderStatus.PAUSED;
@@ -725,7 +727,8 @@ function completeHandler(event:LoaderEvent):void {
 				loader = _loaders[i];
 				if (!loader.auditedSize && loader.status <= maxStatus) {
 					if (!found) {
-						loader.addEventListener("auditedSize", _auditSize, false, 0, true);
+						loader.addEventListener("auditedSize", _auditSize, false, -100, true);
+						loader.addEventListener(LoaderEvent.FAIL, _auditSize, false, -100, true);
 					}
 					found = true;
 					loader.auditSize();
@@ -744,10 +747,11 @@ function completeHandler(event:LoaderEvent):void {
 		
 		/** @private **/
 		protected function _loadNext(event:Event=null):void {
-			if (event != null) {
+			if (event != null && _activeLoaders != null) {
 				delete _activeLoaders[event.target];
 				_removeLoaderListeners(LoaderCore(event.target), false);
 			}
+			
 			if (_status == LoaderStatus.LOADING) {
 				
 				var audit:Boolean = ("auditSize" in this.vars) ? Boolean(this.vars.auditSize) : LoaderMax.defaultAuditSize;
@@ -763,19 +767,19 @@ function completeHandler(event:LoaderEvent):void {
 				for (var i:int = 0; i < l; i++) {
 					loader = _loaders[i];
 					if (!this.skipPaused && loader.status == LoaderStatus.PAUSED) {
-						super._failHandler(new LoaderEvent(LoaderEvent.FAIL, this, "Did not complete LoaderMax because skipPaused was false and " + loader.toString() + " was paused."));
+						super._failHandler(new LoaderEvent(LoaderEvent.FAIL, this, "Did not complete LoaderMax because skipPaused was false and " + loader.toString() + " was paused."), false);
 						return;
 						
 					} else if (!this.skipFailed && loader.status == LoaderStatus.FAILED) {
-						super._failHandler(new LoaderEvent(LoaderEvent.FAIL, this, "Did not complete LoaderMax because skipFailed was false and " + loader.toString() + " failed."));
+						super._failHandler(new LoaderEvent(LoaderEvent.FAIL, this, "Did not complete LoaderMax because skipFailed was false and " + loader.toString() + " failed."), false);
 						return;
 						
 					} else if (loader.status <= LoaderStatus.LOADING) {
 						activeCount++;
 						if (!(loader in _activeLoaders)) {
 							_activeLoaders[loader] = true;
-							loader.addEventListener(LoaderEvent.COMPLETE, _loadNext);
-							loader.addEventListener(LoaderEvent.CANCEL, _loadNext);
+							loader.addEventListener(LoaderEvent.COMPLETE, _loadNext, false, -100, true);
+							loader.addEventListener(LoaderEvent.CANCEL, _loadNext, false, -100, true);
 							loader.load(false);
 						}
 						if (activeCount == this.maxConnections) {
@@ -791,18 +795,20 @@ function completeHandler(event:LoaderEvent):void {
 		
 		/** @private **/
 		override protected function _progressHandler(event:Event):void {
-			if (_dispatchProgress) {
+			if (_dispatchChildProgress && event != null) {
+				dispatchEvent(new LoaderEvent(LoaderEvent.CHILD_PROGRESS, event.target));
+			}
+			if (_dispatchProgress && _status != LoaderStatus.DISPOSED) {
 				var bl:uint = _cachedBytesLoaded;
 				var bt:uint = _cachedBytesTotal;
 				_calculateProgress();
-				if ((_cachedBytesLoaded != _cachedBytesTotal || _status != LoaderStatus.LOADING) && (bl != _cachedBytesLoaded || bt != _cachedBytesTotal)) { //note: added _status != LoaderStatus.LOADING because it's possible for all the children to load independently (without the LoaderMax actively loading), so in those cases, the progress would never reach 1 since LoaderMax's _completeHandler() won't be called to dispatch the final PROGRESS event.
+				if (bl == 0 && _cachedBytesLoaded == 0) {
+					//do nothing
+				} else if ((_cachedBytesLoaded != _cachedBytesTotal || _status != LoaderStatus.LOADING) && (bl != _cachedBytesLoaded || bt != _cachedBytesTotal)) { //note: added _status != LoaderStatus.LOADING because it's possible for all the children to load independently (without the LoaderMax actively loading), so in those cases, the progress would never reach 1 since LoaderMax's _completeHandler() won't be called to dispatch the final PROGRESS event.
 					dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));
 				}
 			} else {
 				_cacheIsDirty = true;
-			}
-			if (_dispatchChildProgress) {
-				dispatchEvent(new LoaderEvent(LoaderEvent.CHILD_PROGRESS, event.target));
 			}
 		}
 		
@@ -845,6 +851,31 @@ function completeHandler(event:LoaderEvent):void {
 		 */
 		public static function activate(loaderClasses:Array):void {
 			//no need to do anything - we just want to force the classes to get compiled in the swf. Each one calls the _activateClass() method in LoaderCore on its own.
+		}
+		
+		/**
+		 * By default, LoaderMax associates certain file extensions with certain types of loaders, like "jpg", "png", and "gif"
+		 * are associated with ImageLoader and "swf" is associated with SWFLoader so that the <code>LoaderMax.parse()</code> method
+		 * can recognize and create the appropriate loaders for each URL passed in. If you'd like to associate additional file 
+		 * extensions with certain loader types, you may do so with <code>registerFileType()</code>. For example, to associate
+		 * "pdf" with BinaryDataLoader, you would do this:<br /><br /><code>
+		 * 
+		 * LoaderMax.registerFileType("pdf", BinaryDataLoader);<br /><br /></code>
+		 * 
+		 * Then, if you call <code>LoaderMax.parse("file/myFile.pdf")</code>, it would recognize the "pdf" file extension
+		 * as being associated with BinaryDataLoader and would return a BinaryDataLoader instance accordingly. <br /><br />
+		 * 
+		 * There is no reason to use <code>registerFileType()</code> unless you plan on utilizing the <code>parse()</code> 
+		 * method and need it to recognize a extensions that LoaderMax doesn't already recognize by default. 
+		 * 
+		 * <b>NOTE:</b> Make sure you activate() the various loader types you want LoaderMax to recognize before calling parse() - see the documentation for <code>LoaderMax.activate()</code>)
+		 * 
+		 * @param extensions The extension (or comma-delimited list of extensions) that should be associated with the loader class, like <code>"zip"</code> or <code>"zip,pdf"</code>. Do not include the dot in the extension.
+		 * @param loaderClass The loader class that should be associated with the extension(s), like <code>BinaryDataLoader</code>.
+		 * @see #activate() 
+		 */
+		public static function registerFileType(extensions:String, loaderClass:Class):void {
+			_activateClass("", loaderClass, extensions);
 		}
 		
 		/**

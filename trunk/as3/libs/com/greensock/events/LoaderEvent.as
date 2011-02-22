@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.2
- * DATE: 2010-07-28
+ * VERSION: 1.77
+ * DATE: 2010-12-21
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -11,7 +11,7 @@ package com.greensock.events {
  * An Event dispatched by one of the loaders in the LoaderMax system.
  * <br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
@@ -48,6 +48,24 @@ package com.greensock.events {
 		public static const IO_ERROR:String="ioError";
 		/** Dispatched when the loader (or one of its children) encounters a SECURITY_ERROR (see Adobe's docs for details). **/
 		public static const SECURITY_ERROR:String="securityError";
+		/** 
+		 * Dispatched when the loader unloads (which happens when either <code>unload()</code> or <code>dispose(true)</code> is called
+		 * or if a loader is canceled while in the process of loading). This can be particularly useful to listen for in a swf that was
+		 * subloaded by a SWFLoader so that it can get notified when the parent has requested an unload. For example, in the subloaded swf, 
+		 * you could do:<br /><br /><code>
+		 * 
+		 * var curParent:DisplayObjectContainer = this.parent;<br />
+		 * while (curParent) { <br />
+		 *     if (curParent.hasOwnProperty("loader")) { <br />
+		 *         Object(curParent).loader.addEventListener("unload", dispose, false, 0, true); <br />
+		 *     }<br />
+		 *     curParent = curParent.parent;<br />
+		 * }<br />
+		 * function dispose(event:Event):void { <br />
+		 *     //do cleanup stuff here like removing event listeners, stopping sounds, closing NetStreams, etc...<br />
+		 * } </code>
+		 **/
+		public static const UNLOAD:String="unload";
 		
 		/** @private **/
 		protected var _target:Object;

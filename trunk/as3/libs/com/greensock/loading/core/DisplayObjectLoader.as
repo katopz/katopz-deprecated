@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.7
- * DATE: 2010-11-13
+ * VERSION: 1.83
+ * DATE: 2011-02-15
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -27,13 +27,13 @@ package com.greensock.loading.core {
  * Please refer to the documentation for the other classes.
  * <br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
 	public class DisplayObjectLoader extends LoaderItem {
 		/** @private the Sprite to which the EVENT_LISTENER was attached for forcing garbage collection after 1 frame (improves performance especially when multiple loaders are disposed at one time). **/
-		protected static var _gcDispatcher:DisplayObject;
+		protected static var _gcDispatcher:Sprite;
 		/** @private **/
 		protected static var _gcCycles:uint = 0;
 		/** @private **/
@@ -77,8 +77,15 @@ package com.greensock.loading.core {
 			
 			if (this.vars.context is LoaderContext) {
 				_context = this.vars.context;
-			} else if (_context == null && !_isLocal) {
-				_context = (LoaderMax.defaultContext != null) ? LoaderMax.defaultContext : new LoaderContext(true, new ApplicationDomain(ApplicationDomain.currentDomain), SecurityDomain.currentDomain); //avoids some security sandbox headaches that plague many users.
+			} else if (_context == null) {
+				if (LoaderMax.defaultContext != null) {
+					_context = LoaderMax.defaultContext;
+					if (_isLocal) {
+						_context.securityDomain = null;
+					}
+				} else if (!_isLocal) {
+					_context = new LoaderContext(true, new ApplicationDomain(ApplicationDomain.currentDomain), SecurityDomain.currentDomain); //avoids some security sandbox headaches that plague many users.
+				}
 			}
 			if (Capabilities.playerType != "Desktop") { //AIR apps will choke on Security.allowDomain()
 				Security.allowDomain(_url); 
@@ -106,16 +113,23 @@ package com.greensock.loading.core {
 				_loader.contentLoaderInfo.removeEventListener(Event.INIT, _initHandler);
 				if (unloadContent) {
 					try {
+						if (_loader.parent == null && _sprite != null) {
+							_sprite.addChild(_loader); //adding the _loader to the display list BEFORE calling unloadAndStop() and then removing it will greatly improve its ability to gc correctly if event listeners were added to the stage from within a subloaded swf without specifying "true" for the weak parameter of addEventListener(). The order here is critical.
+						}
 						if (_loader.hasOwnProperty("unloadAndStop")) { //Flash Player 10 and later only
 							(_loader as Object).unloadAndStop();
 						} else {
 							_loader.unload();
 						}
+						
 					} catch (error:Error) {
 						
 					}
+					if (_loader.parent) {
+						_loader.parent.removeChild(_loader);
+					}
 				}
-				forceGC(_sprite, (this.hasOwnProperty("getClass")) ? 3 : 1);
+				forceGC((this.hasOwnProperty("getClass")) ? 3 : 1);
 			}
 			_initted = false;
 			_loader = new Loader();
@@ -128,11 +142,11 @@ package com.greensock.loading.core {
 		}
 		
 		/** @private works around bug in Flash Player that prevents SWFs from properly being garbage collected after being unloaded - for certain types of objects like swfs, this needs to be run more than once (spread out over several frames) to force Flash to properly garbage collect everything. **/
-		public static function forceGC(dispatcher:DisplayObject, cycles:uint=1):void {
+		public static function forceGC(cycles:uint=1):void {
 			if (_gcCycles < cycles) {
 				_gcCycles = cycles;
 				if (_gcDispatcher == null) {
-					_gcDispatcher = dispatcher;
+					_gcDispatcher = new Sprite();
 					_gcDispatcher.addEventListener(Event.ENTER_FRAME, _forceGCHandler, false, 0, true);
 				}
 			}
@@ -156,15 +170,15 @@ package com.greensock.loading.core {
 		
 		/** @private scrubLevel: 0 = cancel, 1 = unload, 2 = dispose, 3 = flush **/
 		override protected function _dump(scrubLevel:int=0, newStatus:int=LoaderStatus.READY, suppressEvents:Boolean=false):void {
+			if (!_stealthMode) {
+				_refreshLoader(Boolean(scrubLevel != 2));
+			}
 			if (scrubLevel == 1) {			//unload
 				(_sprite as Object).rawContent = null;
 			} else if (scrubLevel == 2) {	//dispose
 				(_sprite as Object).loader = null;
 			} else if (scrubLevel == 3) {	//unload and dispose
 				(_sprite as Object).dispose(false, false); //makes sure the ContentDisplay is removed from its parent as well.
-			}
-			if (!_stealthMode) {
-				_refreshLoader(Boolean(scrubLevel != 2));
 			}
 			super._dump(scrubLevel, newStatus, suppressEvents);
 		}
@@ -200,6 +214,9 @@ package com.greensock.loading.core {
 		protected function _initHandler(event:Event):void {
 			if (!_initted) {
 				_initted = true;
+				if (_content == null) { //_content is set in ImageLoader or SWFLoader (subclasses), but we put this here just in case someone wants to use DisplayObjectLoader on its own as a lighter weight alternative without the bells & whistles of SWFLoader/ImageLoader.
+					_content = (_scriptAccessDenied) ? _loader : _loader.content;
+				}
 				(_sprite as Object).rawContent = (_content as DisplayObject);
 				dispatchEvent(new LoaderEvent(LoaderEvent.INIT, this));
 			}

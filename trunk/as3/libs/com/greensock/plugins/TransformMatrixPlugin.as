@@ -16,6 +16,9 @@ package com.greensock.plugins {
  * To skew without adjusting scale visually, use skewX2 and skewY2 instead of skewX and skewY. 
  * <br /><br />
  * 
+ * transformMatrix tween will affect all of the DisplayObject's transform properties, so do not use
+ * it in conjunction with regular x/y/scaleX/scaleY/rotation tweens concurrently.<br /><br />
+ * 
  * <b>USAGE:</b><br /><br />
  * <code>
  * 		import com.greensock.TweenLite; <br />
@@ -30,7 +33,7 @@ package com.greensock.plugins {
  * 
  * </code>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
