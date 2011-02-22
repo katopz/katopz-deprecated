@@ -425,7 +425,7 @@ package com.sleepydesign.net
 		 * @param value
 		 * @return type of file URI
 		 */
-		private static function getType(value:String):String
+		public static function getType(value:String):String
 		{
 			//file.something.type?q#a
 			value = value.split("#")[0];
