@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.7
- * DATE: 2010-11-13
+ * VERSION: 1.83
+ * DATE: 2011-02-15
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -30,18 +30,20 @@ package com.greensock.loading.core {
 	[Event(name="fail", 	type="com.greensock.events.LoaderEvent")]
 	/** Dispatched when the loader experiences some type of error, like a SECURITY_ERROR or IO_ERROR. **/
 	[Event(name="error", 	type="com.greensock.events.LoaderEvent")]
+	/** Dispatched when the loader unloads (which happens when either <code>unload()</code> or <code>dispose(true)</code> is called or if a loader is canceled while in the process of loading). **/
+	[Event(name="unload", 	type="com.greensock.events.LoaderEvent")]
 /**
  * Serves as the base class for GreenSock loading tools like <code>LoaderMax, ImageLoader, XMLLoader, SWFLoader</code>, etc. 
  * There is no reason to use this class on its own. Please see the documentation for the other classes.
  * <br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
 	public class LoaderCore extends EventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.7;
+		public static const version:Number = 1.83;
 		
 		/** @private **/
 		protected static var _loaderCount:uint = 0;
@@ -67,7 +69,8 @@ package com.greensock.loading.core {
 													  onChildCancel:"childCancel",
 													  onChildComplete:"childComplete", 
 													  onChildProgress:"childProgress",
-													  onChildFail:"childFail"};
+													  onChildFail:"childFail",
+													  onRawLoad:"rawLoad"};
 		/** @private **/
 		protected static var _types:Object = {};
 		/** @private **/
@@ -122,22 +125,20 @@ package com.greensock.loading.core {
 			_status = (this.vars.paused == true) ? LoaderStatus.PAUSED : LoaderStatus.READY;
 			_auditedSize = Boolean(uint(this.vars.estimatedBytes) != 0 && this.vars.auditSize != true);
 			
-			_rootLoader = (this.vars.requireWithRoot is DisplayObject) ? _rootLookup[this.vars.requireWithRoot] : _globalRootLoader;
-			
 			if (_globalRootLoader == null) {
 				if (this.vars.__isRoot == true) {
 					return;
 				}
-				_globalRootLoader = _rootLoader = new LoaderMax({name:"root", __isRoot:true});
-				_isLocal = Boolean((new LocalConnection( ).domain == "localhost") || Capabilities.playerType == "Desktop"); //alt method (Capabilities.playerType != "ActiveX" && Capabilities.playerType != "PlugIn") doesn't work when testing locally in an html wrapper
+				_globalRootLoader = new LoaderMax({name:"root", __isRoot:true});
+				_isLocal = Boolean(Capabilities.playerType == "Desktop" || (new LocalConnection( ).domain == "localhost")); //alt method (Capabilities.playerType != "ActiveX" && Capabilities.playerType != "PlugIn") doesn't work when testing locally in an html wrapper
 			}
 			
-			if (_rootLoader) {
-				_rootLoader.append(this);
-			} else {
+			_rootLoader = (this.vars.requireWithRoot is DisplayObject) ? _rootLookup[this.vars.requireWithRoot] : _globalRootLoader;
+			
+			if (_rootLoader == null) {
 				_rootLookup[this.vars.requireWithRoot] = _rootLoader = new LoaderMax();
-				_rootLoader.name = "subloaded_swf_" + this.vars.requireWithRoot.loaderInfo.url;
-				_rootLoader.append(this);
+				_rootLoader.name = "subloaded_swf_" + ((this.vars.requireWithRoot.loaderInfo != null) ? this.vars.requireWithRoot.loaderInfo.url : String(_loaderCount));
+				_rootLoader.skipFailed = false;
 			}
 			
 			for (var p:String in _listenerTypes) {
@@ -145,6 +146,8 @@ package com.greensock.loading.core {
 					this.addEventListener(_listenerTypes[p], this.vars[p], false, 0, true);
 				}
 			}
+			
+			_rootLoader.append(this);
 		}
 		
 		/**
@@ -231,7 +234,7 @@ package com.greensock.loading.core {
 			if (isLoading) {
 				_time = getTimer() - _time;
 			}
-			if (_dispatchProgress && !suppressEvents && _status != LoaderStatus.DISPOSED) {
+			if (_dispatchProgress && !suppressEvents && _status < LoaderStatus.FAILED) {
 				if (this is LoaderMax) {
 					_calculateProgress();
 				} else {
@@ -239,8 +242,13 @@ package com.greensock.loading.core {
 				}
 				dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));
 			}
-			if (isLoading && !suppressEvents) {
-				dispatchEvent(new LoaderEvent(LoaderEvent.CANCEL, this));
+			if (!suppressEvents) {
+				if (isLoading) {
+					dispatchEvent(new LoaderEvent(LoaderEvent.CANCEL, this));
+				}
+				if (scrubLevel != 2) {
+					dispatchEvent(new LoaderEvent(LoaderEvent.UNLOAD, this));
+				}
 			}
 			if (newStatus == LoaderStatus.DISPOSED) {
 				if (!suppressEvents) {
@@ -349,7 +357,9 @@ package com.greensock.loading.core {
 		
 		/** @private **/
 		protected static function _activateClass(type:String, loaderClass:Class, extensions:String):Boolean {
-			_types[type.toLowerCase()] = loaderClass;
+			if (type != "") {
+				_types[type.toLowerCase()] = loaderClass;
+			}
 			var a:Array = extensions.split(",");
 			var i:int = a.length;
 			while (--i > -1) {
@@ -392,10 +402,11 @@ package com.greensock.loading.core {
 		
 		/** @private **/
 		protected function _errorHandler(event:Event):void {
-			var target:Object = (event is LoaderEvent && this.hasOwnProperty("getChildren")) ? event.target : this;
+			var target:Object = event.target; //trigger the LoaderEvent's target getter once first in order to ensure that it reports properly - see the notes in LoaderEvent.target for more details.
+			target = (event is LoaderEvent && this.hasOwnProperty("getChildren")) ? event.target : this;
 			var text:String = (event as Object).text;
-			trace("Loading error on " + this.toString() + ": " + text);
-			if (event.type != LoaderEvent.ERROR && this.hasEventListener(event.type)) {
+			trace("----\nLoading error on " + this.toString() + ": " + text + "\n----");
+			if (event.type != LoaderEvent.ERROR && event.type != LoaderEvent.FAIL && this.hasEventListener(event.type)) {
 				dispatchEvent(new LoaderEvent(event.type, target, text));
 			}
 			if (this.hasEventListener(LoaderEvent.ERROR)) {
@@ -404,9 +415,13 @@ package com.greensock.loading.core {
 		}
 		
 		/** @private **/
-		protected function _failHandler(event:Event):void {
+		protected function _failHandler(event:Event, dispatchError:Boolean=true):void {
 			_dump(0, LoaderStatus.FAILED);
-			_errorHandler(event);
+			if (dispatchError) {
+				_errorHandler(event);
+			} else {
+				var target:Object = event.target; //trigger the LoaderEvent's target getter once first in order to ensure that it reports properly - see the notes in LoaderEvent.target for more details.
+			}
 			dispatchEvent(new LoaderEvent(LoaderEvent.FAIL, ((event is LoaderEvent && this.hasOwnProperty("getChildren")) ? event.target : this), this.toString() + " > " + (event as Object).text));
 		}
 		
@@ -446,7 +461,7 @@ package com.greensock.loading.core {
 				if (_status == LoaderStatus.LOADING) {
 					_dump(0, LoaderStatus.PAUSED);
 				}
-				_status == LoaderStatus.PAUSED;
+				_status = LoaderStatus.PAUSED;
 				
 			} else if (!value && _status == LoaderStatus.PAUSED) {
 				if (_prePauseStatus == LoaderStatus.LOADING) {
@@ -457,7 +472,7 @@ package com.greensock.loading.core {
 			}
 		}
 		
-		/** Integer code indicating the loader's status; options are <code>LoaderStatus.READY, LoaderStatus.LOADING, LoaderStatus.COMPLETE, LoaderStatus.PAUSED,</code> and <code>LoaderStatus.DISPOSED</code>. **/
+		/** Integer code indicating the loader's status; options are <code>LoaderStatus.READY, LoaderStatus.LOADING, LoaderStatus.COMPLETED, LoaderStatus.PAUSED,</code> and <code>LoaderStatus.DISPOSED</code>. **/
 		public function get status():int {
 			return _status;
 		}

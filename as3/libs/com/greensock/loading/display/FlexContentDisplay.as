@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.72
- * DATE: 2010-11-17
+ * VERSION: 1.769
+ * DATE: 2010-12-19
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -9,6 +9,8 @@ package com.greensock.loading.display {
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
@@ -38,7 +40,7 @@ package com.greensock.loading.display {
  * After that, all ImageLoaders, SWFLoaders, and VideoLoaders will return FlexContentDisplay objects 
  * as their <code>content</code> instead of regular ContentDisplay objects. <br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -131,10 +133,11 @@ package com.greensock.loading.display {
 			var contentWidth:Number =  mc.width;
 			var contentHeight:Number = mc.height;
 			
-			if (_loader.hasOwnProperty("getClass") && !_loader.scriptAccessDenied) { //for SWFLoaders, use loaderInfo.width/height so that everything is based on the stage size, not the bounding box of the DisplayObjects that happen to be on the stage (which could be much larger or smaller than the swf's stage)
+			if (_loader.hasOwnProperty("getClass")) { //for SWFLoaders, use loaderInfo.width/height so that everything is based on the stage size, not the bounding box of the DisplayObjects that happen to be on the stage (which could be much larger or smaller than the swf's stage)
 				var m:Matrix = mc.transform.matrix;
-				contentWidth = mc.loaderInfo.width * Math.abs(m.a) + mc.loaderInfo.height * Math.abs(m.b);
-				contentHeight = mc.loaderInfo.width * Math.abs(m.c) + mc.loaderInfo.height * Math.abs(m.d);
+				var loaderInfo:LoaderInfo = (mc is Loader) ? Object(mc).contentLoaderInfo : mc.loaderInfo;
+				contentWidth = loaderInfo.width * Math.abs(m.a) + loaderInfo.height * Math.abs(m.b);
+				contentHeight = loaderInfo.width * Math.abs(m.c) + loaderInfo.height * Math.abs(m.d);
 			}
 			
 			if (_fitWidth > 0 && _fitHeight > 0) {
@@ -396,7 +399,7 @@ package com.greensock.loading.display {
 			if (_rawContent != null && _rawContent != value) {
 				if (_rawContent.parent == this) {
 					removeChild(_rawContent);
-				} else if (_rawContent.parent == _cropContainer) {
+				} else if (_cropContainer != null && _rawContent.parent == _cropContainer) {
 					_cropContainer.removeChild(_rawContent);
 					removeChild(_cropContainer);
 					_cropContainer = null;

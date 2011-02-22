@@ -1,6 +1,6 @@
 /**
- * VERSION: 5.0
- * DATE: 2010-11-12
+ * VERSION: 5.1
+ * DATE: 2010-12-09
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/tweenvars/
  **/
@@ -45,23 +45,28 @@ package com.greensock.data {
  *	  	 free to use it. The purpose of this utility is simply to enable code hinting and to allow for strict datatyping.</li>
  * </ul>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	 
 	public class TweenMaxVars {
 		/** @private **/
-		public static const version:Number = 5.0;
+		public static const version:Number = 5.1;
 		
 		/** @private **/
 		protected var _vars:Object;
 		
 		/**
 		 * Constructor
-		 * @param vars A generic Object containing properties that you'd like to add to this TweenMaxVars Object. This is particularly useful for generic properties that don't have a corresponding method for setting the values (although you can use it for properties that do have corresponding methods too). For example, to tween the x and y properties of a DisplayObject, <code>new TweenMaxVars({x:300, y:0})</code>
+		 * @param vars A generic Object containing properties that you'd like added (copied) to this TweenMaxVars instance. This is particularly useful for generic properties that don't have a corresponding method for setting the values (although you can use it for properties that do have corresponding methods too). For example, to tween the x and y properties of a DisplayObject, <code>new TweenMaxVars({x:300, y:0})</code>
 		 */
 		public function TweenMaxVars(vars:Object=null) {
-			_vars = vars || {};
+			_vars = {};
+			if (vars != null) {
+				for (var p:String in vars) {
+					_vars[p] = vars[p];
+				}
+			}
 			if (TweenLite.version < 11.4) {
 				trace("WARNING: it is suggested that you update to at least version 11.4 of TweenMax in order for TweenMaxVars to work properly. http://www.greensock.com/tweenmax/"); 
 			}
@@ -263,6 +268,11 @@ package com.greensock.data {
 		/** When true, the tween will flip the start and end values which is exactly what <code>TweenMax.from()</code> does. **/
 		public function runBackwards(value:Boolean):TweenMaxVars {
 			return _set("runBackwards", value, false);
+		}
+		
+		/** Multiplier affecting the speed of the timeline where 1 is normal speed, 0.5 is half-speed, 2 is double speed, etc. **/
+		public function timeScale(value:Number):TweenMaxVars {
+			return _set("timeScale", value, false);
 		}
 		
 		/** 
@@ -595,9 +605,12 @@ package com.greensock.data {
 		 * 
 		 * Note: When tweening the frames of a MovieClip, any audio that is embedded on the MovieClip's timeline (as "stream") will not be played. 
 		 * Doing so would be impossible because the tween might speed up or slow down the MovieClip to any degree.<br /><br />
+		 * 
+		 * @param value The frame to which the MovieClip should be tweened (or if <code>relative</code> is <code>true</code>, this value would represent the number of frames to travel from the current frame)
+		 * @param relative If <code>true</code>, the frame value will be interpreted as relative to the current frame. So for example, if the MovieClip is at frame 5 currently and <code>frame(10, true) is used, the MovieClip will tween 10 frames and end up on frame 15.</code>
 		 **/
-		public function frame(value:uint):TweenMaxVars {
-			return _set("frame", value, true);
+		public function frame(value:int, relative:Boolean=false):TweenMaxVars {
+			return _set("frame", (relative) ? String(value) : value, true);
 		}
 		
 		/** 
@@ -606,7 +619,7 @@ package com.greensock.data {
 		 * and you want tween to frame 15, a normal frame tween would go forward from 10 to 15, but a frameBackward
 		 * would go from 10 to 1 (the beginning) and wrap to the end and continue tweening from 20 to 15.
 		 **/
-		public function frameBackward(frame:uint):TweenMaxVars {
+		public function frameBackward(frame:int):TweenMaxVars {
 			return _set("frameBackward", frame, true);
 		}
 		
@@ -616,7 +629,7 @@ package com.greensock.data {
 		 * and you want tween to frame 5, a normal frame tween would go backwards from 10 to 5, but a frameForward
 		 * would go from 10 to 20 (the end) and wrap to the beginning and continue tweening from 1 to 5. 
 		 **/
-		public function frameForward(frame:uint):TweenMaxVars {
+		public function frameForward(frame:int):TweenMaxVars {
 			return _set("frameForward", frame, true);
 		}
 		
