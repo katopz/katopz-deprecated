@@ -1,7 +1,7 @@
 package com.sleepydesign.net
 {
 	import com.sleepydesign.system.DebugUtil;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -44,17 +44,17 @@ package com.sleepydesign.net
 
 		private static var loaders:Array = [];
 
-		public static function saveJPG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
+		public static function saveJPG(uri:String, data:ByteArray, eventHandler:Function = null):URLLoader
 		{
-			return saveBinary(data, uri, eventHandler, "image/jpeg");
+			return saveBinary(uri, data, eventHandler, "image/jpeg");
 		}
 
-		public static function savePNG(data:ByteArray, uri:String, eventHandler:Function = null):URLLoader
+		public static function savePNG(uri:String, data:ByteArray, eventHandler:Function = null):URLLoader
 		{
-			return saveBinary(data, uri, eventHandler, "image/png");
+			return saveBinary(uri, data, eventHandler, "image/png");
 		}
 
-		public static function saveBinary(data:ByteArray, uri:String, eventHandler:Function = null, contentType:String = "application/octet-stream"):URLLoader
+		public static function saveBinary(uri:String, data:ByteArray, eventHandler:Function = null, contentType:String = "application/octet-stream"):URLLoader
 		{
 			var _loader:URLLoader = new URLLoader();
 			_loader.dataFormat = URLLoaderDataFormat.BINARY;
@@ -196,7 +196,33 @@ package com.sleepydesign.net
 		{
 			return load(uri, eventHandler, "asset") as Loader;
 		}
-
+		
+		
+		public static function loadBinaryAsBitmap(uri:String, eventHandler:Function = null):Loader
+		{
+			var loader:Loader = new Loader();
+			
+			loadBinary(uri, function(event:Event):void
+			{
+				if (event.type == Event.COMPLETE)
+				{
+					
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(event:Event):void
+					{
+						loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, eventHandler);
+						if (eventHandler is Function)
+							eventHandler(event);
+					});
+					loader.loadBytes(event.target.data as ByteArray);
+				}else{
+					if (eventHandler is Function)
+						eventHandler(event);
+				}
+			});
+			
+			return loader;
+		}
+		
 		/**
 		 * Load as Binary type
 		 * @param uri
