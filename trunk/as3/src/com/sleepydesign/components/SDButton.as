@@ -1,11 +1,10 @@
 package com.sleepydesign.components
 {
 	import com.greensock.TweenLite;
-
+	
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
-
-	import flashx.textLayout.formats.TextAlign;
+	import flash.text.TextFormatAlign;
 
 	public class SDButton extends SDComponent
 	{
@@ -30,7 +29,7 @@ package com.sleepydesign.components
 			_label = new SDLabel(_labelText);
 			addChild(_label);
 
-			_label.autoSize = TextAlign.CENTER;
+			_label.autoSize = TextFormatAlign.CENTER
 
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 			addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
@@ -42,7 +41,7 @@ package com.sleepydesign.components
 
 		override public function draw():void
 		{
-			_label.autoSize = TextAlign.CENTER;
+			_label.autoSize = TextFormatAlign.CENTER;
 			_label.text = _labelText;
 			if (_label.width > _width - 4)
 			{
@@ -51,7 +50,7 @@ package com.sleepydesign.components
 			}
 			else
 			{
-				_label.autoSize = TextAlign.CENTER;
+				_label.autoSize = TextFormatAlign.CENTER;
 			}
 			_label.draw();
 			_label.x = _width / 2 - _label.width / 2;
