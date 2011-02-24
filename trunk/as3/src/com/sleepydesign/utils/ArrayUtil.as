@@ -19,5 +19,19 @@ package com.sleepydesign.utils
 
 			return f;
 		}
+		
+		public static function getItemByID(arr:Array, id:String):*
+		{
+			return getItemBy(arr, id, "id");
+		}
+		
+		public static function getItemBy(arr:Array, key:*, arg:String = "id"):*
+		{
+			for each (var _item:* in arr)
+			if (_item[arg] == key)
+				return _item;
+			
+			return null;
+		}
 	}
 }
