@@ -120,7 +120,7 @@ package com.sleepydesign.components.items
 			titleText.text = value;
 			titleText.mouseEnabled = false;
 			titleText.mouseWheelEnabled = false;
-			DebugUtil.trace(" ! setTitle : " + titleText.text);
+			//DebugUtil.trace(" ! setTitle : " + titleText.text);
 		}
 
 		public function setImage(bitmapData:BitmapData):void
