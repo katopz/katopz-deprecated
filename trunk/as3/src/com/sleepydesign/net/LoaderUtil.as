@@ -1,7 +1,7 @@
 package com.sleepydesign.net
 {
 	import com.sleepydesign.system.DebugUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -195,17 +195,17 @@ package com.sleepydesign.net
 		{
 			return load(uri, eventHandler, "asset") as Loader;
 		}
-		
-		
+
+
 		public static function loadBinaryAsBitmap(uri:String, eventHandler:Function = null):Loader
 		{
 			var loader:Loader = new Loader();
-			
+
 			loadBinary(uri, function(event:Event):void
 			{
 				if (event.type == Event.COMPLETE)
 				{
-					
+
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(event:Event):void
 					{
 						loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, eventHandler);
@@ -213,15 +213,17 @@ package com.sleepydesign.net
 							eventHandler(event);
 					});
 					loader.loadBytes(event.target.data as ByteArray);
-				}else{
+				}
+				else
+				{
 					if (eventHandler is Function)
 						eventHandler(event);
 				}
 			});
-			
+
 			return loader;
 		}
-		
+
 		/**
 		 * Load as Binary type
 		 * @param uri
@@ -352,9 +354,28 @@ package com.sleepydesign.net
 				}
 
 				if (loaderDict[uri])
+				{
 					loaderDict[uri].visible = false;
-				else if (defaultLoaderClip && hideLoader is Function && loaders && loaders.length == 0)
+					DebugUtil.trace("hide----------" + uri);
+				}
+				else if (defaultLoaderClip && (hideLoader is Function) && loaders && (loaders.length == 0))
+				{
 					hideLoader();
+				}
+				else
+				{
+					// still have loaders remain that use defaultLoaderClip?
+					var isDone:Boolean = true;
+					for each (var loaderObject:Object in loaders)
+					{
+						if (!loaderDict[loaderObject.urlRequest.url])
+							isDone = false;
+					}
+
+					// no one have defaultLoaderClip
+					if (isDone)
+						hideLoader();
+				}
 
 				_loaderVO = null;
 
