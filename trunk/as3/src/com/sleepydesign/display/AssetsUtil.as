@@ -35,29 +35,36 @@ package com.sleepydesign.display
 		 */
 		public static function loadDefinition(Assets:Class):Signal
 		{
-			return load(Assets, new Signal);
+			return loadClassAsset(Assets);
 		}
 
 		public static function loadDisplayObject(Assets:Class, id:String):Signal
 		{
-			return load(Assets, new Signal(DisplayObject), id);
+			return loadClassAsset(Assets, id, DisplayObject);
 		}
 
-		private static function load(Assets:Class, signal:Signal, id:String = null):Signal
+		private static function loadClassAsset(Assets:Class, id:String = null, typeClass:Class = null):Signal
 		{
 			var loader:Loader = new Loader();
 			var handler:Function;
+			var signal:Signal;
 
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handler = function onAssetLoaderComplete(e:Event):void
+			if (typeClass)
+				signal = new Signal(typeClass);
+			else
+				signal = new Signal();
+
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handler = function(e:Event):void
 			{
 				loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handler);
 				_getDefinition = LoaderInfo(e.currentTarget).applicationDomain.getDefinition;
 				if (signal.valueClasses.length > 0)
 				{
-					var xml:XML = describeType(signal.valueClasses[0]);
-					var s:String = xml["factory"].@type.toString();
-					if (s == "flash.display::DisplayObject")
-						signal.dispatch(getDisplayObject(id));
+					if (describeType(signal.valueClasses[0]) == describeType(typeClass))
+					{
+						var _Class:Class = getAssetClass(id);
+						signal.dispatch(new _Class as typeClass);
+					}
 				}
 				else
 				{
@@ -70,10 +77,28 @@ package com.sleepydesign.display
 			return signal;
 		}
 
-		public static function getAsset(id:String):Class
+		public static function loadBytesAsset(byteArray:ByteArray, id:String = null):Signal
+		{
+			var loader:Loader = new Loader();
+			var handler:Function;
+			var signal:Signal = new Signal(Class);
+
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handler = function(e:Event):void
+			{
+				loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handler);
+				_getDefinition = LoaderInfo(e.currentTarget).applicationDomain.getDefinition;
+				signal.dispatch(getAssetClass(id));
+			});
+
+			loader.loadBytes(byteArray, new LoaderContext(false, ApplicationDomain.currentDomain));
+
+			return signal;
+		}
+
+		public static function getAssetClass(id:String):Class
 		{
 			if (!(_getDefinition is Function))
-				throw new Error('Must loadDefinition before call getAsset.');
+				throw new Error('Must loadDefinition before call getAssetClass');
 
 			try
 			{
@@ -87,10 +112,12 @@ package com.sleepydesign.display
 			return null;
 		}
 
-		public static function getDisplayObject(id:String):DisplayObject
-		{
-			var _Class:Class = getAsset(id);
-			return new _Class as DisplayObject;
-		}
+	/*
+	public static function getDisplayObject(id:String):DisplayObject
+	{
+		var _Class:Class = getAsset(id);
+		return new _Class as DisplayObject;
+	}
+	*/
 	}
 }
