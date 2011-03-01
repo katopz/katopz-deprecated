@@ -56,7 +56,7 @@ package com.sleepydesign.skins
 				create();
 				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
 				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 1});
-					//DebugUtil.trace( " ! Show loader");
+				DebugUtil.trace( " ! Show loader");
 			};
 
 			LoaderUtil.hideLoader = function():void
@@ -65,7 +65,7 @@ package com.sleepydesign.skins
 				create();
 				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
 				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 0});
-					//DebugUtil.trace( " ! Hide loader");
+				DebugUtil.trace( " ! Hide loader");
 			};
 
 			// resize
