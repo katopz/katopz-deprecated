@@ -356,7 +356,6 @@ package com.sleepydesign.net
 				if (loaderDict[uri])
 				{
 					loaderDict[uri].visible = false;
-					DebugUtil.trace("hide----------" + uri);
 				}
 				else if (defaultLoaderClip && (hideLoader is Function) && loaders && (loaders.length == 0))
 				{
