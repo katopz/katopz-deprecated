@@ -48,6 +48,8 @@ package com.sleepydesign.components.items
 			// skin
 			if (!_clip)
 				addChild(_clip = new skin);
+			
+			_clip.mouseEnabled = false;
 
 			if (title && title != "")
 				setTitle(title);
@@ -65,12 +67,24 @@ package com.sleepydesign.components.items
 			// mouse effect
 			TweenPlugin.activate([GlowFilterPlugin]);
 
-			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height);
+			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height/2);
 			//rect.inflate(-10, -10);
-			_hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+
+			/*
+			_hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0.5)) as Sprite;
 
 			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			
+			_hitArea.mouseEnabled = true;
+			*/
+
+			
+			DrawUtil.drawRectTo(graphics, rect, 0xFF0000, 0);
+			
+			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
+			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			
 
 			//var bgClip:Sprite = _clip.getChildByName("bgClip") as Sprite;
 			//bgClip.mouseEnabled = false;
@@ -129,6 +143,8 @@ package com.sleepydesign.components.items
 			{
 				// add guide
 				var imgClip:Sprite = _clip["imgClip"] as Sprite;
+				imgClip.mouseEnabled = false;
+				imgClip.cacheAsBitmap = true;
 
 				// real bitmap
 				imgClip.addChild(bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height)));
@@ -170,8 +186,8 @@ package com.sleepydesign.components.items
 				bitmap.bitmapData.dispose();
 			}
 
-			_hitArea.removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			_hitArea.removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 
 			super.destroy();
 		}
