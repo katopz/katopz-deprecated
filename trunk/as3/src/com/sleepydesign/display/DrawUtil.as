@@ -1,5 +1,6 @@
 package com.sleepydesign.display
 {
+	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 
@@ -8,16 +9,21 @@ package com.sleepydesign.display
 		public static function drawRect(rect:Rectangle, color:int = 0x000000, alpha:Number = 1.0, lineColor:int = -1):Sprite
 		{
 			var containter:Sprite = new Sprite();
+			drawRectTo(containter.graphics, rect, color, alpha, lineColor);
 
-			if (lineColor != -1)
-				containter.graphics.lineStyle(1, lineColor);
-			else
-				containter.graphics.lineStyle();
-
-			containter.graphics.beginFill(color, alpha);
-			containter.graphics.drawRect(rect.x, rect.y, rect.width, rect.height);
-			containter.graphics.endFill();
 			return containter;
+		}
+
+		public static function drawRectTo(graphics:Graphics, rect:Rectangle, color:int = 0x000000, alpha:Number = 1.0, lineColor:int = -1):void
+		{
+			if (lineColor != -1)
+				graphics.lineStyle(1, lineColor);
+			else
+				graphics.lineStyle();
+
+			graphics.beginFill(color, alpha);
+			graphics.drawRect(rect.x, rect.y, rect.width, rect.height);
+			graphics.endFill();
 		}
 	}
 }

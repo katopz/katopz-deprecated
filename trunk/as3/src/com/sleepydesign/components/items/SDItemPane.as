@@ -1,5 +1,8 @@
 package com.sleepydesign.components.items
 {
+	import com.sleepydesign.components.SDScrollBar;
+	import com.sleepydesign.components.SDScrollPane;
+	import com.sleepydesign.components.SDStyle;
 	import com.sleepydesign.display.SDClip;
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ArrayUtil;
@@ -13,9 +16,6 @@ package com.sleepydesign.components.items
 	import flash.geom.Rectangle;
 
 	import org.osflash.signals.Signal;
-	import com.sleepydesign.components.SDScrollBar;
-	import com.sleepydesign.components.SDScrollPane;
-	import com.sleepydesign.components.SDStyle;
 
 	public class SDItemPane extends SDClip
 	{
@@ -42,12 +42,12 @@ package com.sleepydesign.components.items
 		protected var _itemClass:Class;
 
 		/**return id*/
-		public var thumbSignal:Signal = new Signal(String);
+		public var thumbSignal:Signal = new Signal(SDItemThumb);
 
 		private var _prevButton:DisplayObject;
 		private var _nextButton:DisplayObject;
 
-		public function SDItemPane(prevButton:DisplayObject, nextButton:DisplayObject, canvasClip:DisplayObjectContainer, itemClass:Class, style:SDStyle)
+		public function create(prevButton:DisplayObject, nextButton:DisplayObject, canvasClip:DisplayObjectContainer, itemClass:Class, style:SDStyle):void
 		{
 			_prevButton = prevButton;
 			_nextButton = nextButton;
@@ -284,6 +284,10 @@ package com.sleepydesign.components.items
 					break;
 				case "nextButton":
 					setPage(_currentPageNum + 1);
+					break;
+				default:
+					if (event.target is SDItemThumb)
+						thumbSignal.dispatch(event.target);
 					break;
 			}
 		}
