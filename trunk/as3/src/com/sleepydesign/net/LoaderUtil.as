@@ -126,8 +126,7 @@ package com.sleepydesign.net
 
 				if (loaderDict[_loader.contentLoaderInfo.url])
 					loaderDict[_loader.contentLoaderInfo.url].visible = false;
-
-				if (defaultLoaderClip && hideLoader is Function)
+				else if (defaultLoaderClip && hideLoader is Function)
 					hideLoader();
 
 				// gc
@@ -354,8 +353,7 @@ package com.sleepydesign.net
 
 				if (loaderDict[uri])
 					loaderDict[uri].visible = false;
-
-				if (defaultLoaderClip && hideLoader is Function && loaders && loaders.length == 0)
+				else if (defaultLoaderClip && hideLoader is Function && loaders && loaders.length == 0)
 					hideLoader();
 
 				_loaderVO = null;

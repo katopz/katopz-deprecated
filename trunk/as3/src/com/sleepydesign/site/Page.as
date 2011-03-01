@@ -241,6 +241,8 @@ package com.sleepydesign.site
 					// reset
 					_totalLoaded = 0;
 					_pageLoaders = [];
+					
+					LoaderUtil.hideLoader();
 				}
 				else
 				{
