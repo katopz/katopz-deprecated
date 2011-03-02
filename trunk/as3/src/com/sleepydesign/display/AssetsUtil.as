@@ -22,11 +22,6 @@ package com.sleepydesign.display
 	{
 		private static var _getDefinitions:Dictionary = new Dictionary(true);
 
-		public static function getDefinitions(classID:String, assetID:String):Class
-		{
-			return _getDefinitions[classID](assetID);
-		}
-
 		public static function registerDefinition(classID:String, byteArray:ByteArray):Signal
 		{
 			var loader:Loader = new Loader();
