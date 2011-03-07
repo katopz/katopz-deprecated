@@ -127,7 +127,7 @@ package com.sleepydesign.display
 			return signal;
 		}
 
-		public static function getDefinition(classID:String, assetID:String):Class
+		public static function getClass(classID:String, assetID:String):Class
 		{
 			if (!(_getDefinitions[classID] is Function))
 				throw new Error('Must loadDefinition before call getDefinition');
