@@ -126,7 +126,7 @@ package com.sleepydesign.components.items
 			_itemThumbs = [];
 
 			// draw page 0
-			setPage(0);
+			setPage(0, true);
 		}
 
 		public function setPage(pageNum:int, forceReset:Boolean = false):void
