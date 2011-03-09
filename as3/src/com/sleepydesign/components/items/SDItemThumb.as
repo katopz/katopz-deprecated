@@ -7,7 +7,6 @@ package com.sleepydesign.components.items
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDClip;
 	import com.sleepydesign.skins.MacLoadingClip;
-	import com.sleepydesign.system.DebugUtil;
 
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -34,6 +33,8 @@ package com.sleepydesign.components.items
 
 		private var _hitArea:Sprite;
 
+		public var disable:Boolean;
+
 		public function SDItemThumb(index:int, id:String, title:String, skin:Class)
 		{
 			this.index = index;
@@ -48,7 +49,7 @@ package com.sleepydesign.components.items
 			// skin
 			if (!_clip)
 				addChild(_clip = new skin);
-			
+
 			_clip.mouseEnabled = false;
 
 			if (title && title != "")
@@ -67,7 +68,7 @@ package com.sleepydesign.components.items
 			// mouse effect
 			TweenPlugin.activate([GlowFilterPlugin]);
 
-			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height/2);
+			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height / 2);
 			//rect.inflate(-10, -10);
 
 			/*
@@ -75,16 +76,16 @@ package com.sleepydesign.components.items
 
 			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
-			
+
 			_hitArea.mouseEnabled = true;
 			*/
 
-			
+
 			DrawUtil.drawRectTo(graphics, rect, 0xFF0000, 0);
-			
+
 			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
-			
+
 
 			//var bgClip:Sprite = _clip.getChildByName("bgClip") as Sprite;
 			//bgClip.mouseEnabled = false;
