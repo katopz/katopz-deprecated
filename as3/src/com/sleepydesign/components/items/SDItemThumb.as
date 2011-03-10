@@ -33,7 +33,17 @@ package com.sleepydesign.components.items
 
 		private var _hitArea:Sprite;
 
-		public var disable:Boolean;
+		protected var _disable:Boolean;
+
+		public function get disable():Boolean
+		{
+			return _disable;
+		}
+
+		public function set disable(value:Boolean):void
+		{
+			_disable = value;
+		}
 
 		public function SDItemThumb(index:int, id:String, title:String, skin:Class)
 		{
