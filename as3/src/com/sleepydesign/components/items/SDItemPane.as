@@ -177,7 +177,10 @@ package com.sleepydesign.components.items
 
 			// nav
 			_prevButton.visible = (_currentPageNum > 0);
-			_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(_itemNum * itemThumb.width) - 1);
+
+			var rowSize:int = _canvasRect.height / itemThumb.height;
+
+			_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(Math.ceil(_itemNum / rowSize) * itemThumb.width) - 1);
 
 			// slide
 			_canvasPanel.slidePage(_currentPageNum);
