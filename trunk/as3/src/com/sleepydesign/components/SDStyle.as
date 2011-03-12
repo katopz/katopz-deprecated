@@ -85,5 +85,13 @@ package com.sleepydesign.components
 		{
 			return 10;
 		}
+
+		public static const HORIZONTAL:String = "horizontal";
+		public static const VERTICAL:String = "vertical";
+
+		public function get ORIENTATION():String
+		{
+			return SDStyle.HORIZONTAL;
+		}
 	}
 }

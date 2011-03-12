@@ -47,12 +47,15 @@ package com.sleepydesign.components.items
 		private var _prevButton:DisplayObject;
 		private var _nextButton:DisplayObject;
 
+		private var _style:SDStyle;
+
 		public function create(prevButton:DisplayObject, nextButton:DisplayObject, canvasClip:DisplayObjectContainer, itemClass:Class, style:SDStyle):void
 		{
 			_prevButton = prevButton;
 			_nextButton = nextButton;
 
 			_canvasClip = canvasClip;
+			_style = style;
 
 			// base
 			addChild(canvasClip);
@@ -178,12 +181,20 @@ package com.sleepydesign.components.items
 			// nav
 			_prevButton.visible = (_currentPageNum > 0);
 
-			var rowSize:int = _canvasRect.height / itemThumb.height;
+			var rowSize:int;
 
-			_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(Math.ceil(_itemNum / rowSize) * itemThumb.width) - 1);
-
-			// slide
-			_canvasPanel.slidePage(_currentPageNum);
+			if (_style.ORIENTATION == SDStyle.HORIZONTAL)
+			{
+				rowSize = _canvasRect.height / itemThumb.height;
+				_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(Math.ceil(_itemNum / rowSize) * itemThumb.width) - 1);
+				_canvasPanel.slidePage(_currentPageNum);
+			}
+			else
+			{
+				rowSize = _canvasRect.width / itemThumb.width;
+				_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getVPageNumFromHeight(Math.ceil(_itemNum / rowSize) * itemThumb.height) - 1);
+				_canvasPanel.slidePage(0, _currentPageNum);
+			}
 
 			// call when done setup
 			onSetPage();
@@ -257,24 +268,48 @@ package com.sleepydesign.components.items
 
 		protected function applyThumb(i:int, itemThumb:SDItemThumb, itemData:ItemData):void
 		{
-			// set position
-			var _thumbX:Number = i * itemThumb.width;
+			var colSize:int = _canvasRect.width / itemThumb.width;
+			var rowSize:int = _canvasRect.height / itemThumb.height;
+			var pos:Point;
 
-			// auto warp
-			if (_thumbX >= (1 + _currentPageNum) * _canvasRect.width)
+			if (_style.ORIENTATION == SDStyle.HORIZONTAL)
 			{
-				var colSize:int = _canvasRect.width / itemThumb.width;
-				var rowSize:int = _canvasRect.height / itemThumb.height;
+				// set position
+				var _thumbX:Number = i * itemThumb.width;
 
-				var pos:Point = MathUtil.getPointFromIndex(i, colSize);
+				// auto warp
+				if (_thumbX >= (1 + _currentPageNum) * _canvasRect.width)
+				{
+					pos = MathUtil.getPointFromIndex(i, colSize);
 
-				itemThumb.x = (_currentPageNum * _canvasRect.width) + (pos.x * itemThumb.width);
-				itemThumb.y = (pos.y % rowSize) * itemThumb.height;
+					itemThumb.x = (_currentPageNum * _canvasRect.width) + (pos.x * itemThumb.width);
+					itemThumb.y = (pos.y % rowSize) * itemThumb.height;
+				}
+				else
+				{
+					itemThumb.x = _thumbX;
+					itemThumb.y = 0;
+				}
+
 			}
 			else
 			{
-				itemThumb.x = _thumbX;
-				itemThumb.y = 0;
+				// set position
+				var _thumbY:Number = i * itemThumb.height;
+
+				// auto warp
+				if (_thumbY >= (1 + _currentPageNum) * _canvasRect.height)
+				{
+					pos = MathUtil.getPointFromIndex(i, rowSize);
+
+					itemThumb.y = (_currentPageNum * _canvasRect.height) + (pos.x * itemThumb.height);
+					itemThumb.x = (pos.y % rowSize) * itemThumb.height;
+				}
+				else
+				{
+					itemThumb.x = 0;
+					itemThumb.y = _thumbY;
+				}
 			}
 		}
 
