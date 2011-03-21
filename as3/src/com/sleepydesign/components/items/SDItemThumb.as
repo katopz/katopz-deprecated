@@ -197,6 +197,7 @@ package com.sleepydesign.components.items
 			var offsetX:Number = -((bitmapData.width * ratioH) - bitmap.width) * .5;
 			var offsetY:Number = -((bitmapData.height * ratioV) - bitmap.height) * .5;
 
+			bitmap.smoothing = true;
 			bitmap.bitmapData.draw(bitmapData, isAutoSize ? new Matrix(ratioH, 0, 0, ratioV, offsetX, offsetY) : null);
 
 			//bitmap.bitmapData.fillRect(bitmap.bitmapData.rect, 0x00FFFFFF);
