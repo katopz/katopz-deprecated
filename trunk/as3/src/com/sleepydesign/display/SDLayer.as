@@ -19,7 +19,7 @@ package com.sleepydesign.display
 			iterator = new DisplayObjectContainerIterator(this);
 		}
 
-		public function show(child:DisplayObject):void
+		public function showChild(child:DisplayObject):void
 		{
 			if (child is ITransitionable)
 			{
@@ -35,7 +35,7 @@ package com.sleepydesign.display
 			iterator.currentIndex = getChildIndex(child);
 		}
 
-		public function hide(child:DisplayObject):void
+		public function hideChild(child:DisplayObject):void
 		{
 			if (child is ITransitionable)
 			{
@@ -49,16 +49,21 @@ package com.sleepydesign.display
 			}
 		}
 
-		public function setFocus(name:String):void
+		public function setFocus(child:DisplayObject):void
+		{
+			setFocusByName(child.name);
+		}
+
+		public function setFocusByName(name:String):void
 		{
 			iterator.currentIndex = 0;
 			var child:DisplayObject = iterator.current as DisplayObject;
 			while (child)
 			{
 				if (child.name == name)
-					show(child);
+					showChild(child);
 				else
-					hide(child);
+					hideChild(child);
 
 				child = iterator.next() as DisplayObject;
 			}
@@ -71,9 +76,9 @@ package com.sleepydesign.display
 			while (child)
 			{
 				if (iterator.currentIndex == index)
-					show(child);
+					showChild(child);
 				else
-					hide(child);
+					hideChild(child);
 
 				child = iterator.next() as DisplayObject;
 			}
@@ -94,14 +99,14 @@ package com.sleepydesign.display
 		public function hideAll():void
 		{
 			while (iterator.hasNext())
-				hide(iterator.next() as DisplayObject);
+				hideChild(iterator.next() as DisplayObject);
 		}
 
 		public function showLayerByIndex(index:int):void
 		{
 			iterator.currentIndex = index;
 			var child:DisplayObject = iterator.current as DisplayObject;
-			show(child);
+			showChild(child);
 		}
 	}
 }
