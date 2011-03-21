@@ -250,6 +250,12 @@ package com.sleepydesign.components.items
 			}
 		}
 
+		public function removeAllThumb():void
+		{
+			for each (var itemThumb:SDItemThumb in _itemThumbs)
+				itemThumb.destroy();
+		}
+
 		public function getThumbByID(thumbID:String):SDItemThumb
 		{
 			for each (var itemThumb:SDItemThumb in _itemThumbs)
