@@ -7,11 +7,14 @@ package com.sleepydesign.components.items
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDClip;
 	import com.sleepydesign.skins.MacLoadingClip;
+	import com.sleepydesign.system.DebugUtil;
 
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
@@ -34,6 +37,8 @@ package com.sleepydesign.components.items
 		private var _hitArea:Sprite;
 
 		protected var _disable:Boolean;
+
+		public var isAutoSize:Boolean = true;
 
 		public function get disable():Boolean
 		{
@@ -181,8 +186,21 @@ package com.sleepydesign.components.items
 				}
 			}
 
-			bitmap.bitmapData.fillRect(bitmap.bitmapData.rect, 0x00FFFFFF);
-			bitmap.bitmapData.copyPixels(bitmapData, bitmap.bitmapData.rect, new Point);
+			var ratioH:Number = bitmap.height / bitmapData.height;
+			var ratioV:Number = bitmap.width / bitmapData.width;
+
+			if (ratioV > ratioH)
+				ratioH = ratioV;
+			else
+				ratioV = ratioH;
+
+			var offsetX:Number = -((bitmapData.width * ratioH) - bitmap.width) * .5;
+			var offsetY:Number = -((bitmapData.height * ratioV) - bitmap.height) * .5;
+
+			bitmap.bitmapData.draw(bitmapData, isAutoSize ? new Matrix(ratioH, 0, 0, ratioV, offsetX, offsetY) : null);
+
+			//bitmap.bitmapData.fillRect(bitmap.bitmapData.rect, 0x00FFFFFF);
+			//bitmap.bitmapData.copyPixels(bitmapData, bitmap.bitmapData.rect, new Point);
 		}
 
 		override public function destroy():void
