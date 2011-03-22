@@ -60,6 +60,7 @@ package com.sleepydesign.components.items
 			useHandCursor = true;
 			buttonMode = true;
 			cacheAsBitmap = true;
+			mouseChildren = false;
 
 			// skin
 			if (!_clip)
@@ -83,24 +84,20 @@ package com.sleepydesign.components.items
 			// mouse effect
 			TweenPlugin.activate([GlowFilterPlugin]);
 
-			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height / 2);
+			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height);
 			//rect.inflate(-10, -10);
 
-			/*
-			_hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0.5)) as Sprite;
+			hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
 
-			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
-			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			//_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
+			//_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 
-			_hitArea.mouseEnabled = true;
-			*/
+			//_hitArea.mouseEnabled = true;
 
-
-			DrawUtil.drawRectTo(graphics, rect, 0xFF0000, 0);
+			//DrawUtil.drawRectTo(graphics, rect, 0xFF0000, 0);
 
 			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
-
 
 			//var bgClip:Sprite = _clip.getChildByName("bgClip") as Sprite;
 			//bgClip.mouseEnabled = false;

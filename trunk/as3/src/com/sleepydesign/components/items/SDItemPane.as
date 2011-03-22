@@ -42,7 +42,7 @@ package com.sleepydesign.components.items
 		protected var _itemClass:Class;
 
 		/**return id*/
-		public var thumbSignal:Signal = new Signal(SDItemThumb);
+		public var thumbSignal:Signal = new Signal(String);
 
 		private var _prevButton:DisplayObject;
 		private var _nextButton:DisplayObject;
@@ -331,7 +331,7 @@ package com.sleepydesign.components.items
 					break;
 				default:
 					if (event.target is SDItemThumb)
-						thumbSignal.dispatch(event.target);
+						thumbSignal.dispatch(SDItemThumb(event.target).id);
 					break;
 			}
 		}
