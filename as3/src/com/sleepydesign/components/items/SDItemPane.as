@@ -218,7 +218,7 @@ package com.sleepydesign.components.items
 
 		protected function setupThumb(i:int, itemData:ItemData):SDItemThumb
 		{
-			return addThumb(new SDItemThumb(i, itemData.id, itemData.title, _itemClass));
+			return addThumb(new SDItemThumb(i, itemData.id, itemData.title, new _itemClass));
 		}
 
 		public function addThumb(itemThumb:SDItemThumb):SDItemThumb
