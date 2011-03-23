@@ -1,5 +1,6 @@
 package com.sleepydesign.components.items
 {
+	import com.facebook.gallery.view.styles.AlbumItemSkin;
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Quad;
 	import com.greensock.plugins.GlowFilterPlugin;
@@ -30,7 +31,7 @@ package com.sleepydesign.components.items
 
 		public var bitmap:Bitmap;
 
-		protected var _clip:Sprite;
+		protected var _skin:SDItemSkin
 
 		public var loaderClip:MacLoadingClip;
 
@@ -50,33 +51,31 @@ package com.sleepydesign.components.items
 			_disable = value;
 		}
 
-		public function SDItemThumb(index:int, id:String, title:String, skin:Class)
+		public function SDItemThumb(index:int, id:String, title:String, skin:SDItemSkin)
 		{
 			this.index = index;
 
 			this.id = id;
 			this.title = title;
 
-			useHandCursor = true;
-			buttonMode = true;
-			cacheAsBitmap = true;
-			mouseChildren = false;
+			//useHandCursor = true;
+			//buttonMode = true;
+			//cacheAsBitmap = true;
 
 			// skin
-			if (!_clip)
-				addChild(_clip = new skin);
+			addChild(_skin = skin);
 
-			_clip.mouseEnabled = false;
+			_skin.mouseEnabled = false;
 
 			if (title && title != "")
 				setTitle(title);
 
 			// loader
 			addChild(loaderClip = new MacLoadingClip(0xFFFFFF));
-			loaderClip.x = _clip.width * .5;
-			loaderClip.y = _clip.height * .5;
+			loaderClip.x = _skin.imgClip.x + _skin.imgClip.width * .5;
+			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5;
 
-			deactivate();
+			//deactivate();
 
 			TweenLite.defaultEase = Quad.easeOut;
 			TweenLite.to(this, .25, {autoAlpha: 1});
@@ -84,26 +83,38 @@ package com.sleepydesign.components.items
 			// mouse effect
 			TweenPlugin.activate([GlowFilterPlugin]);
 
-			var rect:Rectangle = new Rectangle(0, 0, _clip.width, _clip.height);
+			// hit area
+			var rect:Rectangle;
+
+			if (_skin.hitClip)
+				rect = new Rectangle(0, 0, _skin.hitClip.width, _skin.hitClip.height);
+			else
+				rect = new Rectangle(0, 0, _skin.width, _skin.height);
+
+			if (_skin.boundClip)
+				_skin.boundClip.visible = false;
+
 			//rect.inflate(-10, -10);
 
-			hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+			_hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+			_hitArea.useHandCursor = true;
+			_hitArea.buttonMode = true;
 
-			//_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
-			//_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
+			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 
 			//_hitArea.mouseEnabled = true;
 
 			//DrawUtil.drawRectTo(graphics, rect, 0xFF0000, 0);
 
-			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
-			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			//addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
+			//addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 
 			//var bgClip:Sprite = _clip.getChildByName("bgClip") as Sprite;
 			//bgClip.mouseEnabled = false;
 
 			//can be click even image didn't load yet
-			activate();
+			//activate();
 		}
 
 		private function onMouseOver(event:MouseEvent):void
@@ -143,7 +154,7 @@ package com.sleepydesign.components.items
 
 		public function setTitle(value:String):void
 		{
-			var titleText:TextField = _clip["titleText"] as TextField;
+			var titleText:TextField = _skin["titleText"] as TextField;
 			titleText.text = value;
 			titleText.mouseEnabled = false;
 			titleText.mouseWheelEnabled = false;
@@ -155,16 +166,19 @@ package com.sleepydesign.components.items
 			if (!bitmap)
 			{
 				// add guide
-				var imgClip:Sprite = _clip["imgClip"] as Sprite;
-				imgClip.mouseEnabled = false;
-				imgClip.cacheAsBitmap = true;
+				var imgClip:Sprite = _skin.imgClip as Sprite;
 
 				// real bitmap
-				imgClip.addChild(bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height)));
+				//imgClip.addChild();
 
 				// deactivate
-				bitmap.visible = false;
-				bitmap.alpha = 0;
+				//bitmap.visible = false;
+				//bitmap.alpha = 0;
+
+				bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height));
+				addChild(bitmap);
+				bitmap.x = imgClip.x;
+				bitmap.y = imgClip.y;
 
 				/*				// copy transform
 								bitmap.transform.matrix = imgClip.transform.matrix.clone();
@@ -213,8 +227,8 @@ package com.sleepydesign.components.items
 				bitmap.bitmapData.dispose();
 			}
 
-			removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			_hitArea.removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			_hitArea.removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 
 			super.destroy();
 		}
