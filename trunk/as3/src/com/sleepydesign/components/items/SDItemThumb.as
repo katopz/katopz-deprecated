@@ -1,6 +1,5 @@
 package com.sleepydesign.components.items
 {
-	import com.facebook.gallery.view.styles.AlbumItemSkin;
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Quad;
 	import com.greensock.plugins.GlowFilterPlugin;
@@ -12,13 +11,10 @@ package com.sleepydesign.components.items
 
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.text.TextField;
 
 	public class SDItemThumb extends SDClip
 	{
@@ -58,9 +54,7 @@ package com.sleepydesign.components.items
 			this.id = id;
 			this.title = title;
 
-			//useHandCursor = true;
-			//buttonMode = true;
-			//cacheAsBitmap = true;
+			cacheAsBitmap = true;
 
 			// skin
 			addChild(_skin = skin);
@@ -75,8 +69,6 @@ package com.sleepydesign.components.items
 			loaderClip.x = _skin.imgClip.x + _skin.imgClip.width * .5;
 			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5;
 
-			//deactivate();
-
 			TweenLite.defaultEase = Quad.easeOut;
 			TweenLite.to(this, .25, {autoAlpha: 1});
 
@@ -87,14 +79,17 @@ package com.sleepydesign.components.items
 			var rect:Rectangle;
 
 			if (_skin.hitClip)
-				rect = new Rectangle(0, 0, _skin.hitClip.width, _skin.hitClip.height);
+			{
+				rect = new Rectangle(_skin.hitClip.x, _skin.hitClip.y, _skin.hitClip.x + _skin.hitClip.width, _skin.hitClip.y + _skin.hitClip.height);
+				_skin.hitClip.parent.removeChild(_skin.hitClip);
+			}
 			else
+			{
 				rect = new Rectangle(0, 0, _skin.width, _skin.height);
+			}
 
 			if (_skin.boundClip)
-				_skin.boundClip.visible = false;
-
-			//rect.inflate(-10, -10);
+				_skin.boundClip.parent.removeChild(_skin.boundClip);
 
 			_hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
 			_hitArea.useHandCursor = true;
@@ -102,19 +97,6 @@ package com.sleepydesign.components.items
 
 			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
-
-			//_hitArea.mouseEnabled = true;
-
-			//DrawUtil.drawRectTo(graphics, rect, 0xFF0000, 0);
-
-			//addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
-			//addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
-
-			//var bgClip:Sprite = _clip.getChildByName("bgClip") as Sprite;
-			//bgClip.mouseEnabled = false;
-
-			//can be click even image didn't load yet
-			//activate();
 		}
 
 		private function onMouseOver(event:MouseEvent):void
@@ -154,11 +136,10 @@ package com.sleepydesign.components.items
 
 		public function setTitle(value:String):void
 		{
-			var titleText:TextField = _skin["titleText"] as TextField;
-			titleText.text = value;
-			titleText.mouseEnabled = false;
-			titleText.mouseWheelEnabled = false;
-			//DebugUtil.trace(" ! setTitle : " + titleText.text);
+			_skin.titleText.text = value;
+			_skin.titleText.mouseEnabled = false;
+			_skin.titleText.mouseWheelEnabled = false;
+			DebugUtil.trace(" ! setTitle : " + _skin.titleText.text);
 		}
 
 		public function setImage(bitmapData:BitmapData):void
@@ -168,27 +149,13 @@ package com.sleepydesign.components.items
 				// add guide
 				var imgClip:Sprite = _skin.imgClip as Sprite;
 
-				// real bitmap
-				//imgClip.addChild();
-
-				// deactivate
-				//bitmap.visible = false;
-				//bitmap.alpha = 0;
-
 				bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height));
 				addChild(bitmap);
 				bitmap.x = imgClip.x;
 				bitmap.y = imgClip.y;
 
-				/*				// copy transform
-								bitmap.transform.matrix = imgClip.transform.matrix.clone();
+				imgClip.parent.removeChild(imgClip);
 
-								// remove guide
-								TweenLite.to(imgClip, .25, {autoAlpha: 0, onCompleteParams: [imgClip], onComplete: function(imgClip:Sprite):void
-										{
-											imgClip.parent.removeChild(imgClip);
-										}});
-				*/
 				// hide loader
 				if (loaderClip)
 				{
@@ -210,9 +177,6 @@ package com.sleepydesign.components.items
 
 			bitmap.smoothing = true;
 			bitmap.bitmapData.draw(bitmapData, isAutoSize ? new Matrix(ratioH, 0, 0, ratioV, offsetX, offsetY) : null);
-
-			//bitmap.bitmapData.fillRect(bitmap.bitmapData.rect, 0x00FFFFFF);
-			//bitmap.bitmapData.copyPixels(bitmapData, bitmap.bitmapData.rect, new Point);
 		}
 
 		override public function destroy():void
