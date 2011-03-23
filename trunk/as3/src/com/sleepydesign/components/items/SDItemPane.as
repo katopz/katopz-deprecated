@@ -7,14 +7,14 @@ package com.sleepydesign.components.items
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ArrayUtil;
 	import com.sleepydesign.utils.MathUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import org.osflash.signals.Signal;
 
 	public class SDItemPane extends SDClip
@@ -55,11 +55,11 @@ package com.sleepydesign.components.items
 			_nextButton = nextButton;
 
 			_canvasClip = new Sprite;
-			
+
 			_canvasClip.graphics.beginFill(0xFF0000, 0);
 			_canvasClip.graphics.drawRect(0, 0, boundRect.width, boundRect.height);
 			_canvasClip.graphics.endFill();
-			
+
 			_canvasClip.x = boundRect.x;
 			_canvasClip.y = boundRect.y;
 
@@ -68,20 +68,20 @@ package com.sleepydesign.components.items
 			// base
 			addChild(_canvasClip);
 
-			if (!prevButton.parent)
+			// nav
+			if (prevButton && !prevButton.parent)
 				addChild(prevButton);
 
-			if (!nextButton.parent)
+			if (nextButton && !nextButton.parent)
 				addChild(nextButton);
+
+			enablePrev = false;
+			enableNext = false;
 
 			_itemClass = itemClass;
 
 			if (!_pageSize)
 				_pageSize = 8;
-
-			// default
-			prevButton.visible = false;
-			nextButton.visible = false;
 
 			// canvas
 			_canvasRect = boundRect;
@@ -92,7 +92,7 @@ package com.sleepydesign.components.items
 			_canvasPanel.scrollBarVisible = false;
 			_canvasPanel.useMouseWheel = false;
 			_canvasPanel.mouseEnabled = false;
-			
+
 			_canvasClip.addChild(_canvasPanel);
 
 			// size
@@ -108,6 +108,18 @@ package com.sleepydesign.components.items
 
 			// activate
 			activate();
+		}
+
+		public function set enablePrev(value:Boolean):void
+		{
+			if (_prevButton)
+				_prevButton.visible = false;
+		}
+
+		public function set enableNext(value:Boolean):void
+		{
+			if (_prevButton)
+				_prevButton.visible = false;
 		}
 
 		/**
@@ -189,20 +201,20 @@ package com.sleepydesign.components.items
 			}
 
 			// nav
-			_prevButton.visible = (_currentPageNum > 0);
+			enablePrev = (_currentPageNum > 0);
 
 			var rowSize:int;
 
 			if (_style.ORIENTATION == SDStyle.HORIZONTAL)
 			{
 				rowSize = _canvasRect.height / itemThumb.height;
-				_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(Math.ceil(_itemNum / rowSize) * itemThumb.width) - 1);
+				enableNext = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(Math.ceil(_itemNum / rowSize) * itemThumb.width) - 1);
 				_canvasPanel.slidePage(_currentPageNum);
 			}
 			else
 			{
 				rowSize = _canvasRect.width / itemThumb.width;
-				_nextButton.visible = itemThumb && (_currentPageNum < _canvasPanel.getVPageNumFromHeight(Math.ceil(_itemNum / rowSize) * itemThumb.height) - 1);
+				enableNext = itemThumb && (_currentPageNum < _canvasPanel.getVPageNumFromHeight(Math.ceil(_itemNum / rowSize) * itemThumb.height) - 1);
 				_canvasPanel.slidePage(0, _currentPageNum);
 			}
 
