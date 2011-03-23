@@ -43,7 +43,7 @@ package com.sleepydesign.display
 		protected function onStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			if(_statusSignal)
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_INIT, this);
 			onInit();
 		}
@@ -56,28 +56,31 @@ package com.sleepydesign.display
 		public function show():void
 		{
 			TweenLite.to(this, .25, {autoAlpha: 1, onComplete: shown});
-			if(_statusSignal)
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_SHOW, this);
 		}
 
 		public function hide():void
 		{
-			TweenLite.to(this, .1, {autoAlpha: 0, onComplete: hidden});
-			if(_statusSignal)
+			mouseEnabled = false;
+			mouseChildren = false;
+
+			TweenLite.to(this, .25, {autoAlpha: 0, onComplete: hidden});
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_HIDE, this);
 		}
 
 		protected function shown():void
 		{
 			activate();
-			if(_statusSignal)
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_SHOWN, this);
 		}
 
 		protected function hidden():void
 		{
 			deactivate();
-			if(_statusSignal)
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_HIDDEN, this);
 		}
 
@@ -89,7 +92,7 @@ package com.sleepydesign.display
 			visible = true;
 			alpha = 1;
 
-			if(_statusSignal)
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_ACTIVATE, this);
 		}
 
@@ -101,7 +104,7 @@ package com.sleepydesign.display
 			visible = false;
 			alpha = 0;
 
-			if(_statusSignal)
+			if (_statusSignal)
 				_statusSignal.dispatch(_status = STATUS_DEACTIVATE, this);
 		}
 
