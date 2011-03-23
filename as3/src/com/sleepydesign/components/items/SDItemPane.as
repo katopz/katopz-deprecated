@@ -7,14 +7,14 @@ package com.sleepydesign.components.items
 	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ArrayUtil;
 	import com.sleepydesign.utils.MathUtil;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
+	
 	import org.osflash.signals.Signal;
 
 	public class SDItemPane extends SDClip
@@ -25,7 +25,7 @@ package com.sleepydesign.components.items
 		// canvas
 		protected var _canvas:Sprite;
 		private var _hScrollBar:SDScrollBar;
-		private var _canvasClip:DisplayObjectContainer;
+		private var _canvasClip:Sprite;
 		private var _canvasRect:Rectangle;
 		private var _canvasPanel:SDScrollPane;
 
@@ -49,16 +49,24 @@ package com.sleepydesign.components.items
 
 		private var _style:SDStyle;
 
-		public function create(prevButton:DisplayObject, nextButton:DisplayObject, canvasClip:DisplayObjectContainer, itemClass:Class, style:SDStyle):void
+		public function create(prevButton:DisplayObject, nextButton:DisplayObject, boundRect:Rectangle, itemClass:Class, style:SDStyle):void
 		{
 			_prevButton = prevButton;
 			_nextButton = nextButton;
 
-			_canvasClip = canvasClip;
+			_canvasClip = new Sprite;
+			
+			_canvasClip.graphics.beginFill(0xFF0000, 0);
+			_canvasClip.graphics.drawRect(0, 0, boundRect.width, boundRect.height);
+			_canvasClip.graphics.endFill();
+			
+			_canvasClip.x = boundRect.x;
+			_canvasClip.y = boundRect.y;
+
 			_style = style;
 
 			// base
-			addChild(canvasClip);
+			addChild(_canvasClip);
 
 			if (!prevButton.parent)
 				addChild(prevButton);
@@ -76,14 +84,16 @@ package com.sleepydesign.components.items
 			nextButton.visible = false;
 
 			// canvas
-			_canvasRect = new Rectangle(canvasClip.x, canvasClip.y, canvasClip.width, canvasClip.height);
+			_canvasRect = boundRect;
 
 			_canvas = new Sprite();
 
 			_canvasPanel = new SDScrollPane(style);
 			_canvasPanel.scrollBarVisible = false;
 			_canvasPanel.useMouseWheel = false;
-			canvasClip.addChild(_canvasPanel);
+			_canvasPanel.mouseEnabled = false;
+			
+			_canvasClip.addChild(_canvasPanel);
 
 			// size
 			_canvasPanel.setSize(_canvasRect.width, _canvasRect.height);
@@ -324,16 +334,26 @@ package com.sleepydesign.components.items
 			switch (event.target.name)
 			{
 				case "prevButton":
-					setPage(_currentPageNum - 1);
+					prevPage();
 					break;
 				case "nextButton":
-					setPage(_currentPageNum + 1);
+					nextPage();
 					break;
 				default:
 					if (event.target is SDItemThumb)
 						thumbSignal.dispatch(SDItemThumb(event.target).id);
 					break;
 			}
+		}
+
+		public function prevPage():void
+		{
+			setPage(_currentPageNum - 1);
+		}
+
+		public function nextPage():void
+		{
+			setPage(_currentPageNum + 1);
 		}
 
 		public function draw():void
