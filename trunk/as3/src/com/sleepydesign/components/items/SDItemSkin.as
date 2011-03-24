@@ -8,9 +8,11 @@ package com.sleepydesign.components.items
 
 	public class SDItemSkin extends SDSprite
 	{
+		protected var _skin:Sprite;
+
 		public function get skin():Sprite
 		{
-			return null;
+			return _skin;
 		}
 
 		public function get titleText():TextField
@@ -33,51 +35,22 @@ package com.sleepydesign.components.items
 			return skin.getChildByName("boundClip") as Sprite;
 		}
 
-		public static function get SKIN_WIDTH():Number
-		{
-			return 100;
-		}
-
-		public static function get SKIN_HEIGHT():Number
-		{
-			return 100;
-		}
-
+		/*
 		override public function get width():Number
 		{
-			return SKIN_WIDTH;
+			return scrollRect.width;
 		}
 
 		override public function get height():Number
 		{
-			return SKIN_HEIGHT;
+			return scrollRect.height;
 		}
-
-		public function SDItemSkin()
-		{
-			scrollRect = new Rectangle(0, 0, width, height);
-			addChild(skin);
-
-		/*
-		graphics.beginFill(0x00FFFF, 0.5);
-		graphics.drawRect(0, 0, item_width, 100);
-		graphics.endFill();
-
-		imgClip = new Sprite;
-		imgClip.graphics.beginFill(0x00FF00, 0.5);
-		imgClip.graphics.drawRect(0, 0, 50, 50);
-		imgClip.graphics.endFill();
-		addChild(imgClip);
-
-		imgClip.x = (scrollRect.width - imgClip.width) * .5;
-		imgClip.y = (scrollRect.height - imgClip.height) * .5;
-
-		titleText = new TextField
-		titleText.width = 50;
-		titleText.height = 16;
-		//titleText.autoSize = TextFieldAutoSize.LEFT;
-		addChild(titleText);
 		*/
+
+		public function SDItemSkin(skin:Sprite, scrollRect:Rectangle = null)
+		{
+			this.scrollRect = scrollRect ? scrollRect : skin.getRect(skin);
+			addChild(_skin = skin);
 		}
 	}
 }
