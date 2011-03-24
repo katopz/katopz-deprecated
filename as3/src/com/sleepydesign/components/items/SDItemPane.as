@@ -113,13 +113,13 @@ package com.sleepydesign.components.items
 		public function set enablePrev(value:Boolean):void
 		{
 			if (_prevButton)
-				_prevButton.visible = false;
+				_prevButton.visible = value;
 		}
 
 		public function set enableNext(value:Boolean):void
 		{
-			if (_prevButton)
-				_prevButton.visible = false;
+			if (_nextButton)
+				_nextButton.visible = value;
 		}
 
 		/**
@@ -299,6 +299,7 @@ package com.sleepydesign.components.items
 			var colSize:int = _canvasRect.width / itemThumb.width;
 			var rowSize:int = _canvasRect.height / itemThumb.height;
 			var pos:Point;
+			DebugUtil.trace("itemThumb.width:" + itemThumb.width);
 
 			if (_style.ORIENTATION == SDStyle.HORIZONTAL)
 			{

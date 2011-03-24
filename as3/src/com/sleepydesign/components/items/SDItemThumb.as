@@ -97,6 +97,8 @@ package com.sleepydesign.components.items
 
 			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+
+			scrollRect = rect;
 		}
 
 		private function onMouseOver(event:MouseEvent):void
