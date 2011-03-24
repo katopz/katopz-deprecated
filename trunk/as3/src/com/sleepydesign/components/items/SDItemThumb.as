@@ -139,7 +139,7 @@ package com.sleepydesign.components.items
 			_skin.titleText.text = value;
 			_skin.titleText.mouseEnabled = false;
 			_skin.titleText.mouseWheelEnabled = false;
-			DebugUtil.trace(" ! setTitle : " + _skin.titleText.text);
+			//DebugUtil.trace(" ! setTitle : " + _skin.titleText.text);
 		}
 
 		public function setImage(bitmapData:BitmapData):void
