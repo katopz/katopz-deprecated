@@ -31,7 +31,7 @@ package com.sleepydesign.components.items
 
 		public var loaderClip:MacLoadingClip;
 
-		private var _hitArea:Sprite;
+		//private var _hitArea:Sprite;
 
 		protected var _disable:Boolean;
 
@@ -60,6 +60,7 @@ package com.sleepydesign.components.items
 			addChild(_skin = skin);
 
 			_skin.mouseEnabled = false;
+			_skin.mouseChildren = false;
 
 			if (title && title != "")
 				setTitle(title);
@@ -91,12 +92,13 @@ package com.sleepydesign.components.items
 			if (_skin.boundClip)
 				_skin.boundClip.parent.removeChild(_skin.boundClip);
 
-			_hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
-			_hitArea.useHandCursor = true;
-			_hitArea.buttonMode = true;
+			hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+			mouseChildren = false;
+			useHandCursor = true;
+			buttonMode = true;
 
-			_hitArea.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
-			_hitArea.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
+			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 		}
 
 		private function onMouseOver(event:MouseEvent):void
@@ -191,8 +193,8 @@ package com.sleepydesign.components.items
 				bitmap.bitmapData.dispose();
 			}
 
-			_hitArea.removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			_hitArea.removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 
 			super.destroy();
 		}
