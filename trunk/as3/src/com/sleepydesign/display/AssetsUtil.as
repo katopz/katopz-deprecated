@@ -130,7 +130,7 @@ package com.sleepydesign.display
 		public static function getClass(classID:String, assetID:String):Class
 		{
 			if (!(_getDefinitions[classID] is Function))
-				throw new Error('Must loadDefinition before call getDefinition');
+				throw new Error(classID + ' not found, Must loadDefinition before call getDefinition.');
 
 			try
 			{
