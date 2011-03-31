@@ -131,7 +131,7 @@ package com.sleepydesign.components.items
 		 */
 		public function showItems(itemDatas:Array):void
 		{
-			if (!itemDatas)
+			if (!itemDatas || itemDatas.length <= 0)
 				return;
 
 			// all app items
