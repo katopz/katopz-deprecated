@@ -5,7 +5,6 @@ package com.sleepydesign.skins
 	import com.greensock.plugins.TweenPlugin;
 	import com.sleepydesign.display.SDSprite;
 	import com.sleepydesign.net.LoaderUtil;
-	import com.sleepydesign.system.DebugUtil;
 
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -56,7 +55,6 @@ package com.sleepydesign.skins
 				create();
 				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
 				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 1});
-				DebugUtil.trace( " ! Show loader");
 			};
 
 			LoaderUtil.hideLoader = function():void
@@ -65,7 +63,6 @@ package com.sleepydesign.skins
 				create();
 				TweenLite.killTweensOf(LoaderUtil.defaultLoaderClip);
 				TweenLite.to(LoaderUtil.defaultLoaderClip, 0.5, {autoAlpha: 0});
-				DebugUtil.trace( " ! Hide loader");
 			};
 
 			// resize
