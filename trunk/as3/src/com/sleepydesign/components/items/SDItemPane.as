@@ -240,7 +240,7 @@ package com.sleepydesign.components.items
 
 		protected function setupThumb(i:int, itemData:ItemData):SDItemThumb
 		{
-			return addThumb(new SDItemThumb(i, itemData.id, itemData.title, new _itemClass));
+			return addThumb(new SDItemThumb(i, itemData.id, itemData.title, new _itemClass, itemData.type));
 		}
 
 		public function addThumb(itemThumb:SDItemThumb):SDItemThumb
@@ -299,7 +299,6 @@ package com.sleepydesign.components.items
 			var colSize:int = _canvasRect.width / itemThumb.width;
 			var rowSize:int = _canvasRect.height / itemThumb.height;
 			var pos:Point;
-			DebugUtil.trace("itemThumb.width:" + itemThumb.width);
 
 			if (_style.ORIENTATION == SDStyle.HORIZONTAL)
 			{

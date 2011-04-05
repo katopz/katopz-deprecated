@@ -24,6 +24,7 @@ package com.sleepydesign.components.items
 
 		public var id:String;
 		public var title:String;
+		public var type:String;
 
 		public var bitmap:Bitmap;
 
@@ -47,12 +48,13 @@ package com.sleepydesign.components.items
 			_disable = value;
 		}
 
-		public function SDItemThumb(index:int, id:String, title:String, skin:SDItemSkin)
+		public function SDItemThumb(index:int, id:String, title:String, skin:SDItemSkin, type:String = null)
 		{
 			this.index = index;
 
 			this.id = id;
 			this.title = title;
+			this.type = type;
 
 			cacheAsBitmap = true;
 
@@ -92,7 +94,9 @@ package com.sleepydesign.components.items
 			if (_skin.boundClip)
 				_skin.boundClip.parent.removeChild(_skin.boundClip);
 
-			hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+			//hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+			DrawUtil.drawRectTo(graphics, rect, 0xFFFF00, 0.5);
+
 			mouseChildren = false;
 			useHandCursor = true;
 			buttonMode = true;
