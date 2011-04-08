@@ -207,13 +207,21 @@ package com.sleepydesign.components.items
 
 			if (_style.ORIENTATION == SDStyle.HORIZONTAL)
 			{
-				rowSize = _canvasRect.height / itemThumb.height;
+				if (_canvasRect.height < itemThumb.height)
+					rowSize = 1;
+				else
+					rowSize = _canvasRect.height / itemThumb.height;
+
 				enableNext = itemThumb && (_currentPageNum < _canvasPanel.getHPageNumFromWidth(Math.ceil(_itemNum / rowSize) * itemThumb.width) - 1);
 				_canvasPanel.slidePage(_currentPageNum);
 			}
 			else
 			{
-				rowSize = _canvasRect.width / itemThumb.width;
+				if (_canvasRect.width < itemThumb.width)
+					rowSize = 1;
+				else
+					rowSize = _canvasRect.width / itemThumb.width;
+
 				enableNext = itemThumb && (_currentPageNum < _canvasPanel.getVPageNumFromHeight(Math.ceil(_itemNum / rowSize) * itemThumb.height) - 1);
 				_canvasPanel.slidePage(0, _currentPageNum);
 			}
