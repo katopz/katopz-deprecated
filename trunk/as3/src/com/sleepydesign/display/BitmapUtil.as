@@ -3,7 +3,9 @@ package com.sleepydesign.display
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
+	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
 	public class BitmapUtil
@@ -71,6 +73,19 @@ package com.sleepydesign.display
 			{
 				return null;
 			}
+		}
+
+		public static function replaceColor(bitmapData:BitmapData, color:uint, replaceColor:uint):void
+		{
+			bitmapData.threshold(bitmapData, bitmapData.rect, new Point(0, 0), "==", color, replaceColor, 0xFFFFFFFF, false);
+		}
+
+		public static function removeColor(bitmapData:BitmapData, color:uint, glowColor:uint):void
+		{
+			bitmapData.threshold(bitmapData, new Rectangle(0, 0, bitmapData.width, bitmapData.height), new Point(0, 0), "==", color, 0x00000000, 0xFFFFFFFF, false);
+			
+			if (glowColor > 0)
+				bitmapData.applyFilter(bitmapData, bitmapData.rect, new Point(), new GlowFilter(glowColor, 300, 6, 6, 1.8, 3, true, false));
 		}
 	}
 }
