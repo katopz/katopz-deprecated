@@ -232,7 +232,7 @@ package com.sleepydesign.site
 				if (_pageLoaders.indexOf(event.target.loader) > -1)
 					_totalLoaded++;
 
-				DebugUtil.trace(" ! onLoad [" + _totalLoaded + "/" + _pageLoaders.length + "] : " + event.target.url.split("/").pop());
+				DebugUtil.trace(" ^ onLoad [" + _totalLoaded + "/" + _pageLoaders.length + "] : " + event.target.url.split("/").pop());
 
 				if (_totalLoaded == _pageLoaders.length)
 				{
