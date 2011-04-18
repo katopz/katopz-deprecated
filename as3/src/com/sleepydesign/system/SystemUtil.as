@@ -29,7 +29,7 @@ package com.sleepydesign.system
 		{
 			try
 			{
-				if (int(version[0]) < 10)
+				if (int(Capabilities.version[0]) < 10)
 				{
 					// Flash Player 9
 					new LocalConnection().connect("foo");
