@@ -7,7 +7,6 @@ package com.sleepydesign.components.items
 	import com.sleepydesign.display.DrawUtil;
 	import com.sleepydesign.display.SDClip;
 	import com.sleepydesign.skins.MacLoadingClip;
-	import com.sleepydesign.system.DebugUtil;
 
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -94,8 +93,8 @@ package com.sleepydesign.components.items
 			if (_skin.boundClip)
 				_skin.boundClip.parent.removeChild(_skin.boundClip);
 
-			//hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
-			DrawUtil.drawRectTo(graphics, rect, 0xFFFF00, 0.5);
+			hitArea = addChild(DrawUtil.drawRect(rect, 0xFF0000, 0)) as Sprite;
+			//DrawUtil.drawRectTo(graphics, rect, 0xFFFF00, 0.5);
 
 			mouseChildren = false;
 			useHandCursor = true;
@@ -124,12 +123,12 @@ package com.sleepydesign.components.items
 
 		override public function show():void
 		{
-			TweenLite.to(bitmap, .25, {autoAlpha: 1, onComplete: shown});
+			TweenLite.to(_skin.imgClip, .25, {autoAlpha: 1, onComplete: shown});
 		}
 
 		override public function hide():void
 		{
-			TweenLite.to(bitmap, .25, {autoAlpha: 0, onComplete: hidden});
+			TweenLite.to(_skin.imgClip, .25, {autoAlpha: 0, onComplete: hidden});
 		}
 
 		override public function deactivate():void
@@ -156,11 +155,13 @@ package com.sleepydesign.components.items
 				var imgClip:Sprite = _skin.imgClip as Sprite;
 
 				bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height));
-				addChild(bitmap);
+				imgClip.addChild(bitmap);
+				/*
 				bitmap.x = imgClip.x;
 				bitmap.y = imgClip.y;
 
 				imgClip.parent.removeChild(imgClip);
+				*/
 
 				// hide loader
 				if (loaderClip)
