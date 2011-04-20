@@ -69,7 +69,7 @@ package com.sleepydesign.components.items
 			// loader
 			addChild(loaderClip = new MacLoadingClip(0xFFFFFF));
 			loaderClip.x = _skin.imgClip.x + _skin.imgClip.width * .5;
-			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5;
+			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5 + loaderClip.height * .5;
 
 			TweenLite.defaultEase = Quad.easeOut;
 			TweenLite.to(this, .25, {autoAlpha: 1});
@@ -155,6 +155,7 @@ package com.sleepydesign.components.items
 				var imgClip:Sprite = _skin.imgClip as Sprite;
 
 				bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height));
+				bitmap.smoothing = true;
 				imgClip.addChild(bitmap);
 				/*
 				bitmap.x = imgClip.x;
@@ -183,7 +184,8 @@ package com.sleepydesign.components.items
 			var offsetY:Number = -((bitmapData.height * ratioV) - bitmap.height) * .5;
 
 			bitmap.smoothing = true;
-			bitmap.bitmapData.draw(bitmapData, isAutoSize ? new Matrix(ratioH, 0, 0, ratioV, offsetX, offsetY) : null);
+			bitmap.bitmapData.draw(bitmapData, isAutoSize ? new Matrix(ratioH, 0, 0, ratioV, offsetX, offsetY) : null, null, null, null, true);
+			bitmap.smoothing = true;
 		}
 
 		override public function destroy():void
