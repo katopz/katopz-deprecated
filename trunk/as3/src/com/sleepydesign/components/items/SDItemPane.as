@@ -131,7 +131,7 @@ package com.sleepydesign.components.items
 		 */
 		public function showItems(itemDatas:Array):void
 		{
-			if (!itemDatas || itemDatas.length <= 0)
+			if (!itemDatas)
 				return;
 
 			// all app items
@@ -149,6 +149,9 @@ package com.sleepydesign.components.items
 					itemThumb.destroy();
 
 			_itemThumbs = [];
+
+			if (itemDatas.length <= 0)
+				return;
 
 			// draw page 0
 			setPage(0, true);
