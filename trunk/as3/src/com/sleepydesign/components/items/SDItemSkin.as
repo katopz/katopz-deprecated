@@ -49,8 +49,8 @@ package com.sleepydesign.components.items
 
 		public function SDItemSkin(skin:Sprite, scrollRect:Rectangle = null)
 		{
-			this.scrollRect = scrollRect ? scrollRect : skin.getRect(skin);
 			addChild(_skin = skin);
+			this.scrollRect = scrollRect; // ? scrollRect : boundClip.getRect(boundClip);
 		}
 	}
 }
