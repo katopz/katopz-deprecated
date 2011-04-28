@@ -1,6 +1,7 @@
 ﻿/**
- * VERSION: 1.831
- * DATE: 2011-02-16
+ * VERSION: 1.85
+ * DATE: 2011-04-26
+ * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
 package com.greensock.loading {
@@ -109,6 +110,7 @@ function errorHandler(event:LoaderEvent):void {
  * 		<li><strong> maxConnections : uint</strong> - Maximum number of simultaneous connections that should be used while loading the LoaderMax queue. A higher number will generally result in faster overall load times for the group. The default is 2. This value is instance-based, not system-wide, so if you have two LoaderMax instances that both have a <code>maxConnections</code> value of 3 and they are both loading, there could be up to 6 connections at a time total. Sometimes there are limits imposed by the Flash Player itself or the browser or the user's system, but LoaderMax will do its best to honor the <code>maxConnections</code> you define.</li>
  * 		<li><strong> skipFailed : Boolean</strong> - If <code>skipFailed</code> is <code>true</code> (the default), any failed loaders in the queue will be skipped. Otherwise, the LoaderMax will stop when it hits a failed loader and the LoaderMax's status will become <code>LoaderStatus.FAILED</code>.</li>
  * 		<li><strong> skipPaused : Boolean</strong> - If <code>skipPaused</code> is <code>true</code> (the default), any paused loaders in the queue will be skipped. Otherwise, the LoaderMax will stop when it hits a paused loader and the LoaderMax's status will become <code>LoaderStatus.FAILED</code>.</li>
+ * 		<li><strong> autoLoad : Boolean</strong> - If <code>true</code>, the LoaderMax instance will automatically call <code>load()</code> whenever you insert()/append()/prepend() a new loader whose status is <code>LoaderStatus.READY</code>. This basically makes it easy to create a LoaderMax queue and dump stuff into it whenever you want it to load without having to check the LoaderMax's status and call <code>load()</code> manually if it's not already loading.</li>
  * 		<li><strong> loaders : Array</strong> - An array of loaders (ImageLoaders, SWFLoaders, XMLLoaders, MP3Loaders, other LoaderMax instances, etc.) that should be immediately inserted into the LoaderMax.</li>
  * 		<li><strong> requireWithRoot : DisplayObject</strong> - LoaderMax supports <i>subloading</i>, where an object can be factored into a parent's loading progress. If you want this LoaderMax to be required as part of its parent SWFLoader's progress, you must set the <code>requireWithRoot</code> property to your swf's <code>root</code>. For example, <code>var loader:LoaderMax = new LoaderMax({name:"mainQueue", requireWithRoot:this.root});</code></li>
  * 		<li><strong> autoDispose : Boolean</strong> - When <code>autoDispose</code> is <code>true</code>, the loader will be disposed immediately after it completes (it calls the <code>dispose()</code> method internally after dispatching its <code>COMPLETE</code> event). This will remove any listeners that were defined in the vars object (like onComplete, onProgress, onError, onInit). Once a loader is disposed, it can no longer be found with <code>LoaderMax.getLoader()</code> or <code>LoaderMax.getContent()</code> - it is essentially destroyed but its content is not unloaded (you must call <code>unload()</code> or <code>dispose(true)</code> to unload its content). The default <code>autoDispose</code> value is <code>false</code>.
@@ -141,7 +143,7 @@ function errorHandler(event:LoaderEvent):void {
  */	
 	public class LoaderMax extends LoaderCore {		
 		/** @private **/
-		public static const version:Number = 1.831;
+		public static const version:Number = 1.85;
 		/** The default value that will be used for the <code>estimatedBytes</code> on loaders that don't declare one in the <code>vars</code> parameter of the constructor. **/
 		public static var defaultEstimatedBytes:uint = 20000;
 		/** Controls the default value of <code>auditSize</code> in LoaderMax instances (normally <code>true</code>). For most situations, the auditSize feature is very convenient for ensuring that the overall progress of LoaderMax instances is reported accurately, but when working with very large quantities of files that have no <code>estimatedBytes</code> defined, some developers prefer to turn auditSize off by default. Of course you can always override the default for individual LoaderMax instances by defining an <code>auditSize</code> value in the <code>vars</code> parameter of the constructor. **/
@@ -162,6 +164,8 @@ function errorHandler(event:LoaderEvent):void {
 		public var skipPaused:Boolean;
 		/** Maximum number of simultaneous connections that should be used while loading the LoaderMax queue. A higher number will generally result in faster overall load times for the group. The default is 2. This value is instance-based, not system-wide, so if you have two LoaderMax instances that both have a <code>maxConnections</code> value of 3 and they are both loading, there could be up to 6 connections at a time total. **/
 		public var maxConnections:uint;
+		/** If <code>true</code>, the LoaderMax instance will automatically call <code>load()</code> whenever you insert()/append()/prepend() a new loader whose status is <code>LoaderStatus.READY</code>. This basically makes it easy to create a LoaderMax queue and dump stuff into it whenever you want something to load without having to check the LoaderMax's status and call <code>load()</code> manually if it's not already loading. **/
+		public var autoLoad:Boolean;
 				
 		/**
 		 * Constructor
@@ -176,6 +180,7 @@ function errorHandler(event:LoaderEvent):void {
 		 * 		<li><strong> maxConnections : uint</strong> - Maximum number of simultaneous connections that should be used while loading the LoaderMax queue. A higher number will generally result in faster overall load times for the group. The default is 2. This value is instance-based, not system-wide, so if you have two LoaderMax instances that both have a <code>maxConnections</code> value of 3 and they are both loading, there could be up to 6 connections at a time total. Sometimes there are limits imposed by the Flash Player itself or the browser or the user's system, but LoaderMax will do its best to honor the <code>maxConnections</code> you define.</li>
 		 * 		<li><strong> skipFailed : Boolean</strong> - If <code>skipFailed</code> is <code>true</code> (the default), any failed loaders in the queue will be skipped. Otherwise, the LoaderMax will stop when it hits a failed loader and the LoaderMax's status will become <code>LoaderStatus.FAILED</code>.</li>
 		 * 		<li><strong> skipPaused : Boolean</strong> - If <code>skipPaused</code> is <code>true</code> (the default), any paused loaders in the queue will be skipped. Otherwise, the LoaderMax will stop when it hits a paused loader and the LoaderMax's status will become <code>LoaderStatus.FAILED</code>.</li>
+		 * 		<li><strong> autoLoad : Boolean</strong> - If <code>true</code>, the LoaderMax instance will automatically call <code>load()</code> whenever you insert()/append()/prepend() a new loader whose status is <code>LoaderStatus.READY</code>. This basically makes it easy to create a LoaderMax queue and dump stuff into it whenever you want it to load without having to check the LoaderMax's status and call <code>load()</code> manually if it's not already loading.</li>
 		 * 		<li><strong> loaders : Array</strong> - An array of loaders (ImageLoaders, SWFLoaders, XMLLoaders, MP3Loaders, other LoaderMax instances, etc.) that should be immediately inserted into the LoaderMax.</li>
 		 * 		<li><strong> requireWithRoot : DisplayObject</strong> - LoaderMax supports <i>subloading</i>, where an object can be factored into a parent's loading progress. If you want this LoaderMax to be required as part of its parent SWFLoader's progress, you must set the <code>requireWithRoot</code> property to your swf's <code>root</code>. For example, <code>var loader:LoaderMax = new LoaderMax({name:"mainQueue", requireWithRoot:this.root});</code></li>
 		 * 		<li><strong> autoDispose : Boolean</strong> - When <code>autoDispose</code> is <code>true</code>, the loader will be disposed immediately after it completes (it calls the <code>dispose()</code> method internally after dispatching its <code>COMPLETE</code> event). This will remove any listeners that were defined in the vars object (like onComplete, onProgress, onError, onInit). Once a loader is disposed, it can no longer be found with <code>LoaderMax.getLoader()</code> or <code>LoaderMax.getContent()</code> - it is essentially destroyed but its content is not unloaded (you must call <code>unload()</code> or <code>dispose(true)</code> to unload its content). The default <code>autoDispose</code> value is <code>false</code>.
@@ -204,6 +209,7 @@ function errorHandler(event:LoaderEvent):void {
 			_activeLoaders = new Dictionary();
 			this.skipFailed = Boolean(this.vars.skipFailed != false);
 			this.skipPaused = Boolean(this.vars.skipPaused != false);
+			this.autoLoad = Boolean(this.vars.autoLoad == true);
 			this.maxConnections = ("maxConnections" in this.vars) ? uint(this.vars.maxConnections) : 2;
 			if (this.vars.loaders is Array) {
 				for (var i:int = 0; i < this.vars.loaders.length; i++) {
@@ -368,6 +374,15 @@ function completeHandler(event:LoaderEvent):void {
 			} else if (_prePauseStatus == LoaderStatus.COMPLETED) {
 				_prePauseStatus = LoaderStatus.READY;
 			}
+			
+			if (this.autoLoad && loader.status == LoaderStatus.READY) {
+				if (_status != LoaderStatus.LOADING) {
+					this.load(false);
+				} else {
+					_loadNext(null); //to ensure the maxConnections pipeline is full
+				}
+			}
+			
 			return loader;
 		}
 		
@@ -879,7 +894,7 @@ function completeHandler(event:LoaderEvent):void {
 		}
 		
 		/**
-		 * Searches <strong>ALL</code> loaders to find one based on its name or url. For example:<br /><br /><code>
+		 * Searches <strong>ALL</strong> loaders to find one based on its name or url. For example:<br /><br /><code>
 		 * 
 		 * var loader:ImageLoader = LoaderMax.getLoader("myPhoto1") as ImageLoader;<br /><br /></code>
 		 * 
@@ -1033,7 +1048,7 @@ function completeHandler(event:LoaderEvent):void {
 				status = LoaderCore(_loaders[i]).status;
 				if (status != LoaderStatus.DISPOSED && !(status == LoaderStatus.PAUSED && this.skipPaused) && !(status == LoaderStatus.FAILED && this.skipFailed)) {
 					total++;
-					loaded += LoaderCore(_loaders[i]).progress;
+					loaded += (_loaders[i] is LoaderMax) ? LoaderMax(_loaders[i]).rawProgress : LoaderCore(_loaders[i]).progress;
 				}
 			}
 			return (total == 0) ? 0 : loaded / total;

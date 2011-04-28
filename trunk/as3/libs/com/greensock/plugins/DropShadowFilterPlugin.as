@@ -5,8 +5,9 @@
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
-	import flash.filters.DropShadowFilter;
 	import com.greensock.*;
+	
+	import flash.filters.DropShadowFilter;
 /**
  * Tweens a DropShadowFilter. The following properties are available (you only need to define the ones you want to tween):
  * <code>

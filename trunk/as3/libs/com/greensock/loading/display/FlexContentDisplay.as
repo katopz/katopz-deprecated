@@ -127,6 +127,7 @@ package com.greensock.loading.display {
 				graphics.endFill();
 			}
 			if (_rawContent == null) {
+				measure();
 				return;
 			}
 			var mc:DisplayObject = _rawContent;

@@ -1,8 +1,8 @@
 /**
- * VERSION: 1.01
- * DATE: 2010-02-03
+ * VERSION: 1.1
+ * DATE: 2011-04-26
  * AS3
- * UPDATES AND DOCUMENTATION AT: http://blog.greensock.com/
+ * UPDATES AND DOCS AT: http://www.greensock.com/
  **/
 package com.greensock.layout {
 /**
@@ -24,6 +24,8 @@ package com.greensock.layout {
 		public static const LEFT:String = "left";
 		/** Align with the bottom of the area. **/
 		public static const BOTTOM:String = "bottom";
+		/** No alignment **/
+		public static const NONE:String = "none";
 
 	}
 }

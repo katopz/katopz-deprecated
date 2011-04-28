@@ -9,6 +9,7 @@ package com.greensock.plugins {
 	
 	import flash.filters.*;
 /**
+ * @private
  * Base class for all filter plugins (like blurFilter, colorMatrixFilter, glowFilter, etc.). Handles common routines. 
  * There is no reason to use this class directly.<br /><br />
  * 

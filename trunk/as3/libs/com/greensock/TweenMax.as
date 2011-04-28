@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.66
- * DATE: 2011-01-25
+ * VERSION: 11.67
+ * DATE: 2011-04-12
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com 
  **/
@@ -296,7 +296,7 @@ package com.greensock {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.66;
+		public static const version:Number = 11.67;
 		
 		TweenPlugin.activate([
 			
@@ -870,6 +870,9 @@ package com.greensock {
 			var i:int, varsDup:Object, p:String;
 			var l:int = targets.length;
 			var a:Array = [];
+			if (vars.isGSVars) { //to accommodate TweenMaxVars instances for strong data typing and code hinting
+				vars = vars.vars;
+			}
 			var curDelay:Number = ("delay" in vars) ? Number(vars.delay) : 0;
 			var onCompleteProxy:Function = vars.onComplete;
 			var onCompleteParamsProxy:Array = vars.onCompleteParams;

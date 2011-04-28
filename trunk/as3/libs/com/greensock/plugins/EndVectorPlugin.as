@@ -9,7 +9,7 @@ package com.greensock.plugins {
 	
 	import __AS3__.vec.Vector; //due to a bug in Flex Builder, this must be included in order to correctly compile a swc
 /**
- * Tweens numbers in an Vector.<Number>. Remember, Vectors require that you publish to <strong>Flash Player 10</strong> or later.<br /><br />
+ * Tweens numbers in an Vector.&lt;Number&gt;. Remember, Vectors require that you publish to <strong>Flash Player 10</strong> or later.<br /><br />
  * 
  * <b>USAGE:</b><br /><br />
  * <code>
@@ -18,11 +18,11 @@ package com.greensock.plugins {
  * 		import com.greensock.plugins.EndVectorPlugin; <br />
  * 		TweenPlugin.activate([EndVectorPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
  * 
- * 		var v:Vector.<Number> = new Vector.<Number>();<br />
+ * 		var v:Vector.&lt;Number&gt; = new Vector.&lt;Number&gt;();<br />
  * 		v[0] = 0;<br />
  * 		v[1] = 1;<br />
  * 		v[2] = 2;<br />
- * 		var end:Vector.<Number> = new Vector.<Number>();<br />
+ * 		var end:Vector.&lt;Number&gt; = new Vector.&lt;Number&gt;();<br />
  * 		end[0] = 100;<br />
  * 		end[1] = 250;<br />
  * 		end[2] = 500;<br />
