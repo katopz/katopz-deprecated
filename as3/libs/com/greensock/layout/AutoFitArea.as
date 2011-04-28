@@ -1,6 +1,6 @@
 /**
- * VERSION: 2.53
- * DATE: 2011-02-21
+ * VERSION: 2.54
+ * DATE: 2011-04-26
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/autofitarea/
  **/
@@ -74,7 +74,7 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
  */	 
 	public class AutoFitArea extends Shape {
 		/** @private **/
-		public static const version:Number = 2.53;
+		public static const version:Number = 2.54;
 		
 		/** @private **/
 		private static var _bd:BitmapData;
@@ -132,7 +132,7 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 		 * 			   For example, <code>createAround(mc, {scaleMode:"proportionalOutside", crop:true});</code> instead of <code>createAround(mc, "proportionalOutside", "center", "center", true, 0, 99999999, 0, 99999999, false, NaN, false);</code>.
 		 * 			   The following optional parameters are recognized:
 		 * 				<ul>
-		 * 					<li><b>scaleMode : String</b> - Determines how the target should be scaled to fit the area. Use the ScaleMode class constants: <code>STRETCH, PROPORTIONAL_INSIDE, PROPORTIONAL_OUTSIDE, NONE, WIDTH_ONLY,</code> or <code>HEIGHT_ONLY</li>
+		 * 					<li><b>scaleMode : String</b> - Determines how the target should be scaled to fit the area. Use the ScaleMode class constants: <code>STRETCH, PROPORTIONAL_INSIDE, PROPORTIONAL_OUTSIDE, NONE, WIDTH_ONLY,</code> or <code>HEIGHT_ONLY</code></li>
 		 * 					<li><b>hAlign : String</b> - Horizontal alignment of the target inside the area. Use the AlignMode class constants: <code>LEFT</code>, <code>CENTER</code>, and <code>RIGHT</code>.</li>
 		 * 					<li><b>vAlign : String</b> - Vertical alignment of the target inside the area. Use the AlignMode class constants: <code>TOP</code>, <code>CENTER</code>, and <code>BOTTOM</code>.</li>
 		 * 					<li><b>crop : Boolean</b> - If true, a mask will be created and added to the display list so that the target will be cropped wherever it exceeds the bounds of the AutoFitArea.</li>
@@ -180,7 +180,7 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 		 * 			   For example, <code>attach(mc, {scaleMode:"proportionalOutside", crop:true});</code> instead of <code>attach(mc, "proportionalOutside", "center", "center", true, 0, 99999999, 0, 99999999, false, NaN, false);</code>.
 		 * 			   The following optional parameters are recognized:
 		 * 				<ul>
-		 * 					<li><b>scaleMode : String</b> - Determines how the target should be scaled to fit the area. Use the ScaleMode class constants: <code>STRETCH, PROPORTIONAL_INSIDE, PROPORTIONAL_OUTSIDE, NONE, WIDTH_ONLY,</code> or <code>HEIGHT_ONLY</li>
+		 * 					<li><b>scaleMode : String</b> - Determines how the target should be scaled to fit the area. Use the ScaleMode class constants: <code>STRETCH, PROPORTIONAL_INSIDE, PROPORTIONAL_OUTSIDE, NONE, WIDTH_ONLY,</code> or <code>HEIGHT_ONLY</code></li>
 		 * 					<li><b>hAlign : String</b> - Horizontal alignment of the target inside the area. Use the AlignMode class constants: <code>LEFT</code>, <code>CENTER</code>, and <code>RIGHT</code>.</li>
 		 * 					<li><b>vAlign : String</b> - Vertical alignment of the target inside the area. Use the AlignMode class constants: <code>TOP</code>, <code>CENTER</code>, and <code>BOTTOM</code>.</li>
 		 * 					<li><b>crop : Boolean</b> - If true, a mask will be created and added to the display list so that the target will be cropped wherever it exceeds the bounds of the AutoFitArea.</li>
@@ -444,7 +444,7 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 					tx += (x - outerBounds.x);
 				} else if (item.hAlign == AlignMode.CENTER) {
 					tx += (x - outerBounds.x) + ((width - outerBounds.width) * 0.5);
-				} else {
+				} else if (item.hAlign == AlignMode.RIGHT) {
 					tx += (x - outerBounds.x) + (width - outerBounds.width);
 				}
 				
@@ -452,7 +452,7 @@ var area:AutoFitArea = AutoFitArea.createAround(myImage);
 					ty += (y - outerBounds.y);
 				} else if (item.vAlign == AlignMode.CENTER) {
 					ty += (y - outerBounds.y) + ((height - outerBounds.height) * 0.5);
-				} else {
+				} else if (item.vAlign == AlignMode.BOTTOM) {
 					ty += (y - outerBounds.y) + (height - outerBounds.height);
 				}
 				

@@ -5,8 +5,9 @@
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
-	import flash.display.*;
 	import com.greensock.*;
+	
+	import flash.display.*;
 /**
  * Tweens a MovieClip to a particular frame number. <br /><br />
  * 

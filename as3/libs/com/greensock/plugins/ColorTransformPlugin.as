@@ -1,13 +1,15 @@
 /**
- * VERSION: 1.52
- * DATE: 10/2/2009
- * ACTIONSCRIPT VERSION: 3.0 
- * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
+ * VERSION: 1.521
+ * DATE: 2011-02-15
+ * AS3
+ * UPDATES AND DOCS AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
+	import com.greensock.*;
+	
 	import flash.display.*;
 	import flash.geom.ColorTransform;
-	import com.greensock.*;
+
 /**
  * Ever wanted to tween ColorTransform properties of a DisplayObject to do advanced effects like overexposing, altering
  * the brightness or setting the percent/amount of tint? Or maybe tween individual ColorTransform 

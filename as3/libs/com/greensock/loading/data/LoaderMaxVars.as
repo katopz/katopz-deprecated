@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.1
- * DATE: 2010-12-09
+ * VERSION: 1.2
+ * DATE: 2011-04-26
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -94,6 +94,11 @@ package com.greensock.loading.data {
 			return _set("autoDispose", value);
 		}
 		
+		/** If <code>true</code>, the LoaderMax instance will automatically call <code>load()</code> whenever you insert()/append()/prepend() a new loader whose status is <code>LoaderStatus.READY</code>. This basically makes it easy to create a LoaderMax queue and dump stuff into it whenever you want something to load without having to check the LoaderMax's status and call <code>load()</code> manually if it's not already loading. **/
+		public function autoLoad(value:Boolean):LoaderMaxVars {
+			return _set("autoLoad", value);
+		}
+		
 		/** A name that is used to identify the loader instance. This name can be fed to the <code>LoaderMax.getLoader()</code> or <code>LoaderMax.getContent()</code> methods or traced at any time. Each loader's name should be unique. If you don't define one, a unique name will be created automatically, like "loader21". **/
 		public function name(value:String):LoaderMaxVars {
 			return _set("name", value);
@@ -124,7 +129,7 @@ package com.greensock.loading.data {
 			return _set("onHTTPStatus", value);
 		}
 		
-		/** A handler function for <code>LoaderEvent.IO_ERROR</code> events which will also call the onError handler, so you can use that as more of a catch-all whereas <code>onIOError</code> is specifically for LoaderEvent.IO_ERROR events. Make sure your onIOError function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>).</li> **/
+		/** A handler function for <code>LoaderEvent.IO_ERROR</code> events which will also call the onError handler, so you can use that as more of a catch-all whereas <code>onIOError</code> is specifically for LoaderEvent.IO_ERROR events. Make sure your onIOError function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>). **/
 		public function onIOError(value:Function):LoaderMaxVars {
 			return _set("onIOError", value);
 		}

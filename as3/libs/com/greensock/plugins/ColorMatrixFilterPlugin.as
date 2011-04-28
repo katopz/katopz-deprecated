@@ -5,8 +5,9 @@
  * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
-	import flash.filters.ColorMatrixFilter;
 	import com.greensock.*;
+	
+	import flash.filters.ColorMatrixFilter;
 /**
  * ColorMatrixFilter tweening offers an easy way to tween a DisplayObject's saturation, hue, contrast,
  * brightness, and colorization. The following properties are available (you only need to define the ones you want to tween):

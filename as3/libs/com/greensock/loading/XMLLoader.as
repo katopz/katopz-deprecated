@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.8
- * DATE: 2011-01-21
+ * VERSION: 1.85
+ * DATE: 2011-04-26
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -130,6 +130,9 @@ function completeHandler(event:LoaderMax):void {
  * 		<li><strong> requireWithRoot : DisplayObject</strong> - LoaderMax supports <i>subloading</i>, where an object can be factored into a parent's loading progress. If you want LoaderMax to require this XMLLoader as part of its parent SWFLoader's progress, you must set the <code>requireWithRoot</code> property to your swf's <code>root</code>. For example, <code>var loader:XMLLoader = new XMLLoader("data.xml", {name:"data", requireWithRoot:this.root});</code></li>
  * 		<li><strong> autoDispose : Boolean</strong> - When <code>autoDispose</code> is <code>true</code>, the loader will be disposed immediately after it completes (it calls the <code>dispose()</code> method internally after dispatching its <code>COMPLETE</code> event). This will remove any listeners that were defined in the vars object (like onComplete, onProgress, onError, onInit). Once a loader is disposed, it can no longer be found with <code>LoaderMax.getLoader()</code> or <code>LoaderMax.getContent()</code> - it is essentially destroyed but its content is not unloaded (you must call <code>unload()</code> or <code>dispose(true)</code> to unload its content). The default <code>autoDispose</code> value is <code>false</code>.</li>
  * 		<li><strong> prependURLs : String</strong> - A String that should be prepended to all parsed LoaderMax-related loader URLs (from nodes like &lt;ImageLoader&gt;, &lt;XMLLoader&gt;, etc.) as soon as the XML has been parsed. For example, if your XML has the following node: <code>&lt;ImageLoader url="1.jpg" /&gt;</code> and <code>prependURLs</code> is set to "../images/", then the ImageLoader's url will end up being "../images/1.jpg". <code>prependURLs</code> affects ALL parsed loaders in the XML. However, if you have an <code>&lt;XMLLoader&gt;</code> node inside your XML that also loads another XML doc and you'd like to recursively prepend all of the URLs in this loader's XML as well as the subloading one and all of its children, use <code>recursivePrependURLs</code> instead of <code>prependURLs</code>.</li>
+ * 		<li><strong> maxConnections : uint</strong> - Maximum number of simultaneous connections that should be used while loading child loaders that were parsed from the XML and had their "load" attribute set to "true" (like &lt;ImageLoader url="1.jpg" load="true" /&gt;). A higher number will generally result in faster overall load times for the group. The default is 2. Sometimes there are limits imposed by the Flash Player itself or the browser or the user's system, but LoaderMax will do its best to honor the <code>maxConnections</code> you define.</li>
+ * 		<li><strong> allowMalformedURL : Boolean</strong> - Normally, the URL will be parsed and any variables in the query string (like "?name=test&state=il&gender=m") will be placed into a URLVariables object which is added to the URLRequest. This avoids a few bugs in Flash, but if you need to keep the entire URL intact (no parsing into URLVariables), set <code>allowMalformedURL:true</code>. For example, if your URL has duplicate variables in the query string like <code>http://www.greensock.com/?c=S&c=SE&c=SW</code>, it is technically considered a malformed URL and a URLVariables object can't properly contain all the duplicates, so in this case you'd want to set <code>allowMalformedURL</code> to <code>true</code>.</li>
+ * 		<li><strong> skipFailed : Boolean</strong> - By default, XMLLoader will parse any LoaderMax-related loaders in the XML and load any that have their "load" attribute set to "true" and then if any fail to load, they will simply be skipped. But if you prefer to have the XMLLoader fail immediately if one of the parsed loaders fails to load, set <code>skipFailed</code> to <code>false</code> (it is <code>true</code> by default).</li>
  * 		<li><strong> recursivePrependURLs : String</strong> - A String that should be recursively prepended to all parsed LoaderMax-related loader URLs (from nodes like &lt;ImageLoader&gt;, &lt;XMLLoader&gt;, etc.). The functionality is identical to <code>prependURLs</code> except that it is recursive, affecting all parsed loaders in subloaded XMLLoaders (other XML files that this one loads too). For example, if your XML has the following node: <code>&lt;XMLLoader url="doc2.xml" /&gt;</code> and <code>recursivePrependURLs</code> is set to "../xml/", then the nested XMLLoader's URL will end up being "../xml/doc2.xml". Since it is recursive, parsed loaders inside doc2.xml <i>and</i> any other XML files that it loads will <i>all</i> have their URLs prepended. So if you load doc1.xml which loads doc2.xml which loads doc3.xml (due to <code>&lt;XMLLoader&gt;</code> nodes discovered in each XML file), <code>recursivePrependURLs</code> will affect all of the parsed LoaderMax-related URLs in all 3 documents. If you'd prefer to <i>only</i> have the URLs affected that are in the XML file that this XMLLoader is loading, use <code>prependURLs</code> instead of <code>recursivePrependURLs</code>.
  * 
  * 		<br /><br />----EVENT HANDLER SHORTCUTS----</li>
@@ -217,7 +220,7 @@ function completeHandler(event:LoaderMax):void {
 		/** @private **/
 		private static var _classActivated:Boolean = _activateClass("XMLLoader", XMLLoader, "xml,php,jsp,asp,cfm,cfml,aspx");
 		/** @private Any non-String variable types that XMLLoader should recognized in loader nodes like <ImageLoader>, <VideoLoader>, etc. **/
-		protected static var _varTypes:Object = {skipFailed:true, skipPaused:true, paused:false, load:false, noCache:false, maxConnections:2, autoPlay:false, autoDispose:false, smoothing:false, estimatedBytes:1, x:1, y:1, width:1, height:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, bgColor:0, bgAlpha:0, deblocking:1, repeat:1, checkPolicyFile:false, centerRegistration:false, bufferTime:5, volume:1, bufferMode:false, estimatedDuration:200, crop:false, autoAdjustBuffer:true, suppressInitReparentEvents:true};
+		protected static var _varTypes:Object = {skipFailed:true, skipPaused:true, autoLoad:false, paused:false, load:false, noCache:false, maxConnections:2, autoPlay:false, autoDispose:false, smoothing:false, estimatedBytes:1, x:1, y:1, width:1, height:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, bgColor:0, bgAlpha:0, deblocking:1, repeat:1, checkPolicyFile:false, centerRegistration:false, bufferTime:5, volume:1, bufferMode:false, estimatedDuration:200, crop:false, autoAdjustBuffer:true, suppressInitReparentEvents:true};
 		/** Event type constant for when the XML has loaded but has <b>not</b> been parsed yet. This can be useful in rare situations when you want to alter the XML before it is parsed by XMLLoader (for identifying LoaderMax-related nodes like <code>&lt;ImageLoader&gt;</code>, etc.) **/
 		public static var RAW_LOAD:String = "rawLoad";
 		/** @private contains only the parsed loaders that had the load="true" XML attribute. It also contains the _parsed LoaderMax which is paused, so it won't load (we put it in there for easy searching). **/
@@ -244,6 +247,9 @@ function completeHandler(event:LoaderMax):void {
 		 * 		<li><strong> requireWithRoot : DisplayObject</strong> - LoaderMax supports <i>subloading</i>, where an object can be factored into a parent's loading progress. If you want LoaderMax to require this XMLLoader as part of its parent SWFLoader's progress, you must set the <code>requireWithRoot</code> property to your swf's <code>root</code>. For example, <code>var loader:XMLLoader = new XMLLoader("data.xml", {name:"data", requireWithRoot:this.root});</code></li>
 		 * 		<li><strong> autoDispose : Boolean</strong> - When <code>autoDispose</code> is <code>true</code>, the loader will be disposed immediately after it completes (it calls the <code>dispose()</code> method internally after dispatching its <code>COMPLETE</code> event). This will remove any listeners that were defined in the vars object (like onComplete, onProgress, onError, onInit). Once a loader is disposed, it can no longer be found with <code>LoaderMax.getLoader()</code> or <code>LoaderMax.getContent()</code> - it is essentially destroyed but its content is not unloaded (you must call <code>unload()</code> or <code>dispose(true)</code> to unload its content). The default <code>autoDispose</code> value is <code>false</code>.</li>
 		 * 		<li><strong> prependURLs : String</strong> - A String that should be prepended to all parsed LoaderMax-related loader URLs (from nodes like &lt;ImageLoader&gt;, &lt;XMLLoader&gt;, etc.) as soon as the XML has been parsed. For example, if your XML has the following node: <code>&lt;ImageLoader url="1.jpg" /&gt;</code> and <code>prependURLs</code> is set to "../images/", then the ImageLoader's url will end up being "../images/1.jpg". <code>prependURLs</code> affects ALL parsed loaders in the XML. However, if you have an <code>&lt;XMLLoader&gt;</code> node inside your XML that also loads another XML doc and you'd like to recursively prepend all of the URLs in this loader's XML as well as the subloading one and all of its children, use <code>recursivePrependURLs</code> instead of <code>prependURLs</code>.</li>
+		 * 		<li><strong> maxConnections : uint</strong> - Maximum number of simultaneous connections that should be used while loading child loaders that were parsed from the XML and had their "load" attribute set to "true" (like &lt;ImageLoader url="1.jpg" load="true" /&gt;). A higher number will generally result in faster overall load times for the group. The default is 2. Sometimes there are limits imposed by the Flash Player itself or the browser or the user's system, but LoaderMax will do its best to honor the <code>maxConnections</code> you define.</li>
+		 * 		<li><strong> allowMalformedURL : Boolean</strong> - Normally, the URL will be parsed and any variables in the query string (like "?name=test&state=il&gender=m") will be placed into a URLVariables object which is added to the URLRequest. This avoids a few bugs in Flash, but if you need to keep the entire URL intact (no parsing into URLVariables), set <code>allowMalformedURL:true</code>. For example, if your URL has duplicate variables in the query string like <code>http://www.greensock.com/?c=S&c=SE&c=SW</code>, it is technically considered a malformed URL and a URLVariables object can't properly contain all the duplicates, so in this case you'd want to set <code>allowMalformedURL</code> to <code>true</code>.</li>
+		 * 		<li><strong> skipFailed : Boolean</strong> - By default, XMLLoader will parse any LoaderMax-related loaders in the XML and load any that have their "load" attribute set to "true" and then if any fail to load, they will simply be skipped. But if you prefer to have the XMLLoader fail immediately if one of the parsed loaders fails to load, set <code>skipFailed</code> to <code>false</code> (it is <code>true</code> by default).</li>
 		 * 		<li><strong> recursivePrependURLs : String</strong> - A String that should be recursively prepended to all parsed LoaderMax-related loader URLs (from nodes like &lt;ImageLoader&gt;, &lt;XMLLoader&gt;, etc.). The functionality is identical to <code>prependURLs</code> except that it is recursive, affecting all parsed loaders in subloaded XMLLoaders (other XML files that this one loads too). For example, if your XML has the following node: <code>&lt;XMLLoader url="doc2.xml" /&gt;</code> and <code>recursivePrependURLs</code> is set to "../xml/", then the nested XMLLoader's URL will end up being "../xml/doc2.xml". Since it is recursive, parsed loaders inside doc2.xml <i>and</i> any other XML files that it loads will <i>all</i> have their URLs prepended. So if you load doc1.xml which loads doc2.xml which loads doc3.xml (due to <code>&lt;XMLLoader&gt;</code> nodes discovered in each XML file), <code>recursivePrependURLs</code> will affect all of the parsed LoaderMax-related URLs in all 3 documents. If you'd prefer to <i>only</i> have the URLs affected that are in the XML file that this XMLLoader is loading, use <code>prependURLs</code> instead of <code>recursivePrependURLs</code>.
 		 * 
 		 * 		<br /><br />----EVENT HANDLER SHORTCUTS----</li>
@@ -370,8 +376,8 @@ function completeHandler(event:LoaderMax):void {
 		 * 
 		 * var xmlLoader:XMLLoader = new XMLLoader("xml/doc.xml", {name:"xmlDoc", onComplete:completeHandler});<br />
 		 * function completeHandler(event:Event):void {<br />
-		 * &nbsp;&nbsp;   var imgLoader:ImageLoader = xmlLoader.getLoader("imageInXML") as ImageLoader;<br />
-		 * &nbsp;&nbsp;   addChild(imgLoader.content);<br />
+		 *    var imgLoader:ImageLoader = xmlLoader.getLoader("imageInXML") as ImageLoader;<br />
+		 *    addChild(imgLoader.content);<br />
 		 * }<br /><br /></code>
 		 * 
 		 * The static <code>LoaderMax.getLoader()</code> method can be used instead which searches all loaders.
@@ -389,8 +395,8 @@ function completeHandler(event:LoaderMax):void {
 		 * 
 		 * var loader:XMLLoader = new XMLLoader("xml/doc.xml", {name:"xmlDoc", onComplete:completeHandler});<br />
 		 * function completeHandler(event:Event):void {<br />
-		 * &nbsp;&nbsp;   var subloadedImage:Bitmap = loader.getContent("imageInXML");<br />
-		 * &nbsp;&nbsp;   addChild(subloadedImage);<br />
+		 *    var subloadedImage:Bitmap = loader.getContent("imageInXML");<br />
+		 *    addChild(subloadedImage);<br />
 		 * }<br /><br /></code>
 		 * 
 		 * The static <code>LoaderMax.getContent()</code> method can be used instead which searches all loaders.
@@ -456,6 +462,7 @@ function completeHandler(event:LoaderMax):void {
 				} else {
 					v[s] = value;
 				}
+				
 			}
 			return v;
 		}
@@ -473,32 +480,37 @@ function completeHandler(event:LoaderMax):void {
 		 * @param toLoad The LoaderMax instance to which <strong>ONLY</strong> parsed loaders that have a <code>load="true"</code> attribute defined in the XML should be appended. These loaders will also be appended to the LoaderMax defined in the <code>all</code> parameter.
 		 */
 		public static function parseLoaders(xml:XML, all:LoaderMax, toLoad:LoaderMax=null):void {
-			var loader:LoaderCore, queue:LoaderMax, curName:String, replaceText:Array, loaderClass:Class, i:int;
-			for each (var node:XML in xml.children()) {
-				curName = String(node.name()).toLowerCase();
-				if (curName == "loadermax") {
-					queue = all.append(new LoaderMax(_parseVars(node))) as LoaderMax;
-					if (toLoad != null && queue.vars.load) {
-						toLoad.append(queue);
-					}
+			var node:XML;
+			var nodeName:String = String(xml.name()).toLowerCase();
+			if (nodeName == "loadermax") {
+				var queue:LoaderMax = all.append(new LoaderMax(_parseVars(xml))) as LoaderMax;
+				if (toLoad != null && queue.vars.load) {
+					toLoad.append(queue);
+				}
+				
+				for each (node in xml.children()) {
 					parseLoaders(node, queue, toLoad);
-					if ("replaceURLText" in queue.vars) {
-						replaceText = queue.vars.replaceURLText.split(",");
-						for (i = 0; i < replaceText.length; i+=2) {
-							queue.replaceURLText(replaceText[i], replaceText[i+1], false);
-						}
+				}
+				
+				if ("replaceURLText" in queue.vars) {
+					var replaceText:Array = queue.vars.replaceURLText.split(",");
+					for (var i:int = 0; i < replaceText.length; i += 2) {
+						queue.replaceURLText(replaceText[i], replaceText[i+1], false);
 					}
-					if ("prependURLs" in queue.vars) {
-						queue.prependURLs(queue.vars.prependURLs, false);
+				}
+				if ("prependURLs" in queue.vars) {
+					queue.prependURLs(queue.vars.prependURLs, false);
+				}
+			} else {
+				if (nodeName in _types) {
+					var loaderClass:Class = _types[nodeName];
+					var loader:LoaderCore = all.append(new loaderClass(xml.@url, _parseVars(xml)));
+					if (toLoad != null && loader.vars.load) {
+						toLoad.append(loader);
 					}
-				} else {
-					if (curName in _types) {
-						loaderClass = _types[curName];
-						loader = all.append(new loaderClass(node.@url, _parseVars(node)));
-						if (toLoad != null && loader.vars.load) {
-							toLoad.append(loader);
-						}
-					}
+				}
+				
+				for each (node in xml.children()) {
 					parseLoaders(node, all, toLoad);
 				}
 			}
@@ -540,7 +552,7 @@ function completeHandler(event:LoaderMax):void {
 			dispatchEvent(new LoaderEvent(RAW_LOAD, this, "", _content));
 			_initted = true;
 			
-			_loadingQueue = new LoaderMax({name:this.name + "_Queue"});
+			_loadingQueue = new LoaderMax({name:this.name + "_Queue", maxConnections:(uint(this.vars.maxConnections) || 2), skipFailed:Boolean(this.vars.skipFailed != false), skipPaused:Boolean(this.vars.skipPaused != false)});
 			_parsed = new LoaderMax({name:this.name + "_ParsedLoaders", paused:true});
 			parseLoaders(_content as XML, _parsed, _loadingQueue);
 			if (_parsed.numChildren == 0) {

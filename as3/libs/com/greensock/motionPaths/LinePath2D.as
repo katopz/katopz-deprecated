@@ -48,7 +48,7 @@ addChild(path);
 
 //create an array containing 30 blue squares
 var boxes:Array = [];
-for (var i:int = 0; i < 30; i++) {
+for (var i:int = 0; i &lt; 30; i++) {
 	boxes.push(createSquare(10, 0x0000FF));
 }
 
