@@ -29,6 +29,11 @@ package com.sleepydesign.components.items
 
 		protected var _skin:SDItemSkin
 
+		public function get skin():SDItemSkin
+		{
+			return _skin;
+		}
+
 		public var loaderClip:MacLoadingClip;
 
 		//private var _hitArea:Sprite;
@@ -69,10 +74,11 @@ package com.sleepydesign.components.items
 			// loader
 			addChild(loaderClip = new MacLoadingClip(0xFFFFFF));
 			loaderClip.x = _skin.imgClip.x + _skin.imgClip.width * .5;
-			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5 + loaderClip.height * .5;
+			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5;
 
 			TweenLite.defaultEase = Quad.easeOut;
-			TweenLite.to(this, .25, {autoAlpha: 1});
+			alpha = 1;
+			visible = true;
 
 			// mouse effect
 			TweenPlugin.activate([GlowFilterPlugin]);
@@ -104,13 +110,13 @@ package com.sleepydesign.components.items
 			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 		}
 
-		private function onMouseOver(event:MouseEvent):void
+		protected function onMouseOver(event:MouseEvent):void
 		{
 			if (!isSelected)
-				TweenLite.to(this, .25, {glowFilter: {color: 0xFFFFFF, blurX: 4, blurY: 4, strength: 1, alpha: .75}});
+				TweenLite.to(_skin, .25, {glowFilter: {color: 0xFFFFFF, blurX: 4, blurY: 4, strength: 1, alpha: .75}});
 		}
 
-		private function onMouseOut(event:MouseEvent):void
+		protected function onMouseOut(event:MouseEvent):void
 		{
 			if (!isSelected)
 				restoreEffect();
@@ -118,17 +124,18 @@ package com.sleepydesign.components.items
 
 		public function restoreEffect():void
 		{
-			TweenLite.to(this, 1, {glowFilter: {color: 0xFFFFFF, blurX: 0, blurY: 0, strength: 0, alpha: 0, remove: true}});
+			TweenLite.to(_skin, .5, {glowFilter: {color: 0xFFFFFF, blurX: 0, blurY: 0, strength: 0, alpha: 0, remove: true}});
 		}
 
 		override public function show():void
 		{
-			TweenLite.to(_skin.imgClip, .25, {autoAlpha: 1, onComplete: shown});
+			TweenLite.to(_skin, .25, {autoAlpha: 1, onComplete: shown});
+			TweenLite.to(_skin.imgClip, .25, {autoAlpha: 1});
 		}
 
 		override public function hide():void
 		{
-			TweenLite.to(_skin.imgClip, .25, {autoAlpha: 0, onComplete: hidden});
+			TweenLite.to(_skin, .25, {autoAlpha: 0, onComplete: hidden});
 		}
 
 		override public function deactivate():void
@@ -157,12 +164,7 @@ package com.sleepydesign.components.items
 				bitmap = new Bitmap(new BitmapData(imgClip.width, imgClip.height));
 				bitmap.smoothing = true;
 				imgClip.addChild(bitmap);
-				/*
-				bitmap.x = imgClip.x;
-				bitmap.y = imgClip.y;
-
-				imgClip.parent.removeChild(imgClip);
-				*/
+				imgClip.alpha = 0;
 
 				// hide loader
 				if (loaderClip)
@@ -196,7 +198,7 @@ package com.sleepydesign.components.items
 
 			if (bitmap)
 			{
-				TweenLite.killTweensOf(bitmap);
+				TweenLite.killTweensOf(_skin);
 				bitmap.bitmapData.dispose();
 			}
 
