@@ -34,7 +34,14 @@ package com.sleepydesign.components.items
 		private var _currentPageNum:int = -1;
 
 		protected var _pageSize:int;
-		protected var _itemThumbs:Array; //Dictionary;
+		protected var _itemThumbs:Array;
+
+		public function get itemThumbs():Array
+		{
+			return _itemThumbs;
+		}
+
+		//Dictionary;
 
 		private var _itemDatas:Array;
 
@@ -363,7 +370,9 @@ package com.sleepydesign.components.items
 					nextPage();
 					break;
 				default:
-					if (event.target is SDItemThumb)
+					if (event.target.parent is SDItemThumb)
+						thumbSignal.dispatch(SDItemThumb(event.target.parent).id);
+					else if (event.target is SDItemThumb)
 						thumbSignal.dispatch(SDItemThumb(event.target).id);
 					break;
 			}
