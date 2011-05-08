@@ -37,6 +37,11 @@ package com.sleepydesign.net
 
 		public static var loaderDict:Dictionary = new Dictionary(true);
 
+		public static function getLoader(uri:String):DisplayObject
+		{
+			return loaderDict[uri];
+		}
+		
 		public static function setLoader(uri:String, loaderClip:DisplayObject):void
 		{
 			loaderDict[uri] = loaderClip;
