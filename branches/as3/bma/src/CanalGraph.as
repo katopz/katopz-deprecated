@@ -431,9 +431,9 @@ package {
 						
 						floodObject.canelName = item.NAME;
 						
-						floodObject.height = Number(item.VALUE)
-						floodObject.left =  Number(item.LEFT)
-						floodObject.right =  Number(item.RIGHT)
+						floodObject.height = Number(item.VALUE).toFixed(2);
+						floodObject.left =  Number(item.LEFT);
+						floodObject.right =  Number(item.RIGHT);
 
 						sectionArray[j] = section.extra.graph.addChild(new MovieClip());
 
