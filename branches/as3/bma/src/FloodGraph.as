@@ -195,10 +195,10 @@ package {
 			data3 = data3.concat(_data0);
 			
             graph0.width = data.STATION.length() * 760 / 20;
-            graph0.width = Math.max(graph0.width, 760);
+            graph0.width = .5*Math.max(graph0.width, 760);
 			
             graph1.width = data.STATION.length() * 760 / 20;
-            graph1.width = Math.max(graph1.width, 760);
+            graph1.width =.5* Math.max(graph1.width, 760);
 			
 			//trace(data)
 			
