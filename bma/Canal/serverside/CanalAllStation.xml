@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CANAL>
+<STATION id="BK01">
+  <NAME>ช่วงถนนกรุงเทพ-นนท์ เขตบางซื่อ</NAME>
+  <VALUE>0.159</VALUE>
+  <STATUS>0</STATUS>
+  <CANAL_NAME>คลองบางเขน</CANAL_NAME>
+</STATION>
+<STATION id="BK02">
+  <NAME>ช่วงถนนประชาชื่น เขตจตุจักร</NAME>
+  <VALUE>0.064</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางเขน</CANAL_NAME>
+  </STATION>
+  <STATION id="BK03">
+    <NAME>ช่วงถนนวิภาวดี เขตหลักสี่</NAME>
+    <VALUE>0.39</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางเขน</CANAL_NAME>
+  </STATION>
+  <STATION id="BS01">
+    <NAME>ช่วงถนนพระรามที่ 5 เขตบางซื่อ</NAME>
+    <VALUE>-0.582</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางซื่อ</CANAL_NAME>
+  </STATION>
+  <STATION id="BS02">
+    <NAME>ช่วงถนนพหลโยธิน เขตจตุจักร</NAME>
+    <VALUE>-0.502</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางซื่อ</CANAL_NAME>
+  </STATION>
+  <STATION id="BS03">
+    <NAME>ช่วงถนนวิภาวดี เขตจตุจักร</NAME>
+    <VALUE>0.189</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางซื่อ</CANAL_NAME>
+  </STATION>
+  <STATION id="BS04">
+    <NAME>ช่วงถนนรัชดาภิเษก(เจ้าพระยาปาร์ค) เขตดินแดง</NAME>
+    <VALUE>0.419</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางซื่อ</CANAL_NAME>
+  </STATION>
+  <STATION id="KP01">
+    <NAME>ช่วงสถานีน้ำอุโมงค์คลองเปรมประชากร เขตบางซื่อ</NAME>
+    <VALUE>-1.116</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองเปรมประชากร</CANAL_NAME>
+  </STATION>
+  <STATION id="KP02">
+    <NAME>ช่วงวัดเทวสุนทร เขตจตุจักร</NAME>
+    <VALUE>0.079</VALUE>
+    <STATUS>1</STATUS>
+    <CANAL_NAME>คลองเปรมประชากร</CANAL_NAME>
+  </STATION>
+  <STATION id="KP03">
+    <NAME>ช่วง สน.ดอนเมือง เขตดอนเมือง</NAME>
+    <VALUE>0.616</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองเปรมประชากร</CANAL_NAME>
+  </STATION>
+  <STATION id="LP01">
+    <NAME>ช่วงถนนประดิษฐ์มนูธรรม เขตวังทองหลาง</NAME>
+    <VALUE>0.088</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองลาดพร้าว</CANAL_NAME>
+  </STATION>
+  <STATION id="LP02">
+    <NAME>ช่วงวัดลาดพร้าว เขตลาดพร้าว</NAME>
+    <VALUE>0.376</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองลาดพร้าว</CANAL_NAME>
+  </STATION>
+  <STATION id="LP03">
+    <NAME>ช่วงซอยเสนานิคม เขตลาดพร้าว</NAME>
+    <VALUE>0.354</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองลาดพร้าว</CANAL_NAME>
+  </STATION>
+  <STATION id="SA01">
+    <NAME>ช่วงถนนพระรามที่ 5 เขตดุสิต</NAME>
+    <VALUE>-0.958</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองสามเสน</CANAL_NAME>
+  </STATION>
+  <STATION id="SA02">
+    <NAME>ช่วงถนนพหลโยธิน เขตพญาไท</NAME>
+    <VALUE>-0.825</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองสามเสน</CANAL_NAME>
+  </STATION>
+  <STATION id="SA03">
+    <NAME>ช่วงถนนดินแดง เขตราชเทวี</NAME>
+    <VALUE>-0.425</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองสามเสน</CANAL_NAME>
+  </STATION>
+  <STATION id="SA04">
+    <NAME>ช่วงถนนเอกมัย เขตห้วยขวาง</NAME>
+    <VALUE>-0.963</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองสามเสน</CANAL_NAME>
+  </STATION>
+  <STATION id="SS01">
+    <NAME>ช่วงคลองผดุงกรุงเกษม เขตป้อมปราบศัตรูพ่าย (โบ๊เบ๊)</NAME>
+    <VALUE>-0.168</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองแสนแสบ</CANAL_NAME>
+  </STATION>
+  <STATION id="SS02">
+    <NAME>ช่วงราชดำริ เขตปทุมวัน</NAME>
+    <VALUE>-0.079</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองแสนแสบ</CANAL_NAME>
+  </STATION>
+  <STATION id="SS03">
+    <NAME>ช่วงอโศก เขตวัฒนา</NAME>
+    <VALUE>-0.069</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองแสนแสบ</CANAL_NAME>
+  </STATION>
+  <STATION id="SS04">
+    <NAME>ช่วงคลองตัน (สุขุมวิท 71)เขตวัฒนา</NAME>
+    <VALUE>-0.303</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองแสนแสบ</CANAL_NAME>
+  </STATION>
+  <STATION id="SS05">
+    <NAME>ช่วงสถานีสูบน้ำคลองเจ้าคุณสิงห์ เขตวังทองหลาง</NAME>
+    <VALUE>0.085</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองแสนแสบ</CANAL_NAME>
+  </STATION>
+  <STATION id="SS06">
+    <NAME>ช่วงซอยเสรีไทย 24 เขตบึงกุ่ม</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองแสนแสบ</CANAL_NAME>
+  </STATION>
+  <STATION id="PK01">
+    <NAME>ปากคลองตลาด เขตพระนคร</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>แม่น้ำเจ้าพระยา</CANAL_NAME>
+  </STATION>
+
+  <STATION id="MS01">
+    <NAME>คลองสวนแดน เขตตลิ่งชัน</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองมหาสวัสดิ์</CANAL_NAME>
+  </STATION>
+
+  <STATION id="MS02">
+    <NAME>ถนนพุทธมณฑลสาย 2 เขตทวีวัฒนา</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองมหาสวัสดิ์</CANAL_NAME>
+  </STATION>
+
+  <STATION id="BP01">
+    <NAME>คลองชักพระ เขตตลิ่งชัน</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางพรม</CANAL_NAME>
+  </STATION>
+
+ <STATION id="BP02">
+    <NAME>คลองฉิมพลี เขตตลิ่งชัน</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางพรม</CANAL_NAME>
+  </STATION>
+
+ <STATION id="BP03">
+    <NAME>ถนนกาญจนภิเษก เขตทวีวัฒนา</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางพรม</CANAL_NAME>
+  </STATION>
+
+ <STATION id="BP04">
+    <NAME>ถนนพุทธมณฑลสาย 3 เขตทวีวัฒนา</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางพรม</CANAL_NAME>
+  </STATION>
+.
+ <STATION id="BC01">
+    <NAME>ถนนกาญจนภิเษก เขตทวีวัฒนา</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางเชือกหนัง</CANAL_NAME>
+  </STATION>
+
+<STATION id="BC02">
+    <NAME>ถนนพุทธมณฑลสาย 2 เขตทวีวัฒนา (รร.บางเชือกหนัง)</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางเชือกหนัง</CANAL_NAME>
+  </STATION>
+
+<STATION id="BW01">
+    <NAME>ถนนพุทธมณฑลสาย 2 เขตทวีวัฒนา (รร.บางเชือกหนัง)</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางแวก</CANAL_NAME>
+  </STATION>
+
+<STATION id="BW02">
+    <NAME>ถนนพุทธมณฑลสาย 1 เขตบางแค (วัดไชยฉิมพลี)</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางแวก</CANAL_NAME>
+  </STATION>
+
+<STATION id="BW03">
+    <NAME>ถนนพุทธมณฑลสาย 2 เขตบางแค (วัดบุณยประดิษฐ์)</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางแวก</CANAL_NAME>
+  </STATION>
+
+<STATION id="BW04">
+    <NAME>คลองทวีวัฒนา เขตหนองแขม (สถานีสูบน้ำคลองบางแวก)</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางแวก</CANAL_NAME>
+  </STATION>
+
+<STATION id="PT01">
+    <NAME>ถนนพระรามที่ 2 เขตบางบอน</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองพระยาราชมนตรี</CANAL_NAME>
+  </STATION>
+
+<STATION id="BJ01">
+    <NAME>คลองบางหว้า เขตภาษีเจริญ</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางจาก</CANAL_NAME>
+  </STATION>
+
+<STATION id="BJ02">
+    <NAME>ถนนพุทธมณฑลสาย 2 เขตบางแค(บ่อสูบน้ำคลองบางจาก)</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองบางจาก</CANAL_NAME>
+  </STATION>
+
+<STATION id="PL01">
+    <NAME>ช่วง ร.ร.พิทยากรณ์พิทยาคม เขต บางขุนเทียน</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>คลองพิทยาลงกรณ์</CANAL_NAME>
+  </STATION>
+
+<STATION id="PU01">
+    <NAME>อ.เมือง จ.สมุทรปราการ</NAME>
+    <VALUE>0.205</VALUE>
+    <STATUS>0</STATUS>
+    <CANAL_NAME>สถานตากอากาศ บางปู</CANAL_NAME>
+  </STATION>
+
+
+
+
+</CANAL>

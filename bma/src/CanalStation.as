@@ -139,9 +139,12 @@ package {
 			section.extra.flood = section.addChild(new MovieClip())
 			var flood = section.extra.flood;
 			
-			if(!flood.water){
-				flood.water = flood.addChild(new Water(new Rectangle(0,-208,357,208)));
-				flood.water.y = 208
+			if(!flood.water1){
+				flood.water1 = flood.addChild(new Water(new Rectangle(0,-208,357,208),0.1,180,0x0099FF, 0x0033FF, 0x0099FF));
+				flood.water2 = flood.addChild(new Water(new Rectangle(0,-208,357,208),0.1,180,0xFFFF99, 0xFFFF33, 0xFFFF99));
+				flood.water1.y = 208;
+				flood.water2.y = 208;
+				flood.water1.visible = false;
 			}
 				
 			flood.content = new Content(flood);
@@ -169,7 +172,9 @@ package {
 				
 			}
 			
-			flood.water.height = 108+floodObject.height*factor
+			flood.water1.height = 108+floodObject.height*factor
+			flood.water2.height = 108+floodObject.height*factor
+			
 			flood.bank.left.height = 108+floodObject.left*factor;
 			flood.bank.right.height = 108+floodObject.right*factor;
 			
@@ -180,10 +185,19 @@ package {
 			sectionDetail.leftBank.text = floodObject.left;
 			sectionDetail.rightBank.text = floodObject.right;
 			
-			sectionDetail.waterValue.y = 208-flood.water.height
+			// if higher than critical value
+			if(floodObject.height < floodObject.warning)
+			{
+				flood.water1.visible = true;
+				flood.water2.visible = false;
+			}else{
+				flood.water1.visible = false;
+				flood.water2.visible = true;
+			}
+			
+			sectionDetail.waterValue.y = 208-flood.water1.height
 			sectionDetail.leftBank.y = flood.bank.left.y
 			sectionDetail.rightBank.y = flood.bank.right.y
-			
 		}
 
 		public function onSectionError(event:ContentEvent):void {
@@ -236,6 +250,8 @@ package {
 			floodObject.left =  Number(item.LEFT)
 			floodObject.right =  Number(item.RIGHT)
 			
+			floodObject.warning =  Number(item.WARNING);
+			
 			createSection(xml.STATION.@id)
 			
 		}
@@ -250,5 +266,4 @@ package {
 		}		
 		
 	}
-
 }
