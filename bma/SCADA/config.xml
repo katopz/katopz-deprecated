@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<shell id="shell" focus="SCADA">
+	
+	<!-- @src : แหล่งที่มาของข้อมูล -->
+	<!-- @target : หน้าที่จะเปิด -->
+	<!-- @ttl : เวลาที่ข้อมูลจะถูกดึงมาใหม่หน่วยเป็นมิลลิวินาที -->
+		
+	<link id="web" src="http://203.155.220.232/web/" target="_blank" />
+	<link id="bma" src="http://www.bma.go.th/" target="_blank" />
+	
+	<panel id="SCADA">
+		<foreground id="foreground" src="SCADA/foreground.swf"/>
+		<content id="SCADAMap" src="SCADA/10_map/10_map.swf" ttl="5000" >
+			<!-- ข้อมูลในเมนูด้านซ้าย -->
+			<feed id="SCADAMapList" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
+			<!-- ข้อมูลใน map -->
+			<feed id="SCADAMapData" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
+			<menu>
+				<item src="actionscript:setFocus('graph')" label="กราฟ"/>
+				<item src="actionscript:setFocus('report')" label="รายงาน"/>
+			</menu>
+		</content>
+		<content id="SCADAStation" src="SCADA/20_station/20_station.swf" ttl="5000" >
+			<!-- ข้อมูลในเมนูด้านซ้าย -->
+			<feed id="SCADAStationList" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
+			<!-- folder ที่ SCADA_XXXX.xml อยู่ -->
+			<feed id="SCADAStationData" src="SCADA/serverside/"/>
+			<menu>
+				<item src="actionscript:setFocus('map')" label="แผนที่"/>
+				<item src="actionscript:setFocus('picture')" label="รูปถ่าย"/>
+				<item src="actionscript:setFocus('graph')" label="กราฟ"/>
+				<item src="actionscript:setFocus('report')" label="รายงาน"/>
+			</menu>
+		</content>
+		<content id="SCADAGraph" src="SCADA/30_graph/30_graph.swf" ttl="5000" >
+			<!-- ข้อมูลในเมนูด้านซ้าย -->
+			<feed id="SCADAGraphList" src="SCADA/serverside/GraphList.xml"/>
+			<!-- folder ที่ SCADAAllStation_XXXX.xml อยู่ -->
+			<feed id="SCADAGraphData" src="SCADA/serverside/"/>
+			<menu>
+				<item src="actionscript:setFocus('map')" label="แผนที่"/>
+				<item src="actionscript:setFocus('station')" label="รายการสถานี"/>
+				<item src="actionscript:setFocus('report')" label="รายงาน"/>
+			</menu>
+		</content>
+		<background id="background" src="SCADA/background.swf"/>
+	</panel>
+	
+</shell>
