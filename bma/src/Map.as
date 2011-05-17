@@ -110,8 +110,9 @@ package
 
 			if (isTest)
 			{
-				dataPath = "http://localhost/yourpath/SCADA/serverside/getMapData.php";
-				dataPath = "../serverside/CanalAllStation.xml";
+				//dataPath = "http://localhost/yourpath/SCADA/serverside/getMapData.php";
+				//dataPath = "../serverside/CanalAllStation.xml";
+				dataPath = "../serverside/FloodmonAllStation.xml";
 			}
 
 			var loader:URLLoader = new URLLoader();

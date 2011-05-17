@@ -26,8 +26,6 @@ package {
 			setupWTF()
 			
 			var cursor:Cursor = new Cursor(this, iHouses.iMap);
-			
-			//test();
 		}
 		
 		private function setupWTF()
@@ -38,11 +36,13 @@ package {
             iHouses.iMap.useHandCursor = !true;
             iHouses.iMap.buttonMode = !true;
 			iHouses.iMap.visible = true;
+			iHouses.cacheAsBitmap = true;
 			
             iHouses.iMap.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			
 			//vSlider.addEventListener(SliderEvent.CHANGE, onSlide);
+			
 			iChk.selected = false;
 			onCheck();
 			iChk.addEventListener(Event.CHANGE, onCheck);
@@ -85,31 +85,7 @@ package {
 			}
 			redraw();
 		}
-		/*
-		private function redraw():void
-		{
-			iHouses.x = mouseX - x0;
-			iHouses.y = mouseY - y0
-			
-			if (iHouses.x < iMask.x-iHouses.width+iMask.width)
-			{
-				iHouses.x = iMask.x-iHouses.width+iMask.width
-			}
-			else if (iHouses.x > iMask.x)
-			{
-				iHouses.x = iMask.x
-			}
-			
-			if (iHouses.y < iMask.y-iHouses.height+iMask.height)
-			{
-				iHouses.y = iMask.y-iHouses.height+iMask.height
-			}
-			else if (iHouses.y > iMask.y)
-			{
-				iHouses.y = iMask.y
-			}
-		}
-		*/
+		
 		private function redraw():void
 		{
 			var iHouses_x:Number = iHouses.x - iHouses.width * .5;
@@ -145,16 +121,17 @@ package {
 			removeEventListener(Event.ENTER_FRAME, onDrag);
 		}
 		
-		private function onWheel(event:MouseEvent):void
+		private function onWheel(event:MouseEvent=null):void
 		{
-			stage.quality = "medium"
+			stage.quality = "medium";
+			iHouses.cacheAsBitmap = false;
 			//var oldW = iHouses.width;
 			//var oldH = iHouses.height;
 			
 			//var factorX = iHouses.scaleX;
 			//var factorY = iHouses.scaleY;
-			
-			iHouses.scaleX = iHouses.scaleY += event.delta * .05;
+			if(event)
+				iHouses.scaleX = iHouses.scaleY += event.delta * .05;
 			
 			if (iHouses.height < iMask.height)
 			{
@@ -182,23 +159,39 @@ package {
 				iHouses.scaleY = iMask.height/iHouses.height
 			}
 			
-			for (var i in houses)
+			var _hScale:Number = 1.2/iHouses.scaleX;
+			for each(var house:MovieClip in houses)
 			{
-				houses[i].balloon.scaleX = houses[i].balloon.scaleY = 1.5 + (1 - iHouses.scaleX);
+				house.balloon.scaleX = house.balloon.scaleY = _hScale;
 				//if (iHouses.width < 3*iMask.width*.5)
-				{
-					houses[i].scaleX = houses[i].scaleY = houses[i].balloon.scaleX*.8
-				}
+				
+				var _fScale:Number = (-_hScale+1.2)/5.5;
+				//if(_hScale<0.5)_hScale=.5;
+				
+				// 1.2 -> 0.4
+				// 1.2-1.2 -> 0.4-1.2 (-0.8)
+				// 0 -> -0.8
+				// 0/-1 -> -0.8/-1
+				// 0/1.5 -> 0.8/3
+				// 0 -> 0.26
+				house.scaleX = house.scaleY = _hScale+_fScale;
+				
+				house.balloon.y = house.balloon.extra.y+iHouses.scaleX*2.8;
 			}
-			
-			//trace(iHouses.mouseX-_mouseX)
-			//trace(iHouses.x,factorX / iHouses.scaleX )
-			//iHouses.x = iMask.x - iHouses.width * (factorX / iHouses.scaleX);
-			//trace("*"+iHouses.x )
-			//iHouses.y = iMask.y - iHouses.height*factorY/iHouses.scaleY
-			
+			trace(house.scaleX)
 			redraw();
-			stage.quality = "high"
+			TweenMax.to(this, 0.5, { onComplete: speedup} )
+		}
+		
+		private function speedup():void
+		{
+			stage.quality = "high";
+			iHouses.cacheAsBitmap = true;
+		}
+		
+		public override function setup(xml) 
+		{
+			onWheel();
 		}
 	}
 }
