@@ -40,8 +40,6 @@ package {
 			setupWTF()
 			
 			var cursor:Cursor = new Cursor(this, iHouses.iMap);
-			
-			//test();
 		}
 		
 		private function setupWTF()
@@ -58,6 +56,9 @@ package {
 			addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			
 			//vSlider.addEventListener(SliderEvent.CHANGE, onSlide);
+			
+			iChk.selected = false;
+			onCheck();
 			iChk.addEventListener(Event.CHANGE, onCheck);
 		}
 		
