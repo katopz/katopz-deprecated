@@ -43,10 +43,12 @@ package {
 			addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			
 			//vSlider.addEventListener(SliderEvent.CHANGE, onSlide);
+			iChk.selected = false;
+			onCheck();
 			iChk.addEventListener(Event.CHANGE, onCheck);
 		}
 		
-		private function onCheck(event:Event):void
+		private function onCheck(event:Event=null):void
 		{
 			isChk = !isChk;
 			for (var i in houses)
