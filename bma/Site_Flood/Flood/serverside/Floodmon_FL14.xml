@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FLOODMON>
+  <STATION id="FL14">
+    <NAME>ถนนพิษณุโลก ช่วงสนามม้านางเลิ้ง เขตดุสิต</NAME>
+    <VALUE>10</VALUE>
+    <STATUS>1</STATUS>
+    <STATUS_PUMP>0</STATUS_PUMP>
+    <ROAD_HEIGHT>30</ROAD_HEIGHT>
+    <LAST_START>26-7-2007 02:15:00</LAST_START>
+    <LAST_STOP>26-7-2007 04:35:00</LAST_STOP>
+    <MAX>5.00</MAX>
+    <ALERT>ไม่มีการท่วมขัง</ALERT>
+    <ALARM_LEVEL1>5</ALARM_LEVEL1>
+    <ALARM_LEVEL2>10</ALARM_LEVEL2>
+    <ALARM_LEVEL3>30</ALARM_LEVEL3>
+    <ALARM_LEVEL4>50</ALARM_LEVEL4>
+    <ALARM_LEVEL5>100</ALARM_LEVEL5>
+  </STATION>
+  </FLOODMON>

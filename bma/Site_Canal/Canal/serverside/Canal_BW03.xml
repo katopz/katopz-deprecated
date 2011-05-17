@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CANAL>
+  <STATION id="BK01">
+    <NAME>ช่วงถนนประชาชื่น เขตจตุจักร</NAME>
+    <VALUE>0.064</VALUE>
+    <STATUS>1</STATUS>
+    <CANAL_NAME>คลองบางเขน</CANAL_NAME>
+    <LEFT>0.955</LEFT>
+    <RIGHT>1.016</RIGHT>
+    <LONGITUDE>100'32'34.59241''</LONGITUDE>
+    <LATITUDE>13'50'57.80856''</LATITUDE>
+    <WARNING>0.80</WARNING>
+    <ALARM_WARNING>ระดับน้ำปรกติ</ALARM_WARNING>
+    <ALARM_EDGE>ปรกติ</ALARM_EDGE>
+  </STATION>
+</CANAL>
