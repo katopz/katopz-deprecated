@@ -14,8 +14,7 @@ package com.sleepydesign.components
 		{
 			super(style);
 
-			_back = new Shape();
-			addChild(_back);
+			addChild(_back = new Shape);
 
 			setSize(100, 100);
 			scrollRect = _back.getRect(_back.parent);
@@ -36,7 +35,12 @@ package com.sleepydesign.components
 		{
 			_back.graphics.clear();
 			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
-			_back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
+
+			if (_style.BACKGROUND_ALPHA > 0)
+				_back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
+
+			if (_style.BACKGROUND_ALPHA == 0 && _style.BORDER_ALPHA == 0)
+				_back.visible = false;
 
 			_back.graphics.drawRect(0, 0, _width, _height);
 			_back.graphics.endFill();

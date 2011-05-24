@@ -1,15 +1,10 @@
-package com.sleepydesign.components.items
+package com.sleepydesign.components
 {
-	import com.sleepydesign.components.SDScrollBar;
-	import com.sleepydesign.components.SDScrollPane;
-	import com.sleepydesign.components.SDStyle;
 	import com.sleepydesign.display.SDClip;
-	import com.sleepydesign.system.DebugUtil;
 	import com.sleepydesign.utils.ArrayUtil;
 	import com.sleepydesign.utils.MathUtil;
 
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -17,7 +12,7 @@ package com.sleepydesign.components.items
 
 	import org.osflash.signals.Signal;
 
-	public class SDItemPane extends SDClip
+	public class SDDOPane extends SDClip
 	{
 		// base
 		protected var _controlClip:Sprite;
@@ -45,9 +40,6 @@ package com.sleepydesign.components.items
 
 		private var _itemDatas:Array;
 
-		// skin
-		protected var _itemClass:Class;
-
 		/**return id*/
 		public var thumbSignal:Signal = new Signal(String);
 
@@ -56,21 +48,20 @@ package com.sleepydesign.components.items
 
 		private var _style:SDStyle;
 
-		public function create(prevButton:DisplayObject, nextButton:DisplayObject, boundRect:Rectangle, itemClass:Class, style:SDStyle):void
+		public function create(prevButton:DisplayObject, nextButton:DisplayObject, boundRect:Rectangle, style:SDStyle, pageSize:int = 8):void
 		{
 			_prevButton = prevButton;
 			_nextButton = nextButton;
+			_style = style;
+			_pageSize = pageSize;
 
 			_canvasClip = new Sprite;
-
-			_canvasClip.graphics.beginFill(0xFF0000, 0);
+			_canvasClip.graphics.lineStyle(0, 0, 0);
 			_canvasClip.graphics.drawRect(0, 0, boundRect.width, boundRect.height);
 			_canvasClip.graphics.endFill();
 
 			_canvasClip.x = boundRect.x;
 			_canvasClip.y = boundRect.y;
-
-			_style = style;
 
 			// base
 			addChild(_canvasClip);
@@ -84,11 +75,6 @@ package com.sleepydesign.components.items
 
 			enablePrev = false;
 			enableNext = false;
-
-			_itemClass = itemClass;
-
-			if (!_pageSize)
-				_pageSize = 8;
 
 			// canvas
 			_canvasRect = boundRect;
@@ -152,8 +138,11 @@ package com.sleepydesign.components.items
 
 			// dispose view
 			if (_itemThumbs)
-				for each (var itemThumb:SDItemThumb in _itemThumbs)
-					itemThumb.destroy();
+				for each (var dObject:DisplayObject in _itemThumbs)
+				{
+					if (dObject.parent && dObject.parent.getChildIndex(dObject) > -1)
+						dObject.parent.removeChild(dObject);
+				}
 
 			_itemThumbs = [];
 
@@ -174,13 +163,15 @@ package com.sleepydesign.components.items
 			}
 
 			var i:int;
-			var itemThumb:SDItemThumb;
+			var itemThumb:DisplayObject;
+			var index:int;
 
 			// hide all item itemThumb
 			for each (itemThumb in _itemThumbs)
 			{
 				// don't hide item near selected page
-				if (itemThumb.index < pageNum * _pageSize && itemThumb.index > pageNum * _pageSize)
+				index = itemThumb.parent.getChildIndex(itemThumb);
+				if (index < pageNum * _pageSize && index > pageNum * _pageSize)
 				{
 					deactivateItemThumb(itemThumb);
 				}
@@ -193,7 +184,7 @@ package com.sleepydesign.components.items
 			{
 				for (i = _currentPageNum * _pageSize; i < (_currentPageNum + 1) * _pageSize; i++)
 				{
-					var itemData:ItemData = _itemDatas[i] as ItemData;
+					var itemData:DisplayObject = _itemDatas[i];
 
 					// no data? skip then
 					if (!itemData)
@@ -250,30 +241,33 @@ package com.sleepydesign.components.items
 			setPage(_currentPageNum, true);
 		}
 
-		protected function deactivateItemThumb(itemThumb:SDItemThumb):void
+		protected function deactivateItemThumb(dObject:DisplayObject):void
 		{
 			// hide
-			itemThumb.hide();
+			dObject.visible = false;
 		}
 
-		protected function setupThumb(i:int, itemData:ItemData):SDItemThumb
+		protected function setupThumb(i:int, dObject:DisplayObject):DisplayObject
 		{
-			return addThumb(new SDItemThumb(i, itemData.id, itemData.title, new _itemClass, itemData.type));
+			return addThumb(dObject);
 		}
 
-		public function addThumb(itemThumb:SDItemThumb):SDItemThumb
+		public function addThumb(dObject:DisplayObject):DisplayObject
 		{
-			_canvas.addChild(itemThumb);
-			return itemThumb;
+			if (dObject.parent && dObject.parent.getChildIndex(dObject) > -1)
+				dObject.parent.removeChild(dObject);
+
+			_canvas.addChild(dObject);
+			return dObject;
 		}
 
-		public function removeThumb(itemThumb:SDItemThumb):void
+		public function removeThumb(dObject:DisplayObject):void
 		{
-			if (!itemThumb)
+			if (!dObject)
 				return;
 
-			var index:uint = ArrayUtil.removeItem(_itemThumbs, itemThumb);
-			itemThumb.destroy();
+			var index:uint = ArrayUtil.removeItem(_itemThumbs, dObject);
+			_itemThumbs.parent.removeChild(_itemThumbs);
 
 			if (_itemDatas && (index > -1))
 			{
@@ -292,27 +286,27 @@ package com.sleepydesign.components.items
 
 		public function removeAllThumb():void
 		{
-			for each (var itemThumb:SDItemThumb in _itemThumbs)
-				itemThumb.destroy();
+			for each (var itemThumb:DisplayObject in _itemThumbs)
+				itemThumb.parent.removeChild(itemThumb);
 		}
 
-		public function getThumbByID(thumbID:String):SDItemThumb
+		public function getThumbByName(thumbID:String):DisplayObject
 		{
-			for each (var itemThumb:SDItemThumb in _itemThumbs)
+			for each (var itemThumb:DisplayObject in _itemThumbs)
 			{
-				if (itemThumb.id == thumbID)
+				if (itemThumb.name == thumbID)
 					return itemThumb;
 			}
 
 			return null;
 		}
 
-		public function removeThumbByID(thumbID:String):void
+		public function removeThumbByName(thumbID:String):void
 		{
-			removeThumb(getThumbByID(thumbID));
+			removeThumb(getThumbByName(thumbID));
 		}
 
-		protected function applyThumb(i:int, itemThumb:SDItemThumb, itemData:ItemData):void
+		protected function applyThumb(i:int, itemThumb:DisplayObject, itemData:Object):void
 		{
 			var colSize:int = _canvasRect.width / itemThumb.width;
 			var rowSize:int = _canvasRect.height / itemThumb.height;
@@ -370,10 +364,10 @@ package com.sleepydesign.components.items
 					nextPage();
 					break;
 				default:
-					if (event.target.parent is SDItemThumb)
-						thumbSignal.dispatch(SDItemThumb(event.target.parent).id);
-					else if (event.target is SDItemThumb)
-						thumbSignal.dispatch(SDItemThumb(event.target).id);
+					if (event.target.parent is DisplayObject)
+						thumbSignal.dispatch(DisplayObject(event.target.parent).name);
+					else if (event.target is DisplayObject)
+						thumbSignal.dispatch(DisplayObject(event.target).name);
 					break;
 			}
 		}
@@ -391,6 +385,11 @@ package com.sleepydesign.components.items
 		public function draw():void
 		{
 			resetPage();
+		}
+
+		public function hideItems():void
+		{
+			showItems([]);
 		}
 	}
 }
