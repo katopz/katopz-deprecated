@@ -12,6 +12,8 @@ package com.sleepydesign.components.items
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.filters.BlurFilter;
+	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 
@@ -72,7 +74,7 @@ package com.sleepydesign.components.items
 				setTitle(title);
 
 			// loader
-			addChild(loaderClip = new MacLoadingClip(0xFFFFFF));
+			addChild(loaderClip = new MacLoadingClip(0x666666));
 			loaderClip.x = _skin.imgClip.x + _skin.imgClip.width * .5;
 			loaderClip.y = _skin.imgClip.y + _skin.imgClip.height * .5;
 

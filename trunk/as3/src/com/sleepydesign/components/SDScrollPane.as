@@ -2,7 +2,7 @@ package com.sleepydesign.components
 {
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Quad;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 
@@ -36,8 +36,7 @@ package com.sleepydesign.components
 		{
 			super(style);
 
-			_back = new Shape();
-			addChild(_back);
+			addChild(_back = new Shape);
 
 			_vScrollBar = new SDScrollBar(SDSlider.VERTICAL);
 			addChild(_vScrollBar);
@@ -162,7 +161,13 @@ package com.sleepydesign.components
 
 			_back.graphics.clear();
 			_back.graphics.lineStyle(_style.BORDER_THICK, _style.BORDER_COLOR, _style.BORDER_ALPHA, true);
-			_back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
+			
+			if(_style.BACKGROUND_ALPHA>0)
+				_back.graphics.beginFill(_style.BACKGROUND, _style.BACKGROUND_ALPHA);
+			
+			if (_style.BACKGROUND_ALPHA == 0 && _style.BORDER_ALPHA == 0)
+				_back.visible = false;
+			
 			_back.graphics.drawRoundRect(-pad / 2, -pad / 2, _vScrollBar.visible ? _vScrollBar.width + _width + pad : _width + pad, _hScrollBar.visible ? _hScrollBar.height + _height + pad : _height + pad, pad);
 			_back.graphics.endFill();
 
