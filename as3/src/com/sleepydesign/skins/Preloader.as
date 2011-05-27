@@ -17,13 +17,19 @@ package com.sleepydesign.skins
 	{
 		public static var backgroundColor:Number = 0xFFFFFF;
 
-		private var _loader:Sprite;
 		private var _bg:Sprite;
 		private var _containter:DisplayObjectContainer;
 
 		private var _stage:Stage;
 
 		protected var _customSize:Rectangle;
+
+		private var _loaderClip:DisplayObject;
+
+		public function get loaderClip():DisplayObject
+		{
+			return _loaderClip;
+		}
 
 		public function Preloader(containter:DisplayObjectContainer, customSize:Rectangle = null, loaderClip:DisplayObject = null)
 		{
@@ -39,9 +45,9 @@ package com.sleepydesign.skins
 			addChild(_bg);
 
 			// loader
-			LoaderUtil.defaultLoaderClip = _loader = addChild(loaderClip || new MacLoadingClip()) as Sprite;
-			_loader.x = _customSize.width / 2;
-			_loader.y = _customSize.height / 2;
+			LoaderUtil.defaultLoaderClip = _loaderClip = addChild(loaderClip || new MacLoadingClip()) as Sprite;
+			_loaderClip.x = _customSize.width / 2;
+			_loaderClip.y = _customSize.height / 2;
 
 			mouseEnabled = false;
 			alpha = 0;
@@ -93,11 +99,11 @@ package com.sleepydesign.skins
 		{
 			_stage.removeEventListener(Event.RESIZE, onResize);
 
-			if (_loader)
+			if (_loaderClip)
 			{
-				TweenLite.killTweensOf(_loader);
-				_loader.visible = false;
-				_loader.parent.removeChild(_loader);
+				TweenLite.killTweensOf(_loaderClip);
+				_loaderClip.visible = false;
+				_loaderClip.parent.removeChild(_loaderClip);
 			}
 
 			if (_bg)
@@ -106,7 +112,7 @@ package com.sleepydesign.skins
 				_bg.parent.removeChild(_bg);
 			}
 
-			if (LoaderUtil.defaultLoaderClip == _loader)
+			if (LoaderUtil.defaultLoaderClip == _loaderClip)
 				LoaderUtil.defaultLoaderClip = null;
 
 			super.destroy()

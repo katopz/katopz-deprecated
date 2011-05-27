@@ -10,6 +10,9 @@ package com.sleepydesign.site
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.events.Event;
+	import flash.events.ProgressEvent;
+
+	import org.osflash.signals.Signal;
 
 	public class Page extends SDSprite
 	{
@@ -39,6 +42,29 @@ package com.sleepydesign.site
 		public function get data():PageData
 		{
 			return _data;
+		}
+
+		public var loadSignal:Signal = new Signal(int /*bytesLoaded*/, int /*bytesTotal*/);
+
+		private var _bytesLoadeds:Array = [];
+		private var _bytesTotals:Array = [];
+
+		public function get bytesTotal():int
+		{
+			var _bytesTotal:int = 0;
+			for (var i:int = 0; i < _bytesTotals.length; i++)
+				_bytesTotal = _bytesTotals[i]
+
+			return _bytesTotal;
+		}
+
+		public function get bytesLoaded():int
+		{
+			var _bytesLoaded:int = 0;
+			for (var i:int = 0; i < _bytesLoadeds.length; i++)
+				_bytesLoaded = _bytesLoadeds[i]
+
+			return _bytesLoaded;
 		}
 
 		public function Page(container:DisplayObjectContainer = null, xml:XML = null, focus:String = "")
@@ -194,9 +220,25 @@ package com.sleepydesign.site
 		}
 		*/
 
+		private function onProgress(event:ProgressEvent):void
+		{
+			var loader:Loader = event.target.loader as Loader;
+			var index:int = _pageLoaders.indexOf(loader);
+
+			_bytesTotals[index] = event.bytesTotal;
+			_bytesLoadeds[index] = event.bytesLoaded;
+
+			if (parent is Page)
+				Page(parent).loadSignal.dispatch(bytesLoaded, bytesTotal);
+		}
+
 		protected function onLoad(event:Event):void
 		{
-			if (event.type == "complete")
+			if (event.type == ProgressEvent.PROGRESS)
+			{
+				onProgress(event as ProgressEvent);
+			}
+			else if (event.type == "complete")
 			{
 				var _parent:Page = event.target.loader.parent as Page;
 				if (_parent)
@@ -241,7 +283,7 @@ package com.sleepydesign.site
 					// reset
 					_totalLoaded = 0;
 					_pageLoaders = [];
-					
+
 					LoaderUtil.hideLoader();
 				}
 				else
