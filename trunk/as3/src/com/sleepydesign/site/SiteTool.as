@@ -8,8 +8,11 @@ package com.sleepydesign.site
 	import com.sleepydesign.utils.DisplayObjectUtil;
 	import com.sleepydesign.utils.StringUtil;
 	import com.sleepydesign.utils.XMLUtil;
-	
+
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Loader;
+
+	import org.osflash.signals.Signal;
 
 	public class SiteTool implements IDestroyable
 	{
@@ -48,6 +51,16 @@ package com.sleepydesign.site
 			// root page
 			_page = new Page(_container, _xml, _xml.@focus);
 			_page.name = "site";
+
+			// add pregress via root page
+			_page.loadSignal.add(onLoad);
+		}
+
+		public var loadSignal:Signal = new Signal(int /*bytesLoaded*/, int /*bytesTotal*/);
+
+		private function onLoad(bytesLoaded:int, bytesTotal:int):void
+		{
+			loadSignal.dispatch(bytesLoaded, bytesTotal);
 		}
 
 		public function setFocusByPath(path:String):void
@@ -72,7 +85,7 @@ package com.sleepydesign.site
 
 			// external?
 			var _focusXML:XML = XMLUtil.getXMLById(_xml, path.split("/").pop());
-			if (URLUtil.isURL(_focusXML.@src))
+			if (URLUtil.isURL(_focusXML.@src) && String(_focusXML.@src).indexOf(".swf") == -1)
 			{
 				// not getURL yet (twice call from external tree/site)
 				if (_currentPaths.toString() != _paths.toString())
@@ -177,11 +190,12 @@ package com.sleepydesign.site
 		// ____________________________________________ Destroy ____________________________________________
 
 		private var _isDestroyed:Boolean;
+
 		public function get destroyed():Boolean
 		{
 			return this._isDestroyed;
 		}
-		
+
 		public function destroy():void
 		{
 			super.destroy();
