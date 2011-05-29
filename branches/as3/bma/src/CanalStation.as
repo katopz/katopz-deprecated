@@ -15,6 +15,8 @@ package {
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
+	
+	import com.sleepydesign.containers.Cursor;
 
 	public class CanalStation extends Content{
 		
@@ -50,6 +52,8 @@ package {
 			sectionDetail = addChild(new iSectionDetail());
 			sectionDetail.x = iSection.x
 			sectionDetail.y = iSection.y
+				
+			initTrend();
 			
 			//test()
 		}
@@ -261,9 +265,145 @@ package {
 		public override function onUpdate(event:ContentEvent):void {
 			if(event.content.name=="CanalStation"){
 				setStation(event.data.@id,event.data.CANAL_NAME)
-				setSection(event.data.@id)
+				setSection(event.data.@id);
+				
+				trace(" ! setGraph : " + event.data.@id);
+				
+				try{
+					setGraph(event.data.@id);
+				}catch(e:*){trace(e)};
 			}
 		}		
 		
+		//_________________________________________________________________ History
+		
+		private var graph;
+		private var popdown;
+		
+		public function initTrend():void
+		{
+			Menu.trendSignal.add(onTrend);
+			
+			popdown = this["iPopDown"] as MovieClip;
+			
+			popdown.iGraph.mask = GraphicUtil.createRect(popdown.iGraph);
+			
+			graph = new Content(popdown.iGraph);
+			graph.extra = new Object();
+			
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			
+			addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
+			
+			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
+			
+			popdown.visible = false;
+			
+			//test();
+		}
+		
+		private function onTrend():void
+		{
+			popdown.visible = !popdown.visible; 
+		}
+		
+		private function mouseUpHandler(event:MouseEvent):void
+		{
+			if (graph.extra.flood)
+			{
+				graph.extra.flood.stopDrag();
+			}
+		}
+		
+		private function mouseDownHandler(event:MouseEvent):void
+		{
+			var min = 0
+			var max = -(graph.extra.flood.width - 763);
+			
+			graph.extra.flood.startDrag(false, new Rectangle(min, graph.extra.flood.y, max, 0));
+		}
+		
+		public function setGraph(iID)
+		{
+			var dataPath = XMLUtil.getNodeById(config, "CanalHistoryData").@src;
+			
+			if (isTest)
+				dataPath = "../serverside/";
+			
+			var loader:URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, xmlLoadCompleteHandler);
+			
+			var request = new URLRequest(URLUtil.killCache(dataPath + "CanalHistory_" + iID + ".xml"))
+			loader.load(request);
+			
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
+		}
+		
+		public function xmlLoadCompleteHandler(event:Event):void
+		{
+			var loader:URLLoader = event.target as URLLoader;
+			var data:XML = new XML(loader.data);
+			
+			var dataProvider:Array = new Array();
+			var captionNum = 0;
+			
+			var baseY = 104 - 29;
+			var graphFactor = 70 / 100;
+			
+			if (graph.extra.flood)
+				graph.removeChild(graph.extra.flood);
+			
+			graph.extra.flood = graph.addChild(new MovieClip());
+			graph.extra.flood.y = baseY
+			
+			var myFlood = graph.extra.flood.addChild(new Sprite());
+			
+			// VALUE
+			var floodShape = myFlood.addChild(new Shape());
+			var flood = floodShape.graphics;
+			
+			//_________________________________________water
+			
+			// VALUE
+			flood.lineStyle(0.5, 0xFFFF00, 1);
+			flood.moveTo(0, 0);
+			
+			var stationXML = data.children()[0]
+			var total = stationXML.child("*").length();
+			
+			for (var i = total - 2; i >= 0; i--)
+			{
+				var lastXML = stationXML.children()[i + 1];
+				if (((captionNum) % 4) == 0)
+				{
+					var caption = graph.extra.flood.addChild(new iCaption());
+					caption.x = captionNum * 60 / 4;
+					caption.title.htmlText = lastXML.DATE + "<br/>" + lastXML.TIME;
+				}
+				
+				if(i == total - 2)
+					flood.moveTo(0, -graphFactor * Number(lastXML.VALUE));
+				
+				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE));
+				
+				captionNum++;
+			}
+			
+			myFlood.width *= 60 / 4;
+			
+			// VALUE
+			flood.endFill();
+			
+			graph.extra.flood.x = -(graph.extra.flood.width - 763);
+		}
+
 	}
 }

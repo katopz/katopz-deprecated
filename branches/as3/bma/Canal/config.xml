@@ -28,11 +28,14 @@
 			<feed id="CanalStationList" src="Canal/serverside/CanalAllStation.xml"/>
 			<!-- folder ที่ Canal_XXXX.xml อยู่ -->
 			<feed id="CanalStationData" src="Canal/serverside/"/>
+			<!-- folder ที่ trend อยู่ -->
+			<feed id="CanalHistoryData" src="Canal/serverside/"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
 				<item src="actionscript:setFocus('summary')" label="สรุปทุกสถานี"/>
 				<item src="actionscript:setFocus('graph')" label="กราฟ"/>
 				<item src="actionscript:setFocus('report')" label="รายงาน"/>
+				<item src="actionscript:setFocus('trend')" label="trend"/>
 			</menu>
 		</content>
 		
