@@ -25,6 +25,7 @@
 			<feed id="SCADAStationList" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
 			<!-- folder ที่ SCADA_XXXX.xml อยู่ -->
 			<feed id="SCADAStationData" src="SCADA/serverside/"/>
+			<!-- folder ที่ trend อยู่ -->
 			<feed id="SCADAHistoryData" src="SCADA/serverside/"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
