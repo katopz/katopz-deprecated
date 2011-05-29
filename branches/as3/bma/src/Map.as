@@ -31,7 +31,7 @@ package
 		public var houses:Array;
 		public var balloon:Balloon;
 		public var housesMovieClip;
-		public var isChk:Boolean = true;
+		public var isChk:Boolean = false;
 
 		public function Map()
 		{
@@ -63,6 +63,7 @@ package
 
 				house.visible = false;
 				house.isChk = true;
+				house.cacheAsBitmap = true;
 
 				//house.buttonMode = true;
 				//house.useHandCursor = true

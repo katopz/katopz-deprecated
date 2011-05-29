@@ -44,17 +44,22 @@ package {
 			//vSlider.addEventListener(SliderEvent.CHANGE, onSlide);
 			
 			iChk.selected = false;
-			onCheck();
+			//onCheck();
 			iChk.addEventListener(Event.CHANGE, onCheck);
 		}
 		
 		private function onCheck(event:Event=null):void
 		{
+			iHouses.cacheAsBitmap = false;
+			trace("//chk");
 			isChk = !isChk;
-			for (var i in houses)
+			for each(var house:MovieClip in houses)
 			{
-				houses[i].balloon.visible = isChk;
+				house.balloon.visible = isChk;
+				house.balloon.alpha = isChk?1:0;
 			}
+			trace("chk//");
+			iHouses.cacheAsBitmap = true;
 		}
 		
 		private function onSlide(event:SliderEvent):void

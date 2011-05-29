@@ -10,7 +10,7 @@
 	
 	<panel id="Flood">
 		<foreground id="foreground" src="Flood/foreground.swf"/>
-		<content id="FloodMap" src="Flood/10_map/10_map.swf" ttl="5000" >
+		<content id="FloodMap" src="Flood/10_map/10_map.swf" ttl="50000" >
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
 			<feed id="FloodMapList" src="Flood/serverside/FloodmonAllStation.xml"/>
 			<!-- ข้อมูลใน map -->

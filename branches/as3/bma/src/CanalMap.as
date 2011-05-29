@@ -58,7 +58,7 @@ package {
 			//vSlider.addEventListener(SliderEvent.CHANGE, onSlide);
 			
 			iChk.selected = false;
-			onCheck();
+			//onCheck();
 			iChk.addEventListener(Event.CHANGE, onCheck);
 		}
 		
