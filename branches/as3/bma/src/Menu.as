@@ -6,19 +6,20 @@
 
 package  {
 	
-	import flash.display.MovieClip;
-	import flash.display.Sprite;
-	import flash.system.SecurityPanel;
-	
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	
-	import fl.controls.Button;
-	import fl.events.ComponentEvent;
-
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
+	
+	import fl.controls.Button;
+	import fl.events.ComponentEvent;
+	
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.system.SecurityPanel;
+	
+	import org.osflash.signals.Signal;
 	
 	public class Menu extends Sprite{
 		
@@ -106,8 +107,17 @@ package  {
 			//setFocus(event.currentTarget.name)
 		}
 
+		public static var trendSignal:Signal = new Signal; 
+		
 		public function setFocus(id:String) {
 			trace(" >  Menu.setFocus:"+id)
+			
+			if(id == "trend")
+			{
+				trendSignal.dispatch();
+				return;
+			}
+			
 			//trace(parent.parent)
 			var shell = (parent.parent as Panel);
 			//trace(shell.setFocusByName)

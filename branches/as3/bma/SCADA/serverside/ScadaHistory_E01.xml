@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<SCADA>
+	<STATION id="E01">
+	    <NAME>ปตร. คลองสองสายใต้</NAME>
+		<LAST1>
+			<DATE>21/03/2554</DATE>
+			<TIME>11:45:00</TIME>
+			<VALUE_IN>50</VALUE_IN>
+			<VALUE_OUT>10</VALUE_OUT>
+		</LAST1>
+		<LAST2>
+			<DATE>21/03/2554</DATE>
+			<TIME>11:40:00</TIME>
+			<VALUE_IN>75</VALUE_IN>
+			<VALUE_OUT>20</VALUE_OUT>
+		</LAST2>
+		<LAST3>
+			<DATE>21/03/2554</DATE>
+			<TIME>11:35:00</TIME>
+			<VALUE_IN>25</VALUE_IN>
+			<VALUE_OUT>10</VALUE_OUT>
+		</LAST3>
+	</STATION>
+</SCADA>
