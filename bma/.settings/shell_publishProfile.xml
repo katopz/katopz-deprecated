@@ -22,10 +22,10 @@
     <qtDefaultName>1</qtDefaultName>
     <rnwkDefaultName>1</rnwkDefaultName>
     <swcDefaultName>0</swcDefaultName>
-    <flashFileName>\\XP\temp\bma\shell.swf</flashFileName>
+    <flashFileName>C:\xampp\htdocs\classes\katopz\branches\as3\bma\shell.swf</flashFileName>
     <projectorWinFileName>shell.exe</projectorWinFileName>
     <projectorMacFileName>shell.app</projectorMacFileName>
-    <htmlFileName>\\XP\temp\bma\shell.html</htmlFileName>
+    <htmlFileName>C:\xampp\htdocs\classes\katopz\branches\as3\bma\shell.html</htmlFileName>
     <gifFileName>shell.gif</gifFileName>
     <jpegFileName>shell.jpg</jpegFileName>
     <pngFileName>shell.png</pngFileName>
