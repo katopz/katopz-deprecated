@@ -25,11 +25,14 @@
 			<feed id="SCADAStationList" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
 			<!-- folder ที่ SCADA_XXXX.xml อยู่ -->
 			<feed id="SCADAStationData" src="SCADA/serverside/"/>
+			<!-- folder ที่ trend อยู่ -->
+			<feed id="SCADAHistoryData" src="SCADA/serverside/"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
 				<item src="actionscript:setFocus('picture')" label="รูปถ่าย"/>
 				<item src="actionscript:setFocus('graph')" label="กราฟ"/>
 				<item src="actionscript:setFocus('report')" label="รายงาน"/>
+				<item src="actionscript:setFocus('trend')" label="trend"/>
 			</menu>
 		</content>
 		<content id="SCADAGraph" src="SCADA/30_graph/30_graph.swf" ttl="5000" >
