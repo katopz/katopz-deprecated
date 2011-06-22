@@ -5,6 +5,8 @@ package com.sleepydesign.display
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
@@ -14,15 +16,66 @@ package com.sleepydesign.display
 
 	import org.osflash.signals.Signal;
 
-	/**
-	 * Must loadDefinition first.
-	 * @author katopz
-	 */
-	public class AssetsUtil
+	public class AssetUtil
 	{
 		private static var _getDefinitions:Dictionary = new Dictionary(true);
 
-		public static function registerDefinition(classID:String, byteArray:ByteArray):Signal
+		// from external swf
+		public static function loadSWF(path:String, groupID:String, version:String = null, eventHandler:Function = null):void
+		{
+			// cached
+			if (_getDefinitions[groupID])
+			{
+				eventHandler();
+			}
+			else
+			{
+				var uri:String = path + groupID + ".swf" + (version ? "?v=" + version : "");
+				LoaderUtil.loadBinary(uri, function(event:Event):void
+				{
+					eventHandler(event);
+
+					if (event.type != Event.COMPLETE)
+						return;
+
+					registerDefinition(groupID, event.target.data).addOnce(eventHandler);
+				});
+			}
+		}
+
+		public static function getClass(groupID:String, assetID:String):Class
+		{
+			if (!(_getDefinitions[groupID] is Function))
+				throw new Error('Must loadSWF or loadEmbedSWF before call getDefinition');
+
+			try
+			{
+				return _getDefinitions[groupID](assetID) as Class;
+			}
+			catch (e:*)
+			{
+				throw new Error(e);
+			}
+
+			return null;
+		}
+
+		public static function getDisplayObject(groupID:String, assetID:String):DisplayObject
+		{
+			return new (AssetUtil.getClass(groupID, assetID)) as DisplayObject;
+		}
+
+		public static function getSprite(groupID:String, assetID:String):Sprite
+		{
+			return getDisplayObject(groupID, assetID) as Sprite;
+		}
+
+		public static function getMovieClip(groupID:String, assetID:String):MovieClip
+		{
+			return getDisplayObject(groupID, assetID) as MovieClip;
+		}
+
+		public static function registerDefinition(groupID:String, byteArray:ByteArray):Signal
 		{
 			var loader:Loader = new Loader();
 			var handler:Function;
@@ -33,7 +86,7 @@ package com.sleepydesign.display
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handler = function(e:Event):void
 			{
 				loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handler);
-				_getDefinitions[classID] = LoaderInfo(e.currentTarget).applicationDomain.getDefinition;
+				_getDefinitions[groupID] = LoaderInfo(e.currentTarget).applicationDomain.getDefinition;
 				signal.dispatch();
 			});
 
@@ -42,17 +95,13 @@ package com.sleepydesign.display
 			return signal;
 		}
 
-		public static function loadDefinition(assets:Class, classID:String):Signal
+		// from embed swf
+		public static function loadEmbedSWF(groupClass:Class, groupID:String):Signal
 		{
-			return loadClass(assets, classID);
+			return loadClass(groupClass, groupID);
 		}
 
-		public static function loadDisplayObject(assets:Class, classID:String, assetID:String):Signal
-		{
-			return loadClass(assets, classID, assetID, DisplayObject);
-		}
-
-		private static function loadClass(assets:Class, classID:String, assetID:String = null, typeClass:Class = null):Signal
+		private static function loadClass(assets:Class, groupID:String, assetID:String = null, typeClass:Class = null):Signal
 		{
 			var loader:Loader = new Loader();
 			var handler:Function;
@@ -66,12 +115,12 @@ package com.sleepydesign.display
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handler = function(e:Event):void
 			{
 				loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handler);
-				_getDefinitions[classID] = LoaderInfo(e.currentTarget).applicationDomain.getDefinition;
+				_getDefinitions[groupID] = LoaderInfo(e.currentTarget).applicationDomain.getDefinition;
 				if (assetID && signal.valueClasses.length > 0)
 				{
 					if (describeType(signal.valueClasses[0]) == describeType(typeClass))
 					{
-						var clazz:Class = _getDefinitions[classID](assetID) as Class;
+						var clazz:Class = _getDefinitions[groupID](assetID) as Class;
 						signal.dispatch(new clazz as typeClass);
 					}
 				}
@@ -86,7 +135,7 @@ package com.sleepydesign.display
 			return signal;
 		}
 
-		public static function loadBytes(byteArray:ByteArray, id:String = null, typeClass:Class = null):Signal
+		private static function loadBytes(byteArray:ByteArray, id:String = null, typeClass:Class = null):Signal
 		{
 			var loader:Loader = new Loader();
 			var handler:Function;
@@ -125,23 +174,6 @@ package com.sleepydesign.display
 			loader.loadBytes(byteArray, new LoaderContext(false, ApplicationDomain.currentDomain));
 
 			return signal;
-		}
-
-		public static function getClass(classID:String, assetID:String):Class
-		{
-			if (!(_getDefinitions[classID] is Function))
-				throw new Error(classID + ' not found, Must loadDefinition before call getDefinition.');
-
-			try
-			{
-				return _getDefinitions[classID](assetID) as Class;
-			}
-			catch (e:*)
-			{
-				throw new Error(e);
-			}
-
-			return null;
 		}
 	}
 }
