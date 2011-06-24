@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.769
- * DATE: 2010-12-19
+ * VERSION: 1.851
+ * DATE: 2011-04-29
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -43,7 +43,7 @@ LoaderMax.contentDisplayClass = FlexContentDisplay;
  */	
 	public class ContentDisplay extends Sprite {
 		/** @private **/
-		protected static var _transformProps:Object = {x:1, y:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, blendMode:"normal", centerRegistration:false, crop:false, scaleMode:"stretch", hAlign:"center", vAlign:"center"};
+		protected static var _transformProps:Object = {x:1, y:1, z:1, rotationX:1, rotationY:1, rotationZ:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, blendMode:"normal", centerRegistration:false, crop:false, scaleMode:"stretch", hAlign:"center", vAlign:"center"};
 		/** @private **/
 		protected var _loader:LoaderItem;
 		/** @private **/

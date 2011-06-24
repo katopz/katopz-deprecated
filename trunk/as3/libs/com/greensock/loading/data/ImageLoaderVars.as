@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.2
- * DATE: 2011-03-23
+ * VERSION: 1.22
+ * DATE: 2011-05-05
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -41,7 +41,7 @@ package com.greensock.loading.data {
  */	 
 	public class ImageLoaderVars {
 		/** @private **/
-		public static const version:Number = 1.2;
+		public static const version:Number = 1.22;
 		
 		/** @private **/
 		protected var _vars:Object;
@@ -239,6 +239,21 @@ package com.greensock.loading.data {
 			return _set("rotation", value);
 		}
 		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationX</code> property. **/
+		public function rotationX(value:Number):ImageLoaderVars {
+			return _set("rotationX", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationY</code> property. **/
+		public function rotationY(value:Number):ImageLoaderVars {
+			return _set("rotationY", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationZ</code> property. **/
+		public function rotationZ(value:Number):ImageLoaderVars {
+			return _set("rotationZ", value);
+		}
+		
 		/** 
 		 * When a <code>width</code> and <code>height</code> are defined, the <code>scaleMode</code> controls how the loaded image will be scaled to fit the area. The following values are recognized (you may use the <code>com.greensock.layout.ScaleMode</code> constants if you prefer):
 		 * <ul>
@@ -294,6 +309,11 @@ package com.greensock.loading.data {
 		/** Sets the <code>ContentDisplay</code>'s <code>y</code> property (for positioning on the stage). **/
 		public function y(value:Number):ImageLoaderVars {
 			return _set("y", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>z</code> property (for positioning on the stage). **/
+		public function z(value:Number):ImageLoaderVars {
+			return _set("z", value);
 		}
 		
 		

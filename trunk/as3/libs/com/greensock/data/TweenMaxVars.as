@@ -1,6 +1,6 @@
 /**
- * VERSION: 5.1
- * DATE: 2010-12-09
+ * VERSION: 5.12
+ * DATE: 2011-05-26
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/tweenvars/
  **/
@@ -51,7 +51,7 @@ package com.greensock.data {
  */	 
 	public class TweenMaxVars {
 		/** @private **/
-		public static const version:Number = 5.1;
+		public static const version:Number = 5.12;
 		
 		/** @private **/
 		protected var _vars:Object;
@@ -286,7 +286,7 @@ package com.greensock.data {
 		
 		/** Allows you to define the starting values for properties. It is the same as defining the "from" parameter in a <code>TweenMax.fromTo()</code> call. **/
 		public function startAt(vars:TweenMaxVars):TweenMaxVars {
-			return _set("repeatDelay", vars);
+			return _set("startAt", vars.vars);
 		}
 		
 		/** 

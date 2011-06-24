@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.84
- * DATE: 2011-03-23
+ * VERSION: 1.854
+ * DATE: 2011-06-09
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -153,7 +153,7 @@ package com.greensock.loading.core {
 					_errorHandler(event);
 					return;
 				} else {	
-					//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a NetStream.
+					//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a URLStream.
 					super._failHandler(event);
 				}
 			}
@@ -193,7 +193,7 @@ package com.greensock.loading.core {
 				_url = value;
 				_setRequestURL(_request, _url);
 				var isLoading:Boolean = Boolean(_status == LoaderStatus.LOADING);
-				_dump(0, LoaderStatus.READY, true);
+				_dump(1, LoaderStatus.READY, true);
 				if (isLoading) {
 					_load();
 				}
