@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.842
- * DATE: 2011-04-14
+ * VERSION: 1.854
+ * DATE: 2011-06-16
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -18,6 +18,7 @@ package com.greensock.loading {
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.URLRequest;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
@@ -130,6 +131,13 @@ package com.greensock.loading {
  * make sure all relative paths are consistent. See <a href="http://kb2.adobe.com/cps/041/tn_04157.html" target="_blank">http://kb2.adobe.com/cps/041/tn_04157.html</a>
  * for details.<br /><br />
  * 
+ * <strong>Note:</strong> In order to minimize memory usage, VideoLoader doesn't attach the NetStream to its Video
+ * object (the <code>rawContent</code>) until it is added to the display list. Therefore, if your VideoLoader's content
+ * isn't somewhere on the stage, the NetStream's visual content won't be fully decoded into memory (that's a good thing). 
+ * The only time this could be of consequence is if you are trying to do a BitmapData.draw() of the VideoLoader's content 
+ * or rawContent when it isn't on the stage. In that case, you'd just need to attach the NetStream manually before doing 
+ * your BitmapData.draw() like <code>myVideoLoader.rawContent.attachNetStream(myVideoLoader.netStream)</code>. <br /><br />
+ * 
  * @example Example AS3 code:<listing version="3.0">
  import com.greensock.loading.~~;
  import com.greensock.loading.display.~~;
@@ -206,6 +214,8 @@ function errorHandler(event:LoaderEvent):void {
 		/** @private **/
 		protected var _nc:NetConnection;
 		/** @private **/
+		protected var _auditNS:NetStream;
+		/** @private **/
 		protected var _video:Video;
 		/** @private **/
 		protected var _sound:SoundTransform;
@@ -240,7 +250,7 @@ function errorHandler(event:LoaderEvent):void {
 		/** @private due to a bug in the NetStream class, we cannot seek() or pause() before the NetStream has dispatched a RENDER Event (or after 50ms for Flash Player 9). **/
 		protected var _renderedOnce:Boolean;
 		/** @private primarily used for FP9 to work around a Flash bug with seek() and pause() (see the _waitForRender() method for note). **/
-		protected var _timer:Timer =  new Timer(50, 0);
+		protected var _timer:Timer;
 		
 		/** The metaData that was received from the video (contains information about its width, height, frame rate, etc.). See Adobe's docs for information about a NetStream's onMetaData callback. **/
 		public var metaData:Object;
@@ -330,9 +340,15 @@ function errorHandler(event:LoaderEvent):void {
 			_nc.addEventListener("asyncError", _failHandler, false, 0, true);
 			_nc.addEventListener("securityError", _failHandler, false, 0, true);
 			
+			_timer = new Timer(50, 0);
+			_timer.addEventListener(TimerEvent.TIMER, _renderHandler, false, 0, true);
+			
 			_video = new Video(this.vars.width || 320, this.vars.height || 240);
 			_video.smoothing = Boolean(this.vars.smoothing != false);
 			_video.deblocking = uint(this.vars.deblocking);
+			//the video isn't decoded into memory fully until the NetStream is attached to the Video object. We only attach it when it is in the display list (thus can be seen) in order to conserve memory.
+			_video.addEventListener(Event.ADDED_TO_STAGE, _videoAddedToStage, false, 0, true);
+			_video.addEventListener(Event.REMOVED_FROM_STAGE, _videoRemovedFromStage, false, 0, true);
 			
 			_refreshNetStream();
 			
@@ -364,6 +380,8 @@ function errorHandler(event:LoaderEvent):void {
 					
 				}
 				_sprite.removeEventListener(Event.ENTER_FRAME, _playProgressHandler);
+				_video.attachNetStream(null);
+				_video.clear();
 				_ns.client = {};
 				_ns.removeEventListener(NetStatusEvent.NET_STATUS, _statusHandler);
 				_ns.removeEventListener("ioError", _failHandler);
@@ -378,13 +396,10 @@ function errorHandler(event:LoaderEvent):void {
 			
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, _statusHandler, false, 0, true);
 			_ns.addEventListener("ioError", _failHandler, false, 0, true);
-			_ns.addEventListener("asyncError", _failHandler, false, 0, true);
-			
-			_timer.addEventListener(TimerEvent.TIMER, _renderHandler, false, 0, true); 
+			_ns.addEventListener("asyncError", _failHandler, false, 0, true); 
 			
 			_ns.bufferTime = isNaN(this.vars.bufferTime) ? 5 : Number(this.vars.bufferTime);
 			
-			_video.attachNetStream(_ns);
 			_sound = _ns.soundTransform;
 		}
 		
@@ -413,15 +428,16 @@ function errorHandler(event:LoaderEvent):void {
 		/** @private scrubLevel: 0 = cancel, 1 = unload, 2 = dispose, 3 = flush **/
 		override protected function _dump(scrubLevel:int=0, newStatus:int=0, suppressEvents:Boolean=false):void {
 			_sprite.removeEventListener(Event.ENTER_FRAME, _loadingProgressCheck);
+			_sprite.removeEventListener(Event.ENTER_FRAME, _playProgressHandler);
+			_sprite.removeEventListener(Event.ENTER_FRAME, _detachNS);
 			_ns.removeEventListener(Event.RENDER, _renderHandler);
-			_timer.removeEventListener(TimerEvent.TIMER, _renderHandler);
 			_timer.stop();
 			_forceTime = NaN;
 			_prevTime = 0;
 			_initted = false;
 			_renderedOnce = false;
 			this.metaData = null;
-			if (scrubLevel < 2) {
+			if (scrubLevel != 2) {
 				_refreshNetStream();
 				(_sprite as Object).rawContent = null;
 				if (_video.parent != null) {
@@ -432,15 +448,17 @@ function errorHandler(event:LoaderEvent):void {
 			if (scrubLevel >= 2) {
 				
 				if (scrubLevel == 3) {
-					_video.attachNetStream(null);
 					(_sprite as Object).dispose(false, false);
 				}
 				
+				_timer.removeEventListener(TimerEvent.TIMER, _renderHandler);
 				_nc.removeEventListener("asyncError", _failHandler);
 				_nc.removeEventListener("securityError", _failHandler);
 				_ns.removeEventListener(NetStatusEvent.NET_STATUS, _statusHandler);
 				_ns.removeEventListener("ioError", _failHandler);
 				_ns.removeEventListener("asyncError", _failHandler);
+				_video.removeEventListener(Event.ADDED_TO_STAGE, _videoAddedToStage);
+				_video.removeEventListener(Event.REMOVED_FROM_STAGE, _videoRemovedFromStage);
 				_firstCuePoint = null;
 				
 				(_sprite as Object).gcProtect = (scrubLevel == 3) ? null : _ns; //we need to reference the NetStream in the ContentDisplay before forcing garbage collection, otherwise gc kills the NetStream even if it's attached to the Video and is playing on the stage!
@@ -451,6 +469,7 @@ function errorHandler(event:LoaderEvent):void {
 				_sound = null;
 				(_sprite as Object).loader = null;
 				_sprite = null;
+				_timer = null;
 			}
 			super._dump(scrubLevel, newStatus, suppressEvents);
 		}
@@ -727,7 +746,9 @@ function errorHandler(event:LoaderEvent):void {
 			_pausePending = false;
 			this.volume = _volume; //Just resets the volume to where it should be because we temporarily made it silent during the buffer.
 			_ns.seek(_forceTime || 0);
-			_video.attachNetStream(_ns); //in case it was removed
+			if (_video.stage != null) {
+				_video.attachNetStream(_ns); //in case it was removed
+			}
 			_ns.pause(); //don't just do this.videoPaused = true because sometimes Flash fires NetStream.Play.Start BEFORE the buffer is full, and we must check inside the videoPaused setter to see if if the buffer is full and wait to pause until it is.
 		}
 		
@@ -860,6 +881,87 @@ function errorHandler(event:LoaderEvent):void {
 			}
 		}
 		
+		/** @inheritDoc 
+		 * Flash has a bug/inconsistency that causes NetStreams to load relative URLs as being relative to the swf file itself
+		 * rather than relative to the HTML file in which it is embedded (all other loaders exhibit the opposite behavior), so 
+		 * we need to make sure the audits use NetStreams instead of URLStreams (for relative urls at least). 
+		 **/
+		override public function auditSize():void {
+			if (_url.substr(0, 4) == "http" && _url.indexOf("://") != -1) { //if the url isn't relative, use the regular URLStream to do the audit because it's faster/more efficient. 
+				super.auditSize();
+			} else if (_auditNS == null) {
+				_auditNS = new NetStream(_nc);
+				_auditNS.bufferTime = isNaN(this.vars.bufferTime) ? 5 : Number(this.vars.bufferTime);
+				_auditNS.client = {onMetaData:_auditHandler, onCuePoint:_auditHandler};
+				_auditNS.addEventListener(NetStatusEvent.NET_STATUS, _auditHandler, false, 0, true);
+				_auditNS.addEventListener("ioError", _auditHandler, false, 0, true);
+				_auditNS.addEventListener("asyncError", _auditHandler, false, 0, true);
+				_auditNS.soundTransform = new SoundTransform(0);
+				var request:URLRequest = new URLRequest();
+				request.data = _request.data;
+				_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "gsCacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
+				_auditNS.play(request.url);
+			}
+		}
+			
+		/** @private **/
+		protected function _auditHandler(event:Event=null):void {
+			var type:String = (event == null) ? "" : event.type;
+			var code:String = (event == null || !(event is NetStatusEvent)) ? "" : NetStatusEvent(event).info.code;
+			if (event != null && "duration" in event) {
+				_duration = Object(event).duration;
+			}
+			if (_auditNS != null) {
+				_cachedBytesTotal = _auditNS.bytesTotal; 
+				if (_bufferMode && _duration != 0) {
+					_cachedBytesTotal *= (_auditNS.bufferTime / _duration);
+				}
+			}
+			if (type == "ioError" ||
+				type == "asyncError" || 
+				code == "NetStream.Play.StreamNotFound" || 
+				code == "NetConnection.Connect.Failed" ||
+				code == "NetStream.Play.Failed" ||
+				code == "NetStream.Play.FileStructureInvalid" || 
+				code == "The MP4 doesn't contain any supported tracks") {
+				if (this.vars.alternateURL != undefined && this.vars.alternateURL != "" && this.vars.alternateURL != _url) {
+					_url = this.vars.alternateURL;
+					_setRequestURL(_request, _url);
+					var request:URLRequest = new URLRequest();
+					request.data = _request.data;
+					_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "gsCacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
+					_auditNS.play(request.url);
+					_errorHandler(new LoaderEvent(LoaderEvent.ERROR, this, code));
+					return;
+				} else {	
+					//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a NetStream.
+					super._failHandler(new LoaderEvent(LoaderEvent.ERROR, this, code));
+				}
+			}
+			_auditedSize = true;
+			_closeStream();
+			dispatchEvent(new Event("auditedSize"));
+		}
+		
+		/** @private **/
+		override protected function _closeStream():void {
+			if (_auditNS != null) {
+				_auditNS.pause();
+				try {
+					_auditNS.close();
+				} catch (error:Error) {
+					
+				}
+				_auditNS.client = {};
+				_auditNS.removeEventListener(NetStatusEvent.NET_STATUS, _auditHandler);
+				_auditNS.removeEventListener("ioError", _auditHandler);
+				_auditNS.removeEventListener("asyncError", _auditHandler);
+				_auditNS = null;
+			} else {
+				super._closeStream();
+			}
+		}
+		
 		/** @private **/
 		override protected function _auditStreamHandler(event:Event):void {
 			if (event is ProgressEvent && _bufferMode) {
@@ -893,6 +995,18 @@ function errorHandler(event:LoaderEvent):void {
 			if (!_bufferFull && _pausePending) {
 				_video.attachNetStream(null); //if the NetStream is still buffering, there's a good chance that the video will appear to play briefly right before we pause it, so we detach the NetStream from the Video briefly to avoid that funky visual behavior (we attach it again as soon as it buffers).
 			}
+		}
+		
+		/** @private The video isn't decoded into memory fully until the NetStream is attached to the Video object. We only attach it when it is in the display list (thus can be seen) in order to conserve memory. **/
+		protected function _videoAddedToStage(event:Event):void {
+			_video.attachNetStream(_ns);
+			_ns.seek(this.videoTime); //if the video is paused and we don't seek(), it won't render visually (bug in Flash apparently)
+		}
+		
+		/** @private **/
+		protected function _videoRemovedFromStage(event:Event):void {
+			_video.attachNetStream(null);
+			_video.clear();
 		}
 		
 		
@@ -938,6 +1052,9 @@ function errorHandler(event:LoaderEvent):void {
 				}
 			} else {
 				if (_pausePending || !_bufferFull) {
+					if (_video.stage != null) {
+						_video.attachNetStream(_ns); //in case we had to detach it while buffering and waiting for the metaData
+					}
 					//if we don't seek() first, sometimes the NetStream doesn't attach to the video properly!
 					//if we don't seek() first and the NetStream was previously rendered between its last keyframe and the end of the file, the "NetStream.Play.Stop" will have been called and it will refuse to continue playing even after resume() is called!
 					//if we seek() before the metaData has been received (_initted==true), it typically prevents it from being received at all!
@@ -946,7 +1063,6 @@ function errorHandler(event:LoaderEvent):void {
 						_ns.seek(this.videoTime); 
 						_bufferFull = false;
 					}
-					_video.attachNetStream(_ns); //in case we had to detach it while buffering and waiting for the metaData
 					_pausePending = false;
 				}
 				this.volume = _volume; //Just resets the volume to where it should be in case we temporarily made it silent during the buffer.

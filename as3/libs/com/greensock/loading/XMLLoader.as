@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.85
- * DATE: 2011-04-26
+ * VERSION: 1.851
+ * DATE: 2011-04-29
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -110,7 +110,7 @@ function completeHandler(event:LoaderEvent):void {
  * property there that contains the whole XML node (including the children) so that you can easily get
  * whatever data you need like this: <br />
  * <listing version="3.0">
-function completeHandler(event:LoaderMax):void {
+function completeHandler(event:LoaderEvent):void {
 	var video:VideoLoader = LoaderMax.getLoader("video1");
 	var description:String = video.vars.description;
 	var xml:XML = video.vars.rawXML;
@@ -157,6 +157,10 @@ function completeHandler(event:LoaderMax):void {
  * <strong>Note:</strong> Using a <code><a href="data/XMLLoaderVars.html">XMLLoaderVars</a></code> instance 
  * instead of a generic object to define your <code>vars</code> is a bit more verbose but provides 
  * code hinting and improved debugging because it enforces strict data typing. Use whichever one you prefer.<br /><br />
+ * 
+ * <strong>Note:</strong> If you don't want the fancy auto-parsing capabilities of XMLLoader, you can just use a 
+ * <a href="DataLoader.html">DataLoader </a> instead of XMLLoader. Then make the content into XML like: 
+ * <code>var xml:XML = new XML(myDataLoader.content);</code><br /><br />
  * 
  * XMLLoader recognizes a few additional attributes for dynamically-created loaders that are defined in the XML:
  * <ul>
@@ -220,7 +224,7 @@ function completeHandler(event:LoaderMax):void {
 		/** @private **/
 		private static var _classActivated:Boolean = _activateClass("XMLLoader", XMLLoader, "xml,php,jsp,asp,cfm,cfml,aspx");
 		/** @private Any non-String variable types that XMLLoader should recognized in loader nodes like <ImageLoader>, <VideoLoader>, etc. **/
-		protected static var _varTypes:Object = {skipFailed:true, skipPaused:true, autoLoad:false, paused:false, load:false, noCache:false, maxConnections:2, autoPlay:false, autoDispose:false, smoothing:false, estimatedBytes:1, x:1, y:1, width:1, height:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, bgColor:0, bgAlpha:0, deblocking:1, repeat:1, checkPolicyFile:false, centerRegistration:false, bufferTime:5, volume:1, bufferMode:false, estimatedDuration:200, crop:false, autoAdjustBuffer:true, suppressInitReparentEvents:true};
+		protected static var _varTypes:Object = {skipFailed:true, skipPaused:true, autoLoad:false, paused:false, load:false, noCache:false, maxConnections:2, autoPlay:false, autoDispose:false, smoothing:false, estimatedBytes:1, x:1, y:1, z:1, rotationX:1, rotationY:1, rotationZ:1, width:1, height:1, scaleX:1, scaleY:1, rotation:1, alpha:1, visible:true, bgColor:0, bgAlpha:0, deblocking:1, repeat:1, checkPolicyFile:false, centerRegistration:false, bufferTime:5, volume:1, bufferMode:false, estimatedDuration:200, crop:false, autoAdjustBuffer:true, suppressInitReparentEvents:true};
 		/** Event type constant for when the XML has loaded but has <b>not</b> been parsed yet. This can be useful in rare situations when you want to alter the XML before it is parsed by XMLLoader (for identifying LoaderMax-related nodes like <code>&lt;ImageLoader&gt;</code>, etc.) **/
 		public static var RAW_LOAD:String = "rawLoad";
 		/** @private contains only the parsed loaders that had the load="true" XML attribute. It also contains the _parsed LoaderMax which is paused, so it won't load (we put it in there for easy searching). **/

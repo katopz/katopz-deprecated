@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.84
- * DATE: 2011-03-23
+ * VERSION: 1.854
+ * DATE: 2011-06-07
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -305,11 +305,13 @@ package com.greensock.loading {
 					this.channel.stop(); 
 				}
 				this.channel = _sound.play(_position, ((this.vars.repeat == -1) ? 9999999 : uint(this.vars.repeat) + 1), _soundTransform);
-				this.channel.addEventListener(Event.SOUND_COMPLETE, _soundCompleteHandler);
-				if (_soundPaused) {
-					_shape.addEventListener(Event.ENTER_FRAME, _enterFrameHandler, false, 0, true);
-					_soundPaused = false;
-					dispatchEvent(new LoaderEvent(SOUND_PLAY, this));
+				if (this.channel != null) { //if the device doesn't have a sound card or sound capabilities, this.channel will be null!
+					this.channel.addEventListener(Event.SOUND_COMPLETE, _soundCompleteHandler);
+					if (_soundPaused) {
+						_shape.addEventListener(Event.ENTER_FRAME, _enterFrameHandler, false, 0, true);
+						_soundPaused = false;
+						dispatchEvent(new LoaderEvent(SOUND_PLAY, this));
+					}
 				}
 			}
 		}
@@ -391,8 +393,12 @@ package com.greensock.loading {
 				}
 			} else {
 				this.channel = _sound.play(_position, ((this.vars.repeat == -1) ? 9999999 : uint(this.vars.repeat) + 1), _soundTransform);
-				this.channel.addEventListener(Event.SOUND_COMPLETE, _soundCompleteHandler);
-				_shape.addEventListener(Event.ENTER_FRAME, _enterFrameHandler, false, 0, true);
+				if (this.channel != null) { //if the device doesn't have a sound card or sound capabilities, this.channel will be null!
+					this.channel.addEventListener(Event.SOUND_COMPLETE, _soundCompleteHandler);
+					_shape.addEventListener(Event.ENTER_FRAME, _enterFrameHandler, false, 0, true);
+				} else {
+					return;
+				}
 			}
 			dispatchEvent(new LoaderEvent(((_soundPaused) ? SOUND_PAUSE : SOUND_PLAY), this));
 		}

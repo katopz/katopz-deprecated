@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.2
- * DATE: 2011-03-23
+ * VERSION: 1.22
+ * DATE: 2011-05-05
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -42,7 +42,7 @@ package com.greensock.loading.data {
  */	 
 	public class VideoLoaderVars {
 		/** @private **/
-		public static const version:Number = 1.2;
+		public static const version:Number = 1.22;
 		
 		/** @private **/
 		protected var _vars:Object;
@@ -123,6 +123,11 @@ package com.greensock.loading.data {
 		/** A handler function for <code>LoaderEvent.HTTP_STATUS</code> events. Make sure your onHTTPStatus function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>). You can determine the httpStatus code using the LoaderEvent's <code>target.httpStatus</code> (LoaderItems keep track of their <code>httpStatus</code> when possible, although certain environments prevent Flash from getting httpStatus information).**/
 		public function onHTTPStatus(value:Function):VideoLoaderVars {
 			return _set("onHTTPStatus", value);
+		}
+		
+		/** A handler function for <code>LoaderEvent.INIT</code> events which will be called when the video's metaData has been received and the video is placed into the <code>ContentDisplay</code>. Make sure your onInit function accepts a single parameter of type <code>LoaderEvent</code> (com.greensock.events.LoaderEvent). **/
+		public function onInit(value:Function):VideoLoaderVars {
+			return _set("onInit", value);
 		}
 		
 		/** A handler function for <code>LoaderEvent.IO_ERROR</code> events which will also call the onError handler, so you can use that as more of a catch-all whereas <code>onIOError</code> is specifically for LoaderEvent.IO_ERROR events. Make sure your onIOError function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>). **/
@@ -233,6 +238,21 @@ package com.greensock.loading.data {
 			return _set("rotation", value);
 		}
 		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationX</code> property. **/
+		public function rotationX(value:Number):VideoLoaderVars {
+			return _set("rotationX", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationY</code> property. **/
+		public function rotationY(value:Number):VideoLoaderVars {
+			return _set("rotationY", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationZ</code> property. **/
+		public function rotationZ(value:Number):VideoLoaderVars {
+			return _set("rotationZ", value);
+		}
+		
 		/** 
 		 * When a <code>width</code> and <code>height</code> are defined, the <code>scaleMode</code> controls how the loaded image will be scaled to fit the area. The following values are recognized (you may use the <code>com.greensock.layout.ScaleMode</code> constants if you prefer):
 		 * <ul>
@@ -288,6 +308,11 @@ package com.greensock.loading.data {
 		/** Sets the <code>ContentDisplay</code>'s <code>y</code> property (for positioning on the stage). **/
 		public function y(value:Number):VideoLoaderVars {
 			return _set("y", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>z</code> property (for positioning on the stage). **/
+		public function z(value:Number):VideoLoaderVars {
+			return _set("z", value);
 		}
 		
 		
