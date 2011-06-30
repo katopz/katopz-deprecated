@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.com/flash/license.html
@@ -605,7 +605,7 @@ package com.yahoo.astra.fl.charts
 				label.styleSheet = new StyleSheet();
 				label.styleSheet.parseCSS("p {font-family: supermarket;font-size: 12px;color:#000000;}");
 				
-				label.rotation = 90;
+				label.rotation = 45;
 				
 				var _str:String = this.valueToLabel(i);
 				label.htmlText = "<p>"+_str+"</p>";//.substring(0,1)+"\n"+_str.substring(1,3)

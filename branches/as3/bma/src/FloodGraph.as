@@ -105,8 +105,8 @@ package {
 			createGraph(graph0, type);
 			createGraph(graph1, type);
 			
-			var dataPath = XMLUtil.getNodeById(config,"FloodGraphData").@src;
-			var method = String(XMLUtil.getNodeById(config,"FloodGraphData").@method).toUpperCase();
+			var dataPath = XMLUtil2.getNodeById(config,"FloodGraphData").@src;
+			var method = String(XMLUtil2.getNodeById(config,"FloodGraphData").@method).toUpperCase();
 			
 			if(isTest){
 				dataPath = "../serverside/FloodmonAllStation.xml";

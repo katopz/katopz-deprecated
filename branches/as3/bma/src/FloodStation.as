@@ -218,12 +218,12 @@ package {
 			
 			popdown.iStationName.htmlText = iID+ " - "+iName;
 			
-			var dataPath = XMLUtil.getNodeById(config,"FloodStationData").@src;
-			var method = String(XMLUtil.getNodeById(config,"FloodStationData").@method).toUpperCase();
+			var dataPath = XMLUtil2.getNodeById(config,"FloodStationData").@src;
+			var method = String(XMLUtil2.getNodeById(config,"FloodStationData").@method).toUpperCase();
 			
-			var _customAlpha:String = String(XMLUtil.getNodeById(config,"FloodStationData").@alpha);
-			var _customColor:String = String(XMLUtil.getNodeById(config, "FloodStationData").@color);
-			var _customBlendmode:String = String(XMLUtil.getNodeById(config, "FloodStationData").@blendmode);
+			var _customAlpha:String = String(XMLUtil2.getNodeById(config,"FloodStationData").@alpha);
+			var _customColor:String = String(XMLUtil2.getNodeById(config, "FloodStationData").@color);
+			var _customBlendmode:String = String(XMLUtil2.getNodeById(config, "FloodStationData").@blendmode);
 			
 			customAlpha = (_customAlpha!="")?Number(_customAlpha)/100:customAlpha;
 			customColor = (_customColor != "")?Number(_customColor):customColor;
@@ -344,7 +344,7 @@ package {
             }
 			
 			iPopup.pointer.y = 508 - floodObject.height* .915;
-			iPopup.pointer.label.text = String(floodObject.height + " cm.");
+			iPopup.pointer.label.text = String(floodObject.height + " เซนติเมตร");
 		}
 
 		public function onRoadError(event:ContentEvent):void {
@@ -502,14 +502,14 @@ package {
 			popdown.iDetail.ALERT.htmlText = item.ALERT;
 			
 			if(item.STATUS=="1"){
-				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">Fail</FONT>"
+				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>"
 			}else {
-				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">OK</FONT>"
+				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>"
 			}
 			if (item.STATUS_PUMP == "1") {
-				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">Pump On</FONT>"
+				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">เปิด</FONT>"
 			}else {
-				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#0000FF\">Pump Off</FONT>"
+				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#0000FF\">ปิด</FONT>"
 			}
 			
 			popdown.iDetail.LAST_START.htmlText = item.LAST_START;
@@ -524,7 +524,7 @@ package {
 			section.extra.detail.waterHeight.htmlText = floodObject.height;
 			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
 			
-			popdown.pointer.label.text = String(floodObject.height + " cm.");
+			popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
 			
 			createSection(xml.STATION.@id)
 			createRoad(xml.STATION.@id)
@@ -536,8 +536,8 @@ package {
 		//_________________________________________________________________ History
 		
 		public function setGraph(iID){
-			var dataPath = XMLUtil.getNodeById(config,"FloodHistoryData").@src;
-			var method = String(XMLUtil.getNodeById(config,"FloodHistoryData").@method).toUpperCase();
+			var dataPath = XMLUtil2.getNodeById(config,"FloodHistoryData").@src;
+			var method = String(XMLUtil2.getNodeById(config,"FloodHistoryData").@method).toUpperCase();
 			
 			if(isTest){
 				dataPath = "../serverside/";
