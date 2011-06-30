@@ -97,7 +97,7 @@ package {
 		//_________________________________________________________________ Section
 		
 		public function setSection(iID:String){
-			var dataPath = XMLUtil.getNodeById(config,"CanalStationData").@src;
+			var dataPath = XMLUtil2.getNodeById(config,"CanalStationData").@src;
 			
 			if(isTest){
 				dataPath = "../serverside/";
@@ -235,9 +235,9 @@ package {
 			
 			//TODO custom error
 			if(item.STATUS=="1"){
-				iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">Fail</FONT>"
+				iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>"
 			}else{
-				iDetail.STATUS.htmlText = "<FONT COLOR=\"#00FF00\">OK</FONT>"
+				iDetail.STATUS.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>"
 			}
 			
 			iDetail.LATITUDE.text = item.LATITUDE
@@ -329,7 +329,7 @@ package {
 		
 		public function setGraph(iID)
 		{
-			var dataPath = XMLUtil.getNodeById(config, "CanalHistoryData").@src;
+			var dataPath = XMLUtil2.getNodeById(config, "CanalHistoryData").@src;
 			
 			if (isTest)
 				dataPath = "../serverside/";

@@ -2,7 +2,7 @@
 <FLOODMON>
   <STATION id="FL04">
     <NAME>ถนนเซนต์หลุยส์ 3 เขตสาธร</NAME>
-    <VALUE>10</VALUE>
+    <VALUE>4</VALUE>
     <STATUS>1</STATUS>
     <STATUS_PUMP>0</STATUS_PUMP>
     <ROAD_HEIGHT>30</ROAD_HEIGHT>
