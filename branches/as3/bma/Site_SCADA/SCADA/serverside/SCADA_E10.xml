@@ -1,0 +1,65 @@
+<?xml version="1.0" standalone="yes"?>
+<SCADA>
+  <STATION id="E10">
+    <NAME>สถานีสูบน้ำคลองบางซื่อ</NAME>
+    <MSL_VALUE_IN>-1.12</MSL_VALUE_IN>
+    <MSL_VALUE_OUT>1.11</MSL_VALUE_OUT>
+    <BMA_VALUE_IN>33.91</BMA_VALUE_IN>
+    <BMA_VALUE_OUT>36.14</BMA_VALUE_OUT>
+    <FLOW>0</FLOW>
+    <WQSA>0</WQSA>
+    <WQDO>0</WQDO>
+    <WQPH>0</WQPH>
+    <WQEC>0</WQEC>
+    <STATUS>0</STATUS>
+    <RAIN_15MIN>0</RAIN_15MIN>
+    <RAIN_1HOUR>0</RAIN_1HOUR>
+    <RAIN_24HOUR>10.5</RAIN_24HOUR>
+    <PF>0</PF>
+    <LB>0</LB>
+    <DO>0</DO>
+    <BT>0</BT>
+    <PUMP_STATUS>00000000000000000</PUMP_STATUS>
+    <DOOR_STATUS num="6">
+      <MAX_LEVEL>5</MAX_LEVEL>
+      <HEIGHT>2</HEIGHT>
+      <FLOOR>-2</FLOOR>
+      <DOOR>
+        <INDEX>1</INDEX>
+        <STATUS>1</STATUS>
+        <VALUE>-0.01</VALUE>
+        <LEVEL>30</LEVEL>
+      </DOOR>
+      <DOOR>
+        <INDEX>2</INDEX>
+        <STATUS>1</STATUS>
+        <VALUE>-0.06</VALUE>
+        <LEVEL>10</LEVEL>
+      </DOOR>
+      <DOOR>
+        <INDEX>3</INDEX>
+        <STATUS>0</STATUS>
+        <VALUE>4.6</VALUE>
+        <LEVEL>10</LEVEL>
+      </DOOR>
+      <DOOR>
+        <INDEX>4</INDEX>
+        <STATUS>0</STATUS>
+        <VALUE>0.14</VALUE>
+        <LEVEL>30</LEVEL>
+      </DOOR>
+      <DOOR>
+        <INDEX>5</INDEX>
+        <STATUS>0</STATUS>
+        <VALUE>0.09</VALUE>
+        <LEVEL>10</LEVEL>
+      </DOOR>
+      <DOOR>
+        <INDEX>6</INDEX>
+        <STATUS>0</STATUS>
+        <VALUE>4.35</VALUE>
+        <LEVEL>10</LEVEL>
+      </DOOR>
+    </DOOR_STATUS>
+  </STATION>
+</SCADA>

@@ -1,0 +1,41 @@
+<?xml version="1.0" standalone="yes"?>
+<SCADA>
+  <STATION id="E14">
+    <NAME>สถานีสูบน้ำคลองเจ้าคุณสิงห์</NAME>
+    <MSL_VALUE_IN>-0.78</MSL_VALUE_IN>
+    <MSL_VALUE_OUT>0</MSL_VALUE_OUT>
+    <BMA_VALUE_IN>34.25</BMA_VALUE_IN>
+    <BMA_VALUE_OUT>0</BMA_VALUE_OUT>
+    <FLOW>0</FLOW>
+    <WQSA>0</WQSA>
+    <WQDO>0</WQDO>
+    <WQPH>0</WQPH>
+    <WQEC>0</WQEC>
+    <STATUS>0</STATUS>
+    <RAIN_15MIN>0</RAIN_15MIN>
+    <RAIN_1HOUR>0</RAIN_1HOUR>
+    <RAIN_24HOUR>0</RAIN_24HOUR>
+    <PF>0</PF>
+    <LB>0</LB>
+    <DO>0</DO>
+    <BT>0</BT>
+    <PUMP_STATUS>001</PUMP_STATUS>
+    <DOOR_STATUS num="2">
+      <MAX_LEVEL>5</MAX_LEVEL>
+      <HEIGHT>2</HEIGHT>
+      <FLOOR>-2</FLOOR>
+      <DOOR>
+        <INDEX>1</INDEX>
+        <STATUS>1</STATUS>
+        <VALUE>0</VALUE>
+        <LEVEL>20</LEVEL>
+      </DOOR>
+      <DOOR>
+        <INDEX>2</INDEX>
+        <STATUS>1</STATUS>
+        <VALUE>0</VALUE>
+        <LEVEL>20</LEVEL>
+      </DOOR>
+    </DOOR_STATUS>
+  </STATION>
+</SCADA>

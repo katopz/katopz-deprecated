@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="yes"?>
+<SCADA>
+  <STATION id="E24">
+    <NAME>จุดวัดคลองพระโขนง ตอนวัดขจรศิริ</NAME>
+    <MSL_VALUE_IN>0.19</MSL_VALUE_IN>
+    <MSL_VALUE_OUT>0</MSL_VALUE_OUT>
+    <BMA_VALUE_IN>35.22</BMA_VALUE_IN>
+    <BMA_VALUE_OUT>0</BMA_VALUE_OUT>
+    <FLOW>5.3438</FLOW>
+    <WQSA>0</WQSA>
+    <WQDO>0</WQDO>
+    <WQPH>0</WQPH>
+    <WQEC>0</WQEC>
+    <STATUS>0</STATUS>
+    <RAIN_15MIN>0</RAIN_15MIN>
+    <RAIN_1HOUR>0</RAIN_1HOUR>
+    <RAIN_24HOUR>7.5</RAIN_24HOUR>
+    <PF>0</PF>
+    <LB>0</LB>
+    <DO>0</DO>
+    <BT>0</BT>
+    <PUMP_STATUS />
+    <DOOR_STATUS num="0">
+      <MAX_LEVEL>0</MAX_LEVEL>
+      <HEIGHT>2</HEIGHT>
+      <FLOOR>-2</FLOOR>
+    </DOOR_STATUS>
+  </STATION>
+</SCADA>
