@@ -6,25 +6,23 @@
 
 package
 {
-	import flash.system.Security;
-	import flash.geom.*
-	import flash.display.*
+	import com.sleepydesign.SleepyDesign;
+	import com.sleepydesign.containers.Cursor;
+	import com.sleepydesign.site.*;
+	import com.sleepydesign.utils.*;
+	
+	import flash.display.*;
+	import flash.display.BitmapData;
 	import flash.events.*;
+	import flash.geom.*;
+	import flash.geom.ColorTransform;
+	import flash.geom.Transform;
 	import flash.net.*;
+	import flash.system.Security;
 	import flash.text.*;
 	import flash.utils.Dictionary;
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
-
-	import com.sleepydesign.SleepyDesign;
-	import com.sleepydesign.site.*;
-	import com.sleepydesign.utils.*;
-	import com.sleepydesign.containers.Cursor;
-
-	//TODO Fake2D Class
-	import flash.display.BitmapData;
-	import flash.geom.ColorTransform;
-	import flash.geom.Transform;
 
 	public class SCADAStation extends Content
 	{
@@ -858,8 +856,9 @@ package
 			var dataProvider:Array = new Array();
 			var captionNum = 0;
 			
-			var baseY = 104 - 29;
-			var graphFactor = 70 / 100;
+			var baseY = 143 - 29;//104 - 29;
+			var baseY0 = +29 - 143/2;//133 - 29 - 133/2;
+			var graphFactor = 14;//70 / 100;
 			
 			if (graph.extra.flood)
 				graph.removeChild(graph.extra.flood);
@@ -880,12 +879,12 @@ package
 			//_________________________________________water
 			
 			// VALUE_IN
-			flood.lineStyle(0.5, 0xFFFF00, 1);
-			flood.moveTo(0, 0);
+			flood.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
+			flood.moveTo(0, baseY0);
 			
 			// VALUE_OUT
-			flood2.lineStyle(0.5, 0xFF0000, 1);
-			flood2.moveTo(0, 0);
+			flood2.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
+			flood2.moveTo(0, baseY0);
 			
 			var stationXML = data.children()[0]
 			var total = stationXML.child("*").length();
@@ -901,17 +900,17 @@ package
 				}
 				
 				if(i == total - 2)
-					flood.moveTo(0, -graphFactor * Number(lastXML.VALUE_IN));
+					flood.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_IN));
 				
-				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_IN));
+				flood.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
 				
 				if(Number(lastXML.VALUE_OUT)!=-99)
 				{
 					if(i == total - 2)
-						flood2.moveTo(0, -graphFactor * Number(lastXML.VALUE_OUT));
+						flood2.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
 						
-					flood2.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
-					trace(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
+					flood2.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
+					trace(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
 				}
 				else
 				{

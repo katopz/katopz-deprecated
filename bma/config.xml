@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<shell id="shell" focus="Canal">
+<shell id="shell" focus="SCADA">
 	
 	<!-- @src : แหล่งที่มาของข้อมูล -->
 	<!-- @target : หน้าที่จะเปิด -->
@@ -8,62 +8,45 @@
 	<link id="web" src="http://203.155.220.232/web/" target="_blank" />
 	<link id="bma" src="http://www.bma.go.th/" target="_blank" />
 	
-	<panel id="Canal">
-		<foreground id="foreground" src="Canal/foreground.swf"/>
-		
-		<content id="CanalMap" src="Canal/10_map/10_map.swf" ttl="10000">
+	<panel id="SCADA">
+		<foreground id="foreground" src="SCADA/foreground.swf"/>
+		<content id="SCADAMap" src="SCADA/10_map/10_map.swf" ttl="5000" >
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
-			<feed id="CanalMapList" src="Canal/serverside/CanalAllStation.xml"/>
+			<feed id="SCADAMapList" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
 			<!-- ข้อมูลใน map -->
-			<feed id="CanalMapData" src="Canal/serverside/CanalAllStation.xml"/>
+			<feed id="SCADAMapData" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
 			<menu>
 				<item src="actionscript:setFocus('graph')" label="กราฟ"/>
-				<item src="http://www.google.com" target="_self" label="สรุปทุกสถานี"/>
-				<item src="javascript:alert('alert')" target="_self" label="รายงาน"/>
+				<item src="actionscript:setFocus('report')" label="รายงาน"/>
 			</menu>
 		</content>
-		
-		<content id="CanalStation" src="Canal/20_station/20_station.swf" ttl="5000" >
+		<content id="SCADAStation" src="SCADA/20_station/20_station.swf" ttl="5000" >
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
-			<feed id="CanalStationList" src="Canal/serverside/CanalAllStation.xml"/>
-			<!-- folder ที่ Canal_XXXX.xml อยู่ -->
-			<feed id="CanalStationData" src="Canal/serverside/"/>
+			<feed id="SCADAStationList" src="SCADA/serverside/SCADAAllStation_15MIN.xml"/>
+			<!-- folder ที่ SCADA_XXXX.xml อยู่ -->
+			<feed id="SCADAStationData" src="SCADA/serverside/"/>
 			<!-- folder ที่ trend อยู่ -->
-			<feed id="CanalHistoryData" src="Canal/serverside/"/>
+			<feed id="SCADAHistoryData" src="SCADA/serverside/"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
-				<item src="actionscript:setFocus('summary')" label="สรุปทุกสถานี"/>
+				<item src="actionscript:setFocus('picture')" label="รูปถ่าย"/>
 				<item src="actionscript:setFocus('graph')" label="กราฟ"/>
 				<item src="actionscript:setFocus('report')" label="รายงาน"/>
 				<item src="actionscript:setFocus('trend')" label="trend"/>
 			</menu>
 		</content>
-		
-		<content id="CanalGraph" src="Canal/30_graph/30_graph.swf" ttl="5000" >
+		<content id="SCADAGraph" src="SCADA/30_graph/30_graph.swf" ttl="5000" >
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
-			<feed id="CanalGraphList" src="Canal/serverside/CanalGraph.xml"/>
-			<!-- ข้อมูลใน graph -->
-			<feed id="CanalGraphData" src="Canal/serverside/CanalGraph.xml"/>
-			<!-- ชื่อคลอง -->
-			<canal>
-				<item label="คลองบางเขน" src="Canal/30_graph/stations/BK.swf"/>
-				<item label="คลองบางซื่อ" src="Canal/30_graph/stations/BS.swf"/>
-				<item label="คลองเปรมประชากร" src="Canal/30_graph/stations/KP.swf"/>
-				<item label="คลองลาดพร้าว" src="Canal/30_graph/stations/LP.swf"/>
-				<item label="คลองสามเสน" src="Canal/30_graph/stations/SA.swf"/>
-				<item label="คลองแสนแสบ" src="Canal/30_graph/stations/SS.swf"/>
-				<item label="คลองคูเมืองเดิม" src="Canal/30_graph/stations/PK.swf"/>
-				<item label="แม่น้ำเจ้าพระยา" src="Canal/30_graph/stations/PK.swf"/>
-			</canal>
+			<feed id="SCADAGraphList" src="SCADA/serverside/GraphList.xml"/>
+			<!-- folder ที่ SCADAAllStation_XXXX.xml อยู่ -->
+			<feed id="SCADAGraphData" src="SCADA/serverside/"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
-				<item src="actionscript:setFocus('summary')" label="สรุปทุกสถานี"/>
 				<item src="actionscript:setFocus('station')" label="รายการสถานี"/>
 				<item src="actionscript:setFocus('report')" label="รายงาน"/>
 			</menu>
 		</content>
-		
-		<background id="background" src="Canal/background.swf"/>
+		<background id="background" src="SCADA/background.swf"/>
 	</panel>
-
+	
 </shell>
