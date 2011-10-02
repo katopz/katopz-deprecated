@@ -5,18 +5,17 @@
 */
 
 package {
-	import flash.system.Security;
-	import flash.geom.*
-	import flash.display.*
-	import flash.events.*;
-	import flash.net.*;
-	import flash.text.*;
-	
 	import com.sleepydesign.SleepyDesign;
+	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
 	
-	import com.sleepydesign.containers.Cursor;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import flash.net.*;
+	import flash.system.Security;
+	import flash.text.*;
 
 	public class CanalStation extends Content{
 		
@@ -69,9 +68,10 @@ package {
 			sectionPath = "sections/";
 			//dataPath = "../../"+dataPath;
 			
-			setStation("KP02","ok")
-			setSection("KP02")
+			setStation("BK01","ok");
+			setSection("BK01");
 			
+			setGraph("BK01");
 		}
 		
 		//_________________________________________________________________ Station
@@ -355,8 +355,9 @@ package {
 			var dataProvider:Array = new Array();
 			var captionNum = 0;
 			
-			var baseY = 104 - 29;
-			var graphFactor = 70 / 100;
+			var baseY = 133 - 29;//104 - 29;
+			var baseY0 = -4 +29 - 133/2;//133 - 29 - 133/2;
+			var graphFactor = 14;//70 / 100;
 			
 			if (graph.extra.flood)
 				graph.removeChild(graph.extra.flood);
@@ -368,13 +369,13 @@ package {
 			
 			// VALUE
 			var floodShape = myFlood.addChild(new Shape());
-			var flood = floodShape.graphics;
+			var flood:Graphics = floodShape.graphics;
 			
 			//_________________________________________water
 			
 			// VALUE
-			flood.lineStyle(0.5, 0xFFFF00, 1);
-			flood.moveTo(0, 0);
+			flood.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
+			flood.moveTo(0, baseY0);
 			
 			var stationXML = data.children()[0]
 			var total = stationXML.child("*").length();
@@ -390,9 +391,9 @@ package {
 				}
 				
 				if(i == total - 2)
-					flood.moveTo(0, -graphFactor * Number(lastXML.VALUE));
+					flood.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE));
 				
-				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE));
+				flood.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE));
 				
 				captionNum++;
 			}
