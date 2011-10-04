@@ -883,7 +883,7 @@ package
 			flood.moveTo(0, baseY0);
 			
 			// VALUE_OUT
-			flood2.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
+			flood2.lineStyle(1, 0xFF0000, 1, true, LineScaleMode.NONE);
 			flood2.moveTo(0, baseY0);
 			
 			var stationXML = data.children()[0]
