@@ -97,7 +97,7 @@ package
 			//setStation("E15", "ok");
 			setStation("E23", "ok");
 			
-			setGraph("E01");
+			setGraph("E12");
 			
 			popdown.visible = true;
 		}
@@ -902,19 +902,26 @@ package
 				if(i == total - 2)
 					flood.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_IN));
 				
-				flood.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
+				if(lastXML.VALUE_IN!="")
+				{
+					flood.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
+					flood.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
+				}else{
+					flood2.lineStyle(1, 0xFFFF00, 0, true, LineScaleMode.NONE);
+					flood2.lineTo(captionNum, 0);
+				}
 				
-				if(Number(lastXML.VALUE_OUT)!=-99)
+				if(Number(lastXML.VALUE_OUT)!=-99 && lastXML.VALUE_OUT!="")
 				{
 					if(i == total - 2)
 						flood2.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
-						
+				
+					flood2.lineStyle(1, 0xFF0000, 1, true, LineScaleMode.NONE);
 					flood2.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
-					trace(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
 				}
 				else
 				{
-					flood2.lineStyle(0.5, 0xFF0000, 0);
+					flood2.lineStyle(1, 0xFF0000, 0, true, LineScaleMode.NONE);
 					flood2.lineTo(captionNum, 0);
 				}
 				
