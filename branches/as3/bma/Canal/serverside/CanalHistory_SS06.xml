@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<CANALMON>
+	<STATION id="BK01">
+	    <NAME>ช่วงถนนประชาชื่น เขตจตุจักร</NAME>
+		<LAST1>
+			<DATE>21/03/2554</DATE>
+			<TIME>11:45:00</TIME>
+			<VALUE>3</VALUE>
+		</LAST1>
+		<LAST2>
+			<DATE>21/03/2554</DATE>
+			<TIME>11:40:00</TIME>
+			<VALUE>-3</VALUE>
+		</LAST2>
+		<LAST3>
+			<DATE>21/03/2554</DATE>
+			<TIME>11:35:00</TIME>
+			<VALUE>3</VALUE>
+		</LAST3>
+	</STATION>
+</CANALMON>
