@@ -190,7 +190,7 @@ package
 
 				//show all
 				house.balloon.extra.text = house.balloon.text = (String(house.config.LABEL)!="")?String(house.config.LABEL):String(house.id);
-				house.balloon.extra.desc = String(house.id) + " : " + String(house.config.NAME);
+				house.balloon.extra.desc = String(house.id) + " : " + String(house.config.CANAL_NAME) + "\n" + String(house.config.NAME);
 
 				//house.balloon.visible = true;
 				//house.balloon.addEventListener(MouseEvent.CLICK, mouseHandler);
