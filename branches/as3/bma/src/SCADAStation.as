@@ -797,8 +797,8 @@ package
 			addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			
 			popdown.iGraph.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-			popdown.iGraph.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
-			popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
+			//popdown.iGraph.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
+			//popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
 			
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
 			
@@ -812,12 +812,24 @@ package
 			popdown.visible = !popdown.visible; 
 		}
 		
+		// prevent update while drag
+		private var isDrag:Boolean;
+		
 		private function mouseUpHandler(event:MouseEvent):void
 		{
 			if (graph.extra.flood)
 			{
 				graph.extra.flood.stopDrag();
 			}
+			
+			if(event.type != MouseEvent.MOUSE_UP)
+				return;
+			
+			isDrag = false;
+			
+			//some hold data
+			if(_data)
+				doRender();
 		}
 		
 		private function mouseDownHandler(event:MouseEvent):void
@@ -826,6 +838,8 @@ package
 			var max = -(graph.extra.flood.width - 763);
 			
 			graph.extra.flood.startDrag(false, new Rectangle(min, graph.extra.flood.y, max, 0));
+			
+			isDrag = true;
 		}
 		
 		public function setGraph(iID)
@@ -848,10 +862,23 @@ package
 			popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
 		}
 		
+		private var _data:XML;
+		
 		public function xmlLoadCompleteHandler(event:Event):void
 		{
 			var loader:URLLoader = event.target as URLLoader;
-			var data:XML = new XML(loader.data);
+			_data = new XML(loader.data);
+			
+			trace("isDrag : " + isDrag);
+			
+			//drag?
+			if(!isDrag)
+				doRender();
+		}
+		
+		private function doRender():void
+		{
+			trace("doRender");
 			
 			var dataProvider:Array = new Array();
 			var captionNum = 0;
@@ -860,12 +887,19 @@ package
 			var baseY0 = +29 - 143/2;//133 - 29 - 133/2;
 			var graphFactor = 14;//70 / 100;
 			
+			// last drag
+			var prevX:Number;
+			
 			if (graph.extra.flood)
+			{
+				prevX = graph.extra.flood.x;
 				graph.removeChild(graph.extra.flood);
+			}
 			
 			graph.extra.flood = graph.addChild(new MovieClip());
-			graph.extra.flood.y = baseY
-			
+			graph.extra.flood.y = baseY;
+			graph.extra.flood.mouseChildren = false;
+					
 			var myFlood = graph.extra.flood.addChild(new Sprite());
 			
 			// VALUE_IN
@@ -886,7 +920,7 @@ package
 			flood2.lineStyle(1, 0xFF0000, 1, true, LineScaleMode.NONE);
 			flood2.moveTo(0, baseY0);
 			
-			var stationXML = data.children()[0]
+			var stationXML = _data.children()[0]
 			var total = stationXML.child("*").length();
 			var isInNull:Boolean = false;
 			var isOutNull:Boolean = false;
@@ -956,7 +990,25 @@ package
 			//flood2.lineTo(total - 2, 0);
 			flood2.endFill();
 			
-			graph.extra.flood.x = -(graph.extra.flood.width - 763);
+			if(isNaN(prevX))
+			{
+				// init
+				graph.extra.flood.x = -(graph.extra.flood.width - 763);
+			}else{
+				// restore last drag pos
+				graph.extra.flood.x = prevX;
+			}
+			
+			// prevent OB left
+			if(graph.extra.flood.x < -graph.extra.flood.width)
+				graph.extra.flood.x = -(graph.extra.flood.width - 763);
+				
+			// prevent OB right
+			if(graph.extra.flood.x > 763)
+				graph.extra.flood.x = 0;
+			
+			// release
+			_data = null;
 		}
 	}
 }
