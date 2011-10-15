@@ -97,7 +97,7 @@ package
 			//setStation("E15", "ok");
 			setStation("E23", "ok");
 			
-			setGraph("E12");
+			setGraph("E30");
 			
 			popdown.visible = true;
 		}
@@ -888,10 +888,19 @@ package
 			
 			var stationXML = data.children()[0]
 			var total = stationXML.child("*").length();
+			var isInNull:Boolean = false;
+			var isOutNull:Boolean = false;
+			var isPrevInNull:Boolean = false;
+			var isPrevOutNull:Boolean = false;
 			
 			for (var i = total - 2; i >= 0; i--)
 			{
 				var lastXML = stationXML.children()[i + 1];
+				
+				// for current draw
+				isInNull = String(lastXML.VALUE_IN).length <= 0;
+				isOutNull = String(lastXML.VALUE_OUT).length <= 0;
+				
 				if (((captionNum) % 4) == 0)
 				{
 					var caption = graph.extra.flood.addChild(new iCaption());
@@ -902,19 +911,24 @@ package
 				if(i == total - 2)
 					flood.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_IN));
 				
-				if(lastXML.VALUE_IN!="")
+				if(!isInNull)
 				{
+					if(isPrevInNull)
+						flood.moveTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
+						
 					flood.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
 					flood.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
 				}else{
-					flood2.lineStyle(1, 0xFFFF00, 0, true, LineScaleMode.NONE);
-					flood2.lineTo(captionNum, 0);
+					flood.lineStyle(1, 0xFFFF00, 0, true, LineScaleMode.NONE);
+					flood.lineTo(captionNum, baseY0);
 				}
 				
-				if(Number(lastXML.VALUE_OUT)!=-99 && lastXML.VALUE_OUT!="")
+				if(Number(lastXML.VALUE_OUT)!=-99 && !isOutNull)
 				{
 					if(i == total - 2)
 						flood2.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
+					else if(isPrevOutNull)
+						flood2.moveTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
 				
 					flood2.lineStyle(1, 0xFF0000, 1, true, LineScaleMode.NONE);
 					flood2.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
@@ -922,8 +936,12 @@ package
 				else
 				{
 					flood2.lineStyle(1, 0xFF0000, 0, true, LineScaleMode.NONE);
-					flood2.lineTo(captionNum, 0);
+					flood2.lineTo(captionNum, baseY0);
 				}
+				
+				// for next draw
+				isPrevInNull = isInNull;
+				isPrevOutNull = isOutNull;
 				
 				captionNum++;
 			}
