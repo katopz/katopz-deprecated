@@ -1,5 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
+  <STATION id="TN01">
+    <NAME>อุโมงค์ทางลอดท่าพระ</NAME>
+    <STATUS>1</STATUS>
+  </STATION>
+  
+  <STATION id="TN02">
+    <NAME>อุโมงค์ทางลอดบางพลัด</NAME>
+    <STATUS>2</STATUS>
+  </STATION>
+  
+  <STATION id="TN03">
+    <NAME>อุโมงค์ทางลอดดินแดง</NAME>
+    <STATUS>1</STATUS>
+  </STATION>
+  
+  <STATION id="TN04">
+    <NAME>อุโมงค์ทางลอดพระราม 9</NAME>
+    <STATUS>2</STATUS>
+  </STATION>
+  
+  <STATION id="TN05">
+    <NAME>อุโมงค์กลับรถยนต์ถนนพัฒนาการ</NAME>
+    <STATUS>1</STATUS>
+  </STATION>
+  
+  <STATION id="TN06">
+    <NAME>อุโมงค์ทางลอดราบ 11</NAME>
+    <STATUS>2</STATUS>
+  </STATION>
+  
+  <STATION id="TN07">
+    <NAME>อุโมงค์ทางลอดห้วยขวาง</NAME>
+    <STATUS>1</STATUS>
+  </STATION>
+  
+  <STATION id="TN08">
+    <NAME>อุโมงค์ทางลอดสุทธิสาร</NAME>
+    <STATUS>2</STATUS>
+  </STATION>
+  
   <STATION id="FL01">
     <NAME>ถ.รัชดา แยกลาดพร้าว </NAME>
     <VALUE>4.40</VALUE>
