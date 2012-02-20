@@ -1,66 +1,56 @@
 ﻿package
 {
 	import caurina.transitions.Tweener;
-	
+
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
-	
+
 	import fl.containers.*;
 	import fl.controls.*;
 	import fl.controls.listClasses.*;
 	import fl.data.DataProvider;
 	import fl.events.ListEvent;
-	
+
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
 	import flash.system.Security;
 	import flash.text.*;
 	import flash.ui.*;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 
 	public class shell extends Panel
 	{
 		public static var configXML:XML;
 
-		var isExternal:Boolean = false;
+		private var isExternal:Boolean = false;
 
-		/*
-		   var page                  : String;
+		private var task;
 
-		   var Canal                 : Panel;
-		   var SCADA                 : Panel;
-		   var Flood                 : Panel;
-		 */
+		private var ticker;
 
-		var task
+		private var totalContent:Number = 0;
+		private var contentLoaded:Number = 0;
+		private var currentItem;
 
-		var ticker
+		private var listWidth:Number = 160;
+		private var currentListName:String = "";
 
-		var totalContent:Number = 0;
-		var contentLoaded:Number = 0;
-		var currentItem;
-
-		var listWidth:Number = 160;
-		var currentListName:String = "";
-
-		var externalPage:String = "";
+		private var externalPage:String = "";
 
 		public function shell()
 		{
-
 			SleepyDesign.log("=============================[ shell ]=============================");
 			Security.allowDomain("*");
 
 			getConfig("config.xml");
 			this.addEventListener(ContentEvent.GETCONFIG, onShellGetConfig);
-
 		}
 
 		public function onShellGetConfig(event:ContentEvent):void
 		{
-
 			SleepyDesign.log(" ^ " + event.type);
 
 			//external
@@ -78,19 +68,16 @@
 
 		public function createShell():void
 		{
-
 			contentLoaded = 0;
 
 			for each (var panelXML in config..panel)
 			{
-
 				var _panel:Panel = new Panel(this, panelXML.@id);
 				createPanel(_panel);
 				addContent(_panel);
 
 				_panel.addEventListener(ContentEvent.SETFOCUS, onContentSetFocus);
 				_panel.addEventListener(ContentEvent.LOSTFOCUS, onContentLostFocus);
-
 			}
 
 			this.addEventListener(ContentEvent.SETFOCUS, onPanelSetFocus);
@@ -99,14 +86,10 @@
 			//_________________________________________________________________ Menu
 
 			createSiteMap();
-
 		}
 
 		public function createPanel(iPanel:Panel):void
 		{
-
-			//page = iPanel.name;
-
 			iPanel.extra = new Object();
 
 			var panelId = iPanel.name;
@@ -172,13 +155,9 @@
 			createList(iPanel);
 
 			if (externalPage)
-			{
 				iPanel.setFocusByName(iPanel.name + externalPage);
-			}
 			else
-			{
 				iPanel.setFocus(iPanel.extra.map);
-			}
 		}
 
 		public function setFocusIndex(iPanel:Panel, iIndex:uint):void
@@ -189,19 +168,12 @@
 
 		public function updatePanel():void
 		{
-
-			//stopPolling()
-
-			//var panel = iPanel;
-			//var page = iPanel.currentContent;
-
 			SleepyDesign.log("=============================[ " + page.name + " ]=============================")
 
 			if (page == panel.extra.map)
 			{
 				//special case for map
 				panel.extra.list.selectedIndex = -1
-
 				update();
 
 			}
@@ -209,9 +181,7 @@
 			{
 				//special case for Floodgraph
 				panel.extra.list.selectedIndex = -1
-
 				update();
-
 			}
 			else
 			{
@@ -239,9 +209,7 @@
 							//history focus
 							setItem(getItemByIndex(page.extra.focusIndex));
 						}
-
 					}
-
 				}
 			}
 
@@ -264,7 +232,6 @@
 
 		public function onContentSetFocus(event:ContentEvent):void
 		{
-
 			SleepyDesign.log(" ^ " + event.type + " : " + event.content.name);
 			//var panel = (currentContent as Panel);
 			//var page = (currentContent as Panel).currentContent;
@@ -273,7 +240,6 @@
 			{
 				getList(StringUtil.getNodeById(config, page.name + "List").@src);
 			}
-
 		}
 
 		public function onContentLostFocus(event:ContentEvent):void
@@ -283,7 +249,6 @@
 
 		public function subFocus(id)
 		{
-
 			try
 			{
 				(currentContent as Panel).setFocus(currentContent.extra[id]);
@@ -292,41 +257,31 @@
 			{
 				//trace(e)
 			}
-
 		}
 
 		public function createSiteMap()
 		{
-
 			var myMenu:ContextMenu = new ContextMenu();
 			myMenu.hideBuiltInItems();
 
 			for each (var panelXML in config..panel)
 			{
-
 				var cutItem:ContextMenuItem = new ContextMenuItem(panelXML.@id);
 				cutItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 
 				myMenu.customItems.push(cutItem);
-
 			}
 
 			this.contextMenu = myMenu;
 
-			//var nav = addChild(new iNav());
-			//nav.addEventListener(DockEvent.SELECTED, dockSelectHandler);
-
 			task = addChild(new iTask());
 			task.y = 558;
 			task.menu = task.addChild(new Menu());
-
 		}
 
 		public function dockSelectHandler(event:DockEvent):void
 		{
-
 			subFocus(event.content);
-			//setItem(currentContent.extra.list.selectedItem);
 		}
 
 		public function menuItemSelectHandler(event:ContextMenuEvent):void
@@ -338,102 +293,96 @@
 
 		public function createList(iPanel:Panel):void
 		{
-
 			iPanel.extra.leftPanel = iPanel.addChild(new iList());
-
 			iPanel.extra.list = iPanel.addChild(new List());
-
 			iPanel.extra.focusIndex = -1;
 
-			var list = iPanel.extra.list
+			var list:List = iPanel.extra.list;
 			list.width = 160;
-			list.height = 450;
+			list.height = 450 - 20;
 
-			list.y = 100;
+			list.y = 100 + 20;
 
 			//updateLeftPanel()
 
+			// tab
+			iPanel.extra.leftPanel.addEventListener(MouseEvent.CLICK, function onListClick(event:MouseEvent):void
+			{
+				var tabID:String = event.target.name.split("_")[0];
+				trace(" ^ tab : " + tabID);
+
+				if (tabID && tabID.length > 0)
+				{
+					// tab view
+					iPanel.extra.leftPanel.focus_mc.gotoAndStop(tabID);
+					var list:List = iPanel.extra.list;
+					list.dataProvider = _dps[tabID];
+				}
+			});
 		}
 
 		public function updateLeftPanel():void
 		{
 			if (page)
-			{
-				panel.extra.leftPanel.title.gotoAndStop(page.name)
-			}
+				panel.extra.leftPanel.title.gotoAndStop(page.name);
 		}
 
 		public function getList(iURL)
 		{
-			trace(" > getList : " + iURL)
+			trace(" > getList : " + iURL);
 			var loader:URLLoader = new URLLoader();
 			var request:URLRequest = new URLRequest(URLUtil.killCache(iURL))
 
 			loader.load(request);
 			loader.addEventListener(Event.COMPLETE, onListComplete);
-
 		}
 
 		public function onListRollOver(event:MouseEvent):void
 		{
-
-			Tweener.removeTweens(currentContent.extra.list)
+			Tweener.removeTweens(currentContent.extra.list);
 
 			if (currentContent.extra.list.width < listWidth)
-			{
-				Tweener.addTween(currentContent.extra.list, {alpha: 0.5, width: listWidth, time: 0.25, transition: "easeoutquad"})
-			}
-
+				Tweener.addTween(currentContent.extra.list, {alpha: 0.75, width: listWidth, time: 0.25, transition: "easeoutquad"});
 		}
 
 		public function onListRollOut(event:MouseEvent):void
 		{
-
-			Tweener.addTween(currentContent.extra.list, {alpha: 1, width: 160, time: 0.25, delay: 0, transition: "easeinquad"})
-
+			Tweener.addTween(currentContent.extra.list, {alpha: 1, width: 160, time: 0.25, delay: 0, transition: "easeinquad"});
 		}
 
 		public function onListSelect(event:ListEvent):void
 		{
-
 			//update();
-
 		}
 
 		public function onListChange(event:Event):void
 		{
-
-			stopPolling()
-
-			//var panel = currentContent as Panel;
-			//var page = (currentContent as Panel).currentContent;
-
+			stopPolling();
 
 			if (page == panel.extra.map)
 			{
 				//special case for map
-				setFocusIndex(panel, panel.extra.list.selectedIndex)
+				setFocusIndex(panel, panel.extra.list.selectedIndex);
 				subFocus("station");
 			}
 			else if (page.name == "FloodGraph")
 			{
 				//special case for FloodGraph
-				setFocusIndex(panel, panel.extra.list.selectedIndex)
+				setFocusIndex(panel, panel.extra.list.selectedIndex);
 				subFocus("station");
 			}
 			else
 			{
-				setItem(currentContent.extra.list.selectedItem)
+				setItem(currentContent.extra.list.selectedItem);
 			}
 		}
 
 		public function update()
 		{
+			stopPolling();
 
-			stopPolling()
+			SleepyDesign.log(" * " + ContentEvent.UPDATE + " : " + panel.currentContent.name);
 
-			//var panel = currentContent as Panel;
-			SleepyDesign.log(" * " + ContentEvent.UPDATE + " : " + panel.currentContent.name)
 			if (currentItem)
 			{
 				dispatchEvent(new ContentEvent(ContentEvent.UPDATE, panel.currentContent, currentItem.data));
@@ -445,7 +394,6 @@
 			{
 				dispatchEvent(new ContentEvent(ContentEvent.UPDATE, panel.currentContent, null));
 			}
-
 		}
 
 		public function onTick(event:TimerEvent)
@@ -461,18 +409,13 @@
 			{
 				ticker.reset();
 			}
-
 		}
 
 		public function startPolling()
 		{
-
 			stopPolling()
 
 			trace(" > startPolling");
-
-			//var panel = currentContent as Panel;
-			//var page = (currentContent as Panel).currentContent;
 
 			if (!ticker)
 			{
@@ -481,7 +424,6 @@
 			}
 
 			ticker.start();
-
 		}
 
 		public function lostFocus(iItem):void
@@ -496,7 +438,7 @@
 
 		public function getIndexById(iId)
 		{
-			SleepyDesign.log("getIndexById : " + iId)
+			SleepyDesign.log("getIndexById : " + iId);
 
 			for (var i = 0; i < currentContent.extra.list.dataProvider.length; i++)
 			{
@@ -512,7 +454,7 @@
 
 		public function getItemById(iId)
 		{
-			SleepyDesign.log("getItemById : " + iId)
+			SleepyDesign.log("getItemById : " + iId);
 
 			for (var i = 0; i < currentContent.extra.list.dataProvider.length; i++)
 			{
@@ -533,11 +475,11 @@
 
 			if (iItem)
 			{
-				currentItem = iItem
+				currentItem = iItem;
 
-				currentContent.extra.list.selectedItem = currentItem
+				currentContent.extra.list.selectedItem = currentItem;
 
-				page.extra.focusIndex = currentContent.extra.list.selectedIndex
+				page.extra.focusIndex = currentContent.extra.list.selectedIndex;
 
 				update();
 			}
@@ -552,9 +494,8 @@
 			}
 			else
 			{
-				return null
+				return null;
 			}
-
 		}
 
 		public function get page()
@@ -567,37 +508,34 @@
 				}
 				else
 				{
-					return null
+					return null;
 				}
 			}
 			else
 			{
-				return null
+				return null;
 			}
 		}
 
+		private var _dps:Dictionary;
 
 		public function onListComplete(event:Event):void
 		{
-
 			SleepyDesign.log(" ^ " + event.type);
 
-			//var panel = (currentContent as Panel);
-			//var page = (currentContent as Panel).currentContent;
+			currentListName = page.name;
+			trace(" - currentListName : " + page.name);
 
-			currentListName = page.name
-			trace(" - currentListName : " + page.name)
-
-			updateLeftPanel()
+			updateLeftPanel();
 
 			var loader:URLLoader = event.target as URLLoader;
 			var xml:XML = new XML(loader.data);
 
 			var dp:DataProvider = new DataProvider();
-			var item
+			var item;
 
-			listWidth = 160
-			var labelNormal = ""
+			listWidth = 160;
+			var labelNormal = "";
 
 			switch (currentContent.name)
 			{
@@ -606,21 +544,19 @@
 					switch (panel.currentContent)
 					{
 						case panel.extra.graph:
-							//trace("Canal.extra.graph ")
 							for each (item in xml.CANAL)
 							{
 								labelNormal = item.@NAME;
-								//trace(labelNormal);
 
-								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item})
+								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item});
 								listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 							}
 							break;
 						default:
 							for each (item in xml.STATION)
 							{
-								labelNormal = item.@id + " " + item.CANAL_NAME + " " + item.NAME
-								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item})
+								labelNormal = item.@id + " " + item.CANAL_NAME + " " + item.NAME;
+								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item});
 								listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 							}
 							break;
@@ -634,26 +570,38 @@
 						case panel.extra.graph:
 							for each (item in xml.RAIN)
 							{
-								labelNormal = item
-								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item})
+								labelNormal = item;
+								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item});
 								listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 							}
 							break;
 						default:
 							for each (item in xml.STATION)
 							{
-								labelNormal = item.@id + " " + item.CANAL_NAME + " " + item.NAME
-								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item})
+								labelNormal = item.@id + " " + item.CANAL_NAME + " " + item.NAME;
+								dp.addItem({id: item.@id, labelNormal: labelNormal, data: item});
 								listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 							}
 							break;
 					}
 					break;
 				default:
+					// tab
+					_dps = new Dictionary;
+					dp = _dps["all"] = new DataProvider();
+					_dps["flood"] = new DataProvider();
+					_dps["tunnel"] = new DataProvider();
+
 					for each (item in xml.STATION)
 					{
-						labelNormal = item.@id + " " + item.CANAL_NAME + " " + item.NAME
-						dp.addItem({id: item.@id, labelNormal: labelNormal, data: item})
+						labelNormal = item.@id + " " + item.CANAL_NAME + " " + item.NAME;
+						_dps["all"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
+
+						if (String(item.@id).indexOf("FL") == 0)
+							_dps["flood"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
+						else if (String(item.@id).indexOf("TN") == 0)
+							_dps["tunnel"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
+
 						listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 					}
 
@@ -667,6 +615,7 @@
 			list.addEventListener(MouseEvent.ROLL_OVER, onListRollOver);
 			list.addEventListener(MouseEvent.ROLL_OUT, onListRollOut);
 			list.addEventListener(ListEvent.ITEM_CLICK, onListSelect);
+
 			list.addEventListener(Event.CHANGE, onListChange);
 
 			updatePanel();
@@ -676,7 +625,7 @@
 
 		public function onForegroundComplete(event:ContentEvent):void
 		{
-			var link = addChild(new iLink())
+			var link = addChild(new iLink());
 			link.web.buttonMode = true;
 			link.bma.buttonMode = true;
 			link.web.addEventListener(MouseEvent.CLICK, linkClick);

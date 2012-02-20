@@ -83,7 +83,7 @@ package {
 			var dataPath:String = "../serverside/FloodmonAllStation.xml";
 			
 			setGraph("VALUE");
-			
+	
 		}
 		
 		//_________________________________________________________________ Graph
@@ -92,7 +92,7 @@ package {
 			
 			var chart = graph;
 			
-			chart.horizontalField = "@id";
+			chart.horizontalField = "LABEL";
 			chart.verticalField = type;
 			
 			series0 = new LineSeries();

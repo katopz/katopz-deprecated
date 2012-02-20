@@ -6,23 +6,25 @@
 
 package
 {
-	import com.sleepydesign.SleepyDesign;
-	import com.sleepydesign.containers.Cursor;
-	import com.sleepydesign.site.*;
-	import com.sleepydesign.utils.*;
-	
-	import flash.display.*;
-	import flash.display.BitmapData;
-	import flash.events.*;
-	import flash.geom.*;
-	import flash.geom.ColorTransform;
-	import flash.geom.Transform;
-	import flash.net.*;
 	import flash.system.Security;
+	import flash.geom.*
+	import flash.display.*
+	import flash.events.*;
+	import flash.net.*;
 	import flash.text.*;
 	import flash.utils.Dictionary;
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
+
+	import com.sleepydesign.SleepyDesign;
+	import com.sleepydesign.site.*;
+	import com.sleepydesign.utils.*;
+	import com.sleepydesign.containers.Cursor;
+
+	//TODO Fake2D Class
+	import flash.display.BitmapData;
+	import flash.geom.ColorTransform;
+	import flash.geom.Transform;
 
 	public class SCADAStation extends Content
 	{
@@ -97,7 +99,7 @@ package
 			//setStation("E15", "ok");
 			setStation("E23", "ok");
 			
-			setGraph("E30");
+			setGraph("E01");
 			
 			popdown.visible = true;
 		}
@@ -797,8 +799,8 @@ package
 			addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			
 			popdown.iGraph.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-			//popdown.iGraph.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
-			//popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
+			popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
 			
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
 			
@@ -812,24 +814,12 @@ package
 			popdown.visible = !popdown.visible; 
 		}
 		
-		// prevent update while drag
-		private var isDrag:Boolean;
-		
 		private function mouseUpHandler(event:MouseEvent):void
 		{
 			if (graph.extra.flood)
 			{
 				graph.extra.flood.stopDrag();
 			}
-			
-			if(event.type != MouseEvent.MOUSE_UP)
-				return;
-			
-			isDrag = false;
-			
-			//some hold data
-			if(_data)
-				doRender();
 		}
 		
 		private function mouseDownHandler(event:MouseEvent):void
@@ -838,8 +828,6 @@ package
 			var max = -(graph.extra.flood.width - 763);
 			
 			graph.extra.flood.startDrag(false, new Rectangle(min, graph.extra.flood.y, max, 0));
-			
-			isDrag = true;
 		}
 		
 		public function setGraph(iID)
@@ -862,44 +850,23 @@ package
 			popdown.iGraph.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler);
 		}
 		
-		private var _data:XML;
-		
 		public function xmlLoadCompleteHandler(event:Event):void
 		{
 			var loader:URLLoader = event.target as URLLoader;
-			_data = new XML(loader.data);
-			
-			trace("isDrag : " + isDrag);
-			
-			//drag?
-			if(!isDrag)
-				doRender();
-		}
-		
-		private function doRender():void
-		{
-			trace("doRender");
+			var data:XML = new XML(loader.data);
 			
 			var dataProvider:Array = new Array();
 			var captionNum = 0;
 			
-			var baseY = 143 - 29;//104 - 29;
-			var baseY0 = +29 - 143/2;//133 - 29 - 133/2;
-			var graphFactor = 14;//70 / 100;
-			
-			// last drag
-			var prevX:Number;
+			var baseY = 104 - 29;
+			var graphFactor = 70 / 100;
 			
 			if (graph.extra.flood)
-			{
-				prevX = graph.extra.flood.x;
 				graph.removeChild(graph.extra.flood);
-			}
 			
 			graph.extra.flood = graph.addChild(new MovieClip());
-			graph.extra.flood.y = baseY;
-			graph.extra.flood.mouseChildren = false;
-					
+			graph.extra.flood.y = baseY
+			
 			var myFlood = graph.extra.flood.addChild(new Sprite());
 			
 			// VALUE_IN
@@ -913,28 +880,19 @@ package
 			//_________________________________________water
 			
 			// VALUE_IN
-			flood.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
-			flood.moveTo(0, baseY0);
+			flood.lineStyle(0.5, 0xFFFF00, 1);
+			flood.moveTo(0, 0);
 			
 			// VALUE_OUT
-			flood2.lineStyle(1, 0xFF0000, 1, true, LineScaleMode.NONE);
-			flood2.moveTo(0, baseY0);
+			flood2.lineStyle(0.5, 0xFF0000, 1);
+			flood2.moveTo(0, 0);
 			
-			var stationXML = _data.children()[0]
+			var stationXML = data.children()[0]
 			var total = stationXML.child("*").length();
-			var isInNull:Boolean = false;
-			var isOutNull:Boolean = false;
-			var isPrevInNull:Boolean = false;
-			var isPrevOutNull:Boolean = false;
 			
 			for (var i = total - 2; i >= 0; i--)
 			{
 				var lastXML = stationXML.children()[i + 1];
-				
-				// for current draw
-				isInNull = String(lastXML.VALUE_IN).length <= 0;
-				isOutNull = String(lastXML.VALUE_OUT).length <= 0;
-				
 				if (((captionNum) % 4) == 0)
 				{
 					var caption = graph.extra.flood.addChild(new iCaption());
@@ -943,39 +901,23 @@ package
 				}
 				
 				if(i == total - 2)
-					flood.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_IN));
+					flood.moveTo(0, -graphFactor * Number(lastXML.VALUE_IN));
 				
-				if(!isInNull)
-				{
-					if(isPrevInNull)
-						flood.moveTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
-						
-					flood.lineStyle(1, 0xFFFF00, 1, true, LineScaleMode.NONE);
-					flood.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_IN));
-				}else{
-					flood.lineStyle(1, 0xFFFF00, 0, true, LineScaleMode.NONE);
-					flood.lineTo(captionNum, baseY0);
-				}
+				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_IN));
 				
-				if(Number(lastXML.VALUE_OUT)!=-99 && !isOutNull)
+				if(Number(lastXML.VALUE_OUT)!=-99)
 				{
 					if(i == total - 2)
-						flood2.moveTo(0, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
-					else if(isPrevOutNull)
-						flood2.moveTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
-				
-					flood2.lineStyle(1, 0xFF0000, 1, true, LineScaleMode.NONE);
-					flood2.lineTo(captionNum, baseY0-graphFactor * Number(lastXML.VALUE_OUT));
+						flood2.moveTo(0, -graphFactor * Number(lastXML.VALUE_OUT));
+						
+					flood2.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
+					trace(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
 				}
 				else
 				{
-					flood2.lineStyle(1, 0xFF0000, 0, true, LineScaleMode.NONE);
-					flood2.lineTo(captionNum, baseY0);
+					flood2.lineStyle(0.5, 0xFF0000, 0);
+					flood2.lineTo(captionNum, 0);
 				}
-				
-				// for next draw
-				isPrevInNull = isInNull;
-				isPrevOutNull = isOutNull;
 				
 				captionNum++;
 			}
@@ -990,25 +932,7 @@ package
 			//flood2.lineTo(total - 2, 0);
 			flood2.endFill();
 			
-			if(isNaN(prevX))
-			{
-				// init
-				graph.extra.flood.x = -(graph.extra.flood.width - 763);
-			}else{
-				// restore last drag pos
-				graph.extra.flood.x = prevX;
-			}
-			
-			// prevent OB left
-			if(graph.extra.flood.x < -graph.extra.flood.width)
-				graph.extra.flood.x = -(graph.extra.flood.width - 763);
-				
-			// prevent OB right
-			if(graph.extra.flood.x > 763)
-				graph.extra.flood.x = 0;
-			
-			// release
-			_data = null;
+			graph.extra.flood.x = -(graph.extra.flood.width - 763);
 		}
 	}
 }

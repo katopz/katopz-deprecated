@@ -1,10 +1,4 @@
-﻿/**
- * ...
- * @author katopz@sleepydesign.com
- * @version 0.1
- */
-
-package
+﻿package
 {
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.containers.Balloon;
@@ -20,8 +14,6 @@ package
 	import flash.utils.Dictionary;
 
 	import gs.TweenMax;
-
-	//import caurina.transitions.Tweener;
 
 	public class Map extends Content
 	{
@@ -49,7 +41,8 @@ package
 		}
 
 		//_________________________________________________________________ Map
-		var houseDict:Dictionary
+
+		private var houseDict:Dictionary;
 
 		public function init():void
 		{
@@ -63,11 +56,7 @@ package
 
 				house.visible = false;
 				house.isChk = true;
-				house.cacheAsBitmap = true;
-
-				//house.buttonMode = true;
-				//house.useHandCursor = true
-				//house.hitArea = house.hit
+				house.cacheAsBitmap = false;
 
 				house.balloon = new Balloon("");
 				house.balloon.extra = {desc: ""};
@@ -79,7 +68,6 @@ package
 				house.balloon.y -= 12;
 				house.balloon.extra.y = house.balloon.y;
 				house.balloon.alpha = 0.75;
-				//house.balloon.blendMode = BlendMode.SCREEN
 				house.balloon.extra.house = house;
 
 				house.balloon.mouseEnabled = false;
@@ -88,12 +76,13 @@ package
 				house.balloon.mouseChildren = false;
 
 				house.hit = GraphicUtil.createRect(house, housesMovieClip);
-				house.hit.x = house.x - house.width * .5 - 3
-				house.hit.y = house.y - house.height * .5 - 3
+				house.hit.x = house.x - house.width * .5;
+				house.hit.y = house.y - house.height * .5 - 3;
 				house.hit.alpha = 0;
-				house.hit.buttonMode = true;
-				house.hit.useHandCursor = true
 
+				house.hit.buttonMode = true;
+				house.hit.useHandCursor = true;
+				house.cacheAsBitmap = true;
 
 				house.scaleX = 1.3;
 				house.scaleY = 1.3;
@@ -173,28 +162,12 @@ package
 					house.balloon.alpha = 1;
 				else
 					house.balloon.alpha = 0;
+
 				house.gotoAndStop(1 + Number(house.config.STATUS));
-				//trace(1 + Number(house.config.STATUS));
-				//house.gotoAndStop(3);
-				/*
-				   //special request
-				   if (String(house.name).charAt(0) == "E") {
-				   //trace(String(house.name).charAt(0) )
-				   house.visible = true;
-				   house.gotoAndStop(2);
-				   house.hit.addEventListener(MouseEvent.MOUSE_OVER, mouseHandler);
-				   house.hit.addEventListener(MouseEvent.MOUSE_OUT, mouseHandler);
-				   }
-				   //cancel 2008_03_27
-				 */
 
 				//show all
-				house.balloon.extra.text = house.balloon.text = (String(house.config.LABEL)!="")?String(house.config.LABEL):(String(house.id) + " : " + String(house.config.CANAL_NAME));
-				house.balloon.extra.desc = String(house.id) + " : " + String(house.config.CANAL_NAME) + "\n" + String(house.config.NAME);
-
-				//house.balloon.visible = true;
-				//house.balloon.addEventListener(MouseEvent.CLICK, mouseHandler);
-				//house.balloon.show();
+				house.balloon.extra.text = house.balloon.text = (String(house.config.LABEL) != "") ? String(house.config.LABEL) : String(house.id);
+				house.balloon.extra.desc = String(house.id) + " : " + String(house.config.NAME);
 
 				house.balloon.scaleX = house.balloon.scaleY = 0.99609375;
 				house.scaleX = house.scaleY = house.balloon.scaleX;
@@ -273,44 +246,34 @@ package
 					}
 					break;
 				case MouseEvent.MOUSE_OVER:
-					//if(house.hit.mouseEnabled)
 					if (!house.isMouseOver)
 					{
 						house.isMouseOver = true
-						house.body.gotoAndPlay(1);
-						//Tweener.addTween(house, { scaleX:1.5, scaleY:1.5, time:1 } );
+
+						if (house.body)
+							house.body.gotoAndPlay(1);
 
 						house.balloon.visible = true;
-						/*
-						   house.balloon.alpha = 0;
-						   house.balloon.visible = true;
-						   house.balloon.show();
-						   house.balloon.text = String(house.id)
-						   house.balloon.copyPosition(house);
-						 */
 
-						//if(balloon.y>balloon.height){
 						var oy:Number = house.balloon.y;
-						//house.balloon.y = oy-5*house.scaleX;
 
 						house.balloon.text = house.balloon.extra.desc;
 
 						for (i in houses)
 						{
-							//houses[i].balloon.alpha = .1;
 							if (houses[i] != house)
 								TweenMax.to(houses[i].balloon, 0.2, {alpha: 0})
 						}
+
 						house.balloon.alpha = .75;
-							//Tweener.addTween(house.balloon, { y:oy, time:1 } );
-							//TweenMax.to(house.balloon, 1, { y:oy} );
 					}
 					break;
 				case MouseEvent.MOUSE_OUT:
 
 					house.isMouseOver = false
-					//house.balloon.hide();
-					house.body.gotoAndStop(1);
+
+					if (house.body)
+						house.body.gotoAndStop(1);
 
 					house.balloon.text = house.balloon.extra.text;
 
