@@ -442,11 +442,11 @@ package com.yahoo.astra.fl.charts
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
 					label.x = this._contentBounds.x - label.width - labelDistance;
-					label.y = position - label.height / 2;
+					label.y = position - label.height /2;
 				}
 				else
 				{
-					label.x = position - label.width / 2;
+					label.x = position - label.width /2;
 					label.y = this._contentBounds.y + this._contentBounds.height + labelDistance;
 				}
 				
@@ -530,7 +530,7 @@ package com.yahoo.astra.fl.charts
 				}
 				
 				//
-				label.x += 28;
+				label.x +=28;
 			} //end for loop
 		}
 		
@@ -603,9 +603,9 @@ package com.yahoo.astra.fl.charts
 				label.embedFonts = true;
 				
 				label.styleSheet = new StyleSheet();
-				label.styleSheet.parseCSS("p {font-family: supermarket;font-size: 12px;color:#000000;}");
+				label.styleSheet.parseCSS("p{font-family: tahoma;font-size:10px;color:#000000;}");
 				
-				label.rotation = 45;
+				label.rotation = 80;
 				
 				var _str:String = this.valueToLabel(i);
 				label.htmlText = "<p>"+_str+"</p>";//.substring(0,1)+"\n"+_str.substring(1,3)
