@@ -317,6 +317,8 @@
 					iPanel.extra.leftPanel.focus_mc.gotoAndStop(tabID);
 					var list:List = iPanel.extra.list;
 					list.dataProvider = _dps[tabID];
+
+					Global.tabID = tabID;
 				}
 			});
 		}
@@ -589,8 +591,8 @@
 					// tab
 					_dps = new Dictionary;
 					dp = _dps["all"] = new DataProvider();
-					_dps["flood"] = new DataProvider();
-					_dps["tunnel"] = new DataProvider();
+					_dps["FL"] = new DataProvider();
+					_dps["TN"] = new DataProvider();
 
 					for each (item in xml.STATION)
 					{
@@ -598,9 +600,9 @@
 						_dps["all"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
 
 						if (String(item.@id).indexOf("FL") == 0)
-							_dps["flood"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
+							_dps["FL"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
 						else if (String(item.@id).indexOf("TN") == 0)
-							_dps["tunnel"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
+							_dps["TN"].addItem({id: item.@id, labelNormal: labelNormal, data: item});
 
 						listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 					}
