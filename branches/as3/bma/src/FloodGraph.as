@@ -230,8 +230,8 @@
 						}
 					}
 
-					data0.sortOn("@id");
-					data1.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
+					data1.sortOn("@id");
+					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 
 					graph0.width = data.STATION.length() * 760 / 20;
 					graph0.width = .5 * Math.max(graph0.width, 760);
@@ -268,8 +268,8 @@
 						}
 					}
 
-					data0.sortOn("@id");
-					data1.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
+					data1.sortOn("@id");
+					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 
 					var w:Number = data0.length * 760 / 10;
 					graph1.width = graph0.width = Math.max(w, 760);
