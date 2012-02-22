@@ -1,10 +1,4 @@
-﻿/**
-* ...
-* @author katopz@sleepydesign.com
-* @version 0.1
-*/
-
-package
+﻿package
 {
 	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.*;
@@ -19,6 +13,7 @@ package
 	import flash.net.*;
 	import flash.system.Security;
 
+	import gs.TweenLite;
 	import gs.TweenMax;
 
 	public class FloodGraph extends Content
@@ -113,6 +108,13 @@ package
 			var dataPath = XMLUtil2.getNodeById(config, "FloodGraphData").@src;
 			var method = String(XMLUtil2.getNodeById(config, "FloodGraphData").@method).toUpperCase();
 
+			trace("all color : " + XMLUtil2.getNodeById(config, "FloodGraphData").@allColor);
+
+			// color
+			Global.ALL_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@allColor || Global.ALL_GRAPH_COLOR;
+			Global.FLOOD_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@floodColor || Global.FLOOD_GRAPH_COLOR;
+			Global.TUNNEL_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@tunnelColor || Global.TUNNEL_GRAPH_COLOR;
+
 			if (isTest)
 				dataPath = "../serverside/FloodmonAllStation.xml";
 
@@ -199,6 +201,13 @@ package
 					graph1.width = data.STATION.length() * 760 / 20;
 					graph1.width = .5 * Math.max(graph1.width, 760);
 
+					// color
+					ColumnChart.getStyleDefinition().seriesColors[0] = Global.ALL_GRAPH_COLOR;
+					TweenMax.to(flood_0_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
+					TweenMax.to(flood_1_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
+					TweenMax.to(tunnel_0_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
+					TweenMax.to(tunnel_1_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
+
 					series0.dataProvider = data3;
 					series1.dataProvider = data1;
 
@@ -227,6 +236,13 @@ package
 					graph1.width = data.STATION.length() * 760 / 20;
 					graph1.width = .5 * Math.max(graph1.width, 760);
 
+					// color
+					ColumnChart.getStyleDefinition().seriesColors[0] = Global.FLOOD_GRAPH_COLOR;
+					TweenMax.to(flood_0_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(flood_1_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(tunnel_0_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(tunnel_1_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
+
 					series0.dataProvider = data0;
 					series1.dataProvider = data1;
 
@@ -252,12 +268,18 @@ package
 					var w:Number = data0.length * 760 / 10;
 					graph1.width = graph0.width = Math.max(w, 760);
 
+					// color
+					ColumnChart.getStyleDefinition().seriesColors[0] = Global.TUNNEL_GRAPH_COLOR;
+					TweenMax.to(flood_0_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(flood_1_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(tunnel_0_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(tunnel_1_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
+
 					series0.dataProvider = data0;
 					series1.dataProvider = data1;
 
 					graph0.dataProvider = [data0, series0];
 					graph1.dataProvider = [data1, series1];
-
 					break;
 				}
 			}
