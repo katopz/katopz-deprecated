@@ -38,7 +38,8 @@
 		}
 
 		// graph
-		public static const TUNNEL_GRAPH_COLOR:Number = 0x0000CC;
-		public static const FLOOD_GRAPH_COLOR:Number = 0x00CC00;
+		public static var ALL_GRAPH_COLOR:Number = 0x729FCF;
+		public static var FLOOD_GRAPH_COLOR:Number = 0x4E70AF;
+		public static var TUNNEL_GRAPH_COLOR:Number = 0x76AD96;
 	}
 }
