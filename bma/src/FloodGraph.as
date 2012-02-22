@@ -208,6 +208,9 @@
 					TweenMax.to(tunnel_0_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
 
+					// rotation
+					Global.GRAPH_ROTATION = 80;
+
 					series0.dataProvider = data3;
 					series1.dataProvider = data1;
 
@@ -243,6 +246,9 @@
 					TweenMax.to(tunnel_0_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
 
+					// rotation
+					Global.GRAPH_ROTATION = 80;
+
 					series0.dataProvider = data0;
 					series1.dataProvider = data1;
 
@@ -275,6 +281,9 @@
 					TweenMax.to(tunnel_0_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
 
+					// rotation
+					Global.GRAPH_ROTATION = 0;
+
 					series0.dataProvider = data0;
 					series1.dataProvider = data1;
 
@@ -285,6 +294,12 @@
 			}
 
 			// draw left
+			if (fake0)
+				fake0.visible = false;
+
+			if (fake1)
+				fake1.visible = false;
+
 			TweenMax.to(this, 0.5, {onComplete: draw});
 		}
 
