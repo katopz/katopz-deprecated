@@ -76,11 +76,14 @@
 			//popdown.iGraph.buttonMode = true
 
 			popdown.visible = false;
+			popdown.road_desc2_mc.visible = false;
+			popdown.iDetail.visible = false;
+			popdown.iTunnelDetail.visible = false;
 
 			var cursor1:Cursor = new Cursor(this, popup.iRoad);
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
 
-			test();
+			//test();
 		}
 
 		//080610
@@ -423,7 +426,7 @@
 
 		private function mouseDownHandler2(event:MouseEvent):void
 		{
-			var min = 0
+			var min = 0;
 			var max = -(road.extra.flood.width - popup.iRoad.mask.width);
 
 			road.extra.flood.startDrag(false, new Rectangle(min, 0, max, 0));
@@ -592,7 +595,10 @@
 			updateStation();
 
 			// visibility
-			popdown.popupButton.visible = false;
+			popdown.popupButton.visible = true;
+			popdown.road_desc2_mc.visible = false;
+			popdown.iDetail.visible = true;
+			popdown.iTunnelDetail.visible = false;
 		}
 
 		private function setupTunnel(xml:XML):void
@@ -601,9 +607,8 @@
 
 			//setGraph
 			if (section.extra.fake2D)
-			{
 				section.removeChild(section.extra.fake2D);
-			}
+
 			section.extra.fake2D = section.addChild(new Sprite())
 
 			//setStationDetail
@@ -614,21 +619,39 @@
 			section.extra.detail.x = popdown.iSection.x;
 			section.extra.detail.y = popdown.iSection.y;
 
-			popdown.ALERT_TOP_IN.tf.htmlText = item.ALERT_TOP_IN;
-			popdown.ALERT_BOTTOM_IN.tf.htmlText = item.ALERT_BOTTOM_IN;
-			popdown.ALERT_TOP_OUT.tf.htmlText = item.ALERT_TOP_OUT;
-			popdown.ALERT_BOTTOM_OUT.tf.htmlText = item.ALERT_BOTTOM_OUT;
+			if (String(item.ALERT_TOP_IN).length > 0)
+				popdown.road_desc2_mc.ALERT_TOP_IN.tf.htmlText = item.ALERT_TOP_IN;
+			else
+				popdown.road_desc2_mc.ALERT_TOP_IN.visible = false;
+
+			if (String(item.ALERT_BOTTOM_IN).length > 0)
+				popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf.htmlText = item.ALERT_BOTTOM_IN;
+			else
+				popdown.road_desc2_mc.ALERT_BOTTOM_IN.visible = false;
+
+			if (String(item.ALERT_TOP_OUT).length > 0)
+				popdown.road_desc2_mc.ALERT_TOP_OUT.tf.htmlText = item.ALERT_TOP_OUT;
+			else
+				popdown.road_desc2_mc.ALERT_TOP_OUT.visible = false;
+
+			if (String(item.ALERT_BOTTOM_OUT).length > 0)
+				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf.htmlText = item.ALERT_BOTTOM_OUT;
+			else
+				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.visible = false;
 
 			// pump
 			var pump_ins:Array = String(item.STATUS_PUMP_IN).split(",");
 			var pump_outs:Array = String(item.STATUS_PUMP_OUT).split(",");
 
+			var i:int;
+			var pump:MovieClip;
+
 			// pump left
 			if (String(item.STATUS_PUMP_IN).length > 0)
-				for (var i:int = 0; i < pump_ins.length; i++)
+				for (i = 0; i < pump_ins.length; i++)
 				{
-					var pump:MovieClip = new Pump();
-					pump.gotoAndStop(pump_ins[i] + 1);
+					pump = new Pump();
+					pump.gotoAndStop(2 - pump_ins[i]);
 					addChild(pump);
 					pump.x = 210 + i * 20;
 					pump.y = 237;
@@ -636,10 +659,10 @@
 
 			// pump right
 			if (String(item.STATUS_PUMP_OUT).length > 0)
-				for (var i:int = 0; i < pump_outs.length; i++)
+				for (i = 0; i < pump_outs.length; i++)
 				{
-					var pump:MovieClip = new Pump();
-					pump.gotoAndStop(pump_outs[i] + 1);
+					pump = new Pump();
+					pump.gotoAndStop(2 - pump_ins[i]);
 					addChild(pump);
 					pump.x = 947 - i * 20;
 					pump.y = 237;
@@ -677,6 +700,9 @@
 
 			// visibility
 			popdown.popupButton.visible = false;
+			popdown.road_desc2_mc.visible = true;
+			popdown.iDetail.visible = false;
+			popdown.iTunnelDetail.visible = true;
 		}
 
 		//_________________________________________________________________ History
