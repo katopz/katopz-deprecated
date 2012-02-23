@@ -683,8 +683,9 @@
 
 			floodObject = new Object();
 
-			floodObject.height = Number(item.VALUE);
-			floodObject.roadHeight = Number(item.ROAD_HEIGHT);
+			// TODO : VALUE_IN, VALUE_OUT, <ROAD_HEIGHT>25</ROAD_HEIGHT>, water in out
+			floodObject.height = 20; //Number(item.VALUE);
+			floodObject.roadHeight = 180; //Number(item.ROAD_HEIGHT);
 
 			section.extra.detail.waterHeight.htmlText = floodObject.height;
 			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
