@@ -399,8 +399,8 @@
 			//road.addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler2);
 			road.addEventListener(MouseEvent.ROLL_OUT, mouseUpHandler2);
 
-			road.buttonMode = true
-			road.extra.flood.x = 20 - road.extra.flood.width * .5 + popup.iRoad.mask.width * .5
+			road.buttonMode = true;
+			road.extra.flood.x = 20 - road.extra.flood.width * .5 + popup.iRoad.mask.width * .5;
 
 			var _road:MovieClip = event.content.road as MovieClip;
 			if (_road)
@@ -441,7 +441,7 @@
 			if (section.extra.flood)
 				section.removeChild(section.extra.flood);
 
-			section.extra.flood = section.addChild(new MovieClip())
+			section.extra.flood = section.addChild(new MovieClip());
 			var flood = section.extra.flood;
 
 			if (!flood.water)
@@ -452,7 +452,7 @@
 
 			if (!flood.bank)
 			{
-				flood.bank = flood.addChild(new MovieClip())
+				flood.bank = flood.addChild(new MovieClip());
 
 				flood.bank.left = GraphicUtil.createRect(flood.water, flood.bank);
 				flood.bank.right = GraphicUtil.createRect(flood.water, flood.bank);
@@ -508,7 +508,7 @@
 		public function onSectionComplete(event:ContentEvent):void
 		{
 			SleepyDesign.log(" ^ " + event.type);
-			event.content.mask = section.extra.flood.bank
+			event.content.mask = section.extra.flood.bank;
 			//section.extra.fake2D.addChild(new Fake2D(section.extra.flood,20,0.1 ))
 		}
 
@@ -516,7 +516,7 @@
 
 		public function onComplete(event:Event):void
 		{
-			var mom = (parent as Content)
+			var mom = (parent as Content);
 			if (mom)
 				mom.ready();
 
@@ -538,19 +538,17 @@
 
 			//setGraph
 			if (section.extra.fake2D)
-			{
 				section.removeChild(section.extra.fake2D);
-			}
-			section.extra.fake2D = section.addChild(new Sprite())
+
+			section.extra.fake2D = section.addChild(new Sprite());
 
 			//setStationDetail
 			if (section.extra.detail)
-			{
 				iPopDown.removeChild(section.extra.detail);
-			}
-			section.extra.detail = iPopDown.addChild(new iSectionDetail())
-			section.extra.detail.x = popdown.iSection.x
-			section.extra.detail.y = popdown.iSection.y
+
+			section.extra.detail = iPopDown.addChild(new iSectionDetail());
+			section.extra.detail.x = popdown.iSection.x;
+			section.extra.detail.y = popdown.iSection.y;
 
 			//setDetail
 			popdown.iDetail.ALERT.htmlText = item.ALERT;
@@ -563,6 +561,7 @@
 			{
 				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>"
 			}
+
 			if (item.STATUS_PUMP == "1")
 			{
 				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">เปิด</FONT>"
@@ -578,19 +577,22 @@
 
 			floodObject = new Object();
 
-			floodObject.height = Number(item.VALUE)
-			floodObject.roadHeight = Number(item.ROAD_HEIGHT)
+			floodObject.height = Number(item.VALUE);
+			floodObject.roadHeight = Number(item.ROAD_HEIGHT);
 
 			section.extra.detail.waterHeight.htmlText = floodObject.height;
 			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
 
 			popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
 
-			createSection(xml.STATION.@id)
-			createRoad(xml.STATION.@id)
+			createSection(xml.STATION.@id);
+			createRoad(xml.STATION.@id);
 
-			popdown.iValue = floodObject.height
+			popdown.iValue = floodObject.height;
 			updateStation();
+
+			// visibility
+			popdown.popupButton.visible = false;
 		}
 
 		private function setupTunnel(xml:XML):void
@@ -606,45 +608,46 @@
 
 			//setStationDetail
 			if (section.extra.detail)
-			{
 				iPopDown.removeChild(section.extra.detail);
-			}
-			section.extra.detail = iPopDown.addChild(new iSectionDetail())
+
+			section.extra.detail = iPopDown.addChild(new iSectionDetail());
 			section.extra.detail.x = popdown.iSection.x;
 			section.extra.detail.y = popdown.iSection.y;
 
-			/*
-			//setDetail
-			popdown.iDetail.ALERT.htmlText = item.ALERT;
-
-			if (item.STATUS == "1")
-			{
-				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>"
-			}
-			else
-			{
-				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>"
-			}
-			if (item.STATUS_PUMP == "1")
-			{
-				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">เปิด</FONT>"
-			}
-			else
-			{
-				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#0000FF\">ปิด</FONT>"
-			}
-			*/
-
 			//item.ALERT1;
 			//item.ALERT2;
-			//item.STATUS_PUMP_IN;
-			//item.STATUS_PUMP_OUT;
 
-			popdown.iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 0) ? "ปกติ" : "ขัดข้อง";
-			popdown.iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 0) ? "ปกติ" : "ขัดข้อง";
+			// pump
+			var pump_ins:Array = String(item.STATUS_PUMP_IN).split(",");
+			var pump_outs:Array = String(item.STATUS_PUMP_OUT).split(",");
 
-			popdown.iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "ปกติ" : "ขัดข้อง";
-			popdown.iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "ปกติ" : "ขัดข้อง";
+			// pump left
+			if (String(item.STATUS_PUMP_IN).length > 0)
+				for (var i:int = 0; i < pump_ins.length; i++)
+				{
+					var pump:MovieClip = new Pump();
+					pump.gotoAndStop(pump_ins[i] + 1);
+					addChild(pump);
+					pump.x = 210 + i * 20;
+					pump.y = 237;
+				}
+
+			// pump right
+			if (String(item.STATUS_PUMP_OUT).length > 0)
+				for (var i:int = 0; i < pump_outs.length; i++)
+				{
+					var pump:MovieClip = new Pump();
+					pump.gotoAndStop(pump_outs[i] + 1);
+					addChild(pump);
+					pump.x = 947 - i * 20;
+					pump.y = 237;
+				}
+
+			popdown.iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			popdown.iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+
+			popdown.iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			popdown.iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
 			popdown.iTunnelDetail.LAST_FLOOD_START_IN.htmlText = item.LAST_FLOOD_START_IN;
 			popdown.iTunnelDetail.LAST_FLOOD_START_OUT.htmlText = item.LAST_FLOOD_START_OUT;
@@ -669,11 +672,14 @@
 			popdown.iValue = floodObject.height;
 
 			updateStation();
+
+			// visibility
+			popdown.popupButton.visible = false;
 		}
 
 		//_________________________________________________________________ History
 
-		public function setGraph(iID)
+		public function setGraph(iID):void
 		{
 			var dataPath = XMLUtil2.getNodeById(config, "FloodHistoryData").@src;
 			var method = String(XMLUtil2.getNodeById(config, "FloodHistoryData").@method).toUpperCase();
@@ -699,11 +705,10 @@
 
 		public function xmlLoadCompleteHandler(event:Event):void
 		{
-
 			var loader:URLLoader = event.target as URLLoader;
 			var data:XML = new XML(loader.data);
 
-			var dataProvider:Array = new Array();
+			var dataProvider:Array = [];
 			var captionNum = 0;
 
 			//data.normalize();
@@ -722,7 +727,6 @@
 			var myFlood = graph.extra.flood.addChild(new Sprite());
 			var floodShape = myFlood.addChild(new Shape());
 			var flood = floodShape.graphics;
-
 
 			//graph.extra.flood = myFlood;
 
@@ -774,7 +778,7 @@
 			//createGraph();
 		}
 
-		public function createGraph()
+		public function createGraph():void
 		{
 			if (graph.extra.fake2D)
 				graph.removeChild(graph.extra.fake2D);
