@@ -146,7 +146,6 @@
 			setStation(test);
 			//setSection("TN01")
 			setGraph("TN01");
-
 		}
 
 		//_________________________________________________________________ Station
@@ -527,6 +526,16 @@
 
 			var item = xml.STATION;
 
+			if (String(item..@id).indexOf(Global.FLOOD_TAB) == 0)
+				setupFlood(xml);
+			else
+				setupTunnel(xml);
+		}
+
+		private function setupFlood(xml:XML):void
+		{
+			var item = xml.STATION;
+
 			//setGraph
 			if (section.extra.fake2D)
 			{
@@ -581,6 +590,84 @@
 			createRoad(xml.STATION.@id)
 
 			popdown.iValue = floodObject.height
+			updateStation();
+		}
+
+		private function setupTunnel(xml:XML):void
+		{
+			var item = xml.STATION;
+
+			//setGraph
+			if (section.extra.fake2D)
+			{
+				section.removeChild(section.extra.fake2D);
+			}
+			section.extra.fake2D = section.addChild(new Sprite())
+
+			//setStationDetail
+			if (section.extra.detail)
+			{
+				iPopDown.removeChild(section.extra.detail);
+			}
+			section.extra.detail = iPopDown.addChild(new iSectionDetail())
+			section.extra.detail.x = popdown.iSection.x;
+			section.extra.detail.y = popdown.iSection.y;
+
+			/*
+			//setDetail
+			popdown.iDetail.ALERT.htmlText = item.ALERT;
+
+			if (item.STATUS == "1")
+			{
+				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>"
+			}
+			else
+			{
+				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>"
+			}
+			if (item.STATUS_PUMP == "1")
+			{
+				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">เปิด</FONT>"
+			}
+			else
+			{
+				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#0000FF\">ปิด</FONT>"
+			}
+			*/
+
+			//item.ALERT1;
+			//item.ALERT2;
+			//item.STATUS_PUMP_IN;
+			//item.STATUS_PUMP_OUT;
+
+			popdown.iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 0) ? "ปกติ" : "ขัดข้อง";
+			popdown.iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 0) ? "ปกติ" : "ขัดข้อง";
+
+			popdown.iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "ปกติ" : "ขัดข้อง";
+			popdown.iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "ปกติ" : "ขัดข้อง";
+
+			popdown.iTunnelDetail.LAST_FLOOD_START_IN.htmlText = item.LAST_FLOOD_START_IN;
+			popdown.iTunnelDetail.LAST_FLOOD_START_OUT.htmlText = item.LAST_FLOOD_START_OUT;
+			popdown.iTunnelDetail.LAST_FLOOD_STOP_IN.htmlText = item.LAST_FLOOD_STOP_IN;
+			popdown.iTunnelDetail.LAST_FLOOD_STOP_OUT.htmlText = item.LAST_FLOOD_STOP_OUT;
+			popdown.iTunnelDetail.MAX_IN.htmlText = item.MAX_IN;
+			popdown.iTunnelDetail.MAX_OUT.htmlText = item.MAX_OUT;
+
+			floodObject = new Object();
+
+			floodObject.height = Number(item.VALUE);
+			floodObject.roadHeight = Number(item.ROAD_HEIGHT);
+
+			section.extra.detail.waterHeight.htmlText = floodObject.height;
+			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
+
+			popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
+
+			createSection(xml.STATION.@id);
+			//createRoad(xml.STATION.@id);
+
+			popdown.iValue = floodObject.height;
+
 			updateStation();
 		}
 
