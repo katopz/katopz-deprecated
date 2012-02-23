@@ -141,7 +141,7 @@
 			trace(" * parseData : " + tabID);
 
 			if (isTest)
-				tabID = Global.FLOOD_TAB;
+				tabID = Global.ALL_TAB;
 
 			series0 = new LineSeries();
 			series1 = new LineSeries();
@@ -199,9 +199,6 @@
 
 					graph1.width = data.STATION.length() * 760 / 20;
 					graph1.width = .5 * Math.max(graph1.width, 760);
-
-					// color TODO : graph color
-					ColumnChart.getStyleDefinition().seriesColors[0] = Global.ALL_GRAPH_COLOR;
 
 					TweenMax.to(tunnel_0_mc, 0, {x: 887.95, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {x: 887.95, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});

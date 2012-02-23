@@ -17,18 +17,18 @@ package com.yahoo.astra.fl.charts.series
 
 	/**
 	 * Renders data points as a series of vertical columns.
-	 * 
+	 *
 	 * @langversion ActionScript 3.0
 	 * @playerversion Flash 9
 	 * @author Josh Tynjala
 	 */
 	public class ColumnSeries extends CartesianSeries
 	{
-		
-	//--------------------------------------
-	//  Class Variables
-	//--------------------------------------
-	
+
+		//--------------------------------------
+		//  Class Variables
+		//--------------------------------------
+
 		/**
 		 * @private
 		 */
@@ -36,17 +36,17 @@ package com.yahoo.astra.fl.charts.series
 			{
 				markerSkin: RectangleSkin
 			};
-	
+
 		/**
 		 * @private
 		 * Holds an array of ColumnSeries objects for each plot area in which they appear.
 		 */
 		private static var seriesInPlotAreas:Dictionary = new Dictionary();
-		
-	//--------------------------------------
-	//  Class Methods
-	//--------------------------------------
-	
+
+		//--------------------------------------
+		//  Class Methods
+		//--------------------------------------
+
 		/**
 		 * @private
 		 * When a column series is added to a IPlotArea, it should be registered with that IPlotArea.
@@ -55,15 +55,15 @@ package com.yahoo.astra.fl.charts.series
 		private static function registerSeries(plotArea:IPlotArea, series:ColumnSeries):void
 		{
 			var columns:Array = seriesInPlotAreas[plotArea];
-			if(!columns)
+			if (!columns)
 			{
 				columns = [];
 				seriesInPlotAreas[plotArea] = columns;
 			}
-			
+
 			columns.push(series);
 		}
-		
+
 		/**
 		 * @private
 		 * When a column series is removed from its parent IPlotArea, it should be unregistered.
@@ -71,13 +71,14 @@ package com.yahoo.astra.fl.charts.series
 		private static function unregisterSeries(plotArea:IPlotArea, series:ColumnSeries):void
 		{
 			var columns:Array = seriesInPlotAreas[plotArea];
-			if(columns)
+			if (columns)
 			{
 				var index:int = columns.indexOf(series);
-				if(index >= 0) columns.splice(index, 1);
+				if (index >= 0)
+					columns.splice(index, 1);
 			}
 		}
-		
+
 		/**
 		 * @private
 		 * Returns the number of ColumnSeries objects appearing in a particular IPlotArea.
@@ -86,10 +87,11 @@ package com.yahoo.astra.fl.charts.series
 		private static function getSeriesCount(plotArea:IPlotArea):int
 		{
 			var columns:Array = seriesInPlotAreas[plotArea];
-			if(columns) return columns.length;
+			if (columns)
+				return columns.length;
 			return 0;
 		}
-		
+
 		/**
 		 * @private
 		 * Returns the index of a ColumnSeries within a plot area.
@@ -98,13 +100,13 @@ package com.yahoo.astra.fl.charts.series
 		private static function seriesToIndex(plotArea:IPlotArea, series:ColumnSeries):int
 		{
 			var columns:Array = seriesInPlotAreas[plotArea];
-			if(columns)
+			if (columns)
 			{
 				return columns.indexOf(series);
 			}
 			return -1;
 		}
-		
+
 		/**
 		 * @private
 		 * Returns the ColumnSeries at the specified index within a plot area.
@@ -112,14 +114,14 @@ package com.yahoo.astra.fl.charts.series
 		private static function indexToSeries(plotArea:IPlotArea, index:int):ColumnSeries
 		{
 			var columns:Array = seriesInPlotAreas[plotArea];
-			if(columns)
+			if (columns)
 			{
 				return columns[index];
 			}
-			
+
 			return null;
 		}
-			
+
 		/**
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
@@ -127,12 +129,12 @@ package com.yahoo.astra.fl.charts.series
 		{
 			return defaultStyles;
 		}
-		
-		
-	//--------------------------------------
-	//  Constructor
-	//--------------------------------------
-	
+
+
+		//--------------------------------------
+		//  Constructor
+		//--------------------------------------
+
 		/**
 		 * Constructor.
 		 */
@@ -140,23 +142,24 @@ package com.yahoo.astra.fl.charts.series
 		{
 			super(data);
 		}
-		
-	//--------------------------------------
-	//  Properties
-	//--------------------------------------
-	
+
+		//--------------------------------------
+		//  Properties
+		//--------------------------------------
+
 		/**
 		 * @private
 		 */
 		override public function set plotArea(value:IPlotArea):void
 		{
-			if(this.plotArea != value)
+			if (this.plotArea != value)
 			{
-				if(this.plotArea) unregisterSeries(this.plotArea, this);
+				if (this.plotArea)
+					unregisterSeries(this.plotArea, this);
 				super.plotArea = value;
-				if(this.plotArea)
+				if (this.plotArea)
 				{
-					if(!(this.plotArea is CartesianChart))
+					if (!(this.plotArea is CartesianChart))
 					{
 						throw new Error("Objects of type ColumnSeries may only be added to a CartesianChart.");
 					}
@@ -164,61 +167,62 @@ package com.yahoo.astra.fl.charts.series
 				}
 			}
 		}
-		
-	//--------------------------------------
-	//  Public Methods
-	//--------------------------------------
-	
+
+		//--------------------------------------
+		//  Public Methods
+		//--------------------------------------
+
 		/**
 		 * @copy com.yahoo.charts.ISeries#clone()
 		 */
 		override public function clone():ISeries
 		{
 			var series:ColumnSeries = new ColumnSeries();
-			if(this.dataProvider is Array)
+			if (this.dataProvider is Array)
 			{
 				//copy the array rather than pass it by reference
 				series.dataProvider = (this.dataProvider as Array).concat();
 			}
-			else if(this.dataProvider is XMLList)
+			else if (this.dataProvider is XMLList)
 			{
 				series.dataProvider = (this.dataProvider as XMLList).copy();
 			}
 			series.displayName = this.displayName;
 			series.horizontalField = this.horizontalField;
 			series.verticalField = this.verticalField;
-			
+
 			return series;
 		}
-		
-	//--------------------------------------
-	//  Protected Methods
-	//--------------------------------------
-		
+
+		//--------------------------------------
+		//  Protected Methods
+		//--------------------------------------
+
 		/**
 		 * @private
 		 */
 		override protected function draw():void
 		{
 			super.draw();
-			
+
 			this.graphics.clear();
-			
+
 			//if we don't have data, let's get out of here
-			if(!this.dataProvider) return;
-			
+			if (!this.dataProvider)
+				return;
+
 			this.graphics.lineStyle(1, 0x0000ff);
-			
+
 			var cartesianChart:CartesianChart = this.plotArea as CartesianChart;
-			
+
 			//grab the axes
 			var valueAxis:NumericAxis = cartesianChart.verticalAxis as NumericAxis;
 			var categoryAxis:CategoryAxis = cartesianChart.horizontalAxis as CategoryAxis;
-			if(!categoryAxis)
+			if (!categoryAxis)
 			{
 				throw new Error("To use a ColumnSeries object, the horizontal axis of the chart it appears within must be a CategoryAxis.");
 			}
-			
+
 			//variables we need in the loop (and shouldn't look up a gazillion times)
 			var originPosition:Number = valueAxis.valueToLocal(valueAxis.origin);
 			var columnCount:int = getSeriesCount(this.plotArea);
@@ -227,41 +231,43 @@ package com.yahoo.astra.fl.charts.series
 			var fillColor:uint = this.getStyleValue("fillColor") as uint;
 			var maximumMarkerSize:Number = (this.width / categoryAxis.categoryNames.length) / columnCount;
 			markerSize = Math.min(maximumMarkerSize, markerSize);
-			
+
 			var itemCount:int = this.length;
-			for(var i:int = 0; i < itemCount; i++)
+			for (var i:int = 0; i < itemCount; i++)
 			{
 				var item:Object = this.dataProvider[i];
 				var position:Point = cartesianChart.dataToLocal(item, this);
-				
+
 				var marker:DisplayObject = this.markers[i] as DisplayObject;
 				marker.width = markerSize;
 				//the x position is offset from the center to accomodate multiple columns.
 				marker.x = position.x - (marker.width * columnCount / 2) + marker.width * seriesIndex; //markers should be the same width
 				marker.y = position.y;
-				
+
 				// if we have a bad position, don't display the marker
 				marker.visible = !isNaN(position.x) && !isNaN(position.y);
-				
+
 				var calculatedHeight:Number = originPosition - marker.y;
-				if(calculatedHeight < 0)
+				if (calculatedHeight < 0)
 				{
 					calculatedHeight = Math.abs(calculatedHeight);
 					marker.y = originPosition;
 				}
 				marker.height = calculatedHeight;
-				
-				if(marker is IProgrammaticSkin)
+
+				if (marker is IProgrammaticSkin)
 				{
-					(marker as IProgrammaticSkin).fillColor = fillColor;
+					trace(String(item.@id));
+					(marker as IProgrammaticSkin).fillColor = (String(item.@id).indexOf("TN") == 0) ? Global.TUNNEL_GRAPH_COLOR : Global.FLOOD_GRAPH_COLOR;
+					;
 				}
-				
-				if(marker is UIComponent) 
+
+				if (marker is UIComponent)
 				{
 					(marker as UIComponent).drawNow();
 				}
 			}
 		}
-		
+
 	}
 }
