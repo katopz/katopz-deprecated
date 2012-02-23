@@ -614,8 +614,10 @@
 			section.extra.detail.x = popdown.iSection.x;
 			section.extra.detail.y = popdown.iSection.y;
 
-			//item.ALERT1;
-			//item.ALERT2;
+			popdown.ALERT_TOP_IN.tf.htmlText = item.ALERT_TOP_IN;
+			popdown.ALERT_BOTTOM_IN.tf.htmlText = item.ALERT_BOTTOM_IN;
+			popdown.ALERT_TOP_OUT.tf.htmlText = item.ALERT_TOP_OUT;
+			popdown.ALERT_BOTTOM_OUT.tf.htmlText = item.ALERT_BOTTOM_OUT;
 
 			// pump
 			var pump_ins:Array = String(item.STATUS_PUMP_IN).split(",");
