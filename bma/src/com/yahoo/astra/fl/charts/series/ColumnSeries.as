@@ -257,9 +257,7 @@ package com.yahoo.astra.fl.charts.series
 
 				if (marker is IProgrammaticSkin)
 				{
-					trace(String(item.@id));
 					(marker as IProgrammaticSkin).fillColor = (String(item.@id).indexOf("TN") == 0) ? Global.TUNNEL_GRAPH_COLOR : Global.FLOOD_GRAPH_COLOR;
-					;
 				}
 
 				if (marker is UIComponent)
