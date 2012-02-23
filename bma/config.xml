@@ -42,7 +42,7 @@
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
 			<feed id="FloodGraphList" src="Flood/serverside/FloodmonAllStation.xml"/>
 			<!-- ข้อมูลใน graph -->
-			<feed id="FloodGraphData" src="Flood/serverside/FloodmonAllStation.xml" allColor="0x729FCF" floodColor="0x4E70AF" tunnelColor="0x76AD96"/>
+			<feed id="FloodGraphData" src="Flood/serverside/FloodmonAllStation.xml" floodColor="0x4E70AF" tunnelColor="0x76AD96"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
 				<item src="actionscript:getLinkId('javascript:alert($id)')" label="รูปถ่าย"/>

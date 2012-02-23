@@ -111,7 +111,6 @@
 			trace("all color : " + XMLUtil2.getNodeById(config, "FloodGraphData").@allColor);
 
 			// color
-			Global.ALL_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@allColor || Global.ALL_GRAPH_COLOR;
 			Global.FLOOD_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@floodColor || Global.FLOOD_GRAPH_COLOR;
 			Global.TUNNEL_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@tunnelColor || Global.TUNNEL_GRAPH_COLOR;
 
@@ -201,12 +200,18 @@
 					graph1.width = data.STATION.length() * 760 / 20;
 					graph1.width = .5 * Math.max(graph1.width, 760);
 
-					// color
+					// color TODO : graph color
 					ColumnChart.getStyleDefinition().seriesColors[0] = Global.ALL_GRAPH_COLOR;
-					TweenMax.to(flood_0_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
-					TweenMax.to(flood_1_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
-					TweenMax.to(tunnel_0_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
-					TweenMax.to(tunnel_1_mc, 0, {tint: Global.ALL_GRAPH_COLOR});
+
+					TweenMax.to(tunnel_0_mc, 0, {x: 887.95, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(tunnel_1_mc, 0, {x: 887.95, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(flood_0_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(flood_1_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
+
+					TweenMax.to(tunnel_desc_0_mc, 0, {x: 875.8, alpha: 1});
+					TweenMax.to(tunnel_desc_1_mc, 0, {x: 875.8, alpha: 1});
+					TweenMax.to(flood_desc_0_mc, 0, {x: 918.8, alpha: 1});
+					TweenMax.to(flood_desc_1_mc, 0, {x: 918.8, alpha: 1});
 
 					// rotation
 					Global.GRAPH_ROTATION = 80;
@@ -241,10 +246,16 @@
 
 					// color
 					ColumnChart.getStyleDefinition().seriesColors[0] = Global.FLOOD_GRAPH_COLOR;
-					TweenMax.to(flood_0_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
-					TweenMax.to(flood_1_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
-					TweenMax.to(tunnel_0_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
-					TweenMax.to(tunnel_1_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
+
+					TweenMax.to(tunnel_0_mc, 0, {x: 887.95, alpha: 0, tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(tunnel_1_mc, 0, {x: 887.95, alpha: 0, tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(flood_0_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(flood_1_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
+
+					TweenMax.to(tunnel_desc_0_mc, 0, {x: 875.8, alpha: 0});
+					TweenMax.to(tunnel_desc_1_mc, 0, {x: 875.8, alpha: 0});
+					TweenMax.to(flood_desc_0_mc, 0, {x: 918.8, alpha: 1});
+					TweenMax.to(flood_desc_1_mc, 0, {x: 918.8, alpha: 1});
 
 					// rotation
 					Global.GRAPH_ROTATION = 80;
@@ -276,10 +287,16 @@
 
 					// color
 					ColumnChart.getStyleDefinition().seriesColors[0] = Global.TUNNEL_GRAPH_COLOR;
-					TweenMax.to(flood_0_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
-					TweenMax.to(flood_1_mc, 0, {tint: Global.FLOOD_GRAPH_COLOR});
-					TweenMax.to(tunnel_0_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
-					TweenMax.to(tunnel_1_mc, 0, {tint: Global.TUNNEL_GRAPH_COLOR});
+
+					TweenMax.to(tunnel_0_mc, 0, {x: 925.90, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(tunnel_1_mc, 0, {x: 925.90, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
+					TweenMax.to(flood_0_mc, 0, {alpha: 0, tint: Global.FLOOD_GRAPH_COLOR});
+					TweenMax.to(flood_1_mc, 0, {alpha: 0, tint: Global.FLOOD_GRAPH_COLOR});
+
+					TweenMax.to(tunnel_desc_0_mc, 0, {x: 915, alpha: 1});
+					TweenMax.to(tunnel_desc_1_mc, 0, {x: 915, alpha: 1});
+					TweenMax.to(flood_desc_0_mc, 0, {alpha: 0});
+					TweenMax.to(flood_desc_1_mc, 0, {alpha: 0});
 
 					// rotation
 					Global.GRAPH_ROTATION = 0;
