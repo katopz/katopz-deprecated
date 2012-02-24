@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <FLOODMON>
-  <STATION id="TN01">
-    <NAME>ถนนนวมินทร์ ช่วงสันติอโศก เขตบางกะปิ</NAME>
+  <STATION id="TN03">
+    <NAME>อุโมงค์ทางลอดดินแดง</NAME>
     <LAST1>
       <DATE>31/10/2550</DATE>
       <TIME>12:50:00</TIME>

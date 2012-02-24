@@ -1,12 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
-  <STATION id="TN01">
-    <NAME>อุโมงค์ทางลอดท่าพระ</NAME>
-    <TITLE_IN>ขาเข้า(ไปมไหสวรรย์)</TITLE_IN>
-    <TITLE_OUT>ขาออก(ไปปิ่นเกล้า)</TITLE_OUT>
+  <STATION id="TN04">
+    <NAME>อุโมงค์ทางลอดพระราม 9</NAME>
+    <TITLE_IN>ขาเข้า(ไปรามคำแหง)</TITLE_IN>
+    <TITLE_OUT>ขาออก(ไปพัฒนาการ)</TITLE_OUT>
     <VALUE_IN>10</VALUE_IN>
     <VALUE_OUT>20</VALUE_OUT>
-    <STATUS_PUMP_IN>1,0,1,1</STATUS_PUMP_IN>
+    <STATUS_PUMP_IN>1,0,1</STATUS_PUMP_IN>
     <STATUS_PUMP_OUT></STATUS_PUMP_OUT>
     <STATUS_POWER>0</STATUS_POWER>
     <STATUS_BREAKER>1</STATUS_BREAKER>
