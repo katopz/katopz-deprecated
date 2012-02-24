@@ -140,7 +140,7 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN03">
+				<STATION id="TN01">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -148,7 +148,7 @@
 
 			setStation(test);
 			//setSection("TN01")
-			setGraph("TN03");
+			setGraph("TN01");
 		}
 
 		//_________________________________________________________________ Station
@@ -502,6 +502,114 @@
 			}
 		}
 
+		public function createTunnel1Section(iID:String):void
+		{
+			if (section.extra.flood)
+				section.removeChild(section.extra.flood);
+
+			section.extra.flood = section.addChild(new MovieClip());
+			var flood = section.extra.flood;
+
+			if (!flood.water)
+			{
+				flood.water = flood.addChild(new Water(new Rectangle(0, -180, 763, 180), 1, 1));
+				flood.water.y = 180;
+			}
+
+			if (!flood.bank)
+			{
+				flood.bank = flood.addChild(new MovieClip());
+
+				flood.bank.left = GraphicUtil.createRect(flood.water, flood.bank);
+				flood.bank.right = GraphicUtil.createRect(flood.water, flood.bank);
+
+				flood.bank.left.width = 200;
+				flood.bank.right.width = 763 - 200;
+
+				flood.bank.right.x = 200;
+					//flood.bank.y = 180;
+			}
+
+			var y0 = 180 - 120;
+
+			flood.water.height = y0 + floodObject.height * factor;
+			flood.bank.right.height = y0 + floodObject.roadHeight * factor;
+
+			flood.bank.right.y = 180 - flood.bank.right.height;
+
+			section.extra.detail.waterHeight.y = 180 - flood.water.height - 16;
+			section.extra.detail.roadHeight.y = flood.bank.right.y - 16;
+
+			flood.content = new Content(flood);
+			flood.content.addEventListener(ContentEvent.COMPLETE, onSectionComplete);
+			flood.content.addEventListener(ContentEvent.ERROR, onSectionError);
+
+			try
+			{
+				flood.content.load(sectionPath + iID + ".swf");
+			}
+			catch (error:*)
+			{
+				trace("catch:" + error);
+			}
+
+			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
+		}
+
+		public function createTunnel2Section(iID:String):void
+		{
+			if (section.extra.flood)
+				section.removeChild(section.extra.flood);
+
+			section.extra.flood = section.addChild(new MovieClip());
+			var flood = section.extra.flood;
+
+			if (!flood.water)
+			{
+				flood.water = flood.addChild(new Water(new Rectangle(0, -180, 763 * .5, 180), 1, 1));
+				flood.water.y = 180;
+			}
+
+			if (!flood.bank)
+			{
+				flood.bank = flood.addChild(new MovieClip());
+
+				flood.bank.left = GraphicUtil.createRect(flood.water, flood.bank);
+				flood.bank.right = GraphicUtil.createRect(flood.water, flood.bank);
+
+				flood.bank.left.width = 200;
+				flood.bank.right.width = 763 - 200;
+
+				flood.bank.right.x = 200;
+			}
+
+			var y0 = 180 - 120;
+
+			flood.water.height = y0 + floodObject.height_in * factor;
+			flood.bank.right.height = y0 + floodObject.roadHeight * factor;
+
+			flood.bank.right.y = 180 - flood.bank.right.height;
+
+			section.extra.detail.waterHeight.y = 180 - flood.water.height - 16;
+			section.extra.detail.roadHeight.y = flood.bank.right.y - 16;
+
+			flood.content = new Content(flood);
+			flood.content.addEventListener(ContentEvent.COMPLETE, onSectionComplete);
+			flood.content.addEventListener(ContentEvent.ERROR, onSectionError);
+
+			try
+			{
+				flood.content.load(sectionPath + iID + ".swf");
+			}
+			catch (error:*)
+			{
+				trace("catch:" + error);
+			}
+
+			popdown.pointer_in.y = 180 + 16 - floodObject.height_in * factor;
+			popdown.pointer_out.y = 180 + 16 - floodObject.height_out * factor;
+		}
+
 		public function onSectionError(event:ContentEvent):void
 		{
 			SleepyDesign.log(" ^ " + event.type);
@@ -693,19 +801,46 @@
 			popdown.iTunnelDetail.MAX_IN.htmlText = item.MAX_IN;
 			popdown.iTunnelDetail.MAX_OUT.htmlText = item.MAX_OUT;
 
+			section.extra.detail.roadHeight.htmlText = "";
+
 			floodObject = new Object();
+			floodObject.roadHeight = 180;
 
-			// TODO : VALUE_IN, VALUE_OUT, <ROAD_HEIGHT>25</ROAD_HEIGHT>, water in out
-			floodObject.height = Number(item.VALUE_IN);
-			floodObject.roadHeight = 180; //Number(item.ROAD_HEIGHT);
+			if (String(item.VALUE_OUT).length == 0)
+			{
+				// has 1 way
+				floodObject.height = Number(item.VALUE_IN);
 
-			section.extra.detail.waterHeight.htmlText = floodObject.height;
-			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
+				section.extra.detail.waterHeight.htmlText = floodObject.height;
 
-			popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
+				popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
 
-			createSection(xml.STATION.@id);
-			//createRoad(xml.STATION.@id);
+				createTunnel1Section(xml.STATION.@id);
+
+				popdown.pointer.visible = true;
+				section.extra.detail.waterHeight.visible = true;
+				popdown.pointer_in.visible = false;
+				popdown.pointer_out.visible = false;
+			}
+			else
+			{
+				// has 2 ways
+				floodObject.height_in = Number(item.VALUE_IN);
+				floodObject.height_out = Number(item.VALUE_OUT);
+
+				//section.extra.detail.waterHeightIn.htmlText = floodObject.height_in;
+				//section.extra.detail.waterHeightOut.htmlText = floodObject.height_out;
+
+				popdown.pointer_in.label.text = String(floodObject.height_in + " เซนติเมตร");
+				popdown.pointer_out.label.text = String(floodObject.height_out + " เซนติเมตร");
+
+				createTunnel2Section(xml.STATION.@id);
+
+				popdown.pointer.visible = false;
+				section.extra.detail.waterHeight.visible = false;
+				popdown.pointer_in.visible = true;
+				popdown.pointer_out.visible = true;
+			}
 
 			popdown.iValue = floodObject.height;
 
@@ -716,6 +851,7 @@
 			popdown.road_desc2_mc.visible = true;
 			popdown.iDetail.visible = false;
 			popdown.iTunnelDetail.visible = true;
+			section.extra.detail.roadHeight.htmlText = "";
 		}
 
 		//_________________________________________________________________ History
