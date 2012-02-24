@@ -652,6 +652,12 @@
 
 		private function setupFlood(xml:XML):void
 		{
+			// clear old pumps
+			for each (var pump:MovieClip in _pumps)
+				pump.parent.removeChild(pump);
+
+			_pumps = [];
+
 			var item = xml.STATION;
 
 			//setGraph
@@ -716,6 +722,8 @@
 			popdown.iTunnelDetail.visible = false;
 		}
 
+		private var _pumps:Array = [];
+
 		private function setupTunnel(xml:XML):void
 		{
 			var item = xml.STATION;
@@ -766,12 +774,16 @@
 				popdown.road_desc2_mc.ALERT_BOTTOM_IN.x = 246;
 			}
 
+			// clear old pumps
+			for each (var pump:MovieClip in _pumps)
+				pump.parent.removeChild(pump);
+			_pumps = [];
+
 			// pump
 			var pump_ins:Array = String(item.STATUS_PUMP_IN).split(",");
 			var pump_outs:Array = String(item.STATUS_PUMP_OUT).split(",");
 
 			var i:int;
-			var pump:MovieClip;
 
 			// pump left
 			if (String(item.STATUS_PUMP_IN).length > 0)
@@ -779,7 +791,7 @@
 				{
 					pump = new Pump();
 					pump.gotoAndStop(2 - pump_ins[i]);
-					addChild(pump);
+					_pumps.push(addChild(pump));
 					pump.x = 210 + i * 20;
 					pump.y = 237;
 				}
@@ -790,7 +802,7 @@
 				{
 					pump = new Pump();
 					pump.gotoAndStop(2 - pump_ins[i]);
-					addChild(pump);
+					_pumps.push(addChild(pump));
 					pump.x = 947 - i * 20;
 					pump.y = 237;
 				}
