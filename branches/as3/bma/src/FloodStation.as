@@ -570,6 +570,12 @@
 				flood.water.y = 180;
 			}
 
+			if (!flood.waterOut)
+			{
+				flood.waterOut = flood.addChild(new Water(new Rectangle(763 * .5, -180, 763 * .5, 180), 1, 1));
+				flood.waterOut.y = 180;
+			}
+
 			if (!flood.bank)
 			{
 				flood.bank = flood.addChild(new MovieClip());
@@ -586,6 +592,7 @@
 			var y0 = 180 - 120;
 
 			flood.water.height = y0 + floodObject.height_in * factor;
+			flood.waterOut.height = y0 + floodObject.height_out * factor;
 			flood.bank.right.height = y0 + floodObject.roadHeight * factor;
 
 			flood.bank.right.y = 180 - flood.bank.right.height;
