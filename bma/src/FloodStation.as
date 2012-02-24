@@ -83,7 +83,7 @@
 			var cursor1:Cursor = new Cursor(this, popup.iRoad);
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
 
-			//test();
+			test();
 		}
 
 		//080610
@@ -140,7 +140,7 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN01">
+				<STATION id="TN03">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -148,7 +148,7 @@
 
 			setStation(test);
 			//setSection("TN01")
-			setGraph("TN01");
+			setGraph("TN03");
 		}
 
 		//_________________________________________________________________ Station
@@ -674,6 +674,18 @@
 			popdown.iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 			popdown.iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
+			if (String(item.STATUS_POWER).length == 0)
+				popdown.iTunnelDetail.STATUS_POWER.htmlText = "";
+
+			if (String(item.STATUS_BREAKER).length == 0)
+				popdown.iTunnelDetail.STATUS_BREAKER.htmlText = "";
+
+			if (String(item.STATUS_IN).length == 0)
+				popdown.iTunnelDetail.STATUS_IN.htmlText = "";
+
+			if (String(item.STATUS_OUT).length == 0)
+				popdown.iTunnelDetail.STATUS_OUT.htmlText = "";
+
 			popdown.iTunnelDetail.LAST_FLOOD_START_IN.htmlText = item.LAST_FLOOD_START_IN;
 			popdown.iTunnelDetail.LAST_FLOOD_START_OUT.htmlText = item.LAST_FLOOD_START_OUT;
 			popdown.iTunnelDetail.LAST_FLOOD_STOP_IN.htmlText = item.LAST_FLOOD_STOP_IN;
@@ -684,7 +696,7 @@
 			floodObject = new Object();
 
 			// TODO : VALUE_IN, VALUE_OUT, <ROAD_HEIGHT>25</ROAD_HEIGHT>, water in out
-			floodObject.height = 20; //Number(item.VALUE);
+			floodObject.height = Number(item.VALUE_IN);
 			floodObject.roadHeight = 180; //Number(item.ROAD_HEIGHT);
 
 			section.extra.detail.waterHeight.htmlText = floodObject.height;
