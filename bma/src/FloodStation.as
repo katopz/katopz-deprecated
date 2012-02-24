@@ -742,6 +742,11 @@
 			section.extra.detail.x = popdown.iSection.x;
 			section.extra.detail.y = popdown.iSection.y;
 
+			popdown.road_desc2_mc.ALERT_TOP_IN.visible = true;
+			popdown.road_desc2_mc.ALERT_BOTTOM_IN.visible = true;
+			popdown.road_desc2_mc.ALERT_TOP_OUT.visible = true;
+			popdown.road_desc2_mc.ALERT_BOTTOM_OUT.visible = true;
+
 			if (String(item.ALERT_TOP_IN).length > 0)
 				popdown.road_desc2_mc.ALERT_TOP_IN.tf.htmlText = item.ALERT_TOP_IN;
 			else
