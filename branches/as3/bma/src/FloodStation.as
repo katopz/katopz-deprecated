@@ -83,7 +83,7 @@
 			var cursor1:Cursor = new Cursor(this, popup.iRoad);
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
 
-			test();
+			//test();
 		}
 
 		//080610
@@ -537,8 +537,8 @@
 
 			flood.bank.right.y = 180 - flood.bank.right.height;
 
-			section.extra.detail.waterHeight.y = 180 - flood.water.height - 16;
-			section.extra.detail.roadHeight.y = flood.bank.right.y - 16;
+			//section.extra.detail.waterHeight.y = 180 - flood.water.height - 16;
+			//section.extra.detail.roadHeight.y = flood.bank.right.y - 16;
 
 			flood.content = new Content(flood);
 			flood.content.addEventListener(ContentEvent.COMPLETE, onSectionComplete);
@@ -597,8 +597,8 @@
 
 			flood.bank.right.y = 180 - flood.bank.right.height;
 
-			section.extra.detail.waterHeight.y = 180 - flood.water.height - 16;
-			section.extra.detail.roadHeight.y = flood.bank.right.y - 16;
+			//section.extra.detail.waterHeight.y = 180 - flood.water.height - 16;
+			//section.extra.detail.roadHeight.y = flood.bank.right.y - 16;
 
 			flood.content = new Content(flood);
 			flood.content.addEventListener(ContentEvent.COMPLETE, onSectionComplete);
@@ -730,7 +730,7 @@
 			if (section.extra.detail)
 				iPopDown.removeChild(section.extra.detail);
 
-			section.extra.detail = iPopDown.addChild(new iSectionDetail());
+			section.extra.detail = iPopDown.addChild(new iSectionDetail2());
 			section.extra.detail.x = popdown.iSection.x;
 			section.extra.detail.y = popdown.iSection.y;
 
@@ -753,6 +753,18 @@
 				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf.htmlText = item.ALERT_BOTTOM_OUT;
 			else
 				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.visible = false;
+
+			// align center if need
+			if (popdown.road_desc2_mc.ALERT_TOP_OUT.visible || popdown.road_desc2_mc.ALERT_BOTTOM_OUT.visible)
+			{
+				popdown.road_desc2_mc.ALERT_TOP_IN.x = 79;
+				popdown.road_desc2_mc.ALERT_BOTTOM_IN.x = 79;
+			}
+			else
+			{
+				popdown.road_desc2_mc.ALERT_TOP_IN.x = 246;
+				popdown.road_desc2_mc.ALERT_BOTTOM_IN.x = 246;
+			}
 
 			// pump
 			var pump_ins:Array = String(item.STATUS_PUMP_IN).split(",");
@@ -808,7 +820,7 @@
 			popdown.iTunnelDetail.MAX_IN.htmlText = item.MAX_IN;
 			popdown.iTunnelDetail.MAX_OUT.htmlText = item.MAX_OUT;
 
-			section.extra.detail.roadHeight.htmlText = "";
+			//section.extra.detail.roadHeight.htmlText = "";
 
 			floodObject = new Object();
 			floodObject.roadHeight = 180;
@@ -818,14 +830,13 @@
 				// has 1 way
 				floodObject.height = Number(item.VALUE_IN);
 
-				section.extra.detail.waterHeight.htmlText = floodObject.height;
+				//section.extra.detail.waterHeight.htmlText = floodObject.height;
 
 				popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
 
 				createTunnel1Section(xml.STATION.@id);
 
 				popdown.pointer.visible = true;
-				section.extra.detail.waterHeight.visible = true;
 				popdown.pointer_in.visible = false;
 				popdown.pointer_out.visible = false;
 			}
@@ -844,7 +855,6 @@
 				createTunnel2Section(xml.STATION.@id);
 
 				popdown.pointer.visible = false;
-				section.extra.detail.waterHeight.visible = false;
 				popdown.pointer_in.visible = true;
 				popdown.pointer_out.visible = true;
 			}
@@ -858,7 +868,7 @@
 			popdown.road_desc2_mc.visible = true;
 			popdown.iDetail.visible = false;
 			popdown.iTunnelDetail.visible = true;
-			section.extra.detail.roadHeight.htmlText = "";
+			//section.extra.detail.roadHeight.htmlText = "";
 		}
 
 		//_________________________________________________________________ History
