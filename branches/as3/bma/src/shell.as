@@ -309,9 +309,9 @@
 			iPanel.extra.leftPanel.addEventListener(MouseEvent.CLICK, function onListClick(event:MouseEvent):void
 			{
 				var tabID:String = event.target.name.split("_")[0];
-				trace(" ^ tab : " + tabID);
+				//trace(" ^ tab : " + tabID);
 
-				if (tabID && tabID.length > 0)
+				if (tabID && tabID.length > 0 && _dps[tabID])
 				{
 					// tab view
 					iPanel.extra.leftPanel.focus_mc.gotoAndStop(tabID);
