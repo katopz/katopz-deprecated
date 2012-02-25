@@ -781,6 +781,10 @@
 				popdown.road_desc2_mc.ALERT_BOTTOM_IN.x = 246;
 			}
 
+			// in out title
+			popdown.road_desc2_mc.TITLE_IN.htmlText = (String(item.TITLE_IN).length > 0) ? item.TITLE_IN : "";
+			popdown.road_desc2_mc.TITLE_OUT.htmlText = (String(item.TITLE_OUT).length > 0) ? item.TITLE_OUT : "";
+
 			// clear old pumps
 			for each (var pump:MovieClip in _pumps)
 				pump.parent.removeChild(pump);
