@@ -716,10 +716,12 @@
 			updateStation();
 
 			// visibility
-			popdown.popupButton.visible = true;
+			//popdown.popupButton.visible = true;
 			popdown.road_desc2_mc.visible = false;
 			popdown.iDetail.visible = true;
 			popdown.iTunnelDetail.visible = false;
+			popdown.pointer_in.visible = false;
+			popdown.pointer_out.visible = false;
 		}
 
 		private var _pumps:Array = [];
