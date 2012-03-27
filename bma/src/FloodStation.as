@@ -141,7 +141,7 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN01">
+				<STATION id="TN05">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -149,7 +149,7 @@
 
 			setStation(test);
 			//setSection("TN01")
-			setGraph("TN01");
+			setGraph("TN05");
 		}
 
 		//_________________________________________________________________ Station
@@ -803,7 +803,7 @@
 				for (i = 0; i < pump_ins.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop(2 - pump_ins[i]);
+					pump.gotoAndStop(pump_ins[i] + 1);
 					_pumps.push(addChild(pump));
 					pump.x = 210 + i * 20;
 					pump.y = 237;
@@ -814,9 +814,18 @@
 				for (i = 0; i < pump_outs.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop(2 - pump_ins[i]);
+					pump.gotoAndStop(pump_outs[i] + 1);
 					_pumps.push(addChild(pump));
-					pump.x = 947 - i * 20;
+
+					if (String(item.STATUS_PUMP_IN).length > 0)
+					{
+						pump.x = 947 - i * 20;
+					}
+					else
+					{
+						pump.x = 210 + i * 20;
+					}
+
 					pump.y = 237;
 				}
 
