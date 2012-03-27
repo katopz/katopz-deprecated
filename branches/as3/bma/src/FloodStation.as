@@ -79,6 +79,7 @@
 			popdown.road_desc2_mc.visible = false;
 			popdown.iDetail.visible = false;
 			popdown.iTunnelDetail.visible = false;
+			popdown.top_title_mc.gotoAndStop(1);
 
 			var cursor1:Cursor = new Cursor(this, popup.iRoad);
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
@@ -722,6 +723,7 @@
 			popdown.iTunnelDetail.visible = false;
 			popdown.pointer_in.visible = false;
 			popdown.pointer_out.visible = false;
+			popdown.top_title_mc.gotoAndStop(1);
 		}
 
 		private var _pumps:Array = [];
@@ -891,6 +893,7 @@
 			popdown.road_desc2_mc.visible = true;
 			popdown.iDetail.visible = false;
 			popdown.iTunnelDetail.visible = true;
+			popdown.top_title_mc.gotoAndStop(2);
 			//section.extra.detail.roadHeight.htmlText = "";
 		}
 
