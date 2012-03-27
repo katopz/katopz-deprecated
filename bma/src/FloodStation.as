@@ -864,6 +864,9 @@
 				popdown.pointer.visible = true;
 				popdown.pointer_in.visible = false;
 				popdown.pointer_out.visible = false;
+
+				// bar
+				section.extra.detail.bar_sp.visible = false;
 			}
 			else
 			{
@@ -882,6 +885,9 @@
 				popdown.pointer.visible = false;
 				popdown.pointer_in.visible = true;
 				popdown.pointer_out.visible = true;
+
+				// bar
+				section.extra.detail.bar_sp.visible = true;
 			}
 
 			popdown.iValue = floodObject.height;
