@@ -79,6 +79,7 @@
 			popdown.road_desc2_mc.visible = false;
 			popdown.iDetail.visible = false;
 			popdown.iTunnelDetail.visible = false;
+			popdown.iTunnelDetail2.visible = false;
 			popdown.top_title_mc.gotoAndStop(1);
 
 			var cursor1:Cursor = new Cursor(this, popup.iRoad);
@@ -721,6 +722,7 @@
 			popdown.road_desc2_mc.visible = false;
 			popdown.iDetail.visible = true;
 			popdown.iTunnelDetail.visible = false;
+			popdown.iTunnelDetail2.visible = false;
 			popdown.pointer_in.visible = false;
 			popdown.pointer_out.visible = false;
 			popdown.top_title_mc.gotoAndStop(1);
@@ -833,30 +835,44 @@
 					pump.no_tf.text = String(i + 1);
 				}
 
-			popdown.iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			popdown.iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			var _iTunnelDetail;
+			if (String(item.VALUE_OUT).length == 0)
+			{
+				// has 1 way
+				popdown.iTunnelDetail2.visible = false;
+				_iTunnelDetail = popdown.iTunnelDetail;
+			}
+			else
+			{
+				// has 2 ways
+				popdown.iTunnelDetail.visible = false;
+				_iTunnelDetail = popdown.iTunnelDetail2;
+			}
 
-			popdown.iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			popdown.iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+
+			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
 			if (String(item.STATUS_POWER).length == 0)
-				popdown.iTunnelDetail.STATUS_POWER.htmlText = "";
+				_iTunnelDetail.STATUS_POWER.htmlText = "";
 
 			if (String(item.STATUS_BREAKER).length == 0)
-				popdown.iTunnelDetail.STATUS_BREAKER.htmlText = "";
+				_iTunnelDetail.STATUS_BREAKER.htmlText = "";
 
 			if (String(item.STATUS_IN).length == 0)
-				popdown.iTunnelDetail.STATUS_IN.htmlText = "";
+				_iTunnelDetail.STATUS_IN.htmlText = "";
 
 			if (String(item.STATUS_OUT).length == 0)
-				popdown.iTunnelDetail.STATUS_OUT.htmlText = "";
+				_iTunnelDetail.STATUS_OUT.htmlText = "";
 
-			popdown.iTunnelDetail.LAST_FLOOD_START_IN.htmlText = item.LAST_FLOOD_START_IN;
-			popdown.iTunnelDetail.LAST_FLOOD_START_OUT.htmlText = item.LAST_FLOOD_START_OUT;
-			popdown.iTunnelDetail.LAST_FLOOD_STOP_IN.htmlText = item.LAST_FLOOD_STOP_IN;
-			popdown.iTunnelDetail.LAST_FLOOD_STOP_OUT.htmlText = item.LAST_FLOOD_STOP_OUT;
-			popdown.iTunnelDetail.MAX_IN.htmlText = item.MAX_IN;
-			popdown.iTunnelDetail.MAX_OUT.htmlText = item.MAX_OUT;
+			_iTunnelDetail.LAST_FLOOD_START_IN.htmlText = item.LAST_FLOOD_START_IN;
+			_iTunnelDetail.LAST_FLOOD_START_OUT.htmlText = item.LAST_FLOOD_START_OUT;
+			_iTunnelDetail.LAST_FLOOD_STOP_IN.htmlText = item.LAST_FLOOD_STOP_IN;
+			_iTunnelDetail.LAST_FLOOD_STOP_OUT.htmlText = item.LAST_FLOOD_STOP_OUT;
+			_iTunnelDetail.MAX_IN.htmlText = item.MAX_IN;
+			_iTunnelDetail.MAX_OUT.htmlText = item.MAX_OUT;
 
 			//section.extra.detail.roadHeight.htmlText = "";
 
@@ -911,7 +927,7 @@
 			popdown.popupButton.visible = false;
 			popdown.road_desc2_mc.visible = true;
 			popdown.iDetail.visible = false;
-			popdown.iTunnelDetail.visible = true;
+			_iTunnelDetail.visible = true;
 			popdown.top_title_mc.gotoAndStop(2);
 			//section.extra.detail.roadHeight.htmlText = "";
 		}
