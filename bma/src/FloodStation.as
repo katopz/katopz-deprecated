@@ -806,7 +806,9 @@
 					pump.gotoAndStop(pump_ins[i] + 1);
 					_pumps.push(addChild(pump));
 					pump.x = 210 + i * 20;
-					pump.y = 237;
+					pump.y = 234;
+
+					pump.no_tf.text = String(i + 1);
 				}
 
 			// pump right
@@ -826,7 +828,9 @@
 						pump.x = 210 + i * 20;
 					}
 
-					pump.y = 237;
+					pump.y = 234;
+
+					pump.no_tf.text = String(i + 1);
 				}
 
 			popdown.iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
