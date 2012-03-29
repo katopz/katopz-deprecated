@@ -799,6 +799,7 @@
 			var pump_outs:Array = String(item.STATUS_PUMP_OUT).split(",");
 
 			var i:int;
+			var j:int = 0;
 
 			// pump left
 			if (String(item.STATUS_PUMP_IN).length > 0)
@@ -810,7 +811,7 @@
 					pump.x = 210 + i * 20;
 					pump.y = 234;
 
-					pump.no_tf.text = String(i + 1);
+					pump.no_tf.text = String(++j);
 				}
 
 			// pump right
@@ -823,7 +824,7 @@
 
 					if (String(item.STATUS_PUMP_IN).length > 0)
 					{
-						pump.x = 947 - i * 20;
+						pump.x = 947 - (pump_outs.length * 20) + (i + 1) * 20;
 					}
 					else
 					{
@@ -832,7 +833,7 @@
 
 					pump.y = 234;
 
-					pump.no_tf.text = String(i + 1);
+					pump.no_tf.text = String(++j);
 				}
 
 			var _iTunnelDetail;
