@@ -959,11 +959,98 @@
 
 		}
 
-		public function xmlLoadCompleteHandler(event:Event):void
+		private function xmlLoadCompleteHandler(event:Event):void
 		{
 			var loader:URLLoader = event.target as URLLoader;
 			var data:XML = new XML(loader.data);
 
+			trace(" ^ xmlLoadCompleteHandler : " + String(data.STATION.@id));
+
+			// tunnel
+			if (String(data.STATION.@id).indexOf("TN") == 0)
+			{
+				onTunnelXMLComplete(data);
+			}
+			else
+			{
+				onFloodXMLComplete(data);
+			}
+		}
+
+		public function onFloodXMLComplete(data:XML):void
+		{
+			var dataProvider:Array = [];
+			var captionNum = 0;
+
+			//data.normalize();
+
+			var baseY = 104 - 29;
+			var graphFactor = 70 / 100;
+
+			if (graph.extra.flood)
+			{
+				graph.removeChild(graph.extra.flood);
+			}
+
+			graph.extra.flood = graph.addChild(new MovieClip());
+			graph.extra.flood.y = baseY
+
+			var myFlood = graph.extra.flood.addChild(new Sprite());
+			var floodShape = myFlood.addChild(new Shape());
+			var flood = floodShape.graphics;
+
+			//graph.extra.flood = myFlood;
+
+			//_________________________________________water
+
+			var fillType:String = GradientType.LINEAR;
+			var colors:Array = [0x0033FF, 0x0099FF];
+			var alphas:Array = [0, 1];
+			var ratios:Array = [0x00, 0xFF];
+			var matr:Matrix = new Matrix();
+			matr.rotate(180);
+			var spreadMethod:String = SpreadMethod.PAD;
+
+			flood.beginGradientFill(fillType, colors, alphas, ratios, matr, spreadMethod);
+
+			flood.lineStyle(0.5, 0x0099FF, 0.5);
+
+			//flood.beginFill(0x0000FF);
+			flood.moveTo(0, 0);
+
+			var stationXML = data.children()[0];
+
+			var total = stationXML.child("*").length();
+
+			//for (var i=0;i<total-1;i++){
+			for (var i = total - 2; i > 0; i--)
+			{
+				var lastXML = stationXML.children()[i + 1];
+				if (((captionNum) % 4) == 0)
+				{
+
+					var caption = graph.extra.flood.addChild(new iCaption());
+					caption.x = captionNum * 60 / 4;
+					//caption.y = baseY
+					caption.title.htmlText = lastXML.DATE + "<br/>" + lastXML.TIME;
+
+				}
+				//flood.water = flood.addChild(new Water(new Rectangle(0,0,12,Number(lastXML.VALUE))));
+				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE))
+				captionNum++
+			}
+
+			flood.lineTo(total - 2, 0);
+			myFlood.width *= 60 / 4;
+			flood.endFill();
+
+			graph.extra.flood.x = -(graph.extra.flood.width - 763);
+
+			//createGraph();
+		}
+
+		private function onTunnelXMLComplete(data:XML):void
+		{
 			var dataProvider:Array = new Array();
 			var captionNum = 0;
 
