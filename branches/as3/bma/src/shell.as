@@ -607,6 +607,10 @@
 						listWidth = Math.max(listWidth, String(labelNormal).length * 6);
 					}
 
+					// already select tab
+					if (Global.tabID)
+						dp = _dps[Global.tabID];
+
 					break;
 			}
 

@@ -806,7 +806,7 @@
 				for (i = 0; i < pump_ins.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop(pump_ins[i] + 1);
+					pump.gotoAndStop((pump_ins[i] == 0) ? 2 : 1);
 					_pumps.push(addChild(pump));
 					pump.x = 210 + i * 20;
 					pump.y = 234;
@@ -819,7 +819,7 @@
 				for (i = 0; i < pump_outs.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop(pump_outs[i] + 1);
+					pump.gotoAndStop((pump_ins[i] == 0) ? 2 : 1);
 					_pumps.push(addChild(pump));
 
 					if (String(item.STATUS_PUMP_IN).length > 0)
@@ -850,11 +850,11 @@
 				_iTunnelDetail = popdown.iTunnelDetail2;
 			}
 
-			_iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			_iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
-			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
 			if (String(item.STATUS_POWER).length == 0)
 				_iTunnelDetail.STATUS_POWER.htmlText = "";
