@@ -1,12 +1,12 @@
 ﻿package
 {
 	import caurina.transitions.Tweener;
-
+	
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
-
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
@@ -142,15 +142,15 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN05">
+				<STATION id="FL01">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
 				</STATION>
 
 			setStation(test);
-			//setSection("TN01")
-			setGraph("TN01");
+			//setSection("FL01")
+			setGraph("FL01");
 		}
 
 		//_________________________________________________________________ Station
@@ -679,22 +679,30 @@
 			//setDetail
 			popdown.iDetail.ALERT.htmlText = item.ALERT;
 
-			if (item.STATUS == "1")
+			if (item.STATUS == "0")
 			{
-				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>"
+				//popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+				TextField(popdown.iDetail.COM).htmlText = "ขัดข้อง";
+				TextField(popdown.iDetail.COM).textColor = 0xFF0000;
 			}
 			else
 			{
-				popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>"
+				//popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>";
+				TextField(popdown.iDetail.COM).htmlText = "ปกติ";
+				TextField(popdown.iDetail.COM).textColor = 0x00FF00;
 			}
 
-			if (item.STATUS_PUMP == "1")
+			if (item.STATUS_PUMP == "0")
 			{
-				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">เปิด</FONT>"
+				//popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#FF0000\">เปิด</FONT>";
+				TextField(popdown.iDetail.STATUS).htmlText = "เปิด";
+				TextField(popdown.iDetail.STATUS).textColor = 0xFF0000;
 			}
 			else
 			{
-				popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#0000FF\">ปิด</FONT>"
+				//popdown.iDetail.STATUS.htmlText = "<FONT COLOR=\"#0000FF\">ปิด</FONT>";
+				TextField(popdown.iDetail.STATUS).htmlText = "ปิด";
+				TextField(popdown.iDetail.STATUS).textColor = 0x0000FF;
 			}
 
 			popdown.iDetail.LAST_START.htmlText = item.LAST_START;
@@ -726,6 +734,7 @@
 			popdown.pointer_in.visible = false;
 			popdown.pointer_out.visible = false;
 			popdown.top_title_mc.gotoAndStop(1);
+			popdown.tunnel_caption_sp.visible = false;
 		}
 
 		private var _pumps:Array = [];
@@ -819,7 +828,7 @@
 				for (i = 0; i < pump_outs.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop((pump_ins[i] == 0) ? 2 : 1);
+					pump.gotoAndStop((pump_outs[i] == 0) ? 2 : 1);
 					_pumps.push(addChild(pump));
 
 					if (String(item.STATUS_PUMP_IN).length > 0)
@@ -850,11 +859,11 @@
 				_iTunnelDetail = popdown.iTunnelDetail2;
 			}
 
-			_iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			_iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
-			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
 			if (String(item.STATUS_POWER).length == 0)
 				_iTunnelDetail.STATUS_POWER.htmlText = "";
@@ -931,6 +940,7 @@
 			_iTunnelDetail.visible = true;
 			popdown.top_title_mc.gotoAndStop(2);
 			//section.extra.detail.roadHeight.htmlText = "";
+			popdown.tunnel_caption_sp.visible = true;
 		}
 
 		//_________________________________________________________________ History
@@ -1082,8 +1092,11 @@
 			// VALUE_OUT
 			flood2.lineStyle(0.5, 0xFF0000, 1);
 			flood2.moveTo(0, 0);
+			
+			var floodVisible:Boolean;
+			var flood2Visible:Boolean;
 
-			var stationXML = data.children()[0]
+			var stationXML = data.children()[0];
 			var total = stationXML.child("*").length();
 
 			for (var i = total - 2; i > 0; i--)
@@ -1107,10 +1120,14 @@
 					flood2.lineStyle(0.5, 0xFF0000, 0);
 					flood2.lineTo(captionNum, 0);
 				}
-
+				
+				// visibility
+				floodVisible = (String(lastXML.VALUE_IN) != "");
+				flood2Visible = (String(lastXML.VALUE_OUT) != "");
+				
 				captionNum++;
 			}
-
+			
 			myFlood.width *= 60 / 4;
 
 			// VALUE_IN
@@ -1120,6 +1137,10 @@
 			// VALUE_OUT
 			flood2.lineTo(total - 2, 0);
 			flood2.endFill();
+			
+			// visibility
+			floodShape.visible = floodVisible;
+			floodShape2.visible = flood2Visible;
 
 			graph.extra.flood.x = -(graph.extra.flood.width - 763);
 		}
