@@ -862,8 +862,8 @@
 			_iTunnelDetail.STATUS_POWER.htmlText = (int(item.STATUS_POWER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 			_iTunnelDetail.STATUS_BREAKER.htmlText = (int(item.STATUS_BREAKER) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
-			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 1) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_IN.htmlText = (int(item.STATUS_IN) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
+			_iTunnelDetail.STATUS_OUT.htmlText = (int(item.STATUS_OUT) == 0) ? "<FONT COLOR=\"#00FF00\">ปกติ</FONT>" : "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
 
 			if (String(item.STATUS_POWER).length == 0)
 				_iTunnelDetail.STATUS_POWER.htmlText = "";
