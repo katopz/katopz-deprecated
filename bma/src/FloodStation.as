@@ -831,6 +831,8 @@
 					pump.gotoAndStop((pump_outs[i] == 0) ? 2 : 1);
 					_pumps.push(addChild(pump));
 
+					// cancel auto align left : 2012/04/27
+					/*
 					if (String(item.STATUS_PUMP_IN).length > 0)
 					{
 						pump.x = 947 - (pump_outs.length * 20) + (i + 1) * 20;
@@ -839,7 +841,9 @@
 					{
 						pump.x = 210 + i * 20;
 					}
-
+					*/
+					
+					pump.x = 947 - (pump_outs.length * 20) + (i + 1) * 20;
 					pump.y = 234;
 
 					pump.no_tf.text = String(++j);
