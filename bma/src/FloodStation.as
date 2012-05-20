@@ -492,17 +492,27 @@
 				trace("catch:" + error);
 			}
 
-			// not over 100
-			var floodObject_height:Number = floodObject.height < 100 ? floodObject.height : 100;
-			popdown.pointer.y = 180 + 16 - floodObject_height * factor;
+			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
+			popdown.pointer2.y = 180 + 16 - floodObject.height * factor;
 
 			if (Number(iID.substr(2)) > 21)
 			{
-				popdown.pointer.visible = true;
+				// over bound
+				if (floodObject.height < 80)
+				{
+					popdown.pointer.visible = true;
+					popdown.pointer2.visible = false;
+				}
+				else
+				{
+					popdown.pointer.visible = false;
+					popdown.pointer2.visible = true;
+				}
 			}
 			else
 			{
 				popdown.pointer.visible = false;
+				popdown.pointer2.visible = false;
 			}
 		}
 
@@ -557,9 +567,8 @@
 				trace("catch:" + error);
 			}
 
-			// not over 100
-			var floodObject_height:Number = floodObject.height < 100 ? floodObject.height : 100;
-			popdown.pointer.y = 180 + 16 - floodObject_height * factor;
+			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
+			popdown.pointer2.y = 180 + 16 - floodObject.height * factor;
 		}
 
 		public function createTunnel2Section(iID:String):void
@@ -619,12 +628,8 @@
 				trace("catch:" + error);
 			}
 
-			// not over 100
-			var floodObject_height_in:Number = floodObject.height_in < 100 ? floodObject.height_in : 100;
-			var floodObject_height_out:Number = floodObject.height_out < 100 ? floodObject.height_out : 100;
-
-			popdown.pointer_in2.y = popdown.pointer_in.y = 180 + 16 - floodObject_height_in * factor;
-			popdown.pointer_out2.y = popdown.pointer_out.y = 180 + 16 - floodObject_height_out * factor;
+			popdown.pointer_in2.y = popdown.pointer_in.y = 180 + 16 - floodObject.height_in * factor;
+			popdown.pointer_out2.y = popdown.pointer_out.y = 180 + 16 - floodObject.height_out * factor;
 		}
 
 		public function onSectionError(event:ContentEvent):void
@@ -726,6 +731,7 @@
 			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
 
 			popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
+			popdown.pointer2.label.text = String(floodObject.height + " เซนติเมตร");
 
 			createSection(xml.STATION.@id);
 			createRoad(xml.STATION.@id);
@@ -911,10 +917,13 @@
 				//section.extra.detail.waterHeight.htmlText = floodObject.height;
 
 				popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
+				popdown.pointer2.label.text = String(floodObject.height + " เซนติเมตร");
 
 				createTunnel1Section(xml.STATION.@id);
 
 				popdown.pointer.visible = true;
+				popdown.pointer2.visible = true;
+
 				popdown.pointer_in.visible = false;
 				popdown.pointer_out.visible = false;
 				popdown.pointer_in2.visible = false;
@@ -922,6 +931,18 @@
 
 				// bar
 				section.extra.detail.bar_sp.visible = false;
+
+				// over bound
+				if (floodObject.height < 80)
+				{
+					popdown.pointer.visible = true;
+					popdown.pointer2.visible = false;
+				}
+				else
+				{
+					popdown.pointer.visible = false;
+					popdown.pointer2.visible = true;
+				}
 			}
 			else
 			{
@@ -940,6 +961,7 @@
 				createTunnel2Section(xml.STATION.@id);
 
 				popdown.pointer.visible = false;
+				popdown.pointer2.visible = false;
 
 				// over bound
 				if (floodObject.height_in < 80)
