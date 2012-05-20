@@ -1103,7 +1103,7 @@
 			var stationXML = data.children()[0];
 			var total = stationXML.child("*").length();
 
-			for (var i = total - 2; i > 0; i--)
+			for (var i = total - 2; i >= 0; i--)
 			{
 				var lastXML = stationXML.children()[i + 1];
 				if (((captionNum) % 4) == 0)
@@ -1135,11 +1135,11 @@
 			myFlood.width *= 60 / 4;
 
 			// VALUE_IN
-			flood.lineTo(total - 2, 0);
+			//flood.lineTo(total - 2, 0);
 			flood.endFill();
 
 			// VALUE_OUT
-			flood2.lineTo(total - 2, 0);
+			//flood2.lineTo(total - 2, 0);
 			flood2.endFill();
 
 			// visibility
