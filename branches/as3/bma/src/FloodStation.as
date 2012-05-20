@@ -1,12 +1,12 @@
 ﻿package
 {
 	import caurina.transitions.Tweener;
-	
+
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
-	
+
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
@@ -142,7 +142,7 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="FL01">
+				<STATION id="TN02">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -150,7 +150,7 @@
 
 			setStation(test);
 			//setSection("FL01")
-			setGraph("FL01");
+			setGraph("TN02");
 		}
 
 		//_________________________________________________________________ Station
@@ -842,7 +842,7 @@
 						pump.x = 210 + i * 20;
 					}
 					*/
-					
+
 					pump.x = 947 - (pump_outs.length * 20) + (i + 1) * 20;
 					pump.y = 234;
 
@@ -1096,7 +1096,7 @@
 			// VALUE_OUT
 			flood2.lineStyle(0.5, 0xFF0000, 1);
 			flood2.moveTo(0, 0);
-			
+
 			var floodVisible:Boolean;
 			var flood2Visible:Boolean;
 
@@ -1124,14 +1124,14 @@
 					flood2.lineStyle(0.5, 0xFF0000, 0);
 					flood2.lineTo(captionNum, 0);
 				}
-				
+
 				// visibility
 				floodVisible = (String(lastXML.VALUE_IN) != "");
 				flood2Visible = (String(lastXML.VALUE_OUT) != "");
-				
+
 				captionNum++;
 			}
-			
+
 			myFlood.width *= 60 / 4;
 
 			// VALUE_IN
@@ -1141,10 +1141,15 @@
 			// VALUE_OUT
 			flood2.lineTo(total - 2, 0);
 			flood2.endFill();
-			
+
 			// visibility
 			floodShape.visible = floodVisible;
 			floodShape2.visible = flood2Visible;
+
+			//caption
+			popdown.tunnel_caption_sp.in_sp.visible = floodVisible;
+			popdown.tunnel_caption_sp.out_sp.visible = flood2Visible;
+			popdown.tunnel_caption_sp.out_sp.x = floodVisible ? 50 : popdown.tunnel_caption_sp.in_sp.x;
 
 			graph.extra.flood.x = -(graph.extra.flood.width - 763);
 		}
