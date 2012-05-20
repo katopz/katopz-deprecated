@@ -492,7 +492,9 @@
 				trace("catch:" + error);
 			}
 
-			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
+			// not over 100
+			var floodObject_height:Number = floodObject.height < 100 ? floodObject.height : 100;
+			popdown.pointer.y = 180 + 16 - floodObject_height * factor;
 
 			if (Number(iID.substr(2)) > 21)
 			{
@@ -555,7 +557,9 @@
 				trace("catch:" + error);
 			}
 
-			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
+			// not over 100
+			var floodObject_height:Number = floodObject.height < 100 ? floodObject.height : 100;
+			popdown.pointer.y = 180 + 16 - floodObject_height * factor;
 		}
 
 		public function createTunnel2Section(iID:String):void
@@ -615,8 +619,12 @@
 				trace("catch:" + error);
 			}
 
-			popdown.pointer_in.y = 180 + 16 - floodObject.height_in * factor;
-			popdown.pointer_out.y = 180 + 16 - floodObject.height_out * factor;
+			// not over 100
+			var floodObject_height_in:Number = floodObject.height_in < 100 ? floodObject.height_in : 100;
+			var floodObject_height_out:Number = floodObject.height_out < 100 ? floodObject.height_out : 100;
+
+			popdown.pointer_in2.y = popdown.pointer_in.y = 180 + 16 - floodObject_height_in * factor;
+			popdown.pointer_out2.y = popdown.pointer_out.y = 180 + 16 - floodObject_height_out * factor;
 		}
 
 		public function onSectionError(event:ContentEvent):void
@@ -733,6 +741,8 @@
 			popdown.iTunnelDetail2.visible = false;
 			popdown.pointer_in.visible = false;
 			popdown.pointer_out.visible = false;
+			popdown.pointer_in2.visible = false;
+			popdown.pointer_out2.visible = false;
 			popdown.top_title_mc.gotoAndStop(1);
 			popdown.tunnel_caption_sp.visible = false;
 		}
@@ -907,6 +917,8 @@
 				popdown.pointer.visible = true;
 				popdown.pointer_in.visible = false;
 				popdown.pointer_out.visible = false;
+				popdown.pointer_in2.visible = false;
+				popdown.pointer_out2.visible = false;
 
 				// bar
 				section.extra.detail.bar_sp.visible = false;
@@ -922,12 +934,35 @@
 
 				popdown.pointer_in.label.text = String(floodObject.height_in + " เซนติเมตร");
 				popdown.pointer_out.label.text = String(floodObject.height_out + " เซนติเมตร");
+				popdown.pointer_in2.label.text = String(floodObject.height_in + " เซนติเมตร");
+				popdown.pointer_out2.label.text = String(floodObject.height_out + " เซนติเมตร");
 
 				createTunnel2Section(xml.STATION.@id);
 
 				popdown.pointer.visible = false;
-				popdown.pointer_in.visible = true;
-				popdown.pointer_out.visible = true;
+
+				// over bound
+				if (floodObject.height_in < 80)
+				{
+					popdown.pointer_in.visible = true;
+					popdown.pointer_in2.visible = false;
+				}
+				else
+				{
+					popdown.pointer_in.visible = false;
+					popdown.pointer_in2.visible = true;
+				}
+
+				if (floodObject.height_out < 80)
+				{
+					popdown.pointer_out.visible = true;
+					popdown.pointer_out2.visible = false;
+				}
+				else
+				{
+					popdown.pointer_out.visible = false;
+					popdown.pointer_out2.visible = true;
+				}
 
 				// bar
 				section.extra.detail.bar_sp.visible = true;
