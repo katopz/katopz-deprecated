@@ -116,11 +116,11 @@
 
 		//min
 		if(nextX>0){
-			nextX = 0
+		nextX = 0
 		}
 		//max
 		if(nextX<-(slide.width-763)){
-			nextX = -(slide.width-763)
+		nextX = -(slide.width-763)
 		}
 
 		Tweener.addTween(slide,{x:nextX, time:0.25, transition:"easeoutquad"})
@@ -142,7 +142,7 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN02">
+				<STATION id="TN03">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -150,7 +150,7 @@
 
 			setStation(test);
 			//setSection("FL01")
-			setGraph("TN02");
+			setGraph("TN03");
 		}
 
 		//_________________________________________________________________ Station
@@ -284,7 +284,7 @@
 		var method = String(XMLUtil.getNodeById(config,"FloodStationData").@method).toUpperCase();
 
 		if(isTest){
-			dataPath = "http://localhost/yourpath/Flood/serverside/getStationData.php";
+		dataPath = "http://localhost/yourpath/Flood/serverside/getStationData.php";
 		}
 
 		var loader:URLLoader = new URLLoader();
@@ -851,11 +851,11 @@
 					/*
 					if (String(item.STATUS_PUMP_IN).length > 0)
 					{
-						pump.x = 947 - (pump_outs.length * 20) + (i + 1) * 20;
+					pump.x = 947 - (pump_outs.length * 20) + (i + 1) * 20;
 					}
 					else
 					{
-						pump.x = 210 + i * 20;
+					pump.x = 210 + i * 20;
 					}
 					*/
 
@@ -866,7 +866,7 @@
 				}
 
 			var _iTunnelDetail;
-			if (String(item.VALUE_OUT).length == 0)
+			if ((String(item.VALUE_IN).length == 0) || (String(item.VALUE_OUT).length == 0))
 			{
 				// has 1 way
 				popdown.iTunnelDetail2.visible = false;
@@ -874,6 +874,7 @@
 			}
 			else
 			{
+				trace("has 2 ways");
 				// has 2 ways
 				popdown.iTunnelDetail.visible = false;
 				_iTunnelDetail = popdown.iTunnelDetail2;
@@ -909,10 +910,13 @@
 			floodObject = new Object();
 			floodObject.roadHeight = 180;
 
-			if (String(item.VALUE_OUT).length == 0)
+			if ((String(item.VALUE_IN).length == 0) || (String(item.VALUE_OUT).length == 0))
 			{
 				// has 1 way
-				floodObject.height = Number(item.VALUE_IN);
+				if (String(item.VALUE_OUT).length == 0)
+					floodObject.height = Number(item.VALUE_IN);
+				else
+					floodObject.height = Number(item.VALUE_OUT);
 
 				//section.extra.detail.waterHeight.htmlText = floodObject.height;
 
@@ -946,6 +950,7 @@
 			}
 			else
 			{
+				trace("has 2 ways");
 				// has 2 ways
 				floodObject.height_in = Number(item.VALUE_IN);
 				floodObject.height_out = Number(item.VALUE_OUT);
