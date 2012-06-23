@@ -22,19 +22,12 @@
   </STATION>
   
   <STATION id="TN04">
-    <NAME>อุโมงค์ทางลอดพระราม 9 In</NAME>
-    <LABEL>ทางลอดพระราม 9 In</LABEL>
+    <NAME>อุโมงค์ทางลอดพระราม 9</NAME>
+    <LABEL>ทางลอดพระราม 9</LABEL>
     <STATUS>1</STATUS>
     <VALUE>10</VALUE>
   </STATION>
 
-   <STATION id="TN04">
-    <NAME>อุโมงค์ทางลอดพระราม 9 Out</NAME>
-    <LABEL>ทางลอดพระราม 9 Out</LABEL>
-    <STATUS>1</STATUS>
-    <VALUE>20</VALUE>
-  </STATION>
-  
   <STATION id="TN05">
     <NAME>อุโมงค์กลับรถยนต์ถนนพัฒนาการ</NAME>
     <LABEL>กลับรถยนต์ถนนพัฒนาการ</LABEL>

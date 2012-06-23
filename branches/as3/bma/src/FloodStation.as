@@ -249,7 +249,7 @@
 			}
 
 
-			popdown.iStationName.htmlText = iID + " - " + iName;
+			popdown.iStationName.htmlText = "<b>" + iID + " - " + iName + "</b>";
 
 			var dataPath = XMLUtil2.getNodeById(config, "FloodStationData").@src;
 			var method = String(XMLUtil2.getNodeById(config, "FloodStationData").@method).toUpperCase();
