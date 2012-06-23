@@ -22,10 +22,10 @@
     <qtDefaultName>1</qtDefaultName>
     <rnwkDefaultName>1</rnwkDefaultName>
     <swcDefaultName>0</swcDefaultName>
-    <flashFileName>C:\xampp\htdocs\classes\katopz\branches\as3\bma\shell.swf</flashFileName>
+    <flashFileName>C:\classes\katopz\branches\as3\bma\shell.swf</flashFileName>
     <projectorWinFileName>shell.exe</projectorWinFileName>
     <projectorMacFileName>shell.app</projectorMacFileName>
-    <htmlFileName>C:\xampp\htdocs\classes\katopz\branches\as3\bma\shell.html</htmlFileName>
+    <htmlFileName>C:\classes\katopz\branches\as3\bma\shell.html</htmlFileName>
     <gifFileName>shell.gif</gifFileName>
     <jpegFileName>shell.jpg</jpegFileName>
     <pngFileName>shell.png</pngFileName>
@@ -35,7 +35,7 @@
   </PublishFormatProperties>
   <PublishHtmlProperties enabled="true">
     <VersionDetectionIfAvailable>0</VersionDetectionIfAvailable>
-    <VersionInfo>10,2,153,0;10,1,52,0;9,0,124,0;8,0,24,0;7,0,14,0;6,0,79,0;5,0,58,0;4,0,32,0;3,0,8,0;2,0,1,12;1,0,0,1;</VersionInfo>
+    <VersionInfo>12,0,0,0;11,2,0,0;11,1,0,0;10,3,0,0;10,2,153,0;10,1,52,0;9,0,124,0;8,0,24,0;7,0,14,0;6,0,79,0;5,0,58,0;4,0,32,0;3,0,8,0;2,0,1,12;1,0,0,1;</VersionInfo>
     <UsingDefaultContentFilename>1</UsingDefaultContentFilename>
     <UsingDefaultAlternateFilename>1</UsingDefaultAlternateFilename>
     <ContentFilename>shell_content.html</ContentFilename>
@@ -56,7 +56,7 @@
     <WindowMode>0</WindowMode>
     <DisplayMenu>1</DisplayMenu>
     <DeviceFont>0</DeviceFont>
-    <TemplateFileName>C:\Users\katopz\AppData\Local\Adobe\Flash CS5\en_US\Configuration\HTML\Default.html</TemplateFileName>
+    <TemplateFileName>C:\Documents and Settings\Administrator\Local Settings\Application Data\Adobe\Flash CS5\en_US\Configuration\HTML\Default.html</TemplateFileName>
     <showTagWarnMsg>1</showTagWarnMsg>
   </PublishHtmlProperties>
   <PublishFlashProperties enabled="true">
@@ -77,11 +77,12 @@
     <ActionScriptVersion>3</ActionScriptVersion>
     <PackageExportFrame>1</PackageExportFrame>
     <PackagePaths></PackagePaths>
-    <AS3PackagePaths>.</AS3PackagePaths>
-    <AS3ConfigConst>CONFIG::FLASH_AUTHORING=&quot;true&quot;;</AS3ConfigConst>
+    <AS3PackagePaths>.;C:\Documents and Settings\Administrator\Desktop\bma\Site_Flood\src</AS3PackagePaths>
+    <AS3ConfigConst></AS3ConfigConst>
     <DebuggingPermitted>1</DebuggingPermitted>
     <DebuggingPassword></DebuggingPassword>
     <CompressMovie>1</CompressMovie>
+    <CompressionType>0</CompressionType>
     <InvisibleLayer>1</InvisibleLayer>
     <DeviceSound>0</DeviceSound>
     <StreamUse8kSampleRate>0</StreamUse8kSampleRate>
@@ -101,7 +102,7 @@
     <AS3Flags>4102</AS3Flags>
     <DefaultLibraryLinkage>rsl</DefaultLibraryLinkage>
     <RSLPreloaderMethod>wrap</RSLPreloaderMethod>
-    <RSLPreloaderSWF>$(AppConfig)/ActionScript 3.0/rsls/loader_animation.swf</RSLPreloaderSWF>
+    <RSLPreloaderSWF></RSLPreloaderSWF>
     <LibraryPath>
       <library-path-entry>
         <swc-path>$(AppConfig)/ActionScript 3.0/libs</swc-path>
