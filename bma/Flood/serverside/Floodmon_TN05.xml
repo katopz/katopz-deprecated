@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
   <STATION id="TN05">
     <NAME>อุโมงค์กลับรถยนต์ถนนพัฒนาการ</NAME>
@@ -6,7 +6,7 @@
     <VALUE_IN>10</VALUE_IN>
     <STATUS_PUMP_OUT>1,0,0,1</STATUS_PUMP_OUT>
     <STATUS_POWER>0</STATUS_POWER>
-    <STATUS_BREAKER>1</STATUS_BREAKER>
+    <STATUS_BREAKER>0</STATUS_BREAKER>
     <STATUS_IN>0</STATUS_IN>
     <LAST_FLOOD_START_IN>24-7-2007 02:15:00</LAST_FLOOD_START_IN>
     <LAST_FLOOD_STOP_IN>26-7-2007 04:35:00</LAST_FLOOD_STOP_IN>

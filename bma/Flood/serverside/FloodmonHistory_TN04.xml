@@ -1,11 +1,11 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <FLOODMON>
   <STATION id="TN04">
     <NAME>อุโมงค์ทางลอดพระราม 9</NAME>
      <LAST1>
       <DATE>31/10/2550</DATE>
       <TIME>12:50:00</TIME>
-      <VALUE_IN>10</VALUE_IN><VALUE_OUT>10</VALUE_OUT>
+      <VALUE_IN>10</VALUE_IN><VALUE_OUT>80</VALUE_OUT>
     </LAST1>
     <LAST2>
       <DATE>31/10/2550</DATE>
@@ -15,7 +15,7 @@
     <LAST3>
       <DATE>31/10/2550</DATE>
       <TIME>12:40:00</TIME>
-      <VALUE_IN>30</VALUE_IN><VALUE_OUT>30</VALUE_OUT>
+      <VALUE_IN>40</VALUE_IN><VALUE_OUT>30</VALUE_OUT>
     </LAST3>
     <LAST4>
       <DATE>31/10/2550</DATE>
