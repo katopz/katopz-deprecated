@@ -730,8 +730,8 @@
 			section.extra.detail.waterHeight.htmlText = floodObject.height;
 			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
 
-			popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
-			popdown.pointer2.label.text = String(floodObject.height + " เซนติเมตร");
+			popdown.pointer.label.text = String(floodObject.height + "  เซนติเมตร");
+			popdown.pointer2.label.text = String(floodObject.height + "  เซนติเมตร");
 
 			createSection(xml.STATION.@id);
 			createRoad(xml.STATION.@id);
@@ -920,8 +920,8 @@
 
 				//section.extra.detail.waterHeight.htmlText = floodObject.height;
 
-				popdown.pointer.label.text = String(floodObject.height + " เซนติเมตร");
-				popdown.pointer2.label.text = String(floodObject.height + " เซนติเมตร");
+				popdown.pointer.label.text = String(floodObject.height + " ซม.");
+				popdown.pointer2.label.text = String(floodObject.height + " ซม.");
 
 				createTunnel1Section(xml.STATION.@id);
 
@@ -958,10 +958,10 @@
 				//section.extra.detail.waterHeightIn.htmlText = floodObject.height_in;
 				//section.extra.detail.waterHeightOut.htmlText = floodObject.height_out;
 
-				popdown.pointer_in.label.text = String(floodObject.height_in + " เซนติเมตร");
-				popdown.pointer_out.label.text = String(floodObject.height_out + " เซนติเมตร");
-				popdown.pointer_in2.label.text = String(floodObject.height_in + " เซนติเมตร");
-				popdown.pointer_out2.label.text = String(floodObject.height_out + " เซนติเมตร");
+				popdown.pointer_in.label.text = String(floodObject.height_in + " ซม.");
+				popdown.pointer_out.label.text = String(floodObject.height_out + " ซม.");
+				popdown.pointer_in2.label.text = String(floodObject.height_in + " ซม.");
+				popdown.pointer_out2.label.text = String(floodObject.height_out + " ซม.");
 
 				createTunnel2Section(xml.STATION.@id);
 
