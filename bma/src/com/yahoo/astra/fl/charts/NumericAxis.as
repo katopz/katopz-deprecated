@@ -633,10 +633,12 @@ package com.yahoo.astra.fl.charts
 			
 			_maximum += _majorUnit;
 			
+			/*
 			trace("_minimum:"+_minimum);
 			trace("_maximum:"+_maximum);
 			trace("_majorUnit:"+_majorUnit);
 			trace("_minorUnit:"+_minorUnit);
+			*/
 		}
 		
 		/**

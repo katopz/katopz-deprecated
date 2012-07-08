@@ -5,14 +5,14 @@
 	import com.sleepydesign.utils.*;
 	import com.yahoo.astra.fl.charts.*;
 	import com.yahoo.astra.fl.charts.series.*;
-
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
 	import flash.system.Security;
-
+	
 	import gs.TweenLite;
 	import gs.TweenMax;
 
@@ -23,12 +23,12 @@
 		public var rootPath:String = "Flood/";
 
 
-		public var type = "Graph";
+		public var type:String = "Graph";
 
-		public var graph0;
-		public var graph1;
+		public var graph0:ColumnChart;
+		public var graph1:ColumnChart;
 
-		public var isTest = false;
+		public var isTest:Boolean = false;
 
 		var series0, series1:LineSeries
 
@@ -84,26 +84,32 @@
 
 			var dataPath:String = "../serverside/FloodmonAllStation.xml";
 
+			Global.tabID = Global.TUNNEL_TAB;
+
+			/*if (Global.tabID == Global.TUNNEL_TAB)
+				setGraph("VALUE_IN");
+			else*/
 			setGraph("VALUE");
 		}
 
 		//_________________________________________________________________ Graph
 
-		public function createGraph(graph, type)
+		private var type2:String;
+
+		public function createGraph(graph, type, type2 = null)
 		{
-			var chart = graph;
+			graph.horizontalField = "LABEL";
+			graph.verticalField = type;
+			this.type2 = type2;
 
-			chart.horizontalField = "LABEL";
-			chart.verticalField = type;
-
-			series0 = new LineSeries();
-			series1 = new LineSeries();
+			//series0 = new LineSeries();
+			//series1 = new LineSeries();
 		}
 
-		public function setGraph(type)
+		public function setGraph(type, type2 = null)
 		{
-			createGraph(graph0, type);
-			createGraph(graph1, type);
+			createGraph(graph0, type, type2);
+			createGraph(graph1, type, type2);
 
 			var dataPath = XMLUtil2.getNodeById(config, "FloodGraphData").@src;
 			var method = String(XMLUtil2.getNodeById(config, "FloodGraphData").@method).toUpperCase();
@@ -140,14 +146,13 @@
 		{
 			trace(" * parseData : " + tabID);
 
-			if (isTest)
-				tabID = Global.ALL_TAB;
-
 			series0 = new LineSeries();
 			series1 = new LineSeries();
 
 			var data0:Array = [];
 			var data1:Array = [];
+			//var data0_out:Array = [];
+			//var data1_out:Array = [];
 			var i:int;
 
 			switch (tabID)
@@ -156,11 +161,45 @@
 				{
 					for (i = 0; i < data.STATION.length(); i++)
 					{
-						data0.push(data.STATION[i]);
-						data1.push(data.STATION[i]);
+						// proxy vin VALUE_IN -> VALUE
+						var stationXML:XML = data.STATION[i].copy();
+						
+						if (String(stationXML.VALUE).length > 0)
+						{
+							// normal value case
+							data0.push(stationXML);
+							data1.push(stationXML);
+						}else{
+							if (String(stationXML.VALUE_IN).length > 0)
+							{
+								stationXML.VALUE = Number(stationXML.VALUE_IN);
+								//trace("stationXML.@id:"+stationXML.@id)
+								//stationXML.@id = String(stationXML.@id) + "_IN" ;
+								stationXML.LABEL = String(stationXML.LABEL) + " (เข้า)";
+								//trace("stationXML.@id:"+stationXML.@id)
+								data0.push(stationXML);
+								data1.push(stationXML);
+								//data0_out.push(stationXML);
+								//data1_out.push(stationXML);
+							}
+							
+							// proxy vout VALUE_OUT -> VALUE
+							if (String(stationXML.VALUE_OUT).length > 0)
+							{
+								stationXML = data.STATION[i].copy();
+								stationXML.VALUE = Number(stationXML.VALUE_OUT);
+								//stationXML.@id = String(stationXML.@id) + "_OUT" ;
+								stationXML.LABEL = String(stationXML.LABEL) + " (ออก)";
+								data0.push(stationXML);
+								data1.push(stationXML);
+								//data0_out.push(stationXML);
+								//data1_out.push(stationXML);
+							}
+						}
 					}
-
+						
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
+					//data0_out.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 
 					//sort alphabet
 					var data3:Array = [];
@@ -216,8 +255,8 @@
 					series0.dataProvider = data3;
 					series1.dataProvider = data1;
 
-					graph0.dataProvider = [data3, series0];
-					graph1.dataProvider = [data1, series1];
+					graph0.dataProvider = [data3];//, series0];
+					graph1.dataProvider = [data1];//, series1];
 
 					break;
 				}
@@ -260,25 +299,127 @@
 					series0.dataProvider = data0;
 					series1.dataProvider = data1;
 
-					graph0.dataProvider = [data0, series0];
-					graph1.dataProvider = [data1, series1];
+					graph0.dataProvider = [data0];//, series0];
+					graph1.dataProvider = [data1];//, series1];
 
 					break;
 				}
 				case Global.TUNNEL_TAB:
 				{
-					for (i = 0; i < data.STATION.length(); i++)
+					// vout
+					//var series0_out = new LineSeries();
+					//var series1_out = new LineSeries();
+
+					var data0_out:Array = [];
+					var data1_out:Array = [];
+
+					var STATION_LENGTH:int = data.STATION.length();
+					
+					for (i = 0; i < STATION_LENGTH; i++)
 					{
 						if (String(data.STATION[i].@id).indexOf(tabID) == 0)
 						{
-							data0.push(data.STATION[i]);
-							data1.push(data.STATION[i]);
+							// one way?
+							if ((String(data.STATION[i].VALUE_IN).length <= 0) || (String(data.STATION[i].VALUE_OUT).length <= 0))
+							{
+								data.STATION[i].ONEWAY = "true";
+							}else{
+								data.STATION[i].ONEWAY = "false";
+							}
+							
+							// proxy vin VALUE_IN -> VALUE
+							var stationXML:XML = data.STATION[i].copy();
+							stationXML.VALUE = Number(stationXML.VALUE_IN);
+							
+							//if (String(stationXML.VALUE_IN).length > 0)
+							//{
+								data0.push(stationXML);
+								data1.push(stationXML);
+								//trace("data0:"+stationXML.@id);
+							//}else{
+								//trace(stationXML);
+							//}
+
+							// proxy vout VALUE_OUT -> VALUE
+							stationXML = data.STATION[i].copy();
+							stationXML.VALUE = Number(stationXML.VALUE_OUT);
+							stationXML.VALUE_OUT = null;
+
+							//if (String(stationXML.VALUE_OUT).length > 0)
+							//{
+								data0_out.push(stationXML);
+								data1_out.push(stationXML);
+								//trace("data0_out:"+stationXML.@id);
+							//}else{
+								//trace(stationXML);
+							//}
 						}
 					}
 
-					data1.sortOn("@id");
+					// vin
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
-
+					
+					// vout
+					//data0_out.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
+					// sort by sorted vin
+					var data0_out_sorted:Array = [];
+					for (i=0 ;i<data0.length;i++)
+					{
+						for (var j:int = 0; j < data0_out.length; j++) 
+						{
+							if(data0_out[j].@id == data0[i].@id)
+							{
+								//if(String(data0_out[j].ONEWAY) == "false")
+								
+								if(Number(data0_out[j].VALUE) == 0)
+								{
+									//data0_out[j].VALUE = -1;
+								}
+								
+								if(Number(data0[j].VALUE) == 0)
+								{
+									//data0[j].VALUE = -1;
+								}
+								
+								data0_out_sorted.push(data0_out[j]);
+									
+								//trace(String(data0_out[j].ONEWAY));
+								
+								/*
+								trace("data0[i].@isOneWay:"+data0[i].@isOneWay);
+								if(data0[i].@isOneWay)
+								{
+									if(data0[i].@isOneWay == "true")
+										data0_out_sorted.push(data0_out[j]);
+									else
+										data0_out_sorted.push(data0_out[j]);
+								}
+								*/
+								
+								//trace(data0_out_sorted);
+							//}else{
+								//trace(data0_out[j].@id, data0[i].@id);
+							}
+						}
+					}
+							
+					//data0_out_sorted = data0_out.concat();
+					
+					/*
+					// remove one way
+					for (i=0 ;i<data0.length;i++)
+					{
+						if(stationXML.@isOneWay == "true")
+							removeItemAt(data0, );
+					}
+					*/
+					
+					// vin
+					data1.sortOn("@id");
+					
+					// vout
+					data1_out.sortOn("@id");
+					
 					var w:Number = data0.length * 760 / 10;
 					graph1.width = graph0.width = Math.max(w, 760);
 
@@ -298,11 +439,17 @@
 					// rotation
 					Global.GRAPH_ROTATION = 0;
 
-					series0.dataProvider = data0;
-					series1.dataProvider = data1;
+					//series0.dataProvider = data0;
+					//series1.dataProvider = data1;
 
-					graph0.dataProvider = [data0, series0];
-					graph1.dataProvider = [data1, series1];
+					// vout
+					//series0_out.dataProvider = data0_out;
+					//series1_out.dataProvider = data1_out;
+
+					//graph0.dataProvider = [data0, series0, data0_out, series0_out];
+					//graph1.dataProvider = [data1, series1, data1_out, series1_out];
+					graph0.dataProvider = [data0, data0_out_sorted];
+					graph1.dataProvider = [data1, data1_out];
 					break;
 				}
 			}
@@ -360,7 +507,6 @@
 			fake0.addChild(new Bitmap(axisBitmap));
 
 			//
-
 			var graphBitmap:BitmapData = GraphicUtil.getBitmapData(graph1, false);
 			var axisBitmap:BitmapData = new BitmapData(33, graphBitmap.height);
 			axisBitmap.copyPixels(graphBitmap, new Rectangle(0, 0, 33, 190), new Point());
@@ -381,12 +527,24 @@
 		public override function onUpdate(event:ContentEvent):void
 		{
 			if (event.content.name == "FloodGraph")
-			{
-				//setGraph(event.data.@id);
 				setGraph("VALUE");
-			}
 		}
-
+		
+		private function removeItemAt(arr:Array, index:int):*
+		{
+			if (index == -1)
+				return index;
+			
+			const item:* = arr[index];
+			
+			arr.splice(index, 1);
+			
+			return item;
+		}
+		
+		private function removeItem(arr:Array, item:*):*
+		{
+			return removeItemAt(arr, arr.indexOf(item));
+		}
 	}
-
 }
