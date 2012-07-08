@@ -76,6 +76,7 @@
 			//popdown.iGraph.buttonMode = true
 
 			popdown.visible = false;
+			popdown.road_desc1_mc.visible = false;
 			popdown.road_desc2_mc.visible = false;
 			popdown.iDetail.visible = false;
 			popdown.iTunnelDetail.visible = false;
@@ -142,15 +143,15 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN03">
+				<STATION id="FL01">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
 				</STATION>
 
 			setStation(test);
-			//setSection("FL01")
-			setGraph("TN03");
+			setSection("FL01")
+			//setGraph("TN03");
 		}
 
 		//_________________________________________________________________ Station
@@ -658,7 +659,6 @@
 			var xml:XML = new XML(loader.data);
 
 			var item = xml.STATION;
-
 			if (String(item..@id).indexOf(Global.FLOOD_TAB) == 0)
 				setupFlood(xml);
 			else
@@ -739,8 +739,24 @@
 			popdown.iValue = floodObject.height;
 			updateStation();
 
-			// visibility
+			// desc -----------------------------------------------------------------
+
+			popdown.road_desc1_mc.ALERT_TOP.visible = true;
+			popdown.road_desc1_mc.ALERT_BOTTOM.visible = true;
+
+			if (String(item.ALERT_TOP).length > 0)
+				popdown.road_desc1_mc.ALERT_TOP.tf.htmlText = item.ALERT_TOP;
+			else
+				popdown.road_desc1_mc.ALERT_TOP.visible = false;
+
+			if (String(item.ALERT_BOTTOM).length > 0)
+				popdown.road_desc1_mc.ALERT_BOTTOM.tf.htmlText = item.ALERT_BOTTOM;
+			else
+				popdown.road_desc1_mc.ALERT_BOTTOM.visible = false;
+
+			// visibility -----------------------------------------------------------------
 			//popdown.popupButton.visible = true;
+			popdown.road_desc1_mc.visible = true;
 			popdown.road_desc2_mc.visible = false;
 			popdown.iDetail.visible = true;
 			popdown.iTunnelDetail.visible = false;
