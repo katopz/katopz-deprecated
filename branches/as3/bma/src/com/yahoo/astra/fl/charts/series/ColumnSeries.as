@@ -5,15 +5,22 @@ http://developer.yahoo.com/flash/license.html
 */
 package com.yahoo.astra.fl.charts.series
 {
+	import com.yahoo.astra.fl.charts.*;
+	import com.yahoo.astra.fl.charts.skins.IProgrammaticSkin;
+	import com.yahoo.astra.fl.charts.skins.RectangleSkin;
+	
+	import fl.core.UIComponent;
+	
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.events.Event;
+	import flash.text.AntiAliasType;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import flash.utils.Dictionary;
-	import fl.core.UIComponent;
-	import com.yahoo.astra.fl.charts.*;
-	import com.yahoo.astra.fl.charts.skins.RectangleSkin;
-	import com.yahoo.astra.fl.charts.skins.IProgrammaticSkin;
 
 	/**
 	 * Renders data points as a series of vertical columns.
@@ -193,6 +200,21 @@ package com.yahoo.astra.fl.charts.series
 
 			return series;
 		}
+		
+		private function addLabel(iString:String):TextField
+		{
+			//super.configUI();
+			var label:TextField = new TextField();
+			label.defaultTextFormat =new TextFormat("_sans", 8, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0);
+			label.autoSize = TextFieldAutoSize.LEFT;
+			label.selectable = false;
+			label.text = iString;
+			label.selectable = false;
+			label.mouseEnabled = false;
+			
+			this.addChild(label);
+			return label
+		}
 
 		//--------------------------------------
 		//  Protected Methods
@@ -264,6 +286,10 @@ package com.yahoo.astra.fl.charts.series
 				{
 					(marker as UIComponent).drawNow();
 				}
+				
+				var label:TextField = addLabel(String(Number(item.VALUE)));
+				label.x = marker.x;
+				label.y = marker.y-label.height;
 			}
 		}
 
