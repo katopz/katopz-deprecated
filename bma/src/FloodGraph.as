@@ -4,7 +4,6 @@
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
 	import com.yahoo.astra.fl.charts.*;
-	import com.yahoo.astra.fl.charts.series.*;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -13,7 +12,6 @@
 	import flash.net.*;
 	import flash.system.Security;
 	
-	import gs.TweenLite;
 	import gs.TweenMax;
 
 	public class FloodGraph extends Content
@@ -29,8 +27,6 @@
 		public var graph1:ColumnChart;
 
 		public var isTest:Boolean = false;
-
-		var series0, series1:LineSeries
 
 		public function FloodGraph()
 		{
@@ -101,9 +97,6 @@
 			graph.horizontalField = "LABEL";
 			graph.verticalField = type;
 			this.type2 = type2;
-
-			//series0 = new LineSeries();
-			//series1 = new LineSeries();
 		}
 
 		public function setGraph(type, type2 = null)
@@ -146,13 +139,8 @@
 		{
 			trace(" * parseData : " + tabID);
 
-			series0 = new LineSeries();
-			series1 = new LineSeries();
-
 			var data0:Array = [];
 			var data1:Array = [];
-			//var data0_out:Array = [];
-			//var data1_out:Array = [];
 			var i:int;
 
 			switch (tabID)
@@ -173,14 +161,9 @@
 							if (String(stationXML.VALUE_IN).length > 0)
 							{
 								stationXML.VALUE = Number(stationXML.VALUE_IN);
-								//trace("stationXML.@id:"+stationXML.@id)
-								//stationXML.@id = String(stationXML.@id) + "_IN" ;
 								stationXML.LABEL = String(stationXML.LABEL) + " (เข้า)";
-								//trace("stationXML.@id:"+stationXML.@id)
 								data0.push(stationXML);
 								data1.push(stationXML);
-								//data0_out.push(stationXML);
-								//data1_out.push(stationXML);
 							}
 							
 							// proxy vout VALUE_OUT -> VALUE
@@ -188,18 +171,14 @@
 							{
 								stationXML = data.STATION[i].copy();
 								stationXML.VALUE = Number(stationXML.VALUE_OUT);
-								//stationXML.@id = String(stationXML.@id) + "_OUT" ;
 								stationXML.LABEL = String(stationXML.LABEL) + " (ออก)";
 								data0.push(stationXML);
 								data1.push(stationXML);
-								//data0_out.push(stationXML);
-								//data1_out.push(stationXML);
 							}
 						}
 					}
 						
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
-					//data0_out.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 
 					//sort alphabet
 					var data3:Array = [];
@@ -252,11 +231,8 @@
 					// rotation
 					Global.GRAPH_ROTATION = 80;
 
-					series0.dataProvider = data3;
-					series1.dataProvider = data1;
-
-					graph0.dataProvider = [data3];//, series0];
-					graph1.dataProvider = [data1];//, series1];
+					graph0.dataProvider = [data3];
+					graph1.dataProvider = [data1];
 
 					break;
 				}
@@ -296,20 +272,13 @@
 					// rotation
 					Global.GRAPH_ROTATION = 80;
 
-					series0.dataProvider = data0;
-					series1.dataProvider = data1;
-
-					graph0.dataProvider = [data0];//, series0];
-					graph1.dataProvider = [data1];//, series1];
+					graph0.dataProvider = [data0];
+					graph1.dataProvider = [data1];
 
 					break;
 				}
 				case Global.TUNNEL_TAB:
 				{
-					// vout
-					//var series0_out = new LineSeries();
-					//var series1_out = new LineSeries();
-
 					var data0_out:Array = [];
 					var data1_out:Array = [];
 
@@ -330,29 +299,18 @@
 							// proxy vin VALUE_IN -> VALUE
 							var stationXML:XML = data.STATION[i].copy();
 							stationXML.VALUE = Number(stationXML.VALUE_IN);
+							stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
 							
-							//if (String(stationXML.VALUE_IN).length > 0)
-							//{
-								data0.push(stationXML);
-								data1.push(stationXML);
-								//trace("data0:"+stationXML.@id);
-							//}else{
-								//trace(stationXML);
-							//}
+							data0.push(stationXML);
+							data1.push(stationXML);
 
 							// proxy vout VALUE_OUT -> VALUE
 							stationXML = data.STATION[i].copy();
 							stationXML.VALUE = Number(stationXML.VALUE_OUT);
-							stationXML.VALUE_OUT = null;
+							stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
 
-							//if (String(stationXML.VALUE_OUT).length > 0)
-							//{
-								data0_out.push(stationXML);
-								data1_out.push(stationXML);
-								//trace("data0_out:"+stationXML.@id);
-							//}else{
-								//trace(stationXML);
-							//}
+							data0_out.push(stationXML);
+							data1_out.push(stationXML);
 						}
 					}
 
@@ -360,7 +318,6 @@
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 					
 					// vout
-					//data0_out.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 					// sort by sorted vin
 					var data0_out_sorted:Array = [];
 					for (i=0 ;i<data0.length;i++)
@@ -369,51 +326,11 @@
 						{
 							if(data0_out[j].@id == data0[i].@id)
 							{
-								//if(String(data0_out[j].ONEWAY) == "false")
-								
-								if(Number(data0_out[j].VALUE) == 0)
-								{
-									//data0_out[j].VALUE = -1;
-								}
-								
-								if(Number(data0[j].VALUE) == 0)
-								{
-									//data0[j].VALUE = -1;
-								}
-								
 								data0_out_sorted.push(data0_out[j]);
-									
-								//trace(String(data0_out[j].ONEWAY));
-								
-								/*
-								trace("data0[i].@isOneWay:"+data0[i].@isOneWay);
-								if(data0[i].@isOneWay)
-								{
-									if(data0[i].@isOneWay == "true")
-										data0_out_sorted.push(data0_out[j]);
-									else
-										data0_out_sorted.push(data0_out[j]);
-								}
-								*/
-								
-								//trace(data0_out_sorted);
-							//}else{
-								//trace(data0_out[j].@id, data0[i].@id);
 							}
 						}
 					}
 							
-					//data0_out_sorted = data0_out.concat();
-					
-					/*
-					// remove one way
-					for (i=0 ;i<data0.length;i++)
-					{
-						if(stationXML.@isOneWay == "true")
-							removeItemAt(data0, );
-					}
-					*/
-					
 					// vin
 					data1.sortOn("@id");
 					
@@ -435,19 +352,10 @@
 					TweenMax.to(tunnel_desc_1_mc, 0, {x: 915, alpha: 1});
 					TweenMax.to(flood_desc_0_mc, 0, {alpha: 0});
 					TweenMax.to(flood_desc_1_mc, 0, {alpha: 0});
-
+					
 					// rotation
 					Global.GRAPH_ROTATION = 0;
 
-					//series0.dataProvider = data0;
-					//series1.dataProvider = data1;
-
-					// vout
-					//series0_out.dataProvider = data0_out;
-					//series1_out.dataProvider = data1_out;
-
-					//graph0.dataProvider = [data0, series0, data0_out, series0_out];
-					//graph1.dataProvider = [data1, series1, data1_out, series1_out];
 					graph0.dataProvider = [data0, data0_out_sorted];
 					graph1.dataProvider = [data1, data1_out];
 					break;

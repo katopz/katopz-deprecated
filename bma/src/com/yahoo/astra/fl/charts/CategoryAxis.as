@@ -617,7 +617,7 @@ package com.yahoo.astra.fl.charts
 				label.embedFonts = true;
 
 				label.styleSheet = new StyleSheet();
-				label.styleSheet.parseCSS("p{font-family: supermarket;font-size:10px;color:#000000;}");
+				label.styleSheet.parseCSS("p{font-family: supermarket;font-size:10px;color:#000000;text-align:center}");
 
 				label.rotation = Global.GRAPH_ROTATION;
 
