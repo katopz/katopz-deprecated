@@ -18,9 +18,9 @@
     <LAST_FLOOD_STOP_OUT>27-7-2007 05:35:00</LAST_FLOOD_STOP_OUT>
     <MAX_IN>5.00</MAX_IN>
     <MAX_OUT>5.00</MAX_OUT>
-    <ALERT_TOP_IN>แจ้งเตือน 1</ALERT_TOP_IN>
-    <ALERT_BOTTOM_IN>แจ้งเตือน 2</ALERT_BOTTOM_IN>
-    <ALERT_TOP_OUT>แจ้งเตือน 3</ALERT_TOP_OUT>
-    <ALERT_BOTTOM_OUT>แจ้งเตือน 4</ALERT_BOTTOM_OUT>
+    <ALERT_TOP_IN speed="-0.5">แจ้งเตือน 1vvvvvvvvvvvvvvvvvvvvvvvvvvb</ALERT_TOP_IN>
+    <ALERT_BOTTOM_IN>แจ้งเตือน 2sssssssb</ALERT_BOTTOM_IN>
+    <ALERT_TOP_OUT speed="-1">แจ้งเตือน 3sssssssssssssssssssssssssssssssssssssssb</ALERT_TOP_OUT>
+    <ALERT_BOTTOM_OUT speed="1">แแแแจ้งเตือน 4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab</ALERT_BOTTOM_OUT>
   </STATION>
 </FLOODMON>

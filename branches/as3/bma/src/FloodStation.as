@@ -1,12 +1,12 @@
 ﻿package
 {
 	import caurina.transitions.Tweener;
-
+	
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
-
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
@@ -86,7 +86,22 @@
 			var cursor1:Cursor = new Cursor(this, popup.iRoad);
 			var cursor2:Cursor = new Cursor(this, popdown.iGraph);
 
+			// marquee
+			createMarquee(popdown.road_desc2_mc.ALERT_TOP_IN.tf);
+			createMarquee(popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf);
+			createMarquee(popdown.road_desc2_mc.ALERT_TOP_OUT.tf);
+			createMarquee(popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf);
+			
+			// marquee
+			createMarquee(popdown.road_desc1_mc.ALERT_TOP.tf);
+			createMarquee(popdown.road_desc1_mc.ALERT_BOTTOM.tf);
+			
 			//test();
+		}
+		
+		private function createMarquee(tf:TextField):void
+		{
+			tf.parent.addChild(MarqueeUtil.marquee(tf, tf.getBounds(tf.parent), -.5));
 		}
 
 		//080610
@@ -150,7 +165,7 @@
 				</STATION>
 
 			setStation(test);
-			//setSection("FL01")
+			//setSection("FL02");
 			setGraph("TN02");
 		}
 
@@ -763,6 +778,10 @@
 				popdown.road_desc1_mc.ALERT_BOTTOM.tf.htmlText = item.ALERT_BOTTOM;
 			else
 				popdown.road_desc1_mc.ALERT_BOTTOM.visible = false;
+			
+			// marquee
+			MarqueeUtil.update(popdown.road_desc1_mc.ALERT_TOP.tf, Number(item.ALERT_TOP.@speed));
+			MarqueeUtil.update(popdown.road_desc1_mc.ALERT_BOTTOM.tf, Number(item.ALERT_BOTTOM.@speed));
 
 			// visibility -----------------------------------------------------------------
 			//popdown.popupButton.visible = true;
@@ -835,7 +854,13 @@
 				popdown.road_desc2_mc.ALERT_TOP_IN.x = 246;
 				popdown.road_desc2_mc.ALERT_BOTTOM_IN.x = 246;
 			}
-
+			
+			// marquee
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_TOP_IN.tf, Number(item.ALERT_TOP_IN.@speed));
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf, Number(item.ALERT_BOTTOM_IN.@speed));
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_TOP_OUT.tf, Number(item.ALERT_TOP_OUT.@speed));
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf, Number(item.ALERT_BOTTOM_OUT.@speed));
+			
 			// in out title
 			popdown.road_desc2_mc.TITLE_IN.htmlText = (String(item.TITLE_IN).length > 0) ? item.TITLE_IN : "";
 			popdown.road_desc2_mc.TITLE_OUT.htmlText = (String(item.TITLE_OUT).length > 0) ? item.TITLE_OUT : "";
