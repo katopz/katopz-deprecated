@@ -1,21 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
-  <STATION id="FL01">
-    <NAME>ถนนรัชดาภิเษก ช่วงแยกลาดพร้าว เขตจตุจักร</NAME>
-    <VALUE>20</VALUE>
-    <STATUS>1</STATUS>
-    <STATUS_PUMP>0</STATUS_PUMP>
-    <ROAD_HEIGHT>25</ROAD_HEIGHT>
-    <LAST_START>26-7-2007 02:15:00</LAST_START>
-    <LAST_STOP>26-7-2007 04:35:00</LAST_STOP>
-    <MAX>5.00</MAX>
-    <ALERT>ไม่มีการท่วมขัง</ALERT>
-    <ALARM_LEVEL1>5</ALARM_LEVEL1>
-    <ALARM_LEVEL2>10</ALARM_LEVEL2>
-    <ALARM_LEVEL3>30</ALARM_LEVEL3>
-    <ALARM_LEVEL4>50</ALARM_LEVEL4>
-    <ALARM_LEVEL5>100</ALARM_LEVEL5>
-    <ALERT_TOP>แจ้งเตือน flood 1</ALERT_TOP>
-	<ALERT_BOTTOM>แจ้งเตือน flood 2</ALERT_BOTTOM>
-  </STATION>
-  </FLOODMON>
+	<STATION id="FL01">
+		<NAME>ถนนรัชดาภิเษก ช่วงแยกลาดพร้าว เขตจตุจักร</NAME>
+		<VALUE>20</VALUE>
+		<STATUS>1</STATUS>
+		<STATUS_PUMP>0</STATUS_PUMP>
+		<ROAD_HEIGHT>25</ROAD_HEIGHT>
+		<LAST_START>26-7-2007 02:15:00</LAST_START>
+		<LAST_STOP>26-7-2007 04:35:00</LAST_STOP>
+		<MAX>5.00</MAX>
+		<ALERT>ไม่มีการท่วมขัง</ALERT>
+		<ALARM_LEVEL1>5</ALARM_LEVEL1>
+		<ALARM_LEVEL2>10</ALARM_LEVEL2>
+		<ALARM_LEVEL3>30</ALARM_LEVEL3>
+		<ALARM_LEVEL4>50</ALARM_LEVEL4>
+		<ALARM_LEVEL5>100</ALARM_LEVEL5>
+		<ALERT_TOP>แจ้งเตือน flood 1</ALERT_TOP>
+		<ALERT_BOTTOM>แจ้งเตือน flood 2</ALERT_BOTTOM>
+		<STATION_TITLE_STATUS>สถานะระบบ : กำลังปรับปรุง</STATION_TITLE_STATUS>
+		<STATION_STATUS><![CDATA[ขณะนี้อยู่ในระหว่างปรับปรุงระบบไม่สามารถแสดงข้อมูลได้<br><b>ระบบจะใช้ได้อีกประมาณ 1 ชม.</b>]]></STATION_STATUS>
+	</STATION>
+</FLOODMON>

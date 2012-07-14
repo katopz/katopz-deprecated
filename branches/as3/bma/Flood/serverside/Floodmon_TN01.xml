@@ -1,30 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
-  
-<STATION id="TN01">
-    
-<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
-    
-<TITLE_IN>ขาเข้า(ไปมไหสวรรย์)</TITLE_IN>
-    
-<TITLE_OUT>ขาออก(ไปปิ่นเกล้า)</TITLE_OUT>
-   
- <VALUE_IN>120</VALUE_IN>
-   
- <STATUS_PUMP_IN>0,1,0,1</STATUS_PUMP_IN>
-    
-<STATUS_POWER>0</STATUS_POWER>
- 
- <STATUS_BREAKER>0</STATUS_BREAKER>
- 
-<STATUS_IN>1</STATUS_IN>
-<LAST_FLOOD_START_IN>24-7-2007 02:15:00</LAST_FLOOD_START_IN>
- 
-<LAST_FLOOD_STOP_IN>26-7-2007 04:35:00</LAST_FLOOD_STOP_IN>
-<MAX_IN>5.5545</MAX_IN>
-<ALERT_TOP_IN>แจ้งเตือน 1</ALERT_TOP_IN>
-
-<ALERT_BOTTOM_IN>ขณะนี้มีน้ำท่วมภายในอุโมงค์ ควรหลีกเลี่ยงการลงอุโมงค์เพราะอาจทำให้เกิดอุบัติเหตุได้ง่าย</ALERT_BOTTOM_IN>
-
-</STATION>
+	<STATION id="TN01">
+		<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
+		<TITLE_IN>ขาเข้า(ไปมไหสวรรย์)</TITLE_IN>
+		<TITLE_OUT>ขาออก(ไปปิ่นเกล้า)</TITLE_OUT>
+		<VALUE_IN>120</VALUE_IN>
+		<STATUS_PUMP_IN>0,1,0,1</STATUS_PUMP_IN>
+		<STATUS_POWER>0</STATUS_POWER>
+		<STATUS_BREAKER>0</STATUS_BREAKER>
+		<STATUS_IN>1</STATUS_IN>
+		<LAST_FLOOD_START_IN>24-7-2007 02:15:00</LAST_FLOOD_START_IN>
+		<LAST_FLOOD_STOP_IN>26-7-2007 04:35:00</LAST_FLOOD_STOP_IN>
+		<MAX_IN>5.5545</MAX_IN>
+		<ALERT_TOP_IN>แจ้งเตือน 1</ALERT_TOP_IN>
+		<ALERT_BOTTOM_IN>ขณะนี้มีน้ำท่วมภายในอุโมงค์
+			ควรหลีกเลี่ยงการลงอุโมงค์เพราะอาจทำให้เกิดอุบัติเหตุได้ง่าย
+		</ALERT_BOTTOM_IN>
+		<STATION_TITLE_STATUS>สถานะระบบ : ปรับปรุง</STATION_TITLE_STATUS>
+		<STATION_STATUS>ขณะนี้อยู่ในระหว่างปรับปรุงระบบไม่สามารถแสดงข้อมูลได้</STATION_STATUS>
+	</STATION>
 </FLOODMON>
