@@ -18,77 +18,86 @@ package com.sleepydesign.utils
 		private static var timer:Timer;
 		private static var list:Array;
 		private static var pointer:Dictionary;
-		
+
 		public static function dispose(tf:TextField):MarqueeBitmap
 		{
-			if(!pointer)
+			if (!pointer)
 				return null;
-				
+
 			var tfmq:MarqueeBitmap;
-			
-			if( pointer[tf])
+
+			if (pointer[tf])
 			{
 				tfmq = pointer[tf];
 				pointer[tf] = null;
 				ArrayUtil.removeItem(list, tfmq);
-				
+
 				trace(" ! remove tf : " + tf);
 			}
-				
-			return tfmq; 
+
+			return tfmq;
 		}
-		
+
 		public static function marquee(tf:TextField, rect:Rectangle, speed:Number):MarqueeBitmap
 		{
 			var bitmapData:BitmapData = BitmapUtil.getBitmapData(tf);
+			
+			if(isNaN(speed))
+				speed = 0;
+			
 			var tfmq:MarqueeBitmap = new MarqueeBitmap(rect, bitmapData, speed);
-				
+
 			// bye
 			tf.visible = false;
-			
+
 			// keen for update
 			//tf.addEventListener(Event.CHANGE, onChange);
-			
+
 			// move it
-			if(!timer)
+			if (!timer)
 			{
-				timer = new Timer(30/1000);
+				timer = new Timer(30 / 1000);
 				timer.addEventListener(TimerEvent.TIMER, onTimer);
 				timer.start();
 			}
-			
+
 			// list
-			if(!list)
+			if (!list)
 				list = [];
-			
+
 			list.push(tfmq);
-			
-			if(!pointer)
+
+			if (!pointer)
 				pointer = new Dictionary;
-					
+
 			pointer[tf] = tfmq;
-			
+
 			return tfmq;
 		}
-		
+
 		private static function onTimer(event:Event):void
 		{
-			for each(var tfmq:MarqueeBitmap in list)
+			for each (var tfmq:MarqueeBitmap in list)
 			{
-				tfmq.mat.translate(tfmq.speed,0);
-				
-				tfmq.graphics.clear(); 
+				if(tfmq.speed == 0 )
+				{
+					tfmq.mat.identity();
+				} else{
+					tfmq.mat.translate(tfmq.speed, 0);
+				}
+
+				tfmq.graphics.clear();
 				tfmq.graphics.beginBitmapFill(tfmq.bitmapData, tfmq.mat);
 				tfmq.graphics.drawRect(tfmq.rect.x, tfmq.rect.y, tfmq.rect.width, tfmq.rect.height);
 			}
 		}
-		
+
 		public static function update(tf:TextField, speed:Number = 0):void
 		{
 			trace(" ! onChange tf : " + tf);
-			
+
 			var tfmq:MarqueeBitmap = pointer[tf];
-			
+
 			var bitmapData:BitmapData = BitmapUtil.getBitmapData(tf);
 			DrawUtil.drawBitmapRect(tfmq.rect, bitmapData);
 			tfmq.bitmapData = bitmapData;
@@ -109,15 +118,15 @@ internal class MarqueeBitmap extends Sprite
 	public var rect:Rectangle;
 	public var mat:Matrix;
 	public var speed:Number;
-	
+
 	public function MarqueeBitmap(rect:Rectangle, bitmapData:BitmapData, speed:Number)
 	{
 		this.rect = rect;
 		this.bitmapData = bitmapData;
 		this.speed = speed;
-		
+
 		mat = new Matrix;
-			
+
 		DrawUtil.drawBitmapRectTo(graphics, rect, bitmapData);
 	}
 }
