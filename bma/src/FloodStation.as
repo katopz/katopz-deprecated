@@ -143,15 +143,15 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="FL01">
+				<STATION id="TN02">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
 				</STATION>
 
 			setStation(test);
-			setSection("FL01")
-			//setGraph("TN03");
+			//setSection("FL01")
+			setGraph("TN02");
 		}
 
 		//_________________________________________________________________ Station
@@ -663,6 +663,16 @@
 				setupFlood(xml);
 			else
 				setupTunnel(xml);
+			
+			// alert?
+			if (String(item.STATION_STATUS).length > 0)
+			{
+				STATION_STATUS.visible = true;
+				STATION_STATUS.title_tf.htmlText = String(item.STATION_TITLE_STATUS);
+				STATION_STATUS.desc_tf.htmlText = String(item.STATION_STATUS);
+			}else{
+				STATION_STATUS.visible = false;
+			}
 		}
 
 		private function setupFlood(xml:XML):void
@@ -848,7 +858,7 @@
 				{
 					pump = new Pump();
 					pump.gotoAndStop((pump_ins[i] == 0) ? 2 : 1);
-					_pumps.push(addChild(pump));
+					_pumps.push(popdown.addChild(pump));
 					pump.x = 210 + i * 20;
 					pump.y = 234;
 
@@ -861,7 +871,7 @@
 				{
 					pump = new Pump();
 					pump.gotoAndStop((pump_outs[i] == 0) ? 2 : 1);
-					_pumps.push(addChild(pump));
+					_pumps.push(popdown.addChild(pump));
 
 					// cancel auto align left : 2012/04/27
 					/*
