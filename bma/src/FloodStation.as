@@ -1052,7 +1052,10 @@
 
 			// visibility
 			popdown.popupButton.visible = false;
+			
+			popdown.road_desc1_mc.visible = false;
 			popdown.road_desc2_mc.visible = true;
+			
 			popdown.iDetail.visible = false;
 			_iTunnelDetail.visible = true;
 			popdown.top_title_mc.gotoAndStop(2);
