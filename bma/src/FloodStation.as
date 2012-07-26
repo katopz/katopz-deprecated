@@ -160,7 +160,7 @@
 
 			//dataPath = "../../"+dataPath;
 			var test:XML =
-				<STATION id="TN02">
+				<STATION id="TN01">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -168,7 +168,7 @@
 
 			setStation(test);
 			//setSection("FL02");
-			setGraph("TN02");
+			setGraph("TN01");
 		}
 
 		//_________________________________________________________________ Station
@@ -801,7 +801,12 @@
 		}
 
 		private var _pumps:Array = [];
-
+		
+		private const WHITESPACE:String = " \t\n\r";
+		private function trim(source:String):String {
+			return source.split("\r").join("").split("\n").join("");
+		}
+		
 		private function setupTunnel(xml:XML):void
 		{
 			var item = xml.STATION;
@@ -826,22 +831,22 @@
 			popdown.road_desc2_mc.ALERT_BOTTOM_OUT.visible = true;
 
 			if (String(item.ALERT_TOP_IN).length > 0)
-				popdown.road_desc2_mc.ALERT_TOP_IN.tf.htmlText = item.ALERT_TOP_IN;
+				popdown.road_desc2_mc.ALERT_TOP_IN.tf.htmlText = trim(item.ALERT_TOP_IN);
 			else
 				popdown.road_desc2_mc.ALERT_TOP_IN.visible = false;
 
 			if (String(item.ALERT_BOTTOM_IN).length > 0)
-				popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf.htmlText = item.ALERT_BOTTOM_IN;
+				popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf.htmlText = trim(item.ALERT_BOTTOM_IN);
 			else
 				popdown.road_desc2_mc.ALERT_BOTTOM_IN.visible = false;
 
 			if (String(item.ALERT_TOP_OUT).length > 0)
-				popdown.road_desc2_mc.ALERT_TOP_OUT.tf.htmlText = item.ALERT_TOP_OUT;
+				popdown.road_desc2_mc.ALERT_TOP_OUT.tf.htmlText = trim(item.ALERT_TOP_OUT);
 			else
 				popdown.road_desc2_mc.ALERT_TOP_OUT.visible = false;
 
 			if (String(item.ALERT_BOTTOM_OUT).length > 0)
-				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf.htmlText = item.ALERT_BOTTOM_OUT;
+				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf.htmlText = trim(item.ALERT_BOTTOM_OUT);
 			else
 				popdown.road_desc2_mc.ALERT_BOTTOM_OUT.visible = false;
 

@@ -82,10 +82,11 @@ package com.sleepydesign.utils
 			{
 				tfmq.graphics.clear();
 				
-				if(tfmq.speed == 0 )
+				if(tfmq.speed == 0 && tfmq.tf.width<260)
 				{
 					tfmq.tf.visible = true;
-					//tfmq.mat.identity();
+					tfmq.mat.identity();
+					//tfmq.tf.width = 260;
 				} else{
 					tfmq.tf.visible = false;
 					tfmq.mat.translate(tfmq.speed, 0);
