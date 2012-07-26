@@ -13,9 +13,7 @@
 		<LAST_FLOOD_STOP_IN>26-7-2007 04:35:00</LAST_FLOOD_STOP_IN>
 		<MAX_IN>5.5545</MAX_IN>
 		<ALERT_TOP_IN>แจ้งเตือน 1</ALERT_TOP_IN>
-		<ALERT_BOTTOM_IN>ขณะนี้มีน้ำท่วมภายในอุโมงค์
-			ควรหลีกเลี่ยงการลงอุโมงค์เพราะอาจทำให้เกิดอุบัติเหตุได้ง่าย
-		</ALERT_BOTTOM_IN>
+		<ALERT_BOTTOM_IN>ขณะนี้มีน้ำท่วมภายในอุโมงค์ ควรหลีกเลี่ยงการลงอุโมงค์เพราะอาจทำให้เกิดอุบัติเหตุได้ง่าย</ALERT_BOTTOM_IN>
 		<STATION_TITLE_STATUS>สถานะระบบ : ปรับปรุง</STATION_TITLE_STATUS>
 		<STATION_STATUS>ขณะนี้อยู่ในระหว่างปรับปรุงระบบไม่สามารถแสดงข้อมูลได้</STATION_STATUS>
 	</STATION>
