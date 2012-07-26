@@ -1225,6 +1225,12 @@
 
 			var stationXML = data.children()[0];
 			var total = stationXML.child("*").length();
+			
+			var bad_VALUE_IN:Boolean = false;
+			var bad_VALUE_OUT:Boolean = false;
+			
+			var prev_bad_VALUE_IN:Boolean = false;
+			var prev_bad_VALUE_OUT:Boolean = false;
 
 			for (var i = total - 2; i >= 0; i--)
 			{
@@ -1236,8 +1242,19 @@
 					caption.title.htmlText = lastXML.DATE + "<br/>" + lastXML.TIME;
 				}
 
+				bad_VALUE_IN = (String(lastXML.VALUE_IN).length == 0);
+				bad_VALUE_OUT = (String(lastXML.VALUE_OUT).length == 0);
+				
+				flood.lineStyle(0.5, 0xFFFF00, bad_VALUE_IN?0:1);
+				flood2.lineStyle(0.5, 0xFF0000, bad_VALUE_OUT?0:1);
+				
+				if(prev_bad_VALUE_IN)
+					flood.moveTo(captionNum, -graphFactor * Number(lastXML.VALUE_IN));
+				
+				if(prev_bad_VALUE_OUT)
+					flood2.moveTo(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
+					
 				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_IN));
-
 				if (Number(lastXML.VALUE_OUT) != -99)
 				{
 					flood2.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
@@ -1247,10 +1264,13 @@
 					flood2.lineStyle(0.5, 0xFF0000, 0);
 					flood2.lineTo(captionNum, 0);
 				}
-
+				
 				// visibility
 				floodVisible = (String(lastXML.VALUE_IN) != "");
 				flood2Visible = (String(lastXML.VALUE_OUT) != "");
+				
+				prev_bad_VALUE_IN = bad_VALUE_IN;
+				prev_bad_VALUE_OUT = bad_VALUE_OUT;
 
 				captionNum++;
 			}

@@ -6,7 +6,6 @@
       <DATE>31/10/2550</DATE>
       <TIME>12:50:00</TIME>
       <VALUE_IN>100</VALUE_IN>
-      
       <VALUE_OUT>10</VALUE_OUT>
     </LAST1>
     <LAST2>
@@ -18,19 +17,19 @@
     <LAST3>
       <DATE>31/10/2550</DATE>
       <TIME>12:40:00</TIME>
-      <VALUE_IN>50</VALUE_IN>
-      <VALUE_OUT>30</VALUE_OUT>
+      <VALUE_IN>20</VALUE_IN>
+      <VALUE_OUT>10</VALUE_OUT>
     </LAST3>
     <LAST4>
       <DATE>31/10/2550</DATE>
       <TIME>12:35:00</TIME>
-      <VALUE_IN>60</VALUE_IN>
-      <VALUE_OUT>30</VALUE_OUT>
+      <VALUE_IN></VALUE_IN>
+      <VALUE_OUT></VALUE_OUT>
     </LAST4>
     <LAST5>
       <DATE>31/10/2550</DATE>
       <TIME>12:30:00</TIME>
-      <VALUE_IN>50</VALUE_IN>
+      <VALUE_IN>40</VALUE_IN>
       <VALUE_OUT>30</VALUE_OUT>
     </LAST5>
     <LAST6>
