@@ -21,6 +21,6 @@
     <ALERT_TOP_IN speed="-0.5">แจ้งเตือน 1vvvvvvvvvvvvvvvvvvvvvvvvvvb</ALERT_TOP_IN>
     <ALERT_BOTTOM_IN>แจ้งเตือน 2sssssssb</ALERT_BOTTOM_IN>
     <ALERT_TOP_OUT speed="-1">แจ้งเตือน 3sssssssssssssssssssssssssssssssssssssssb</ALERT_TOP_OUT>
-    <ALERT_BOTTOM_OUT speed="1">แแแแจ้งเตือน 4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab</ALERT_BOTTOM_OUT>
+    <ALERT_BOTTOM_OUT speed="5">แแแแจ้งเตือน 4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab</ALERT_BOTTOM_OUT>
   </STATION>
 </FLOODMON>

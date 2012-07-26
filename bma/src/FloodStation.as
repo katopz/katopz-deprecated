@@ -101,7 +101,9 @@
 		
 		private function createMarquee(tf:TextField):void
 		{
-			tf.parent.addChild(MarqueeUtil.marquee(tf, tf.getBounds(tf.parent), -.5));
+			var rect:Rectangle = tf.getBounds(tf.parent);
+			rect.width = 260;
+			tf.parent.addChild(MarqueeUtil.marquee(tf, rect, 0));
 		}
 
 		//080610

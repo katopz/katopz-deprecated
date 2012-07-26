@@ -9,6 +9,7 @@ package com.sleepydesign.utils
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 
@@ -45,7 +46,7 @@ package com.sleepydesign.utils
 			if(isNaN(speed))
 				speed = 0;
 			
-			var tfmq:MarqueeBitmap = new MarqueeBitmap(rect, bitmapData, speed);
+			var tfmq:MarqueeBitmap = new MarqueeBitmap(tf, rect, bitmapData, speed);
 
 			// bye
 			tf.visible = false;
@@ -79,16 +80,18 @@ package com.sleepydesign.utils
 		{
 			for each (var tfmq:MarqueeBitmap in list)
 			{
+				tfmq.graphics.clear();
+				
 				if(tfmq.speed == 0 )
 				{
-					tfmq.mat.identity();
+					tfmq.tf.visible = true;
+					//tfmq.mat.identity();
 				} else{
+					tfmq.tf.visible = false;
 					tfmq.mat.translate(tfmq.speed, 0);
+					tfmq.graphics.beginBitmapFill(tfmq.bitmapData, tfmq.mat);
+					tfmq.graphics.drawRect(tfmq.rect.x, tfmq.rect.y, tfmq.rect.width, tfmq.rect.height);
 				}
-
-				tfmq.graphics.clear();
-				tfmq.graphics.beginBitmapFill(tfmq.bitmapData, tfmq.mat);
-				tfmq.graphics.drawRect(tfmq.rect.x, tfmq.rect.y, tfmq.rect.width, tfmq.rect.height);
 			}
 		}
 
@@ -97,9 +100,17 @@ package com.sleepydesign.utils
 			trace(" ! onChange tf : " + tf);
 
 			var tfmq:MarqueeBitmap = pointer[tf];
-
+			
+			tf.multiline = false;
+			tf.autoSize = "center";
+			
 			var bitmapData:BitmapData = BitmapUtil.getBitmapData(tf);
-			DrawUtil.drawBitmapRect(tfmq.rect, bitmapData);
+			
+			tfmq.graphics.lineStyle();
+			tfmq.graphics.beginBitmapFill(bitmapData);
+			tfmq.graphics.drawRect(tfmq.rect.x, tfmq.rect.y, tfmq.rect.width, tfmq.rect.height);
+			tfmq.graphics.endFill();
+			
 			tfmq.bitmapData = bitmapData;
 			tfmq.speed = speed;
 		}
@@ -111,6 +122,7 @@ import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
+import flash.text.TextField;
 
 internal class MarqueeBitmap extends Sprite
 {
@@ -118,9 +130,11 @@ internal class MarqueeBitmap extends Sprite
 	public var rect:Rectangle;
 	public var mat:Matrix;
 	public var speed:Number;
+	public var tf:TextField;
 
-	public function MarqueeBitmap(rect:Rectangle, bitmapData:BitmapData, speed:Number)
+	public function MarqueeBitmap(tf:TextField, rect:Rectangle, bitmapData:BitmapData, speed:Number)
 	{
+		this.tf = tf;
 		this.rect = rect;
 		this.bitmapData = bitmapData;
 		this.speed = speed;
