@@ -510,8 +510,8 @@
 				trace("catch:" + error);
 			}
 
-			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
-			popdown.pointer2.y = 180 + 16 - floodObject.height * factor;
+			popdown.pointer.y = Math.max(180 + 16 - floodObject.height * factor, 76);
+			popdown.pointer2.y = Math.max(180 + 16 - floodObject.height * factor, 76);
 
 			if (Number(iID.substr(2)) > 21)
 			{
@@ -585,8 +585,8 @@
 				trace("catch:" + error);
 			}
 
-			popdown.pointer.y = 180 + 16 - floodObject.height * factor;
-			popdown.pointer2.y = 180 + 16 - floodObject.height * factor;
+			popdown.pointer.y = Math.max(180 + 16 - floodObject.height * factor, 76);
+			popdown.pointer2.y = Math.max(180 + 16 - floodObject.height * factor, 76);
 		}
 
 		public function createTunnel2Section(iID:String):void
@@ -646,8 +646,8 @@
 				trace("catch:" + error);
 			}
 
-			popdown.pointer_in2.y = popdown.pointer_in.y = 180 + 16 - floodObject.height_in * factor;
-			popdown.pointer_out2.y = popdown.pointer_out.y = 180 + 16 - floodObject.height_out * factor;
+			popdown.pointer_in2.y = popdown.pointer_in.y = Math.max(180 + 16 - floodObject.height_in * factor, 76);
+			popdown.pointer_out2.y = popdown.pointer_out.y = Math.max(180 + 16 - floodObject.height_out * factor, 76);
 		}
 
 		public function onSectionError(event:ContentEvent):void

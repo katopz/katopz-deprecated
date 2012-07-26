@@ -22,5 +22,7 @@
     <ALERT_BOTTOM_IN>แจ้งเตือน 2sssssssb</ALERT_BOTTOM_IN>
     <ALERT_TOP_OUT speed="-1">แจ้งเตือน 3sssssssssssssssssssssssssssssssssssssssb</ALERT_TOP_OUT>
     <ALERT_BOTTOM_OUT speed="5">แแแแจ้งเตือน 4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab</ALERT_BOTTOM_OUT>
+    <STATION_TITLE_STATUS>สถานะระบบ : ปรับปรุง</STATION_TITLE_STATUS>
+	<STATION_STATUS>ขณะนี้อยู่ในระหว่างปรับปรุงระบบไม่สามารถแสดงข้อมูลได้</STATION_STATUS>
   </STATION>
 </FLOODMON>
