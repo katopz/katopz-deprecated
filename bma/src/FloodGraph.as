@@ -298,15 +298,27 @@
 							
 							// proxy vin VALUE_IN -> VALUE
 							var stationXML:XML = data.STATION[i].copy();
-							stationXML.VALUE = Number(stationXML.VALUE_IN);
+							trace("lol:"+String(stationXML.VALUE_IN).length);
+							
+							if(String(stationXML.VALUE_IN).length<=0)
+								stationXML.VALUE = NaN;
+							else
+								stationXML.VALUE = Number(stationXML.VALUE_IN);
+							
 							stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
+							//stationXML.LABEL = "<font color='#"+(isNaN(stationXML.VALUE)?"FFFFFF":"000000")+"'>(เข้า)</font> <font color='#FFFFFF'>(ออก)</font>\n" + String(stationXML.LABEL);
 							
 							data0.push(stationXML);
 							data1.push(stationXML);
 
 							// proxy vout VALUE_OUT -> VALUE
 							stationXML = data.STATION[i].copy();
-							stationXML.VALUE = Number(stationXML.VALUE_OUT);
+							
+							if(String(stationXML.VALUE_OUT).length<=0)
+								stationXML.VALUE = NaN;
+							else
+								stationXML.VALUE = Number(stationXML.VALUE_OUT);
+							
 							stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
 
 							data0_out.push(stationXML);

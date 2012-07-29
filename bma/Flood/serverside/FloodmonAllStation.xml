@@ -5,7 +5,6 @@
     <LABEL>ทางลอดท่าพระ</LABEL>
     <STATUS>0</STATUS>
     <VALUE_IN>40</VALUE_IN>
-    <VALUE_OUT>20</VALUE_OUT>
   </STATION>
   
   <STATION id="TN02">
