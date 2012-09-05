@@ -1,28 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <FLOODMON>
-  <STATION id="TN02">
-    <NAME>อุโมงค์ทางลอดบางพลัด</NAME>
-    <TITLE_IN>ขาเข้า(ไปปิ่นเกล้า)</TITLE_IN>
-    <TITLE_OUT>ขาออก(ไปสะพานพระราม 7)</TITLE_OUT>
-    <VALUE_IN>100</VALUE_IN>
-   <VALUE_OUT>110</VALUE_OUT>
-         <STATUS_PUMP_IN>0,0</STATUS_PUMP_IN>
-    <STATUS_PUMP_OUT>0,0</STATUS_PUMP_OUT>
-    <STATUS_POWER>0</STATUS_POWER>
-    <STATUS_BREAKER>1</STATUS_BREAKER>
-    <STATUS_IN>0</STATUS_IN>
-    <STATUS_OUT>1</STATUS_OUT>
-    <LAST_FLOOD_START_IN>24-7-2007 02:15:00</LAST_FLOOD_START_IN>
-    <LAST_FLOOD_START_OUT>25-7-2007 03:15:00</LAST_FLOOD_START_OUT>
-    <LAST_FLOOD_STOP_IN>26-7-2007 04:35:00</LAST_FLOOD_STOP_IN>
-    <LAST_FLOOD_STOP_OUT>27-7-2007 05:35:00</LAST_FLOOD_STOP_OUT>
-    <MAX_IN>5.00</MAX_IN>
-    <MAX_OUT>5.00</MAX_OUT>
-    <ALERT_TOP_IN speed="-0.5">แจ้งเตือน 1vvvvvvvvvvvvvvvvvvvvvvvvvvb</ALERT_TOP_IN>
-    <ALERT_BOTTOM_IN>แจ้งเตือน 2sssssssb</ALERT_BOTTOM_IN>
-    <ALERT_TOP_OUT speed="-1">แจ้งเตือน 3sssssssssssssssssssssssssssssssssssssssb</ALERT_TOP_OUT>
-    <ALERT_BOTTOM_OUT speed="5">แแแแจ้งเตือน 4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab</ALERT_BOTTOM_OUT>
-    <STATION_TITLE_STATUS>สถานะระบบ : ปรับปรุง</STATION_TITLE_STATUS>
-	<STATION_STATUS>ขณะนี้อยู่ในระหว่างปรับปรุงระบบไม่สามารถแสดงข้อมูลได้</STATION_STATUS>
-  </STATION>
+	<STATION id="TN02">
+		<NAME>อุโมงค์ทางลอดบางพลัด</NAME>
+		<TITLE_IN>ขาเข้า(ไปปิ่นเกล้า)</TITLE_IN>
+		<TITLE_OUT>ขาออก(ไปสะพานพระราม 7)</TITLE_OUT>
+		<VALUE_IN>100</VALUE_IN>
+		<VALUE_OUT>110</VALUE_OUT>
+		<STATUS_PUMP_IN>0,0</STATUS_PUMP_IN>
+		<STATUS_PUMP_OUT>0,0</STATUS_PUMP_OUT>
+		<STATUS_POWER>0</STATUS_POWER>
+		<STATUS_BREAKER>1</STATUS_BREAKER>
+		<STATUS_IN>0</STATUS_IN>
+		<STATUS_OUT>1</STATUS_OUT>
+		<LAST_FLOOD_START_IN>24-7-2007 02:15:00</LAST_FLOOD_START_IN>
+		<LAST_FLOOD_START_OUT>25-7-2007 03:15:00</LAST_FLOOD_START_OUT>
+		<LAST_FLOOD_STOP_IN>26-7-2007 04:35:00</LAST_FLOOD_STOP_IN>
+		<LAST_FLOOD_STOP_OUT>27-7-2007 05:35:00</LAST_FLOOD_STOP_OUT>
+		<MAX_IN>5.00</MAX_IN>
+		<MAX_OUT>5.00</MAX_OUT>
+		<ALERT_TOP_IN>แจ้งเตือน 1vvvvvvvvvvvvvvvvvvvvvvvvvvb</ALERT_TOP_IN>
+		<ALERT_TOP_IN_SPEED>0.5</ALERT_TOP_IN_SPEED>
+		<ALERT_BOTTOM_IN>แจ้งเตือน 2sssssssb</ALERT_BOTTOM_IN>
+		<ALERT_BOTTOM_IN_SPEED>-0.5</ALERT_BOTTOM_IN_SPEED>
+		<ALERT_TOP_OUT>แจ้งเตือน 3sssssssssssssssssssssssssssssssssssssssb</ALERT_TOP_OUT>
+		<ALERT_TOP_OUT_SPEED>-1</ALERT_TOP_OUT_SPEED>
+		<ALERT_BOTTOM_OUT>แแแแจ้งเตือน 4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab</ALERT_BOTTOM_OUT>
+		<ALERT_BOTTOM_OUT_SPEED>5</ALERT_BOTTOM_OUT_SPEED>
+<!-- 		<STATION_TITLE_STATUS>สถานะระบบ : ปรับปรุง</STATION_TITLE_STATUS> -->
+<!-- 		<STATION_STATUS>ขณะนี้อยู่ในระหว่างปรับปรุงระบบไม่สามารถแสดงข้อมูลได้</STATION_STATUS> -->
+	</STATION>
 </FLOODMON>

@@ -1,12 +1,12 @@
 ﻿package
 {
 	import caurina.transitions.Tweener;
-	
+
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.*;
 	import com.sleepydesign.utils.*;
-	
+
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
@@ -91,14 +91,14 @@
 			createMarquee(popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf);
 			createMarquee(popdown.road_desc2_mc.ALERT_TOP_OUT.tf);
 			createMarquee(popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf);
-			
+
 			// marquee
 			createMarquee(popdown.road_desc1_mc.ALERT_TOP.tf);
 			createMarquee(popdown.road_desc1_mc.ALERT_BOTTOM.tf);
-			
+
 			//test();
 		}
-		
+
 		private function createMarquee(tf:TextField):void
 		{
 			var rect:Rectangle = tf.getBounds(tf.parent);
@@ -159,8 +159,7 @@
 			roadPath = "roads/";
 
 			//dataPath = "../../"+dataPath;
-			var test:XML =
-				<STATION id="TN01">
+			var test:XML = <STATION id="TN01">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
@@ -680,14 +679,16 @@
 				setupFlood(xml);
 			else
 				setupTunnel(xml);
-			
+
 			// alert?
 			if (String(item.STATION_STATUS).length > 0)
 			{
 				STATION_STATUS.visible = true;
 				STATION_STATUS.title_tf.htmlText = String(item.STATION_TITLE_STATUS);
 				STATION_STATUS.desc_tf.htmlText = String(item.STATION_STATUS);
-			}else{
+			}
+			else
+			{
 				STATION_STATUS.visible = false;
 			}
 		}
@@ -780,10 +781,10 @@
 				popdown.road_desc1_mc.ALERT_BOTTOM.tf.htmlText = item.ALERT_BOTTOM;
 			else
 				popdown.road_desc1_mc.ALERT_BOTTOM.visible = false;
-			
+
 			// marquee
-			MarqueeUtil.update(popdown.road_desc1_mc.ALERT_TOP.tf, Number(item.ALERT_TOP.@speed));
-			MarqueeUtil.update(popdown.road_desc1_mc.ALERT_BOTTOM.tf, Number(item.ALERT_BOTTOM.@speed));
+			MarqueeUtil.update(popdown.road_desc1_mc.ALERT_TOP.tf, Number(item.ALERT_TOP_SPEED) || Number(item.ALERT_TOP.@speed));
+			MarqueeUtil.update(popdown.road_desc1_mc.ALERT_BOTTOM.tf, Number(item.ALERT_BOTTOM_SPEED) || Number(item.ALERT_BOTTOM.@speed));
 
 			// visibility -----------------------------------------------------------------
 			//popdown.popupButton.visible = true;
@@ -801,12 +802,14 @@
 		}
 
 		private var _pumps:Array = [];
-		
+
 		private const WHITESPACE:String = " \t\n\r";
-		private function trim(source:String):String {
+
+		private function trim(source:String):String
+		{
 			return source.split("\r").join("").split("\n").join("");
 		}
-		
+
 		private function setupTunnel(xml:XML):void
 		{
 			var item = xml.STATION;
@@ -861,13 +864,13 @@
 				popdown.road_desc2_mc.ALERT_TOP_IN.x = 246;
 				popdown.road_desc2_mc.ALERT_BOTTOM_IN.x = 246;
 			}
-			
+
 			// marquee
-			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_TOP_IN.tf, Number(item.ALERT_TOP_IN.@speed));
-			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf, Number(item.ALERT_BOTTOM_IN.@speed));
-			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_TOP_OUT.tf, Number(item.ALERT_TOP_OUT.@speed));
-			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf, Number(item.ALERT_BOTTOM_OUT.@speed));
-			
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_TOP_IN.tf, Number(item.ALERT_TOP_IN_SPEED) || Number(item.ALERT_TOP_IN.@speed));
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_BOTTOM_IN.tf, Number(item.ALERT_BOTTOM_IN_SPEED) || Number(item.ALERT_BOTTOM_IN.@speed));
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_TOP_OUT.tf, Number(item.ALERT_TOP_OUT_SPEED) || Number(item.ALERT_TOP_OUT.@speed));
+			MarqueeUtil.update(popdown.road_desc2_mc.ALERT_BOTTOM_OUT.tf, Number(item.ALERT_BOTTOM_OUT_SPEED) || Number(item.ALERT_BOTTOM_OUT.@speed));
+
 			// in out title
 			popdown.road_desc2_mc.TITLE_IN.htmlText = (String(item.TITLE_IN).length > 0) ? item.TITLE_IN : "";
 			popdown.road_desc2_mc.TITLE_OUT.htmlText = (String(item.TITLE_OUT).length > 0) ? item.TITLE_OUT : "";
@@ -1059,10 +1062,10 @@
 
 			// visibility
 			popdown.popupButton.visible = false;
-			
+
 			popdown.road_desc1_mc.visible = false;
 			popdown.road_desc2_mc.visible = true;
-			
+
 			popdown.iDetail.visible = false;
 			_iTunnelDetail.visible = true;
 			popdown.top_title_mc.gotoAndStop(2);
@@ -1225,10 +1228,10 @@
 
 			var stationXML = data.children()[0];
 			var total = stationXML.child("*").length();
-			
+
 			var bad_VALUE_IN:Boolean = false;
 			var bad_VALUE_OUT:Boolean = false;
-			
+
 			var prev_bad_VALUE_IN:Boolean = false;
 			var prev_bad_VALUE_OUT:Boolean = false;
 
@@ -1244,16 +1247,16 @@
 
 				bad_VALUE_IN = (String(lastXML.VALUE_IN).length == 0);
 				bad_VALUE_OUT = (String(lastXML.VALUE_OUT).length == 0);
-				
-				flood.lineStyle(0.5, 0xFFFF00, bad_VALUE_IN?0:1);
-				flood2.lineStyle(0.5, 0xFF0000, bad_VALUE_OUT?0:1);
-				
-				if(prev_bad_VALUE_IN)
+
+				flood.lineStyle(0.5, 0xFFFF00, bad_VALUE_IN ? 0 : 1);
+				flood2.lineStyle(0.5, 0xFF0000, bad_VALUE_OUT ? 0 : 1);
+
+				if (prev_bad_VALUE_IN)
 					flood.moveTo(captionNum, -graphFactor * Number(lastXML.VALUE_IN));
-				
-				if(prev_bad_VALUE_OUT)
+
+				if (prev_bad_VALUE_OUT)
 					flood2.moveTo(captionNum, -graphFactor * Number(lastXML.VALUE_OUT));
-					
+
 				flood.lineTo(captionNum, -graphFactor * Number(lastXML.VALUE_IN));
 				if (Number(lastXML.VALUE_OUT) != -99)
 				{
@@ -1264,11 +1267,11 @@
 					flood2.lineStyle(0.5, 0xFF0000, 0);
 					flood2.lineTo(captionNum, 0);
 				}
-				
+
 				// visibility
 				floodVisible = (String(lastXML.VALUE_IN) != "");
 				flood2Visible = (String(lastXML.VALUE_OUT) != "");
-				
+
 				prev_bad_VALUE_IN = bad_VALUE_IN;
 				prev_bad_VALUE_OUT = bad_VALUE_OUT;
 
