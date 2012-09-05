@@ -5,17 +5,11 @@ http://developer.yahoo.com/flash/license.html
 */
 package com.yahoo.astra.fl.charts
 {
-	import fl.core.UIComponent;
-
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
-	import flash.text.AntiAliasType;
-	import flash.text.GridFitType;
 	import flash.text.StyleSheet;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
-	import flash.text.TextFormatAlign;
+	import flash.utils.Dictionary;
 
 	/**
 	 * An axis type representing a range of categories.
@@ -513,8 +507,7 @@ package com.yahoo.astra.fl.charts
 					{
 						if (lastVisibleLabel)
 						{
-							if (this.reverse && label.y + label.height > lastVisibleLabel.y ||
-								!this.reverse && lastVisibleLabel.y + lastVisibleLabel.height > label.y)
+							if (this.reverse && label.y + label.height > lastVisibleLabel.y || !this.reverse && lastVisibleLabel.y + lastVisibleLabel.height > label.y)
 							{
 
 								//always show the last label
@@ -528,8 +521,7 @@ package com.yahoo.astra.fl.charts
 					{
 						if (lastVisibleLabel)
 						{
-							if (this.reverse && label.x + label.width > lastVisibleLabel.x ||
-								!this.reverse && lastVisibleLabel.x + lastVisibleLabel.width > label.x)
+							if (this.reverse && label.x + label.width > lastVisibleLabel.x || !this.reverse && lastVisibleLabel.x + lastVisibleLabel.width > label.x)
 							{
 								/*if(i == this.labels.length - 1) lastVisibleLabel.visible = false;
 								else*/
@@ -602,6 +594,9 @@ package com.yahoo.astra.fl.charts
 //			textFormat.align = TextFormatAlign.LEFT;
 		}
 
+		// hack for in/out label
+		public static var LABELS:Dictionary = new Dictionary;
+
 		/**
 		 * @private
 		 * Sets the text for each label and determines the offets.
@@ -622,6 +617,7 @@ package com.yahoo.astra.fl.charts
 				label.rotation = Global.GRAPH_ROTATION;
 
 				var _str:String = this.valueToLabel(i);
+				_str = LABELS[_str] ? (LABELS[_str] + "\n" + _str) : _str;
 				label.htmlText = "<p>" + _str + "</p>"; //.substring(0,1)+"\n"+_str.substring(1,3)
 
 				if (this.orientation == AxisOrientation.VERTICAL)

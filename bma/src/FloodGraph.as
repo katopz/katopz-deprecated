@@ -1,17 +1,26 @@
 ﻿package
 {
 	import com.sleepydesign.containers.Cursor;
-	import com.sleepydesign.site.*;
-	import com.sleepydesign.utils.*;
-	import com.yahoo.astra.fl.charts.*;
-	
-	import flash.display.*;
-	import flash.events.*;
+	import com.sleepydesign.site.Content;
+	import com.sleepydesign.site.ContentEvent;
+	import com.sleepydesign.utils.GraphicUtil;
+	import com.sleepydesign.utils.URLUtil;
+	import com.sleepydesign.utils.XMLUtil2;
+	import com.yahoo.astra.fl.charts.CategoryAxis;
+	import com.yahoo.astra.fl.charts.ColumnChart;
+
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.net.*;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.system.Security;
-	
+	import flash.utils.Dictionary;
+
 	import gs.TweenMax;
 
 	public class FloodGraph extends Content
@@ -151,13 +160,15 @@
 					{
 						// proxy vin VALUE_IN -> VALUE
 						var stationXML:XML = data.STATION[i].copy();
-						
+
 						if (String(stationXML.VALUE).length > 0)
 						{
 							// normal value case
 							data0.push(stationXML);
 							data1.push(stationXML);
-						}else{
+						}
+						else
+						{
 							if (String(stationXML.VALUE_IN).length > 0)
 							{
 								stationXML.VALUE = Number(stationXML.VALUE_IN);
@@ -165,7 +176,7 @@
 								data0.push(stationXML);
 								data1.push(stationXML);
 							}
-							
+
 							// proxy vout VALUE_OUT -> VALUE
 							if (String(stationXML.VALUE_OUT).length > 0)
 							{
@@ -177,7 +188,7 @@
 							}
 						}
 					}
-						
+
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 
 					//sort alphabet
@@ -279,47 +290,72 @@
 				}
 				case Global.TUNNEL_TAB:
 				{
+					// hack for real label
+					var labels:Dictionary = CategoryAxis.LABELS;
+
 					var data0_out:Array = [];
 					var data1_out:Array = [];
 
 					var STATION_LENGTH:int = data.STATION.length();
-					
+
 					for (i = 0; i < STATION_LENGTH; i++)
 					{
 						if (String(data.STATION[i].@id).indexOf(tabID) == 0)
 						{
 							// one way?
+							/*
 							if ((String(data.STATION[i].VALUE_IN).length <= 0) || (String(data.STATION[i].VALUE_OUT).length <= 0))
 							{
 								data.STATION[i].ONEWAY = "true";
-							}else{
+							}
+							else
+							{
 								data.STATION[i].ONEWAY = "false";
 							}
-							
+							*/
+
 							// proxy vin VALUE_IN -> VALUE
 							var stationXML:XML = data.STATION[i].copy();
-							trace("lol:"+String(stationXML.VALUE_IN).length);
-							
-							if(String(stationXML.VALUE_IN).length<=0)
+							//trace("lol:" + String(stationXML.VALUE_IN).length);
+
+							if (String(stationXML.VALUE_IN).length <= 0)
+							{
 								stationXML.VALUE = NaN;
+								labels[String(stationXML.LABEL)] = "(เข้า)";
+								//trace(stationXML.LABEL + " = " + labels[String(stationXML.LABEL)]);
+							}
 							else
+							{
 								stationXML.VALUE = Number(stationXML.VALUE_IN);
-							
-							stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
+								labels[String(stationXML.LABEL)] = labels[String(stationXML.LABEL)] || "(เข้า) (ออก)";
+								//trace(stationXML.LABEL + " = " + labels[String(stationXML.LABEL)]);
+							}
+
+							//trace(labels[String(stationXML.LABEL)]);
+
+							//stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
 							//stationXML.LABEL = "<font color='#"+(isNaN(stationXML.VALUE)?"FFFFFF":"000000")+"'>(เข้า)</font> <font color='#FFFFFF'>(ออก)</font>\n" + String(stationXML.LABEL);
-							
+
 							data0.push(stationXML);
 							data1.push(stationXML);
 
 							// proxy vout VALUE_OUT -> VALUE
 							stationXML = data.STATION[i].copy();
-							
-							if(String(stationXML.VALUE_OUT).length<=0)
+
+							if (String(stationXML.VALUE_OUT).length <= 0)
+							{
 								stationXML.VALUE = NaN;
+								labels[String(stationXML.LABEL)] = "(ออก)";
+								//trace(stationXML.LABEL + " = " + labels[String(stationXML.LABEL)]);
+							}
 							else
+							{
 								stationXML.VALUE = Number(stationXML.VALUE_OUT);
-							
-							stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
+								labels[String(stationXML.LABEL)] = labels[String(stationXML.LABEL)] || "(เข้า) (ออก)";
+								//trace(stationXML.LABEL + " = " + labels[String(stationXML.LABEL)]);
+							}
+
+							//stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
 
 							data0_out.push(stationXML);
 							data1_out.push(stationXML);
@@ -328,27 +364,27 @@
 
 					// vin
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
-					
+
 					// vout
 					// sort by sorted vin
 					var data0_out_sorted:Array = [];
-					for (i=0 ;i<data0.length;i++)
+					for (i = 0; i < data0.length; i++)
 					{
-						for (var j:int = 0; j < data0_out.length; j++) 
+						for (var j:int = 0; j < data0_out.length; j++)
 						{
-							if(data0_out[j].@id == data0[i].@id)
+							if (data0_out[j].@id == data0[i].@id)
 							{
 								data0_out_sorted.push(data0_out[j]);
 							}
 						}
 					}
-							
+
 					// vin
 					data1.sortOn("@id");
-					
+
 					// vout
 					data1_out.sortOn("@id");
-					
+
 					var w:Number = data0.length * 760 / 10;
 					graph1.width = graph0.width = Math.max(w, 760);
 
@@ -364,7 +400,7 @@
 					TweenMax.to(tunnel_desc_1_mc, 0, {x: 915, alpha: 1});
 					TweenMax.to(flood_desc_0_mc, 0, {alpha: 0});
 					TweenMax.to(flood_desc_1_mc, 0, {alpha: 0});
-					
+
 					// rotation
 					Global.GRAPH_ROTATION = 0;
 
@@ -449,19 +485,19 @@
 			if (event.content.name == "FloodGraph")
 				setGraph("VALUE");
 		}
-		
+
 		private function removeItemAt(arr:Array, index:int):*
 		{
 			if (index == -1)
 				return index;
-			
+
 			const item:* = arr[index];
-			
+
 			arr.splice(index, 1);
-			
+
 			return item;
 		}
-		
+
 		private function removeItem(arr:Array, item:*):*
 		{
 			return removeItemAt(arr, arr.indexOf(item));
