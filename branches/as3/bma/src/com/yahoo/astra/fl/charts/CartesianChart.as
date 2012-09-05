@@ -5,17 +5,19 @@ http://developer.yahoo.com/flash/license.html
 */
 package com.yahoo.astra.fl.charts
 {
+	import com.yahoo.astra.fl.charts.series.CartesianSeries;
+	
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.geom.ColorTransform;
-	import flash.events.Event;
-	import flash.display.DisplayObject;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import fl.core.UIComponent;
+	
 	import fl.core.InvalidationType;
-	import com.yahoo.astra.fl.charts.series.CartesianSeries;
+	import fl.core.UIComponent;
 	
 	//--------------------------------------
 	//  Styles
@@ -1319,6 +1321,20 @@ package com.yahoo.astra.fl.charts
 				}
 				
 			}
+			
+			// hack
+			var realLabel:String;
+			try{
+				realLabel = String(item.LABEL);
+			}catch(e:*){
+				
+			}
+			
+			if(realLabel)
+			{
+				text = realLabel + "\n" + text.split("\n")[1];
+			}
+			
 			return text;
 		}
 		
