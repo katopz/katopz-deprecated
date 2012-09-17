@@ -3,7 +3,7 @@
   <STATION id="FL48">
     <NAME>ถนนสนามไชย สน.พระราชวัง เขตพระนคร</NAME>
     <VALUE>50</VALUE>
-    <STATUS>1</STATUS>
+    <STATUS>0</STATUS>
     <STATUS_PUMP>0</STATUS_PUMP>
     <ROAD_HEIGHT>25</ROAD_HEIGHT>
     <LAST_START>26-7-2007 02:15:00</LAST_START>
