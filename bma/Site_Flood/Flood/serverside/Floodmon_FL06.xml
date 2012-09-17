@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
   <STATION id="FL06">
-    <NAME>ถนนนวมินทร์ ช่วงสันติอโศก เขตบางกะปิ</NAME>
+    <NAME>ถนนนวมินทร์ ช่วงสันติอโศก เขตบึงกุ่ม</NAME>
     <VALUE>11.11</VALUE>
     <STATUS>1</STATUS>
     <ROAD_HEIGHT>25</ROAD_HEIGHT>

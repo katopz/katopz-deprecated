@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
   <STATION id="FL23">
-    <NAME>ถนนนวมินทร์ ช่วงสันติอโศก เขตบางกะปิ</NAME>
-    <VALUE>100</VALUE>
+    <NAME>ถนนพหลโยธิน กรมการขนส่งทางบก เขตจตุจักร</NAME>
+    <VALUE>50</VALUE>
     <STATUS>1</STATUS>
     <STATUS_PUMP>0</STATUS_PUMP>
     <ROAD_HEIGHT>25</ROAD_HEIGHT>

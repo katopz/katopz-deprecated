@@ -10,7 +10,7 @@
 	
 	<panel id="Flood">
 		<foreground id="foreground" src="Flood/foreground.swf"/>
-		<content id="FloodMap" src="Flood/10_map/10_map.swf" ttl="50000" >
+		<content id="FloodMap" src="Flood/10_map/10_map.swf" ttl="10000" >
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
 			<feed id="FloodMapList" src="Flood/serverside/FloodmonAllStation.xml"/>
 			<!-- ข้อมูลใน map -->
@@ -22,7 +22,7 @@
 				<item src="actionscript:getLinkId('index.html#$id')" label="รายงาน"/>
 			</menu>
 		</content>
-		<content id="FloodStation" src="Flood/20_station/20_station.swf" ttl="5000">
+		<content id="FloodStation" src="Flood/20_station/20_station.swf" ttl="10000">
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
 			<feed id="FloodStationList" src="Flood/serverside/FloodmonAllStation.xml"/>
 			<!-- folder ที่ Floodmon_XXXX.xml อยู่ -->
@@ -38,11 +38,11 @@
 				<item src="actionscript:getLinkId('index.html#$id')" label="รายงาน"/>
 			</menu>
 		</content>
-		<content id="FloodGraph" src="Flood/30_graph/30_graph.swf" ttl="5000">
+		<content id="FloodGraph" src="Flood/30_graph/30_graph.swf" ttl="10000">
 			<!-- ข้อมูลในเมนูด้านซ้าย -->
 			<feed id="FloodGraphList" src="Flood/serverside/FloodmonAllStation.xml"/>
 			<!-- ข้อมูลใน graph -->
-			<feed id="FloodGraphData" src="Flood/serverside/FloodmonAllStation.xml"/>
+			<feed id="FloodGraphData" src="Flood/serverside/FloodmonAllStation.xml" floodColor="0x4E70AF" tunnelColor="0x76AD96"/>
 			<menu>
 				<item src="actionscript:setFocus('map')" label="แผนที่"/>
 				<item src="actionscript:getLinkId('javascript:alert($id)')" label="รูปถ่าย"/>
