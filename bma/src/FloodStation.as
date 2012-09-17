@@ -400,7 +400,7 @@
 			}
 
 			iPopup.pointer.y = 508 - floodObject.height * .915;
-			iPopup.pointer.label.text = String(floodObject.height + " เซนติเมตร");
+			iPopup.pointer.label.text = String(floodObject.height + " ซม.");
 		}
 
 		public function onRoadError(event:ContentEvent):void
@@ -758,8 +758,8 @@
 			section.extra.detail.waterHeight.htmlText = floodObject.height;
 			section.extra.detail.roadHeight.htmlText = floodObject.roadHeight;
 
-			popdown.pointer.label.text = String(floodObject.height + "  เซนติเมตร");
-			popdown.pointer2.label.text = String(floodObject.height + "  เซนติเมตร");
+			popdown.pointer.label.text = String(floodObject.height + "  ซม.");
+			popdown.pointer2.label.text = String(floodObject.height + "  ซม.");
 
 			createSection(xml.STATION.@id);
 			createRoad(xml.STATION.@id);
