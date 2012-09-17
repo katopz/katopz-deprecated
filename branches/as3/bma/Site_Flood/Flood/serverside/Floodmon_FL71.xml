@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <FLOODMON>
   <STATION id="FL71">
     <NAME>ซอยมหาดไทย เขตวังทองหลาง</NAME>
-    <VALUE>50</VALUE>
+    <VALUE>20</VALUE>
     <STATUS>1</STATUS>
     <STATUS_PUMP>0</STATUS_PUMP>
     <ROAD_HEIGHT>25</ROAD_HEIGHT>
