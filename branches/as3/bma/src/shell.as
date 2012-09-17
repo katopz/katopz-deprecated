@@ -188,16 +188,21 @@
 				//new list
 				if (panel.extra.list.selectedIndex == -1)
 				{
-
 					if (page.extra.focusIndex == -1)
 					{
 						//no focus
-						setItem(getItemByIndex(0));
-						panel.extra.focusIndex = 0
+						if (page.name == "FloodStation")
+						{
+							// do something?
+						}
+						else
+						{
+							setItem(getItemByIndex(0));
+							panel.extra.focusIndex = 0
+						}
 					}
 					else
 					{
-
 						if (panel.extra.focusIndex != -1)
 						{
 							//external focus
@@ -387,9 +392,9 @@
 
 			if (currentItem)
 			{
+				trace(" * update : " + currentItem.id);
 				dispatchEvent(new ContentEvent(ContentEvent.UPDATE, panel.currentContent, currentItem.data));
 				//TODO add event insteadOf call back hack
-				trace(currentItem.id)
 				task.menu.currentId = currentItem.id;
 			}
 			else
@@ -435,16 +440,16 @@
 
 		public function getItemByIndex(iIndex)
 		{
-			return currentContent.extra.list.dataProvider.getItemAt(iIndex);
+			return _dps["all"].getItemAt(iIndex);
 		}
 
 		public function getIndexById(iId)
 		{
 			SleepyDesign.log("getIndexById : " + iId);
 
-			for (var i = 0; i < currentContent.extra.list.dataProvider.length; i++)
+			for (var i = 0; i < _dps["all"].length; i++)
 			{
-				var item = currentContent.extra.list.dataProvider.getItemAt(i)
+				var item = _dps["all"].getItemAt(i)
 				if (item.id == iId)
 				{
 					return i;
@@ -458,9 +463,9 @@
 		{
 			SleepyDesign.log("getItemById : " + iId);
 
-			for (var i = 0; i < currentContent.extra.list.dataProvider.length; i++)
+			for (var i = 0; i < _dps["all"].length; i++)
 			{
-				var item = currentContent.extra.list.dataProvider.getItemAt(i)
+				var item = _dps["all"].getItemAt(i)
 				if (item.id == iId)
 				{
 					return item;
@@ -472,6 +477,7 @@
 
 		public function setItem(iItem):void
 		{
+			trace(" * setItem : " + iItem);
 
 			//var page = (currentContent as Panel).currentContent;
 
