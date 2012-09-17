@@ -723,14 +723,32 @@
 			if (item.STATUS == "0")
 			{
 				//popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#FF0000\">ขัดข้อง</FONT>";
-				TextField(popdown.iDetail.COM).htmlText = "ขัดข้อง";
-				TextField(popdown.iDetail.COM).textColor = 0xFF0000;
+				// tunnel
+				if (String(item.@id).indexOf("TN") == 0)
+				{
+					TextField(popdown.iDetail.COM).htmlText = "ขัดข้อง";
+					TextField(popdown.iDetail.COM).textColor = 0xFF0000;
+				}
+				else
+				{
+					TextField(popdown.iDetail.COM).htmlText = "ปกติ";
+					TextField(popdown.iDetail.COM).textColor = 0x00FF00;
+				}
 			}
 			else
 			{
 				//popdown.iDetail.COM.htmlText = "<FONT COLOR=\"#00FF00\">ปกติ</FONT>";
-				TextField(popdown.iDetail.COM).htmlText = "ปกติ";
-				TextField(popdown.iDetail.COM).textColor = 0x00FF00;
+				// tunnel
+				if (String(item.@id).indexOf("TN") == 0)
+				{
+					TextField(popdown.iDetail.COM).htmlText = "ปกติ";
+					TextField(popdown.iDetail.COM).textColor = 0x00FF00;
+				}
+				else
+				{
+					TextField(popdown.iDetail.COM).htmlText = "ขัดข้อง";
+					TextField(popdown.iDetail.COM).textColor = 0xFF0000;
+				}
 			}
 
 			if (item.STATUS_PUMP == "0")
