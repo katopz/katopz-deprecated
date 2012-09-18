@@ -910,7 +910,17 @@
 				for (i = 0; i < pump_ins.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop((pump_ins[i] == 0) ? 2 : 1);
+
+					// tunnel
+					if (String(item.@id).indexOf("TN") == 0)
+					{
+						pump.gotoAndStop((pump_ins[i] == 0) ? 1 : 2);
+					}
+					else
+					{
+						pump.gotoAndStop((pump_ins[i] == 0) ? 2 : 1);
+					}
+
 					_pumps.push(popdown.addChild(pump));
 					pump.x = 210 + i * 20;
 					pump.y = 234;
@@ -923,7 +933,17 @@
 				for (i = 0; i < pump_outs.length; i++)
 				{
 					pump = new Pump();
-					pump.gotoAndStop((pump_outs[i] == 0) ? 2 : 1);
+
+					// tunnel
+					if (String(item.@id).indexOf("TN") == 0)
+					{
+						pump.gotoAndStop((pump_outs[i] == 0) ? 1 : 2);
+					}
+					else
+					{
+						pump.gotoAndStop((pump_outs[i] == 0) ? 2 : 1);
+					}
+
 					_pumps.push(popdown.addChild(pump));
 
 					// cancel auto align left : 2012/04/27
