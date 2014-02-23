@@ -440,39 +440,7 @@
 
 		public function getItemByIndex(iIndex)
 		{
-			return _dps["all"].getItemAt(iIndex);
-		}
-
-		public function getIndexById(iId)
-		{
-			SleepyDesign.log("getIndexById : " + iId);
-
-			for (var i = 0; i < _dps["all"].length; i++)
-			{
-				var item = _dps["all"].getItemAt(i)
-				if (item.id == iId)
-				{
-					return i;
-				}
-			}
-			return null;
-
-		}
-
-		public function getItemById(iId)
-		{
-			SleepyDesign.log("getItemById : " + iId);
-
-			for (var i = 0; i < _dps["all"].length; i++)
-			{
-				var item = _dps["all"].getItemAt(i)
-				if (item.id == iId)
-				{
-					return item;
-				}
-			}
-			return null;
-
+			return _dps[Global.tabID].getItemAt(iIndex);
 		}
 
 		public function setItem(iItem):void
