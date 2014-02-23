@@ -767,6 +767,18 @@
 			popdown.iDetail.LAST_START.htmlText = item.LAST_START;
 			popdown.iDetail.LAST_STOP.htmlText = item.LAST_STOP;
 			popdown.iDetail.MAX.htmlText = item.MAX;
+			
+			// added 2014-02-23
+			if (item.SENSOR == "0")
+			{
+				TextField(popdown.iDetail.SENSOR).htmlText = "ปกติ";
+				TextField(popdown.iDetail.SENSOR).textColor = 0x00FF00;
+			}
+			else
+			{
+				TextField(popdown.iDetail.SENSOR).htmlText = "ขัดข้อง";
+				TextField(popdown.iDetail.SENSOR).textColor = 0xFF0000;
+			}
 
 			floodObject = new Object();
 
