@@ -443,6 +443,28 @@
 			return _dps[Global.tabID].getItemAt(iIndex);
 		}
 
+		/**
+		 * Call from Map
+		 * @param iId
+		 * @return
+		 *
+		 */
+		public function getIndexById(iId)
+		{
+			SleepyDesign.log("getIndexById : " + iId);
+
+			for (var i = 0; i < _dps[Global.tabID].length; i++)
+			{
+				var item = _dps[Global.tabID].getItemAt(i)
+				if (item.id == iId)
+				{
+					return i;
+				}
+			}
+
+			return null;
+		}
+
 		public function setItem(iItem):void
 		{
 			trace(" * setItem : " + iItem);
