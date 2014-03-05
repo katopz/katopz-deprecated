@@ -554,4 +554,10 @@
     <VALUE>0.00</VALUE>
     <STATUS>2</STATUS>
   </STATION>
+  <STATION id="FL72">
+<LABEL>ซ.มหาดไทย</LABEL>
+    <NAME>ซอย มหาดไทย</NAME>
+    <VALUE>0.00</VALUE>
+    <STATUS>2</STATUS>
+  </STATION>
  </FLOODMON>

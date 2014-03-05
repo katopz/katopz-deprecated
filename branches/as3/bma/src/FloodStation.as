@@ -1,18 +1,30 @@
 ﻿package
 {
-	import caurina.transitions.Tweener;
-
 	import com.sleepydesign.SleepyDesign;
 	import com.sleepydesign.containers.Cursor;
-	import com.sleepydesign.site.*;
-	import com.sleepydesign.utils.*;
+	import com.sleepydesign.site.Content;
+	import com.sleepydesign.site.ContentEvent;
+	import com.sleepydesign.utils.GraphicUtil;
+	import com.sleepydesign.utils.MarqueeUtil;
+	import com.sleepydesign.utils.URLUtil;
+	import com.sleepydesign.utils.XMLUtil2;
 
-	import flash.display.*;
-	import flash.events.*;
-	import flash.geom.*;
-	import flash.net.*;
+	import flash.display.Bitmap;
+	import flash.display.GradientType;
+	import flash.display.MovieClip;
+	import flash.display.Shape;
+	import flash.display.SpreadMethod;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.system.Security;
-	import flash.text.*;
+	import flash.text.TextField;
+
+	import caurina.transitions.Tweener;
 
 	public class FloodStation extends Content
 	{
@@ -159,15 +171,15 @@
 			roadPath = "roads/";
 
 			//dataPath = "../../"+dataPath;
-			var test:XML = <STATION id="TN01">
+			var test:XML = <STATION id="FL101">
 					<NAME>อุโมงค์ทางลอดท่าพระ</NAME>
 					<LABEL>อุโมงค์ทางลอดท่าพระ</LABEL>
 					<STATUS>0</STATUS>
 				</STATION>
 
 			setStation(test);
-			//setSection("FL02");
-			setGraph("TN01");
+			setSection("FL101");
+			//setGraph("TN01");
 		}
 
 		//_________________________________________________________________ Station
@@ -767,7 +779,7 @@
 			popdown.iDetail.LAST_START.htmlText = item.LAST_START;
 			popdown.iDetail.LAST_STOP.htmlText = item.LAST_STOP;
 			popdown.iDetail.MAX.htmlText = item.MAX;
-			
+
 			// added 2014-02-23
 			if (item.SENSOR == "0")
 			{
@@ -776,8 +788,22 @@
 			}
 			else
 			{
-				TextField(popdown.iDetail.SENSOR).htmlText = "ขัดข้อง";
+				TextField(popdown.iDetail.SENSOR).htmlText = "อุดตัน";
 				TextField(popdown.iDetail.SENSOR).textColor = 0xFF0000;
+			}
+
+			trace(" ! id : " + String(xml.STATION.@id));
+
+			// only 72->101 
+			if (String(xml.STATION.@id).indexOf("FL") == 0)
+			{
+				var stationNums:int = String(xml.STATION.@id).split("FL")[1];
+				trace(" ! stationNums : " + stationNums);
+				popdown.iDetail.SENSOR_KEY.visible = popdown.iDetail.SENSOR.visible = (72 <= stationNums) && (stationNums <= 101);
+			}
+			else
+			{
+				popdown.iDetail.SENSOR_KEY.visible = popdown.iDetail.SENSOR.visible = false;
 			}
 
 			floodObject = new Object();
