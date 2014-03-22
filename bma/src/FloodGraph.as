@@ -8,7 +8,7 @@
 	import com.sleepydesign.utils.XMLUtil2;
 	import com.yahoo.astra.fl.charts.CategoryAxis;
 	import com.yahoo.astra.fl.charts.ColumnChart;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -20,7 +20,7 @@
 	import flash.net.URLRequest;
 	import flash.system.Security;
 	import flash.utils.Dictionary;
-
+	
 	import gs.TweenMax;
 
 	public class FloodGraph extends Content
@@ -34,6 +34,9 @@
 
 		public var graph0:ColumnChart;
 		public var graph1:ColumnChart;
+		
+		private var graph0_x:Number;
+		private var graph1_x:Number;
 
 		public var isTest:Boolean = false;
 
@@ -43,6 +46,9 @@
 
 			graph0 = iGraphContainer0;
 			graph1 = iGraphContainer1;
+			
+			graph0_x = graph0.x;
+			graph1_x = graph1.x;
 
 			graph0.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler0);
 			graph0.mouseEnabled = !true;
@@ -68,6 +74,9 @@
 
 		private function resetGraph(tabID:String):void
 		{
+			// reset
+			_prevData = null;
+			
 			if (_data)
 				parseData(_data, tabID);
 		}
@@ -89,7 +98,7 @@
 
 			var dataPath:String = "../serverside/FloodmonAllStation.xml";
 
-			Global.tabID = Global.TUNNEL_TAB;
+			Global.tabID = Global.FLOOD_TAB;
 
 			/*if (Global.tabID == Global.TUNNEL_TAB)
 				setGraph("VALUE_IN");
@@ -144,9 +153,17 @@
 				mom.ready();
 		}
 
+		private var _prevData:String;
+		
 		private function parseData(data:XML, tabID:String):void
 		{
 			trace(" * parseData : " + tabID);
+			
+			var dataString:String = data.toString();
+			if(_prevData == dataString)
+				return;
+			else
+				_prevData = dataString;
 
 			var data0:Array = [];
 			var data1:Array = [];
@@ -260,6 +277,35 @@
 
 					data1.sortOn("@id");
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
+					
+					//trace("before :" + data0[0].@id);
+					
+					// sort id
+					var temp:*;
+					var data0_length:int = data0.length;
+					
+					for (var k:uint = 0; k < data0_length; k++)
+					{
+						for (var l:uint = data0_length - 1; l > k; l--)
+						{
+							var num0:int = Number(data0[l - 1].@id.substr(2));
+							var num1:int = Number(data0[l].@id.substr(2));
+							
+							var value0:Number = data0[l - 1].VALUE;
+							var value1:Number = data0[l].VALUE;
+							
+							// will sort by id if value is equal
+							if (num0 > num1 && value0 == value1)
+							{
+								temp = data0[l - 1];
+								data0[l - 1] = data0[l];
+								data0[l] = temp;
+								
+								// for test
+								//data0[l].LABEL = data0[l].@id;
+							}
+						}
+					}
 
 					graph0.width = data.STATION.length() * 760 / 20;
 					graph0.width = .5 * Math.max(graph0.width, 760);
@@ -409,6 +455,10 @@
 					break;
 				}
 			}
+			
+			// reset graph to 0,0
+			graph0.x = graph0_x;
+			graph1.x = graph1_x;
 
 			// draw left
 			if (fake0)
