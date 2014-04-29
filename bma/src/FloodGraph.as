@@ -1,4 +1,4 @@
-﻿package
+﻿﻿package
 {
 	import com.sleepydesign.containers.Cursor;
 	import com.sleepydesign.site.Content;
@@ -11,6 +11,7 @@
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -19,59 +20,69 @@
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.system.Security;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
 	
 	import gs.TweenMax;
-
+	
 	public class FloodGraph extends Content
 	{
-
+		
 		//TODO path config
 		public var rootPath:String = "Flood/";
-
-
+		
+		
 		public var type:String = "Graph";
-
+		
 		public var graph0:ColumnChart;
 		public var graph1:ColumnChart;
 		
 		private var graph0_x:Number;
 		private var graph1_x:Number;
-
+		
+		private var _old_graph0_x:Number;
+		private var _old_graph1_x:Number;
+		
 		public var isTest:Boolean = false;
-
+		
 		public function FloodGraph()
 		{
+			// for check version
+			var versionTF:TextField = new TextField;
+			addChild(versionTF);
+			versionTF.text = "1579.5";
+			
 			Security.allowDomain("*");
-
+			
 			graph0 = iGraphContainer0;
 			graph1 = iGraphContainer1;
 			
 			graph0_x = graph0.x;
 			graph1_x = graph1.x;
-
+			
 			graph0.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler0);
 			graph0.mouseEnabled = !true;
 			graph0.useHandCursor = !true;
 			graph0.buttonMode = !true;
-
+			
 			graph1.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler1);
 			graph1.mouseEnabled = !true;
 			graph1.useHandCursor = !true;
 			graph1.buttonMode = !true;
-
+			
 			addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseUpHandler);
-
+			
 			//test();
-
+			
 			var cursor1:Cursor = new Cursor(this, iGraphContainer0);
 			var cursor2:Cursor = new Cursor(this, iGraphContainer1);
-
+			
 			// tab
 			Global.tabIDChangeSignal.add(resetGraph);
 		}
-
+		
 		private function resetGraph(tabID:String):void
 		{
 			// reset
@@ -80,95 +91,117 @@
 			if (_data)
 				parseData(_data, tabID);
 		}
-
+		
 		private function mouseUpHandler(param1:MouseEvent):void
 		{
 			if (graph0)
 				graph0.stopDrag();
-
+			
 			if (graph1)
 				graph1.stopDrag();
 		}
-
+		
 		public function test()
 		{
 			trace("Self Test")
-
+			
 			isTest = true;
-
+			
 			var dataPath:String = "../serverside/FloodmonAllStation.xml";
-
+			
 			Global.tabID = Global.FLOOD_TAB;
-
+			
 			/*if (Global.tabID == Global.TUNNEL_TAB)
-				setGraph("VALUE_IN");
+			setGraph("VALUE_IN");
 			else*/
 			setGraph("VALUE");
 		}
-
+		
 		//_________________________________________________________________ Graph
-
+		
 		private var type2:String;
-
+		
 		public function createGraph(graph, type, type2 = null)
 		{
 			graph.horizontalField = "LABEL";
 			graph.verticalField = type;
 			this.type2 = type2;
 		}
-
+		
 		public function setGraph(type, type2 = null)
 		{
 			createGraph(graph0, type, type2);
 			createGraph(graph1, type, type2);
-
+			
 			var dataPath = XMLUtil2.getNodeById(config, "FloodGraphData").@src;
 			var method = String(XMLUtil2.getNodeById(config, "FloodGraphData").@method).toUpperCase();
-
-			trace("all color : " + XMLUtil2.getNodeById(config, "FloodGraphData").@allColor);
-
+			
+			//trace("all color : " + XMLUtil2.getNodeById(config, "FloodGraphData").@allColor);
+			
 			// color
 			Global.FLOOD_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@floodColor || Global.FLOOD_GRAPH_COLOR;
 			Global.TUNNEL_GRAPH_COLOR = XMLUtil2.getNodeById(config, "FloodGraphData").@tunnelColor || Global.TUNNEL_GRAPH_COLOR;
-
+			
 			if (isTest)
 				dataPath = "../serverside/FloodmonAllStation.xml";
-
+			
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, xmlLoadCompleteHandler);
-
+			
 			var request = new URLRequest(URLUtil.killCache(dataPath))
 			loader.load(request);
 		}
-
+		
 		public function xmlLoadCompleteHandler(event:Event):void
 		{
 			var loader:URLLoader = event.target as URLLoader;
 			_data = new XML(loader.data);
 			parseData(_data, Global.tabID);
-
+			
 			//all done
 			var mom = (parent as Content)
 			if (mom)
 				mom.ready();
 		}
-
+		
 		private var _prevData:String;
+		private var _prevTabID:String;
 		
 		private function parseData(data:XML, tabID:String):void
 		{
+			/*
 			trace(" * parseData : " + tabID);
+			trace(" * graph0.x : " + graph0.x);
+			trace(" * graph1.x : " + graph1.x);
+			*/
+			
+			// not same tabid will need reset
+			if(_prevTabID != tabID)
+			{
+				// reset graph to 0,0
+				graph0.x = graph0_x;
+				graph1.x = graph1_x;
+				
+				_old_graph0_x = graph0_x;
+				_old_graph1_x = graph0_x;
+			}else{
+				//will jump back last position if same tab
+				_old_graph0_x = graph0.x;
+				_old_graph1_x = graph1.x;
+			}
+			
+			_prevTabID = tabID;
 			
 			var dataString:String = data.toString();
 			if(_prevData == dataString)
 				return;
 			else
 				_prevData = dataString;
-
+			
 			var data0:Array = [];
 			var data1:Array = [];
 			var i:int;
-
+			
 			switch (tabID)
 			{
 				case Global.ALL_TAB:
@@ -177,14 +210,8 @@
 					{
 						// proxy vin VALUE_IN -> VALUE
 						var stationXML:XML = data.STATION[i].copy();
-
-						if (String(stationXML.VALUE).length > 0)
-						{
-							// normal value case
-							data0.push(stationXML);
-							data1.push(stationXML);
-						}
-						else
+						
+						if (String(stationXML.@id).indexOf("TN") == 0)
 						{
 							if (String(stationXML.VALUE_IN).length > 0)
 							{
@@ -193,7 +220,7 @@
 								data0.push(stationXML);
 								data1.push(stationXML);
 							}
-
+							
 							// proxy vout VALUE_OUT -> VALUE
 							if (String(stationXML.VALUE_OUT).length > 0)
 							{
@@ -203,16 +230,22 @@
 								data0.push(stationXML);
 								data1.push(stationXML);
 							}
+						} 
+						else  if (String(stationXML.VALUE).length > 0)
+						{
+							// normal value case
+							data0.push(stationXML);
+							data1.push(stationXML);
 						}
 					}
-
+					
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
-
+					
 					//sort alphabet
 					var data3:Array = [];
 					var _data0:Array = [];
 					var _value:Number = -1;
-
+					
 					for each (var _data:* in data0)
 					{
 						//new group
@@ -220,48 +253,48 @@
 						{
 							//mem value
 							_value = Number(_data.VALUE);
-
+							
 							//mem data
 							if (_data0)
 							{
 								//sort alphabet
 								_data0.sortOn("@id");
-
+								
 								//concat
 								data3 = data3.concat(_data0);
-
+								
 								//reset
 								_data0 = [];
 							}
 						}
 						_data0.push(_data);
 					}
-
+					
 					_data0.sortOn("@id");
 					data3 = data3.concat(_data0);
-
+					
 					graph0.width = data.STATION.length() * 760 / 20;
 					graph0.width = .5 * Math.max(graph0.width, 760);
-
+					
 					graph1.width = data.STATION.length() * 760 / 20;
 					graph1.width = .5 * Math.max(graph1.width, 760);
-
+					
 					TweenMax.to(tunnel_0_mc, 0, {x: 887.95, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {x: 887.95, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(flood_0_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
 					TweenMax.to(flood_1_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
-
+					
 					TweenMax.to(tunnel_desc_0_mc, 0, {x: 875.8, alpha: 1});
 					TweenMax.to(tunnel_desc_1_mc, 0, {x: 875.8, alpha: 1});
 					TweenMax.to(flood_desc_0_mc, 0, {x: 918.8, alpha: 1});
 					TweenMax.to(flood_desc_1_mc, 0, {x: 918.8, alpha: 1});
-
+					
 					// rotation
 					Global.GRAPH_ROTATION = 80;
-
+					
 					graph0.dataProvider = [data3];
 					graph1.dataProvider = [data1];
-
+					
 					break;
 				}
 				case Global.FLOOD_TAB:
@@ -274,7 +307,7 @@
 							data1.push(data.STATION[i]);
 						}
 					}
-
+					
 					data1.sortOn("@id");
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
 					
@@ -306,44 +339,46 @@
 							}
 						}
 					}
-
+					
 					graph0.width = data.STATION.length() * 760 / 20;
 					graph0.width = .5 * Math.max(graph0.width, 760);
-
+					
 					graph1.width = data.STATION.length() * 760 / 20;
 					graph1.width = .5 * Math.max(graph1.width, 760);
-
+					
 					// color
 					ColumnChart.getStyleDefinition().seriesColors[0] = Global.FLOOD_GRAPH_COLOR;
-
+					
 					TweenMax.to(tunnel_0_mc, 0, {x: 887.95, alpha: 0, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {x: 887.95, alpha: 0, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(flood_0_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
 					TweenMax.to(flood_1_mc, 0, {x: 925.90, alpha: 1, tint: Global.FLOOD_GRAPH_COLOR});
-
+					
 					TweenMax.to(tunnel_desc_0_mc, 0, {x: 875.8, alpha: 0});
 					TweenMax.to(tunnel_desc_1_mc, 0, {x: 875.8, alpha: 0});
 					TweenMax.to(flood_desc_0_mc, 0, {x: 918.8, alpha: 1});
 					TweenMax.to(flood_desc_1_mc, 0, {x: 918.8, alpha: 1});
-
+					
 					// rotation
 					Global.GRAPH_ROTATION = 80;
-
+					
 					graph0.dataProvider = [data0];
 					graph1.dataProvider = [data1];
-
+					
 					break;
 				}
 				case Global.TUNNEL_TAB:
 				{
 					// hack for real label
-					var labels:Dictionary = CategoryAxis.LABELS;
-
+					var labels:Dictionary = new Dictionary;
+					for(var lol:* in CategoryAxis.LABELS)
+						labels[lol] = CategoryAxis.LABELS[lol];
+					
 					var data0_out:Array = [];
 					var data1_out:Array = [];
-
+					
 					var STATION_LENGTH:int = data.STATION.length();
-
+					
 					for (i = 0; i < STATION_LENGTH; i++)
 					{
 						if (String(data.STATION[i].@id).indexOf(tabID) == 0)
@@ -352,18 +387,18 @@
 							/*
 							if ((String(data.STATION[i].VALUE_IN).length <= 0) || (String(data.STATION[i].VALUE_OUT).length <= 0))
 							{
-								data.STATION[i].ONEWAY = "true";
+							data.STATION[i].ONEWAY = "true";
 							}
 							else
 							{
-								data.STATION[i].ONEWAY = "false";
+							data.STATION[i].ONEWAY = "false";
 							}
 							*/
-
+							
 							// proxy vin VALUE_IN -> VALUE
 							var stationXML:XML = data.STATION[i].copy();
 							//trace("lol:" + String(stationXML.VALUE_IN).length);
-
+							
 							if (String(stationXML.VALUE_IN).length <= 0)
 							{
 								stationXML.VALUE = NaN;
@@ -376,18 +411,18 @@
 								labels[String(stationXML.LABEL)] = labels[String(stationXML.LABEL)] || "(เข้า) (ออก)";
 								//trace(stationXML.LABEL + " = " + labels[String(stationXML.LABEL)]);
 							}
-
+							
 							//trace(labels[String(stationXML.LABEL)]);
-
+							
 							//stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
 							//stationXML.LABEL = "<font color='#"+(isNaN(stationXML.VALUE)?"FFFFFF":"000000")+"'>(เข้า)</font> <font color='#FFFFFF'>(ออก)</font>\n" + String(stationXML.LABEL);
-
+							
 							data0.push(stationXML);
 							data1.push(stationXML);
-
+							
 							// proxy vout VALUE_OUT -> VALUE
 							stationXML = data.STATION[i].copy();
-
+							
 							if (String(stationXML.VALUE_OUT).length <= 0)
 							{
 								stationXML.VALUE = NaN;
@@ -400,17 +435,17 @@
 								labels[String(stationXML.LABEL)] = labels[String(stationXML.LABEL)] || "(เข้า) (ออก)";
 								//trace(stationXML.LABEL + " = " + labels[String(stationXML.LABEL)]);
 							}
-
+							
 							//stationXML.LABEL = "(เข้า) (ออก)\n" + String(stationXML.LABEL);
-
+							
 							data0_out.push(stationXML);
 							data1_out.push(stationXML);
 						}
 					}
-
+					
 					// vin
 					data0.sortOn("VALUE", Array.DESCENDING | Array.NUMERIC);
-
+					
 					// vout
 					// sort by sorted vin
 					var data0_out_sorted:Array = [];
@@ -424,130 +459,138 @@
 							}
 						}
 					}
-
+					
 					// vin
 					data1.sortOn("@id");
-
+					
 					// vout
 					data1_out.sortOn("@id");
-
+					
 					var w:Number = data0.length * 760 / 10;
 					graph1.width = graph0.width = Math.max(w, 760);
-
+					
 					// color
 					ColumnChart.getStyleDefinition().seriesColors[0] = Global.TUNNEL_GRAPH_COLOR;
-
+					
 					TweenMax.to(tunnel_0_mc, 0, {x: 925.90, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(tunnel_1_mc, 0, {x: 925.90, alpha: 1, tint: Global.TUNNEL_GRAPH_COLOR});
 					TweenMax.to(flood_0_mc, 0, {alpha: 0, tint: Global.FLOOD_GRAPH_COLOR});
 					TweenMax.to(flood_1_mc, 0, {alpha: 0, tint: Global.FLOOD_GRAPH_COLOR});
-
+					
 					TweenMax.to(tunnel_desc_0_mc, 0, {x: 915, alpha: 1});
 					TweenMax.to(tunnel_desc_1_mc, 0, {x: 915, alpha: 1});
 					TweenMax.to(flood_desc_0_mc, 0, {alpha: 0});
 					TweenMax.to(flood_desc_1_mc, 0, {alpha: 0});
-
+					
 					// rotation
 					Global.GRAPH_ROTATION = 0;
-
+					
 					graph0.dataProvider = [data0, data0_out_sorted];
 					graph1.dataProvider = [data1, data1_out];
 					break;
 				}
 			}
 			
-			// reset graph to 0,0
-			graph0.x = graph0_x;
-			graph1.x = graph1_x;
-
 			// draw left
 			if (fake0)
 				fake0.visible = false;
-
+			
 			if (fake1)
 				fake1.visible = false;
-
+			
 			TweenMax.to(this, 0.5, {onComplete: draw});
 		}
-
+		
 		private var fake0:Sprite;
 		private var fake1:Sprite;
-
+		
 		private var _data:XML;
-
+		
 		private function mouseDownHandler0(param1:MouseEvent):void
 		{
 			var min = graph0.x;
 			var max = -(graph0.width - 760);
-
+			
 			graph0.startDrag(false, new Rectangle(min, graph0.y, max, 0));
 			//draw();
+			
+			//this.addEventListener(Event.ENTER_FRAME,function():void{trace(graph0.x)});
 		}
-
+		
 		private function mouseDownHandler1(param1:MouseEvent):void
 		{
 			var min = graph1.x;
 			var max = -(graph1.width - 760);
-
+			
 			graph1.startDrag(false, new Rectangle(min, graph1.y, max, 0));
 		}
-
+		
 		//_________________________________________________________________ Update
-
+		
 		private function draw():void
 		{
+			// reset graph to 0,0
+			graph0.x = graph0_x;
+			graph1.x = graph1_x;
+			
 			var graphBitmap:BitmapData = GraphicUtil.getBitmapData(graph0, false);
 			var axisBitmap:BitmapData = new BitmapData(33, graphBitmap.height);
 			axisBitmap.copyPixels(graphBitmap, new Rectangle(0, 0, 33, 190), new Point());
-
+			
 			if (fake0)
 			{
 				fake0.parent.removeChild(fake0);
 				fake0 = null;
 			}
-
+			
 			fake0 = new Sprite();
 			addChild(fake0);
 			fake0.x = graph0.x;
 			fake0.y = graph0.y;
 			fake0.addChild(new Bitmap(axisBitmap));
-
+			
 			//
 			var graphBitmap:BitmapData = GraphicUtil.getBitmapData(graph1, false);
 			var axisBitmap:BitmapData = new BitmapData(33, graphBitmap.height);
 			axisBitmap.copyPixels(graphBitmap, new Rectangle(0, 0, 33, 190), new Point());
-
+			
 			if (fake1)
 			{
 				fake1.parent.removeChild(fake1);
 				fake1 = null;
 			}
-
+			
 			fake1 = new Sprite();
 			addChild(fake1);
 			fake1.x = graph1.x;
 			fake1.y = graph1.y;
 			fake1.addChild(new Bitmap(axisBitmap));
+			
+			// jump back
+			//trace("_old_graph0_x:" + _old_graph0_x);
+			//trace("_old_graph1_x:" + _old_graph1_x);
+			graph0.x = _old_graph0_x;
+			graph1.x = _old_graph1_x;
 		}
-
+		
 		public override function onUpdate(event:ContentEvent):void
 		{
 			if (event.content.name == "FloodGraph")
 				setGraph("VALUE");
 		}
-
+		
 		private function removeItemAt(arr:Array, index:int):*
 		{
 			if (index == -1)
 				return index;
-
+			
 			const item:* = arr[index];
-
+			
 			arr.splice(index, 1);
-
+			
 			return item;
 		}
-
+		
 		private function removeItem(arr:Array, item:*):*
 		{
 			return removeItemAt(arr, arr.indexOf(item));

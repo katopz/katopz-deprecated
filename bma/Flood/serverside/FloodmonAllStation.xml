@@ -1,563 +1,671 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" standalone="yes"?>
 <FLOODMON>
   <STATION id="TN01">
     <NAME>อุโมงค์ทางลอดท่าพระ</NAME>
     <LABEL>ทางลอดท่าพระ</LABEL>
-    <STATUS>0</STATUS>
-    <VALUE_IN>40</VALUE_IN>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+    <VALUE_IN>10.0</VALUE_IN>
   </STATION>
-  
   <STATION id="TN02">
     <NAME>อุโมงค์ทางลอดบางพลัด</NAME>
     <LABEL>ทางลอดบางพลัด</LABEL>
     <STATUS>1</STATUS>
-    <VALUE_IN>22</VALUE_IN>
-    <VALUE_OUT>11</VALUE_OUT>
+    <VALUE>0</VALUE>
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-  
   <STATION id="TN03">
     <NAME>อุโมงค์ทางลอดดินแดง</NAME>
     <LABEL>ทางลอดดินแดง</LABEL>
-    <STATUS>2</STATUS>
-    <VALUE_IN>18</VALUE_IN>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+    <VALUE_OUT />
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-  
   <STATION id="TN04">
     <NAME>อุโมงค์ทางลอดพระราม 9</NAME>
     <LABEL>ทางลอดพระราม 9</LABEL>
     <STATUS>1</STATUS>
-    <VALUE_IN>10</VALUE_IN>
-    <VALUE_OUT>5</VALUE_OUT>
+    <VALUE>0</VALUE>
+    <VALUE_OUT>0.0</VALUE_OUT>
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-
   <STATION id="TN05">
     <NAME>อุโมงค์กลับรถยนต์ถนนพัฒนาการ</NAME>
     <LABEL>กลับรถยนต์ถนนพัฒนาการ</LABEL>
-    <STATUS>0</STATUS>
-    <VALUE_OUT>15</VALUE_OUT>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+    <VALUE_OUT>0.0</VALUE_OUT>
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-  
   <STATION id="TN06">
     <NAME>อุโมงค์ทางลอดราบ 11</NAME>
     <LABEL>ทางลอดราบ 11</LABEL>
-    <STATUS>0</STATUS>
-    <VALUE_IN>22</VALUE_IN>
-    <VALUE_OUT>11</VALUE_OUT>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+    <VALUE_OUT>0.0</VALUE_OUT>
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-  
   <STATION id="TN07">
     <NAME>อุโมงค์ทางลอดห้วยขวาง</NAME>
     <LABEL>ทางลอดห้วยขวาง</LABEL>
-    <STATUS>0</STATUS>
-    <VALUE_IN>21</VALUE_IN>
-    <VALUE_OUT>31</VALUE_OUT>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+    <VALUE_OUT>0.0</VALUE_OUT>
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-
   <STATION id="TN08">
     <NAME>อุโมงค์ทางลอดสุทธิสาร</NAME>
     <LABEL>ทางลอดสุทธิสาร</LABEL>
-    <STATUS>0</STATUS>
-    <VALUE_IN>20</VALUE_IN>
-    <VALUE_OUT>10</VALUE_OUT>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+    <VALUE_OUT>0.0</VALUE_OUT>
+    <VALUE_IN>0.0</VALUE_IN>
   </STATION>
-
   <STATION id="FL01">
-<NAME>ถ.รัชดา แยกลาดพร้าว </NAME>
-<LABEL>ถ.รัชดา แยกลาดพร้าว</LABEL>
-    <VALUE>10.00</VALUE>
-    <STATUS>1</STATUS>
-  </STATION>
-
-  <STATION id="FL02">
-<LABEL>ถ.กำแพงเพชร 3</LABEL>
-    <NAME>ถ.กำแพงเพชร 3</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
-  </STATION>
-
-  <STATION id="FL03">
-<LABEL>ถ.จันทน์</LABEL>
-    <NAME>ถ.จันทน์ </NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>1</STATUS>
-  </STATION>
-
-  <STATION id="FL04">
-<LABEL>ถ.เซนต์หลุยส์ 3</LABEL>
-    <NAME>ถ.เซนต์หลุยส์ 3</NAME>
-    <VALUE>10.00</VALUE>
-    <STATUS>2</STATUS>
-  </STATION>
- 
- <STATION id="FL05">
-<LABEL>ถ.สาธุประดิษฐ์</LABEL>
-    <NAME>ถ.สาธุประดิษฐ์ </NAME>
-    <VALUE>12.50</VALUE>
-    <STATUS>2</STATUS>
-  </STATION>
-
-  <STATION id="FL06">
-<LABEL>ถ.นวมินทร</LABEL>
-    <NAME>ถ.นวมินทร์ สันติอโศก</NAME>
-    <VALUE>12.00</VALUE>
-    <STATUS>2</STATUS>
-  </STATION>
-
-  <STATION id="FL07">
-<LABEL>ถ.พหลฯสนามเป้า</LABEL>
-    <NAME>ถ.พหลฯ หน้าสนามเป้า</NAME>
-    <VALUE>17.20</VALUE>
-    <STATUS>2</STATUS>
-  </STATION>
-
-  <STATION id="FL08">
-<LABEL>ถ.พหลฯ สะพานควาย</LABEL>
-    <NAME>ถ.พหลฯ สะพานควาย</NAME>
-    <VALUE>0.00</VALUE>
+    <NAME>ถ.รัชดา แยกลาดพร้าว </NAME>
+    <LABEL>ถ.รัชดา แยกลาดพร้าว</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL02">
+    <NAME>ถ.กำแพงเพชร 3</NAME>
+    <LABEL>ถ.กำแพงเพชร 3</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL03">
+    <NAME>ถ.จันทน์ </NAME>
+    <LABEL>ถ.จันทน์</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL04">
+    <NAME>ถ.เซนต์หลุยส์ 3</NAME>
+    <LABEL>ถ.เซนต์หลุยส์ 3</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL05">
+    <NAME>ถ.สาธุประดิษฐ์ </NAME>
+    <LABEL>ถ.สาธุประดิษฐ์</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL06">
+    <NAME>ถ.นวมินทร์ สันติอโศก</NAME>
+    <LABEL>ถ.นวมินทร</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL07">
+    <NAME>ถ.พหลฯ หน้าสนามเป้า</NAME>
+    <LABEL>ถ.พหลฯสนามเป้า</LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL08">
+    <NAME>ถ.พหลฯ สะพานควาย</NAME>
+    <LABEL>ถ.พหลฯ สะพานควาย</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
   <STATION id="FL09">
-<LABEL>ถ.พหลฯ แยกเกษตร</LABEL>
     <NAME>ถ.พหลฯ แยกเกษตร </NAME>
-    <VALUE>15.50</VALUE>
+    <LABEL>ถ.พหลฯ แยกเกษตร</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
   <STATION id="FL10">
-<LABEL>ซ.แจ้งวัฒนะ 14</LABEL>
     <NAME>ซ.แจ้งวัฒนะ 14 </NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ซ.แจ้งวัฒนะ 14</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL11">
-<LABEL>ถ.สุขุมวิท ซ.62</LABEL>
     <NAME>ถ.สุขุมวิท ซ.62</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.สุขุมวิท ซ.62</LABEL>
     <STATUS>0</STATUS>
-   </STATION>
-
+    <VALUE>0</VALUE>
+  </STATION>
   <STATION id="FL12">
-<LABEL>ถ.พระราม1 หน้าสนามกีฬา</LABEL>
     <NAME>ถ.พระราม1 หน้าสนามกีฬา</NAME>
-    <VALUE>12.20</VALUE>
+    <LABEL>ถ.พระราม1 หน้าสนามกีฬา</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL13">
-<LABEL>ถ.พระราม6 ทางด่วน</LABEL>
     <NAME>ถ.พระราม 6 ช่วงลงทางด่วน </NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พระราม6 ทางด่วน</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL14">
-<LABEL>ถ.พิษณุโลก สนามม้า</LABEL>
     <NAME>ถ.พิษณุโลก หน้าสนามม้า</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พิษณุโลก สนามม้า</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL15">
-<LABEL>ถ.เพชรบุรีตัดใหม่</LABEL>
     <NAME>ถ.เพชรบุรี สถานฑูตญี่ปุ่น</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>0</STATUS>
+    <LABEL>ถ.เพชรบุรีตัดใหม่</LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL16">
-<LABEL>ถ.ศรีนครินทร์ ซีคอนฯ</LABEL>
     <NAME>ถ.ศรีนครินทร์ หน้าซีคอนฯ</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ศรีนครินทร์ ซีคอนฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL17">
-<LABEL>ถ.รัชดาภิเษก โรบินสัน</LABEL>
     <NAME>ถ.รัชดาฯ หน้าโรบินสัน</NAME>
-    <VALUE>4.25</VALUE>
+    <LABEL>ถ.รัชดาภิเษก โรบินสัน</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL18">
-<LABEL>ถ.ลาดพร้าว-ประดิษฐ์มนูธรรม</LABEL>
     <NAME>ถ.ลาดพร้าว-ประดิษฐ์มนูธรรม</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ลาดพร้าว-ประดิษฐ์มนูธรรม</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL19">
-<LABEL>ถ.เจริญกรุง วัดราชสิงขร</LABEL>
     <NAME>ถ.เจริญกรุง วัดราชสิงขร</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เจริญกรุง วัดราชสิงขร</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL20">
-<LABEL>ถ.พระราม3 ฮ่องกง-ปีนัง</LABEL>
     <NAME>ถ.พระราม3 ฮ่องกง-ปีนัง</NAME>
-    <VALUE>3.20</VALUE>
+    <LABEL>ถ.พระราม3 ฮ่องกง-ปีนัง</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL21">
-<LABEL>ถ.เทศบาลสงเคราะห์</LABEL>
     <NAME>ถ.เทศบาลสงเคราะห์ หน้าตลาดฯ</NAME>
-    <VALUE>11.11</VALUE>
-    <STATUS>1</STATUS>
+    <LABEL>ถ.เทศบาลสงเคราะห์</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL22">
-<LABEL>ถ.ลาดพร้าว</LABEL>
     <NAME>ถ.ลาดพร้าว</NAME>
-    <VALUE>55</VALUE>
-    <STATUS>1</STATUS>
+    <LABEL>ถ.ลาดพร้าว</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL23">
-<LABEL>ถ.พหลฯ ขนส่งทางบก</LABEL>
     <NAME>ถ.พหลโยธิน กรมการขนส่งทางบก</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พหลฯ ขนส่งทางบก</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL24">
-<LABEL>ถ.งามวงศ์วาน เกษตร</LABEL>
     <NAME>ถ.งามวงศ์วาน ช่วงแยกเกษตร</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.งามวงศ์วาน เกษตร</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL25">
-<LABEL>ถ.ศรีอยุธยา รพ.เดชา</LABEL>
     <NAME>ถ.ศรีอยุธยา ช่วงหน้าโรงพยาบาลเดชา</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ศรีอยุธยา รพ.เดชา</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL26">
-<LABEL>ถ.เพชรบุรี แยกนานา</LABEL>
     <NAME>ถ.เพชรบุรี ช่วงแยกนานา</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เพชรบุรี แยกนานา</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL27">
-<LABEL>ถ.เพชรบุรี เมโทร</LABEL>
     <NAME>ถ.เพชรบุรี ช่วงเมโทร</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เพชรบุรี เมโทร</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL28">
-<LABEL>ถ.พญาไท ปศุสัตว</LABEL>
     <NAME>ถ.พญาไท ช่วงกรมปศุสัตว์</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พญาไท ปศุสัตว</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL29">
-<LABEL>ถ.พระราม6 ประแจจีน</LABEL>
     <NAME>ถ.พระราม 6 ตลาดท่าจีน</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พระราม6 ประแจจีน</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL30">
-<LABEL>ถ.ราชวิถี สวนสันติภาพ</LABEL>
     <NAME>ถ.ราชวิถี ช่วงสวนสันติภาพ</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ราชวิถี สวนสันติภาพ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL31">
-<LABEL>ถ.ศรีอยุธยา สันติราษฏร์ฯ</LABEL>
     <NAME>ถ.ศรีอยุธยา หน้า ร.ร.สันติราษฏร์</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ศรีอยุธยา สันติราษฏร์ฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL32">
-<LABEL>ถ.นิคมมักกะสัน</LABEL>
     <NAME>ถ.นิคมมักกะสัน</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.นิคมมักกะสัน</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL33">
-<LABEL>ถ.บรรทัดทอง</LABEL>
     <NAME>ถ.บรรทัดทอง ช่วง ถ.เพชรบุรี</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.บรรทัดทอง</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL34">
-<LABEL>ถ.พญาไท ช่วงมาบุญครอง</LABEL>
     <NAME>ถ.พญาไท ช่วงมาบุญครอง</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พญาไท ช่วงมาบุญครอง</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL35">
-<LABEL>ถ.พระราม1 วัดปทุม</LABEL>
     <NAME>ถ.พระราม 1 ช่วงวัดปทุมวนาราม</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พระราม1 วัดปทุม</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL36">
-<LABEL>ถ.พระราม4 สวนลุม</LABEL>
     <NAME>ถ.พระราม 4 แยกมหานคร</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พระราม4 สวนลุม</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL37">
-<LABEL>ถ.ราชดำริ รพ.ตำรวจ</LABEL>
     <NAME>ถ.ราชดำริ ช่วงแยกสารสิน</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ราชดำริ รพ.ตำรวจ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL38">
-<LABEL>ถ.ประชาสงเคราะห์์</LABEL>
     <NAME>ถ.ประชาสงเคราะห์</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ประชาสงเคราะห์์</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL39">
-<LABEL>ถ.ดินแดง ซ.สุทธิพร 2</LABEL>
     <NAME>ถ.ดินแดง</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ดินแดง ซ.สุทธิพร 2</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL40">
-<LABEL>ถ.รัชดาภิเษก ค.บางซื่อ</LABEL>
     <NAME>ถ.รัชดาภิเษก ช่วงเจ้าพระยาปาร์ค</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>0</STATUS>
+    <LABEL>ถ.รัชดาภิเษก ค.บางซื่อ</LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL41">
-<LABEL>ถ.สวนพล</LABEL>
     <NAME>ถ.สวนพลู ช่วงตลาด</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.สวนพล</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL42">
-<LABEL>ถ.ประชาราษฏร์สาย2</LABEL>
     <NAME>ถ.ประชาราษฏร์ แยกเตาปูน</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ประชาราษฏร์สาย2</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL43">
-<LABEL>ถ.สามเสน รร.โยธินฯ</LABEL>
     <NAME>ถ.สามเสน ช่วงโรงเรียนโยธินฯ</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.สามเสน รร.โยธินฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL44">
-<LABEL>ถ.ศรีอยุธยา ลานพระรูปฯ</LABEL>
     <NAME>ถ.ศรีอยุธยา ลานพระบรมรูป</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ศรีอยุธยา ลานพระรูปฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL45">
-<LABEL>ถ.ราชสีมา อู่ทองนอก</LABEL>
     <NAME>ถ.ราชสีมา แยกอู่ทองนอก</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ราชสีมา อู่ทองนอก</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL46">
-<LABEL>ถ.นครไชยศรี สรรพสามิต</LABEL>
     <NAME>ถ.นครชัยศรี กรมสรรพสามิต</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.นครไชยศรี สรรพสามิต</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL47">
-<LABEL>ถ,ราชวิถี สะพานกรุงธน</LABEL>
     <NAME>ถ.ราชวิถี เชิงสะพานกรุงธน</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>0</STATUS>
+    <LABEL>ถ,ราชวิถี สะพานกรุงธน</LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL48">
-<LABEL>ถ.สนามไชย</LABEL>
     <NAME>ถ.สนามไชย สน.พระราชวัง</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>0</STATUS>
+    <LABEL>ถ.สนามไชย</LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL49">
-<LABEL>ถ.หลานหลวง</LABEL>
     <NAME>ถ.หลานหลวง แยกหลานหลวง</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.หลานหลวง</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL50">
-<LABEL>ถ.วิสุทธิ์กษัตริย์ วัดอินฯ</LABEL>
     <NAME>ถ.วิสุทธิ์กษัตริย์</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.วิสุทธิ์กษัตริย์ วัดอินฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL51">
-<LABEL>ถ.พัฒนาการ</LABEL>
     <NAME>ถ.พัฒนาการ ช่วงศรีนครินทร์</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.พัฒนาการ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL52">
-<LABEL>ถ.สุรวงศ์  ทางด่วน</LABEL>
     <NAME>ถ.สุรวงค์ ช่วงทางด่วน</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.สุรวงศ์  ทางด่วน</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
   <STATION id="FL53">
-<LABEL>ถ.สีลม คอนแวนต</LABEL>
-    <NAME>ถ.สุรวงค์ ช่วงทางด่วน</NAME>
-    <VALUE>0.00</VALUE>
+    <NAME>ถ.สีลม ช่วงถ.คอนแวนต์</NAME>
+    <LABEL>ถ.สีลม ช่วงถ.คอนแวนต์</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL54">
-<LABEL>ถ.เจริญกรุง แปลงนาม</LABEL>
     <NAME>ถ.เจริญกรุง แยกแปลงนาม</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เจริญกรุง แปลงนาม</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL55">
-<LABEL>ถ.เยาวราช ราชวงศ์</LABEL>
     <NAME>ถ.เยาวราช ช่วงแยกราชวงศ์</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เยาวราช ราชวงศ์</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL56">
-<LABEL>ถ.หลวง วัดเทพศิรินฯ</LABEL>
     <NAME>ถ.หลวง ตอนวัดเทพศิรินทราวาส</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.หลวง วัดเทพศิรินฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL57">
-<LABEL>ถ.งามวงค์วาน พงษ์เพชร</LABEL>
     <NAME>ถ.งามวงค์วาน แยกพงษ์เพชร</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.งามวงค์วาน พงษ์เพชร</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL58">
-<LABEL>ถ.แจ้งวัฒนะ กสท.</LABEL>
     <NAME>ถ.แจ้งวัฒนะ หน้า กสท.</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>0</STATUS>
+    <LABEL>ถ.แจ้งวัฒนะ กสท.</LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL59">
-<LABEL>ถ.สุทธิสารฯ ซอย 19</LABEL>
     <NAME>ถ.สุทธิสารวินิจฉัย</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.สุทธิสารฯ ซอย 19</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL60">
-<LABEL>ถ.สุขุมวิท กรมอุตุฯ</LABEL>
     <NAME>ถ.สุขุมวิท ช่วงกรมอุตุนิยมวิทยา</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.สุขุมวิท กรมอุตุฯ</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL61">
-<LABEL>ถ,สุขุมวิท ซอย 39</LABEL>
     <NAME>ถ.สุขุมวิท ช่วงซอย 47-63</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ,สุขุมวิท ซอย 39</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL62">
-<LABEL>ถ.เพชรเกษม วงแหวน</LABEL>
     <NAME>ถ.เพชรเกษม แยกวงแหวน</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เพชรเกษม วงแหวน</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL63">
-<LABEL>ถ.เพชรเกษม วัดม่วง</LABEL>
     <NAME>ถ.เพชรเกษม ช่วงซอยวัดม่วง</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เพชรเกษม วัดม่วง</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL64">
-<LABEL>ถ.ลาดหญ้า วงเวียนใหญ่</LABEL>
     <NAME>ถ.ลาดหญ้า ช่วงวงเวียนใหญ่</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.ลาดหญ้า วงเวียนใหญ่</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL65">
-<LABEL>ถ.จอมทอง แยกจอมทอง</LABEL>
     <NAME>ถ.จอมทอง ช่วงแยกจอมทอง</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.จอมทอง แยกจอมทอง</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL66">
-<LABEL>ถ.เอกชัย ห้างคาร์ฟู</LABEL>
     <NAME>ถ.เอกชัย ช่วงห้างคาร์ฟู</NAME>
-    <VALUE>0.00</VALUE>
+    <LABEL>ถ.เอกชัย ห้างคาร์ฟู</LABEL>
     <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL67">
-<LABEL>ถ.อิสรภาพ ตลาดพรานนก</LABEL>
     <NAME>ถ.อิสรภาพ ช่วงตลาดพรานนก</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
+    <LABEL>ถ.อิสรภาพ ตลาดพรานนก</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL68">
-<LABEL>ซ.เสนานิคม เขตจตุจักร</LABEL>
     <NAME>ซอย เสนานิคม</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
+    <LABEL>ซ.เสนานิคม เขตจตุจักร</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>2.3</VALUE>
   </STATION>
-
   <STATION id="FL69">
-<LABEL>ซ.สุขุมวิท 22</LABEL>
     <NAME>ซอย สุขุมวิท 22 (ด้านพระราม4)</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
+    <LABEL>ซ.สุขุมวิท 22</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL70">
-<LABEL>ซ.รามคำแหง 43/1</LABEL>
     <NAME>ซอย รามคำแหง 43/1</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
+    <LABEL>ซ.รามคำแหง 43/1</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
-
   <STATION id="FL71">
-<LABEL>ซ.มหาดไทย</LABEL>
-    <NAME>ซอย มหาดไทย</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
+    <NAME>ซ.มหาดไทย</NAME>
+    <LABEL>ซ.มหาดไทย</LABEL>
+    <STATUS>0</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
   <STATION id="FL72">
-<LABEL>ซ.มหาดไทย</LABEL>
-    <NAME>ซอย มหาดไทย</NAME>
-    <VALUE>0.00</VALUE>
-    <STATUS>2</STATUS>
+    <NAME> ถ.แจ้งวัฒนะ หน้าโลตัส </NAME>
+    <LABEL> ถ.แจ้งวัฒนะ หน้าโลตัส </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
   </STATION>
- </FLOODMON>
+  <STATION id="FL73">
+    <NAME> ถ.แจ้งวัฒนะ ตรงข้ามโลตัส </NAME>
+    <LABEL> ถ.แจ้งวัฒนะ ตรงข้ามโลตัส </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL74">
+    <NAME> ถ.งามวงศ์วาน ชอยชินเขต </NAME>
+    <LABEL> ถ.งามวงศ์วาน ชอยชินเขต </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL75">
+    <NAME> ถ.พหลโยธิน ซอยแอนเน็กซ์ </NAME>
+    <LABEL> ถ.พหลโยธิน ซอยแอนเน็กซ์ </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL76">
+    <NAME> ถ.พหลโยธิน วงเวียนบางเขน </NAME>
+    <LABEL> ถ.พหลโยธิน วงเวียนบางเขน </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL77">
+    <NAME> ถ.พหลโยธิน สะพานใหม่ </NAME>
+    <LABEL> ถ.พหลโยธิน สะพานใหม่ </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL78">
+    <NAME> ถ.พหลโยธิน ซอยสายลม </NAME>
+    <LABEL> ถ.พหลโยธิน ซอยสายลม </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL79">
+    <NAME> ถ.ประดิพัทธ์ สะพานควาย </NAME>
+    <LABEL> ถ.ประดิพัทธ์ สะพานควาย </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL80">
+    <NAME> ถ.นครชัยศรี ตลาดศรีย่าน </NAME>
+    <LABEL> ถ.นครชัยศรี ตลาดศรีย่าน </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL81">
+    <NAME> ถ.รัชดาภิเษก สถานฑูตจีน </NAME>
+    <LABEL> ถ.รัชดาภิเษก สถานฑูตจีน </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL82">
+    <NAME> ถ.ประชาสุข ซ.53 </NAME>
+    <LABEL> ถ.ประชาสุข ซ.53 </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL83">
+    <NAME> ถ.วิภาวดี หน้า ปตท. </NAME>
+    <LABEL> ถ.วิภาวดี หน้า ปตท. </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL84">
+    <NAME> ถ.ดินแดง ร.ร.พิบูลฯ </NAME>
+    <LABEL> ถ.ดินแดง ร.ร.พิบูลฯ </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL85">
+    <NAME> ถ.พหลโยธิน หน้าบิ๊กซี </NAME>
+    <LABEL> ถ.พหลโยธิน หน้าบิ๊กซี </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL86">
+    <NAME> ถ.ศรีอยุธยา ร.ร.ศรีอยุธยา </NAME>
+    <LABEL> ถ.ศรีอยุธยา ร.ร.ศรีอยุธยา </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL87">
+    <NAME> ถ.อโศกมนตรี แยกชิโนไทย </NAME>
+    <LABEL> ถ.อโศกมนตรี แยกชิโนไทย </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL88">
+    <NAME> ถ.พระราม 3 ทางรถไฟ </NAME>
+    <LABEL> ถ.พระราม 3 ทางรถไฟ </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL89">
+    <NAME> ถ.พระราม 4 กล้วยน้ำไท </NAME>
+    <LABEL> ถ.พระราม 4 กล้วยน้ำไท </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL90">
+    <NAME> ถ.สุนทรโกษา แยก ณ ระนอง </NAME>
+    <LABEL> ถ.สุนทรโกษา แยก ณ ระนอง </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL91">
+    <NAME> ถ.นวมินทร์ คลองบางเตย </NAME>
+    <LABEL> ถ.นวมินทร์ ช่วงคลองบางเตย </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL92">
+    <NAME> ถ.พัฒนาการ คลองบ้านป่า </NAME>
+    <LABEL> ถ.พัฒนาการ คลองบ้านป่า </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL93">
+    <NAME> ถ.ลาดพร้าว แม็คโคร </NAME>
+    <LABEL> ถ.ลาดพร้าว ช่วงแม็คโคร </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL94">
+    <NAME> ถ.พัฒนาการ ธ.กรุงไทย </NAME>
+    <LABEL> ถ.พัฒนาการ ธ.กรุงไทย </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL95">
+    <NAME> ถ.ศรีนครินทร์ กรีนสปอร์ต </NAME>
+    <LABEL> ถ.ศรีนครินทร์ กรีนสปอร์ต </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL96">
+    <NAME> ถ.ศรีนครินทร์ เสรีเซ็นเตอร์ </NAME>
+    <LABEL> ถ.ศรีนครินทร์ เสรีเซ็นเตอร์ </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL97">
+    <NAME> ถ.ศรีนครินทร์ วัดศรีเอี่ยม  </NAME>
+    <LABEL> ถ.ศรีนครินทร์ วัดศรีเอี่ยม </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL98">
+    <NAME> ถ.สุขุมวิท แยกบางนา </NAME>
+    <LABEL> ถ.สุขุมวิท แยกบางนา </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL99">
+    <NAME> ถ.ฉิมพลี ซ.28 </NAME>
+    <LABEL> ถ.ฉิมพลี ซ.28 </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL100">
+    <NAME> ถ.บรมราชชนนี สายใต้ </NAME>
+    <LABEL> ถ.บรมราชชนนี สายใต้ </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+  <STATION id="FL101">
+    <NAME> ถ.บางบอน 1 </NAME>
+    <LABEL> ถ.บางบอน 1 </LABEL>
+    <STATUS>1</STATUS>
+    <VALUE>0</VALUE>
+  </STATION>
+</FLOODMON>
